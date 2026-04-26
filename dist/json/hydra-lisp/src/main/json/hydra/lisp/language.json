@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Language constraints for Lisp"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Language constraints for Lisp"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -35,7 +35,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
                     "name": "literalVariants",
@@ -68,7 +68,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -89,7 +89,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -110,7 +110,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
                     "name": "integerTypes",
@@ -127,7 +127,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -224,7 +224,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -305,7 +305,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -318,7 +318,7 @@
                             "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "t0"}}},
@@ -354,7 +354,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.lisp.language.lispReservedWords",
@@ -362,8 +362,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "A set of reserved words across all four Lisp dialects"}}}],
             "body": {
               "let": {
@@ -374,8 +374,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Clojure special forms and reserved symbols"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Clojure special forms and reserved symbols"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "def"}},
@@ -421,15 +421,15 @@
                             {"literal": {"string": "set!"}},
                             {"literal": {"string": "monitor-enter"}},
                             {"literal": {"string": "monitor-exit"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "emacsLispKeywords",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Emacs Lisp special forms and reserved symbols"}}}],
                         "body": {
                           "list": [
@@ -478,15 +478,15 @@
                             {"literal": {"string": "pcase"}},
                             {"literal": {"string": "pcase-let"}},
                             {"literal": {"string": "seq-let"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "commonLispKeywords",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Common Lisp special operators, macros, and reserved symbols"}}}],
                         "body": {
@@ -561,15 +561,15 @@
                             {"literal": {"string": "locally"}},
                             {"literal": {"string": "the"}},
                             {"literal": {"string": "pi"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "schemeKeywords",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Scheme R7RS keywords and special forms"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Scheme R7RS keywords and special forms"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "define"}},
@@ -614,18 +614,18 @@
                             {"literal": {"string": "guard"}},
                             {"literal": {"string": "parameterize"}},
                             {"literal": {"string": "else"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraLispKeywords",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Reserved words specific to Hydra-Lisp code generation"}}}],
                         "body": {"list": [{"literal": {"string": "Node"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -645,7 +645,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)",
   "namespace": "hydra.lisp.language",
   "termDependencies": ["hydra.lexical"],

@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.typing.FunctionStructure",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term."}}}],
               "body": {
@@ -22,8 +22,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
                             "body": {"list": {"variable": "hydra.core.Name"}}}}},
                       {
                         "name": "params",
@@ -31,8 +31,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
                             "body": {"list": {"variable": "hydra.core.Name"}}}}},
                       {
                         "name": "bindings",
@@ -40,8 +40,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
                             "body": {"list": {"variable": "hydra.core.Binding"}}}}},
                       {
                         "name": "body",
@@ -49,8 +49,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
                             "body": {"variable": "hydra.core.Term"}}}},
                       {
@@ -59,8 +59,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "Domain types of the value parameters"}}}],
                             "body": {"list": {"variable": "hydra.core.Type"}}}}},
                       {
                         "name": "codomain",
@@ -68,8 +68,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "The return type of the function (if type inference succeeded)"}}}],
                             "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
@@ -79,8 +79,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "Updated environment after processing all bindings"}}}],
                             "body": {"variable": "env"}}}}]},
                   "parameter": "env"}}}},
@@ -89,12 +89,12 @@
       "type": {
         "name": "hydra.typing.InferenceResult",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The result of applying inference rules to a term."}}}],
               "body": {
                 "record": [
@@ -104,8 +104,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The term which was inferred"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The term which was inferred"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "type",
@@ -113,8 +113,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The inferred type of the term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The inferred type of the term"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "subst",
@@ -122,8 +122,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The type substitution resulting from unification"}}}],
                         "body": {"variable": "hydra.typing.TypeSubst"}}}},
                   {
@@ -132,8 +132,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
                         "body": {
@@ -146,8 +146,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The updated context after inference (carries fresh variable state)"}}}],
                         "body": {"variable": "hydra.context.Context"}}}}]}}},
@@ -156,12 +156,12 @@
       "type": {
         "name": "hydra.typing.TermSubst",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A substitution of term variables for terms"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A substitution of term variables for terms"}}}],
               "body": {
                 "wrap": {
                   "map": {
@@ -172,12 +172,12 @@
       "type": {
         "name": "hydra.typing.TypeConstraint",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An assertion that two types can be unified into a single type"}}}],
               "body": {
@@ -188,8 +188,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "right",
@@ -197,8 +197,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "comment",
@@ -206,8 +206,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A description of the type constraint which may be used for tracing or debugging"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
@@ -216,12 +216,12 @@
       "type": {
         "name": "hydra.typing.TypeSubst",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A substitution of type variables for types"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A substitution of type variables for types"}}}],
               "body": {
                 "wrap": {
                   "map": {

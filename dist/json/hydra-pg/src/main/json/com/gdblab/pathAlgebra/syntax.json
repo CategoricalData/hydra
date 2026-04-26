@@ -3,28 +3,28 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Number",
-        "type": {"type": {"literal": {"integer": {"bigint": {}}}}, "variables": []}}},
+        "type": {"body": {"literal": {"integer": {"bigint": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Text",
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
+        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Label",
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
+        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Variable",
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
+        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathName",
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
+        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathQuery",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "projection",
@@ -46,7 +46,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Projection",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "partProj",
@@ -62,7 +62,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PartProj",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
               {
@@ -73,7 +73,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupProj",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
               {
@@ -84,7 +84,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathProj",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
               {
@@ -95,7 +95,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RestrictorExt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "walk", "type": {"unit": {}}},
               {"name": "trail", "type": {"unit": {}}},
@@ -107,19 +107,19 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderBy",
         "type": {
-          "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.OrderByOption"}},
+          "body": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.OrderByOption"}},
           "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupBy",
         "type": {
-          "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.GroupByOption"}},
+          "body": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.GroupByOption"}},
           "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderByOption",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "partition", "type": {"unit": {}}},
               {"name": "group", "type": {"unit": {}}},
@@ -133,7 +133,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupByOption",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "source", "type": {"unit": {}}},
               {"name": "target", "type": {"unit": {}}},
@@ -147,7 +147,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathPattern",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "pathName",
@@ -170,7 +170,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.NodePattern",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "variable",
@@ -180,7 +180,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.EdgePattern",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "direction",
@@ -193,7 +193,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.EdgeDirection",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "outgoing", "type": {"unit": {}}},
               {"name": "incoming", "type": {"unit": {}}},
@@ -203,7 +203,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Rpq",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "parenthesis",
@@ -237,7 +237,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Plus",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "expression",
@@ -250,7 +250,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Star",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "expression",
@@ -263,7 +263,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Concatenation",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -276,7 +276,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Alternation",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -289,13 +289,13 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RpqRestrictor",
         "type": {
-          "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}},
+          "body": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}},
           "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.ComplexCondition",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "simple",
@@ -308,7 +308,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "lhs",
@@ -324,7 +324,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Condition",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "function",
@@ -340,7 +340,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.CompareSym",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "equal", "type": {"unit": {}}},
               {"name": "notEqual", "type": {"unit": {}}},
@@ -353,7 +353,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Function",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "simple",
@@ -369,7 +369,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.SimpleFunction",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -382,7 +382,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.NestedFunction",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -395,7 +395,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.ComplexFunction",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -411,7 +411,7 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "and", "type": {"unit": {}}},
               {"name": "or", "type": {"unit": {}}}]},

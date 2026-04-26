@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Try the first parser; if it fails without consuming input, try the second"}}}],
                 "body": {
@@ -112,7 +112,7 @@
                                     "domain": {"literal": {"string": {}}},
                                     "parameter": "input"}},
                                 "type": {
-                                  "type": {
+                                  "body": {
                                     "function": {
                                       "codomain": {
                                         "application": {
@@ -137,7 +137,7 @@
                     "parameter": "p1"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -161,8 +161,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse any single character (codepoint)"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse any single character (codepoint)"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -172,7 +172,7 @@
                     "parameter": "_"}},
                 "function": {"variable": "hydra.parsers.satisfy"}}}}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"literal": {"integer": {"int32": {}}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -188,8 +188,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Apply a parser containing a function to a parser containing a value"}}}],
                     "body": {
@@ -345,7 +345,7 @@
                                         "domain": {"literal": {"string": {}}},
                                         "parameter": "input"}},
                                     "type": {
-                                      "type": {
+                                      "body": {
                                         "function": {
                                           "codomain": {
                                             "application": {
@@ -372,7 +372,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -403,8 +403,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Parse something between an opening and closing parser"}}}],
                         "body": {
                           "lambda": {
@@ -486,7 +486,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -520,8 +520,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Sequence two parsers, passing the result of the first to a function that produces the second"}}}],
                     "body": {
@@ -606,7 +606,7 @@
                                         "domain": {"literal": {"string": {}}},
                                         "parameter": "input"}},
                                     "type": {
-                                      "type": {
+                                      "body": {
                                         "function": {
                                           "codomain": {
                                             "application": {
@@ -635,7 +635,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -662,8 +662,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a specific character (codepoint)"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a specific character (codepoint)"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -686,7 +686,7 @@
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -703,8 +703,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Try each parser in the list until one succeeds"}}}],
                 "body": {
                   "lambda": {
@@ -747,7 +747,7 @@
                     "parameter": "ps"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -766,8 +766,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "A parser that succeeds only at the end of input"}}}],
             "body": {
               "typeApplication": {
@@ -836,7 +836,7 @@
                     "typeName": "hydra.parsing.Parser"}},
                 "type": {"unit": {}}}}}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"unit": {}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -850,8 +850,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "A parser that always fails with the given error message"}}}],
                 "body": {
                   "lambda": {
@@ -883,7 +883,7 @@
                     "parameter": "msg"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -900,8 +900,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Create a parser that defers construction of another parser until parsing time. This is essential for breaking recursive parser definitions."}}}],
                 "body": {
@@ -937,7 +937,7 @@
                     "parameter": "f"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -960,8 +960,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Parse zero or more occurrences of the given parser"}}}],
                 "body": {
                   "lambda": {
@@ -995,7 +995,7 @@
                     "parameter": "p"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1017,8 +1017,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Apply a function to the result of a parser"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Apply a function to the result of a parser"}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -1112,7 +1112,7 @@
                                         "domain": {"literal": {"string": {}}},
                                         "parameter": "input"}},
                                     "type": {
-                                      "type": {
+                                      "body": {
                                         "function": {
                                           "codomain": {
                                             "application": {
@@ -1136,7 +1136,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1160,8 +1160,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Optionally parse something, returning Nothing if it fails"}}}],
                 "body": {
@@ -1205,7 +1205,7 @@
                     "parameter": "p"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1225,8 +1225,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "A parser that always succeeds with the given value without consuming input"}}}],
                 "body": {
@@ -1262,7 +1262,7 @@
                     "parameter": "a"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1279,8 +1279,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Run a parser on the given input string"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Run a parser on the given input string"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -1304,7 +1304,7 @@
                     "parameter": "p"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1325,8 +1325,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Parse a character (codepoint) that satisfies the given predicate"}}}],
             "body": {
@@ -1348,7 +1348,7 @@
                                         "argument": {"variable": "input"},
                                         "function": {"variable": "hydra.lib.strings.toList"}}},
                                     "type": {
-                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                      "body": {"list": {"literal": {"integer": {"int32": {}}}}},
                                       "variables": []}}],
                                 "body": {
                                   "application": {
@@ -1381,7 +1381,7 @@
                                                                     "body": {"variable": "hydra.lib.lists.drop"},
                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                         "function": {"variable": "hydra.lib.strings.fromList"}}},
-                                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                 "body": {
                                                   "application": {
                                                     "argument": {
@@ -1463,7 +1463,7 @@
                             "domain": {"literal": {"string": {}}},
                             "parameter": "input"}},
                         "type": {
-                          "type": {
+                          "body": {
                             "function": {
                               "codomain": {
                                 "application": {
@@ -1482,7 +1482,7 @@
                     "domain": {"literal": {"integer": {"int32": {}}}}}},
                 "parameter": "pred"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1504,8 +1504,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Parse zero or more occurrences separated by a separator"}}}],
                     "body": {
                       "lambda": {
@@ -1553,7 +1553,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1581,8 +1581,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Parse one or more occurrences separated by a separator"}}}],
                     "body": {
                       "lambda": {
@@ -1671,7 +1671,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1697,8 +1697,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Parse one or more occurrences of the given parser"}}}],
                 "body": {
                   "lambda": {
@@ -1763,7 +1763,7 @@
                     "parameter": "p"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1781,8 +1781,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a specific string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a specific string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1801,7 +1801,7 @@
                                         "argument": {"variable": "str"},
                                         "function": {"variable": "hydra.lib.strings.toList"}}},
                                     "type": {
-                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                      "body": {"list": {"literal": {"integer": {"int32": {}}}}},
                                       "variables": []}}],
                                 "body": {
                                   "let": {
@@ -1813,7 +1813,7 @@
                                             "argument": {"variable": "input"},
                                             "function": {"variable": "hydra.lib.strings.toList"}}},
                                         "type": {
-                                          "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                          "body": {"list": {"literal": {"integer": {"int32": {}}}}},
                                           "variables": []}}],
                                     "body": {
                                       "let": {
@@ -1827,7 +1827,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.length"},
                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                            "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                            "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -1844,7 +1844,7 @@
                                                             "body": {"variable": "hydra.lib.lists.take"},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                 "type": {
-                                                  "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                  "body": {"list": {"literal": {"integer": {"int32": {}}}}},
                                                   "variables": []}}],
                                             "body": {
                                               "application": {
@@ -1929,7 +1929,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "str"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Language constraints for Haskell"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Language constraints for Haskell"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -35,7 +35,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
                     "name": "literalVariants",
@@ -72,7 +72,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -93,7 +93,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -114,7 +114,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
                     "name": "integerTypes",
@@ -147,7 +147,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -244,7 +244,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -325,7 +325,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -338,7 +338,7 @@
                             "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "t0"}}},
@@ -374,7 +374,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.haskell.language.reservedWords",
@@ -382,8 +382,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Created on 2025-02-28 using GHCi 9.6.6\n\nYou can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n/tmp/browse_Prelude.txt, and then running the Bash command provided with each list.\n\nSee also https://www.haskell.org/onlinereport/standard-prelude.html"}}}],
             "body": {
@@ -395,8 +395,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Haskell's strictly reserved keywords; they cannot be used as identifiers."}}}],
                         "body": {
@@ -424,15 +424,15 @@
                             {"literal": {"string": "then"}},
                             {"literal": {"string": "type"}},
                             {"literal": {"string": "where"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "reservedSymbols",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Hydra uses these symbols in generated code, so we reserve them to avoid conflicts."}}}],
                         "body": {
@@ -450,7 +450,7 @@
                             {"literal": {"string": "Show"}},
                             {"literal": {"string": "String"}},
                             {"literal": {"string": "True"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -467,7 +467,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for Haskell",
   "namespace": "hydra.haskell.language",
   "termDependencies": [],

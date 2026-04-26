@@ -19,8 +19,8 @@
                                   "annotated": {
                                     "annotation": [
                                       {
-                                        "@key": "description",
-                                        "@value": {
+                                        "key": "description",
+                                        "value": {
                                           "literal": {"string": "Construct JSON Schema documents from type definitions"}}}],
                                     "body": {
                                       "lambda": {
@@ -83,7 +83,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -111,8 +111,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Encode a field type as a JSON Schema keyword-schema pair"}}}],
                         "body": {
                           "lambda": {
@@ -129,14 +129,14 @@
                                               "application": {
                                                 "argument": {"variable": "ft"},
                                                 "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
-                                            "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}},
+                                            "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                           {
                                             "name": "typ",
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "ft"},
                                                 "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                         "body": {
                                           "application": {
                                             "argument": {
@@ -180,14 +180,14 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "pair": {
-                                                                "@first": {
+                                                                "first": {
                                                                   "wrap": {
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {"variable": "name"},
                                                                         "function": {"unwrap": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.json.schema.Keyword"}},
-                                                                "@second": {
+                                                                "second": {
                                                                   "wrap": {"body": {"variable": "res"}, "typeName": "hydra.json.schema.Schema"}}}},
                                                             "type": {"variable": "hydra.json.schema.Keyword"}}},
                                                         "type": {"variable": "hydra.json.schema.Schema"}}},
@@ -216,7 +216,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -240,8 +240,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Encode a Hydra name as a safe identifier string, replacing non-alphanumeric characters with underscores"}}}],
             "body": {
@@ -256,7 +256,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -274,8 +274,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Encode a named type as a list of JSON Schema restrictions with a title"}}}],
                         "body": {
@@ -370,7 +370,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -404,8 +404,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "Encode a Hydra type as a list of JSON Schema restrictions"}}}],
                                 "body": {
@@ -458,7 +458,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -477,8 +477,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Determine whether a field is required (i.e., not optional/Maybe)"}}}],
             "body": {
@@ -492,7 +492,7 @@
                           "application": {
                             "argument": {"variable": "ft"},
                             "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -514,7 +514,7 @@
                 "domain": {"variable": "hydra.core.FieldType"},
                 "parameter": "ft"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"boolean": {}}},
               "domain": {"variable": "hydra.core.FieldType"}}},
@@ -538,8 +538,8 @@
                                   "annotated": {
                                     "annotation": [
                                       {
-                                        "@key": "description",
-                                        "@value": {
+                                        "key": "description",
+                                        "value": {
                                           "literal": {"string": "Convert a Hydra module to a map of JSON Schema documents"}}}],
                                     "body": {
                                       "lambda": {
@@ -602,7 +602,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -624,8 +624,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Create a JSON Schema reference restriction for a named type"}}}],
             "body": {
@@ -651,7 +651,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.schema.Restriction"},
               "domain": {"variable": "hydra.core.Name"}}},

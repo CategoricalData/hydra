@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an attribute list to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an attribute list to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -64,7 +64,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.AttrList"},
                 "parameter": "al"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.AttrList"}}},
@@ -76,8 +76,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert an attribute statement to an expression"}}}],
             "body": {
               "lambda": {
@@ -91,7 +91,7 @@
                             "argument": {"variable": "as"},
                             "function": {
                               "project": {"field": "type", "typeName": "hydra.graphviz.dot.AttrStmt"}}}},
-                        "type": {"type": {"variable": "hydra.graphviz.dot.AttrType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphviz.dot.AttrType"}, "variables": []}},
                       {
                         "name": "attr",
                         "term": {
@@ -99,7 +99,7 @@
                             "argument": {"variable": "as"},
                             "function": {
                               "project": {"field": "attributes", "typeName": "hydra.graphviz.dot.AttrStmt"}}}},
-                        "type": {"type": {"variable": "hydra.graphviz.dot.AttrList"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.graphviz.dot.AttrList"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -116,7 +116,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
                 "parameter": "as"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.AttrStmt"}}},
@@ -128,8 +128,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an attribute type to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an attribute type to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -172,7 +172,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.AttrType"},
                 "parameter": "t"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.AttrType"}}},
@@ -184,8 +184,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a compass point to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a compass point to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -298,7 +298,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.CompassPt"},
                 "parameter": "p"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.CompassPt"}}},
@@ -310,8 +310,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an edge statement to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an edge statement to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -327,7 +327,7 @@
                                 "function": {
                                   "project": {"field": "left", "typeName": "hydra.graphviz.dot.EdgeStmt"}}}},
                             "type": {
-                              "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
+                              "body": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
                               "variables": []}},
                           {
                             "name": "r",
@@ -337,7 +337,7 @@
                                 "function": {
                                   "project": {"field": "right", "typeName": "hydra.graphviz.dot.EdgeStmt"}}}},
                             "type": {
-                              "type": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
+                              "body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
                               "variables": []}},
                           {
                             "name": "attr",
@@ -347,7 +347,7 @@
                                 "function": {
                                   "project": {"field": "attributes", "typeName": "hydra.graphviz.dot.EdgeStmt"}}}},
                             "type": {
-                              "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}},
+                              "body": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}},
                               "variables": []}},
                           {
                             "name": "arrow",
@@ -364,7 +364,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.logic.ifElse"},
                                             "type": {"literal": {"string": {}}}}}}}}}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                           {
                             "name": "rhsParts",
                             "term": {
@@ -402,7 +402,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.concat"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                            "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                            "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                           {
                             "name": "attrParts",
                             "term": {
@@ -431,7 +431,7 @@
                                                 "body": {"variable": "hydra.lib.maybes.maybe"},
                                                 "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                             "type": {"variable": "hydra.graphviz.dot.AttrList"}}}}}}}}},
-                            "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                            "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -459,7 +459,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "directed"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -474,8 +474,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an equality pair to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an equality pair to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -488,7 +488,7 @@
                             "argument": {"variable": "eq"},
                             "function": {
                               "project": {"field": "left", "typeName": "hydra.graphviz.dot.EqualityPair"}}}},
-                        "type": {"type": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}},
                       {
                         "name": "r",
                         "term": {
@@ -496,7 +496,7 @@
                             "argument": {"variable": "eq"},
                             "function": {
                               "project": {"field": "right", "typeName": "hydra.graphviz.dot.EqualityPair"}}}},
-                        "type": {"type": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -517,7 +517,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
                 "parameter": "eq"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.EqualityPair"}}},
@@ -529,8 +529,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a graph to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a graph to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -543,7 +543,7 @@
                             "argument": {"variable": "g"},
                             "function": {
                               "project": {"field": "strict", "typeName": "hydra.graphviz.dot.Graph"}}}},
-                        "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "directed",
                         "term": {
@@ -551,7 +551,7 @@
                             "argument": {"variable": "g"},
                             "function": {
                               "project": {"field": "directed", "typeName": "hydra.graphviz.dot.Graph"}}}},
-                        "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "stmts",
                         "term": {
@@ -560,7 +560,7 @@
                             "function": {
                               "project": {"field": "statements", "typeName": "hydra.graphviz.dot.Graph"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}},
+                          "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}},
                           "variables": []}},
                       {
                         "name": "graphKeyword",
@@ -577,7 +577,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "graphExpr",
                         "term": {
@@ -608,7 +608,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
@@ -645,7 +645,7 @@
                                   "application": {
                                     "argument": {"variable": "hydra.serialization.curlyBraces"},
                                     "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"list": [{"variable": "graphExpr"}, {"variable": "body"}]},
@@ -653,7 +653,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.Graph"},
                 "parameter": "g"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.Graph"}}},
@@ -665,8 +665,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an identifier to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an identifier to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -686,7 +686,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.Id"},
                 "parameter": "i"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.Id"}}},
@@ -698,8 +698,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a node identifier to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a node identifier to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -711,7 +711,7 @@
                           "application": {
                             "argument": {"variable": "nid"},
                             "function": {"project": {"field": "id", "typeName": "hydra.graphviz.dot.NodeId"}}}},
-                        "type": {"type": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}},
                       {
                         "name": "mp",
                         "term": {
@@ -720,7 +720,7 @@
                             "function": {
                               "project": {"field": "port", "typeName": "hydra.graphviz.dot.NodeId"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphviz.dot.Port"}},
+                          "body": {"maybe": {"variable": "hydra.graphviz.dot.Port"}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -759,7 +759,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.NodeId"},
                 "parameter": "nid"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.NodeId"}}},
@@ -771,8 +771,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a node or subgraph to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a node or subgraph to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -812,7 +812,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "directed"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -827,8 +827,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a node statement to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a node statement to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -841,7 +841,7 @@
                             "argument": {"variable": "ns"},
                             "function": {
                               "project": {"field": "id", "typeName": "hydra.graphviz.dot.NodeStmt"}}}},
-                        "type": {"type": {"variable": "hydra.graphviz.dot.NodeId"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphviz.dot.NodeId"}, "variables": []}},
                       {
                         "name": "attr",
                         "term": {
@@ -850,7 +850,7 @@
                             "function": {
                               "project": {"field": "attributes", "typeName": "hydra.graphviz.dot.NodeStmt"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}},
+                          "body": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -889,7 +889,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.NodeStmt"},
                 "parameter": "ns"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.NodeStmt"}}},
@@ -901,8 +901,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a port to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a port to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -915,7 +915,7 @@
                             "argument": {"variable": "p"},
                             "function": {"project": {"field": "id", "typeName": "hydra.graphviz.dot.Port"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphviz.dot.Id"}},
+                          "body": {"maybe": {"variable": "hydra.graphviz.dot.Id"}},
                           "variables": []}},
                       {
                         "name": "mp",
@@ -925,7 +925,7 @@
                             "function": {
                               "project": {"field": "position", "typeName": "hydra.graphviz.dot.Port"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphviz.dot.CompassPt"}},
+                          "body": {"maybe": {"variable": "hydra.graphviz.dot.CompassPt"}},
                           "variables": []}},
                       {
                         "name": "pre",
@@ -959,7 +959,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                         "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "suf",
                         "term": {
@@ -992,7 +992,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                         "type": {"variable": "hydra.graphviz.dot.CompassPt"}}}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -1006,7 +1006,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.Port"},
                 "parameter": "p"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.Port"}}},
@@ -1018,8 +1018,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a statement to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a statement to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1092,7 +1092,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "directed"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1107,8 +1107,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a subgraph to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a subgraph to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1124,7 +1124,7 @@
                                 "function": {
                                   "project": {"field": "subgraphId", "typeName": "hydra.graphviz.dot.Subgraph"}}}},
                             "type": {
-                              "type": {"maybe": {"variable": "hydra.graphviz.dot.SubgraphId"}},
+                              "body": {"maybe": {"variable": "hydra.graphviz.dot.SubgraphId"}},
                               "variables": []}},
                           {
                             "name": "stmts",
@@ -1134,7 +1134,7 @@
                                 "function": {
                                   "project": {"field": "statements", "typeName": "hydra.graphviz.dot.Subgraph"}}}},
                             "type": {
-                              "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}},
+                              "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}},
                               "variables": []}},
                           {
                             "name": "body",
@@ -1166,7 +1166,7 @@
                                       "application": {
                                         "argument": {"variable": "hydra.serialization.curlyBraces"},
                                         "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                            "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -1203,7 +1203,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "directed"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1218,8 +1218,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a subgraph identifier to an expression"}}}],
             "body": {
               "lambda": {
@@ -1263,7 +1263,7 @@
                 "domain": {"variable": "hydra.graphviz.dot.SubgraphId"},
                 "parameter": "sid"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphviz.dot.SubgraphId"}}},

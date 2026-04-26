@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.packaging.Definition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A definition, which may be either a term or type definition"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A term definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A term definition"}}}],
                         "body": {"variable": "hydra.packaging.TermDefinition"}}}},
                   {
                     "name": "type",
@@ -29,20 +29,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A type definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A type definition"}}}],
                         "body": {"variable": "hydra.packaging.TypeDefinition"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.packaging.FileExtension",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
@@ -51,12 +51,12 @@
       "type": {
         "name": "hydra.packaging.Library",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A library of primitive functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A library of primitive functions"}}}],
               "body": {
                 "record": [
                   {
@@ -65,8 +65,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A common prefix for all primitive function names in the library"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
@@ -76,8 +76,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A preferred namespace prefix for function names in the library"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -87,20 +87,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The primitives defined in this library"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The primitives defined in this library"}}}],
                         "body": {"list": {"variable": "hydra.graph.Primitive"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.packaging.Module",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A logical collection of elements in the same namespace, having dependencies on zero or more other modules"}}}],
               "body": {
@@ -111,8 +111,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A common prefix for all element names in the module"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
@@ -121,8 +121,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The definitions in this module"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The definitions in this module"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Definition"}}}}},
                   {
                     "name": "termDependencies",
@@ -130,8 +130,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Any modules which the term expressions of this module directly depend upon"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
@@ -141,8 +141,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Any modules which the type expressions of this module directly depend upon"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
@@ -152,8 +152,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An optional human-readable description of the module"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
@@ -161,24 +161,24 @@
       "type": {
         "name": "hydra.packaging.Namespace",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A prefix for element names"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A prefix for element names"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.packaging.Namespaces",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A mapping from namespaces to values of type n, with a focus on one namespace"}}}],
               "body": {
@@ -191,8 +191,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "The namespace in focus, together with its associated value"}}}],
                             "body": {
@@ -205,8 +205,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "A mapping of namespaces to values"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
                             "body": {
                               "map": {
                                 "keys": {"variable": "hydra.packaging.Namespace"},
@@ -217,12 +217,12 @@
       "type": {
         "name": "hydra.packaging.Package",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A package, which is a named collection of modules with metadata and dependencies"}}}],
               "body": {
@@ -233,8 +233,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the package"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the package"}}}],
                         "body": {"variable": "hydra.packaging.PackageName"}}}},
                   {
                     "name": "modules",
@@ -242,8 +242,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The modules in this package"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The modules in this package"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Module"}}}}},
                   {
                     "name": "dependencies",
@@ -251,8 +251,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The packages which this package depends on"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The packages which this package depends on"}}}],
                         "body": {"list": {"variable": "hydra.packaging.PackageName"}}}}},
                   {
                     "name": "description",
@@ -260,8 +260,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An optional human-readable description of the package"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
@@ -269,12 +269,12 @@
       "type": {
         "name": "hydra.packaging.PackageName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\""}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
@@ -283,12 +283,12 @@
       "type": {
         "name": "hydra.packaging.QualifiedName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A qualified name consisting of an optional namespace together with a mandatory local name"}}}],
               "body": {
@@ -299,8 +299,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The optional namespace"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The optional namespace"}}}],
                         "body": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}},
                   {
                     "name": "local",
@@ -308,20 +308,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The local name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The local name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.packaging.TermDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A term-level definition, including a name, a term, and the type scheme of the term"}}}],
               "body": {
@@ -332,8 +332,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the term"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "term",
@@ -341,8 +341,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The term being defined"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The term being defined"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "type",
@@ -350,8 +350,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The type scheme of the term, including any class constraints"}}}],
                         "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
@@ -360,12 +360,12 @@
       "type": {
         "name": "hydra.packaging.TypeDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A type-level definition, including a name and the type scheme"}}}],
               "body": {
@@ -376,8 +376,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "type",
@@ -385,8 +385,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type scheme being defined"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
   "description": "A model for Hydra namespaces, modules, and packages",

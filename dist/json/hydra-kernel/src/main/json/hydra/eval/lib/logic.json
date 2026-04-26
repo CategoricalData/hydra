@@ -13,8 +13,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly logical AND."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly logical AND."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -29,7 +29,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -98,7 +98,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -126,8 +126,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly logical NOT."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly logical NOT."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -140,7 +140,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "application",
@@ -217,7 +217,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -242,8 +242,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly logical OR."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly logical OR."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -258,7 +258,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -327,7 +327,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

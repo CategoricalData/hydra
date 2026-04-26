@@ -175,8 +175,8 @@
                                               "annotated": {
                                                 "annotation": [
                                                   {
-                                                    "@key": "description",
-                                                    "@value": {
+                                                    "key": "description",
+                                                    "value": {
                                                       "literal": {
                                                         "string": "The set of type variables introduced specifically by type lambdas"}}}],
                                                 "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -188,8 +188,8 @@
                                           "annotated": {
                                             "annotation": [
                                               {
-                                                "@key": "description",
-                                                "@value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                                                "key": "description",
+                                                "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                                             "body": {
                                               "map": {
                                                 "keys": {"variable": "hydra.core.Name"},
@@ -202,8 +202,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {
+                                            "key": "description",
+                                            "value": {
                                               "literal": {"string": "All primitive functions and constants by name"}}}],
                                         "body": {
                                           "map": {
@@ -217,8 +217,8 @@
                                   "annotated": {
                                     "annotation": [
                                       {
-                                        "@key": "description",
-                                        "@value": {
+                                        "key": "description",
+                                        "value": {
                                           "literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                                     "body": {
                                       "map": {
@@ -232,8 +232,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "The set of term variables introduced by specifically by lambdas"}}}],
                                 "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -245,8 +245,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                             "body": {
@@ -261,8 +261,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The type schemes of all term variables in scope"}}}],
                         "body": {
                           "map": {
@@ -276,8 +276,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The terms bound by all term variables in scope"}}}],
                     "body": {
                       "map": {
@@ -286,7 +286,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "boundTerms"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -312,8 +312,8 @@
                                                 "annotated": {
                                                   "annotation": [
                                                     {
-                                                      "@key": "description",
-                                                      "@value": {
+                                                      "key": "description",
+                                                      "value": {
                                                         "literal": {
                                                           "string": "The set of type variables introduced specifically by type lambdas"}}}],
                                                   "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -324,8 +324,8 @@
                                             "annotated": {
                                               "annotation": [
                                                 {
-                                                  "@key": "description",
-                                                  "@value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                                                  "key": "description",
+                                                  "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                                               "body": {
                                                 "map": {
                                                   "keys": {"variable": "hydra.core.Name"},
@@ -337,8 +337,8 @@
                                         "annotated": {
                                           "annotation": [
                                             {
-                                              "@key": "description",
-                                              "@value": {
+                                              "key": "description",
+                                              "value": {
                                                 "literal": {"string": "All primitive functions and constants by name"}}}],
                                           "body": {
                                             "map": {
@@ -351,8 +351,8 @@
                                     "annotated": {
                                       "annotation": [
                                         {
-                                          "@key": "description",
-                                          "@value": {
+                                          "key": "description",
+                                          "value": {
                                             "literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                                       "body": {
                                         "map": {
@@ -365,8 +365,8 @@
                                 "annotated": {
                                   "annotation": [
                                     {
-                                      "@key": "description",
-                                      "@value": {
+                                      "key": "description",
+                                      "value": {
                                         "literal": {
                                           "string": "The set of term variables introduced by specifically by lambdas"}}}],
                                   "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -377,8 +377,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                               "body": {
@@ -392,8 +392,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The type schemes of all term variables in scope"}}}],
                           "body": {
                             "map": {
@@ -406,8 +406,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The terms bound by all term variables in scope"}}}],
                       "body": {
                         "map": {
@@ -467,7 +467,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -475,8 +475,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The terms bound by all term variables in scope"}}}],
                       "body": {
                         "map": {
@@ -540,7 +540,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -548,8 +548,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The type schemes of all term variables in scope"}}}],
                       "body": {
                         "map": {
@@ -613,7 +613,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -621,8 +621,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                       "body": {
@@ -687,7 +687,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -695,8 +695,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The set of term variables introduced by specifically by lambdas"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -758,7 +758,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -766,8 +766,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                       "body": {
                         "map": {
@@ -831,7 +831,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -839,8 +839,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "All primitive functions and constants by name"}}}],
                       "body": {
                         "map": {
@@ -904,7 +904,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -912,8 +912,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.core.Name"},
@@ -976,7 +976,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -984,8 +984,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The set of type variables introduced specifically by type lambdas"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -1396,8 +1396,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The terms bound by all term variables in scope"}}}],
                         "body": {
                           "map": {
@@ -1411,7 +1411,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1425,8 +1425,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The terms bound by all term variables in scope"}}}],
                           "body": {
                             "map": {
@@ -1839,8 +1839,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The type schemes of all term variables in scope"}}}],
                         "body": {
                           "map": {
@@ -1854,7 +1854,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1868,8 +1868,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The type schemes of all term variables in scope"}}}],
                           "body": {
                             "map": {
@@ -2282,8 +2282,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                         "body": {
@@ -2298,7 +2298,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2312,8 +2312,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
                           "body": {
@@ -2727,8 +2727,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The set of term variables introduced by specifically by lambdas"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -2740,7 +2740,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2754,8 +2754,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The set of term variables introduced by specifically by lambdas"}}}],
                           "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -3166,8 +3166,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                         "body": {
                           "map": {
@@ -3181,7 +3181,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3195,8 +3195,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
                           "body": {
                             "map": {
@@ -3609,8 +3609,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "All primitive functions and constants by name"}}}],
                         "body": {
                           "map": {
@@ -3624,7 +3624,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3638,8 +3638,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "All primitive functions and constants by name"}}}],
                           "body": {
                             "map": {
@@ -4052,8 +4052,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.core.Name"},
@@ -4066,7 +4066,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4080,8 +4080,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
                           "body": {
                             "map": {
                               "keys": {"variable": "hydra.core.Name"},
@@ -4493,8 +4493,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The set of type variables introduced specifically by type lambdas"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -4506,7 +4506,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4520,8 +4520,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The set of type variables introduced specifically by type lambdas"}}}],
                           "body": {"set": {"variable": "hydra.core.Name"}}}},
@@ -4616,8 +4616,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
                             "body": {
@@ -4641,8 +4641,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The type signature of the primitive function"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4653,13 +4653,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The unique name of the primitive function"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The unique name of the primitive function"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4675,8 +4675,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
                               "body": {
@@ -4699,8 +4699,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The type signature of the primitive function"}}}],
                           "body": {"variable": "hydra.core.TypeScheme"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -4710,8 +4710,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The unique name of the primitive function"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The unique name of the primitive function"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4767,7 +4767,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4775,8 +4775,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The unique name of the primitive function"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The unique name of the primitive function"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4836,7 +4836,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4844,8 +4844,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The type signature of the primitive function"}}}],
                       "body": {"variable": "hydra.core.TypeScheme"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4906,7 +4906,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4914,8 +4914,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
                       "body": {
@@ -5088,8 +5088,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unique name of the primitive function"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The unique name of the primitive function"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5099,7 +5099,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5113,8 +5113,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The unique name of the primitive function"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The unique name of the primitive function"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5273,8 +5273,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The type signature of the primitive function"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -5285,7 +5285,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5299,8 +5299,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The type signature of the primitive function"}}}],
                           "body": {"variable": "hydra.core.TypeScheme"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -5460,8 +5460,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
                         "body": {
@@ -5485,7 +5485,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5499,8 +5499,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."}}}],
                           "body": {
@@ -5607,8 +5607,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "A decode function from native values to terms"}}}],
                             "body": {
                               "function": {
@@ -5628,8 +5628,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An encode function from terms to native values"}}}],
                         "body": {
                           "function": {
@@ -5652,13 +5652,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "type"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5677,8 +5677,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {"string": "A decode function from native values to terms"}}}],
                               "body": {
                                 "function": {
@@ -5697,8 +5697,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "An encode function from terms to native values"}}}],
                           "body": {
                             "function": {
@@ -5720,8 +5720,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["a"]}}},
@@ -5780,7 +5780,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5788,8 +5788,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5855,7 +5855,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5863,8 +5863,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "An encode function from terms to native values"}}}],
                       "body": {
                         "function": {
@@ -5943,7 +5943,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5951,8 +5951,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A decode function from native values to terms"}}}],
                       "body": {
                         "function": {
@@ -6124,8 +6124,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6138,7 +6138,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6155,8 +6155,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6318,8 +6318,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An encode function from terms to native values"}}}],
                         "body": {
                           "function": {
@@ -6345,7 +6345,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6362,8 +6362,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "An encode function from terms to native values"}}}],
                           "body": {
                             "function": {
@@ -6538,8 +6538,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A decode function from native values to terms"}}}],
                         "body": {
                           "function": {
@@ -6562,7 +6562,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6579,8 +6579,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "A decode function from native values to terms"}}}],
                           "body": {
                             "function": {

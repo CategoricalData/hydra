@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract an arbitrary-precision floating-point value from a term"}}}],
             "body": {
@@ -71,7 +71,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -89,8 +89,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a bigfloat value from a FloatValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a bigfloat value from a FloatValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -107,7 +107,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "f"}}},
+                                        "body": {"either": {"right": {"variable": "f"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"float": {"bigfloat": {}}}}}},
                                 "domain": {"literal": {"float": {"bigfloat": {}}}},
@@ -118,7 +118,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -145,7 +145,7 @@
                 "domain": {"variable": "hydra.core.FloatValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -160,8 +160,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract an arbitrary-precision integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -223,7 +223,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -241,8 +241,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a bigint value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a bigint value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -259,7 +259,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"bigint": {}}}}}},
                                 "domain": {"literal": {"integer": {"bigint": {}}}},
@@ -270,7 +270,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -297,7 +297,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -312,8 +312,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a binary data value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a binary data value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -352,7 +352,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -370,8 +370,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a binary literal from a Literal value"}}}],
             "body": {
               "lambda": {
@@ -389,7 +389,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "b"}}},
+                                        "body": {"either": {"right": {"variable": "b"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"binary": {}}}}},
                                 "domain": {"literal": {"binary": {}}},
@@ -400,7 +400,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -427,7 +427,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -442,8 +442,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a boolean value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a boolean value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -482,7 +482,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -500,8 +500,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a boolean literal from a Literal value"}}}],
             "body": {
               "lambda": {
@@ -519,7 +519,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "b"}}},
+                                        "body": {"either": {"right": {"variable": "b"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"boolean": {}}}}},
                                 "domain": {"literal": {"boolean": {}}},
@@ -530,7 +530,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -557,7 +557,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -572,8 +572,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract a specific case handler from a case statement term"}}}],
             "body": {
@@ -590,7 +590,7 @@
                                   {
                                     "name": "fieldName",
                                     "term": {"wrap": {"body": {"variable": "n"}, "typeName": "hydra.core.Name"}},
-                                    "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                    "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -636,7 +636,7 @@
                                                           "typeApplication": {
                                                             "body": {"variable": "hydra.lib.lists.find"},
                                                             "type": {"variable": "hydra.core.Field"}}}}}}},
-                                                "type": {"type": {"maybe": {"variable": "hydra.core.Field"}}, "variables": []}}],
+                                                "type": {"body": {"maybe": {"variable": "hydra.core.Field"}}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {"variable": "matching"},
@@ -648,7 +648,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"either": {"@right": {"variable": "mf"}}},
+                                                                "body": {"either": {"right": {"variable": "mf"}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.core.Field"}}},
                                                         "domain": {"variable": "hydra.core.Field"},
@@ -661,7 +661,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "extraction",
@@ -724,7 +724,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -748,8 +748,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract case statement from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract case statement from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -778,7 +778,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -818,7 +818,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"either": {"@right": {"variable": "cs"}}},
+                                                                "body": {"either": {"right": {"variable": "cs"}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.core.CaseStatement"}}},
                                                         "function": {
@@ -858,7 +858,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "extraction",
@@ -912,7 +912,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -933,8 +933,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract an arbitrary-precision decimal value from a term"}}}],
             "body": {
               "lambda": {
@@ -974,7 +974,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -992,8 +992,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a decimal literal from a Literal value"}}}],
             "body": {
               "lambda": {
@@ -1011,7 +1011,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "d"}}},
+                                        "body": {"either": {"right": {"variable": "d"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"decimal": {}}}}},
                                 "domain": {"literal": {"decimal": {}}},
@@ -1022,7 +1022,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -1049,7 +1049,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -1068,8 +1068,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Decode an Either value using the provided left and right decoders"}}}],
                     "body": {
@@ -1118,7 +1118,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"either": {"@right": {"variable": "x"}}},
+                                                                                            "body": {"either": {"right": {"variable": "x"}}},
                                                                                             "type": {"variable": "t0"}}},
                                                                                         "type": {"variable": "t1"}}},
                                                                                     "domain": {"variable": "t1"},
@@ -1156,7 +1156,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"either": {"@left": {"variable": "x"}}},
+                                                                                                "body": {"either": {"left": {"variable": "x"}}},
                                                                                                 "type": {"variable": "t0"}}},
                                                                                             "type": {"variable": "t1"}}},
                                                                                         "domain": {"variable": "t0"},
@@ -1197,7 +1197,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "wrap": {
                                                                     "body": {"literal": {"string": "expected either value"}},
                                                                     "typeName": "hydra.errors.DecodingError"}}}},
@@ -1254,7 +1254,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1298,8 +1298,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Decode a list of elements using the provided element decoder"}}}],
                 "body": {
@@ -1349,7 +1349,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "wrap": {
                                                             "body": {"literal": {"string": "expected list"}},
                                                             "typeName": "hydra.errors.DecodingError"}}}},
@@ -1394,7 +1394,7 @@
                     "parameter": "elemDecoder"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1428,8 +1428,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Decode a Map using the provided key and value decoders"}}}],
                     "body": {
                       "lambda": {
@@ -1501,7 +1501,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"pair": {"@first": {"variable": "k"}, "@second": {"variable": "v"}}},
+                                                                                                        "body": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}},
                                                                                                         "type": {"variable": "t0"}}},
                                                                                                     "type": {"variable": "t1"}}},
                                                                                                 "domain": {"variable": "t1"},
@@ -1595,7 +1595,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "wrap": {
                                                                     "body": {"literal": {"string": "expected map"}},
                                                                     "typeName": "hydra.errors.DecodingError"}}}},
@@ -1652,8 +1652,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1687,6 +1686,7 @@
                           "right": {"variable": "t0"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0", "t1"]}}},
     {
       "term": {
@@ -1697,8 +1697,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Decode a Maybe value using the provided element decoder"}}}],
                 "body": {
                   "lambda": {
@@ -1747,7 +1747,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "wrap": {
                                                             "body": {"literal": {"string": "expected optional value"}},
                                                             "typeName": "hydra.errors.DecodingError"}}}},
@@ -1792,7 +1792,7 @@
                     "parameter": "elemDecoder"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1826,8 +1826,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Decode a Pair using the provided first and second decoders"}}}],
                     "body": {
@@ -1882,7 +1882,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"pair": {"@first": {"variable": "f"}, "@second": {"variable": "s"}}},
+                                                                                        "body": {"pair": {"first": {"variable": "f"}, "second": {"variable": "s"}}},
                                                                                         "type": {"variable": "t0"}}},
                                                                                     "type": {"variable": "t1"}}},
                                                                                 "domain": {"variable": "t1"},
@@ -1938,7 +1938,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "wrap": {
                                                                     "body": {"literal": {"string": "expected pair"}},
                                                                     "typeName": "hydra.errors.DecodingError"}}}},
@@ -1995,7 +1995,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2039,8 +2039,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Decode a Set using the provided element decoder"}}}],
                 "body": {
                   "lambda": {
@@ -2113,7 +2113,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "wrap": {
                                                             "body": {"literal": {"string": "expected set"}},
                                                             "typeName": "hydra.errors.DecodingError"}}}},
@@ -2158,8 +2158,7 @@
                     "parameter": "elemDecoder"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2181,6 +2180,7 @@
                           "right": {"variable": "t0"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -2189,8 +2189,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Decode a unit value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Decode a unit value"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2213,7 +2213,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"unit": {}}}},
+                                                    "body": {"either": {"right": {"unit": {}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
                                                 "type": {"unit": {}}}},
                                             "domain": {"unit": {}},
@@ -2224,7 +2224,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "wrap": {
                                                     "body": {"literal": {"string": "expected a unit value"}},
                                                     "typeName": "hydra.errors.DecodingError"}}}},
@@ -2257,7 +2257,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "g"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2277,8 +2277,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Decode a wrapped value using the provided body decoder"}}}],
                 "body": {
                   "lambda": {
@@ -2318,7 +2318,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "wrap": {
                                                             "body": {"literal": {"string": "expected wrapped value"}},
                                                             "typeName": "hydra.errors.DecodingError"}}}},
@@ -2363,7 +2363,7 @@
                     "parameter": "bodyDecoder"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2393,8 +2393,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Strip annotations and dereference variables, returning Either DecodingError Term"}}}],
             "body": {
@@ -2448,7 +2448,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "g"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2468,8 +2468,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Extract a field value from a list of fields"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Extract a field value from a list of fields"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -2515,7 +2515,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.filter"},
                                                     "type": {"variable": "hydra.core.Field"}}}}}}},
-                                        "type": {"type": {"list": {"variable": "hydra.core.Field"}}, "variables": []}}],
+                                        "type": {"body": {"list": {"variable": "hydra.core.Field"}}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -2529,7 +2529,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
@@ -2562,7 +2562,7 @@
                                                     "type": {"variable": "t1"}}},
                                                 "parameter": "t1"}},
                                             "type": {
-                                              "type": {
+                                              "body": {
                                                 "either": {
                                                   "left": {"variable": "hydra.errors.Error"},
                                                   "right": {"variable": "t1"}}},
@@ -2577,7 +2577,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
@@ -2730,7 +2730,7 @@
                     "parameter": "fname"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2760,8 +2760,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 32-bit floating-point value from a term"}}}],
             "body": {
               "lambda": {
@@ -2823,7 +2823,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2841,8 +2841,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a float32 value from a FloatValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a float32 value from a FloatValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2859,7 +2859,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "f"}}},
+                                        "body": {"either": {"right": {"variable": "f"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"float": {"float32": {}}}}}},
                                 "domain": {"literal": {"float": {"float32": {}}}},
@@ -2870,7 +2870,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -2897,7 +2897,7 @@
                 "domain": {"variable": "hydra.core.FloatValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -2912,8 +2912,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 64-bit floating-point value from a term"}}}],
             "body": {
               "lambda": {
@@ -2975,7 +2975,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2993,8 +2993,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a float64 value from a FloatValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a float64 value from a FloatValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3011,7 +3011,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "f"}}},
+                                        "body": {"either": {"right": {"variable": "f"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"float": {"float64": {}}}}}},
                                 "domain": {"literal": {"float": {"float64": {}}}},
@@ -3022,7 +3022,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -3049,7 +3049,7 @@
                 "domain": {"variable": "hydra.core.FloatValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -3064,8 +3064,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a floating-point literal from a Literal value"}}}],
             "body": {
               "lambda": {
@@ -3083,7 +3083,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "v"}}},
+                                        "body": {"either": {"right": {"variable": "v"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.core.FloatValue"}}},
                                 "domain": {"variable": "hydra.core.FloatValue"},
@@ -3094,7 +3094,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -3123,7 +3123,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "lit"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -3138,8 +3138,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a float value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a float value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3178,7 +3178,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3200,8 +3200,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Extract an either value from a term, applying functions to the left and right values"}}}],
                     "body": {
@@ -3245,7 +3245,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"either": {"@right": {"variable": "x"}}},
+                                                                                            "body": {"either": {"right": {"variable": "x"}}},
                                                                                             "type": {"variable": "t0"}}},
                                                                                         "type": {"variable": "t1"}}},
                                                                                     "domain": {"variable": "t1"},
@@ -3278,7 +3278,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"either": {"@left": {"variable": "x"}}},
+                                                                                                "body": {"either": {"left": {"variable": "x"}}},
                                                                                                 "type": {"variable": "t0"}}},
                                                                                             "type": {"variable": "t1"}}},
                                                                                         "domain": {"variable": "t0"},
@@ -3319,7 +3319,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -3387,7 +3387,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3423,8 +3423,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract the left and right types from an either type"}}}],
             "body": {
               "lambda": {
@@ -3437,7 +3437,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "stripped"},
@@ -3452,7 +3452,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "et"}}},
+                                            "body": {"either": {"right": {"variable": "et"}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.EitherType"}}},
                                     "domain": {"variable": "hydra.core.EitherType"},
@@ -3463,7 +3463,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "extraction",
@@ -3490,7 +3490,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -3505,8 +3505,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a function type from a type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a function type from a type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3518,7 +3518,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "stripped"},
@@ -3533,7 +3533,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "ft"}}},
+                                            "body": {"either": {"right": {"variable": "ft"}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.FunctionType"}}},
                                     "domain": {"variable": "hydra.core.FunctionType"},
@@ -3544,7 +3544,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "extraction",
@@ -3571,7 +3571,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -3586,8 +3586,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a field from a union term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a field from a union term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3616,7 +3616,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -3661,7 +3661,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "application": {
                                                                         "argument": {"variable": "injection"},
                                                                         "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}}}},
@@ -3703,7 +3703,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "extraction",
@@ -3755,7 +3755,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "expected"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3776,8 +3776,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 16-bit signed integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -3839,7 +3839,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3857,8 +3857,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract an int16 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract an int16 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3875,7 +3875,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"int16": {}}}}}},
                                 "domain": {"literal": {"integer": {"int16": {}}}},
@@ -3886,7 +3886,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -3913,7 +3913,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -3928,8 +3928,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 32-bit signed integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -3991,7 +3991,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4009,8 +4009,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract an int32 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract an int32 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4027,7 +4027,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
@@ -4038,7 +4038,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -4065,7 +4065,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -4080,8 +4080,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 64-bit signed integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -4143,7 +4143,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4161,8 +4161,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract an int64 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract an int64 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4179,7 +4179,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"int64": {}}}}}},
                                 "domain": {"literal": {"integer": {"int64": {}}}},
@@ -4190,7 +4190,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -4217,7 +4217,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -4232,8 +4232,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract an 8-bit signed integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -4295,7 +4295,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4313,8 +4313,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract an int8 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract an int8 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4331,7 +4331,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"int8": {}}}}}},
                                 "domain": {"literal": {"integer": {"int8": {}}}},
@@ -4342,7 +4342,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -4369,7 +4369,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -4384,8 +4384,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract an integer literal from a Literal value"}}}],
             "body": {
               "lambda": {
@@ -4403,7 +4403,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "v"}}},
+                                        "body": {"either": {"right": {"variable": "v"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.core.IntegerValue"}}},
                                 "domain": {"variable": "hydra.core.IntegerValue"},
@@ -4414,7 +4414,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -4441,7 +4441,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "lit"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -4456,8 +4456,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract an integer value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract an integer value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4496,7 +4496,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4514,8 +4514,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the body of a lambda term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the body of a lambda term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4547,7 +4547,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4565,8 +4565,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a lambda from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a lambda from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4589,7 +4589,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "l"}}},
+                                                    "body": {"either": {"right": {"variable": "l"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.core.Lambda"}}},
                                             "domain": {"variable": "hydra.core.Lambda"},
@@ -4600,7 +4600,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -4650,7 +4650,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4668,8 +4668,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a binding with the given name from a let term"}}}],
             "body": {
               "lambda": {
@@ -4683,7 +4683,7 @@
                               {
                                 "name": "name",
                                 "term": {"wrap": {"body": {"variable": "n"}, "typeName": "hydra.core.Name"}},
-                                "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -4729,7 +4729,7 @@
                                                         "body": {"variable": "hydra.lib.lists.filter"},
                                                         "type": {"variable": "hydra.core.Binding"}}}}}}},
                                             "type": {
-                                              "type": {"list": {"variable": "hydra.core.Binding"}},
+                                              "body": {"list": {"variable": "hydra.core.Binding"}},
                                               "variables": []}}],
                                         "body": {
                                           "let": {
@@ -4744,7 +4744,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -4762,7 +4762,7 @@
                                                         "type": {"variable": "t0"}}},
                                                     "parameter": "t0"}},
                                                 "type": {
-                                                  "type": {
+                                                  "body": {
                                                     "either": {
                                                       "left": {"variable": "hydra.errors.Error"},
                                                       "right": {"variable": "t0"}}},
@@ -4777,7 +4777,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -4814,7 +4814,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "either": {
-                                                                                "@right": {
+                                                                                "right": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "b"},
                                                                                     "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
@@ -4913,7 +4913,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "n"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4934,8 +4934,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a let expression from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a let expression from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4958,7 +4958,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "lt"}}},
+                                                    "body": {"either": {"right": {"variable": "lt"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.core.Let"}}},
                                             "domain": {"variable": "hydra.core.Let"},
@@ -4969,7 +4969,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -5019,7 +5019,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5037,8 +5037,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a list of terms from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a list of terms from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5061,7 +5061,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "l"}}},
+                                                    "body": {"either": {"right": {"variable": "l"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"list": {"variable": "hydra.core.Term"}}}},
                                             "domain": {"list": {"variable": "hydra.core.Term"}},
@@ -5072,7 +5072,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -5122,7 +5122,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5140,8 +5140,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the first element of a list term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the first element of a list term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5167,7 +5167,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"either": {"@right": {"variable": "h"}}},
+                                                "body": {"either": {"right": {"variable": "h"}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "hydra.core.Term"},
@@ -5180,7 +5180,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "extraction",
@@ -5236,7 +5236,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5256,8 +5256,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Extract a list of values from a term, mapping a function over each element"}}}],
                 "body": {
@@ -5321,7 +5321,7 @@
                     "parameter": "f"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5348,8 +5348,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the element type from a list type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the element type from a list type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5361,7 +5361,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "stripped"},
@@ -5376,7 +5376,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "t"}}},
+                                            "body": {"either": {"right": {"variable": "t"}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Type"}}},
                                     "domain": {"variable": "hydra.core.Type"},
@@ -5387,7 +5387,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "extraction",
@@ -5414,7 +5414,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -5429,8 +5429,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a literal value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a literal value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5453,7 +5453,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "lit"}}},
+                                                    "body": {"either": {"right": {"variable": "lit"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.core.Literal"}}},
                                             "domain": {"variable": "hydra.core.Literal"},
@@ -5464,7 +5464,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -5514,7 +5514,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5536,8 +5536,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Extract a map of key-value pairs from a term, mapping functions over each key and value"}}}],
                     "body": {
@@ -5570,7 +5570,7 @@
                                                                     "body": {"variable": "hydra.lib.pairs.first"},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}},
-                                                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                        "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -5586,7 +5586,7 @@
                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}},
-                                                            "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                            "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                         "body": {
                                                           "application": {
                                                             "argument": {
@@ -5601,12 +5601,12 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "either": {
-                                                                                    "@right": {
+                                                                                    "right": {
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
                                                                                             "body": {
-                                                                                              "pair": {"@first": {"variable": "kval"}, "@second": {"variable": "vval"}}},
+                                                                                              "pair": {"first": {"variable": "kval"}, "second": {"variable": "vval"}}},
                                                                                             "type": {"variable": "t0"}}},
                                                                                         "type": {"variable": "t1"}}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5649,7 +5649,7 @@
                                                     "second": {"variable": "hydra.core.Term"}}},
                                                 "parameter": "kvPair"}},
                                             "type": {
-                                              "type": {
+                                              "body": {
                                                 "function": {
                                                   "codomain": {
                                                     "either": {
@@ -5735,7 +5735,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "extraction",
@@ -5803,8 +5803,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5832,6 +5831,7 @@
                       "left": {"variable": "hydra.errors.Error"},
                       "right": {"variable": "t0"}}},
                   "domain": {"variable": "hydra.core.Term"}}}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0", "t1"]}}},
     {
       "term": {
@@ -5840,8 +5840,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract the key and value types from a map type"}}}],
             "body": {
               "lambda": {
@@ -5854,7 +5854,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "stripped"},
@@ -5869,7 +5869,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "mt"}}},
+                                            "body": {"either": {"right": {"variable": "mt"}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.MapType"}}},
                                     "domain": {"variable": "hydra.core.MapType"},
@@ -5880,7 +5880,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "extraction",
@@ -5907,7 +5907,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -5924,8 +5924,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Ensure a function has the expected number of arguments"}}}],
                 "body": {
                   "lambda": {
@@ -5941,7 +5941,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "either": {
-                                            "@left": {
+                                            "left": {
                                               "inject": {
                                                 "field": {
                                                   "name": "extraction",
@@ -5994,7 +5994,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"unit": {}}}},
+                                            "body": {"either": {"right": {"unit": {}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"unit": {}}}},
                                     "function": {
@@ -6028,7 +6028,7 @@
                     "parameter": "name"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6049,8 +6049,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Extract an optional value from a term, applying a function to the value if present"}}}],
                 "body": {
@@ -6110,7 +6110,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t0"}}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"maybe": {"variable": "t0"}}}},
@@ -6132,7 +6132,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "extraction",
@@ -6191,7 +6191,7 @@
                     "parameter": "f"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6218,8 +6218,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the base type from an optional type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the base type from an optional type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -6231,7 +6231,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "stripped"},
@@ -6246,7 +6246,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "t"}}},
+                                            "body": {"either": {"right": {"variable": "t"}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Type"}}},
                                     "domain": {"variable": "hydra.core.Type"},
@@ -6257,7 +6257,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "extraction",
@@ -6284,7 +6284,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -6303,8 +6303,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Extract a pair of values from a term, applying functions to each component"}}}],
                     "body": {
@@ -6343,12 +6343,12 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "either": {
-                                                                                        "@right": {
+                                                                                        "right": {
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "pair": {"@first": {"variable": "kVal"}, "@second": {"variable": "vVal"}}},
+                                                                                                  "pair": {"first": {"variable": "kVal"}, "second": {"variable": "vVal"}}},
                                                                                                 "type": {"variable": "t0"}}},
                                                                                             "type": {"variable": "t1"}}}}},
                                                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -6418,7 +6418,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -6486,7 +6486,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6522,8 +6522,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a record's fields from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a record's fields from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -6542,7 +6542,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -6587,7 +6587,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {"variable": "record"},
                                                         "function": {"project": {"field": "fields", "typeName": "hydra.core.Record"}}}}}},
@@ -6643,7 +6643,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "expected"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6666,8 +6666,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Extract the field types from a record type"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Extract the field types from a record type"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -6681,7 +6681,7 @@
                                   "application": {
                                     "argument": {"variable": "typ"},
                                     "function": {"variable": "hydra.strip.deannotateType"}}},
-                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "stripped"},
@@ -6696,7 +6696,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "fields"}}},
+                                                    "body": {"either": {"right": {"variable": "fields"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                             "domain": {"list": {"variable": "hydra.core.FieldType"}},
@@ -6707,7 +6707,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -6737,7 +6737,7 @@
                     "parameter": "ename"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6761,8 +6761,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Require a field from a record's field map and decode it"}}}],
                         "body": {
                           "lambda": {
@@ -6807,7 +6807,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "wrap": {
                                                                     "body": {
                                                                       "application": {
@@ -6854,7 +6854,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6890,8 +6890,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a set of terms from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a set of terms from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -6914,7 +6914,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "s"}}},
+                                                    "body": {"either": {"right": {"variable": "s"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"set": {"variable": "hydra.core.Term"}}}},
                                             "domain": {"set": {"variable": "hydra.core.Term"}},
@@ -6925,7 +6925,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -6975,7 +6975,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6995,8 +6995,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Extract a set of values from a term, mapping a function over each element"}}}],
                 "body": {
@@ -7060,7 +7060,7 @@
                     "parameter": "f"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -7087,8 +7087,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the element type from a set type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the element type from a set type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -7100,7 +7100,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "stripped"},
@@ -7115,7 +7115,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "t"}}},
+                                            "body": {"either": {"right": {"variable": "t"}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Type"}}},
                                     "domain": {"variable": "hydra.core.Type"},
@@ -7126,7 +7126,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "extraction",
@@ -7153,7 +7153,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -7168,8 +7168,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a string value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a string value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -7208,7 +7208,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -7226,8 +7226,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a string literal from a Literal value"}}}],
             "body": {
               "lambda": {
@@ -7245,7 +7245,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "s"}}},
+                                        "body": {"either": {"right": {"variable": "s"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"string": {}}}}},
                                 "domain": {"literal": {"string": {}}},
@@ -7256,7 +7256,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -7283,7 +7283,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -7298,8 +7298,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a record from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a record from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -7322,7 +7322,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "record"}}},
+                                                    "body": {"either": {"right": {"variable": "record"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.core.Record"}}},
                                             "domain": {"variable": "hydra.core.Record"},
@@ -7333,7 +7333,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -7383,7 +7383,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -7401,8 +7401,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a Record's fields to a Map from Name to Term"}}}],
             "body": {
               "lambda": {
@@ -7424,11 +7424,11 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "@first": {
+                                            "first": {
                                               "application": {
                                                 "argument": {"variable": "f"},
                                                 "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
-                                            "@second": {
+                                            "second": {
                                               "application": {
                                                 "argument": {"variable": "f"},
                                                 "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}}}},
@@ -7456,7 +7456,7 @@
                 "domain": {"variable": "hydra.core.Record"},
                 "parameter": "record"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "map": {
@@ -7471,8 +7471,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 16-bit unsigned integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -7534,7 +7534,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -7552,8 +7552,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a uint16 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a uint16 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -7570,7 +7570,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"uint16": {}}}}}},
                                 "domain": {"literal": {"integer": {"uint16": {}}}},
@@ -7581,7 +7581,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -7608,7 +7608,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -7623,8 +7623,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 32-bit unsigned integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -7686,7 +7686,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -7704,8 +7704,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a uint32 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a uint32 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -7722,7 +7722,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"uint32": {}}}}}},
                                 "domain": {"literal": {"integer": {"uint32": {}}}},
@@ -7733,7 +7733,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -7760,7 +7760,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -7775,8 +7775,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract a 64-bit unsigned integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -7838,7 +7838,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -7856,8 +7856,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a uint64 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a uint64 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -7874,7 +7874,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"uint64": {}}}}}},
                                 "domain": {"literal": {"integer": {"uint64": {}}}},
@@ -7885,7 +7885,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -7912,7 +7912,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -7927,8 +7927,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract an 8-bit unsigned integer value from a term"}}}],
             "body": {
               "lambda": {
@@ -7990,7 +7990,7 @@
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "graph"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -8008,8 +8008,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a uint8 value from an IntegerValue"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a uint8 value from an IntegerValue"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -8026,7 +8026,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "i"}}},
+                                        "body": {"either": {"right": {"variable": "i"}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"literal": {"integer": {"uint8": {}}}}}},
                                 "domain": {"literal": {"integer": {"uint8": {}}}},
@@ -8037,7 +8037,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -8064,7 +8064,7 @@
                 "domain": {"variable": "hydra.core.IntegerValue"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -8081,8 +8081,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Extract the field types from a union type"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Extract the field types from a union type"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -8096,7 +8096,7 @@
                                   "application": {
                                     "argument": {"variable": "typ"},
                                     "function": {"variable": "hydra.strip.deannotateType"}}},
-                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "stripped"},
@@ -8111,7 +8111,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "fields"}}},
+                                                    "body": {"either": {"right": {"variable": "fields"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                             "domain": {"list": {"variable": "hydra.core.FieldType"}},
@@ -8122,7 +8122,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -8152,7 +8152,7 @@
                     "parameter": "ename"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -8170,8 +8170,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a unit value from a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract a unit value from a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -8188,7 +8188,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"unit": {}}}},
+                                        "body": {"either": {"right": {"unit": {}}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"unit": {}}}},
                                 "domain": {"unit": {}},
@@ -8199,7 +8199,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "inject": {
                                         "field": {
                                           "name": "extraction",
@@ -8226,7 +8226,7 @@
                 "domain": {"variable": "hydra.core.Term"},
                 "parameter": "term"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"unit": {}}}},
@@ -8239,8 +8239,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract a unit variant (a variant with an empty record value) from a union term"}}}],
             "body": {
@@ -8263,7 +8263,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {"variable": "field"},
                                                         "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}}}},
@@ -8321,7 +8321,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "tname"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -8342,8 +8342,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract the wrapped value from a wrapped term"}}}],
             "body": {
               "lambda": {
@@ -8373,7 +8373,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@left": {
+                                                                "left": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
@@ -8419,7 +8419,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "application": {
                                                                         "argument": {"variable": "wrappedTerm"},
                                                                         "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}}}},
@@ -8462,7 +8462,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "extraction",
@@ -8531,7 +8531,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "expected"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -8554,8 +8554,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Extract the wrapped type from a wrapper type"}}}],
                 "body": {
                   "lambda": {
@@ -8570,7 +8570,7 @@
                                   "application": {
                                     "argument": {"variable": "typ"},
                                     "function": {"variable": "hydra.strip.deannotateType"}}},
-                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "stripped"},
@@ -8585,7 +8585,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "innerType"}}},
+                                                    "body": {"either": {"right": {"variable": "innerType"}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.core.Type"}}},
                                             "domain": {"variable": "hydra.core.Type"},
@@ -8596,7 +8596,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "extraction",
@@ -8626,7 +8626,7 @@
                     "parameter": "ename"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

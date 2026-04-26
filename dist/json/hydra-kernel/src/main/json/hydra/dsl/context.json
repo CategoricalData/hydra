@@ -85,8 +85,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                             "body": {
@@ -101,8 +101,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "messages"}},
@@ -112,15 +112,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A stack of context labels describing the current execution path"}}}],
                     "body": {"list": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "trace"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -136,8 +136,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                               "body": {
@@ -151,8 +151,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                           "body": {"list": {"literal": {"string": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -161,8 +161,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A stack of context labels describing the current execution path"}}}],
                       "body": {"list": {"literal": {"string": {}}}}}},
@@ -220,7 +220,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -228,8 +228,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A stack of context labels describing the current execution path"}}}],
                       "body": {"list": {"literal": {"string": {}}}}}},
@@ -291,7 +291,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -299,8 +299,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                       "body": {"list": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -360,7 +360,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -368,8 +368,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                       "body": {
@@ -533,8 +533,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A stack of context labels describing the current execution path"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}},
@@ -546,7 +546,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -560,8 +560,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "A stack of context labels describing the current execution path"}}}],
                           "body": {"list": {"literal": {"string": {}}}}}},
@@ -722,8 +722,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -733,7 +733,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -747,8 +747,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                           "body": {"list": {"literal": {"string": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -907,8 +907,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                         "body": {
@@ -923,7 +923,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -937,8 +937,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                           "body": {
@@ -1018,8 +1018,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The execution context at the point of capture"}}}],
                         "body": {"variable": "hydra.context.Context"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1030,13 +1030,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A domain object; typically an error"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A domain object; typically an error"}}}],
                     "body": {"variable": "e"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "object"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1053,8 +1053,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The execution context at the point of capture"}}}],
                           "body": {"variable": "hydra.context.Context"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -1064,8 +1064,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A domain object; typically an error"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A domain object; typically an error"}}}],
                       "body": {"variable": "e"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["e"]}}},
@@ -1124,7 +1124,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1132,8 +1132,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A domain object; typically an error"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A domain object; typically an error"}}}],
                       "body": {"variable": "e"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1199,7 +1199,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1207,8 +1207,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The execution context at the point of capture"}}}],
                       "body": {"variable": "hydra.context.Context"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1321,8 +1321,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A domain object; typically an error"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A domain object; typically an error"}}}],
                         "body": {"variable": "e"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1335,7 +1335,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1352,8 +1352,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A domain object; typically an error"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A domain object; typically an error"}}}],
                           "body": {"variable": "e"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1465,8 +1465,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The execution context at the point of capture"}}}],
                         "body": {"variable": "hydra.context.Context"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1480,7 +1480,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1497,8 +1497,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The execution context at the point of capture"}}}],
                           "body": {"variable": "hydra.context.Context"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},

@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.json.model.Value",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A JSON value"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A JSON value"}}}],
               "body": {
                 "union": [
                   {
@@ -18,8 +18,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A JSON array"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A JSON array"}}}],
                         "body": {"list": {"variable": "hydra.json.model.Value"}}}}},
                   {
                     "name": "boolean",
@@ -27,8 +27,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A boolean value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A boolean value"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "null",
@@ -36,8 +36,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "JSON's null value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "JSON's null value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "number",
@@ -45,8 +45,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A numeric value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A numeric value"}}}],
                         "body": {"literal": {"decimal": {}}}}}},
                   {
                     "name": "object",
@@ -54,8 +54,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
                         "body": {
                           "map": {
                             "keys": {"literal": {"string": {}}},
@@ -66,8 +66,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A string value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
   "description": "A JSON syntax model. See the BNF at https://www.json.org",

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Language constraints for WebAssembly"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Language constraints for WebAssembly"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -31,7 +31,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
                     "name": "literalVariants",
@@ -60,7 +60,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -81,7 +81,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -102,7 +102,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
                     "name": "integerTypes",
@@ -147,7 +147,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -244,7 +244,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -325,7 +325,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -338,7 +338,7 @@
                             "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "t0"}}},
@@ -374,7 +374,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.wasm.language.wasmReservedWords",
@@ -382,8 +382,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "A set of reserved words in WebAssembly text format"}}}],
             "body": {
               "let": {
@@ -394,8 +394,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "WAT keywords (section and instruction keywords)"}}}],
                         "body": {
                           "list": [
@@ -432,15 +432,15 @@
                             {"literal": {"string": "mut"}},
                             {"literal": {"string": "offset"}},
                             {"literal": {"string": "align"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "valueTypes",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "WAT value type keywords"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "WAT value type keywords"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "i32"}},
@@ -450,15 +450,15 @@
                             {"literal": {"string": "v128"}},
                             {"literal": {"string": "funcref"}},
                             {"literal": {"string": "externref"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "instructionPrefixes",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Common WAT instruction prefixes"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Common WAT instruction prefixes"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "i32"}},
@@ -472,7 +472,7 @@
                             {"literal": {"string": "global.set"}},
                             {"literal": {"string": "memory.size"}},
                             {"literal": {"string": "memory.grow"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -490,7 +490,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for WebAssembly (WAT text format)",
   "namespace": "hydra.wasm.language",
   "termDependencies": ["hydra.lexical"],

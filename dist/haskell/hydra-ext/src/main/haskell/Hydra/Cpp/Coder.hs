@@ -537,7 +537,7 @@ findIncludes withFwd ns defs =
 
 findTypeDependencies :: Packaging.Namespace -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unNamespace (Names.namespaceOf n)) (Just (Packaging.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeType (Packaging.typeDefinitionType d)))) Sets.empty defs))
+    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unNamespace (Names.namespaceOf n)) (Just (Packaging.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionType d)))) Sets.empty defs))
 
 fwdHeaderName :: Packaging.Namespace -> Core.Name
 fwdHeaderName ns =
@@ -556,7 +556,7 @@ generateTypeFile :: Packaging.Namespace -> Packaging.TypeDefinition -> t0 -> t1 
 generateTypeFile ns def_ cx g =
 
       let name = Packaging.typeDefinitionName def_
-          typ = Core.typeSchemeType (Packaging.typeDefinitionType def_)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionType def_)
       in (Eithers.bind (encodeTypeDefinition cx g name typ) (\decls ->
         let includes = findIncludes True ns [
               def_]

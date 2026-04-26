@@ -11,8 +11,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Interpreter-friendly bind for Either terms."}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Interpreter-friendly bind for Either terms."}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -37,7 +37,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "application": {
                                                                     "argument": {"variable": "e"},
                                                                     "function": {
@@ -69,7 +69,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"either": {"@left": {"variable": "val"}}},
+                                                                                              "body": {"either": {"left": {"variable": "val"}}},
                                                                                               "type": {"variable": "hydra.core.Term"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}}},
                                                                                     "typeName": "hydra.core.Term"}},
@@ -98,7 +98,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "extraction",
@@ -133,7 +133,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -161,8 +161,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Interpreter-friendly bimap for Either terms."}}}],
                     "body": {
                       "lambda": {
@@ -190,7 +190,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "application": {
                                                                         "argument": {"variable": "e"},
                                                                         "function": {
@@ -207,7 +207,7 @@
                                                                                             "typeApplication": {
                                                                                               "body": {
                                                                                                 "either": {
-                                                                                                  "@right": {
+                                                                                                  "right": {
                                                                                                     "inject": {
                                                                                                       "field": {
                                                                                                         "name": "application",
@@ -237,7 +237,7 @@
                                                                                                 "typeApplication": {
                                                                                                   "body": {
                                                                                                     "either": {
-                                                                                                      "@left": {
+                                                                                                      "left": {
                                                                                                         "inject": {
                                                                                                           "field": {
                                                                                                             "name": "application",
@@ -276,7 +276,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
@@ -313,7 +313,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -344,8 +344,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Interpreter-friendly case analysis for Either terms."}}}],
                     "body": {
                       "lambda": {
@@ -373,7 +373,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "application": {
                                                                         "argument": {"variable": "e"},
                                                                         "function": {
@@ -433,7 +433,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
@@ -470,7 +470,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -499,8 +499,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly foldl for Either."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly foldl for Either."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -521,7 +521,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@right": {
+                                                        "right": {
                                                           "application": {
                                                             "argument": {"variable": "elements"},
                                                             "function": {
@@ -534,7 +534,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"variable": "initTerm"}}},
+                                                                              "body": {"either": {"right": {"variable": "initTerm"}}},
                                                                               "type": {"variable": "hydra.core.Term"}}},
                                                                           "type": {"variable": "hydra.core.Term"}}}},
                                                                     "typeName": "hydra.core.Term"}},
@@ -611,7 +611,7 @@
                                                                                                                                                 "typeApplication": {
                                                                                                                                                   "body": {
                                                                                                                                                     "either": {
-                                                                                                                                                      "@left": {
+                                                                                                                                                      "left": {
                                                                                                                                                         "inject": {
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "variable",
@@ -730,7 +730,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -761,8 +761,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Interpreter-friendly fromLeft for Either terms."}}}],
                     "body": {
                       "lambda": {
@@ -788,7 +788,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "application": {
                                                                     "argument": {"variable": "e"},
                                                                     "function": {
@@ -828,7 +828,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "extraction",
@@ -863,7 +863,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -891,8 +891,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Interpreter-friendly fromRight for Either terms."}}}],
                     "body": {
                       "lambda": {
@@ -918,7 +918,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "application": {
                                                                     "argument": {"variable": "e"},
                                                                     "function": {
@@ -958,7 +958,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "extraction",
@@ -993,7 +993,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1021,8 +1021,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Interpreter-friendly isLeft for Either terms."}}}],
                     "body": {
                       "lambda": {
@@ -1046,7 +1046,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "application": {
                                                                 "argument": {"variable": "e"},
                                                                 "function": {
@@ -1102,7 +1102,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "extraction",
@@ -1135,7 +1135,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1160,8 +1160,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Interpreter-friendly isRight for Either terms."}}}],
                     "body": {
                       "lambda": {
@@ -1185,7 +1185,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "application": {
                                                                 "argument": {"variable": "e"},
                                                                 "function": {
@@ -1241,7 +1241,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "extraction",
@@ -1274,7 +1274,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1297,8 +1297,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly lefts for list of Either terms."}}}],
                 "body": {
                   "lambda": {
@@ -1316,7 +1316,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "list",
@@ -1435,7 +1435,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1460,8 +1460,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Interpreter-friendly map for Either terms."}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Interpreter-friendly map for Either terms."}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -1486,7 +1486,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "application": {
                                                                     "argument": {"variable": "e"},
                                                                     "function": {
@@ -1503,7 +1503,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "either": {
-                                                                                              "@right": {
+                                                                                              "right": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "application",
@@ -1531,7 +1531,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"either": {"@left": {"variable": "val"}}},
+                                                                                              "body": {"either": {"left": {"variable": "val"}}},
                                                                                               "type": {"variable": "hydra.core.Term"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}}},
                                                                                     "typeName": "hydra.core.Term"}},
@@ -1560,7 +1560,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "extraction",
@@ -1595,7 +1595,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1621,8 +1621,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly mapList for Either (traverse)."}}}],
                 "body": {
                   "lambda": {
@@ -1642,7 +1642,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
@@ -1663,7 +1663,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@right": {
+                                                                              "right": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "list",
@@ -1746,7 +1746,7 @@
                                                                                                                                             "typeApplication": {
                                                                                                                                               "body": {
                                                                                                                                                 "either": {
-                                                                                                                                                  "@left": {
+                                                                                                                                                  "left": {
                                                                                                                                                     "inject": {
                                                                                                                                                       "field": {
                                                                                                                                                         "name": "variable",
@@ -1848,7 +1848,7 @@
                                                                                                                                                                                       "typeApplication": {
                                                                                                                                                                                         "body": {
                                                                                                                                                                                           "either": {
-                                                                                                                                                                                            "@left": {
+                                                                                                                                                                                            "left": {
                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                 "field": {
                                                                                                                                                                                                   "name": "variable",
@@ -1893,7 +1893,7 @@
                                                                                                                                                                         "typeApplication": {
                                                                                                                                                                           "body": {
                                                                                                                                                                             "either": {
-                                                                                                                                                                              "@right": {
+                                                                                                                                                                              "right": {
                                                                                                                                                                                 "inject": {
                                                                                                                                                                                   "field": {
                                                                                                                                                                                     "name": "application",
@@ -2015,7 +2015,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2043,8 +2043,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Interpreter-friendly mapMaybe for Either (traverse over Maybe)."}}}],
                     "body": {
@@ -2071,7 +2071,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "application": {
                                                                     "argument": {"variable": "opt"},
                                                                     "function": {
@@ -2145,7 +2145,7 @@
                                                                                                                                                 "typeApplication": {
                                                                                                                                                   "body": {
                                                                                                                                                     "either": {
-                                                                                                                                                      "@left": {
+                                                                                                                                                      "left": {
                                                                                                                                                         "inject": {
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "variable",
@@ -2190,7 +2190,7 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
                                                                                                                                       "either": {
-                                                                                                                                        "@right": {
+                                                                                                                                        "right": {
                                                                                                                                           "inject": {
                                                                                                                                             "field": {
                                                                                                                                               "name": "maybe",
@@ -2239,7 +2239,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "either": {
-                                                                                              "@right": {
+                                                                                              "right": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "maybe",
@@ -2266,7 +2266,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "extraction",
@@ -2301,7 +2301,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2327,8 +2327,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Interpreter-friendly mapSet for Either (traverse over Set)."}}}],
                 "body": {
@@ -2349,7 +2349,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
@@ -2370,7 +2370,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@right": {
+                                                                              "right": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "set",
@@ -2459,7 +2459,7 @@
                                                                                                                                             "typeApplication": {
                                                                                                                                               "body": {
                                                                                                                                                 "either": {
-                                                                                                                                                  "@left": {
+                                                                                                                                                  "left": {
                                                                                                                                                     "inject": {
                                                                                                                                                       "field": {
                                                                                                                                                         "name": "variable",
@@ -2561,7 +2561,7 @@
                                                                                                                                                                                       "typeApplication": {
                                                                                                                                                                                         "body": {
                                                                                                                                                                                           "either": {
-                                                                                                                                                                                            "@left": {
+                                                                                                                                                                                            "left": {
                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                 "field": {
                                                                                                                                                                                                   "name": "variable",
@@ -2606,7 +2606,7 @@
                                                                                                                                                                         "typeApplication": {
                                                                                                                                                                           "body": {
                                                                                                                                                                             "either": {
-                                                                                                                                                                              "@right": {
+                                                                                                                                                                              "right": {
                                                                                                                                                                                 "inject": {
                                                                                                                                                                                   "field": {
                                                                                                                                                                                     "name": "application",
@@ -2728,7 +2728,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2754,8 +2754,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Interpreter-friendly partitionEithers for list of Either terms."}}}],
                 "body": {
@@ -2774,7 +2774,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "application": {
                                                     "argument": {"variable": "elements"},
                                                     "function": {
@@ -2785,9 +2785,9 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}}},
                                                                 "type": {"list": {"variable": "hydra.core.Term"}}}},
                                                             "type": {"list": {"variable": "hydra.core.Term"}}}},
@@ -2812,7 +2812,7 @@
                                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                                         "type": {"list": {"variable": "hydra.core.Term"}}}},
                                                                                     "type": {"list": {"variable": "hydra.core.Term"}}}}}},
-                                                                            "type": {"type": {"list": {"variable": "hydra.core.Term"}}, "variables": []}}],
+                                                                            "type": {"body": {"list": {"variable": "hydra.core.Term"}}, "variables": []}}],
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
@@ -2828,7 +2828,7 @@
                                                                                             "body": {"variable": "hydra.lib.pairs.second"},
                                                                                             "type": {"list": {"variable": "hydra.core.Term"}}}},
                                                                                         "type": {"list": {"variable": "hydra.core.Term"}}}}}},
-                                                                                "type": {"type": {"list": {"variable": "hydra.core.Term"}}, "variables": []}}],
+                                                                                "type": {"body": {"list": {"variable": "hydra.core.Term"}}, "variables": []}}],
                                                                             "body": {
                                                                               "application": {
                                                                                 "argument": {"variable": "el"},
@@ -2852,8 +2852,8 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "pair": {
-                                                                                                                    "@first": {"variable": "ls"},
-                                                                                                                    "@second": {
+                                                                                                                    "first": {"variable": "ls"},
+                                                                                                                    "second": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
                                                                                                                           "application": {
@@ -2883,7 +2883,7 @@
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
                                                                                                                       "pair": {
-                                                                                                                        "@first": {
+                                                                                                                        "first": {
                                                                                                                           "application": {
                                                                                                                             "argument": {
                                                                                                                               "application": {
@@ -2899,7 +2899,7 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                                                                     "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                                                                                        "@second": {"variable": "rs"}}},
+                                                                                                                        "second": {"variable": "rs"}}},
                                                                                                                     "type": {"list": {"variable": "hydra.core.Term"}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.core.Term"}}}},
                                                                                                             "domain": {"variable": "hydra.core.Term"},
@@ -2978,7 +2978,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3004,8 +3004,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly rights for list of Either terms."}}}],
                 "body": {
                   "lambda": {
@@ -3023,7 +3023,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "list",
@@ -3142,7 +3142,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

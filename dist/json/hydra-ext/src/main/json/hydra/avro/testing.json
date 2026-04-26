@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.avro.testing.TypeLevelForwardTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which maps an Avro schema to a Hydra type and compares the result"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -31,8 +31,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The input Avro schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The input Avro schema"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
                     "name": "type",
@@ -40,20 +40,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected Hydra type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected Hydra type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelReverseTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which maps a Hydra type to an Avro schema and compares the result"}}}],
               "body": {
@@ -64,8 +64,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -75,8 +75,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The input Hydra type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The input Hydra type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "schema",
@@ -84,20 +84,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected Avro schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected Avro schema"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelRoundTripAvroTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which maps an Avro schema to a Hydra type and back, verifying the result"}}}],
               "body": {
@@ -108,8 +108,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -119,8 +119,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The original Avro schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The original Avro schema"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
                     "name": "expectedSchema",
@@ -128,8 +128,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The expected Avro schema after the round-trip, which may differ from the original due to normalization or information loss"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}}]}}},
@@ -138,12 +138,12 @@
       "type": {
         "name": "hydra.avro.testing.TypeLevelRoundTripHydraTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which maps a Hydra type to an Avro schema and back, verifying the result"}}}],
               "body": {
@@ -154,8 +154,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -165,8 +165,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The original Hydra type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The original Hydra type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "expectedType",
@@ -174,8 +174,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The expected Hydra type after the round-trip, which may differ from the original due to normalization or information loss"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
@@ -184,12 +184,12 @@
       "type": {
         "name": "hydra.avro.testing.TermLevelForwardTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which encodes a JSON value as a Hydra term using an Avro schema"}}}],
               "body": {
@@ -200,8 +200,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -211,8 +211,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Avro schema describing the JSON value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Avro schema describing the JSON value"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
                     "name": "json",
@@ -220,8 +220,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The input JSON value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The input JSON value"}}}],
                         "body": {"variable": "hydra.json.model.Value"}}}},
                   {
                     "name": "term",
@@ -229,20 +229,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected Hydra term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected Hydra term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelReverseTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which decodes a Hydra term to a JSON value using an Avro schema"}}}],
               "body": {
@@ -253,8 +253,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -264,8 +264,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The Avro schema describing the expected JSON value"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
@@ -274,8 +274,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The input Hydra term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The input Hydra term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "json",
@@ -283,20 +283,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected JSON value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected JSON value"}}}],
                         "body": {"variable": "hydra.json.model.Value"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelRoundTripJsonTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which encodes a JSON value as a Hydra term and decodes it back, verifying the result"}}}],
               "body": {
@@ -307,8 +307,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -318,8 +318,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Avro schema describing the JSON value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Avro schema describing the JSON value"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
                     "name": "json",
@@ -327,8 +327,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The original JSON value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The original JSON value"}}}],
                         "body": {"variable": "hydra.json.model.Value"}}}},
                   {
                     "name": "expectedJson",
@@ -336,8 +336,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The expected JSON value after the round-trip, which may differ from the original due to normalization"}}}],
                         "body": {"variable": "hydra.json.model.Value"}}}}]}}},
@@ -346,12 +346,12 @@
       "type": {
         "name": "hydra.avro.testing.TermLevelRoundTripTermTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which decodes a Hydra term to JSON and encodes it back, verifying the result"}}}],
               "body": {
@@ -362,8 +362,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -373,8 +373,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Hydra type of the term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Hydra type of the term"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "term",
@@ -382,8 +382,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The original Hydra term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The original Hydra term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "expectedTerm",
@@ -391,8 +391,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The expected Hydra term after the round-trip, which may differ from the original due to normalization"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
@@ -401,12 +401,12 @@
       "type": {
         "name": "hydra.avro.testing.UnionTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case for union type encoding and decoding, covering the various strategies for representing unions in Avro"}}}],
               "body": {
@@ -417,8 +417,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -428,8 +428,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Hydra union type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Hydra union type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "avroSchema",
@@ -437,8 +437,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The expected Avro schema (enum for all-unit unions, record with optional fields for general unions)"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
@@ -448,8 +448,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Pairs of corresponding Hydra terms and JSON values for this union"}}}],
                         "body": {
@@ -462,12 +462,12 @@
       "type": {
         "name": "hydra.avro.testing.NameMappingTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case for bidirectional name mapping between Hydra and Avro"}}}],
               "body": {
@@ -478,8 +478,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -489,8 +489,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Hydra name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Hydra name"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "avroName",
@@ -498,8 +498,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The expected Avro qualified name (dotted string)"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
@@ -508,20 +508,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected Avro namespace, if any"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected Avro namespace, if any"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.LossinessTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case which verifies that lossy conversions stash original information in annotations"}}}],
               "body": {
@@ -532,8 +532,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -543,8 +543,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The original Avro schema containing information that may be lost"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
@@ -554,8 +554,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The resulting Hydra type, which should carry annotations for any lost information"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
@@ -565,8 +565,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The Avro schema recovered from the annotated Hydra type"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
@@ -575,8 +575,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether the adapter reports this conversion as lossy"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -584,12 +584,12 @@
       "type": {
         "name": "hydra.avro.testing.SchemaSerializationTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case for Avro schema serialization to and from JSON"}}}],
               "body": {
@@ -600,8 +600,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A human-readable description of what this test case covers"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -611,8 +611,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Avro schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Avro schema"}}}],
                         "body": {"variable": "hydra.avro.schema.Schema"}}}},
                   {
                     "name": "json",
@@ -620,8 +620,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The expected JSON representation of the schema"}}}],
                         "body": {"variable": "hydra.json.model.Value"}}}}]}}},
           "variables": []}}},
@@ -629,12 +629,12 @@
       "type": {
         "name": "hydra.avro.testing.AvroTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A test case for the bidirectional Avro coder"}}}],
               "body": {
                 "union": [
@@ -644,8 +644,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Type-level forward mapping (Avro Schema -> Hydra Type)"}}}],
                         "body": {"variable": "hydra.avro.testing.TypeLevelForwardTestCase"}}}},
                   {
@@ -654,8 +654,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Type-level reverse mapping (Hydra Type -> Avro Schema)"}}}],
                         "body": {"variable": "hydra.avro.testing.TypeLevelReverseTestCase"}}}},
                   {
@@ -664,8 +664,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Type-level round-trip starting from Avro (Avro -> Hydra -> Avro)"}}}],
                         "body": {"variable": "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"}}}},
@@ -675,8 +675,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Type-level round-trip starting from Hydra (Hydra -> Avro -> Hydra)"}}}],
                         "body": {"variable": "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"}}}},
@@ -686,8 +686,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Term-level forward mapping (JSON -> Hydra Term)"}}}],
                         "body": {"variable": "hydra.avro.testing.TermLevelForwardTestCase"}}}},
                   {
@@ -696,8 +696,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Term-level reverse mapping (Hydra Term -> JSON)"}}}],
                         "body": {"variable": "hydra.avro.testing.TermLevelReverseTestCase"}}}},
                   {
@@ -706,8 +706,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Term-level round-trip starting from JSON (JSON -> Term -> JSON)"}}}],
                         "body": {"variable": "hydra.avro.testing.TermLevelRoundTripJsonTestCase"}}}},
@@ -717,8 +717,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Term-level round-trip starting from a term (Term -> JSON -> Term)"}}}],
                         "body": {"variable": "hydra.avro.testing.TermLevelRoundTripTermTestCase"}}}},
@@ -728,8 +728,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Union-specific encoding and decoding"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Union-specific encoding and decoding"}}}],
                         "body": {"variable": "hydra.avro.testing.UnionTestCase"}}}},
                   {
                     "name": "nameMapping",
@@ -737,8 +737,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Name mapping between Hydra and Avro"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Name mapping between Hydra and Avro"}}}],
                         "body": {"variable": "hydra.avro.testing.NameMappingTestCase"}}}},
                   {
                     "name": "lossiness",
@@ -746,8 +746,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Lossy conversion with annotation stashing"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Lossy conversion with annotation stashing"}}}],
                         "body": {"variable": "hydra.avro.testing.LossinessTestCase"}}}},
                   {
                     "name": "schemaSerialization",
@@ -755,8 +755,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Schema serialization to and from JSON"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Schema serialization to and from JSON"}}}],
                         "body": {"variable": "hydra.avro.testing.SchemaSerializationTestCase"}}}}]}}},
           "variables": []}}}],
   "description": "Test case types for the bidirectional Avro coder",

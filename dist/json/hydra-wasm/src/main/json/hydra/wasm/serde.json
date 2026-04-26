@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Serialize a WebAssembly module to a WAT expression"}}}],
             "body": {
               "lambda": {
@@ -21,7 +21,7 @@
                           "application": {
                             "argument": {"variable": "mod"},
                             "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.Module"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
@@ -30,7 +30,7 @@
                             "function": {
                               "project": {"field": "fields", "typeName": "hydra.wasm.syntax.Module"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}},
                           "variables": []}},
                       {
                         "name": "nameStr",
@@ -60,7 +60,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "fieldExprs",
                         "term": {
@@ -76,7 +76,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.ModuleField"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -138,7 +138,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.Module"},
                 "parameter": "mod"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.Module"}}},
@@ -150,8 +150,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Serialize a module field to a WAT expression"}}}],
             "body": {
               "lambda": {
@@ -272,7 +272,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ModuleField"},
                 "parameter": "field"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.ModuleField"}}},
@@ -284,8 +284,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a value type to its WAT string representation"}}}],
             "body": {
               "lambda": {
@@ -341,7 +341,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ValType"},
                 "parameter": "vt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.wasm.syntax.ValType"}}},
@@ -353,8 +353,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a function type to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a function type to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -368,7 +368,7 @@
                             "function": {
                               "project": {"field": "params", "typeName": "hydra.wasm.syntax.FuncType"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
                           "variables": []}},
                       {
                         "name": "results",
@@ -378,7 +378,7 @@
                             "function": {
                               "project": {"field": "results", "typeName": "hydra.wasm.syntax.FuncType"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
                           "variables": []}},
                       {
                         "name": "paramParts",
@@ -412,7 +412,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.ValType"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "resultParts",
                         "term": {
@@ -445,7 +445,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.ValType"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -518,7 +518,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.FuncType"},
                 "parameter": "ft"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.FuncType"}}},
@@ -530,8 +530,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a type use clause to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a type use clause to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -544,7 +544,7 @@
                             "argument": {"variable": "tu"},
                             "function": {
                               "project": {"field": "index", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "params",
                         "term": {
@@ -553,7 +553,7 @@
                             "function": {
                               "project": {"field": "params", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.Param"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.Param"}},
                           "variables": []}},
                       {
                         "name": "results",
@@ -563,7 +563,7 @@
                             "function": {
                               "project": {"field": "results", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
                           "variables": []}},
                       {
                         "name": "idxPart",
@@ -594,7 +594,7 @@
                                         "body": {"variable": "hydra.lib.maybes.map"},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "paramParts",
                         "term": {
@@ -610,7 +610,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.Param"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "resultParts",
                         "term": {
@@ -643,7 +643,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.ValType"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -699,7 +699,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.TypeUse"},
                 "parameter": "tu"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.TypeUse"}}},
@@ -711,8 +711,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a type definition to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a type definition to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -725,7 +725,7 @@
                             "argument": {"variable": "td"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.TypeDef"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "ft",
                         "term": {
@@ -733,7 +733,7 @@
                             "argument": {"variable": "td"},
                             "function": {
                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.TypeDef"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.FuncType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.FuncType"}, "variables": []}},
                       {
                         "name": "nameStr",
                         "term": {
@@ -762,7 +762,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -789,7 +789,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.TypeDef"},
                 "parameter": "td"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.TypeDef"}}},
@@ -801,8 +801,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a function parameter to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a function parameter to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -814,14 +814,14 @@
                           "application": {
                             "argument": {"variable": "p"},
                             "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.Param"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "p"},
                             "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.Param"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                       {
                         "name": "nameStr",
                         "term": {
@@ -850,7 +850,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -870,7 +870,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.Param"},
                 "parameter": "p"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.Param"}}},
@@ -882,8 +882,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a function definition to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a function definition to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -895,7 +895,7 @@
                           "application": {
                             "argument": {"variable": "f"},
                             "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.Func"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "typeUse",
                         "term": {
@@ -903,7 +903,7 @@
                             "argument": {"variable": "f"},
                             "function": {
                               "project": {"field": "typeUse", "typeName": "hydra.wasm.syntax.Func"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.TypeUse"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.TypeUse"}, "variables": []}},
                       {
                         "name": "locals",
                         "term": {
@@ -911,7 +911,7 @@
                             "argument": {"variable": "f"},
                             "function": {"project": {"field": "locals", "typeName": "hydra.wasm.syntax.Func"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.FuncLocal"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.FuncLocal"}},
                           "variables": []}},
                       {
                         "name": "body",
@@ -920,7 +920,7 @@
                             "argument": {"variable": "f"},
                             "function": {"project": {"field": "body", "typeName": "hydra.wasm.syntax.Func"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
                           "variables": []}},
                       {
                         "name": "nameStr",
@@ -950,7 +950,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "headerStr",
                         "term": {
@@ -960,14 +960,14 @@
                               "application": {
                                 "argument": {"literal": {"string": "(func"}},
                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "typeUsePart",
                         "term": {
                           "application": {
                             "argument": {"variable": "typeUse"},
                             "function": {"variable": "hydra.wasm.serde.typeUseToExpr"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "localParts",
                         "term": {
@@ -983,7 +983,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.FuncLocal"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "bodyParts",
                         "term": {
@@ -999,7 +999,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.Instruction"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "innerParts",
                         "term": {
@@ -1012,7 +1012,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -1105,7 +1105,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.Func"},
                 "parameter": "f"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.Func"}}},
@@ -1117,8 +1117,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Serialize a local variable declaration to WAT"}}}],
             "body": {
               "lambda": {
@@ -1132,7 +1132,7 @@
                             "argument": {"variable": "l"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.FuncLocal"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
@@ -1140,7 +1140,7 @@
                             "argument": {"variable": "l"},
                             "function": {
                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.FuncLocal"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                       {
                         "name": "nameStr",
                         "term": {
@@ -1169,7 +1169,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -1189,7 +1189,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.FuncLocal"},
                 "parameter": "l"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.FuncLocal"}}},
@@ -1201,8 +1201,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize an instruction to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize an instruction to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1300,7 +1300,7 @@
                                             "argument": {"variable": "ld"},
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "ma",
                                         "term": {
@@ -1308,7 +1308,7 @@
                                             "argument": {"variable": "ld"},
                                             "function": {
                                               "project": {"field": "memArg", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.MemArg"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.MemArg"}, "variables": []}},
                                       {
                                         "name": "off",
                                         "term": {
@@ -1316,7 +1316,7 @@
                                             "argument": {"variable": "ma"},
                                             "function": {
                                               "project": {"field": "offset", "typeName": "hydra.wasm.syntax.MemArg"}}}},
-                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                       {
                                         "name": "offStr",
                                         "term": {
@@ -1350,7 +1350,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1381,7 +1381,7 @@
                                             "argument": {"variable": "st"},
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "ma",
                                         "term": {
@@ -1389,7 +1389,7 @@
                                             "argument": {"variable": "st"},
                                             "function": {
                                               "project": {"field": "memArg", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.MemArg"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.MemArg"}, "variables": []}},
                                       {
                                         "name": "off",
                                         "term": {
@@ -1397,7 +1397,7 @@
                                             "argument": {"variable": "ma"},
                                             "function": {
                                               "project": {"field": "offset", "typeName": "hydra.wasm.syntax.MemArg"}}}},
-                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                       {
                                         "name": "offStr",
                                         "term": {
@@ -1431,7 +1431,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1462,7 +1462,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
@@ -1470,7 +1470,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1501,7 +1501,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
@@ -1509,7 +1509,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1540,7 +1540,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
@@ -1548,7 +1548,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1579,7 +1579,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
@@ -1587,7 +1587,7 @@
                                             "argument": {"variable": "op"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1722,7 +1722,7 @@
                                             "argument": {"variable": "bt"},
                                             "function": {
                                               "project": {"field": "labels", "typeName": "hydra.wasm.syntax.BrTableArgs"}}}},
-                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "def",
                                         "term": {
@@ -1730,7 +1730,7 @@
                                             "argument": {"variable": "bt"},
                                             "function": {
                                               "project": {"field": "default", "typeName": "hydra.wasm.syntax.BrTableArgs"}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1886,7 +1886,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.Instruction"},
                 "parameter": "instr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.Instruction"}}},
@@ -1898,8 +1898,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Serialize a block or loop instruction to WAT"}}}],
             "body": {
               "lambda": {
@@ -1915,7 +1915,7 @@
                                 "argument": {"variable": "b"},
                                 "function": {
                                   "project": {"field": "label", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
-                            "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                            "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                           {
                             "name": "bt",
                             "term": {
@@ -1925,7 +1925,7 @@
                                   "project": {
                                     "field": "blockType",
                                     "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
-                            "type": {"type": {"variable": "hydra.wasm.syntax.BlockType"}, "variables": []}},
+                            "type": {"body": {"variable": "hydra.wasm.syntax.BlockType"}, "variables": []}},
                           {
                             "name": "body",
                             "term": {
@@ -1934,7 +1934,7 @@
                                 "function": {
                                   "project": {"field": "body", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
                             "type": {
-                              "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                              "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
                               "variables": []}},
                           {
                             "name": "labelStr",
@@ -1964,14 +1964,14 @@
                                                 "body": {"variable": "hydra.lib.maybes.maybe"},
                                                 "type": {"literal": {"string": {}}}}},
                                             "type": {"literal": {"string": {}}}}}}}}}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                           {
                             "name": "btPart",
                             "term": {
                               "application": {
                                 "argument": {"variable": "bt"},
                                 "function": {"variable": "hydra.wasm.serde.blockTypeToExpr"}}},
-                            "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                            "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                           {
                             "name": "bodyParts",
                             "term": {
@@ -1987,7 +1987,7 @@
                                             "body": {"variable": "hydra.lib.lists.map"},
                                             "type": {"variable": "hydra.wasm.syntax.Instruction"}}},
                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                            "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                            "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                           {
                             "name": "header",
                             "term": {
@@ -2014,7 +2014,7 @@
                                         "body": {"variable": "hydra.lib.maybes.cat"},
                                         "type": {"variable": "hydra.ast.Expr"}}}}},
                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
-                            "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -2067,7 +2067,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "keyword"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2082,8 +2082,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a block type to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a block type to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2136,7 +2136,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.BlockType"},
                 "parameter": "bt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.ast.Expr"}},
               "domain": {"variable": "hydra.wasm.syntax.BlockType"}}},
@@ -2148,8 +2148,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize an if instruction to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize an if instruction to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2162,7 +2162,7 @@
                             "argument": {"variable": "i"},
                             "function": {
                               "project": {"field": "label", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "bt",
                         "term": {
@@ -2170,7 +2170,7 @@
                             "argument": {"variable": "i"},
                             "function": {
                               "project": {"field": "blockType", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.BlockType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.BlockType"}, "variables": []}},
                       {
                         "name": "thenBranch",
                         "term": {
@@ -2179,7 +2179,7 @@
                             "function": {
                               "project": {"field": "then", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
                           "variables": []}},
                       {
                         "name": "elseBranch",
@@ -2189,7 +2189,7 @@
                             "function": {
                               "project": {"field": "else", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
                           "variables": []}},
                       {
                         "name": "labelStr",
@@ -2219,14 +2219,14 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "btPart",
                         "term": {
                           "application": {
                             "argument": {"variable": "bt"},
                             "function": {"variable": "hydra.wasm.serde.blockTypeToExpr"}}},
-                        "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "thenParts",
                         "term": {
@@ -2242,7 +2242,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.Instruction"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "elseParts",
                         "term": {
@@ -2258,7 +2258,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.wasm.syntax.Instruction"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "header",
                         "term": {
@@ -2281,7 +2281,7 @@
                                     "body": {"variable": "hydra.lib.maybes.cat"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "thenBlock",
                         "term": {
@@ -2336,7 +2336,7 @@
                                     "body": {"variable": "hydra.lib.lists.concat"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}},
                             "function": {"variable": "hydra.serialization.newlineSep"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "elseBlock",
                         "term": {
@@ -2391,7 +2391,7 @@
                                     "body": {"variable": "hydra.lib.lists.concat"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}},
                             "function": {"variable": "hydra.serialization.newlineSep"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -2435,7 +2435,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.IfInstruction"},
                 "parameter": "i"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.IfInstruction"}}},
@@ -2447,8 +2447,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a memory definition to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a memory definition to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2461,7 +2461,7 @@
                             "argument": {"variable": "m"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.MemoryDef"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "lim",
                         "term": {
@@ -2469,7 +2469,7 @@
                             "argument": {"variable": "m"},
                             "function": {
                               "project": {"field": "limits", "typeName": "hydra.wasm.syntax.MemoryDef"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                       {
                         "name": "nameStr",
                         "term": {
@@ -2498,7 +2498,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -2525,7 +2525,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.MemoryDef"},
                 "parameter": "m"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.MemoryDef"}}},
@@ -2537,8 +2537,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a data segment to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a data segment to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2551,7 +2551,7 @@
                             "argument": {"variable": "d"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "mode",
                         "term": {
@@ -2559,7 +2559,7 @@
                             "argument": {"variable": "d"},
                             "function": {
                               "project": {"field": "mode", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.DataMode"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.DataMode"}, "variables": []}},
                       {
                         "name": "bytes",
                         "term": {
@@ -2567,7 +2567,7 @@
                             "argument": {"variable": "d"},
                             "function": {
                               "project": {"field": "bytes", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "nameStr",
                         "term": {
@@ -2596,7 +2596,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "mode"},
@@ -2700,7 +2700,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.DataSegment"},
                 "parameter": "d"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.DataSegment"}}},
@@ -2712,8 +2712,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize limits to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize limits to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2725,7 +2725,7 @@
                           "application": {
                             "argument": {"variable": "l"},
                             "function": {"project": {"field": "min", "typeName": "hydra.wasm.syntax.Limits"}}}},
-                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                       {
                         "name": "mx",
                         "term": {
@@ -2733,7 +2733,7 @@
                             "argument": {"variable": "l"},
                             "function": {"project": {"field": "max", "typeName": "hydra.wasm.syntax.Limits"}}}},
                         "type": {
-                          "type": {"maybe": {"literal": {"integer": {"int32": {}}}}},
+                          "body": {"maybe": {"literal": {"integer": {"int32": {}}}}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -2780,7 +2780,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.Limits"},
                 "parameter": "l"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.Limits"}}},
@@ -2792,8 +2792,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a global definition to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a global definition to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2806,7 +2806,7 @@
                             "argument": {"variable": "g"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "gt",
                         "term": {
@@ -2815,7 +2815,7 @@
                             "function": {
                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
                         "type": {
-                          "type": {"variable": "hydra.wasm.syntax.GlobalType"},
+                          "body": {"variable": "hydra.wasm.syntax.GlobalType"},
                           "variables": []}},
                       {
                         "name": "init",
@@ -2825,7 +2825,7 @@
                             "function": {
                               "project": {"field": "init", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                          "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
                           "variables": []}},
                       {
                         "name": "nameStr",
@@ -2855,7 +2855,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -2898,7 +2898,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.GlobalDef"},
                 "parameter": "g"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.GlobalDef"}}},
@@ -2910,8 +2910,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a global type to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a global type to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2924,7 +2924,7 @@
                             "argument": {"variable": "gt"},
                             "function": {
                               "project": {"field": "valType", "typeName": "hydra.wasm.syntax.GlobalType"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                       {
                         "name": "mut",
                         "term": {
@@ -2932,7 +2932,7 @@
                             "argument": {"variable": "gt"},
                             "function": {
                               "project": {"field": "mutable", "typeName": "hydra.wasm.syntax.GlobalType"}}}},
-                        "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -2968,7 +2968,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.GlobalType"},
                 "parameter": "gt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.GlobalType"}}},
@@ -2980,8 +2980,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a table definition to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a table definition to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2994,7 +2994,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.TableDef"}}}},
-                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "rt",
                         "term": {
@@ -3002,7 +3002,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "refType", "typeName": "hydra.wasm.syntax.TableDef"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.RefType"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.RefType"}, "variables": []}},
                       {
                         "name": "lim",
                         "term": {
@@ -3010,7 +3010,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "limits", "typeName": "hydra.wasm.syntax.TableDef"}}}},
-                        "type": {"type": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                       {
                         "name": "nameStr",
                         "term": {
@@ -3039,7 +3039,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -3073,7 +3073,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.TableDef"},
                 "parameter": "t"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.TableDef"}}},
@@ -3085,8 +3085,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize an import declaration to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize an import declaration to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3099,7 +3099,7 @@
                             "argument": {"variable": "i"},
                             "function": {
                               "project": {"field": "module", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
@@ -3107,7 +3107,7 @@
                             "argument": {"variable": "i"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "desc",
                         "term": {
@@ -3116,7 +3116,7 @@
                             "function": {
                               "project": {"field": "desc", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
                         "type": {
-                          "type": {"variable": "hydra.wasm.syntax.ImportDesc"},
+                          "body": {"variable": "hydra.wasm.syntax.ImportDesc"},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -3160,7 +3160,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ImportDef"},
                 "parameter": "i"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.ImportDef"}}},
@@ -3172,8 +3172,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize an import descriptor to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize an import descriptor to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3196,7 +3196,7 @@
                                             "argument": {"variable": "f"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportFunc"}}}},
-                                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "tu",
                                         "term": {
@@ -3204,7 +3204,7 @@
                                             "argument": {"variable": "f"},
                                             "function": {
                                               "project": {"field": "typeUse", "typeName": "hydra.wasm.syntax.ImportFunc"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.TypeUse"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.TypeUse"}, "variables": []}},
                                       {
                                         "name": "nameStr",
                                         "term": {
@@ -3233,7 +3233,7 @@
                                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -3273,7 +3273,7 @@
                                             "argument": {"variable": "m"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportMemory"}}}},
-                                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "lim",
                                         "term": {
@@ -3281,7 +3281,7 @@
                                             "argument": {"variable": "m"},
                                             "function": {
                                               "project": {"field": "limits", "typeName": "hydra.wasm.syntax.ImportMemory"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                                       {
                                         "name": "nameStr",
                                         "term": {
@@ -3310,7 +3310,7 @@
                                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -3350,7 +3350,7 @@
                                             "argument": {"variable": "t"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
-                                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "rt",
                                         "term": {
@@ -3358,7 +3358,7 @@
                                             "argument": {"variable": "t"},
                                             "function": {
                                               "project": {"field": "refType", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.RefType"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.RefType"}, "variables": []}},
                                       {
                                         "name": "lim",
                                         "term": {
@@ -3366,7 +3366,7 @@
                                             "argument": {"variable": "t"},
                                             "function": {
                                               "project": {"field": "limits", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
-                                        "type": {"type": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                                       {
                                         "name": "nameStr",
                                         "term": {
@@ -3395,7 +3395,7 @@
                                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -3442,7 +3442,7 @@
                                             "argument": {"variable": "g"},
                                             "function": {
                                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportGlobal"}}}},
-                                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "gt",
                                         "term": {
@@ -3451,7 +3451,7 @@
                                             "function": {
                                               "project": {"field": "type", "typeName": "hydra.wasm.syntax.ImportGlobal"}}}},
                                         "type": {
-                                          "type": {"variable": "hydra.wasm.syntax.GlobalType"},
+                                          "body": {"variable": "hydra.wasm.syntax.GlobalType"},
                                           "variables": []}},
                                       {
                                         "name": "nameStr",
@@ -3481,7 +3481,7 @@
                                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -3511,7 +3511,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ImportDesc"},
                 "parameter": "desc"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.ImportDesc"}}},
@@ -3523,8 +3523,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize an export declaration to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize an export declaration to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3537,7 +3537,7 @@
                             "argument": {"variable": "e"},
                             "function": {
                               "project": {"field": "name", "typeName": "hydra.wasm.syntax.ExportDef"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "desc",
                         "term": {
@@ -3546,7 +3546,7 @@
                             "function": {
                               "project": {"field": "desc", "typeName": "hydra.wasm.syntax.ExportDef"}}}},
                         "type": {
-                          "type": {"variable": "hydra.wasm.syntax.ExportDesc"},
+                          "body": {"variable": "hydra.wasm.syntax.ExportDesc"},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -3579,7 +3579,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ExportDef"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.ExportDef"}}},
@@ -3591,8 +3591,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize an export descriptor to WAT"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Serialize an export descriptor to WAT"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3673,7 +3673,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ExportDesc"},
                 "parameter": "desc"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.ExportDesc"}}},
@@ -3685,8 +3685,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Serialize a constant value instruction to WAT"}}}],
             "body": {
               "lambda": {
@@ -3776,7 +3776,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.ConstValue"},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.wasm.syntax.ConstValue"}}},
@@ -3788,8 +3788,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a reference type to its WAT string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a reference type to its WAT string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3816,7 +3816,7 @@
                 "domain": {"variable": "hydra.wasm.syntax.RefType"},
                 "parameter": "rt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.wasm.syntax.RefType"}}},
@@ -3828,8 +3828,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a string to a WAT comment"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a string to a WAT comment"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3839,7 +3839,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},

@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.Identifier",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A JavaScript identifier (variable, function, class name, etc.)"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
@@ -18,12 +18,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.QualifiedName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A qualified name like 'module.submodule.name'"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
           "variables": []}}},
@@ -31,12 +31,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.Literal",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A literal value"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A literal value"}}}],
               "body": {
                 "union": [
                   {
@@ -45,8 +45,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A string literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A string literal"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.StringLiteral"}}}},
                   {
                     "name": "number",
@@ -54,8 +54,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A numeric literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A numeric literal"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.NumericLiteral"}}}},
                   {
                     "name": "boolean",
@@ -63,8 +63,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A boolean literal (true or false)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A boolean literal (true or false)"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "null",
@@ -72,8 +72,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The null literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The null literal"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "undefined",
@@ -81,8 +81,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The undefined literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The undefined literal"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bigInt",
@@ -90,8 +90,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A BigInt literal (e.g., 123n)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A BigInt literal (e.g., 123n)"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}}},
                   {
                     "name": "template",
@@ -99,20 +99,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A template literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A template literal"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.TemplateLiteral"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.StringLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A string literal with quote style"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A string literal with quote style"}}}],
               "body": {
                 "record": [
                   {
@@ -121,8 +121,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The string value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The string value"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "singleQuote",
@@ -130,8 +130,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether to use single quotes (true) or double quotes (false)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -140,12 +140,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.TemplateLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A template literal (backtick string with interpolations)"}}}],
               "body": {
                 "record": [
@@ -155,8 +155,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The static string parts"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The static string parts"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.TemplateElement"}}}}},
                   {
                     "name": "expressions",
@@ -164,20 +164,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The interpolated expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The interpolated expressions"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.TemplateElement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A static part of a template literal"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A static part of a template literal"}}}],
               "body": {
                 "record": [
                   {
@@ -186,8 +186,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The raw string value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The raw string value"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "tail",
@@ -195,20 +195,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether this is the last element"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether this is the last element"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.NumericLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A numeric literal (integer or floating-point)"}}}],
               "body": {
                 "union": [
@@ -218,8 +218,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An integer literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An integer literal"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
                   {
                     "name": "float",
@@ -227,20 +227,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A floating-point literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A floating-point literal"}}}],
                         "body": {"literal": {"float": {"float64": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.TypeAnnotation",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A type annotation (for JSDoc comments or TypeScript)"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}},
           "variables": []}}},
@@ -248,12 +248,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.TypeExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A type expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A type expression"}}}],
               "body": {
                 "union": [
                   {
@@ -262,8 +262,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A named type (e.g., 'string', 'number', 'MyClass')"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
@@ -272,8 +272,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A literal type (e.g., 'hello', 42)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A literal type (e.g., 'hello', 42)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Literal"}}}},
                   {
                     "name": "array",
@@ -281,8 +281,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An array type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An array type"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ArrayTypeExpression"}}}},
                   {
                     "name": "function",
@@ -290,8 +290,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A function type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A function type"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.FunctionTypeExpression"}}}},
                   {
                     "name": "object",
@@ -299,8 +299,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An object type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An object type"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ObjectTypeExpression"}}}},
                   {
                     "name": "union",
@@ -308,8 +308,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A union type (A | B)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A union type (A | B)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.UnionTypeExpression"}}}},
                   {
                     "name": "parameterized",
@@ -317,8 +317,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A parameterized type (e.g., Array<T>, Map<K, V>)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ParameterizedTypeExpression"}}}},
                   {
@@ -327,8 +327,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An optional type (?T)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An optional type (?T)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}},
                   {
                     "name": "any",
@@ -336,8 +336,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The 'any' type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The 'any' type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "void",
@@ -345,8 +345,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The 'void' type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The 'void' type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "never",
@@ -354,20 +354,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The 'never' type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The 'never' type"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionTypeExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A function type expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A function type expression"}}}],
               "body": {
                 "record": [
                   {
@@ -376,8 +376,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Type parameters (generics)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Type parameters (generics)"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.TypeParameter"}}}}},
                   {
                     "name": "parameters",
@@ -385,8 +385,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Parameter types"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Parameter types"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}}},
                   {
                     "name": "returnType",
@@ -394,44 +394,44 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Return type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Return type"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayTypeExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An array type (T[])"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An array type (T[])"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.UnionTypeExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A union type (A | B | C)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A union type (A | B | C)"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ParameterizedTypeExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A parameterized type (e.g., Array<T>, Map<K, V>)"}}}],
               "body": {
                 "record": [
@@ -446,24 +446,24 @@
       "type": {
         "name": "hydra.javaScript.syntax.ObjectTypeExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An object type with property signatures"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An object type with property signatures"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.PropertySignature"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.PropertySignature",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A property signature in an object type"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A property signature in an object type"}}}],
               "body": {
                 "record": [
                   {
@@ -472,8 +472,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Property name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Property name"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
                     "name": "type",
@@ -481,8 +481,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Property type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Property type"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}},
                   {
                     "name": "optional",
@@ -490,8 +490,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the property is optional"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the property is optional"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "readonly",
@@ -499,20 +499,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the property is readonly"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the property is readonly"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.TypeParameter",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A type parameter (generic)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A type parameter (generic)"}}}],
               "body": {
                 "record": [
                   {
@@ -521,8 +521,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Parameter name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Parameter name"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
                     "name": "constraint",
@@ -530,8 +530,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional constraint (extends clause)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional constraint (extends clause)"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}}},
                   {
                     "name": "default",
@@ -539,20 +539,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional default type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional default type"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.Expression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A JavaScript expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A JavaScript expression"}}}],
               "body": {
                 "union": [
                   {
@@ -561,8 +561,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A simple identifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A simple identifier"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
                     "name": "literal",
@@ -570,8 +570,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A literal value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A literal value"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Literal"}}}},
                   {
                     "name": "array",
@@ -579,8 +579,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An array expression [a, b, c]"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An array expression [a, b, c]"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ArrayExpression"}}}},
                   {
                     "name": "object",
@@ -588,8 +588,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An object expression {a: 1, b: 2}"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An object expression {a: 1, b: 2}"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ObjectExpression"}}}},
                   {
                     "name": "function",
@@ -597,8 +597,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A function expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A function expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.FunctionExpression"}}}},
                   {
                     "name": "arrow",
@@ -606,8 +606,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An arrow function expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An arrow function expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ArrowFunctionExpression"}}}},
                   {
                     "name": "call",
@@ -615,8 +615,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A function call expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A function call expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.CallExpression"}}}},
                   {
                     "name": "member",
@@ -624,8 +624,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A member access expression (obj.prop or obj[prop])"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.MemberExpression"}}}},
                   {
@@ -634,8 +634,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A conditional (ternary) expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A conditional (ternary) expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ConditionalExpression"}}}},
                   {
                     "name": "binary",
@@ -643,8 +643,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A binary operation expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A binary operation expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.BinaryExpression"}}}},
                   {
                     "name": "unary",
@@ -652,8 +652,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unary operation expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unary operation expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.UnaryExpression"}}}},
                   {
                     "name": "assignment",
@@ -661,8 +661,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An assignment expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An assignment expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.AssignmentExpression"}}}},
                   {
                     "name": "sequence",
@@ -670,8 +670,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A sequence expression (a, b, c)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A sequence expression (a, b, c)"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "this",
@@ -679,8 +679,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The 'this' keyword"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The 'this' keyword"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "new",
@@ -688,8 +688,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A 'new' expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A 'new' expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.CallExpression"}}}},
                   {
                     "name": "yield",
@@ -697,8 +697,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A yield expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A yield expression"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "await",
@@ -706,8 +706,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An await expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An await expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "spread",
@@ -715,8 +715,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A spread expression (...x)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A spread expression (...x)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.SpreadElement"}}}},
                   {
                     "name": "parenthesized",
@@ -724,44 +724,44 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A parenthesized expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A parenthesized expression"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An array expression [a, b, c]"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An array expression [a, b, c]"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.ArrayElement"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ObjectExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An object expression {a: 1, b: 2}"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An object expression {a: 1, b: 2}"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.Property"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A function expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A function expression"}}}],
               "body": {
                 "record": [
                   {
@@ -770,8 +770,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional function name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional function name"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Identifier"}}}}},
                   {
                     "name": "params",
@@ -779,8 +779,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function parameters"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function parameters"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Pattern"}}}}},
                   {
                     "name": "body",
@@ -788,8 +788,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function body"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function body"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.BlockStatement"}}}},
                   {
                     "name": "async",
@@ -797,8 +797,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the function is async"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the function is async"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "generator",
@@ -806,20 +806,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the function is a generator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the function is a generator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrowFunctionExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An arrow function expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An arrow function expression"}}}],
               "body": {
                 "record": [
                   {
@@ -828,8 +828,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function parameters"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function parameters"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Pattern"}}}}},
                   {
                     "name": "body",
@@ -837,8 +837,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function body (expression or block)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function body (expression or block)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ArrowFunctionBody"}}}},
                   {
                     "name": "async",
@@ -846,20 +846,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the function is async"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the function is async"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrowFunctionBody",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The body of an arrow function (expression or block)"}}}],
               "body": {
                 "union": [
@@ -874,12 +874,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.CallExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A function call expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A function call expression"}}}],
               "body": {
                 "record": [
                   {
@@ -888,8 +888,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The function being called"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The function being called"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "arguments",
@@ -897,8 +897,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The arguments"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The arguments"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "optional",
@@ -906,20 +906,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether using optional chaining (?.)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether using optional chaining (?.)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.MemberExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A member access expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A member access expression"}}}],
               "body": {
                 "record": [
                   {
@@ -927,9 +927,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The object"}}}],
+                          {"key": "description", "value": {"literal": {"string": "The object"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "property",
@@ -937,8 +935,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The property"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The property"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "computed",
@@ -946,8 +944,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether using bracket notation (obj[prop])"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether using bracket notation (obj[prop])"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "optional",
@@ -955,20 +953,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether using optional chaining (?.)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether using optional chaining (?.)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ConditionalExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A conditional (ternary) expression: test ? consequent : alternate"}}}],
               "body": {
@@ -987,12 +985,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.BinaryExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A binary operation expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A binary operation expression"}}}],
               "body": {
                 "record": [
                   {
@@ -1009,12 +1007,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.UnaryExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A unary operation expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A unary operation expression"}}}],
               "body": {
                 "record": [
                   {
@@ -1029,8 +1027,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether the operator is prefix (true) or postfix (false)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -1038,12 +1036,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.AssignmentExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An assignment expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An assignment expression"}}}],
               "body": {
                 "record": [
                   {
@@ -1060,24 +1058,24 @@
       "type": {
         "name": "hydra.javaScript.syntax.SpreadElement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A spread element (...x)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A spread element (...x)"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.Expression"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.Property",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A property in an object expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A property in an object expression"}}}],
               "body": {
                 "record": [
                   {
@@ -1086,8 +1084,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Property key (identifier, literal, or computed)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
@@ -1096,8 +1094,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Property value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Property value"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "kind",
@@ -1105,8 +1103,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Property kind (init, get, set)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Property kind (init, get, set)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.PropertyKind"}}}},
                   {
                     "name": "computed",
@@ -1114,8 +1112,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the key is computed [expr]"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the key is computed [expr]"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "shorthand",
@@ -1123,8 +1121,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether using shorthand syntax {x} for {x: x}"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -1132,12 +1130,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.PropertyKind",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The kind of an object property"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The kind of an object property"}}}],
               "body": {
                 "union": [
                   {
@@ -1146,34 +1144,32 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A normal property initialization"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A normal property initialization"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "get",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"@key": "description", "@value": {"literal": {"string": "A getter"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A getter"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"@key": "description", "@value": {"literal": {"string": "A setter"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A setter"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayElement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An element in an array expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An element in an array expression"}}}],
               "body": {
                 "union": [
                   {
@@ -1182,8 +1178,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A regular expression element"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A regular expression element"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "spread",
@@ -1191,8 +1187,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A spread element ...x"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A spread element ...x"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.SpreadElement"}}}},
                   {
                     "name": "hole",
@@ -1200,20 +1196,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An empty slot (elision)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An empty slot (elision)"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.Pattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A binding pattern (for destructuring)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A binding pattern (for destructuring)"}}}],
               "body": {
                 "union": [
                   {
@@ -1222,8 +1218,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A simple identifier binding"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A simple identifier binding"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
                     "name": "object",
@@ -1231,8 +1227,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An object destructuring pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An object destructuring pattern"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ObjectPattern"}}}},
                   {
                     "name": "array",
@@ -1240,8 +1236,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An array destructuring pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An array destructuring pattern"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ArrayPattern"}}}},
                   {
                     "name": "assignment",
@@ -1249,8 +1245,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A pattern with default value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A pattern with default value"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.AssignmentPattern"}}}},
                   {
                     "name": "rest",
@@ -1258,20 +1254,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A rest element (...x)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A rest element (...x)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.RestElement"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ObjectPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An object destructuring pattern {a, b: c}"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An object destructuring pattern {a, b: c}"}}}],
               "body": {
                 "record": [
                   {
@@ -1280,8 +1276,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The property patterns"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The property patterns"}}}],
                         "body": {
                           "list": {"variable": "hydra.javaScript.syntax.ObjectPatternProperty"}}}}}]}}},
           "variables": []}}},
@@ -1289,12 +1285,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ObjectPatternProperty",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A property in an object pattern"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A property in an object pattern"}}}],
               "body": {
                 "union": [
                   {
@@ -1308,24 +1304,24 @@
       "type": {
         "name": "hydra.javaScript.syntax.ArrayPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An array destructuring pattern [a, b, c]"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An array destructuring pattern [a, b, c]"}}}],
               "body": {"list": {"maybe": {"variable": "hydra.javaScript.syntax.Pattern"}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.AssignmentPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A pattern with default value (param = default)"}}}],
               "body": {
                 "record": [
@@ -1340,24 +1336,24 @@
       "type": {
         "name": "hydra.javaScript.syntax.RestElement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A rest element pattern (...x)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A rest element pattern (...x)"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.Pattern"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.Statement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A JavaScript statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A JavaScript statement"}}}],
               "body": {
                 "union": [
                   {
@@ -1366,8 +1362,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An expression statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An expression statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "block",
@@ -1375,8 +1371,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A block statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A block statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.BlockStatement"}}}},
                   {
                     "name": "empty",
@@ -1384,8 +1380,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An empty statement (;)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An empty statement (;)"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "debugger",
@@ -1393,8 +1389,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A debugger statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A debugger statement"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "return",
@@ -1402,8 +1398,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A return statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A return statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ReturnStatement"}}}},
                   {
                     "name": "break",
@@ -1411,8 +1407,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A break statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A break statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.BreakStatement"}}}},
                   {
                     "name": "continue",
@@ -1420,8 +1416,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A continue statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A continue statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ContinueStatement"}}}},
                   {
                     "name": "if",
@@ -1429,8 +1425,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An if statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An if statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.IfStatement"}}}},
                   {
                     "name": "switch",
@@ -1438,8 +1434,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A switch statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A switch statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.SwitchStatement"}}}},
                   {
                     "name": "throw",
@@ -1447,8 +1443,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A throw statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A throw statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ThrowStatement"}}}},
                   {
                     "name": "try",
@@ -1456,8 +1452,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A try statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A try statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.TryStatement"}}}},
                   {
                     "name": "while",
@@ -1465,8 +1461,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A while statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A while statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.WhileStatement"}}}},
                   {
                     "name": "doWhile",
@@ -1474,8 +1470,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A do-while statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A do-while statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.DoWhileStatement"}}}},
                   {
                     "name": "for",
@@ -1483,8 +1479,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A for statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A for statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ForStatement"}}}},
                   {
                     "name": "forIn",
@@ -1492,8 +1488,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A for-in statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A for-in statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ForInStatement"}}}},
                   {
                     "name": "forOf",
@@ -1501,8 +1497,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A for-of statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A for-of statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ForOfStatement"}}}},
                   {
                     "name": "variableDeclaration",
@@ -1510,8 +1506,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A variable declaration"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A variable declaration"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.VariableDeclaration"}}}},
                   {
                     "name": "functionDeclaration",
@@ -1519,8 +1515,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A function declaration"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A function declaration"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.FunctionDeclaration"}}}},
                   {
                     "name": "classDeclaration",
@@ -1528,8 +1524,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A class declaration"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A class declaration"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ClassDeclaration"}}}},
                   {
                     "name": "labeled",
@@ -1537,20 +1533,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A labeled statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A labeled statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.LabeledStatement"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.LabeledStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A labeled statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A labeled statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1564,24 +1560,24 @@
       "type": {
         "name": "hydra.javaScript.syntax.BlockStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A block statement { ... }"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A block statement { ... }"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.Statement"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.VariableDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A variable declaration (var, let, const)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A variable declaration (var, let, const)"}}}],
               "body": {
                 "record": [
                   {
@@ -1595,12 +1591,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.VariableDeclarator",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A variable declarator (id = init)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A variable declarator (id = init)"}}}],
               "body": {
                 "record": [
                   {
@@ -1614,12 +1610,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.VariableKind",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The kind of variable declaration"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The kind of variable declaration"}}}],
               "body": {
                 "union": [
                   {"name": "var", "type": {"unit": {}}},
@@ -1630,12 +1626,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.IfStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An if statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An if statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1652,12 +1648,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.SwitchStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A switch statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A switch statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1671,12 +1667,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.SwitchCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A case clause in a switch statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A case clause in a switch statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1685,8 +1681,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The test expression (Nothing for default)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The test expression (Nothing for default)"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "consequent",
@@ -1694,20 +1690,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The statements to execute"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The statements to execute"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Statement"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ForStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A for statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A for statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1716,8 +1712,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Initialization"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Initialization"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.ForInit"}}}}},
                   {
                     "name": "test",
@@ -1725,8 +1721,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Test condition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Test condition"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "update",
@@ -1734,8 +1730,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Update expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Update expression"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "body",
@@ -1745,12 +1741,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ForInit",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Initialization clause of a for statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Initialization clause of a for statement"}}}],
               "body": {
                 "union": [
                   {
@@ -1764,12 +1760,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ForInStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A for-in statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A for-in statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1786,12 +1782,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ForInLeft",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Left-hand side of a for-in or for-of statement"}}}],
               "body": {
                 "union": [
@@ -1806,12 +1802,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ForOfStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A for-of statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A for-of statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1820,8 +1816,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether this is a for-await-of"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether this is a for-await-of"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "left",
@@ -1837,12 +1833,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.WhileStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A while statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A while statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1856,12 +1852,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.DoWhileStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A do-while statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A do-while statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1875,12 +1871,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.TryStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A try statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A try statement"}}}],
               "body": {
                 "record": [
                   {
@@ -1897,12 +1893,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.CatchClause",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A catch clause"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A catch clause"}}}],
               "body": {
                 "record": [
                   {
@@ -1911,8 +1907,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The catch parameter (can be omitted in ES2019+)"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Pattern"}}}}},
                   {
@@ -1923,60 +1919,60 @@
       "type": {
         "name": "hydra.javaScript.syntax.ThrowStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A throw statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A throw statement"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.Expression"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ReturnStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A return statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A return statement"}}}],
               "body": {"maybe": {"variable": "hydra.javaScript.syntax.Expression"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.BreakStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A break statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A break statement"}}}],
               "body": {"maybe": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ContinueStatement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A continue statement"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A continue statement"}}}],
               "body": {"maybe": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A function declaration"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A function declaration"}}}],
               "body": {
                 "record": [
                   {
@@ -1985,8 +1981,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function name"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
                     "name": "params",
@@ -1994,8 +1990,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function parameters"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function parameters"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.Pattern"}}}}},
                   {
                     "name": "body",
@@ -2003,8 +1999,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function body"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function body"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.BlockStatement"}}}},
                   {
                     "name": "async",
@@ -2012,8 +2008,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the function is async"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the function is async"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "generator",
@@ -2021,20 +2017,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the function is a generator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the function is a generator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ClassDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A class declaration"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A class declaration"}}}],
               "body": {
                 "record": [
                   {
@@ -2042,9 +2038,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Class name"}}}],
+                          {"key": "description", "value": {"literal": {"string": "Class name"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
                   {
                     "name": "superClass",
@@ -2052,41 +2046,39 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional superclass"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional superclass"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Expression"}}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Class body"}}}],
+                          {"key": "description", "value": {"literal": {"string": "Class body"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ClassBody"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ClassBody",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A class body"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A class body"}}}],
               "body": {"list": {"variable": "hydra.javaScript.syntax.MethodDefinition"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.MethodDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A method definition in a class"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A method definition in a class"}}}],
               "body": {
                 "record": [
                   {
@@ -2095,8 +2087,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Method name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Method name"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "value",
@@ -2104,8 +2096,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Method function"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Method function"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.FunctionExpression"}}}},
                   {
                     "name": "kind",
@@ -2113,8 +2105,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Method kind"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Method kind"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.MethodKind"}}}},
                   {
                     "name": "computed",
@@ -2122,8 +2114,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the key is computed"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the key is computed"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "static",
@@ -2131,20 +2123,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether the method is static"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether the method is static"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.MethodKind",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The kind of a class method"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The kind of a class method"}}}],
               "body": {
                 "union": [
                   {"name": "constructor", "type": {"unit": {}}},
@@ -2156,12 +2148,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.Program",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A JavaScript program (module)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A JavaScript program (module)"}}}],
               "body": {
                 "record": [
                   {
@@ -2170,8 +2162,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The module items"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The module items"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.ModuleItem"}}}}},
                   {
                     "name": "sourceType",
@@ -2179,20 +2171,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Whether this is a module or script"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Whether this is a module or script"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.SourceType"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.SourceType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Whether the program is a module or script"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Whether the program is a module or script"}}}],
               "body": {
                 "union": [
                   {"name": "module", "type": {"unit": {}}},
@@ -2202,12 +2194,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ModuleItem",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A top-level item in a module"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A top-level item in a module"}}}],
               "body": {
                 "union": [
                   {
@@ -2224,12 +2216,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ImportDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An import declaration"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An import declaration"}}}],
               "body": {
                 "record": [
                   {
@@ -2238,8 +2230,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "What to import"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "What to import"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.ImportClause"}}}}},
                   {
                     "name": "source",
@@ -2247,20 +2239,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The module to import from"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The module to import from"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.StringLiteral"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ImportClause",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "An import clause (named, default, or namespace import)"}}}],
               "body": {
                 "union": [
@@ -2278,12 +2270,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ImportSpecifier",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A named import specifier (import {x as y} from ...)"}}}],
               "body": {
                 "record": [
@@ -2298,12 +2290,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ImportDefaultSpecifier",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A default import specifier (import x from ...)"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
           "variables": []}}},
@@ -2311,12 +2303,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ImportNamespaceSpecifier",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A namespace import specifier (import * as x from ...)"}}}],
               "body": {"wrap": {"variable": "hydra.javaScript.syntax.Identifier"}}}},
           "variables": []}}},
@@ -2324,12 +2316,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ExportDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An export declaration"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An export declaration"}}}],
               "body": {
                 "union": [
                   {
@@ -2338,8 +2330,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Named exports (export {x, y as z})"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Named exports (export {x, y as z})"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.NamedExport"}}}},
                   {
                     "name": "default",
@@ -2347,8 +2339,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Default export (export default ...)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Default export (export default ...)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Expression"}}}},
                   {
                     "name": "declaration",
@@ -2356,8 +2348,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Export a declaration (export const x = ...)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Export a declaration (export const x = ...)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Statement"}}}},
                   {
                     "name": "all",
@@ -2365,20 +2357,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Export all (export * from ...)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Export all (export * from ...)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ExportAllDeclaration"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.NamedExport",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Named exports (export {x, y as z})"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Named exports (export {x, y as z})"}}}],
               "body": {
                 "record": [
                   {
@@ -2392,12 +2384,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ExportAllDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Export all declaration (export * from ...)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Export all declaration (export * from ...)"}}}],
               "body": {
                 "record": [
                   {
@@ -2411,12 +2403,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ExportSpecifier",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An export specifier (x as y)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An export specifier (x as y)"}}}],
               "body": {
                 "record": [
                   {
@@ -2430,354 +2422,352 @@
       "type": {
         "name": "hydra.javaScript.syntax.BinaryOperator",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A binary operator"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A binary operator"}}}],
               "body": {
                 "union": [
                   {
                     "name": "add",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "+"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "+"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "subtract",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "-"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "-"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "multiply",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "*"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "*"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "divide",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "/"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "/"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "modulo",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "%"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "%"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "exponentiate",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "**"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "**"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "equal",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "=="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "=="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "notEqual",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "!="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "!="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "strictEqual",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "==="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "==="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "strictNotEqual",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "!=="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "!=="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "lessThan",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "<"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "<"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "lessThanOrEqual",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "<="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "<="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "greaterThan",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": ">"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": ">"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "greaterThanOrEqual",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": ">="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": ">="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "and",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "&&"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "&&"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "or",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "||"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "||"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "nullishCoalescing",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "??"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "??"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseAnd",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "&"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "&"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseOr",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "|"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "|"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseXor",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "^"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "^"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "leftShift",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "<<"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "<<"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "rightShift",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": ">>"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": ">>"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "unsignedRightShift",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": ">>>"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": ">>>"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "in",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "in"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "in"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "instanceof",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "instanceof"}}}],
+                          {"key": "description", "value": {"literal": {"string": "instanceof"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.UnaryOperator",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A unary operator"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A unary operator"}}}],
               "body": {
                 "union": [
                   {
                     "name": "negate",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "-"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "-"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "plus",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "+"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "+"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "not",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "!"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "!"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseNot",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "~"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "~"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "typeof",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "typeof"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "typeof"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "void",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "void"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "void"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "delete",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "delete"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "delete"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "increment",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "++"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "++"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "decrement",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "--"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "--"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.AssignmentOperator",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An assignment operator"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An assignment operator"}}}],
               "body": {
                 "union": [
                   {
                     "name": "assign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "addAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "+="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "+="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "subtractAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "-="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "-="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "multiplyAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "*="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "*="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "divideAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "/="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "/="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "moduloAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "%="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "%="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "exponentiateAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "**="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "**="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "leftShiftAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "<<="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "<<="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "rightShiftAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": ">>="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": ">>="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "unsignedRightShiftAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": ">>>="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": ">>>="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseAndAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "&="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "&="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseOrAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "|="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "|="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bitwiseXorAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "^="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "^="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "andAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "&&="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "&&="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "orAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "||="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "||="}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "nullishAssign",
                     "type": {
                       "annotated": {
-                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "??="}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "??="}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.Comment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A JavaScript comment"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A JavaScript comment"}}}],
               "body": {
                 "union": [
                   {
@@ -2786,8 +2776,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A single-line comment (// ...)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A single-line comment (// ...)"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "block",
@@ -2795,8 +2785,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A block comment (/* ... */)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A block comment (/* ... */)"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "documentation",
@@ -2804,8 +2794,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A documentation comment (/** ... */, i.e. JSDoc)"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.DocumentationComment"}}}}]}}},
           "variables": []}}},
@@ -2813,12 +2803,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.DocumentationComment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A documentation comment (JSDoc) with structured tags"}}}],
               "body": {
                 "record": [
@@ -2828,8 +2818,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The main description"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The main description"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "tags",
@@ -2837,20 +2827,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Documentation tags (@param, @returns, etc.)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Documentation tags (@param, @returns, etc.)"}}}],
                         "body": {"list": {"variable": "hydra.javaScript.syntax.DocumentationTag"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.DocumentationTag",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A documentation tag (@param, @returns, @type, etc.)"}}}],
               "body": {
                 "record": [
@@ -2860,8 +2850,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Tag name (param, returns, type, etc.)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Tag name (param, returns, type, etc.)"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "type",
@@ -2869,8 +2859,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional type expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional type expression"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.TypeExpression"}}}}},
                   {
                     "name": "paramName",
@@ -2878,8 +2868,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional parameter name (for @param)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional parameter name (for @param)"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.Identifier"}}}}},
                   {
                     "name": "description",
@@ -2887,20 +2877,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Tag description"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Tag description"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.javaScript.syntax.ModuleItemWithComments",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A module item with optional documentation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A module item with optional documentation"}}}],
               "body": {
                 "record": [
                   {
@@ -2909,8 +2899,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The module item"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The module item"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ModuleItem"}}}},
                   {
                     "name": "comments",
@@ -2918,8 +2908,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional documentation comment"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional documentation comment"}}}],
                         "body": {
                           "maybe": {"variable": "hydra.javaScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}},
@@ -2927,12 +2917,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.StatementWithComments",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A statement with optional documentation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A statement with optional documentation"}}}],
               "body": {
                 "record": [
                   {
@@ -2941,8 +2931,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The statement"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The statement"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.Statement"}}}},
                   {
                     "name": "comments",
@@ -2950,8 +2940,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional documentation comment"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional documentation comment"}}}],
                         "body": {
                           "maybe": {"variable": "hydra.javaScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}},
@@ -2959,12 +2949,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.FunctionDeclarationWithComments",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A function declaration with optional JSDoc"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A function declaration with optional JSDoc"}}}],
               "body": {
                 "record": [
                   {
@@ -2973,8 +2963,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The function declaration"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The function declaration"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.FunctionDeclaration"}}}},
                   {
                     "name": "comments",
@@ -2982,8 +2972,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional JSDoc comment"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional JSDoc comment"}}}],
                         "body": {
                           "maybe": {"variable": "hydra.javaScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}},
@@ -2991,12 +2981,12 @@
       "type": {
         "name": "hydra.javaScript.syntax.ClassDeclarationWithComments",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A class declaration with optional JSDoc"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A class declaration with optional JSDoc"}}}],
               "body": {
                 "record": [
                   {
@@ -3005,8 +2995,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The class declaration"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The class declaration"}}}],
                         "body": {"variable": "hydra.javaScript.syntax.ClassDeclaration"}}}},
                   {
                     "name": "comments",
@@ -3014,8 +3004,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional JSDoc comment"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional JSDoc comment"}}}],
                         "body": {
                           "maybe": {"variable": "hydra.javaScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}}],

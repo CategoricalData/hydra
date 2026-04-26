@@ -28,7 +28,7 @@
                     "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Term"}}}}},
         "type": {
-          "type": {
+          "body": {
             "map": {
               "keys": {"variable": "hydra.core.Name"},
               "values": {"variable": "hydra.core.Term"}}},
@@ -269,7 +269,7 @@
                     "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Type"}}}}},
         "type": {
-          "type": {
+          "body": {
             "map": {
               "keys": {"variable": "hydra.core.Name"},
               "values": {"variable": "hydra.core.Type"}}},
@@ -281,7 +281,7 @@
           "wrap": {
             "body": {"literal": {"string": "testGraph"}},
             "typeName": "hydra.packaging.Namespace"}},
-        "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testSchemaNamespace",
@@ -289,7 +289,7 @@
           "wrap": {
             "body": {"literal": {"string": "testSchemaGraph"}},
             "typeName": "hydra.packaging.Namespace"}},
-        "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testGraph",
@@ -303,12 +303,12 @@
                   "map": {
                     "keys": {"variable": "hydra.core.Name"},
                     "values": {"variable": "hydra.core.Type"}}}}}}},
-        "type": {"type": {"variable": "hydra.graph.Graph"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.graph.Graph"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testContext",
         "term": {"variable": "hydra.test.testEnv.testContext"},
-        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.context.Context"}, "variables": []}}}],
   "description": "A module defining the graph used in the test suite.",
   "namespace": "hydra.test.testGraph",
   "termDependencies": [

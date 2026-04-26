@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly applicative apply for List terms."}}}],
                 "body": {
                   "lambda": {
@@ -65,7 +65,7 @@
                                                             "domain": {"variable": "hydra.core.Term"},
                                                             "parameter": "f"}},
                                                         "type": {
-                                                          "type": {
+                                                          "body": {
                                                             "function": {
                                                               "codomain": {"list": {"variable": "hydra.core.Term"}},
                                                               "domain": {"variable": "hydra.core.Term"}}},
@@ -76,7 +76,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "list",
@@ -154,7 +154,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -180,8 +180,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly monadic bind for List terms."}}}],
                 "body": {
                   "lambda": {
@@ -201,7 +201,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -288,7 +288,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -318,8 +318,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Interpreter-friendly concat2 for List terms."}}}],
                         "body": {
                           "lambda": {
@@ -335,7 +335,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -377,7 +377,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -405,8 +405,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Interpreter-friendly dropWhile for List terms."}}}],
                         "body": {
                           "lambda": {
@@ -422,7 +422,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -491,7 +491,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -519,8 +519,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly elem for List terms."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly elem for List terms."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -535,7 +535,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -626,7 +626,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -650,8 +650,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly filter for List terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly filter for List terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -670,7 +670,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -824,7 +824,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -854,8 +854,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly find for List terms."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly find for List terms."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -870,7 +870,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -939,7 +939,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -961,8 +961,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Interpreter-friendly left fold for List terms."}}}],
             "body": {
               "lambda": {
@@ -987,7 +987,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"either": {"@right": {"variable": "initTerm"}}},
+                                                        "body": {"either": {"right": {"variable": "initTerm"}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "function": {
@@ -1099,7 +1099,7 @@
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1126,8 +1126,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Interpreter-friendly right fold for List terms."}}}],
             "body": {
               "lambda": {
@@ -1152,7 +1152,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"either": {"@right": {"variable": "initTerm"}}},
+                                                        "body": {"either": {"right": {"variable": "initTerm"}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "function": {
@@ -1264,7 +1264,7 @@
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1297,8 +1297,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly group for List terms."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly group for List terms."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -1311,7 +1311,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "application",
@@ -1701,7 +1701,7 @@
                                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                                             "body": {
                                                                                                                                                                                               "pair": {
-                                                                                                                                                                                                "@first": {
+                                                                                                                                                                                                "first": {
                                                                                                                                                                                                   "inject": {
                                                                                                                                                                                                     "field": {
                                                                                                                                                                                                       "name": "list",
@@ -1715,7 +1715,7 @@
                                                                                                                                                                                                                   "wrap": {"body": {"literal": {"string": "el"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                               "typeName": "hydra.core.Term"}}]}},
                                                                                                                                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                "@second": {
+                                                                                                                                                                                                "second": {
                                                                                                                                                                                                   "inject": {
                                                                                                                                                                                                     "field": {
                                                                                                                                                                                                       "name": "application",
@@ -1871,7 +1871,7 @@
                                                                                                                                                                                                                       "typeApplication": {
                                                                                                                                                                                                                         "body": {
                                                                                                                                                                                                                           "pair": {
-                                                                                                                                                                                                                            "@first": {
+                                                                                                                                                                                                                            "first": {
                                                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                                                 "field": {
                                                                                                                                                                                                                                   "name": "application",
@@ -1951,7 +1951,7 @@
                                                                                                                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                                                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                                                                                                                                                                 "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                                            "@second": {
+                                                                                                                                                                                                                            "second": {
                                                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                                                 "field": {
                                                                                                                                                                                                                                   "name": "application",
@@ -1999,7 +1999,7 @@
                                                                                                                                                                                                         "typeApplication": {
                                                                                                                                                                                                           "body": {
                                                                                                                                                                                                             "pair": {
-                                                                                                                                                                                                              "@first": {
+                                                                                                                                                                                                              "first": {
                                                                                                                                                                                                                 "inject": {
                                                                                                                                                                                                                   "field": {
                                                                                                                                                                                                                     "name": "list",
@@ -2013,7 +2013,7 @@
                                                                                                                                                                                                                                 "wrap": {"body": {"literal": {"string": "el"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                             "typeName": "hydra.core.Term"}}]}},
                                                                                                                                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                              "@second": {
+                                                                                                                                                                                                              "second": {
                                                                                                                                                                                                                 "inject": {
                                                                                                                                                                                                                   "field": {
                                                                                                                                                                                                                     "name": "application",
@@ -2201,14 +2201,14 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "pair": {
-                                                                                                            "@first": {
+                                                                                                            "first": {
                                                                                                               "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "list",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                 "typeName": "hydra.core.Term"}},
-                                                                                                            "@second": {
+                                                                                                            "second": {
                                                                                                               "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "list",
@@ -2237,7 +2237,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2262,8 +2262,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Interpreter-friendly intercalate for List terms."}}}],
                         "body": {
                           "lambda": {
@@ -2279,7 +2279,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -2348,7 +2348,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2372,8 +2372,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly intersperse for List terms."}}}],
                 "body": {
                   "lambda": {
@@ -2393,7 +2393,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "list",
@@ -2513,7 +2513,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2539,8 +2539,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly map for List terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly map for List terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -2559,7 +2559,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "list",
@@ -2647,7 +2647,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2673,8 +2673,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly maybeHead for List terms."}}}],
                 "body": {
                   "lambda": {
@@ -2692,7 +2692,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "maybe",
@@ -2771,7 +2771,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2794,8 +2794,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly nub for List terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly nub for List terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -2812,7 +2812,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "application",
@@ -3103,7 +3103,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3126,8 +3126,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly partition for List terms."}}}],
                 "body": {
                   "lambda": {
@@ -3156,14 +3156,14 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "pair": {
-                                                                  "@first": {
+                                                                  "first": {
                                                                     "inject": {
                                                                       "field": {
                                                                         "name": "list",
                                                                         "term": {
                                                                           "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "@second": {
+                                                                  "second": {
                                                                     "inject": {
                                                                       "field": {
                                                                         "name": "list",
@@ -3173,7 +3173,7 @@
                                                               "type": {"variable": "hydra.core.Term"}}},
                                                           "type": {"variable": "hydra.core.Term"}}}},
                                                     "typeName": "hydra.core.Term"}},
-                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -3217,7 +3217,7 @@
                                                                                             {"name": "argument", "term": {"variable": "acc"}}],
                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                             "body": {
                                                                               "let": {
                                                                                 "bindings": [
@@ -3244,7 +3244,7 @@
                                                                                                 {"name": "argument", "term": {"variable": "acc"}}],
                                                                                               "typeName": "hydra.core.Application"}}},
                                                                                         "typeName": "hydra.core.Term"}},
-                                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                    "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -3308,7 +3308,7 @@
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
                                                                                                                             "pair": {
-                                                                                                                              "@first": {
+                                                                                                                              "first": {
                                                                                                                                 "inject": {
                                                                                                                                   "field": {
                                                                                                                                     "name": "application",
@@ -3346,7 +3346,7 @@
                                                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                                                         "typeName": "hydra.core.Application"}}},
                                                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                                                              "@second": {"variable": "nos"}}},
+                                                                                                                              "second": {"variable": "nos"}}},
                                                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                                                       "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
@@ -3364,8 +3364,8 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "pair": {
-                                                                                                                "@first": {"variable": "yeses"},
-                                                                                                                "@second": {
+                                                                                                                "first": {"variable": "yeses"},
+                                                                                                                "second": {
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "application",
@@ -3419,12 +3419,12 @@
                                                                         "body": {"variable": "hydra.lib.lists.foldl"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                    "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"either": {"@right": {"variable": "finalState"}}},
+                                                        "body": {"either": {"right": {"variable": "finalState"}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Term"}}}}}}},
                                         "domain": {"list": {"variable": "hydra.core.Term"}},
@@ -3458,7 +3458,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3488,8 +3488,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly pure for List terms."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly pure for List terms."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -3502,7 +3502,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {"name": "list", "term": {"list": [{"variable": "x"}]}},
                                                     "typeName": "hydra.core.Term"}}}},
@@ -3518,7 +3518,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3543,8 +3543,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Interpreter-friendly replicate for List terms."}}}],
                         "body": {
                           "lambda": {
@@ -3560,7 +3560,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -3675,7 +3675,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3703,8 +3703,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Interpreter-friendly singleton for List terms."}}}],
                         "body": {
                           "lambda": {
@@ -3718,7 +3718,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {"name": "list", "term": {"list": [{"variable": "x"}]}},
                                                     "typeName": "hydra.core.Term"}}}},
@@ -3734,7 +3734,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3759,8 +3759,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly sort for List terms."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly sort for List terms."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -3773,7 +3773,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "application",
@@ -3828,7 +3828,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3849,8 +3849,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly sortOn for List terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly sortOn for List terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -3869,7 +3869,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {"variable": "elements"},
                                                         "function": {
@@ -4010,7 +4010,7 @@
                                                                                             {"name": "argument", "term": {"variable": "sorted"}}],
                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                             "body": {
                                                                               "let": {
                                                                                 "bindings": [
@@ -4037,7 +4037,7 @@
                                                                                                 {"name": "argument", "term": {"variable": "splitResult"}}],
                                                                                               "typeName": "hydra.core.Application"}}},
                                                                                         "typeName": "hydra.core.Term"}},
-                                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                    "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
                                                                                     "bindings": [
@@ -4064,7 +4064,7 @@
                                                                                                     {"name": "argument", "term": {"variable": "splitResult"}}],
                                                                                                   "typeName": "hydra.core.Application"}}},
                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                        "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "inject": {
                                                                                         "field": {
@@ -4176,7 +4176,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4202,8 +4202,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly span for List terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly span for List terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -4231,7 +4231,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "pair": {
-                                                                  "@first": {
+                                                                  "first": {
                                                                     "inject": {
                                                                       "field": {
                                                                         "name": "pair",
@@ -4241,7 +4241,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "pair": {
-                                                                                    "@first": {
+                                                                                    "first": {
                                                                                       "inject": {
                                                                                         "field": {
                                                                                           "name": "literal",
@@ -4250,7 +4250,7 @@
                                                                                               "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                         "typeName": "hydra.core.Term"}},
-                                                                                    "@second": {
+                                                                                    "second": {
                                                                                       "inject": {
                                                                                         "field": {
                                                                                           "name": "list",
@@ -4260,7 +4260,7 @@
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}},
                                                                       "typeName": "hydra.core.Term"}},
-                                                                  "@second": {
+                                                                  "second": {
                                                                     "inject": {
                                                                       "field": {
                                                                         "name": "list",
@@ -4270,7 +4270,7 @@
                                                               "type": {"variable": "hydra.core.Term"}}},
                                                           "type": {"variable": "hydra.core.Term"}}}},
                                                     "typeName": "hydra.core.Term"}},
-                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -4314,7 +4314,7 @@
                                                                                             {"name": "argument", "term": {"variable": "acc"}}],
                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                             "body": {
                                                                               "let": {
                                                                                 "bindings": [
@@ -4341,7 +4341,7 @@
                                                                                                 {"name": "argument", "term": {"variable": "acc"}}],
                                                                                               "typeName": "hydra.core.Application"}}},
                                                                                         "typeName": "hydra.core.Term"}},
-                                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                    "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
                                                                                     "bindings": [
@@ -4368,7 +4368,7 @@
                                                                                                     {"name": "argument", "term": {"variable": "takingLeft"}}],
                                                                                                   "typeName": "hydra.core.Application"}}},
                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                        "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "let": {
                                                                                         "bindings": [
@@ -4395,7 +4395,7 @@
                                                                                                         {"name": "argument", "term": {"variable": "takingLeft"}}],
                                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                                 "typeName": "hydra.core.Term"}},
-                                                                                            "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                            "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                         "body": {
                                                                                           "inject": {
                                                                                             "field": {
@@ -4493,7 +4493,7 @@
                                                                                                                                 "typeApplication": {
                                                                                                                                   "body": {
                                                                                                                                     "pair": {
-                                                                                                                                      "@first": {
+                                                                                                                                      "first": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
                                                                                                                                             "name": "pair",
@@ -4503,7 +4503,7 @@
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
                                                                                                                                                       "pair": {
-                                                                                                                                                        "@first": {
+                                                                                                                                                        "first": {
                                                                                                                                                           "inject": {
                                                                                                                                                             "field": {
                                                                                                                                                               "name": "literal",
@@ -4512,7 +4512,7 @@
                                                                                                                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                                                                                        "@second": {
+                                                                                                                                                        "second": {
                                                                                                                                                           "inject": {
                                                                                                                                                             "field": {
                                                                                                                                                               "name": "application",
@@ -4553,7 +4553,7 @@
                                                                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                 "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                           "typeName": "hydra.core.Term"}},
-                                                                                                                                      "@second": {"variable": "right"}}},
+                                                                                                                                      "second": {"variable": "right"}}},
                                                                                                                                   "type": {"variable": "hydra.core.Term"}}},
                                                                                                                               "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                         "typeName": "hydra.core.Term"}}}],
@@ -4571,7 +4571,7 @@
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
                                                                                                                       "pair": {
-                                                                                                                        "@first": {
+                                                                                                                        "first": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
                                                                                                                               "name": "pair",
@@ -4581,7 +4581,7 @@
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
                                                                                                                                         "pair": {
-                                                                                                                                          "@first": {
+                                                                                                                                          "first": {
                                                                                                                                             "inject": {
                                                                                                                                               "field": {
                                                                                                                                                 "name": "literal",
@@ -4590,11 +4590,11 @@
                                                                                                                                                     "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
                                                                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                                                                               "typeName": "hydra.core.Term"}},
-                                                                                                                                          "@second": {"variable": "left"}}},
+                                                                                                                                          "second": {"variable": "left"}}},
                                                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                   "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                                                        "@second": {
+                                                                                                                        "second": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
                                                                                                                               "name": "application",
@@ -4648,14 +4648,14 @@
                                                                         "body": {"variable": "hydra.lib.lists.foldl"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                    "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "pair",
@@ -4665,7 +4665,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "application",
@@ -4708,7 +4708,7 @@
                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                         "typeName": "hydra.core.Application"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "application",
@@ -4765,7 +4765,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4791,8 +4791,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly uncons for List terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly uncons for List terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -4809,7 +4809,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "maybe",
@@ -4840,8 +4840,8 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "pair": {
-                                                                                      "@first": {"variable": "h"},
-                                                                                      "@second": {
+                                                                                      "first": {"variable": "h"},
+                                                                                      "second": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "list",
@@ -4904,7 +4904,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4927,8 +4927,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly zipWith for List terms."}}}],
                 "body": {
                   "lambda": {
@@ -4954,7 +4954,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "inject": {
                                                                     "field": {
                                                                       "name": "list",
@@ -4992,7 +4992,7 @@
                                                                                                       "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                                   "type": {"variable": "hydra.core.Term"}}}}},
-                                                                                          "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                          "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                       "body": {
                                                                                         "let": {
                                                                                           "bindings": [
@@ -5008,7 +5008,7 @@
                                                                                                           "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                                       "type": {"variable": "hydra.core.Term"}}}}},
-                                                                                              "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                              "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                           "body": {
                                                                                             "inject": {
                                                                                               "field": {
@@ -5104,7 +5104,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

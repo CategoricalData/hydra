@@ -393,7 +393,7 @@ etaExpansionArity graph term =
       Core.TermUnwrap _ -> 1
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
+      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
       _ -> 0
 
 -- | Eta-reduce a term by removing redundant lambda abstractions

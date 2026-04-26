@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a GraphSON AdjacentEdge to a JSON Value. The Bool indicates whether this is an outgoing edge."}}}],
             "body": {
@@ -25,8 +25,8 @@
                                   "typeApplication": {
                                     "body": {
                                       "pair": {
-                                        "@first": {"literal": {"string": "id"}},
-                                        "@second": {
+                                        "first": {"literal": {"string": "id"}},
+                                        "second": {
                                           "maybe": {
                                             "application": {
                                               "argument": {
@@ -43,8 +43,8 @@
                                   "typeApplication": {
                                     "body": {
                                       "pair": {
-                                        "@first": {"literal": {"string": "inV"}},
-                                        "@second": {
+                                        "first": {"literal": {"string": "inV"}},
+                                        "second": {
                                           "application": {
                                             "argument": {
                                               "typeApplication": {
@@ -78,8 +78,8 @@
                                   "typeApplication": {
                                     "body": {
                                       "pair": {
-                                        "@first": {"literal": {"string": "outV"}},
-                                        "@second": {
+                                        "first": {"literal": {"string": "outV"}},
+                                        "second": {
                                           "application": {
                                             "argument": {
                                               "maybe": {
@@ -113,8 +113,8 @@
                                   "typeApplication": {
                                     "body": {
                                       "pair": {
-                                        "@first": {"literal": {"string": "properties"}},
-                                        "@second": {
+                                        "first": {"literal": {"string": "properties"}},
+                                        "second": {
                                           "application": {
                                             "argument": {
                                               "application": {
@@ -132,7 +132,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "out"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -147,8 +147,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphSON DoubleValue to a JSON Value"}}}],
             "body": {
               "cases": {
@@ -200,7 +200,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.pg.graphson.syntax.DoubleValue"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}}},
@@ -212,8 +212,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a map of edges by label to an optional JSON Value"}}}],
             "body": {
@@ -251,7 +251,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "pair": {
-                                                            "@first": {
+                                                            "first": {
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
@@ -264,7 +264,7 @@
                                                                             "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                                                         "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}},
                                                                 "function": {"unwrap": "hydra.pg.graphson.syntax.EdgeLabel"}}},
-                                                            "@second": {
+                                                            "second": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "array",
@@ -352,7 +352,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "out"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -370,8 +370,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a map of edge properties to an optional JSON Value"}}}],
             "body": {
@@ -407,7 +407,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "pair": {
-                                                        "@first": {
+                                                        "first": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
@@ -420,7 +420,7 @@
                                                                         "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
                                                             "function": {"unwrap": "hydra.pg.graphson.syntax.PropertyKey"}}},
-                                                        "@second": {
+                                                        "second": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
@@ -489,7 +489,7 @@
                     "values": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                 "parameter": "m"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.json.model.Value"}},
               "domain": {
@@ -504,8 +504,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphSON FloatValue to a JSON Value"}}}],
             "body": {
               "cases": {
@@ -557,7 +557,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.pg.graphson.syntax.FloatValue"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"variable": "hydra.pg.graphson.syntax.FloatValue"}}},
@@ -569,8 +569,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a GraphSON Map to a JSON array of alternating keys and values"}}}],
             "body": {
@@ -626,7 +626,7 @@
                 "domain": {"variable": "hydra.pg.graphson.syntax.Map"},
                 "parameter": "m"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"variable": "hydra.pg.graphson.syntax.Map"}}},
@@ -638,8 +638,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Create a JSON object from a list of key-value pairs, filtering out Nothing values"}}}],
             "body": {
@@ -681,7 +681,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "pair": {
-                                                                  "@first": {
+                                                                  "first": {
                                                                     "application": {
                                                                       "argument": {"variable": "p"},
                                                                       "function": {
@@ -691,7 +691,7 @@
                                                                               "body": {"variable": "hydra.lib.pairs.first"},
                                                                               "type": {"literal": {"string": {}}}}},
                                                                           "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}},
-                                                                  "@second": {"variable": "v"}}},
+                                                                  "second": {"variable": "v"}}},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.json.model.Value"}}},
                                                       "domain": {"variable": "hydra.json.model.Value"},
@@ -747,7 +747,7 @@
                       "second": {"maybe": {"variable": "hydra.json.model.Value"}}}}},
                 "parameter": "pairs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {
@@ -763,8 +763,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a typed JSON object with @type and @value fields"}}}],
             "body": {
               "lambda": {
@@ -780,8 +780,8 @@
                                   "typeApplication": {
                                     "body": {
                                       "pair": {
-                                        "@first": {"literal": {"string": "@type"}},
-                                        "@second": {
+                                        "first": {"literal": {"string": "@type"}},
+                                        "second": {
                                           "maybe": {
                                             "inject": {
                                               "field": {"name": "string", "term": {"variable": "typeName"}},
@@ -794,8 +794,8 @@
                                   "typeApplication": {
                                     "body": {
                                       "pair": {
-                                        "@first": {"literal": {"string": "@value"}},
-                                        "@second": {"maybe": {"variable": "valueJson"}}}},
+                                        "first": {"literal": {"string": "@value"}},
+                                        "second": {"maybe": {"variable": "valueJson"}}}},
                                     "type": {"literal": {"string": {}}}}},
                                 "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}]},
                         "function": {"variable": "hydra.pg.graphson.coder.toJsonObject"}}},
@@ -804,7 +804,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "typeName"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -819,8 +819,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a GraphSON Value to a JSON Value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a GraphSON Value to a JSON Value"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -1269,7 +1269,7 @@
                         "parameter": "u"}}}],
                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"variable": "hydra.pg.graphson.syntax.Value"}}},
@@ -1281,8 +1281,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a map of vertex properties to an optional JSON Value"}}}],
             "body": {
@@ -1318,7 +1318,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "pair": {
-                                                        "@first": {
+                                                        "first": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
@@ -1331,7 +1331,7 @@
                                                                         "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                     "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}},
                                                             "function": {"unwrap": "hydra.pg.graphson.syntax.PropertyKey"}}},
-                                                        "@second": {
+                                                        "second": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "array",
@@ -1414,7 +1414,7 @@
                     "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                 "parameter": "m"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.json.model.Value"}},
               "domain": {
@@ -1429,8 +1429,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphSON VertexPropertyValue to a JSON Value"}}}],
             "body": {
               "lambda": {
@@ -1444,8 +1444,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "id"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "id"}},
+                                    "second": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -1472,8 +1472,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "value"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "value"}},
+                                    "second": {
                                       "maybe": {
                                         "application": {
                                           "argument": {
@@ -1490,7 +1490,7 @@
                 "domain": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"},
                 "parameter": "vpv"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}},
@@ -1502,8 +1502,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a GraphSON Vertex to a JSON Value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a GraphSON Vertex to a JSON Value"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1516,8 +1516,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "id"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "id"}},
+                                    "second": {
                                       "maybe": {
                                         "application": {
                                           "argument": {
@@ -1534,8 +1534,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "label"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "label"}},
+                                    "second": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -1572,8 +1572,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "inE"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "inE"}},
+                                    "second": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -1592,8 +1592,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "outE"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "outE"}},
+                                    "second": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -1612,8 +1612,8 @@
                               "typeApplication": {
                                 "body": {
                                   "pair": {
-                                    "@first": {"literal": {"string": "properties"}},
-                                    "@second": {
+                                    "first": {"literal": {"string": "properties"}},
+                                    "second": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -1627,7 +1627,7 @@
                 "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},

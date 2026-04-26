@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.haskell.environment.HaskellModuleMetadata",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Metadata used to determine which standard imports are needed in a generated Haskell module"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -30,8 +30,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -41,8 +41,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -52,8 +52,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},

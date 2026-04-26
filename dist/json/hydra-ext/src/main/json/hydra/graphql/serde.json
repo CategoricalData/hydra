@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL definition to an expression"}}}],
             "body": {
               "lambda": {
@@ -43,7 +43,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.Definition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.Definition"}}},
@@ -55,8 +55,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL description to a triple-quoted comment"}}}],
             "body": {
               "lambda": {
@@ -69,7 +69,7 @@
                           "application": {
                             "argument": {"literal": {"string": "\"\"\""}},
                             "function": {"variable": "hydra.serialization.cst"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "text",
                         "term": {
@@ -79,7 +79,7 @@
                                 "argument": {"variable": "desc"},
                                 "function": {"unwrap": "hydra.graphql.syntax.Description"}}},
                             "function": {"unwrap": "hydra.graphql.syntax.StringValue"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -94,7 +94,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.Description"},
                 "parameter": "desc"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.Description"}}},
@@ -106,8 +106,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a GraphQL document to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a GraphQL document to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -132,7 +132,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.Document"},
                 "parameter": "d"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.Document"}}},
@@ -144,8 +144,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL enum type definition to an expression"}}}],
             "body": {
               "lambda": {
@@ -162,7 +162,7 @@
                                 "field": "Description",
                                 "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                          "body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
                           "variables": []}},
                       {
                         "name": "name",
@@ -173,7 +173,7 @@
                               "project": {
                                 "field": "Name",
                                 "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
-                        "type": {"type": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
                       {
                         "name": "values",
                         "term": {
@@ -184,7 +184,7 @@
                                 "field": "EnumValuesDefinition",
                                 "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}},
+                          "body": {"maybe": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}},
                           "variables": []}},
                       {
                         "name": "valuesExpr",
@@ -224,7 +224,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                         "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -258,7 +258,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.EnumTypeDefinition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.EnumTypeDefinition"}}},
@@ -270,8 +270,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL enum value to an expression"}}}],
             "body": {
               "lambda": {
@@ -285,7 +285,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.EnumValue"},
                 "parameter": "ev"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.EnumValue"}}},
@@ -297,8 +297,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL enum value definition to an expression"}}}],
             "body": {
               "lambda": {
@@ -315,7 +315,7 @@
                                 "field": "Description",
                                 "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                          "body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
                           "variables": []}},
                       {
                         "name": "ev",
@@ -327,7 +327,7 @@
                                 "field": "EnumValue",
                                 "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
                         "type": {
-                          "type": {"variable": "hydra.graphql.syntax.EnumValue"},
+                          "body": {"variable": "hydra.graphql.syntax.EnumValue"},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -342,7 +342,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.EnumValueDefinition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
@@ -354,8 +354,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL field definition to an expression"}}}],
             "body": {
               "lambda": {
@@ -372,7 +372,7 @@
                                 "field": "Description",
                                 "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                          "body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
                           "variables": []}},
                       {
                         "name": "name",
@@ -381,7 +381,7 @@
                             "argument": {"variable": "def"},
                             "function": {
                               "project": {"field": "Name", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
-                        "type": {"type": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
@@ -389,7 +389,7 @@
                             "argument": {"variable": "def"},
                             "function": {
                               "project": {"field": "Type", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
-                        "type": {"type": {"variable": "hydra.graphql.syntax.Type"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphql.syntax.Type"}, "variables": []}},
                       {
                         "name": "namePart",
                         "term": {
@@ -405,14 +405,14 @@
                                     "argument": {"literal": {"string": ":"}},
                                     "function": {"variable": "hydra.serialization.cst"}}}]},
                             "function": {"variable": "hydra.serialization.noSep"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "typePart",
                         "term": {
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.graphql.serde.exprType"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -426,7 +426,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.FieldDefinition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
@@ -438,8 +438,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL list type to an expression"}}}],
             "body": {
               "lambda": {
@@ -466,7 +466,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.ListType"},
                 "parameter": "lt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.ListType"}}},
@@ -478,8 +478,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a GraphQL name to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a GraphQL name to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -492,7 +492,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.Name"},
                 "parameter": "n"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.Name"}}},
@@ -504,8 +504,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL named type to an expression"}}}],
             "body": {
               "lambda": {
@@ -519,7 +519,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.NamedType"},
                 "parameter": "nt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.NamedType"}}},
@@ -531,8 +531,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL non-null type to an expression"}}}],
             "body": {
               "lambda": {
@@ -568,7 +568,7 @@
                                         "domain": {"variable": "hydra.graphql.syntax.ListType"},
                                         "parameter": "lt"}}}],
                                 "typeName": "hydra.graphql.syntax.NonNullType"}}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -582,7 +582,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.NonNullType"},
                 "parameter": "nnt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.NonNullType"}}},
@@ -594,8 +594,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a GraphQL object type definition to an expression"}}}],
             "body": {
@@ -613,7 +613,7 @@
                                 "field": "Description",
                                 "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                          "body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
                           "variables": []}},
                       {
                         "name": "name",
@@ -624,7 +624,7 @@
                               "project": {
                                 "field": "Name",
                                 "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
-                        "type": {"type": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
@@ -635,7 +635,7 @@
                                 "field": "FieldsDefinition",
                                 "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.graphql.syntax.FieldsDefinition"}},
+                          "body": {"maybe": {"variable": "hydra.graphql.syntax.FieldsDefinition"}},
                           "variables": []}},
                       {
                         "name": "fieldsExpr",
@@ -675,7 +675,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                         "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -709,7 +709,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.ObjectTypeDefinition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.ObjectTypeDefinition"}}},
@@ -721,8 +721,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a GraphQL type to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a GraphQL type to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -765,7 +765,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.Type"}}},
@@ -777,8 +777,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a GraphQL type definition to an expression"}}}],
             "body": {
               "lambda": {
@@ -852,7 +852,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.TypeDefinition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.TypeDefinition"}}},
@@ -864,8 +864,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a GraphQL type system definition to an expression"}}}],
             "body": {
@@ -910,7 +910,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"},
                 "parameter": "def"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"}}},
@@ -922,8 +922,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a GraphQL type system definition or extension to an expression"}}}],
             "body": {
@@ -958,7 +958,7 @@
                 "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"},
                 "parameter": "de"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}},
@@ -970,8 +970,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Prepend an optional description to an expression"}}}],
             "body": {
               "lambda": {
@@ -1013,7 +1013,7 @@
                 "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
                 "parameter": "mdesc"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

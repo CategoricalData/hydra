@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.cypher.features.CypherFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A set of features which characterize an OpenCypher query or implementation. Any features which are omitted from the set are assumed to be unsupported or nonrequired."}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Arithmetic operations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Arithmetic operations"}}}],
                         "body": {"variable": "hydra.cypher.features.ArithmeticFeatures"}}}},
                   {
                     "name": "atom",
@@ -29,8 +29,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Various kinds of atomic expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Various kinds of atomic expressions"}}}],
                         "body": {"variable": "hydra.cypher.features.AtomFeatures"}}}},
                   {
                     "name": "comparison",
@@ -38,8 +38,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Comparison operators and functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Comparison operators and functions"}}}],
                         "body": {"variable": "hydra.cypher.features.ComparisonFeatures"}}}},
                   {
                     "name": "delete",
@@ -47,8 +47,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Delete operations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Delete operations"}}}],
                         "body": {"variable": "hydra.cypher.features.DeleteFeatures"}}}},
                   {
                     "name": "function",
@@ -56,8 +56,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Standard Cypher functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Standard Cypher functions"}}}],
                         "body": {"variable": "hydra.cypher.features.FunctionFeatures"}}}},
                   {
                     "name": "list",
@@ -65,8 +65,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "List functionality"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "List functionality"}}}],
                         "body": {"variable": "hydra.cypher.features.ListFeatures"}}}},
                   {
                     "name": "literal",
@@ -74,8 +74,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Various types of literal values"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Various types of literal values"}}}],
                         "body": {"variable": "hydra.cypher.features.LiteralFeatures"}}}},
                   {
                     "name": "logical",
@@ -83,8 +83,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Logical operations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Logical operations"}}}],
                         "body": {"variable": "hydra.cypher.features.LogicalFeatures"}}}},
                   {
                     "name": "match",
@@ -92,8 +92,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Match queries"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Match queries"}}}],
                         "body": {"variable": "hydra.cypher.features.MatchFeatures"}}}},
                   {
                     "name": "merge",
@@ -101,8 +101,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Merge operations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Merge operations"}}}],
                         "body": {"variable": "hydra.cypher.features.MergeFeatures"}}}},
                   {
                     "name": "nodePattern",
@@ -110,8 +110,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Node patterns"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Node patterns"}}}],
                         "body": {"variable": "hydra.cypher.features.NodePatternFeatures"}}}},
                   {
                     "name": "null",
@@ -119,8 +119,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}],
                         "body": {"variable": "hydra.cypher.features.NullFeatures"}}}},
                   {
                     "name": "path",
@@ -128,8 +128,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Path functions only found in OpenCypher"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Path functions only found in OpenCypher"}}}],
                         "body": {"variable": "hydra.cypher.features.PathFeatures"}}}},
                   {
                     "name": "procedureCall",
@@ -137,8 +137,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Procedure calls"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Procedure calls"}}}],
                         "body": {"variable": "hydra.cypher.features.ProcedureCallFeatures"}}}},
                   {
                     "name": "projection",
@@ -146,8 +146,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Projections"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Projections"}}}],
                         "body": {"variable": "hydra.cypher.features.ProjectionFeatures"}}}},
                   {
                     "name": "quantifier",
@@ -155,8 +155,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Quantifier expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Quantifier expressions"}}}],
                         "body": {"variable": "hydra.cypher.features.QuantifierFeatures"}}}},
                   {
                     "name": "rangeLiteral",
@@ -164,8 +164,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Range literals within relationship patterns"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Range literals within relationship patterns"}}}],
                         "body": {"variable": "hydra.cypher.features.RangeLiteralFeatures"}}}},
                   {
                     "name": "reading",
@@ -173,8 +173,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Specific syntax related to reading data from the graph."}}}],
                         "body": {"variable": "hydra.cypher.features.ReadingFeatures"}}}},
                   {
@@ -183,8 +183,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Relationship directions / arrow patterns"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Relationship directions / arrow patterns"}}}],
                         "body": {"variable": "hydra.cypher.features.RelationshipDirectionFeatures"}}}},
                   {
                     "name": "relationshipPattern",
@@ -192,8 +192,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Relationship patterns"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Relationship patterns"}}}],
                         "body": {"variable": "hydra.cypher.features.RelationshipPatternFeatures"}}}},
                   {
                     "name": "remove",
@@ -201,8 +201,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "REMOVE operations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "REMOVE operations"}}}],
                         "body": {"variable": "hydra.cypher.features.RemoveFeatures"}}}},
                   {
                     "name": "set",
@@ -210,8 +210,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Set definitions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Set definitions"}}}],
                         "body": {"variable": "hydra.cypher.features.SetFeatures"}}}},
                   {
                     "name": "string",
@@ -219,8 +219,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "String functions/keywords only found in OpenCypher"}}}],
                         "body": {"variable": "hydra.cypher.features.StringFeatures"}}}},
                   {
@@ -229,8 +229,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Specific syntax related to updating data in the graph"}}}],
                         "body": {"variable": "hydra.cypher.features.UpdatingFeatures"}}}}]}}},
           "variables": []}}},
@@ -238,12 +238,12 @@
       "type": {
         "name": "hydra.cypher.features.ArithmeticFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Arithmetic operations"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Arithmetic operations"}}}],
               "body": {
                 "record": [
                   {
@@ -252,8 +252,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The + operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The + operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "minus",
@@ -261,8 +261,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The - operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The - operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "multiply",
@@ -270,8 +270,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The * operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The * operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "divide",
@@ -279,8 +279,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The / operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The / operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "modulus",
@@ -288,8 +288,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The % operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The % operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "powerOf",
@@ -297,20 +297,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The ^ operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The ^ operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.AtomFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Various kinds of atomic expressions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Various kinds of atomic expressions"}}}],
               "body": {
                 "record": [
                   {
@@ -319,8 +319,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "CASE expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "CASE expressions"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "count",
@@ -328,8 +328,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The COUNT (*) expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The COUNT (*) expression"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "existentialSubquery",
@@ -337,8 +337,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Existential subqueries"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Existential subqueries"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "functionInvocation",
@@ -346,8 +346,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function invocation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function invocation"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "parameter",
@@ -355,8 +355,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Parameter expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Parameter expressions"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "patternComprehension",
@@ -364,8 +364,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Pattern comprehensions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Pattern comprehensions"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "patternPredicate",
@@ -373,8 +373,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Relationship patterns as subexpressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Relationship patterns as subexpressions"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "variable",
@@ -382,8 +382,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Variable expressions (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -392,12 +392,12 @@
       "type": {
         "name": "hydra.cypher.features.ComparisonFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Comparison operators and functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Comparison operators and functions"}}}],
               "body": {
                 "record": [
                   {
@@ -406,8 +406,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The = comparison operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The = comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "greaterThan",
@@ -415,8 +415,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The > comparison operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The > comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "greaterThanOrEqual",
@@ -424,8 +424,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The >= comparison operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The >= comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "lessThan",
@@ -433,8 +433,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The < comparison operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The < comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "lessThanOrEqual",
@@ -442,8 +442,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The <= comparison operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The <= comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "notEqual",
@@ -451,20 +451,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The <> comparison operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The <> comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.DeleteFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Delete operations"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Delete operations"}}}],
               "body": {
                 "record": [
                   {
@@ -473,8 +473,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The basic DELETE clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The basic DELETE clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "detachDelete",
@@ -482,20 +482,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The DETACH DELETE clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The DETACH DELETE clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.FunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Standard Cypher functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Standard Cypher functions"}}}],
               "body": {
                 "record": [
                   {
@@ -504,8 +504,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Aggregate functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Aggregate functions"}}}],
                         "body": {"variable": "hydra.cypher.features.AggregateFunctionFeatures"}}}},
                   {
                     "name": "databaseFunction",
@@ -513,8 +513,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Database functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Database functions"}}}],
                         "body": {"variable": "hydra.cypher.features.DatabaseFunctionFeatures"}}}},
                   {
                     "name": "genAIFunction",
@@ -522,8 +522,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "GenAI functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "GenAI functions"}}}],
                         "body": {"variable": "hydra.cypher.features.GenAIFunctionFeatures"}}}},
                   {
                     "name": "graphFunction",
@@ -531,8 +531,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Graph functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Graph functions"}}}],
                         "body": {"variable": "hydra.cypher.features.GraphFunctionFeatures"}}}},
                   {
                     "name": "listFunction",
@@ -540,8 +540,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "List functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "List functions"}}}],
                         "body": {"variable": "hydra.cypher.features.ListFunctionFeatures"}}}},
                   {
                     "name": "loadCSVFunction",
@@ -549,8 +549,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Load CSV functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Load CSV functions"}}}],
                         "body": {"variable": "hydra.cypher.features.LoadCSVFunctionFeatures"}}}},
                   {
                     "name": "logarithmicFunction",
@@ -558,8 +558,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Logarithmic functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Logarithmic functions"}}}],
                         "body": {"variable": "hydra.cypher.features.LogarithmicFunctionFeatures"}}}},
                   {
                     "name": "numericFunction",
@@ -567,8 +567,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Numeric functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Numeric functions"}}}],
                         "body": {"variable": "hydra.cypher.features.NumericFunctionFeatures"}}}},
                   {
                     "name": "predicateFunction",
@@ -576,8 +576,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Predicate functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Predicate functions"}}}],
                         "body": {"variable": "hydra.cypher.features.PredicateFunctionFeatures"}}}},
                   {
                     "name": "scalarFunction",
@@ -585,8 +585,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Scalar functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Scalar functions"}}}],
                         "body": {"variable": "hydra.cypher.features.ScalarFunctionFeatures"}}}},
                   {
                     "name": "spatialFunction",
@@ -594,8 +594,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Spatial functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Spatial functions"}}}],
                         "body": {"variable": "hydra.cypher.features.SpatialFunctionFeatures"}}}},
                   {
                     "name": "stringFunction",
@@ -603,8 +603,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "String functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "String functions"}}}],
                         "body": {"variable": "hydra.cypher.features.StringFunctionFeatures"}}}},
                   {
                     "name": "temporalDurationFunction",
@@ -612,8 +612,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Temporal duration functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Temporal duration functions"}}}],
                         "body": {"variable": "hydra.cypher.features.TemporalDurationFunctionFeatures"}}}},
                   {
                     "name": "temporalInstantFunction",
@@ -621,8 +621,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Temporal instant functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Temporal instant functions"}}}],
                         "body": {"variable": "hydra.cypher.features.TemporalInstantFunctionFeatures"}}}},
                   {
                     "name": "trigonometricFunction",
@@ -630,8 +630,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Trigonometric functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Trigonometric functions"}}}],
                         "body": {"variable": "hydra.cypher.features.TrigonometricFunctionFeatures"}}}},
                   {
                     "name": "vectorFunction",
@@ -639,20 +639,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Vector functions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Vector functions"}}}],
                         "body": {"variable": "hydra.cypher.features.VectorFunctionFeatures"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.AggregateFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Aggregate functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Aggregate functions"}}}],
               "body": {
                 "record": [
                   {
@@ -661,8 +661,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The avg() function / AVG. Returns the average of a set of DURATION values.; Returns the average of a set of FLOAT values.; Returns the average of a set of INTEGER values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -672,8 +672,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The collect() function / COLLECT. Returns a list containing the values returned by an expression."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -683,8 +683,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The count() function / COUNT. Returns the number of values or rows."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -694,8 +694,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The max() function / MAX. Returns the maximum value in a set of values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -705,8 +705,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The min() function / MIN. Returns the minimum value in a set of values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -716,8 +716,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The percentileCont() function. Returns the percentile of a value over a group using linear interpolation."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -727,8 +727,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The percentileDisc() function. Returns the nearest FLOAT value to the given percentile over a group using a rounding method.; Returns the nearest INTEGER value to the given percentile over a group using a rounding method."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -738,8 +738,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The stdev() function. Returns the standard deviation for the given value over a group for a sample of a population."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -749,8 +749,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The stdevp() function. Returns the standard deviation for the given value over a group for an entire population."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -760,8 +760,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The sum() function / SUM. Returns the sum of a set of DURATION values.; Returns the sum of a set of FLOAT values.; Returns the sum of a set of INTEGER values."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -770,12 +770,12 @@
       "type": {
         "name": "hydra.cypher.features.DatabaseFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Database functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Database functions"}}}],
               "body": {
                 "record": [
                   {
@@ -784,8 +784,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -794,12 +794,12 @@
       "type": {
         "name": "hydra.cypher.features.GenAIFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "GenAI functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "GenAI functions"}}}],
               "body": {
                 "record": [
                   {
@@ -808,8 +808,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -818,12 +818,12 @@
       "type": {
         "name": "hydra.cypher.features.GraphFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Graph functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Graph functions"}}}],
               "body": {
                 "record": [
                   {
@@ -832,8 +832,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The graph.byElementId() function. Resolves the constituent graph to which a given element id belongs. Introduced in 5.13."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -843,8 +843,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The graph.byName() function. Resolves a constituent graph by name."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -854,8 +854,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The graph.names() function. Returns a list containing the names of all graphs in the current composite database."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -865,8 +865,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The graph.propertiesByName() function. Returns a map containing the properties associated with the given graph."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -875,12 +875,12 @@
       "type": {
         "name": "hydra.cypher.features.ListFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "List functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "List functions"}}}],
               "body": {
                 "record": [
                   {
@@ -889,8 +889,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The keys() function. Returns a LIST<STRING> containing the STRING representations for all the property names of a MAP.; Returns a LIST<STRING> containing the STRING representations for all the property names of a NODE.; Returns a LIST<STRING> containing the STRING representations for all the property names of a RELATIONSHIP."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -900,8 +900,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The labels() function. Returns a LIST<STRING> containing the STRING representations for all the labels of a NODE."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -911,8 +911,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The nodes() function. Returns a LIST<NODE> containing all the NODE values in a PATH."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -922,8 +922,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The range() function. Returns a LIST<INTEGER> comprising all INTEGER values within a specified range.; Returns a LIST<INTEGER> comprising all INTEGER values within a specified range created with step length."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -933,8 +933,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The reduce() function. Runs an expression against individual elements of a LIST<ANY>, storing the result of the expression in an accumulator."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -944,8 +944,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The relationships() function. Returns a LIST<RELATIONSHIP> containing all the RELATIONSHIP values in a PATH."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -955,8 +955,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The reverse() function. Returns a LIST<ANY> in which the order of all elements in the given LIST<ANY> have been reversed."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -966,8 +966,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The tail() function. Returns all but the first element in a LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -977,8 +977,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toBooleanList() function. Converts a LIST<ANY> of values to a LIST<BOOLEAN> values. If any values are not convertible to BOOLEAN they will be null in the LIST<BOOLEAN> returned."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -988,8 +988,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toFloatList() function. Converts a LIST<ANY> to a LIST<FLOAT> values. If any values are not convertible to FLOAT they will be null in the LIST<FLOAT> returned."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -999,8 +999,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toIntegerList() function. Converts a LIST<ANY> to a LIST<INTEGER> values. If any values are not convertible to INTEGER they will be null in the LIST<INTEGER> returned."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1010,8 +1010,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toStringList() function. Converts a LIST<ANY> to a LIST<STRING> values. If any values are not convertible to STRING they will be null in the LIST<STRING> returned."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1020,12 +1020,12 @@
       "type": {
         "name": "hydra.cypher.features.LoadCSVFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Load CSV functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Load CSV functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1034,8 +1034,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The file() function. Returns the absolute path of the file that LOAD CSV is using."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1045,8 +1045,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The linenumber() function. Returns the line number that LOAD CSV is currently using."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1055,12 +1055,12 @@
       "type": {
         "name": "hydra.cypher.features.LogarithmicFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Logarithmic functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Logarithmic functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1069,8 +1069,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The e() function. Returns the base of the natural logarithm, e."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1080,8 +1080,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The exp() function. Returns e^n, where e is the base of the natural logarithm, and n is the value of the argument expression."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1091,8 +1091,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The log() function. Returns the natural logarithm of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1102,8 +1102,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The log10() function. Returns the common logarithm (base 10) of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1113,8 +1113,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The sqrt() function. Returns the square root of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -1122,12 +1122,12 @@
       "type": {
         "name": "hydra.cypher.features.NumericFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Numeric functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Numeric functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1136,8 +1136,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The abs() function. Returns the absolute value of a FLOAT.; Returns the absolute value of an INTEGER."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1147,8 +1147,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The ceil() function. Returns the smallest FLOAT that is greater than or equal to a number and equal to an INTEGER."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1158,8 +1158,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The floor() function. Returns the largest FLOAT that is less than or equal to a number and equal to an INTEGER."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1169,8 +1169,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The isNaN() function. Returns true if the floating point number is NaN.; Returns true if the integer number is NaN."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1180,8 +1180,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The rand() function. Returns a random FLOAT in the range from 0 (inclusive) to 1 (exclusive)."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1191,8 +1191,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The round() function. Returns the value of a number rounded to the nearest INTEGER.; Returns the value of a number rounded to the specified precision using rounding mode HALF_UP.; Returns the value of a number rounded to the specified precision with the specified rounding mode."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1202,8 +1202,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The sign() function. Returns the signum of a FLOAT: 0 if the number is 0, -1 for any negative number, and 1 for any positive number.; Returns the signum of an INTEGER: 0 if the number is 0, -1 for any negative number, and 1 for any positive number."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1212,12 +1212,12 @@
       "type": {
         "name": "hydra.cypher.features.PredicateFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Predicate functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Predicate functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1226,8 +1226,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The all() function. Returns true if the predicate holds for all elements in the given LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1237,8 +1237,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The any() function. Returns true if the predicate holds for at least one element in the given LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1248,8 +1248,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The exists() function. Returns true if a match for the pattern exists in the graph."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1259,8 +1259,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The isEmpty() function. Checks whether a LIST<ANY> is empty.; Checks whether a MAP is empty.; Checks whether a STRING is empty."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1270,8 +1270,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The none() function. Returns true if the predicate holds for no element in the given LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1281,8 +1281,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The single() function. Returns true if the predicate holds for exactly one of the elements in the given LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1291,12 +1291,12 @@
       "type": {
         "name": "hydra.cypher.features.ScalarFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Scalar functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Scalar functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1305,8 +1305,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The char_length() function. Returns the number of Unicode characters in a STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1316,8 +1316,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The character_length() function. Returns the number of Unicode characters in a STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1327,8 +1327,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The coalesce() function. Returns the first non-null value in a list of expressions."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1338,8 +1338,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The elementId() function. Returns a node identifier, unique within a specific transaction and DBMS.; Returns a relationship identifier, unique within a specific transaction and DBMS."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1349,8 +1349,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The endNode() function. Returns a relationship identifier, unique within a specific transaction and DBMS."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1360,8 +1360,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The head() function. Returns the first element in a LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1371,8 +1371,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The id() function. [Deprecated] Returns the id of a NODE. Replaced by elementId().; [Deprecated] Returns the id of a RELATIONSHIP. Replaced by elementId()."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1382,8 +1382,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The last() function. Returns the last element in a LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1393,8 +1393,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The length() function. Returns the length of a PATH."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -1403,8 +1403,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The nullIf() function. Returns null if the two given parameters are equivalent, otherwise returns the value of the first parameter."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1414,8 +1414,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The properties() function. Returns a MAP containing all the properties of a MAP.; Returns a MAP containing all the properties of a NODE.; Returns a MAP containing all the properties of a RELATIONSHIP."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1425,8 +1425,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The randomUUID() function. Generates a random UUID."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -1435,8 +1435,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The size() function. Returns the number of items in a LIST<ANY>.; Returns the number of Unicode characters in a STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1446,8 +1446,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The startNode() function. Returns the start NODE of a RELATIONSHIP."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1457,8 +1457,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toBoolean() function. Converts a STRING value to a BOOLEAN value.; Converts a BOOLEAN value to a BOOLEAN value.; Converts an INTEGER value to a BOOLEAN value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1468,8 +1468,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toBooleanOrNull() function. Converts a value to a BOOLEAN value, or null if the value cannot be converted."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1479,8 +1479,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toFloat() function. Converts an INTEGER value to a FLOAT value.; Converts a STRING value to a FLOAT value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1490,8 +1490,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toFloatOrNull() function. Converts a value to a FLOAT value, or null if the value cannot be converted."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1501,8 +1501,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toInteger() function. Converts a FLOAT value to an INTEGER value.; Converts a BOOLEAN value to an INTEGER value.; Converts a STRING value to an INTEGER value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1512,8 +1512,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toIntegerOrNull() function. Converts a value to an INTEGER value, or null if the value cannot be converted."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1523,8 +1523,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The type() function. Returns a STRING representation of the RELATIONSHIP type."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1534,8 +1534,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The valueType() function. Returns a STRING representation of the most precise value type that the given expression evaluates to."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1544,12 +1544,12 @@
       "type": {
         "name": "hydra.cypher.features.SpatialFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Spatial functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Spatial functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1558,8 +1558,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The point.distance() function. Returns a FLOAT representing the geodesic distance between any two points in the same CRS."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1569,8 +1569,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The point() function. Returns a 2D point object, given two coordinate values in the Cartesian coordinate system.; Returns a 3D point object, given three coordinate values in the Cartesian coordinate system.; Returns a 2D point object, given two coordinate values in the WGS 84 geographic coordinate system.; Returns a 3D point object, given three coordinate values in the WGS 84 geographic coordinate system."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1580,8 +1580,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The point.withinBBox() function. Returns true if the provided point is within the bounding box defined by the two provided points, lowerLeft and upperRight."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1590,12 +1590,12 @@
       "type": {
         "name": "hydra.cypher.features.StringFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "String functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "String functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1604,8 +1604,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The btrim() function. Returns the given STRING with leading and trailing whitespace removed.; Returns the given STRING with leading and trailing trimCharacterString characters removed. Introduced in 5.20."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1615,8 +1615,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The left() function. Returns a STRING containing the specified number (INTEGER) of leftmost characters in the given STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1626,8 +1626,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The lower() function. Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1637,8 +1637,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The ltrim() function. Returns the given STRING with leading whitespace removed.; Returns the given STRING with leading trimCharacterString characters removed. Introduced in 5.20."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1648,8 +1648,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The normalize() function. Returns the given STRING normalized according to the normalization CypherFunctionForm NFC. Introduced in 5.17.; Returns the given STRING normalized according to the specified normalization CypherFunctionForm. Introduced in 5.17."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1659,8 +1659,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The replace() function. Returns a STRING in which all occurrences of a specified search STRING in the given STRING have been replaced by another (specified) replacement STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1670,8 +1670,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The reverse() function. Returns a STRING in which the order of all characters in the given STRING have been reversed."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1681,8 +1681,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The right() function. Returns a STRING containing the specified number of rightmost characters in the given STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1692,8 +1692,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The rtrim() function. Returns the given STRING with trailing whitespace removed.; Returns the given STRING with trailing trimCharacterString characters removed. Introduced in 5.20."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1703,8 +1703,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The split() function. Returns a LIST<STRING> resulting from the splitting of the given STRING around matches of the given delimiter.; Returns a LIST<STRING> resulting from the splitting of the given STRING around matches of any of the given delimiters."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1714,8 +1714,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The substring() function. Returns a substring of the given STRING, beginning with a 0-based index start.; Returns a substring of a given length from the given STRING, beginning with a 0-based index start."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1725,8 +1725,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toLower() function. Returns the given STRING in lowercase."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1736,8 +1736,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toString() function. Converts an INTEGER, FLOAT, BOOLEAN, POINT or temporal type (i.e. DATE, ZONED TIME, LOCAL TIME, ZONED DATETIME, LOCAL DATETIME or DURATION) value to a STRING."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1747,8 +1747,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toStringOrNull() function. Converts an INTEGER, FLOAT, BOOLEAN, POINT or temporal type (i.e. DATE, ZONED TIME, LOCAL TIME, ZONED DATETIME, LOCAL DATETIME or DURATION) value to a STRING, or null if the value cannot be converted."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1758,8 +1758,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The toUpper() function. Returns the given STRING in uppercase."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1769,8 +1769,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The trim() function. Returns the given STRING with leading and trailing whitespace removed.; Returns the given STRING with the leading and/or trailing trimCharacterString character removed. Introduced in 5.20."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1780,8 +1780,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The upper() function. Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1790,12 +1790,12 @@
       "type": {
         "name": "hydra.cypher.features.TemporalDurationFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Temporal duration functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Temporal duration functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1804,8 +1804,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The duration() function. Constructs a DURATION value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -1814,8 +1814,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The duration.between() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in logical units."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1825,8 +1825,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The duration.inDays() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in days."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1836,8 +1836,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The duration.inMonths() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in months."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1847,8 +1847,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The duration.inSeconds() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in seconds."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1857,12 +1857,12 @@
       "type": {
         "name": "hydra.cypher.features.TemporalInstantFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Temporal instant functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Temporal instant functions"}}}],
               "body": {
                 "record": [
                   {
@@ -1871,8 +1871,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The date() function. Creates a DATE instant."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -1881,8 +1881,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The date.realtime() function. Returns the current DATE instant using the realtime clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1892,8 +1892,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The date.statement() function. Returns the current DATE instant using the statement clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1903,8 +1903,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The date.transaction() function. Returns the current DATE instant using the transaction clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1914,8 +1914,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The date.truncate() function. Truncates the given temporal value to a DATE instant using the specified unit."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1925,8 +1925,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime() function. Creates a ZONED DATETIME instant."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1936,8 +1936,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime.fromepoch() function. Creates a ZONED DATETIME given the seconds and nanoseconds since the start of the epoch."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1947,8 +1947,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime.fromepochmillis() function. Creates a ZONED DATETIME given the milliseconds since the start of the epoch."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1958,8 +1958,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime.realtime() function. Returns the current ZONED DATETIME instant using the realtime clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1969,8 +1969,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime.statement() function. Returns the current ZONED DATETIME instant using the statement clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1980,8 +1980,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime.transaction() function. Returns the current ZONED DATETIME instant using the transaction clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1991,8 +1991,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The datetime.truncate() function. Truncates the given temporal value to a ZONED DATETIME instant using the specified unit."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2002,8 +2002,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localdatetime() function. Creates a LOCAL DATETIME instant."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2013,8 +2013,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localdatetime.realtime() function. Returns the current LOCAL DATETIME instant using the realtime clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2024,8 +2024,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localdatetime.statement() function. Returns the current LOCAL DATETIME instant using the statement clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2035,8 +2035,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localdatetime.transaction() function. Returns the current LOCAL DATETIME instant using the transaction clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2046,8 +2046,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localdatetime.truncate() function. Truncates the given temporal value to a LOCAL DATETIME instant using the specified unit."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2057,8 +2057,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The localtime() function. Creates a LOCAL TIME instant."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2067,8 +2067,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localtime.realtime() function. Returns the current LOCAL TIME instant using the realtime clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2078,8 +2078,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localtime.statement() function. Returns the current LOCAL TIME instant using the statement clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2089,8 +2089,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localtime.transaction() function. Returns the current LOCAL TIME instant using the transaction clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2100,8 +2100,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The localtime.truncate() function. Truncates the given temporal value to a LOCAL TIME instant using the specified unit."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2111,8 +2111,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The time() function. Creates a ZONED TIME instant."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2121,8 +2121,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The time.realtime() function. Returns the current ZONED TIME instant using the realtime clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2132,8 +2132,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The time.statement() function. Returns the current ZONED TIME instant using the statement clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2143,8 +2143,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The time.transaction() function. Returns the current ZONED TIME instant using the transaction clock."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2154,8 +2154,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The time.truncate() function. Truncates the given temporal value to a ZONED TIME instant using the specified unit."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -2164,12 +2164,12 @@
       "type": {
         "name": "hydra.cypher.features.TrigonometricFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Trigonometric functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Trigonometric functions"}}}],
               "body": {
                 "record": [
                   {
@@ -2178,8 +2178,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The acos() function. Returns the arccosine of a FLOAT in radians."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2189,8 +2189,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The asin() function. Returns the arcsine of a FLOAT in radians."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2200,8 +2200,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The atan() function. Returns the arctangent of a FLOAT in radians."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2211,8 +2211,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The atan2() function. Returns the arctangent2 of a set of coordinates in radians."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2222,8 +2222,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The cos() function. Returns the cosine of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2232,8 +2232,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The cot() function. Returns the cotangent of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2242,8 +2242,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The degrees() function. Converts radians to degrees."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2252,8 +2252,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The haversin() function. Returns half the versine of a number."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2263,8 +2263,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The pi() function. Returns the mathematical constant pi."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2273,8 +2273,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The radians() function. Converts degrees to radians."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2283,8 +2283,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The sin() function. Returns the sine of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2293,8 +2293,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The tan() function. Returns the tangent of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -2302,12 +2302,12 @@
       "type": {
         "name": "hydra.cypher.features.VectorFunctionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Vector functions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Vector functions"}}}],
               "body": {
                 "record": [
                   {
@@ -2316,8 +2316,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The vector.similarity.cosine() function. Returns a FLOAT representing the similarity between the argument vectors based on their cosine."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2327,8 +2327,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -2337,12 +2337,12 @@
       "type": {
         "name": "hydra.cypher.features.ListFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "List functionality"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "List functionality"}}}],
               "body": {
                 "record": [
                   {
@@ -2351,8 +2351,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Basic list comprehensions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Basic list comprehensions"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "listRange",
@@ -2360,20 +2360,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "List range comprehensions (e.g. [1..10])"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "List range comprehensions (e.g. [1..10])"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.LiteralFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Various types of literal values"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Various types of literal values"}}}],
               "body": {
                 "record": [
                   {
@@ -2382,8 +2382,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Boolean literals (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2393,8 +2393,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Double-precision floating-point literals"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Double-precision floating-point literals"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "integer",
@@ -2402,8 +2402,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Integer literals"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Integer literals"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "list",
@@ -2411,8 +2411,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "List literals"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "List literals"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "map",
@@ -2420,8 +2420,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Map literals"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Map literals"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "null",
@@ -2429,8 +2429,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The NULL literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The NULL literal"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "string",
@@ -2438,8 +2438,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "String literals (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -2448,12 +2448,12 @@
       "type": {
         "name": "hydra.cypher.features.LogicalFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Logical operations"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Logical operations"}}}],
               "body": {
                 "record": [
                   {
@@ -2462,8 +2462,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The AND operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The AND operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "not",
@@ -2471,8 +2471,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The NOT operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The NOT operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "or",
@@ -2480,8 +2480,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The OR operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The OR operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "xor",
@@ -2489,20 +2489,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The XOR operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The XOR operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.MatchFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Match queries"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Match queries"}}}],
               "body": {
                 "record": [
                   {
@@ -2511,8 +2511,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The basic (non-optional) MATCH clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The basic (non-optional) MATCH clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "optionalMatch",
@@ -2520,20 +2520,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "OPTIONAL MATCH"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "OPTIONAL MATCH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.MergeFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Merge operations"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Merge operations"}}}],
               "body": {
                 "record": [
                   {
@@ -2542,8 +2542,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The basic MERGE clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The basic MERGE clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "mergeOnCreate",
@@ -2551,8 +2551,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "MERGE with the ON CREATE action"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "MERGE with the ON CREATE action"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "mergeOnMatch",
@@ -2560,20 +2560,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "MERGE with the ON MATCH action"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "MERGE with the ON MATCH action"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.NodePatternFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Node patterns"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Node patterns"}}}],
               "body": {
                 "record": [
                   {
@@ -2582,8 +2582,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Specifying multiple labels in a node pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2592,8 +2592,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Specifying a parameter as part of a node pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2602,8 +2602,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Specifying a key/value map of properties in a node pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2613,8 +2613,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Binding a variable to a node in a node pattern (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -2624,20 +2624,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Omitting labels from a node pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Omitting labels from a node pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.NullFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}],
               "body": {
                 "record": [
                   {
@@ -2646,8 +2646,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The IS NULL operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The IS NULL operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "isNotNull",
@@ -2655,20 +2655,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The IS NOT NULL operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The IS NOT NULL operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.PathFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Path functions only found in OpenCypher"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Path functions only found in OpenCypher"}}}],
               "body": {
                 "record": [
                   {
@@ -2677,20 +2677,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The shortestPath() function"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The shortestPath() function"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.ProcedureCallFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Procedure calls"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Procedure calls"}}}],
               "body": {
                 "record": [
                   {
@@ -2699,8 +2699,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "CALL within a query"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "CALL within a query"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "standaloneCall",
@@ -2708,8 +2708,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Standalone / top-level CALL"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Standalone / top-level CALL"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "yield",
@@ -2717,20 +2717,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The YIELD clause in CALL"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The YIELD clause in CALL"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.ProjectionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Projections"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Projections"}}}],
               "body": {
                 "record": [
                   {
@@ -2739,8 +2739,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The LIMIT clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The LIMIT clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "orderBy",
@@ -2748,8 +2748,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The ORDER BY clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The ORDER BY clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "projectDistinct",
@@ -2757,8 +2757,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The DISTINCT keyword"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The DISTINCT keyword"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "projectAll",
@@ -2766,8 +2766,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The * projection"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The * projection"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "projectAs",
@@ -2775,8 +2775,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The AS keyword"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The AS keyword"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "skip",
@@ -2784,8 +2784,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The SKIP clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The SKIP clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "sortOrder",
@@ -2793,8 +2793,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The ASC/ASCENDING and DESC/DESCENDING keywords"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -2802,12 +2802,12 @@
       "type": {
         "name": "hydra.cypher.features.QuantifierFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Quantifier expressions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Quantifier expressions"}}}],
               "body": {
                 "record": [
                   {
@@ -2816,8 +2816,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The ALL quantifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The ALL quantifier"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "any",
@@ -2825,8 +2825,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The ANY quantifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The ANY quantifier"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "none",
@@ -2834,8 +2834,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The NONE quantifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The NONE quantifier"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "single",
@@ -2843,20 +2843,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The SINGLE quantifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The SINGLE quantifier"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.RangeLiteralFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Range literals within relationship patterns"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Range literals within relationship patterns"}}}],
               "body": {
                 "record": [
                   {
@@ -2865,8 +2865,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Range literals with both lower and upper bounds"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2875,8 +2875,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Range literals providing an exact number of repetitions"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2885,8 +2885,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Range literals with a lower bound (only)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Range literals with a lower bound (only)"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "starRange",
@@ -2894,8 +2894,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The * range literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The * range literal"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "upperBound",
@@ -2903,20 +2903,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Range literals with an upper bound (only)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Range literals with an upper bound (only)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.ReadingFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Specific syntax related to reading data from the graph."}}}],
               "body": {
                 "record": [
@@ -2926,8 +2926,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The UNION operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The UNION operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "unionAll",
@@ -2935,8 +2935,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The UNION ALL operator"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The UNION ALL operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "unwind",
@@ -2944,20 +2944,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The UNWIND clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The UNWIND clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.RelationshipDirectionFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Relationship directions / arrow patterns"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Relationship directions / arrow patterns"}}}],
               "body": {
                 "record": [
                   {
@@ -2966,8 +2966,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The two-headed arrow (<-[]->) relationship direction"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2976,8 +2976,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The left arrow (<-[]-) relationship direction"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2986,8 +2986,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The headless arrow (-[]-) relationship direction"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -2996,8 +2996,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The right arrow (-[]->) relationship direction"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -3005,12 +3005,12 @@
       "type": {
         "name": "hydra.cypher.features.RelationshipPatternFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Relationship patterns"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Relationship patterns"}}}],
               "body": {
                 "record": [
                   {
@@ -3019,8 +3019,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Specifying a disjunction of multiple types in a relationship pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -3030,8 +3030,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Binding a variable to a relationship in a relationship pattern (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -3041,20 +3041,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Omitting types from a relationship pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Omitting types from a relationship pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.RemoveFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "REMOVE operations"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "REMOVE operations"}}}],
               "body": {
                 "record": [
                   {
@@ -3063,8 +3063,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "REMOVE Variable:NodeLabels"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "REMOVE Variable:NodeLabels"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "byProperty",
@@ -3072,20 +3072,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "REMOVE PropertyExpression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "REMOVE PropertyExpression"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.SetFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Set definitions"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Set definitions"}}}],
               "body": {
                 "record": [
                   {
@@ -3094,8 +3094,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Defining a set using PropertyExpression = Expression"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -3104,8 +3104,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Defining a set using Variable = Expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Defining a set using Variable = Expression"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "variablePlusEquals",
@@ -3113,8 +3113,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Defining a set using Variable += Expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Defining a set using Variable += Expression"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "variableWithNodeLabels",
@@ -3122,20 +3122,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Defining a set using Variable:NodeLabels"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Defining a set using Variable:NodeLabels"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.StringFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "String functions/keywords only found in OpenCypher"}}}],
               "body": {
                 "record": [
@@ -3145,8 +3145,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The contains() function / CONTAINS"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The contains() function / CONTAINS"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "endsWith",
@@ -3154,8 +3154,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The endsWith() function / ENDS WITH"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The endsWith() function / ENDS WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "in",
@@ -3163,8 +3163,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The in() function / IN"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The in() function / IN"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "startsWith",
@@ -3172,20 +3172,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The startsWith() function / STARTS WITH"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The startsWith() function / STARTS WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cypher.features.UpdatingFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Specific syntax related to updating data in the graph"}}}],
               "body": {
                 "record": [
@@ -3195,8 +3195,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The CREATE clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The CREATE clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "set",
@@ -3204,8 +3204,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The SET clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The SET clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "with",
@@ -3213,8 +3213,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Multi-part queries using WITH"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Multi-part queries using WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
   "description": "A model for characterizing OpenCypher queries and implementations in terms of included features.Based on the OpenCypher grammar and the list of standard Cypher functions at https://neo4j.com/docs/cypher-manual/current/functions. Current as of August 2024.",

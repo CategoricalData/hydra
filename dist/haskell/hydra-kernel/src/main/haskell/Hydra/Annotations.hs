@@ -166,7 +166,7 @@ isNativeType el =
               Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)))
       in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+        Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
         Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
 
 -- | Return a zero-indexed counter for the given key and updated context (pure version)

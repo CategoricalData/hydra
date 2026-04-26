@@ -66,17 +66,17 @@ dereferenceSchemaType name types =
                 Core.TypeAnnotated v0 -> forType (Core.annotatedTypeBody v0)
                 Core.TypeForall v0 -> Maybes.map (\ts -> Core.TypeScheme {
                   Core.typeSchemeVariables = (Lists.cons (Core.forallTypeParameter v0) (Core.typeSchemeVariables ts)),
-                  Core.typeSchemeType = (Core.typeSchemeType ts),
+                  Core.typeSchemeBody = (Core.typeSchemeBody ts),
                   Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (forType (Core.forallTypeBody v0))
                 Core.TypeVariable v0 -> dereferenceSchemaType v0 types
                 _ -> Just (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = t,
+                  Core.typeSchemeBody = t,
                   Core.typeSchemeConstraints = Nothing})
       in (Maybes.bind (Maps.lookup name types) (\ts -> Maybes.map (\ts2 -> Core.TypeScheme {
         Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) (Core.typeSchemeVariables ts2)),
-        Core.typeSchemeType = (Core.typeSchemeType ts2),
-        Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts2)}) (forType (Core.typeSchemeType ts))))
+        Core.typeSchemeBody = (Core.typeSchemeBody ts2),
+        Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts2)}) (forType (Core.typeSchemeBody ts))))
 
 -- | Look up a binding by name in a graph, returning Either an error or the binding
 dereferenceVariable :: Graph.Graph -> Core.Name -> Either Errors.Error Core.Binding

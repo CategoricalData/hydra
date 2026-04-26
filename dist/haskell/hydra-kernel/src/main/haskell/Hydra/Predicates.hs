@@ -38,7 +38,7 @@ isComplexBinding tc b =
           mts = Core.bindingType b
       in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
         let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
-            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeType ts)) 0
+            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeBody ts)) 0
             isComplex = isComplexTerm tc term
         in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
 

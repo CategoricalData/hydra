@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Transform a type binding into an encoder binding"}}}],
                 "body": {
                   "lambda": {
@@ -28,7 +28,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "record": {
                                                     "fields": [
                                                       {
@@ -100,7 +100,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -121,8 +121,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate a binding name for an encoder function from a type name"}}}],
             "body": {
@@ -142,7 +142,7 @@
                               "application": {
                                 "argument": {"literal": {"string": "."}},
                                 "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
-                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -155,7 +155,7 @@
                                     "argument": {"variable": "n"},
                                     "function": {"variable": "hydra.names.localNameOf"}}},
                                 "function": {"variable": "hydra.formatting.decapitalize"}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -163,7 +163,7 @@
                                 "name": "localResult",
                                 "term": {
                                   "wrap": {"body": {"variable": "localPart"}, "typeName": "hydra.core.Name"}},
-                                "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -205,7 +205,7 @@
                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"literal": {"string": {}}}}},
                                                                     "type": {"list": {"literal": {"string": {}}}}}}}},
-                                                            "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                                            "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                                         "body": {
                                                           "wrap": {
                                                             "body": {
@@ -268,7 +268,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "n"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Name"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -280,8 +280,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Collect forall type variable names from a type"}}}],
             "body": {
               "lambda": {
@@ -336,7 +336,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.core.Name"}},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -348,8 +348,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Collect type variables needing Ord constraints"}}}],
             "body": {
               "lambda": {
@@ -634,7 +634,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.core.Name"}},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -646,8 +646,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Collect all type variable names from a type expression"}}}],
             "body": {
               "lambda": {
@@ -892,7 +892,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.core.Name"}},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -904,8 +904,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Get full result type for encoder input"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Get full result type for encoder input"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1242,7 +1242,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Type"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -1254,8 +1254,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Get full result type for encoder input, using element name for nominal types"}}}],
             "body": {
@@ -1589,7 +1589,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1604,8 +1604,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Build encoder function type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Build encoder function type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1617,7 +1617,7 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.encoding.encoderFullResultType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1644,7 +1644,7 @@
                                               "typeName": "hydra.core.Type"}}}],
                                       "typeName": "hydra.core.FunctionType"}}},
                                 "typeName": "hydra.core.Type"}},
-                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {"variable": "typ"},
@@ -1655,7 +1655,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Type"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -1667,8 +1667,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Build encoder function type with element name for nominal types"}}}],
             "body": {
@@ -1687,7 +1687,7 @@
                                   "application": {
                                     "argument": {"variable": "ename"},
                                     "function": {"variable": "hydra.encoding.encoderFullResultTypeNamed"}}}}},
-                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -1714,7 +1714,7 @@
                                                   "typeName": "hydra.core.Type"}}}],
                                           "typeName": "hydra.core.FunctionType"}}},
                                     "typeName": "hydra.core.Type"}},
-                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "typ"},
@@ -1727,7 +1727,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1742,8 +1742,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Construct a TypeScheme for an encoder function from a source type"}}}],
             "body": {
@@ -1757,21 +1757,21 @@
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.encoding.encoderCollectForallVariables"}}},
-                        "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                       {
                         "name": "encoderFunType",
                         "term": {
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.encoding.encoderType"}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                       {
                         "name": "allOrdVars",
                         "term": {
                           "application": {
                             "argument": {"variable": "typ"},
                             "function": {"variable": "hydra.encoding.encoderCollectOrdVars"}}},
-                        "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                       {
                         "name": "ordVars",
                         "term": {
@@ -1797,7 +1797,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.filter"},
                                     "type": {"variable": "hydra.core.Name"}}}}}}},
-                        "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                        "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                       {
                         "name": "constraints",
                         "term": {
@@ -1818,8 +1818,8 @@
                                                     "typeApplication": {
                                                       "body": {
                                                         "pair": {
-                                                          "@first": {"variable": "v"},
-                                                          "@second": {
+                                                          "first": {"variable": "v"},
+                                                          "second": {
                                                             "record": {
                                                               "fields": [
                                                                 {
@@ -1883,7 +1883,7 @@
                                               "keys": {"variable": "hydra.core.Name"},
                                               "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}}},
                         "type": {
-                          "type": {
+                          "body": {
                             "maybe": {
                               "map": {
                                 "keys": {"variable": "hydra.core.Name"},
@@ -1893,13 +1893,13 @@
                       "record": {
                         "fields": [
                           {"name": "variables", "term": {"variable": "typeVars"}},
-                          {"name": "type", "term": {"variable": "encoderFunType"}},
+                          {"name": "body", "term": {"variable": "encoderFunType"}},
                           {"name": "constraints", "term": {"variable": "constraints"}}],
                         "typeName": "hydra.core.TypeScheme"}}}},
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "typ"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.TypeScheme"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -1911,8 +1911,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Construct a TypeScheme for an encoder function, with element name for nominal types"}}}],
             "body": {
@@ -1928,7 +1928,7 @@
                               "application": {
                                 "argument": {"variable": "typ"},
                                 "function": {"variable": "hydra.encoding.encoderCollectForallVariables"}}},
-                            "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                            "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                           {
                             "name": "encoderFunType",
                             "term": {
@@ -1938,14 +1938,14 @@
                                   "application": {
                                     "argument": {"variable": "ename"},
                                     "function": {"variable": "hydra.encoding.encoderTypeNamed"}}}}},
-                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}},
+                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                           {
                             "name": "allOrdVars",
                             "term": {
                               "application": {
                                 "argument": {"variable": "typ"},
                                 "function": {"variable": "hydra.encoding.encoderCollectOrdVars"}}},
-                            "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                            "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                           {
                             "name": "ordVars",
                             "term": {
@@ -1971,7 +1971,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.lists.filter"},
                                         "type": {"variable": "hydra.core.Name"}}}}}}},
-                            "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                            "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                           {
                             "name": "constraints",
                             "term": {
@@ -1992,8 +1992,8 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "pair": {
-                                                              "@first": {"variable": "v"},
-                                                              "@second": {
+                                                              "first": {"variable": "v"},
+                                                              "second": {
                                                                 "record": {
                                                                   "fields": [
                                                                     {
@@ -2057,7 +2057,7 @@
                                                   "keys": {"variable": "hydra.core.Name"},
                                                   "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}}},
                             "type": {
-                              "type": {
+                              "body": {
                                 "maybe": {
                                   "map": {
                                     "keys": {"variable": "hydra.core.Name"},
@@ -2067,7 +2067,7 @@
                           "record": {
                             "fields": [
                               {"name": "variables", "term": {"variable": "typeVars"}},
-                              {"name": "type", "term": {"variable": "encoderFunType"}},
+                              {"name": "body", "term": {"variable": "encoderFunType"}},
                               {"name": "constraints", "term": {"variable": "constraints"}}],
                             "typeName": "hydra.core.TypeScheme"}}}},
                     "domain": {"variable": "hydra.core.Type"},
@@ -2075,7 +2075,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2090,8 +2090,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Prepend encoder types for forall parameters to base type"}}}],
             "body": {
               "lambda": {
@@ -2187,7 +2187,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "baseType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2202,8 +2202,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate the encoder for a field's value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate the encoder for a field's value"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2298,7 +2298,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "typeName"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2316,8 +2316,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Encode a float value based on its float type"}}}],
             "body": {
               "lambda": {
@@ -2389,7 +2389,7 @@
                 "domain": {"variable": "hydra.core.FloatType"},
                 "parameter": "floatType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2404,8 +2404,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Encode an Injection as a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Encode an Injection as a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2526,7 +2526,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "typeName"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2544,8 +2544,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Encode an integer value based on its integer type"}}}],
             "body": {
               "lambda": {
@@ -2677,7 +2677,7 @@
                 "domain": {"variable": "hydra.core.IntegerType"},
                 "parameter": "intType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2692,8 +2692,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for a list type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for a list type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2793,7 +2793,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "elemType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -2805,8 +2805,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for a literal type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for a literal type"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -3390,7 +3390,7 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.core.LiteralType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.LiteralType"}}},
@@ -3402,8 +3402,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for an Either type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for an Either type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3526,7 +3526,7 @@
                 "domain": {"variable": "hydra.core.EitherType"},
                 "parameter": "et"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.EitherType"}}},
@@ -3538,8 +3538,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Generate an encoder for a polymorphic (forall) type"}}}],
             "body": {
               "lambda": {
@@ -3578,7 +3578,7 @@
                 "domain": {"variable": "hydra.core.ForallType"},
                 "parameter": "ft"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.ForallType"}}},
@@ -3590,8 +3590,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for a map type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for a map type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3714,7 +3714,7 @@
                 "domain": {"variable": "hydra.core.MapType"},
                 "parameter": "mt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.MapType"}}},
@@ -3726,8 +3726,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for a Maybe type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for a Maybe type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3831,7 +3831,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "elemType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -3843,8 +3843,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for a pair type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for a pair type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3967,7 +3967,7 @@
                 "domain": {"variable": "hydra.core.PairType"},
                 "parameter": "pt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.PairType"}}},
@@ -3979,8 +3979,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Transform a type module into an encoder module"}}}],
             "body": {
               "lambda": {
@@ -4004,7 +4004,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@right": {
+                                                        "right": {
                                                           "maybe": {
                                                             "record": {
                                                               "fields": [
@@ -4228,7 +4228,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "typeApplication": {
                                                         "body": {"maybe": null},
                                                         "type": {"variable": "hydra.packaging.Module"}}}}},
@@ -4289,7 +4289,7 @@
                                                                                   "argument": {"variable": "td"},
                                                                                   "function": {
                                                                                     "project": {"field": "type", "typeName": "hydra.packaging.TypeDefinition"}}}},
-                                                                              "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
+                                                                              "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {
@@ -4315,7 +4315,7 @@
                                                                                                         "body": {"literal": {"string": "hydra.core.Type"}},
                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                              "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                              "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                           "body": {
                                                                                             "let": {
                                                                                               "bindings": [
@@ -4348,8 +4348,8 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
                                                                                                                                       "pair": {
-                                                                                                                                        "@first": {"variable": "hydra.constants.key_type"},
-                                                                                                                                        "@second": {"variable": "schemaTerm"}}},
+                                                                                                                                        "first": {"variable": "hydra.constants.key_type"},
+                                                                                                                                        "second": {"variable": "schemaTerm"}}},
                                                                                                                                     "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                 "type": {"variable": "hydra.core.Term"}}}]},
                                                                                                                         "function": {
@@ -4362,7 +4362,7 @@
                                                                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                           "typeName": "hydra.core.Term"}},
                                                                                                       "function": {"variable": "hydra.annotations.normalizeTermAnnotations"}}},
-                                                                                                  "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                                  "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                               "body": {
                                                                                                 "record": {
                                                                                                   "fields": [
@@ -4379,7 +4379,7 @@
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                               {
-                                                                                                                "name": "type",
+                                                                                                                "name": "body",
                                                                                                                 "term": {
                                                                                                                   "inject": {
                                                                                                                     "field": {
@@ -4446,7 +4446,7 @@
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4467,8 +4467,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Encode a Name as a term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Encode a Name as a term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4505,7 +4505,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "n"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -4517,8 +4517,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder module namespace from a source module namespace"}}}],
             "body": {
@@ -4538,7 +4538,7 @@
                               "application": {
                                 "argument": {"literal": {"string": "."}},
                                 "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
-                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -4551,7 +4551,7 @@
                                     "argument": {"variable": "ns"},
                                     "function": {"unwrap": "hydra.packaging.Namespace"}}},
                                 "typeName": "hydra.packaging.Namespace"}},
-                            "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -4611,7 +4611,7 @@
                 "domain": {"variable": "hydra.packaging.Namespace"},
                 "parameter": "ns"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.packaging.Namespace"},
               "domain": {"variable": "hydra.packaging.Namespace"}}},
@@ -4623,8 +4623,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder for a record type (unnamed — should not be called directly)"}}}],
             "body": {
@@ -4642,7 +4642,7 @@
                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
                 "parameter": "rt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
@@ -4654,8 +4654,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder for a record type with the given element name"}}}],
             "body": {
@@ -4903,7 +4903,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4918,8 +4918,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder for a set type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder for a set type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5019,7 +5019,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "elemType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -5031,8 +5031,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Generate an encoder term for a Type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Generate an encoder term for a Type"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -5385,7 +5385,7 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.core.Type"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -5397,8 +5397,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder term for a Type, with the element name for nominal types"}}}],
             "body": {
@@ -5807,7 +5807,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5822,8 +5822,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Generate an encoder for a union type (placeholder name)"}}}],
             "body": {
               "lambda": {
@@ -5840,7 +5840,7 @@
                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
                 "parameter": "rt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
@@ -5852,8 +5852,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder for a union type with the given element name"}}}],
             "body": {
@@ -5925,7 +5925,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5940,8 +5940,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder for a wrapped type (placeholder name)"}}}],
             "body": {
@@ -5959,7 +5959,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "wt"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -5971,8 +5971,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate an encoder for a wrapped type with the given element name"}}}],
             "body": {
@@ -6120,7 +6120,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "ename"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6135,8 +6135,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Filter bindings to only encodable type definitions"}}}],
             "body": {
               "lambda": {
@@ -6200,7 +6200,7 @@
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6221,8 +6221,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Check if a binding is encodable (serializable type)"}}}],
             "body": {
               "lambda": {
@@ -6240,7 +6240,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "either": {
-                                            "@right": {
+                                            "right": {
                                               "application": {
                                                 "argument": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Binding"}}},
@@ -6290,7 +6290,7 @@
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6311,8 +6311,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Check whether a type is the unit type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Check whether a type is the unit type"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -6326,7 +6326,7 @@
                 "default": {"literal": {"boolean": false}},
                 "typeName": "hydra.core.Type"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"boolean": {}}},
               "domain": {"variable": "hydra.core.Type"}}},

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Differentiate a binary primitive application given both arguments and their derivatives"}}}],
             "body": {
@@ -1437,7 +1437,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "bfname"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1461,8 +1461,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Differentiate a function term (Float64 -> Float64) with respect to its parameter"}}}],
             "body": {
@@ -1499,7 +1499,7 @@
                                           "application": {
                                             "argument": {"variable": "l"},
                                             "function": {"project": {"field": "parameter", "typeName": "hydra.core.Lambda"}}}},
-                                        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -1509,7 +1509,7 @@
                                               "application": {
                                                 "argument": {"variable": "l"},
                                                 "function": {"project": {"field": "body", "typeName": "hydra.core.Lambda"}}}},
-                                            "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                            "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                         "body": {
                                           "inject": {
                                             "field": {
@@ -1542,7 +1542,7 @@
                 "domain": {"variable": "hydra.core.Term"},
                 "parameter": "term"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.core.Term"}}},
@@ -1554,8 +1554,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Differentiate a term with respect to a named variable"}}}],
             "body": {
               "lambda": {
@@ -1655,7 +1655,7 @@
                                                 "argument": {"variable": "app"},
                                                 "function": {
                                                   "project": {"field": "function", "typeName": "hydra.core.Application"}}}},
-                                            "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                            "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -1666,7 +1666,7 @@
                                                     "argument": {"variable": "app"},
                                                     "function": {
                                                       "project": {"field": "argument", "typeName": "hydra.core.Application"}}}},
-                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {"variable": "func"},
@@ -1784,7 +1784,7 @@
                                                                         "argument": {"variable": "innerApp"},
                                                                         "function": {
                                                                           "project": {"field": "function", "typeName": "hydra.core.Application"}}}},
-                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                    "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
@@ -1795,7 +1795,7 @@
                                                                             "argument": {"variable": "innerApp"},
                                                                             "function": {
                                                                               "project": {"field": "argument", "typeName": "hydra.core.Application"}}}},
-                                                                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                        "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {"variable": "innerFunc"},
@@ -2252,7 +2252,7 @@
                                                 "typeApplication": {
                                                   "body": {
                                                     "pair": {
-                                                      "@first": {
+                                                      "first": {
                                                         "application": {
                                                           "argument": {
                                                             "application": {
@@ -2268,7 +2268,7 @@
                                                             "application": {
                                                               "argument": {"variable": "dx"},
                                                               "function": {"variable": "hydra.differentiation.differentiateTerm"}}}}},
-                                                      "@second": {
+                                                      "second": {
                                                         "application": {
                                                           "argument": {
                                                             "application": {
@@ -2541,7 +2541,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "dx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2556,8 +2556,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Compute the gradient of a term as a record of partial derivatives"}}}],
             "body": {
@@ -2615,7 +2615,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "typeName"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2633,8 +2633,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Look up the derivative of a unary Float64 primitive"}}}],
             "body": {
               "lambda": {
@@ -5069,7 +5069,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.core.Term"}},
               "domain": {"variable": "hydra.core.Name"}}},

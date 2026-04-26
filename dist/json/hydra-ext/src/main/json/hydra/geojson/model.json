@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.geojson.model.BoundingBox",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A GeoJSON object MAY have a member named \"bbox\" to include information on the coordinate range for its Geometries, Features, or FeatureCollections.  The value of the bbox member MUST be an array of length 2*n where n is the number of dimensions represented in the contained geometries, with all axes of the most southwesterly point followed by all axes of the more northeasterly point.  The axes order of a bbox follows the axes order of geometries."}}}],
               "body": {
@@ -19,7 +19,7 @@
       "type": {
         "name": "hydra.geojson.model.CoordinateRange",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "min", "type": {"literal": {"float": {"bigfloat": {}}}}},
               {"name": "max", "type": {"literal": {"float": {"bigfloat": {}}}}}]},
@@ -28,12 +28,12 @@
       "type": {
         "name": "hydra.geojson.model.Feature",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A Feature object represents a spatially bounded thing.  Every Feature object is a GeoJSON object no matter where it occurs in a GeoJSON text."}}}],
               "body": {
@@ -44,8 +44,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A Feature object has a member with the name \"geometry\".  The value of the geometry member SHALL be either a Geometry object as defined above or, in the case that the Feature is unlocated, a JSON null value."}}}],
                         "body": {"maybe": {"variable": "hydra.geojson.model.Geometry"}}}}},
@@ -55,8 +55,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A Feature object has a member with the name \"properties\".  The value of the properties member is an object (any JSON object or a JSON null value)."}}}],
                         "body": {
@@ -70,8 +70,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "If a Feature has a commonly used identifier, that identifier SHOULD be included as a member of the Feature object with the name \"id\", and the value of this member is either a JSON string or number."}}}],
                         "body": {"maybe": {"variable": "hydra.geojson.model.Id"}}}}},
@@ -83,12 +83,12 @@
       "type": {
         "name": "hydra.geojson.model.FeatureCollection",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A GeoJSON object with the type \"FeatureCollection\" is a FeatureCollection object.  A FeatureCollection object has a member with the name \"features\".  The value of \"features\" is a JSON array. Each element of the array is a Feature object as defined above.  It is possible for this array to be empty."}}}],
               "body": {
@@ -104,12 +104,12 @@
       "type": {
         "name": "hydra.geojson.model.GeometryCollection",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A GeoJSON object with type \"GeometryCollection\" is a Geometry object. A GeometryCollection has a member with the name \"geometries\".  The value of \"geometries\" is an array.  Each element of this array is a GeoJSON Geometry object.  It is possible for this array to be empty."}}}],
               "body": {
@@ -125,12 +125,12 @@
       "type": {
         "name": "hydra.geojson.model.Geometry",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A Geometry object represents points, curves, and surfaces in coordinate space.  Every Geometry object is a GeoJSON object no matter where it occurs in a GeoJSON text."}}}],
               "body": {
@@ -159,7 +159,7 @@
       "type": {
         "name": "hydra.geojson.model.Id",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "number", "type": {"literal": {"float": {"bigfloat": {}}}}},
               {"name": "string", "type": {"literal": {"string": {}}}}]},
@@ -168,12 +168,12 @@
       "type": {
         "name": "hydra.geojson.model.LineString",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "For type \"LineString\", the \"coordinates\" member is an array of two or more positions."}}}],
               "body": {
@@ -189,12 +189,12 @@
       "type": {
         "name": "hydra.geojson.model.MultiLineString",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "For type \"MultiLineString\", the \"coordinates\" member is an array of LineString coordinate arrays."}}}],
               "body": {
@@ -210,12 +210,12 @@
       "type": {
         "name": "hydra.geojson.model.MultiPoint",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "For type \"MultiPoint\", the \"coordinates\" member is an array of positions."}}}],
               "body": {
@@ -231,12 +231,12 @@
       "type": {
         "name": "hydra.geojson.model.MultiPolygon",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "For type \"MultiPolygon\", the \"coordinates\" member is an array of Polygon coordinate arrays."}}}],
               "body": {
@@ -252,12 +252,12 @@
       "type": {
         "name": "hydra.geojson.model.Object",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A GeoJSON object represents a Geometry, Feature, or collection of Features."}}}],
               "body": {
@@ -276,12 +276,12 @@
       "type": {
         "name": "hydra.geojson.model.Point",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "For type \"Point\", the \"coordinates\" member is a single position."}}}],
               "body": {
@@ -297,12 +297,12 @@
       "type": {
         "name": "hydra.geojson.model.Polygon",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "For type \"Polygon\", the \"coordinates\" member MUST be an array of linear ring coordinate arrays.\nFor Polygons with more than one of these rings, the first MUST be the exterior ring, and any others MUST be interior rings.  The exterior ring bounds the surface, and the interior rings (if present) bound holes within the surface."}}}],
               "body": {
@@ -318,12 +318,12 @@
       "type": {
         "name": "hydra.geojson.model.Position",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A position is an array of numbers.  There MUST be two or more elements.  The first two elements are longitude and latitude, or easting and northing, precisely in that order and using decimal numbers.  Altitude or elevation MAY be included as an optional third element."}}}],
               "body": {

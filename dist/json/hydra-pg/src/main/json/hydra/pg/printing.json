@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Print an edge using the provided value printer"}}}],
                 "body": {
                   "lambda": {
@@ -31,7 +31,7 @@
                                             "body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"unwrap": "hydra.pg.model.EdgeLabel"}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "id",
                                 "term": {
@@ -44,7 +44,7 @@
                                             "body": {"project": {"field": "id", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "outId",
                                 "term": {
@@ -57,7 +57,7 @@
                                             "body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "inId",
                                 "term": {
@@ -70,7 +70,7 @@
                                             "body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -148,7 +148,7 @@
                                       "application": {
                                         "argument": {"literal": {"string": ", "}},
                                         "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -177,7 +177,7 @@
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -200,8 +200,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Print a graph using the provided value printer"}}}],
                 "body": {
                   "lambda": {
@@ -277,8 +277,7 @@
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -291,6 +290,7 @@
                 "function": {
                   "codomain": {"literal": {"string": {}}},
                   "domain": {"variable": "t0"}}}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -301,8 +301,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Print a lazy graph using the provided value printer"}}}],
                 "body": {
                   "lambda": {
@@ -322,7 +322,7 @@
                                           "project": {"field": "vertices", "typeName": "hydra.pg.model.LazyGraph"}},
                                         "type": {"variable": "t0"}}}}},
                                 "type": {
-                                  "type": {
+                                  "body": {
                                     "list": {
                                       "application": {
                                         "argument": {"variable": "t0"},
@@ -339,7 +339,7 @@
                                           "project": {"field": "edges", "typeName": "hydra.pg.model.LazyGraph"}},
                                         "type": {"variable": "t0"}}}}},
                                 "type": {
-                                  "type": {
+                                  "body": {
                                     "list": {
                                       "application": {
                                         "argument": {"variable": "t0"},
@@ -446,7 +446,7 @@
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -469,8 +469,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Print a property using the provided value printer"}}}],
                 "body": {
                   "lambda": {
@@ -503,7 +503,7 @@
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -526,8 +526,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Print a vertex using the provided value printer"}}}],
                 "body": {
                   "lambda": {
@@ -548,7 +548,7 @@
                                             "body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"unwrap": "hydra.pg.model.VertexLabel"}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "id",
                                 "term": {
@@ -561,7 +561,7 @@
                                             "body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -639,7 +639,7 @@
                                       "application": {
                                         "argument": {"literal": {"string": ", "}},
                                         "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -663,7 +663,7 @@
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

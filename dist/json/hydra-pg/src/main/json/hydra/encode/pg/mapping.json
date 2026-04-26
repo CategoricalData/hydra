@@ -525,7 +525,7 @@
             "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"}}},
@@ -671,7 +671,7 @@
             "domain": {"variable": "hydra.pg.mapping.EdgeSpec"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.pg.mapping.EdgeSpec"}}},
@@ -762,7 +762,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.mapping.ElementSpec"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.pg.mapping.ElementSpec"}}},
@@ -834,7 +834,7 @@
             "domain": {"variable": "hydra.pg.mapping.PropertySpec"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.pg.mapping.PropertySpec"}}},
@@ -944,7 +944,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.mapping.ValueSpec"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.pg.mapping.ValueSpec"}}},
@@ -1055,7 +1055,7 @@
             "domain": {"variable": "hydra.pg.mapping.VertexSpec"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.pg.mapping.VertexSpec"}}},

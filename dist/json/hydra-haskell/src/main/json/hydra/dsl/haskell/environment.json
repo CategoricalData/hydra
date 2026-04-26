@@ -104,8 +104,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                                 "body": {"literal": {"boolean": {}}}}},
@@ -117,8 +117,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                             "body": {"literal": {"boolean": {}}}}},
@@ -130,8 +130,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                         "body": {"literal": {"boolean": {}}}}},
@@ -143,14 +143,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "usesByteString"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -168,8 +168,8 @@
                                 "annotated": {
                                   "annotation": [
                                     {
-                                      "@key": "description",
-                                      "@value": {
+                                      "key": "description",
+                                      "value": {
                                         "literal": {
                                           "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                                   "body": {"literal": {"boolean": {}}}}},
@@ -180,8 +180,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                               "body": {"literal": {"boolean": {}}}}},
@@ -192,8 +192,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                           "body": {"literal": {"boolean": {}}}}},
@@ -204,8 +204,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -263,7 +263,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -271,8 +271,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -334,7 +334,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -342,8 +342,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
@@ -406,7 +406,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -414,8 +414,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
@@ -478,7 +478,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -486,8 +486,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
@@ -702,8 +702,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -714,7 +714,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -728,8 +728,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                           "body": {"literal": {"boolean": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -943,8 +943,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                         "body": {"literal": {"boolean": {}}}}},
@@ -956,7 +956,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -970,8 +970,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                           "body": {"literal": {"boolean": {}}}}},
@@ -1186,8 +1186,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}},
@@ -1199,7 +1199,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1213,8 +1213,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                           "body": {"literal": {"boolean": {}}}}},
@@ -1429,8 +1429,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}},
@@ -1442,7 +1442,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1456,8 +1456,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                           "body": {"literal": {"boolean": {}}}}},

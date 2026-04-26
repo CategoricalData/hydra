@@ -354,7 +354,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.json.model.Value"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.json.model.Value"}}},

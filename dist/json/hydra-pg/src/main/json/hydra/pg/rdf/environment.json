@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.pg.rdf.environment.PgRdfEnvironment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The environment for property graph to RDF mapping"}}}],
               "body": {
                 "forall": {
@@ -21,8 +21,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "A function which encodes a vertex id as an RDF IRI"}}}],
                             "body": {
                               "function": {
@@ -34,8 +34,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "A function which encodes a vertex label as an RDF IRI"}}}],
                             "body": {
                               "function": {
@@ -47,8 +47,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "A function which encodes an edge id as an RDF IRI"}}}],
                             "body": {
                               "function": {
@@ -60,8 +60,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "A function which encodes an edge label as an RDF IRI"}}}],
                             "body": {
                               "function": {
@@ -73,8 +73,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "A function which encodes a property key as an RDF IRI"}}}],
                             "body": {
                               "function": {
@@ -86,8 +86,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "A function which encodes a property value as an RDF literal"}}}],
                             "body": {

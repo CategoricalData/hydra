@@ -11,8 +11,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Convert edge types into property shape constraints for a given vertex label"}}}],
                     "body": {
@@ -44,7 +44,7 @@
                                                                   "typeApplication": {
                                                                     "body": {"project": {"field": "out", "typeName": "hydra.pg.model.EdgeType"}},
                                                                     "type": {"variable": "t1"}}}}},
-                                                            "type": {"type": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
+                                                            "type": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                                                           {
                                                             "name": "matchesVertex",
                                                             "term": {
@@ -63,7 +63,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.equality.equal"},
                                                                         "type": {"literal": {"string": {}}}}}}}}},
-                                                            "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
+                                                            "type": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -196,7 +196,7 @@
                                                                                   "function": {"variable": "hydra.shacl.model.Reference"}}}}}}}},
                                                                     "typeName": "hydra.shacl.model.CommonConstraint"}},
                                                                 "type": {
-                                                                  "type": {"variable": "hydra.shacl.model.CommonConstraint"},
+                                                                  "body": {"variable": "hydra.shacl.model.CommonConstraint"},
                                                                   "variables": []}}],
                                                             "body": {
                                                               "application": {
@@ -251,7 +251,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -281,8 +281,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Encode a property graph edge as an RDF description"}}}],
                 "body": {
                   "lambda": {
@@ -300,7 +300,7 @@
                                       "typeApplication": {
                                         "body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {"type": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}},
                               {
                                 "name": "eout",
                                 "term": {
@@ -310,7 +310,7 @@
                                       "typeApplication": {
                                         "body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {"type": {"variable": "t0"}, "variables": []}},
+                                "type": {"body": {"variable": "t0"}, "variables": []}},
                               {
                                 "name": "ein",
                                 "term": {
@@ -320,7 +320,7 @@
                                       "typeApplication": {
                                         "body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {"type": {"variable": "t0"}, "variables": []}},
+                                "type": {"body": {"variable": "t0"}, "variables": []}},
                               {
                                 "name": "subj",
                                 "term": {
@@ -341,7 +341,7 @@
                                                       "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Resource"}},
-                                "type": {"type": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
                               {
                                 "name": "obj",
                                 "term": {
@@ -362,7 +362,7 @@
                                                       "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Node"}},
-                                "type": {"type": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}},
                               {
                                 "name": "pred",
                                 "term": {
@@ -378,7 +378,7 @@
                                                 "field": "encodeEdgeLabel",
                                                 "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                             "type": {"variable": "t0"}}}}}}},
-                                "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}}],
+                                "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}}],
                             "body": {
                               "record": {
                                 "fields": [
@@ -419,7 +419,7 @@
                     "parameter": "env"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -442,8 +442,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Encode a lazy property graph as an RDF graph"}}}],
                 "body": {
                   "lambda": {
@@ -484,7 +484,7 @@
                                                     "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                                             "type": {"variable": "hydra.rdf.syntax.Description"}}}}}}},
                                 "type": {
-                                  "type": {"list": {"variable": "hydra.rdf.syntax.Description"}},
+                                  "body": {"list": {"variable": "hydra.rdf.syntax.Description"}},
                                   "variables": []}},
                               {
                                 "name": "edgeDescs",
@@ -518,7 +518,7 @@
                                                     "function": {"variable": "hydra.pg.model.Edge"}}}}},
                                             "type": {"variable": "hydra.rdf.syntax.Description"}}}}}}},
                                 "type": {
-                                  "type": {"list": {"variable": "hydra.rdf.syntax.Description"}},
+                                  "body": {"list": {"variable": "hydra.rdf.syntax.Description"}},
                                   "variables": []}},
                               {
                                 "name": "allDescs",
@@ -530,7 +530,7 @@
                                         "body": {"variable": "hydra.lib.lists.concat"},
                                         "type": {"variable": "hydra.rdf.syntax.Description"}}}}},
                                 "type": {
-                                  "type": {"list": {"variable": "hydra.rdf.syntax.Description"}},
+                                  "body": {"list": {"variable": "hydra.rdf.syntax.Description"}},
                                   "variables": []}}],
                             "body": {
                               "application": {
@@ -548,7 +548,7 @@
                     "parameter": "env"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -571,8 +571,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Encode a property graph vertex as an RDF description"}}}],
                 "body": {
                   "lambda": {
@@ -590,7 +590,7 @@
                                       "typeApplication": {
                                         "body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {"type": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                               {
                                 "name": "vid",
                                 "term": {
@@ -600,7 +600,7 @@
                                       "typeApplication": {
                                         "body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {"type": {"variable": "t0"}, "variables": []}},
+                                "type": {"body": {"variable": "t0"}, "variables": []}},
                               {
                                 "name": "vprops",
                                 "term": {
@@ -612,7 +612,7 @@
                                           "project": {"field": "properties", "typeName": "hydra.pg.model.Vertex"}},
                                         "type": {"variable": "t0"}}}}},
                                 "type": {
-                                  "type": {
+                                  "body": {
                                     "map": {
                                       "keys": {"variable": "hydra.pg.model.PropertyKey"},
                                       "values": {"variable": "t0"}}},
@@ -637,7 +637,7 @@
                                                       "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Resource"}},
-                                "type": {"type": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
                               {
                                 "name": "rtype",
                                 "term": {
@@ -658,7 +658,7 @@
                                                       "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Node"}},
-                                "type": {"type": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}},
                               {
                                 "name": "typeTriple",
                                 "term": {
@@ -673,7 +673,7 @@
                                             "function": {"variable": "hydra.rdf.utils.rdfIri"}}}},
                                       {"name": "object", "term": {"variable": "rtype"}}],
                                     "typeName": "hydra.rdf.syntax.Triple"}},
-                                "type": {"type": {"variable": "hydra.rdf.syntax.Triple"}, "variables": []}},
+                                "type": {"body": {"variable": "hydra.rdf.syntax.Triple"}, "variables": []}},
                               {
                                 "name": "propTriples",
                                 "term": {
@@ -707,7 +707,7 @@
                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                 "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                             "type": {"variable": "t0"}}}}},
-                                                    "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
+                                                    "type": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                                   {
                                                     "name": "val",
                                                     "term": {
@@ -720,7 +720,7 @@
                                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                                 "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                             "type": {"variable": "t0"}}}}},
-                                                    "type": {"type": {"variable": "t0"}, "variables": []}},
+                                                    "type": {"body": {"variable": "t0"}, "variables": []}},
                                                   {
                                                     "name": "pred",
                                                     "term": {
@@ -736,7 +736,7 @@
                                                                     "field": "encodePropertyKey",
                                                                     "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                                 "type": {"variable": "t0"}}}}}}},
-                                                    "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                                                    "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                                                   {
                                                     "name": "obj",
                                                     "term": {
@@ -757,7 +757,7 @@
                                                                           "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                                       "type": {"variable": "t0"}}}}}}}},
                                                         "typeName": "hydra.rdf.syntax.Node"}},
-                                                    "type": {"type": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
+                                                    "type": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
                                                 "body": {
                                                   "record": {
                                                     "fields": [
@@ -781,7 +781,7 @@
                                                     "second": {"variable": "t0"}}}}},
                                             "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
                                 "type": {
-                                  "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}},
+                                  "body": {"list": {"variable": "hydra.rdf.syntax.Triple"}},
                                   "variables": []}},
                               {
                                 "name": "allTriples",
@@ -796,7 +796,7 @@
                                             "body": {"variable": "hydra.lib.lists.cons"},
                                             "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
                                 "type": {
-                                  "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}},
+                                  "body": {"list": {"variable": "hydra.rdf.syntax.Triple"}},
                                   "variables": []}}],
                             "body": {
                               "record": {
@@ -832,7 +832,7 @@
                     "parameter": "env"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -855,8 +855,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Convert a property graph schema to a SHACL shapes graph"}}}],
                 "body": {
                   "lambda": {
@@ -894,7 +894,7 @@
                                                         "argument": {"variable": "t0"},
                                                         "function": {"variable": "hydra.pg.model.VertexType"}}}}}}},
                                             "type": {
-                                              "type": {
+                                              "body": {
                                                 "list": {
                                                   "application": {
                                                     "argument": {"variable": "t0"},
@@ -923,7 +923,7 @@
                                                         "argument": {"variable": "t0"},
                                                         "function": {"variable": "hydra.pg.model.EdgeType"}}}}}}},
                                             "type": {
-                                              "type": {
+                                              "body": {
                                                 "list": {
                                                   "application": {
                                                     "argument": {"variable": "t0"},
@@ -960,7 +960,7 @@
                                                                                     "body": {"variable": "hydra.pg.rdf.mappings.vertexTypeToNodeShape"},
                                                                                     "type": {"variable": "t0"}}}}}}}}}}},
                                                                 "type": {
-                                                                  "type": {
+                                                                  "body": {
                                                                     "application": {
                                                                       "argument": {"variable": "hydra.shacl.model.Shape"},
                                                                       "function": {"variable": "hydra.shacl.model.Definition"}}},
@@ -997,7 +997,7 @@
                                                                                             "domain": {"variable": "hydra.pg.model.VertexLabel"}}}}},
                                                                                     "type": {"variable": "t0"}}}}}}}}}}},
                                                                 "type": {
-                                                                  "type": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
+                                                                  "body": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
                                                                   "variables": []}},
                                                               {
                                                                 "name": "baseShape",
@@ -1009,7 +1009,7 @@
                                                                         "body": {
                                                                           "project": {"field": "target", "typeName": "hydra.shacl.model.Definition"}},
                                                                         "type": {"variable": "hydra.shacl.model.Shape"}}}}},
-                                                                "type": {"type": {"variable": "hydra.shacl.model.Shape"}, "variables": []}},
+                                                                "type": {"body": {"variable": "hydra.shacl.model.Shape"}, "variables": []}},
                                                               {
                                                                 "name": "baseNode",
                                                                 "term": {
@@ -1085,7 +1085,7 @@
                                                                                 "domain": {"variable": "hydra.shacl.model.PropertyShape"},
                                                                                 "parameter": "_"}}}],
                                                                         "typeName": "hydra.shacl.model.Shape"}}}},
-                                                                "type": {"type": {"variable": "hydra.shacl.model.NodeShape"}, "variables": []}},
+                                                                "type": {"body": {"variable": "hydra.shacl.model.NodeShape"}, "variables": []}},
                                                               {
                                                                 "name": "baseCommon",
                                                                 "term": {
@@ -1094,7 +1094,7 @@
                                                                     "function": {
                                                                       "project": {"field": "common", "typeName": "hydra.shacl.model.NodeShape"}}}},
                                                                 "type": {
-                                                                  "type": {"variable": "hydra.shacl.model.CommonProperties"},
+                                                                  "body": {"variable": "hydra.shacl.model.CommonProperties"},
                                                                   "variables": []}},
                                                               {
                                                                 "name": "mergedConstraints",
@@ -1121,7 +1121,7 @@
                                                                             "body": {"variable": "hydra.lib.sets.union"},
                                                                             "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}}}}},
                                                                 "type": {
-                                                                  "type": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}},
+                                                                  "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}},
                                                                   "variables": []}},
                                                               {
                                                                 "name": "updatedCommon",
@@ -1192,7 +1192,7 @@
                                                                                 "typeName": "hydra.shacl.model.CommonProperties"}}}}}],
                                                                     "typeName": "hydra.shacl.model.CommonProperties"}},
                                                                 "type": {
-                                                                  "type": {"variable": "hydra.shacl.model.CommonProperties"},
+                                                                  "body": {"variable": "hydra.shacl.model.CommonProperties"},
                                                                   "variables": []}},
                                                               {
                                                                 "name": "updatedShape",
@@ -1205,7 +1205,7 @@
                                                                           "fields": [{"name": "common", "term": {"variable": "updatedCommon"}}],
                                                                           "typeName": "hydra.shacl.model.NodeShape"}}},
                                                                     "typeName": "hydra.shacl.model.Shape"}},
-                                                                "type": {"type": {"variable": "hydra.shacl.model.Shape"}, "variables": []}}],
+                                                                "type": {"body": {"variable": "hydra.shacl.model.Shape"}, "variables": []}}],
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -1243,7 +1243,7 @@
                                                             "argument": {"variable": "hydra.shacl.model.Shape"},
                                                             "function": {"variable": "hydra.shacl.model.Definition"}}}}}}}}},
                                             "type": {
-                                              "type": {
+                                              "body": {
                                                 "list": {
                                                   "application": {
                                                     "argument": {"variable": "hydra.shacl.model.Shape"},
@@ -1289,7 +1289,7 @@
                     "parameter": "encodeType"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1330,8 +1330,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Convert a property type to a SHACL property shape"}}}],
                 "body": {
                   "lambda": {
@@ -1352,14 +1352,14 @@
                                             "body": {
                                               "project": {"field": "key", "typeName": "hydra.pg.model.PropertyType"}},
                                             "type": {"variable": "t0"}}}}},
-                                    "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
+                                    "type": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                   {
                                     "name": "path",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "key"},
                                         "function": {"variable": "encodeKey"}}},
-                                    "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                                    "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                                   {
                                     "name": "required_",
                                     "term": {
@@ -1370,7 +1370,7 @@
                                             "body": {
                                               "project": {"field": "required", "typeName": "hydra.pg.model.PropertyType"}},
                                             "type": {"variable": "t0"}}}}},
-                                    "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
+                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "dtIri",
                                     "term": {
@@ -1384,7 +1384,7 @@
                                                   "project": {"field": "value", "typeName": "hydra.pg.model.PropertyType"}},
                                                 "type": {"variable": "t0"}}}}},
                                         "function": {"variable": "encodeType"}}},
-                                    "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                                    "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                                   {
                                     "name": "constraints",
                                     "term": {
@@ -1398,7 +1398,7 @@
                                             "body": {"variable": "hydra.lib.sets.singleton"},
                                             "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}}},
                                     "type": {
-                                      "type": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}},
+                                      "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}},
                                       "variables": []}},
                                   {
                                     "name": "propConstraints",
@@ -1430,7 +1430,7 @@
                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                     "type": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}}}}}}}},
                                     "type": {
-                                      "type": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}},
+                                      "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}},
                                       "variables": []}}],
                                 "body": {
                                   "record": {
@@ -1517,7 +1517,7 @@
                     "parameter": "encodeType"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1546,8 +1546,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Convert a vertex type to a SHACL node shape definition"}}}],
                 "body": {
                   "lambda": {
@@ -1570,14 +1570,14 @@
                                                 "body": {
                                                   "project": {"field": "label", "typeName": "hydra.pg.model.VertexType"}},
                                                 "type": {"variable": "t0"}}}}},
-                                        "type": {"type": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                                       {
                                         "name": "labelIri",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "label"},
                                             "function": {"variable": "encodeLabel"}}},
-                                        "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                                        "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                                       {
                                         "name": "propTypes",
                                         "term": {
@@ -1589,7 +1589,7 @@
                                                   "project": {"field": "properties", "typeName": "hydra.pg.model.VertexType"}},
                                                 "type": {"variable": "t0"}}}}},
                                         "type": {
-                                          "type": {
+                                          "body": {
                                             "list": {
                                               "application": {
                                                 "argument": {"variable": "t0"},
@@ -1655,7 +1655,7 @@
                                                             "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
                                                     "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}}}}},
                                         "type": {
-                                          "type": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
+                                          "body": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
                                           "variables": []}},
                                       {
                                         "name": "common",
@@ -1714,7 +1714,7 @@
                                                     "type": {"variable": "hydra.rdf.syntax.Property"}}}}],
                                             "typeName": "hydra.shacl.model.CommonProperties"}},
                                         "type": {
-                                          "type": {"variable": "hydra.shacl.model.CommonProperties"},
+                                          "body": {"variable": "hydra.shacl.model.CommonProperties"},
                                           "variables": []}}],
                                     "body": {
                                       "typeApplication": {
@@ -1757,7 +1757,7 @@
                     "parameter": "encodeType"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

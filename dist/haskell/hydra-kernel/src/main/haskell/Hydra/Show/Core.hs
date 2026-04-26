@@ -473,7 +473,7 @@ typeScheme :: Core.TypeScheme -> String
 typeScheme ts =
 
       let vars = Core.typeSchemeVariables ts
-          body = Core.typeSchemeType ts
+          body = Core.typeSchemeBody ts
           varNames = Lists.map Core.unName vars
           fa =
                   Logic.ifElse (Lists.null vars) "" (Strings.cat [

@@ -4,7 +4,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShexDoc",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "listOfDirective",
@@ -20,7 +20,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShexDoc_Sequence_Option",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "alts",
@@ -33,7 +33,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShexDoc_Sequence_Option_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "NotStartAction",
@@ -46,7 +46,7 @@
       "type": {
         "name": "hydra.shex.syntax.Directive",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "BaseDecl",
@@ -59,13 +59,13 @@
       "type": {
         "name": "hydra.shex.syntax.BaseDecl",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.IriRef"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.IriRef"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.PrefixDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
               {"name": "IriRef", "type": {"variable": "hydra.shex.syntax.IriRef"}}]},
@@ -74,7 +74,7 @@
       "type": {
         "name": "hydra.shex.syntax.NotStartAction",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "start",
@@ -87,7 +87,7 @@
       "type": {
         "name": "hydra.shex.syntax.NotStartAction_ShapeExprDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "ShapeExprLabel",
@@ -100,7 +100,7 @@
       "type": {
         "name": "hydra.shex.syntax.NotStartAction_ShapeExprDecl_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "ShapeExpression",
@@ -111,13 +111,13 @@
       "type": {
         "name": "hydra.shex.syntax.StartActions",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Statement",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "Directive",
@@ -130,19 +130,19 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeExpression",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.ShapeOr"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.ShapeOr"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.InlineShapeExpression",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.InlineShapeOr"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.InlineShapeOr"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.ShapeOr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "ShapeAnd",
@@ -155,7 +155,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeOr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "ShapeAnd",
@@ -168,7 +168,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeAnd",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "ShapeNot",
@@ -181,7 +181,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeAnd",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "InlineShapeNot",
@@ -194,7 +194,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeNot",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "NOT", "type": {"maybe": {"unit": {}}}},
               {
@@ -205,7 +205,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeNot",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "NOT", "type": {"maybe": {"unit": {}}}},
               {
@@ -216,7 +216,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeAtom",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -233,7 +233,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeAtom_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "NodeConstraint",
@@ -246,7 +246,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeAtom",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -263,7 +263,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeAtom_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "NodeConstraint",
@@ -276,7 +276,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeAtom_Sequence2",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "InlineShapeOrRef",
@@ -289,7 +289,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeOrRef",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "ShapeDefinition",
@@ -308,7 +308,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeOrRef",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "InlineShapeDefinition",
@@ -327,7 +327,7 @@
       "type": {
         "name": "hydra.shex.syntax.NodeConstraint",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -352,7 +352,7 @@
       "type": {
         "name": "hydra.shex.syntax.NodeConstraint_Sequence2",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "NonLiteralKind",
@@ -365,7 +365,7 @@
       "type": {
         "name": "hydra.shex.syntax.NodeConstraint_Sequence3",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "Datatype",
@@ -378,7 +378,7 @@
       "type": {
         "name": "hydra.shex.syntax.NodeConstraint_Sequence4",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "ValueSet",
@@ -391,7 +391,7 @@
       "type": {
         "name": "hydra.shex.syntax.NodeConstraint_Sequence5",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "ValueSet",
@@ -404,7 +404,7 @@
       "type": {
         "name": "hydra.shex.syntax.NonLiteralKind",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "IRI", "type": {"unit": {}}},
               {"name": "BNODE", "type": {"unit": {}}},
@@ -414,7 +414,7 @@
       "type": {
         "name": "hydra.shex.syntax.XsFacet",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "StringFacet",
@@ -427,7 +427,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringFacet",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -438,7 +438,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringFacet_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "StringLength",
@@ -449,7 +449,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringLength",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "LENGTH", "type": {"unit": {}}},
               {"name": "MINLENGTH", "type": {"unit": {}}},
@@ -459,7 +459,7 @@
       "type": {
         "name": "hydra.shex.syntax.NumericFacet",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -472,7 +472,7 @@
       "type": {
         "name": "hydra.shex.syntax.NumericFacet_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "NumericRange",
@@ -485,7 +485,7 @@
       "type": {
         "name": "hydra.shex.syntax.NumericFacet_Sequence2",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "NumericLength",
@@ -496,7 +496,7 @@
       "type": {
         "name": "hydra.shex.syntax.NumericRange",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "MININCLUSIVE", "type": {"unit": {}}},
               {"name": "MINEXCLUSIVE", "type": {"unit": {}}},
@@ -507,7 +507,7 @@
       "type": {
         "name": "hydra.shex.syntax.NumericLength",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "TOTALDIGITS", "type": {"unit": {}}},
               {"name": "FRACTIONDIGITS", "type": {"unit": {}}}]},
@@ -516,7 +516,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeDefinition",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "listOfAlts",
@@ -536,7 +536,7 @@
       "type": {
         "name": "hydra.shex.syntax.ShapeDefinition_ListOfAlts_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "IncludeSet",
@@ -550,7 +550,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeDefinition",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "listOfAlts",
@@ -565,7 +565,7 @@
       "type": {
         "name": "hydra.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "IncludeSet",
@@ -579,19 +579,19 @@
       "type": {
         "name": "hydra.shex.syntax.ExtraPropertySet",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.Predicate"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.Predicate"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.TripleExpression",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.OneOfTripleExpr"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.OneOfTripleExpr"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.OneOfTripleExpr",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "GroupTripleExpr",
@@ -604,7 +604,7 @@
       "type": {
         "name": "hydra.shex.syntax.MultiElementOneOf",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "GroupTripleExpr",
@@ -617,7 +617,7 @@
       "type": {
         "name": "hydra.shex.syntax.InnerTripleExpr",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "MultiElementGroup",
@@ -630,7 +630,7 @@
       "type": {
         "name": "hydra.shex.syntax.GroupTripleExpr",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "SingleElementGroup",
@@ -643,7 +643,7 @@
       "type": {
         "name": "hydra.shex.syntax.SingleElementGroup",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "UnaryTripleExpr",
@@ -654,7 +654,7 @@
       "type": {
         "name": "hydra.shex.syntax.MultiElementGroup",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "UnaryTripleExpr",
@@ -668,7 +668,7 @@
       "type": {
         "name": "hydra.shex.syntax.UnaryTripleExpr",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -679,7 +679,7 @@
       "type": {
         "name": "hydra.shex.syntax.UnaryTripleExpr_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "Sequence",
@@ -692,7 +692,7 @@
       "type": {
         "name": "hydra.shex.syntax.UnaryTripleExpr_Sequence_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "TripleConstraint",
@@ -705,7 +705,7 @@
       "type": {
         "name": "hydra.shex.syntax.BracketedTripleExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "InnerTripleExpr",
@@ -724,7 +724,7 @@
       "type": {
         "name": "hydra.shex.syntax.TripleConstraint",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "SenseFlags",
@@ -749,7 +749,7 @@
       "type": {
         "name": "hydra.shex.syntax.Cardinality",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Ast", "type": {"unit": {}}},
               {"name": "Plus", "type": {"unit": {}}},
@@ -761,18 +761,18 @@
     {
       "type": {
         "name": "hydra.shex.syntax.SenseFlags",
-        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.ValueSet",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.ValueSetValue"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.ValueSetValue"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.ValueSetValue",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "IriRange",
@@ -783,7 +783,7 @@
       "type": {
         "name": "hydra.shex.syntax.IriRange",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -796,7 +796,7 @@
       "type": {
         "name": "hydra.shex.syntax.IriRange_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
               {
@@ -807,19 +807,19 @@
       "type": {
         "name": "hydra.shex.syntax.Exclusion",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.Iri"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.Iri"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Include",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.TripleExprLabel"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.TripleExprLabel"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Annotation",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "Predicate",
@@ -832,7 +832,7 @@
       "type": {
         "name": "hydra.shex.syntax.Annotation_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
               {"name": "Literal", "type": {"variable": "hydra.shex.syntax.Literal"}}]},
@@ -841,13 +841,13 @@
       "type": {
         "name": "hydra.shex.syntax.SemanticActions",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.CodeDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
               {
@@ -858,7 +858,7 @@
       "type": {
         "name": "hydra.shex.syntax.CodeDecl_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Code", "type": {"variable": "hydra.shex.syntax.Code"}},
               {"name": "Percnt", "type": {"unit": {}}}]},
@@ -867,7 +867,7 @@
       "type": {
         "name": "hydra.shex.syntax.Literal",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "RdfLiteral",
@@ -883,7 +883,7 @@
       "type": {
         "name": "hydra.shex.syntax.Predicate",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
               {"name": "RdfType", "type": {"variable": "hydra.shex.syntax.RdfType"}}]},
@@ -892,13 +892,13 @@
       "type": {
         "name": "hydra.shex.syntax.Datatype",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.Iri"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.Iri"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.ShapeExprLabel",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
               {
@@ -909,7 +909,7 @@
       "type": {
         "name": "hydra.shex.syntax.TripleExprLabel",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
               {
@@ -920,7 +920,7 @@
       "type": {
         "name": "hydra.shex.syntax.NumericLiteral",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
               {"name": "Decimal", "type": {"variable": "hydra.shex.syntax.Decimal"}},
@@ -930,7 +930,7 @@
       "type": {
         "name": "hydra.shex.syntax.RdfLiteral",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "String", "type": {"variable": "hydra.shex.syntax.String"}},
               {
@@ -941,7 +941,7 @@
       "type": {
         "name": "hydra.shex.syntax.RdfLiteral_Alts_Option",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "LangTag", "type": {"variable": "hydra.shex.syntax.LangTag"}},
               {
@@ -952,7 +952,7 @@
       "type": {
         "name": "hydra.shex.syntax.BooleanLiteral",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "True", "type": {"unit": {}}},
               {"name": "False", "type": {"unit": {}}}]},
@@ -961,7 +961,7 @@
       "type": {
         "name": "hydra.shex.syntax.String",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "StringLiteral1",
@@ -980,7 +980,7 @@
       "type": {
         "name": "hydra.shex.syntax.Iri",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "IriRef", "type": {"variable": "hydra.shex.syntax.IriRef"}},
               {
@@ -991,7 +991,7 @@
       "type": {
         "name": "hydra.shex.syntax.PrefixedName",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "PnameLn", "type": {"variable": "hydra.shex.syntax.PnameLn"}},
               {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}}]},
@@ -1000,25 +1000,25 @@
       "type": {
         "name": "hydra.shex.syntax.BlankNode",
         "type": {
-          "type": {"wrap": {"variable": "hydra.shex.syntax.BlankNodeLabel"}},
+          "body": {"wrap": {"variable": "hydra.shex.syntax.BlankNodeLabel"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.IncludeSet",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Code",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.Code_Elmt"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.Code_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Code_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
               {"name": "sequence", "type": {"literal": {"string": {}}}},
@@ -1028,7 +1028,7 @@
       "type": {
         "name": "hydra.shex.syntax.RepeatRange",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
               {
@@ -1043,7 +1043,7 @@
       "type": {
         "name": "hydra.shex.syntax.RepeatRange_Sequence_Option_Option_Option",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
               {"name": "Ast", "type": {"unit": {}}}]},
@@ -1051,18 +1051,18 @@
     {
       "type": {
         "name": "hydra.shex.syntax.RdfType",
-        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.IriRef",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.shex.syntax.IriRef_Elmt"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.IriRef_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.IriRef_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
               {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
@@ -1071,13 +1071,13 @@
       "type": {
         "name": "hydra.shex.syntax.PnameNs",
         "type": {
-          "type": {"wrap": {"maybe": {"variable": "hydra.shex.syntax.PnPrefix"}}},
+          "body": {"wrap": {"maybe": {"variable": "hydra.shex.syntax.PnPrefix"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.PnameLn",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
               {"name": "PnLocal", "type": {"variable": "hydra.shex.syntax.PnLocal"}}]},
@@ -1086,13 +1086,13 @@
       "type": {
         "name": "hydra.shex.syntax.AtpNameNs",
         "type": {
-          "type": {"wrap": {"maybe": {"variable": "hydra.shex.syntax.PnPrefix"}}},
+          "body": {"wrap": {"maybe": {"variable": "hydra.shex.syntax.PnPrefix"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.AtpNameLn",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
               {"name": "PnLocal", "type": {"variable": "hydra.shex.syntax.PnLocal"}}]},
@@ -1101,7 +1101,7 @@
       "type": {
         "name": "hydra.shex.syntax.Regexp",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "listOfAlts",
@@ -1112,7 +1112,7 @@
       "type": {
         "name": "hydra.shex.syntax.Regexp_ListOfAlts_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
               {"name": "sequence", "type": {"literal": {"string": {}}}},
@@ -1122,7 +1122,7 @@
       "type": {
         "name": "hydra.shex.syntax.BlankNodeLabel",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "alts",
@@ -1139,7 +1139,7 @@
       "type": {
         "name": "hydra.shex.syntax.BlankNodeLabel_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "PnCharsU",
@@ -1150,7 +1150,7 @@
       "type": {
         "name": "hydra.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
               {"name": "Period", "type": {"unit": {}}}]},
@@ -1158,31 +1158,31 @@
     {
       "type": {
         "name": "hydra.shex.syntax.LangTag",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Integer",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Decimal",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Double",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteral1",
         "type": {
-          "type": {
+          "body": {
             "wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteral1_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteral1_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
               {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
@@ -1192,14 +1192,14 @@
       "type": {
         "name": "hydra.shex.syntax.StringLiteral2",
         "type": {
-          "type": {
+          "body": {
             "wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteral2_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteral2_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
               {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
@@ -1209,14 +1209,14 @@
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong1",
         "type": {
-          "type": {
+          "body": {
             "wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteralLong1_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong1_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -1228,7 +1228,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "Alts",
@@ -1241,7 +1241,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Apos", "type": {"unit": {}}},
               {
@@ -1252,19 +1252,19 @@
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence",
-        "type": {"type": {"record": []}, "variables": []}}},
+        "type": {"body": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong2",
         "type": {
-          "type": {
+          "body": {
             "wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteralLong2_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong2_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -1276,7 +1276,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "Alts",
@@ -1289,7 +1289,7 @@
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Quot", "type": {"unit": {}}},
               {
@@ -1300,12 +1300,12 @@
     {
       "type": {
         "name": "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence",
-        "type": {"type": {"record": []}, "variables": []}}},
+        "type": {"body": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Uchar",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "sequence",
@@ -1318,7 +1318,7 @@
       "type": {
         "name": "hydra.shex.syntax.Uchar_Sequence",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
               {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}},
@@ -1329,7 +1329,7 @@
       "type": {
         "name": "hydra.shex.syntax.Uchar_Sequence2",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
               {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}},
@@ -1343,12 +1343,12 @@
     {
       "type": {
         "name": "hydra.shex.syntax.Echar",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.PnCharsBase",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
               {"name": "regex2", "type": {"literal": {"string": {}}}}]},
@@ -1357,7 +1357,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnCharsU",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "PnCharsBase",
@@ -1368,7 +1368,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnChars",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "PnCharsU",
@@ -1380,7 +1380,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnPrefix",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "PnCharsBase",
@@ -1393,7 +1393,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnPrefix_Sequence_Option",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "alts",
@@ -1404,7 +1404,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnPrefix_Sequence_Option_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
               {"name": "Period", "type": {"unit": {}}}]},
@@ -1413,7 +1413,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnLocal",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "alts",
@@ -1426,7 +1426,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnLocal_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "PnCharsU",
@@ -1439,7 +1439,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnLocal_Sequence_Option",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "listOfAlts",
@@ -1454,7 +1454,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
               {"name": "Period", "type": {"unit": {}}},
@@ -1465,7 +1465,7 @@
       "type": {
         "name": "hydra.shex.syntax.PnLocal_Sequence_Option_Alts",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
               {"name": "Colon", "type": {"unit": {}}},
@@ -1475,7 +1475,7 @@
       "type": {
         "name": "hydra.shex.syntax.Plx",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "Percent", "type": {"variable": "hydra.shex.syntax.Percent"}},
               {
@@ -1486,7 +1486,7 @@
       "type": {
         "name": "hydra.shex.syntax.Percent",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
               {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}}]},
@@ -1494,11 +1494,11 @@
     {
       "type": {
         "name": "hydra.shex.syntax.Hex",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.shex.syntax.PnLocalEsc",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "A Shex model. Based on the BNF at:\n  https://github.com/shexSpec/grammar/blob/master/bnf",
   "namespace": "hydra.shex.syntax",
   "termDependencies": [],

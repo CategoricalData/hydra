@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.variants.EliminationVariant",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The identifier of an elimination constructor (legacy)"}}}],
               "body": {
                 "union": [
@@ -21,12 +21,12 @@
       "type": {
         "name": "hydra.variants.FunctionVariant",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The identifier of a function constructor (legacy)"}}}],
               "body": {
                 "union": [
@@ -37,12 +37,12 @@
       "type": {
         "name": "hydra.variants.LiteralVariant",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The identifier of a literal constructor"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The identifier of a literal constructor"}}}],
               "body": {
                 "union": [
                   {"name": "binary", "type": {"unit": {}}},
@@ -56,12 +56,12 @@
       "type": {
         "name": "hydra.variants.TermVariant",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The identifier of a term expression constructor"}}}],
               "body": {
                 "union": [
@@ -91,12 +91,12 @@
       "type": {
         "name": "hydra.variants.TypeVariant",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The identifier of a type constructor"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The identifier of a type constructor"}}}],
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},

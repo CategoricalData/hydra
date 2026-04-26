@@ -53,7 +53,7 @@ buildFieldOffsets g =
                   \nameSchemePair ->
                     let tname = Pairs.first nameSchemePair
                         tscheme = Pairs.second nameSchemePair
-                        tbody = Core.typeSchemeType tscheme
+                        tbody = Core.typeSchemeBody tscheme
                         mfields = recordFieldsOf tbody
                     in (Maybes.cases mfields Nothing (\fts ->
                       let namedOffsets =
@@ -75,7 +75,7 @@ buildFunctionSignatures cx g termDefs =
                 let nm = Pairs.first nameAndScheme
                     ts = Pairs.second nameAndScheme
                     snakeName = Formatting.convertCaseCamelToLowerSnake (Core.unName nm)
-                    sigEither = extractSignature cx g (Core.typeSchemeType ts)
+                    sigEither = extractSignature cx g (Core.typeSchemeBody ts)
                 in (Eithers.either (\_err -> Nothing) (\sig -> Just (snakeName, sig)) sigEither)
           primEntries =
                   Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Graph.primitiveType (Pairs.second kv)))) (Maps.toList (Graph.graphPrimitives g)))
@@ -119,7 +119,7 @@ buildVariantIndexes g =
                   \nameSchemePair ->
                     let tname = Pairs.first nameSchemePair
                         tscheme = Pairs.second nameSchemePair
-                        tbody = Core.typeSchemeType tscheme
+                        tbody = Core.typeSchemeBody tscheme
                         mfields = unionFieldsOf tbody
                     in (Maybes.cases mfields Nothing (\fts ->
                       let namedIndexes =
@@ -673,7 +673,7 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Core.unName name)
-          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeType (Packaging.termDefinitionType tdef)
+          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Packaging.termDefinitionType tdef)
           extracted = extractLambdaParams term
           paramNames = Pairs.first extracted
           innerBody = Pairs.second extracted
@@ -739,7 +739,7 @@ encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Core.typeSchemeType (Packaging.typeDefinitionType tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionType tdef)
           dtyp = Strip.deannotateType typ
       in case dtyp of
         Core.TypeFunction _ -> Eithers.bind (extractParamTypes cx g typ) (\paramTypes -> Eithers.bind (encodeType cx g typ) (\resultTypes -> Right [

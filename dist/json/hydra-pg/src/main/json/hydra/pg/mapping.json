@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.pg.mapping.AnnotationSchema",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Configurable annotation keys for property graph mapping specifications"}}}],
               "body": {
@@ -34,12 +34,12 @@
       "type": {
         "name": "hydra.pg.mapping.EdgeSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A mapping specification producing edges of a specified label."}}}],
               "body": {
@@ -50,8 +50,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The label of the target edges, which must conform to the edge type associated with that label."}}}],
                         "body": {"variable": "hydra.pg.model.EdgeLabel"}}}},
@@ -61,8 +61,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A specification of the id of each target edge"}}}],
                         "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}},
                   {
@@ -71,8 +71,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A specification of the out-vertex reference of each target edge"}}}],
                         "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}},
@@ -82,8 +82,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A specification of the in-vertex reference of each target edge"}}}],
                         "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}},
@@ -93,8 +93,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Zero or more property specifications for each target edge"}}}],
                         "body": {"list": {"variable": "hydra.pg.mapping.PropertySpec"}}}}}]}}},
@@ -103,12 +103,12 @@
       "type": {
         "name": "hydra.pg.mapping.ElementSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Either a vertex specification or an edge specification"}}}],
               "body": {
                 "union": [
@@ -121,12 +121,12 @@
       "type": {
         "name": "hydra.pg.mapping.PropertySpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A mapping specification producing properties of a specified key, and values of the appropriate type."}}}],
               "body": {
@@ -137,8 +137,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The key of the target properties"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The key of the target properties"}}}],
                         "body": {"variable": "hydra.pg.model.PropertyKey"}}}},
                   {
                     "name": "value",
@@ -146,8 +146,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A specification of the value of each target property, which must conform to the type associated with the property key"}}}],
                         "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}}]}}},
@@ -156,12 +156,12 @@
       "type": {
         "name": "hydra.pg.mapping.Schema",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types"}}}],
               "body": {
@@ -239,12 +239,12 @@
       "type": {
         "name": "hydra.pg.mapping.ValueSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A mapping specification producing values (usually literal values) whose type is understood in context"}}}],
               "body": {
@@ -255,8 +255,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A trivial no-op specification which passes the entire value"}}}],
                         "body": {"unit": {}}}}},
@@ -266,8 +266,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A compact path representing the function, e.g. engine-${engineInfo/model/name}"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
@@ -276,12 +276,12 @@
       "type": {
         "name": "hydra.pg.mapping.VertexSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A mapping specification producing vertices of a specified label"}}}],
               "body": {
@@ -292,8 +292,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The label of the target vertices, which must conform to the vertex type associated with that label."}}}],
                         "body": {"variable": "hydra.pg.model.VertexLabel"}}}},
@@ -303,8 +303,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A specification of the id of each target vertex"}}}],
                         "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}},
                   {
@@ -313,8 +313,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Zero or more property specifications for each target vertex"}}}],
                         "body": {"list": {"variable": "hydra.pg.mapping.PropertySpec"}}}}}]}}},

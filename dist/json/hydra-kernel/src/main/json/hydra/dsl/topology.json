@@ -67,8 +67,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Mapping from target ordering to source ordering"}}}],
                         "body": {
                           "function": {
@@ -82,8 +82,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Mapping from source ordering to target ordering"}}}],
                     "body": {
                       "function": {
@@ -92,7 +92,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "encode"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -109,8 +109,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Mapping from target ordering to source ordering"}}}],
                           "body": {
                             "function": {
@@ -123,8 +123,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Mapping from source ordering to target ordering"}}}],
                       "body": {
                         "function": {
@@ -187,7 +187,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -195,8 +195,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Mapping from source ordering to target ordering"}}}],
                       "body": {
                         "function": {
@@ -266,7 +266,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -274,8 +274,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Mapping from target ordering to source ordering"}}}],
                       "body": {
                         "function": {
@@ -391,8 +391,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Mapping from source ordering to target ordering"}}}],
                         "body": {
                           "function": {
@@ -409,7 +409,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -426,8 +426,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Mapping from source ordering to target ordering"}}}],
                           "body": {
                             "function": {
@@ -543,8 +543,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Mapping from target ordering to source ordering"}}}],
                         "body": {
                           "function": {
@@ -561,7 +561,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -578,8 +578,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Mapping from target ordering to source ordering"}}}],
                           "body": {
                             "function": {
@@ -733,8 +733,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {
+                                            "key": "description",
+                                            "value": {
                                               "literal": {
                                                 "string": "Accumulated strongly connected components, each a list of vertices"}}}],
                                         "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
@@ -746,8 +746,8 @@
                                   "annotated": {
                                     "annotation": [
                                       {
-                                        "@key": "description",
-                                        "@value": {
+                                        "key": "description",
+                                        "value": {
                                           "literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                                     "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                                 "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -758,8 +758,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                                 "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                             "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -770,8 +770,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                             "body": {
@@ -786,8 +786,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                         "body": {
@@ -802,14 +802,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "counter"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -831,8 +831,8 @@
                                         "annotated": {
                                           "annotation": [
                                             {
-                                              "@key": "description",
-                                              "@value": {
+                                              "key": "description",
+                                              "value": {
                                                 "literal": {
                                                   "string": "Accumulated strongly connected components, each a list of vertices"}}}],
                                           "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
@@ -843,8 +843,8 @@
                                     "annotated": {
                                       "annotation": [
                                         {
-                                          "@key": "description",
-                                          "@value": {
+                                          "key": "description",
+                                          "value": {
                                             "literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                                       "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -854,8 +854,8 @@
                                 "annotated": {
                                   "annotation": [
                                     {
-                                      "@key": "description",
-                                      "@value": {
+                                      "key": "description",
+                                      "value": {
                                         "literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                                   "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                               "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -865,8 +865,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                               "body": {
@@ -880,8 +880,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                           "body": {
@@ -895,8 +895,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -953,7 +953,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -961,8 +961,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1023,7 +1023,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1031,8 +1031,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                       "body": {
@@ -1097,7 +1097,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1105,8 +1105,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                       "body": {
@@ -1171,7 +1171,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1179,8 +1179,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                       "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1241,7 +1241,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1249,8 +1249,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                       "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1311,7 +1311,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1319,8 +1319,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Accumulated strongly connected components, each a list of vertices"}}}],
                       "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
@@ -1631,8 +1631,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1643,7 +1643,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1657,8 +1657,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -1968,8 +1968,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                         "body": {
@@ -1984,7 +1984,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1998,8 +1998,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Mapping from vertices to their indices in the DFS traversal"}}}],
                           "body": {
@@ -2313,8 +2313,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                         "body": {
@@ -2329,7 +2329,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2343,8 +2343,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
                           "body": {
@@ -2658,8 +2658,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                         "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2670,7 +2670,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2684,8 +2684,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
                           "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2995,8 +2995,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                         "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3007,7 +3007,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3021,8 +3021,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
                           "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3332,8 +3332,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Accumulated strongly connected components, each a list of vertices"}}}],
                         "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
@@ -3345,7 +3345,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3359,8 +3359,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Accumulated strongly connected components, each a list of vertices"}}}],
                           "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},

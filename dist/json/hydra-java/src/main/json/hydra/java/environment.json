@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.java.environment.JavaSymbolClass",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Classification of a Java symbol for code generation"}}}],
               "body": {
                 "union": [
@@ -19,8 +19,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A constant value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A constant value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "nullaryFunction",
@@ -28,8 +28,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A nullary function (no arguments)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A nullary function (no arguments)"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "hoistedLambda",
@@ -37,8 +37,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
@@ -48,8 +48,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unary function (single argument)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unary function (single argument)"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "localVariable",
@@ -57,20 +57,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A local variable"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A local variable"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.java.environment.JavaFeatures",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Feature flags for the target Java version"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Feature flags for the target Java version"}}}],
               "body": {
                 "record": [
                   {
@@ -79,8 +79,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -88,12 +88,12 @@
       "type": {
         "name": "hydra.java.environment.Aliases",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Aliases and context for Java code generation"}}}],
               "body": {
                 "record": [
@@ -103,8 +103,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Current module namespace context"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Current module namespace context"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
                     "name": "packages",
@@ -112,8 +112,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.packaging.Namespace"},
@@ -124,8 +124,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Variables bound in pattern matching branches"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
                   {
@@ -134,8 +134,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Variables that are self-recursive"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
                   {
                     "name": "inScopeTypeParams",
@@ -143,8 +143,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Type parameters that are in scope (from method-level type parameters)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
@@ -154,8 +154,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Local variables that have polymorphic types (declared with raw types)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
@@ -165,8 +165,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
@@ -176,8 +176,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
                         "body": {
@@ -190,8 +190,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
@@ -201,8 +201,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
                         "body": {
@@ -215,8 +215,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Type variables that actually appear in the method's formal parameter types"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
@@ -226,8 +226,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
                         "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
@@ -237,8 +237,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
@@ -247,12 +247,12 @@
       "type": {
         "name": "hydra.java.environment.JavaEnvironment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Environment for Java code generation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Environment for Java code generation"}}}],
               "body": {
                 "record": [
                   {
@@ -261,8 +261,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Aliases and context state"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Aliases and context state"}}}],
                         "body": {"variable": "hydra.java.environment.Aliases"}}}},
                   {
                     "name": "graph",
@@ -270,8 +270,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Graph context for type inference"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Graph context for type inference"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}}]}}},
           "variables": []}}}],
   "description": "Environment types for Java code generation",

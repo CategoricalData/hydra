@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.classes.TypeClass",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Any of a small number of built-in type classes"}}}],
               "body": {
                 "union": [

@@ -515,9 +515,9 @@ typeScheme cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "variables" (ExtractCore.decodeList name) fieldMap cx) (\field_variables -> Eithers.bind (ExtractCore.requireField "type" type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "constraints" (ExtractCore.decodeMaybe (ExtractCore.decodeMap name typeVariableMetadata)) fieldMap cx) (\field_constraints -> Right (Core.TypeScheme {
+        in (Eithers.bind (ExtractCore.requireField "variables" (ExtractCore.decodeList name) fieldMap cx) (\field_variables -> Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "constraints" (ExtractCore.decodeMaybe (ExtractCore.decodeMap name typeVariableMetadata)) fieldMap cx) (\field_constraints -> Right (Core.TypeScheme {
           Core.typeSchemeVariables = field_variables,
-          Core.typeSchemeType = field_type,
+          Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 

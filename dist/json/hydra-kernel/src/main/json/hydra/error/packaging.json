@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.error.packaging.ConflictingModuleNamespaceError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A module namespace which, when mapped to a target language's directory or package structure, conflicts with another module's mapped namespace. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem."}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The first module namespace"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The first module namespace"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
                     "name": "second",
@@ -29,8 +29,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The second module namespace that conflicts with the first"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}}]}}},
@@ -39,12 +39,12 @@
       "type": {
         "name": "hydra.error.packaging.ConflictingVariantNameError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A union type variant name which, when capitalized and concatenated with its type name, conflicts with another type definition name. For example, a union type Foo with a variant bar produces FooBar, which conflicts with an existing type definition FooBar. This is currently a problem only for the Haskell target."}}}],
               "body": {
@@ -55,8 +55,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The namespace of the module containing the conflict"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
@@ -65,8 +65,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the union type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the union type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "variantName",
@@ -74,8 +74,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The name of the variant field causing the conflict"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
@@ -84,8 +84,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
@@ -94,12 +94,12 @@
       "type": {
         "name": "hydra.error.packaging.DefinitionNotInModuleNamespaceError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A definition whose name does not have the module's namespace as a prefix. If the module namespace is foo.bar, all definition names must have the form foo.bar.quux."}}}],
               "body": {
@@ -110,8 +110,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The namespace of the module"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The namespace of the module"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
                     "name": "name",
@@ -119,8 +119,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The definition name that does not match the module namespace"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
@@ -129,12 +129,12 @@
       "type": {
         "name": "hydra.error.packaging.DuplicateDefinitionNameError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Two or more definitions in the same module share the same name"}}}],
               "body": {
@@ -145,8 +145,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The namespace of the module containing the duplicates"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
@@ -155,20 +155,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The duplicated definition name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The duplicated definition name"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.error.packaging.DuplicateModuleNamespaceError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Two or more modules in the same package share the same namespace"}}}],
               "body": {
@@ -179,20 +179,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The duplicated module namespace"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The duplicated module namespace"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.error.packaging.InvalidModuleError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "An error indicating that a module is invalid"}}}],
               "body": {
                 "union": [
@@ -202,8 +202,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}],
                         "body": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}}},
@@ -213,8 +213,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A definition whose name does not have the module's namespace as a prefix"}}}],
                         "body": {
@@ -225,8 +225,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Two or more definitions in the same module share the same name"}}}],
                         "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}}}]}}},
@@ -235,12 +235,12 @@
       "type": {
         "name": "hydra.error.packaging.InvalidPackageError",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "An error indicating that a package is invalid"}}}],
               "body": {
                 "union": [
@@ -250,8 +250,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Two module namespaces that conflict when mapped to a target language"}}}],
                         "body": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"}}}},
@@ -261,8 +261,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Two or more modules in the same package share the same namespace"}}}],
                         "body": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"}}}},
@@ -272,8 +272,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A module within the package is invalid"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A module within the package is invalid"}}}],
                         "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}]}}},
           "variables": []}}}],
   "description": "Error types for module and package validation",

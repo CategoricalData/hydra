@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a list of bindings as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a list of bindings as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -29,7 +29,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.core.Binding"}}},
                                     "type": {"literal": {"string": {}}}}}}}}},
-                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -47,7 +47,7 @@
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
                 "parameter": "elements"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"list": {"variable": "hydra.core.Binding"}}}},

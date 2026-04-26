@@ -40,7 +40,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.ComparisonConstraint"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -85,7 +85,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.ComparisonConstraint"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -130,7 +130,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.ComparisonConstraint"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -175,7 +175,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.ComparisonConstraint"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -220,7 +220,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.ComparisonConstraint"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -265,7 +265,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.ComparisonConstraint"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -353,8 +353,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
                             "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -366,8 +366,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                         "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -379,15 +379,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "type"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -403,8 +403,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
                               "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -415,8 +415,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                           "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -427,8 +427,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
@@ -486,7 +486,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -494,8 +494,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
@@ -557,7 +557,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -565,8 +565,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -626,7 +626,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -634,8 +634,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -792,8 +792,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
@@ -805,7 +805,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -819,8 +819,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
@@ -977,8 +977,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                         "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -990,7 +990,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1004,8 +1004,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                           "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -1164,8 +1164,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
                         "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -1177,7 +1177,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1191,8 +1191,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
                           "body": {"maybe": {"variable": "hydra.core.Name"}}}},
@@ -1269,8 +1269,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "patterns"}},
@@ -1280,13 +1280,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The name of the component graph"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The name of the component graph"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "graph"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1300,8 +1300,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
                           "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1310,8 +1310,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the component graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of the component graph"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1367,7 +1367,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1375,8 +1375,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the component graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of the component graph"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1436,7 +1436,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1444,8 +1444,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1554,8 +1554,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the component graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the component graph"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1565,7 +1565,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1579,8 +1579,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the component graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The name of the component graph"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1689,8 +1689,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1700,7 +1700,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1714,8 +1714,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
                           "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1770,15 +1770,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A graph term; an expression which is valid in the graph being matched"}}}],
                     "body": {"variable": "hydra.core.Term"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1790,8 +1790,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A graph term; an expression which is valid in the graph being matched"}}}],
                       "body": {"variable": "hydra.core.Term"}}},
@@ -1844,15 +1844,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A query variable, not to be confused with a variable term"}}}],
                     "body": {"variable": "hydra.query.Variable"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1864,8 +1864,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A query variable, not to be confused with a variable term"}}}],
                       "body": {"variable": "hydra.query.Variable"}}},
@@ -1911,7 +1911,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.Node"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1963,13 +1963,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A path given by a single step"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A path given by a single step"}}}],
                     "body": {"variable": "hydra.query.Step"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1981,8 +1981,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A path given by a single step"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A path given by a single step"}}}],
                       "body": {"variable": "hydra.query.Step"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2033,15 +2033,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A path given by a regular expression quantifier applied to another path"}}}],
                     "body": {"variable": "hydra.query.RegexSequence"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2053,8 +2053,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A path given by a regular expression quantifier applied to another path"}}}],
                       "body": {"variable": "hydra.query.RegexSequence"}}},
@@ -2107,13 +2107,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A path given by the inverse of another path"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2125,8 +2125,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A path given by the inverse of another path"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2197,8 +2197,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The right-hand side of the equation"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "right"}},
@@ -2208,13 +2208,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "left"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2228,8 +2228,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The right-hand side of the equation"}}}],
                           "body": {"variable": "hydra.query.Path"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2238,8 +2238,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2295,7 +2295,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2303,8 +2303,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -2364,7 +2364,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2372,8 +2372,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The right-hand side of the equation"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -2482,8 +2482,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2493,7 +2493,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2507,8 +2507,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                           "body": {"variable": "hydra.query.Path"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2617,8 +2617,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The right-hand side of the equation"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2628,7 +2628,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2642,8 +2642,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The right-hand side of the equation"}}}],
                           "body": {"variable": "hydra.query.Path"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2698,13 +2698,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
                     "body": {"variable": "hydra.query.TriplePattern"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2716,8 +2716,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
                       "body": {"variable": "hydra.query.TriplePattern"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2768,13 +2768,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The negation of another pattern"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The negation of another pattern"}}}],
                     "body": {"variable": "hydra.query.Pattern"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2786,8 +2786,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The negation of another pattern"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The negation of another pattern"}}}],
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2838,14 +2838,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The conjunction ('and') of several other patterns"}}}],
                     "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2857,8 +2857,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The conjunction ('and') of several other patterns"}}}],
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2910,15 +2910,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "The disjunction (inclusive 'or') of several other patterns"}}}],
                     "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2930,8 +2930,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The disjunction (inclusive 'or') of several other patterns"}}}],
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
@@ -2984,14 +2984,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A pattern which matches within a named subgraph"}}}],
                     "body": {"variable": "hydra.query.GraphPattern"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3003,8 +3003,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A pattern which matches within a named subgraph"}}}],
                       "body": {"variable": "hydra.query.GraphPattern"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3076,8 +3076,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The pattern which must also match when the antecedent matches"}}}],
                         "body": {"variable": "hydra.query.Pattern"}}},
@@ -3089,15 +3089,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "The pattern which, if it matches, triggers the constraint"}}}],
                     "body": {"variable": "hydra.query.Pattern"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "antecedent"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3111,8 +3111,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The pattern which must also match when the antecedent matches"}}}],
                           "body": {"variable": "hydra.query.Pattern"}}},
@@ -3123,8 +3123,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The pattern which, if it matches, triggers the constraint"}}}],
                       "body": {"variable": "hydra.query.Pattern"}}},
@@ -3182,7 +3182,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3190,8 +3190,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The pattern which, if it matches, triggers the constraint"}}}],
                       "body": {"variable": "hydra.query.Pattern"}}},
@@ -3253,7 +3253,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3261,8 +3261,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The pattern which must also match when the antecedent matches"}}}],
                       "body": {"variable": "hydra.query.Pattern"}}},
@@ -3373,8 +3373,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The pattern which, if it matches, triggers the constraint"}}}],
                         "body": {"variable": "hydra.query.Pattern"}}},
@@ -3386,7 +3386,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3400,8 +3400,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The pattern which, if it matches, triggers the constraint"}}}],
                           "body": {"variable": "hydra.query.Pattern"}}},
@@ -3512,8 +3512,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The pattern which must also match when the antecedent matches"}}}],
                         "body": {"variable": "hydra.query.Pattern"}}},
@@ -3525,7 +3525,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3539,8 +3539,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The pattern which must also match when the antecedent matches"}}}],
                           "body": {"variable": "hydra.query.Pattern"}}},
@@ -3617,8 +3617,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The patterns to be matched"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The patterns to be matched"}}}],
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "patterns"}},
@@ -3628,13 +3628,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The variables selected by the query"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The variables selected by the query"}}}],
                     "body": {"list": {"variable": "hydra.query.Variable"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "variables"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3648,8 +3648,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The patterns to be matched"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The patterns to be matched"}}}],
                           "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -3658,8 +3658,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The variables selected by the query"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The variables selected by the query"}}}],
                       "body": {"list": {"variable": "hydra.query.Variable"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3715,7 +3715,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3723,8 +3723,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The variables selected by the query"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The variables selected by the query"}}}],
                       "body": {"list": {"variable": "hydra.query.Variable"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -3784,7 +3784,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3792,8 +3792,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The patterns to be matched"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The patterns to be matched"}}}],
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -3902,8 +3902,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The variables selected by the query"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The variables selected by the query"}}}],
                         "body": {"list": {"variable": "hydra.query.Variable"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -3913,7 +3913,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3927,8 +3927,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The variables selected by the query"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The variables selected by the query"}}}],
                           "body": {"list": {"variable": "hydra.query.Variable"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4037,8 +4037,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The patterns to be matched"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The patterns to be matched"}}}],
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4048,7 +4048,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4062,8 +4062,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The patterns to be matched"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The patterns to be matched"}}}],
                           "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4138,8 +4138,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "max"}},
@@ -4149,13 +4149,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "min"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4169,8 +4169,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4179,8 +4179,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4236,7 +4236,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4244,8 +4244,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4305,7 +4305,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4313,8 +4313,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4423,8 +4423,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4434,7 +4434,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4448,8 +4448,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4558,8 +4558,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4569,7 +4569,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4583,8 +4583,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4632,7 +4632,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.RegexQuantifier"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4677,7 +4677,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.RegexQuantifier"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4722,7 +4722,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.RegexQuantifier"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4767,7 +4767,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.query.RegexQuantifier"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4819,14 +4819,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4838,8 +4838,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -4891,14 +4891,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4910,8 +4910,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -4963,15 +4963,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
                     "body": {"variable": "hydra.query.Range"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4983,8 +4983,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
                       "body": {"variable": "hydra.query.Range"}}},
@@ -5057,8 +5057,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The quantifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The quantifier"}}}],
                         "body": {"variable": "hydra.query.RegexQuantifier"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "quantifier"}},
@@ -5068,13 +5068,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "path"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5088,8 +5088,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The quantifier"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The quantifier"}}}],
                           "body": {"variable": "hydra.query.RegexQuantifier"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5098,8 +5098,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5155,7 +5155,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5163,8 +5163,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5224,7 +5224,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5232,8 +5232,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The quantifier"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The quantifier"}}}],
                       "body": {"variable": "hydra.query.RegexQuantifier"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5342,8 +5342,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5353,7 +5353,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5367,8 +5367,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
                           "body": {"variable": "hydra.query.Path"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5477,8 +5477,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The quantifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The quantifier"}}}],
                         "body": {"variable": "hydra.query.RegexQuantifier"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5488,7 +5488,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5502,8 +5502,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The quantifier"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The quantifier"}}}],
                           "body": {"variable": "hydra.query.RegexQuantifier"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5558,13 +5558,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
                     "body": {"variable": "hydra.query.Edge"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5576,8 +5576,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
                       "body": {"variable": "hydra.query.Edge"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5628,14 +5628,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A projection from a record through one of its fields"}}}],
                     "body": {"variable": "hydra.core.Projection"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5647,8 +5647,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A projection from a record through one of its fields"}}}],
                       "body": {"variable": "hydra.core.Projection"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -5700,13 +5700,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A comparison of two terms"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A comparison of two terms"}}}],
                     "body": {"variable": "hydra.query.ComparisonConstraint"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5718,8 +5718,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A comparison of two terms"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A comparison of two terms"}}}],
                       "body": {"variable": "hydra.query.ComparisonConstraint"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5808,8 +5808,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "The object of the pattern"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "The object of the pattern"}}}],
                             "body": {"variable": "hydra.query.Node"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "object"}},
@@ -5819,8 +5819,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "predicate"}},
@@ -5830,13 +5830,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The subject of the pattern"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The subject of the pattern"}}}],
                     "body": {"variable": "hydra.query.Node"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "subject"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5852,8 +5852,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The object of the pattern"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "The object of the pattern"}}}],
                               "body": {"variable": "hydra.query.Node"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -5862,8 +5862,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
                           "body": {"variable": "hydra.query.Path"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5872,8 +5872,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The subject of the pattern"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The subject of the pattern"}}}],
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5929,7 +5929,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5937,8 +5937,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The subject of the pattern"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The subject of the pattern"}}}],
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5998,7 +5998,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6006,8 +6006,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -6067,7 +6067,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6075,8 +6075,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The object of the pattern"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The object of the pattern"}}}],
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -6235,8 +6235,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The subject of the pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The subject of the pattern"}}}],
                         "body": {"variable": "hydra.query.Node"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6246,7 +6246,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6260,8 +6260,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The subject of the pattern"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The subject of the pattern"}}}],
                           "body": {"variable": "hydra.query.Node"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6420,8 +6420,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6431,7 +6431,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6445,8 +6445,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
                           "body": {"variable": "hydra.query.Path"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6605,8 +6605,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The object of the pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The object of the pattern"}}}],
                         "body": {"variable": "hydra.query.Node"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6616,7 +6616,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6630,8 +6630,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The object of the pattern"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The object of the pattern"}}}],
                           "body": {"variable": "hydra.query.Node"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6674,7 +6674,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6725,7 +6725,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {

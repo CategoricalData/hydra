@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Annotate an expression with an optional comment using Annotated[]"}}}],
             "body": {
@@ -61,7 +61,7 @@
                 "domain": {"maybe": {"literal": {"string": {}}}},
                 "parameter": "mcomment"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -76,8 +76,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Annotate a statement with an optional comment"}}}],
             "body": {
               "lambda": {
@@ -118,7 +118,7 @@
                 "domain": {"maybe": {"literal": {"string": {}}}},
                 "parameter": "mcomment"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -133,8 +133,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Create an assignment statement from name and annotated rhs"}}}],
             "body": {
@@ -173,7 +173,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -188,8 +188,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create an assignment statement from name and expression"}}}],
             "body": {
               "lambda": {
@@ -210,7 +210,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -225,8 +225,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a cast expression: cast(type, expr)"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a cast expression: cast(type, expr)"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -249,7 +249,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "pytype"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -264,8 +264,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a comment statement (triple-quoted string)"}}}],
             "body": {
               "lambda": {
@@ -279,7 +279,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"literal": {"string": {}}}}},
@@ -291,8 +291,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Decode a Comparison to a Primary if possible"}}}],
             "body": {
               "lambda": {
@@ -307,7 +307,7 @@
                             "function": {
                               "project": {"field": "rhs", "typeName": "hydra.python.syntax.Comparison"}}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}},
+                          "body": {"list": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}},
                           "variables": []}},
                       {
                         "name": "lhs",
@@ -317,7 +317,7 @@
                             "function": {
                               "project": {"field": "lhs", "typeName": "hydra.python.syntax.Comparison"}}}},
                         "type": {
-                          "type": {"variable": "hydra.python.syntax.BitwiseOr"},
+                          "body": {"variable": "hydra.python.syntax.BitwiseOr"},
                           "variables": []}},
                       {
                         "name": "orLhs",
@@ -327,7 +327,7 @@
                             "function": {
                               "project": {"field": "lhs", "typeName": "hydra.python.syntax.BitwiseOr"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}},
+                          "body": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}},
                           "variables": []}},
                       {
                         "name": "orRhs",
@@ -337,7 +337,7 @@
                             "function": {
                               "project": {"field": "rhs", "typeName": "hydra.python.syntax.BitwiseOr"}}}},
                         "type": {
-                          "type": {"variable": "hydra.python.syntax.BitwiseXor"},
+                          "body": {"variable": "hydra.python.syntax.BitwiseXor"},
                           "variables": []}},
                       {
                         "name": "xorLhs",
@@ -347,7 +347,7 @@
                             "function": {
                               "project": {"field": "lhs", "typeName": "hydra.python.syntax.BitwiseXor"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.python.syntax.BitwiseXor"}},
+                          "body": {"maybe": {"variable": "hydra.python.syntax.BitwiseXor"}},
                           "variables": []}},
                       {
                         "name": "xorRhs",
@@ -357,7 +357,7 @@
                             "function": {
                               "project": {"field": "rhs", "typeName": "hydra.python.syntax.BitwiseXor"}}}},
                         "type": {
-                          "type": {"variable": "hydra.python.syntax.BitwiseAnd"},
+                          "body": {"variable": "hydra.python.syntax.BitwiseAnd"},
                           "variables": []}},
                       {
                         "name": "andLhs",
@@ -367,7 +367,7 @@
                             "function": {
                               "project": {"field": "lhs", "typeName": "hydra.python.syntax.BitwiseAnd"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.python.syntax.BitwiseAnd"}},
+                          "body": {"maybe": {"variable": "hydra.python.syntax.BitwiseAnd"}},
                           "variables": []}},
                       {
                         "name": "andRhs",
@@ -377,7 +377,7 @@
                             "function": {
                               "project": {"field": "rhs", "typeName": "hydra.python.syntax.BitwiseAnd"}}}},
                         "type": {
-                          "type": {"variable": "hydra.python.syntax.ShiftExpression"},
+                          "body": {"variable": "hydra.python.syntax.ShiftExpression"},
                           "variables": []}},
                       {
                         "name": "shiftLhs",
@@ -387,7 +387,7 @@
                             "function": {
                               "project": {"field": "lhs", "typeName": "hydra.python.syntax.ShiftExpression"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.python.syntax.ShiftLhs"}},
+                          "body": {"maybe": {"variable": "hydra.python.syntax.ShiftLhs"}},
                           "variables": []}},
                       {
                         "name": "shiftRhs",
@@ -396,7 +396,7 @@
                             "argument": {"variable": "andRhs"},
                             "function": {
                               "project": {"field": "rhs", "typeName": "hydra.python.syntax.ShiftExpression"}}}},
-                        "type": {"type": {"variable": "hydra.python.syntax.Sum"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.python.syntax.Sum"}, "variables": []}},
                       {
                         "name": "sumLhs",
                         "term": {
@@ -404,7 +404,7 @@
                             "argument": {"variable": "shiftRhs"},
                             "function": {"project": {"field": "lhs", "typeName": "hydra.python.syntax.Sum"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.python.syntax.SumLhs"}},
+                          "body": {"maybe": {"variable": "hydra.python.syntax.SumLhs"}},
                           "variables": []}},
                       {
                         "name": "sumRhs",
@@ -412,7 +412,7 @@
                           "application": {
                             "argument": {"variable": "shiftRhs"},
                             "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Sum"}}}},
-                        "type": {"type": {"variable": "hydra.python.syntax.Term"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.python.syntax.Term"}, "variables": []}},
                       {
                         "name": "termLhs",
                         "term": {
@@ -420,7 +420,7 @@
                             "argument": {"variable": "sumRhs"},
                             "function": {"project": {"field": "lhs", "typeName": "hydra.python.syntax.Term"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.python.syntax.TermLhs"}},
+                          "body": {"maybe": {"variable": "hydra.python.syntax.TermLhs"}},
                           "variables": []}},
                       {
                         "name": "termRhs",
@@ -428,7 +428,7 @@
                           "application": {
                             "argument": {"variable": "sumRhs"},
                             "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Term"}}}},
-                        "type": {"type": {"variable": "hydra.python.syntax.Factor"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.python.syntax.Factor"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -603,7 +603,7 @@
                 "domain": {"variable": "hydra.python.syntax.Comparison"},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.python.syntax.Primary"}},
               "domain": {"variable": "hydra.python.syntax.Comparison"}}},
@@ -615,8 +615,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Decode a Conjunction to a Primary if possible"}}}],
             "body": {
               "lambda": {
@@ -630,7 +630,7 @@
                             "argument": {"variable": "c"},
                             "function": {"unwrap": "hydra.python.syntax.Conjunction"}}},
                         "type": {
-                          "type": {"list": {"variable": "hydra.python.syntax.Inversion"}},
+                          "body": {"list": {"variable": "hydra.python.syntax.Inversion"}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -691,7 +691,7 @@
                 "domain": {"variable": "hydra.python.syntax.Conjunction"},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.python.syntax.Primary"}},
               "domain": {"variable": "hydra.python.syntax.Conjunction"}}},
@@ -703,8 +703,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Decode an Expression to a Primary if possible"}}}],
             "body": {
               "lambda": {
@@ -728,7 +728,7 @@
                                             "argument": {"variable": "disj"},
                                             "function": {"unwrap": "hydra.python.syntax.Disjunction"}}},
                                         "type": {
-                                          "type": {"list": {"variable": "hydra.python.syntax.Conjunction"}},
+                                          "body": {"list": {"variable": "hydra.python.syntax.Conjunction"}},
                                           "variables": []}}],
                                     "body": {
                                       "application": {
@@ -796,7 +796,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.python.syntax.Primary"}},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -808,8 +808,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Decode an Inversion to a Primary if possible"}}}],
             "body": {
               "lambda": {
@@ -837,7 +837,7 @@
                 "domain": {"variable": "hydra.python.syntax.Inversion"},
                 "parameter": "i"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.python.syntax.Primary"}},
               "domain": {"variable": "hydra.python.syntax.Inversion"}}},
@@ -849,8 +849,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Decode a Power to a Primary if possible"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Decode a Power to a Primary if possible"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -863,7 +863,7 @@
                             "argument": {"variable": "p"},
                             "function": {"project": {"field": "lhs", "typeName": "hydra.python.syntax.Power"}}}},
                         "type": {
-                          "type": {"variable": "hydra.python.syntax.AwaitPrimary"},
+                          "body": {"variable": "hydra.python.syntax.AwaitPrimary"},
                           "variables": []}},
                       {
                         "name": "await",
@@ -872,7 +872,7 @@
                             "argument": {"variable": "lhs"},
                             "function": {
                               "project": {"field": "await", "typeName": "hydra.python.syntax.AwaitPrimary"}}}},
-                        "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "prim",
                         "term": {
@@ -880,7 +880,7 @@
                             "argument": {"variable": "lhs"},
                             "function": {
                               "project": {"field": "primary", "typeName": "hydra.python.syntax.AwaitPrimary"}}}},
-                        "type": {"type": {"variable": "hydra.python.syntax.Primary"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.python.syntax.Primary"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"maybe": {"variable": "prim"}},
@@ -900,7 +900,7 @@
                 "domain": {"variable": "hydra.python.syntax.Power"},
                 "parameter": "p"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.python.syntax.Primary"}},
               "domain": {"variable": "hydra.python.syntax.Power"}}},
@@ -912,8 +912,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a dotted assignment statement: obj.attr = expr"}}}],
             "body": {
               "lambda": {
@@ -953,7 +953,7 @@
                                           "typeName": "hydra.python.syntax.TargetWithStarAtom"}}},
                                     "typeName": "hydra.python.syntax.StarTarget"}},
                                 "type": {
-                                  "type": {"variable": "hydra.python.syntax.StarTarget"},
+                                  "body": {"variable": "hydra.python.syntax.StarTarget"},
                                   "variables": []}}],
                             "body": {
                               "application": {
@@ -987,7 +987,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "obj"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1005,8 +1005,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a double-quoted string expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a double-quoted string expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1022,7 +1022,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"literal": {"string": {}}}}},
@@ -1034,8 +1034,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Find all namespaces referenced by a list of definitions, plus the core namespace"}}}],
             "body": {
@@ -1051,7 +1051,7 @@
                               "wrap": {
                                 "body": {"literal": {"string": "hydra.core"}},
                                 "typeName": "hydra.packaging.Namespace"}},
-                            "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                            "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                           {
                             "name": "namespaces",
                             "term": {
@@ -1068,7 +1068,7 @@
                                             "body": {"variable": "hydra.analysis.namespacesForDefinitions"},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}}}}}},
                             "type": {
-                              "type": {
+                              "body": {
                                 "application": {
                                   "argument": {"variable": "hydra.python.syntax.DottedName"},
                                   "function": {"variable": "hydra.packaging.Namespaces"}}},
@@ -1169,7 +1169,7 @@
                 "domain": {"variable": "hydra.packaging.Namespace"},
                 "parameter": "focusNs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1187,8 +1187,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a function call expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a function call expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1216,7 +1216,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "func"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1309,7 +1309,7 @@
                   "typeName": "hydra.python.syntax.ParamNoDefaultParameters"}}},
             "typeName": "hydra.python.syntax.Parameters"}},
         "type": {
-          "type": {"variable": "hydra.python.syntax.Parameters"},
+          "body": {"variable": "hydra.python.syntax.Parameters"},
           "variables": []}}},
     {
       "term": {
@@ -1318,8 +1318,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create an indented block with optional comment"}}}],
             "body": {
               "lambda": {
@@ -1359,7 +1359,7 @@
                                                 "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
                                             "type": {"literal": {"string": {}}}}}}}}}}},
                             "type": {
-                              "type": {"list": {"variable": "hydra.python.syntax.Statement"}},
+                              "body": {"list": {"variable": "hydra.python.syntax.Statement"}},
                               "variables": []}},
                           {
                             "name": "groups",
@@ -1396,7 +1396,7 @@
                                         "body": {"variable": "hydra.lib.lists.filter"},
                                         "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}}}}}},
                             "type": {
-                              "type": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}},
+                              "body": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}},
                               "variables": []}}],
                         "body": {
                           "application": {
@@ -1450,7 +1450,7 @@
                 "domain": {"maybe": {"literal": {"string": {}}}},
                 "parameter": "mcomment"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1465,8 +1465,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a name with parameters"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a name with parameters"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1486,7 +1486,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "pyName"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1501,8 +1501,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a NewType statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a NewType statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1557,7 +1557,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1575,8 +1575,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Build an or-expression from multiple primaries"}}}],
             "body": {
               "lambda": {
@@ -1725,7 +1725,7 @@
                             "domain": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}},
                             "parameter": "prev"}},
                         "type": {
-                          "type": {
+                          "body": {
                             "function": {
                               "codomain": {
                                 "function": {
@@ -1749,7 +1749,7 @@
                 "domain": {"list": {"variable": "hydra.python.syntax.Primary"}},
                 "parameter": "prims"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"list": {"variable": "hydra.python.syntax.Primary"}}}},
@@ -1761,8 +1761,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a primary with parameters (subscript)"}}}],
             "body": {
               "lambda": {
@@ -1783,7 +1783,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1798,8 +1798,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Primary with expression slices"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Primary with expression slices"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1901,7 +1901,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1916,8 +1916,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Combine a Primary with a PrimaryRhs"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Combine a Primary with a PrimaryRhs"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1938,7 +1938,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1953,8 +1953,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Primary with slices"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Primary with slices"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1985,7 +1985,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2003,8 +2003,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Project a field from an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Project a field from an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2033,7 +2033,7 @@
                                             "typeName": "hydra.python.syntax.Group"}}},
                                       "typeName": "hydra.python.syntax.Atom"}}},
                                 "typeName": "hydra.python.syntax.Primary"}},
-                            "type": {"type": {"variable": "hydra.python.syntax.Primary"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.python.syntax.Primary"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -2058,7 +2058,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "exp"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2073,8 +2073,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an Assignment to a Statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an Assignment to a Statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2087,7 +2087,7 @@
                 "domain": {"variable": "hydra.python.syntax.Assignment"},
                 "parameter": "a"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"variable": "hydra.python.syntax.Assignment"}}},
@@ -2099,8 +2099,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an Atom to an Expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an Atom to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2113,7 +2113,7 @@
                 "domain": {"variable": "hydra.python.syntax.Atom"},
                 "parameter": "atom"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"variable": "hydra.python.syntax.Atom"}}},
@@ -2125,8 +2125,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a BitwiseOr to a Conjunction"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a BitwiseOr to a Conjunction"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2153,7 +2153,7 @@
                 "domain": {"variable": "hydra.python.syntax.BitwiseOr"},
                 "parameter": "bor"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Conjunction"},
               "domain": {"variable": "hydra.python.syntax.BitwiseOr"}}},
@@ -2165,8 +2165,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a BitwiseOr to an Expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a BitwiseOr to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2179,7 +2179,7 @@
                 "domain": {"variable": "hydra.python.syntax.BitwiseOr"},
                 "parameter": "bor"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"variable": "hydra.python.syntax.BitwiseOr"}}},
@@ -2191,8 +2191,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a ClassDefinition to a Statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a ClassDefinition to a Statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2207,7 +2207,7 @@
                 "domain": {"variable": "hydra.python.syntax.ClassDefinition"},
                 "parameter": "cd"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"variable": "hydra.python.syntax.ClassDefinition"}}},
@@ -2219,8 +2219,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a ClosedPattern to Patterns"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a ClosedPattern to Patterns"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2240,7 +2240,7 @@
                 "domain": {"variable": "hydra.python.syntax.ClosedPattern"},
                 "parameter": "p"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Patterns"},
               "domain": {"variable": "hydra.python.syntax.ClosedPattern"}}},
@@ -2252,8 +2252,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Conjunction to an Expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Conjunction to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2268,7 +2268,7 @@
                 "domain": {"variable": "hydra.python.syntax.Conjunction"},
                 "parameter": "conj"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"variable": "hydra.python.syntax.Conjunction"}}},
@@ -2280,8 +2280,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert an Expression to a BitwiseOr, wrapping in parens if needed"}}}],
             "body": {
@@ -2404,7 +2404,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.BitwiseOr"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2416,8 +2416,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert an Expression to a Disjunction, wrapping in parens if needed"}}}],
             "body": {
@@ -2466,7 +2466,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Disjunction"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2478,8 +2478,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an Expression to an AnnotatedRhs"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an Expression to an AnnotatedRhs"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2496,7 +2496,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "expr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.AnnotatedRhs"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2508,8 +2508,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary"}}}],
             "body": {
@@ -2558,7 +2558,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Primary"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2570,8 +2570,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert an Expression to a SimpleStatement (as star expressions)"}}}],
             "body": {
@@ -2590,7 +2590,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "expr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.SimpleStatement"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2602,8 +2602,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an Expression to a Slice"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an Expression to a Slice"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2618,7 +2618,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "expr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Slice"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2630,8 +2630,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert an Expression to a StarNamedExpression"}}}],
             "body": {
               "lambda": {
@@ -2647,7 +2647,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "expr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.StarNamedExpression"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2659,8 +2659,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an Expression to a Statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an Expression to a Statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2673,7 +2673,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "expr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -2685,8 +2685,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a list of Expressions to Args"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a list of Expressions to Args"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2730,7 +2730,7 @@
                 "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
                 "parameter": "exprs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Args"},
               "domain": {"list": {"variable": "hydra.python.syntax.Expression"}}}},
@@ -2742,8 +2742,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Python list from expressions"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Python list from expressions"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2765,7 +2765,7 @@
                 "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
                 "parameter": "exprs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.List"},
               "domain": {"list": {"variable": "hydra.python.syntax.Expression"}}}},
@@ -2777,8 +2777,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Name to an Expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Name to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2791,7 +2791,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"variable": "hydra.python.syntax.Name"}}},
@@ -2803,8 +2803,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Name to a NamedExpression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Name to a NamedExpression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2819,7 +2819,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.NamedExpression"},
               "domain": {"variable": "hydra.python.syntax.Name"}}},
@@ -2831,8 +2831,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Name to a Primary (simple atom)"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Name to a Primary (simple atom)"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2847,7 +2847,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Primary"},
               "domain": {"variable": "hydra.python.syntax.Name"}}},
@@ -2859,8 +2859,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Name to a StarTarget"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Name to a StarTarget"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2880,7 +2880,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.StarTarget"},
               "domain": {"variable": "hydra.python.syntax.Name"}}},
@@ -2892,8 +2892,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Name to a TypeParameter"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Name to a TypeParameter"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2921,7 +2921,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.TypeParameter"},
               "domain": {"variable": "hydra.python.syntax.Name"}}},
@@ -2933,13 +2933,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "The Python None value as a Name"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "The Python None value as a Name"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "None"}},
                 "typeName": "hydra.python.syntax.Name"}}}},
-        "type": {"type": {"variable": "hydra.python.syntax.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.python.syntax.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.python.utils.pyPrimaryToPyBitwiseOr",
@@ -2947,8 +2947,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Primary to a BitwiseOr"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Primary to a BitwiseOr"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3049,7 +3049,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.BitwiseOr"},
               "domain": {"variable": "hydra.python.syntax.Primary"}}},
@@ -3061,8 +3061,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Primary to a BitwiseXor"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Primary to a BitwiseXor"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3151,7 +3151,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.BitwiseXor"},
               "domain": {"variable": "hydra.python.syntax.Primary"}}},
@@ -3163,8 +3163,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Primary to a Conjunction"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Primary to a Conjunction"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3177,7 +3177,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Conjunction"},
               "domain": {"variable": "hydra.python.syntax.Primary"}}},
@@ -3189,8 +3189,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Primary to an Expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Primary to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3203,7 +3203,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"variable": "hydra.python.syntax.Primary"}}},
@@ -3215,8 +3215,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Primary to a Slice"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Primary to a Slice"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3229,7 +3229,7 @@
                 "domain": {"variable": "hydra.python.syntax.Primary"},
                 "parameter": "prim"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Slice"},
               "domain": {"variable": "hydra.python.syntax.Primary"}}},
@@ -3241,8 +3241,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a SimpleStatement to a Statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a SimpleStatement to a Statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3252,7 +3252,7 @@
                 "domain": {"variable": "hydra.python.syntax.SimpleStatement"},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"variable": "hydra.python.syntax.SimpleStatement"}}},
@@ -3264,8 +3264,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a raise AssertionError statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a raise AssertionError statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3320,7 +3320,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "msg"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"literal": {"string": {}}}}},
@@ -3332,8 +3332,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a raise TypeError statement"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a raise TypeError statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3388,7 +3388,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "msg"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"literal": {"string": {}}}}},
@@ -3400,8 +3400,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a return statement with a single expression"}}}],
             "body": {
               "lambda": {
@@ -3425,7 +3425,7 @@
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "expr"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
@@ -3487,7 +3487,7 @@
                   "typeName": "hydra.python.syntax.ParamNoDefaultParameters"}}},
             "typeName": "hydra.python.syntax.Parameters"}},
         "type": {
-          "type": {"variable": "hydra.python.syntax.Parameters"},
+          "body": {"variable": "hydra.python.syntax.Parameters"},
           "variables": []}}},
     {
       "term": {
@@ -3574,7 +3574,7 @@
                   "typeName": "hydra.python.syntax.ParamNoDefaultParameters"}}},
             "typeName": "hydra.python.syntax.Parameters"}},
         "type": {
-          "type": {"variable": "hydra.python.syntax.Parameters"},
+          "body": {"variable": "hydra.python.syntax.Parameters"},
           "variables": []}}},
     {
       "term": {
@@ -3583,8 +3583,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a single-quoted string expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a single-quoted string expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3600,7 +3600,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"literal": {"string": {}}}}},
@@ -3612,8 +3612,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a string expression with a given quote style"}}}],
             "body": {
               "lambda": {
@@ -3638,7 +3638,7 @@
                 "domain": {"variable": "hydra.python.syntax.QuoteStyle"},
                 "parameter": "style"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3653,15 +3653,15 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Current target Python version for code generation"}}}],
             "body": {
               "inject": {
                 "field": {"name": "python310", "term": {"unit": {}}},
                 "typeName": "hydra.python.environment.PythonVersion"}}}},
         "type": {
-          "type": {"variable": "hydra.python.environment.PythonVersion"},
+          "body": {"variable": "hydra.python.environment.PythonVersion"},
           "variables": []}}},
     {
       "term": {
@@ -3670,8 +3670,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a triple-quoted string expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a triple-quoted string expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3687,7 +3687,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Expression"},
               "domain": {"literal": {"string": {}}}}},
@@ -3699,8 +3699,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate a type alias statement using PEP 695 syntax (Python 3.12+)"}}}],
             "body": {
@@ -3741,7 +3741,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3764,8 +3764,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = \"TypeExpression\""}}}],
                 "body": {
@@ -3792,7 +3792,7 @@
                                                 "function": {"variable": "hydra.serialization.printExpr"}}},
                                             "function": {"variable": "hydra.python.utils.doubleQuotedString"}}},
                                         "type": {
-                                          "type": {"variable": "hydra.python.syntax.Expression"},
+                                          "body": {"variable": "hydra.python.syntax.Expression"},
                                           "variables": []}}],
                                     "body": {
                                       "application": {
@@ -3979,7 +3979,7 @@
                     "parameter": "name"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4000,8 +4000,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Generate a subscriptable union class for Python 3.10"}}}],
             "body": {
               "lambda": {
@@ -4020,7 +4020,7 @@
                                       "application": {
                                         "argument": {"variable": "name"},
                                         "function": {"unwrap": "hydra.python.syntax.Name"}}},
-                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -4042,7 +4042,7 @@
                                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                             "typeName": "hydra.python.syntax.Name"}},
-                                        "type": {"type": {"variable": "hydra.python.syntax.Name"}, "variables": []}}],
+                                        "type": {"body": {"variable": "hydra.python.syntax.Name"}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -4055,7 +4055,7 @@
                                                     "argument": {"variable": "tyexpr"},
                                                     "function": {"variable": "hydra.python.serde.encodeExpression"}}},
                                                 "function": {"variable": "hydra.serialization.printExpr"}}},
-                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -4222,7 +4222,7 @@
                                                         "typeName": "hydra.python.syntax.SimpleStatement"}},
                                                     "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"}}},
                                                 "type": {
-                                                  "type": {"variable": "hydra.python.syntax.Statement"},
+                                                  "body": {"variable": "hydra.python.syntax.Statement"},
                                                   "variables": []}}],
                                             "body": {
                                               "let": {
@@ -4294,7 +4294,7 @@
                                                               "typeName": "hydra.python.syntax.CompoundStatement"}}},
                                                         "typeName": "hydra.python.syntax.Statement"}},
                                                     "type": {
-                                                      "type": {"variable": "hydra.python.syntax.Statement"},
+                                                      "body": {"variable": "hydra.python.syntax.Statement"},
                                                       "variables": []}}],
                                                 "body": {
                                                   "let": {
@@ -4482,7 +4482,7 @@
                                                                 "typeName": "hydra.python.syntax.ClassDefinition"}},
                                                             "function": {"variable": "hydra.python.utils.pyClassDefinitionToPyStatement"}}},
                                                         "type": {
-                                                          "type": {"variable": "hydra.python.syntax.Statement"},
+                                                          "body": {"variable": "hydra.python.syntax.Statement"},
                                                           "variables": []}}],
                                                     "body": {
                                                       "let": {
@@ -4497,7 +4497,7 @@
                                                                     "function": {"variable": "hydra.python.utils.tripleQuotedString"}}},
                                                                 "function": {"variable": "hydra.python.utils.pyExpressionToPyStatement"}}},
                                                             "type": {
-                                                              "type": {"variable": "hydra.python.syntax.Statement"},
+                                                              "body": {"variable": "hydra.python.syntax.Statement"},
                                                               "variables": []}}],
                                                         "body": {
                                                           "let": {
@@ -4523,7 +4523,7 @@
                                                                                         "typeName": "hydra.python.syntax.SimpleStatement"}},
                                                                                     "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"}}},
                                                                                 "type": {
-                                                                                  "type": {"variable": "hydra.python.syntax.Statement"},
+                                                                                  "body": {"variable": "hydra.python.syntax.Statement"},
                                                                                   "variables": []}}],
                                                                             "body": {
                                                                               "list": [
@@ -4543,7 +4543,7 @@
                                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                 "type": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}}}}}}}}}},
                                                                 "type": {
-                                                                  "type": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                  "body": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}},
                                                                   "variables": []}}],
                                                             "body": {
                                                               "let": {
@@ -4699,7 +4699,7 @@
                                                                                       "typeName": "hydra.python.syntax.Disjunction"}}},
                                                                                 "typeName": "hydra.python.syntax.Expression"}}}],
                                                                         "typeName": "hydra.python.syntax.Kwarg"}},
-                                                                    "type": {"type": {"variable": "hydra.python.syntax.Kwarg"}, "variables": []}}],
+                                                                    "type": {"body": {"variable": "hydra.python.syntax.Kwarg"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
@@ -4769,7 +4769,7 @@
                                                                                 "argument": {"variable": "mcomment"},
                                                                                 "function": {"variable": "hydra.python.utils.annotatedStatement"}}}}},
                                                                         "type": {
-                                                                          "type": {"variable": "hydra.python.syntax.Statement"},
+                                                                          "body": {"variable": "hydra.python.syntax.Statement"},
                                                                           "variables": []}}],
                                                                     "body": {"list": [{"variable": "metaClass"}, {"variable": "unionClass"}]}}}}}}}}}}}}}}}}}}}}},
                             "domain": {"list": {"variable": "hydra.python.syntax.Statement"}},
@@ -4781,7 +4781,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4802,8 +4802,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants"}}}],
             "body": {
@@ -4817,7 +4817,7 @@
                           "application": {
                             "argument": {"variable": "className"},
                             "function": {"unwrap": "hydra.python.syntax.Name"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -4853,7 +4853,7 @@
                                         "typeName": "hydra.python.syntax.Name"}},
                                     "function": {"variable": "hydra.python.utils.assignmentStatement"}}}}},
                             "type": {
-                              "type": {"variable": "hydra.python.syntax.Statement"},
+                              "body": {"variable": "hydra.python.syntax.Statement"},
                               "variables": []}}],
                         "body": {
                           "let": {
@@ -5179,7 +5179,7 @@
                                         "typeName": "hydra.python.syntax.SimpleStatement"}},
                                     "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"}}},
                                 "type": {
-                                  "type": {"variable": "hydra.python.syntax.Statement"},
+                                  "body": {"variable": "hydra.python.syntax.Statement"},
                                   "variables": []}}],
                             "body": {
                               "let": {
@@ -5251,7 +5251,7 @@
                                               "typeName": "hydra.python.syntax.CompoundStatement"}}},
                                         "typeName": "hydra.python.syntax.Statement"}},
                                     "type": {
-                                      "type": {"variable": "hydra.python.syntax.Statement"},
+                                      "body": {"variable": "hydra.python.syntax.Statement"},
                                       "variables": []}}],
                                 "body": {
                                   "let": {
@@ -5302,7 +5302,7 @@
                                                 "typeName": "hydra.python.syntax.SimpleStatement"}},
                                             "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"}}},
                                         "type": {
-                                          "type": {"variable": "hydra.python.syntax.Statement"},
+                                          "body": {"variable": "hydra.python.syntax.Statement"},
                                           "variables": []}}],
                                     "body": {
                                       "let": {
@@ -5374,7 +5374,7 @@
                                                       "typeName": "hydra.python.syntax.CompoundStatement"}}},
                                                 "typeName": "hydra.python.syntax.Statement"}},
                                             "type": {
-                                              "type": {"variable": "hydra.python.syntax.Statement"},
+                                              "body": {"variable": "hydra.python.syntax.Statement"},
                                               "variables": []}}],
                                         "body": {
                                           "list": [
@@ -5384,7 +5384,7 @@
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "className"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.python.syntax.Statement"}},
               "domain": {"variable": "hydra.python.syntax.Name"}}},

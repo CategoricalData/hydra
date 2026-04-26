@@ -80,7 +80,7 @@ constructModule namespaces mod defs cx g =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->
                       let name = Packaging.typeDefinitionName v0
-                          typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
+                          typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
                       in (toTypeDeclarationsFrom namespaces name typ cx g)
                     Packaging.DefinitionTerm v0 -> Eithers.bind (toDataDeclaration namespaces v0 cx g) (\d -> Right [
                       d])
@@ -530,9 +530,9 @@ gatherMetadata defs =
                 Packaging.DefinitionTerm v0 ->
                   let term = Packaging.termDefinitionTerm v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeType ts)) (Packaging.termDefinitionType v0))
+                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Packaging.termDefinitionType v0))
                 Packaging.DefinitionType v0 ->
-                  let typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
+                  let typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
       in (Lists.foldl addDef emptyMetadata defs)
 
@@ -675,7 +675,7 @@ toDataDeclaration namespaces def cx g =
                           schemeClasses = typeSchemeConstraintsToClassMap schemeConstraints
                       in (Eithers.bind (Annotations.getTypeClasses cx g (Strip.removeTypesFromTerm term)) (\explicitClasses ->
                         let combinedClasses = Maps.union schemeClasses explicitClasses
-                            schemeType = Maybes.maybe Core.TypeUnit (\ts -> Core.typeSchemeType ts) typ
+                            schemeType = Maybes.maybe Core.TypeUnit (\ts -> Core.typeSchemeBody ts) typ
                         in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses schemeType cx g) (\htype ->
                           let decl =
                                   Syntax.DeclarationTypedBinding (Syntax.TypedBinding {

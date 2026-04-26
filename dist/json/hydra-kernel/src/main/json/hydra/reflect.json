@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "All elimination variants (constructors), in a canonical order (legacy)"}}}],
             "body": {
@@ -26,7 +26,7 @@
                     "field": {"name": "wrap", "term": {"unit": {}}},
                     "typeName": "hydra.variants.EliminationVariant"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.variants.EliminationVariant"}},
+          "body": {"list": {"variable": "hydra.variants.EliminationVariant"}},
           "variables": []}}},
     {
       "term": {
@@ -35,8 +35,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the precision of a given floating-point type"}}}],
             "body": {
               "cases": {
@@ -73,7 +73,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.FloatType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.util.Precision"},
               "domain": {"variable": "hydra.core.FloatType"}}},
@@ -85,8 +85,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "All floating-point types in a canonical order"}}}],
             "body": {
               "list": [
@@ -103,7 +103,7 @@
                     "field": {"name": "float64", "term": {"unit": {}}},
                     "typeName": "hydra.core.FloatType"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.core.FloatType"}},
+          "body": {"list": {"variable": "hydra.core.FloatType"}},
           "variables": []}}},
     {
       "term": {
@@ -112,8 +112,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the float type for a given floating-point value"}}}],
             "body": {
               "cases": {
@@ -150,7 +150,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.FloatValue"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.FloatType"},
               "domain": {"variable": "hydra.core.FloatValue"}}},
@@ -162,8 +162,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "All function variants (constructors), in a canonical order (legacy)"}}}],
             "body": {
@@ -177,7 +177,7 @@
                     "field": {"name": "lambda", "term": {"unit": {}}},
                     "typeName": "hydra.variants.FunctionVariant"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.variants.FunctionVariant"}},
+          "body": {"list": {"variable": "hydra.variants.FunctionVariant"}},
           "variables": []}}},
     {
       "term": {
@@ -186,8 +186,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Find whether a given integer type is signed (true) or unsigned (false)"}}}],
             "body": {
@@ -258,7 +258,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.IntegerType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"boolean": {}}},
               "domain": {"variable": "hydra.core.IntegerType"}}},
@@ -270,8 +270,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Find the precision of a given integer type"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Find the precision of a given integer type"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -367,7 +367,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.IntegerType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.util.Precision"},
               "domain": {"variable": "hydra.core.IntegerType"}}},
@@ -379,8 +379,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "All integer types, in a canonical order"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "All integer types, in a canonical order"}}}],
             "body": {
               "list": [
                 {
@@ -420,7 +420,7 @@
                     "field": {"name": "uint64", "term": {"unit": {}}},
                     "typeName": "hydra.core.IntegerType"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.core.IntegerType"}},
+          "body": {"list": {"variable": "hydra.core.IntegerType"}},
           "variables": []}}},
     {
       "term": {
@@ -429,8 +429,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the integer type for a given integer value"}}}],
             "body": {
               "cases": {
@@ -527,7 +527,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.IntegerValue"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.IntegerType"},
               "domain": {"variable": "hydra.core.IntegerValue"}}},
@@ -539,8 +539,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the literal type for a given literal value"}}}],
             "body": {
               "cases": {
@@ -627,7 +627,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.Literal"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.LiteralType"},
               "domain": {"variable": "hydra.core.Literal"}}},
@@ -639,8 +639,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Find the literal type inject (constructor) for a given literal value"}}}],
             "body": {
@@ -708,7 +708,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.LiteralType"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.LiteralVariant"},
               "domain": {"variable": "hydra.core.LiteralType"}}},
@@ -720,8 +720,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "All literal types, in a canonical order"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "All literal types, in a canonical order"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -791,7 +791,7 @@
                     "body": {"variable": "hydra.lib.lists.concat"},
                     "type": {"variable": "hydra.core.LiteralType"}}}}}}},
         "type": {
-          "type": {"list": {"variable": "hydra.core.LiteralType"}},
+          "body": {"list": {"variable": "hydra.core.LiteralType"}},
           "variables": []}}},
     {
       "term": {
@@ -800,8 +800,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Find the literal inject (constructor) for a given literal value"}}}],
             "body": {
@@ -816,7 +816,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "arg_"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.LiteralVariant"},
               "domain": {"variable": "hydra.core.Literal"}}},
@@ -828,8 +828,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "All literal variants, in a canonical order"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "All literal variants, in a canonical order"}}}],
             "body": {
               "list": [
                 {
@@ -857,7 +857,7 @@
                     "field": {"name": "string", "term": {"unit": {}}},
                     "typeName": "hydra.variants.LiteralVariant"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.variants.LiteralVariant"}},
+          "body": {"list": {"variable": "hydra.variants.LiteralVariant"}},
           "variables": []}}},
     {
       "term": {
@@ -866,8 +866,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the term inject (constructor) for a given term"}}}],
             "body": {
               "cases": {
@@ -1093,7 +1093,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.Term"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.TermVariant"},
               "domain": {"variable": "hydra.core.Term"}}},
@@ -1105,8 +1105,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "All term (expression) variants, in a canonical order"}}}],
             "body": {
               "list": [
@@ -1195,7 +1195,7 @@
                     "field": {"name": "wrap", "term": {"unit": {}}},
                     "typeName": "hydra.variants.TermVariant"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.variants.TermVariant"}},
+          "body": {"list": {"variable": "hydra.variants.TermVariant"}},
           "variables": []}}},
     {
       "term": {
@@ -1204,8 +1204,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the type inject (constructor) for a given type"}}}],
             "body": {
               "cases": {
@@ -1382,7 +1382,7 @@
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.Type"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.TypeVariant"},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -1394,8 +1394,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "All type variants, in a canonical order"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "All type variants, in a canonical order"}}}],
             "body": {
               "list": [
                 {
@@ -1467,7 +1467,7 @@
                     "field": {"name": "void", "term": {"unit": {}}},
                     "typeName": "hydra.variants.TypeVariant"}}]}}},
         "type": {
-          "type": {"list": {"variable": "hydra.variants.TypeVariant"}},
+          "body": {"list": {"variable": "hydra.variants.TypeVariant"}},
           "variables": []}}}],
   "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",
   "namespace": "hydra.reflect",

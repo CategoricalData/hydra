@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract an array from a JSON value, failing if the value is not an array"}}}],
             "body": {
@@ -27,7 +27,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "els"}}},
+                                        "body": {"either": {"right": {"variable": "els"}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"list": {"variable": "hydra.json.model.Value"}}}},
                                 "domain": {"list": {"variable": "hydra.json.model.Value"}},
@@ -38,7 +38,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -69,7 +69,7 @@
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "value"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -84,8 +84,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract a number from a JSON value, failing if the value is not a number"}}}],
             "body": {
@@ -104,7 +104,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "d"}}},
+                                        "body": {"either": {"right": {"variable": "d"}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"literal": {"decimal": {}}}}},
                                 "domain": {"literal": {"decimal": {}}},
@@ -115,7 +115,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -146,7 +146,7 @@
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "value"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -161,8 +161,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract an object from a JSON value, failing if the value is not an object"}}}],
             "body": {
@@ -181,7 +181,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "m"}}},
+                                        "body": {"either": {"right": {"variable": "m"}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {
                                       "map": {
@@ -198,7 +198,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -232,7 +232,7 @@
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "value"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -250,8 +250,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Extract a string from a JSON value, failing if the value is not a string"}}}],
             "body": {
@@ -270,7 +270,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@right": {"variable": "s"}}},
+                                        "body": {"either": {"right": {"variable": "s"}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"literal": {"string": {}}}}},
                                 "domain": {"literal": {"string": {}}},
@@ -281,7 +281,7 @@
                               "typeApplication": {
                                 "body": {
                                   "either": {
-                                    "@left": {
+                                    "left": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -312,7 +312,7 @@
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "value"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "either": {
@@ -331,8 +331,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Look up an optional field in a JSON object"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Look up an optional field in a JSON object"}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -357,14 +357,14 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
                   "codomain": {"maybe": {"variable": "t1"}},
                   "domain": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0", "t1"]}}},
     {
       "term": {
@@ -375,8 +375,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Look up an optional array field in a JSON object"}}}],
                 "body": {
                   "lambda": {
@@ -434,7 +434,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "typeApplication": {
                                                     "body": {"maybe": null},
                                                     "type": {"list": {"variable": "hydra.json.model.Value"}}}}}},
@@ -459,8 +459,7 @@
                     "parameter": "fname"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -473,6 +472,7 @@
                       "keys": {"variable": "t0"},
                       "values": {"variable": "hydra.json.model.Value"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -483,8 +483,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Look up an optional string field in a JSON object"}}}],
                 "body": {
                   "lambda": {
@@ -542,7 +542,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"maybe": {"literal": {"string": {}}}}}},
@@ -565,8 +565,7 @@
                     "parameter": "fname"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -579,6 +578,7 @@
                       "keys": {"variable": "t0"},
                       "values": {"variable": "hydra.json.model.Value"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -591,8 +591,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Look up a required field in a JSON object, failing if not found"}}}],
                     "body": {
@@ -622,7 +622,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"either": {"@right": {"variable": "value"}}},
+                                                "body": {"either": {"right": {"variable": "value"}}},
                                                 "type": {"literal": {"string": {}}}}},
                                             "type": {"variable": "t1"}}},
                                         "domain": {"variable": "t1"},
@@ -635,7 +635,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "application": {
                                                         "argument": {
                                                           "list": [
@@ -666,8 +666,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -675,6 +674,7 @@
                     "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t1"}}},
                   "domain": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0", "t1"]}}},
     {
       "term": {
@@ -685,8 +685,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Look up a required array field in a JSON object"}}}],
                 "body": {
                   "lambda": {
@@ -729,8 +729,7 @@
                     "parameter": "fname"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -743,6 +742,7 @@
                       "keys": {"variable": "t0"},
                       "values": {"variable": "hydra.json.model.Value"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -753,8 +753,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Look up a required number field in a JSON object"}}}],
                 "body": {
                   "lambda": {
@@ -797,8 +797,7 @@
                     "parameter": "fname"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -811,6 +810,7 @@
                       "keys": {"variable": "t0"},
                       "values": {"variable": "hydra.json.model.Value"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -821,8 +821,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Look up a required string field in a JSON object"}}}],
                 "body": {
                   "lambda": {
@@ -865,8 +865,7 @@
                     "parameter": "fname"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -879,6 +878,7 @@
                       "keys": {"variable": "t0"},
                       "values": {"variable": "hydra.json.model.Value"}}}}},
               "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -889,8 +889,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Show a JSON value as a string (placeholder implementation)"}}}],
                 "body": {
@@ -900,7 +900,7 @@
                     "parameter": "value"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "t0"}}},

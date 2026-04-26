@@ -147,7 +147,7 @@ checkTypeSubst cx tx subst =
           vars = Sets.fromList (Maps.keys s)
           suspectVars = Sets.intersection vars (Sets.fromList (Maps.keys (Graph.graphSchemaTypes tx)))
           isNominal =
-                  \ts -> case (Strip.deannotateType (Core.typeSchemeType ts)) of
+                  \ts -> case (Strip.deannotateType (Core.typeSchemeBody ts)) of
                     Core.TypeRecord _ -> True
                     Core.TypeUnion _ -> True
                     Core.TypeWrap _ -> True
@@ -336,7 +336,7 @@ typeOfInjection cx tx typeArgs injection =
         let schemaType = Pairs.first schemaResult
             cx2 = Pairs.second schemaResult
             svars = Core.typeSchemeVariables schemaType
-            sbody = Core.typeSchemeType schemaType
+            sbody = Core.typeSchemeBody schemaType
         in (Eithers.bind (ExtractCore.unionType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp -> Right (Resolution.nominalApplication tname typeArgs, cx2))))))
 
 -- | Reconstruct the type of a lambda function (Either/Context version)
@@ -546,7 +546,7 @@ typeOfProjection cx tx typeArgs p =
         let schemaType = Pairs.first schemaResult
             cx2 = Pairs.second schemaResult
             svars = Core.typeSchemeVariables schemaType
-            sbody = Core.typeSchemeType schemaType
+            sbody = Core.typeSchemeBody schemaType
         in (Eithers.bind (ExtractCore.recordType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp ->
           let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
               sftyp = Substitution.substInType subst ftyp
@@ -644,7 +644,7 @@ typeOfUnwrap cx tx typeArgs tname =
       let schemaType = Pairs.first schemaResult
           cx2 = Pairs.second schemaResult
           svars = Core.typeSchemeVariables schemaType
-          sbody = Core.typeSchemeType schemaType
+          sbody = Core.typeSchemeBody schemaType
       in (Eithers.bind (ExtractCore.wrappedType tname sbody) (\wrapped ->
         let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
             swrapped = Substitution.substInType subst wrapped

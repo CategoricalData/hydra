@@ -225,7 +225,7 @@
                                                                                                                   {
                                                                                                                     "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "body",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
@@ -686,7 +686,7 @@
                                                                                                                   {
                                                                                                                     "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "body",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
@@ -1080,7 +1080,7 @@
                                                                                                               {
                                                                                                                 "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "body",
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
@@ -1299,7 +1299,7 @@
                                                                                                                   {
                                                                                                                     "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "body",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
@@ -1665,7 +1665,7 @@
                                                                                                               {
                                                                                                                 "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "body",
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
@@ -1884,7 +1884,7 @@
                                                                                                                   {
                                                                                                                     "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "body",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
@@ -2464,7 +2464,7 @@
                                                                                                                   {
                                                                                                                     "wrap": {"body": {"literal": {"string": "t2"}}, "typeName": "hydra.core.Name"}}]}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "body",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
@@ -2868,7 +2868,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for code generation operations such as inferModules and inferModulesGiven",
   "namespace": "hydra.test.generation",
   "termDependencies": ["hydra.codegen", "hydra.show.core", "hydra.test.testGraph"],

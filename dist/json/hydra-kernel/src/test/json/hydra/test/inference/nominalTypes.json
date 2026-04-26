@@ -35,7 +35,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.nominalTypes.testGroupForCaseStatements",
@@ -264,7 +264,7 @@
                                                       "term": {
                                                         "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                     {
-                                                      "name": "type",
+                                                      "name": "body",
                                                       "term": {
                                                         "inject": {
                                                           "field": {
@@ -568,7 +568,7 @@
                                                       "term": {
                                                         "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                     {
-                                                      "name": "type",
+                                                      "name": "body",
                                                       "term": {
                                                         "inject": {
                                                           "field": {
@@ -624,7 +624,7 @@
                                     "typeName": "hydra.testing.Tag"}}]}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.nominalTypes.testGroupForProjections",
@@ -782,7 +782,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -973,7 +973,7 @@
                                                                       {
                                                                         "wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}]}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -1209,7 +1209,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -1253,7 +1253,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.nominalTypes.testGroupForRecords",
@@ -1463,7 +1463,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -1672,7 +1672,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -1922,7 +1922,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -2194,7 +2194,7 @@
                                                                       {
                                                                         "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}]}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -2372,7 +2372,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -2652,7 +2652,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -2942,7 +2942,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -3200,7 +3200,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -3517,7 +3517,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -3809,7 +3809,7 @@
                                                                       {
                                                                         "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}]}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -4161,7 +4161,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -4453,7 +4453,7 @@
                                                                       {
                                                                         "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}]}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -4534,7 +4534,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.nominalTypes.testGroupForVariants",
@@ -4714,7 +4714,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -4886,7 +4886,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -5082,7 +5082,7 @@
                                                                       {
                                                                         "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}]}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -5276,7 +5276,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -5546,7 +5546,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -5615,7 +5615,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.nominalTypes.testGroupForWrappers",
@@ -5780,7 +5780,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -5957,7 +5957,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -6143,7 +6143,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -6344,7 +6344,7 @@
                                                                   "term": {
                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                 {
-                                                                  "name": "type",
+                                                                  "name": "body",
                                                                   "term": {
                                                                     "inject": {
                                                                       "field": {
@@ -6388,7 +6388,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Inference tests for nominal types",
   "namespace": "hydra.test.inference.nominalTypes",
   "termDependencies": ["hydra.test.testGraph"],

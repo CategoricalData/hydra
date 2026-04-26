@@ -3234,7 +3234,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for hydra.lib.maybes primitives",
   "namespace": "hydra.test.lib.maybes",
   "termDependencies": ["hydra.reduction", "hydra.show.core"],

@@ -4,7 +4,7 @@
       "type": {
         "name": "hydra.go.syntax.AnnotatedDeclaration",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "comment", "type": {"literal": {"string": {}}}},
               {
@@ -15,7 +15,7 @@
       "type": {
         "name": "hydra.go.syntax.Module",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "package",
@@ -30,36 +30,36 @@
     {
       "type": {
         "name": "hydra.go.syntax.Identifier",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.IntLit",
         "type": {
-          "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
+          "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FloatLit",
         "type": {
-          "type": {"wrap": {"literal": {"float": {"float64": {}}}}},
+          "body": {"wrap": {"literal": {"float": {"float64": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImaginaryLit",
         "type": {
-          "type": {"wrap": {"literal": {"float": {"float64": {}}}}},
+          "body": {"wrap": {"literal": {"float": {"float64": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.RuneLit",
         "type": {
-          "type": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+          "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.StringLit",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "raw", "type": {"variable": "hydra.go.syntax.RawStringLit"}},
               {
@@ -69,16 +69,16 @@
     {
       "type": {
         "name": "hydra.go.syntax.RawStringLit",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.InterpretedStringLit",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SourceFile",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "package",
@@ -94,19 +94,19 @@
       "type": {
         "name": "hydra.go.syntax.PackageClause",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImportDecl",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.ImportSpec"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.ImportSpec"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImportSpec",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "alias",
@@ -117,7 +117,7 @@
       "type": {
         "name": "hydra.go.syntax.ImportAlias",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "dot", "type": {"unit": {}}},
               {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}}]},
@@ -126,13 +126,13 @@
       "type": {
         "name": "hydra.go.syntax.ImportPath",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Declaration",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "const", "type": {"variable": "hydra.go.syntax.ConstDecl"}},
               {"name": "type", "type": {"variable": "hydra.go.syntax.TypeDecl"}},
@@ -142,7 +142,7 @@
       "type": {
         "name": "hydra.go.syntax.TopLevelDecl",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "declaration",
@@ -156,13 +156,13 @@
       "type": {
         "name": "hydra.go.syntax.ConstDecl",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.ConstSpec"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.ConstSpec"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ConstSpec",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "names",
@@ -178,13 +178,13 @@
       "type": {
         "name": "hydra.go.syntax.VarDecl",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.VarSpec"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.VarSpec"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.VarSpec",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "names",
@@ -200,7 +200,7 @@
       "type": {
         "name": "hydra.go.syntax.ShortVarDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "names",
@@ -213,13 +213,13 @@
       "type": {
         "name": "hydra.go.syntax.TypeDecl",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.TypeSpec"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.TypeSpec"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeSpec",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "alias", "type": {"variable": "hydra.go.syntax.AliasDecl"}},
               {
@@ -230,7 +230,7 @@
       "type": {
         "name": "hydra.go.syntax.AliasDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
               {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
@@ -239,7 +239,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeDef",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
               {
@@ -251,13 +251,13 @@
       "type": {
         "name": "hydra.go.syntax.TypeParameters",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.TypeParamDecl"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.TypeParamDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeParamDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "names",
@@ -270,13 +270,13 @@
       "type": {
         "name": "hydra.go.syntax.TypeConstraint",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.TypeElem"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.TypeElem"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FunctionDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
               {
@@ -293,13 +293,13 @@
       "type": {
         "name": "hydra.go.syntax.FunctionBody",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Block"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Block"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.MethodDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "receiver", "type": {"variable": "hydra.go.syntax.Receiver"}},
               {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
@@ -314,7 +314,7 @@
       "type": {
         "name": "hydra.go.syntax.Receiver",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -325,7 +325,7 @@
       "type": {
         "name": "hydra.go.syntax.Type",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.go.syntax.TypeName"}},
               {"name": "literal", "type": {"variable": "hydra.go.syntax.TypeLit"}},
@@ -335,7 +335,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeName",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -348,7 +348,7 @@
       "type": {
         "name": "hydra.go.syntax.QualifiedIdent",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "package",
@@ -359,7 +359,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeLit",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.go.syntax.ArrayType"}},
               {"name": "struct", "type": {"variable": "hydra.go.syntax.StructType"}},
@@ -382,7 +382,7 @@
       "type": {
         "name": "hydra.go.syntax.ArrayType",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "length", "type": {"variable": "hydra.go.syntax.Expression"}},
               {"name": "element", "type": {"variable": "hydra.go.syntax.Type"}}]},
@@ -391,19 +391,19 @@
       "type": {
         "name": "hydra.go.syntax.SliceType",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Type"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.StructType",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.FieldDecl"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.FieldDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FieldDecl",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "named", "type": {"variable": "hydra.go.syntax.NamedField"}},
               {
@@ -414,7 +414,7 @@
       "type": {
         "name": "hydra.go.syntax.NamedField",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "names",
@@ -428,7 +428,7 @@
       "type": {
         "name": "hydra.go.syntax.EmbeddedField",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "pointer", "type": {"literal": {"boolean": {}}}},
               {"name": "type", "type": {"variable": "hydra.go.syntax.TypeName"}},
@@ -440,25 +440,25 @@
       "type": {
         "name": "hydra.go.syntax.Tag",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.PointerType",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Type"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FunctionType",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Signature"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Signature"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Signature",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "parameters",
@@ -471,7 +471,7 @@
       "type": {
         "name": "hydra.go.syntax.Result",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "parameters",
@@ -482,13 +482,13 @@
       "type": {
         "name": "hydra.go.syntax.Parameters",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.ParameterDecl"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.ParameterDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ParameterDecl",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "names",
@@ -500,13 +500,13 @@
       "type": {
         "name": "hydra.go.syntax.InterfaceType",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.InterfaceElem"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.InterfaceElem"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.InterfaceElem",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "method", "type": {"variable": "hydra.go.syntax.MethodElem"}},
               {"name": "type", "type": {"variable": "hydra.go.syntax.TypeElem"}}]},
@@ -515,7 +515,7 @@
       "type": {
         "name": "hydra.go.syntax.MethodElem",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
               {
@@ -526,13 +526,13 @@
       "type": {
         "name": "hydra.go.syntax.TypeElem",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.TypeTerm"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.TypeTerm"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeTerm",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "underlying", "type": {"literal": {"boolean": {}}}},
               {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
@@ -541,7 +541,7 @@
       "type": {
         "name": "hydra.go.syntax.MapType",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.go.syntax.Type"}},
               {"name": "value", "type": {"variable": "hydra.go.syntax.Type"}}]},
@@ -550,7 +550,7 @@
       "type": {
         "name": "hydra.go.syntax.ChannelType",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "direction",
@@ -561,7 +561,7 @@
       "type": {
         "name": "hydra.go.syntax.ChannelDirection",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "bidirectional", "type": {"unit": {}}},
               {"name": "send", "type": {"unit": {}}},
@@ -571,7 +571,7 @@
       "type": {
         "name": "hydra.go.syntax.Expression",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "unary", "type": {"variable": "hydra.go.syntax.UnaryExpr"}},
               {"name": "binary", "type": {"variable": "hydra.go.syntax.BinaryExpr"}}]},
@@ -580,7 +580,7 @@
       "type": {
         "name": "hydra.go.syntax.UnaryExpr",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "primary",
@@ -591,7 +591,7 @@
       "type": {
         "name": "hydra.go.syntax.UnaryOperation",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "op", "type": {"variable": "hydra.go.syntax.UnaryOp"}},
               {"name": "operand", "type": {"variable": "hydra.go.syntax.UnaryExpr"}}]},
@@ -600,7 +600,7 @@
       "type": {
         "name": "hydra.go.syntax.BinaryExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.go.syntax.Expression"}},
               {"name": "op", "type": {"variable": "hydra.go.syntax.BinaryOp"}},
@@ -610,7 +610,7 @@
       "type": {
         "name": "hydra.go.syntax.BinaryOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "or", "type": {"unit": {}}},
               {"name": "and", "type": {"unit": {}}},
@@ -636,7 +636,7 @@
       "type": {
         "name": "hydra.go.syntax.PrimaryExpr",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "operand", "type": {"variable": "hydra.go.syntax.Operand"}},
               {
@@ -659,7 +659,7 @@
       "type": {
         "name": "hydra.go.syntax.SelectorExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
               {
@@ -670,7 +670,7 @@
       "type": {
         "name": "hydra.go.syntax.IndexExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
               {"name": "index", "type": {"variable": "hydra.go.syntax.Expression"}}]},
@@ -679,7 +679,7 @@
       "type": {
         "name": "hydra.go.syntax.SliceExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
               {"name": "slice", "type": {"variable": "hydra.go.syntax.Slice"}}]},
@@ -688,7 +688,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeAssertionExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
               {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
@@ -697,7 +697,7 @@
       "type": {
         "name": "hydra.go.syntax.CallExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "function",
@@ -710,7 +710,7 @@
       "type": {
         "name": "hydra.go.syntax.Operand",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.go.syntax.Literal"}},
               {"name": "name", "type": {"variable": "hydra.go.syntax.OperandName"}},
@@ -720,7 +720,7 @@
       "type": {
         "name": "hydra.go.syntax.OperandName",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -733,7 +733,7 @@
       "type": {
         "name": "hydra.go.syntax.Literal",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "basic", "type": {"variable": "hydra.go.syntax.BasicLit"}},
               {
@@ -747,7 +747,7 @@
       "type": {
         "name": "hydra.go.syntax.BasicLit",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "int", "type": {"variable": "hydra.go.syntax.IntLit"}},
               {"name": "float", "type": {"variable": "hydra.go.syntax.FloatLit"}},
@@ -761,7 +761,7 @@
       "type": {
         "name": "hydra.go.syntax.CompositeLit",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.go.syntax.LiteralType"}},
               {
@@ -772,7 +772,7 @@
       "type": {
         "name": "hydra.go.syntax.LiteralType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "struct", "type": {"variable": "hydra.go.syntax.StructType"}},
               {"name": "array", "type": {"variable": "hydra.go.syntax.ArrayType"}},
@@ -787,19 +787,19 @@
       "type": {
         "name": "hydra.go.syntax.LiteralValue",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.KeyedElement"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.KeyedElement"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ElementList",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.KeyedElement"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.KeyedElement"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.KeyedElement",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "key",
@@ -810,7 +810,7 @@
       "type": {
         "name": "hydra.go.syntax.Key",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "field", "type": {"variable": "hydra.go.syntax.Identifier"}},
               {
@@ -824,7 +824,7 @@
       "type": {
         "name": "hydra.go.syntax.Element",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "expression",
@@ -837,7 +837,7 @@
       "type": {
         "name": "hydra.go.syntax.FunctionLit",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "signature",
@@ -848,19 +848,19 @@
       "type": {
         "name": "hydra.go.syntax.Selector",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Index",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.Expression"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Expression"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Slice",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "simple",
@@ -871,7 +871,7 @@
       "type": {
         "name": "hydra.go.syntax.SimpleSlice",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "low",
@@ -884,7 +884,7 @@
       "type": {
         "name": "hydra.go.syntax.FullSlice",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "low",
@@ -896,13 +896,13 @@
       "type": {
         "name": "hydra.go.syntax.TypeAssertion",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Type"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Arguments",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "typeArg",
@@ -916,7 +916,7 @@
       "type": {
         "name": "hydra.go.syntax.MethodExpr",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "receiver", "type": {"variable": "hydra.go.syntax.Type"}},
               {"name": "method", "type": {"variable": "hydra.go.syntax.Identifier"}}]},
@@ -925,7 +925,7 @@
       "type": {
         "name": "hydra.go.syntax.Conversion",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}},
               {
@@ -936,7 +936,7 @@
       "type": {
         "name": "hydra.go.syntax.Statement",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "declaration",
@@ -966,7 +966,7 @@
       "type": {
         "name": "hydra.go.syntax.SimpleStmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "empty", "type": {"variable": "hydra.go.syntax.EmptyStmt"}},
               {
@@ -984,12 +984,12 @@
     {
       "type": {
         "name": "hydra.go.syntax.EmptyStmt",
-        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.LabeledStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "label", "type": {"variable": "hydra.go.syntax.Identifier"}},
               {
@@ -1000,13 +1000,13 @@
       "type": {
         "name": "hydra.go.syntax.ExpressionStmt",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SendStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "channel",
@@ -1017,7 +1017,7 @@
       "type": {
         "name": "hydra.go.syntax.IncDecStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "expression",
@@ -1028,7 +1028,7 @@
       "type": {
         "name": "hydra.go.syntax.Assignment",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "lhs",
@@ -1042,7 +1042,7 @@
       "type": {
         "name": "hydra.go.syntax.AssignOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "simple", "type": {"unit": {}}},
               {"name": "add", "type": {"variable": "hydra.go.syntax.AddOp"}},
@@ -1052,7 +1052,7 @@
       "type": {
         "name": "hydra.go.syntax.IfStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "init",
@@ -1069,7 +1069,7 @@
       "type": {
         "name": "hydra.go.syntax.ElseClause",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "if", "type": {"variable": "hydra.go.syntax.IfStmt"}},
               {"name": "block", "type": {"variable": "hydra.go.syntax.Block"}}]},
@@ -1078,7 +1078,7 @@
       "type": {
         "name": "hydra.go.syntax.SwitchStmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "expression",
@@ -1091,7 +1091,7 @@
       "type": {
         "name": "hydra.go.syntax.ExprSwitchStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "init",
@@ -1107,7 +1107,7 @@
       "type": {
         "name": "hydra.go.syntax.ExprCaseClause",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "case",
@@ -1120,7 +1120,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeSwitchStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "init",
@@ -1136,7 +1136,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeSwitchGuard",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -1149,7 +1149,7 @@
       "type": {
         "name": "hydra.go.syntax.TypeCaseClause",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "case",
@@ -1162,7 +1162,7 @@
       "type": {
         "name": "hydra.go.syntax.ForStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "clause",
@@ -1173,7 +1173,7 @@
       "type": {
         "name": "hydra.go.syntax.ForClauseOrRange",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "condition",
@@ -1185,7 +1185,7 @@
       "type": {
         "name": "hydra.go.syntax.ForClause",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "init",
@@ -1201,7 +1201,7 @@
       "type": {
         "name": "hydra.go.syntax.RangeClause",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "vars",
@@ -1214,7 +1214,7 @@
       "type": {
         "name": "hydra.go.syntax.RangeVars",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "assign",
@@ -1227,19 +1227,19 @@
       "type": {
         "name": "hydra.go.syntax.GoStmt",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SelectStmt",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.CommClause"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.CommClause"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.CommClause",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "case", "type": {"variable": "hydra.go.syntax.CommCase"}},
               {
@@ -1250,7 +1250,7 @@
       "type": {
         "name": "hydra.go.syntax.CommCase",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "send", "type": {"variable": "hydra.go.syntax.SendStmt"}},
               {
@@ -1262,7 +1262,7 @@
       "type": {
         "name": "hydra.go.syntax.ReceiveCase",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "vars",
@@ -1275,47 +1275,47 @@
       "type": {
         "name": "hydra.go.syntax.ReturnStmt",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.Expression"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Expression"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.BreakStmt",
         "type": {
-          "type": {"wrap": {"maybe": {"variable": "hydra.go.syntax.Identifier"}}},
+          "body": {"wrap": {"maybe": {"variable": "hydra.go.syntax.Identifier"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ContinueStmt",
         "type": {
-          "type": {"wrap": {"maybe": {"variable": "hydra.go.syntax.Identifier"}}},
+          "body": {"wrap": {"maybe": {"variable": "hydra.go.syntax.Identifier"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.GotoStmt",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FallthroughStmt",
-        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.DeferStmt",
         "type": {
-          "type": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
+          "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Block",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.go.syntax.Statement"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Statement"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.UnaryOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "plus", "type": {"unit": {}}},
               {"name": "minus", "type": {"unit": {}}},
@@ -1329,7 +1329,7 @@
       "type": {
         "name": "hydra.go.syntax.MulOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "multiply", "type": {"unit": {}}},
               {"name": "divide", "type": {"unit": {}}},
@@ -1343,7 +1343,7 @@
       "type": {
         "name": "hydra.go.syntax.AddOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "add", "type": {"unit": {}}},
               {"name": "subtract", "type": {"unit": {}}},
@@ -1354,7 +1354,7 @@
       "type": {
         "name": "hydra.go.syntax.RelOp",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "equal", "type": {"unit": {}}},
               {"name": "notEqual", "type": {"unit": {}}},

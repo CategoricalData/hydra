@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a bigfloat to a floating-point value of a given type (note: lossy)"}}}],
             "body": {
@@ -67,7 +67,7 @@
                 "domain": {"variable": "hydra.core.FloatType"},
                 "parameter": "ft"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -82,8 +82,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a bigint to an integer value of a given type (note: lossy)"}}}],
             "body": {
@@ -232,7 +232,7 @@
                 "domain": {"variable": "hydra.core.IntegerType"},
                 "parameter": "it"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -247,8 +247,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a floating-point value of any precision to a bigfloat"}}}],
             "body": {
@@ -283,7 +283,7 @@
                         "parameter": "f64"}}}],
                 "typeName": "hydra.core.FloatValue"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"float": {"bigfloat": {}}}},
               "domain": {"variable": "hydra.core.FloatValue"}}},
@@ -295,8 +295,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert an integer value of any precision to a bigint"}}}],
             "body": {
               "cases": {
@@ -390,7 +390,7 @@
                         "parameter": "ui64"}}}],
                 "typeName": "hydra.core.IntegerValue"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"integer": {"bigint": {}}}},
               "domain": {"variable": "hydra.core.IntegerValue"}}},

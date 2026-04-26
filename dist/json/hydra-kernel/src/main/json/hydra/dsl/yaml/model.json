@@ -47,8 +47,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
                     "body": {
                       "map": {
                         "keys": {"variable": "hydra.yaml.model.Node"},
@@ -56,7 +56,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -68,8 +68,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.yaml.model.Node"},
@@ -123,13 +123,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A scalar value"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A scalar value"}}}],
                     "body": {"variable": "hydra.yaml.model.Scalar"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -141,8 +141,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A scalar value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A scalar value"}}}],
                       "body": {"variable": "hydra.yaml.model.Scalar"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -193,13 +193,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A sequence of nodes"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A sequence of nodes"}}}],
                     "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -211,8 +211,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A sequence of nodes"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A sequence of nodes"}}}],
                       "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -263,13 +263,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Represents a true/false value"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Represents a true/false value"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -281,8 +281,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Represents a true/false value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Represents a true/false value"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -333,15 +333,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
                     "body": {"literal": {"decimal": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -353,8 +353,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
                       "body": {"literal": {"decimal": {}}}}},
@@ -407,13 +407,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
                     "body": {"literal": {"float": {"bigfloat": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -425,8 +425,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
                       "body": {"literal": {"float": {"bigfloat": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -477,14 +477,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
                     "body": {"literal": {"integer": {"bigint": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -496,8 +496,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -542,7 +542,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.yaml.model.Scalar"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -594,13 +594,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A string value"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A string value"}}}],
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -612,8 +612,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A string value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A string value"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],

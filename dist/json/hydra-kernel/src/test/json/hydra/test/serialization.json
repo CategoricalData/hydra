@@ -19,7 +19,7 @@
                   "application": {
                     "argument": {"literal": {"string": "->"}},
                     "function": {"variable": "hydra.serialization.op"}}}}}}},
-        "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.serialization.gtOp",
@@ -36,7 +36,7 @@
                   "application": {
                     "argument": {"literal": {"string": ">"}},
                     "function": {"variable": "hydra.serialization.op"}}}}}}},
-        "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.serialization.plusOp",
@@ -53,7 +53,7 @@
                   "application": {
                     "argument": {"literal": {"string": "+"}},
                     "function": {"variable": "hydra.serialization.op"}}}}}}},
-        "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.serialization.multOp",
@@ -70,7 +70,7 @@
                   "application": {
                     "argument": {"literal": {"string": "*"}},
                     "function": {"variable": "hydra.serialization.op"}}}}}}},
-        "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.serialization.lambdaOp",
@@ -90,7 +90,7 @@
                   "application": {
                     "argument": {"literal": {"string": "->"}},
                     "function": {"variable": "hydra.serialization.op"}}}}}}},
-        "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.serialization.caseOp",
@@ -107,7 +107,7 @@
                   "application": {
                     "argument": {"literal": {"string": "->"}},
                     "function": {"variable": "hydra.serialization.op"}}}}}}},
-        "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.serialization.allTests",
@@ -1311,7 +1311,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for AST serialization",
   "namespace": "hydra.test.serialization",
   "termDependencies": ["hydra.serialization"],

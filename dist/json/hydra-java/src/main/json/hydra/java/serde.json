@@ -198,7 +198,7 @@
             "domain": {"literal": {"integer": {"int32": {}}}},
             "parameter": "c"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -237,7 +237,7 @@
             "domain": {"literal": {"string": {}}},
             "parameter": "s"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},
@@ -290,7 +290,7 @@
             "domain": {"literal": {"integer": {"int32": {}}}},
             "parameter": "n"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -367,7 +367,7 @@
             "domain": {"literal": {"string": {}}},
             "parameter": "s"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},
@@ -403,7 +403,7 @@
                                   "application": {
                                     "argument": {"variable": "n"},
                                     "function": {"variable": "hydra.lib.math.sub"}}}}},
-                            "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -431,7 +431,7 @@
                                       "application": {
                                         "argument": {"literal": {"integer": {"int32": 55296}}},
                                         "function": {"variable": "hydra.lib.math.add"}}}}},
-                                "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -459,7 +459,7 @@
                                           "application": {
                                             "argument": {"literal": {"integer": {"int32": 56320}}},
                                             "function": {"variable": "hydra.lib.math.add"}}}}},
-                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -504,7 +504,7 @@
             "domain": {"literal": {"integer": {"int32": {}}}},
             "parameter": "n"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -535,7 +535,7 @@
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                 "body": {
                   "let": {
                     "bindings": [
@@ -557,7 +557,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -579,7 +579,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                            "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -601,7 +601,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                             "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -623,7 +623,7 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -645,7 +645,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -670,7 +670,7 @@
             "domain": {"literal": {"integer": {"int32": {}}}},
             "parameter": "n"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -682,8 +682,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Sanitize a string for use in a Java comment"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Sanitize a string for use in a Java comment"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -714,7 +714,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},
@@ -726,8 +726,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a single-line Java comment"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a single-line Java comment"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -746,7 +746,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"literal": {"string": {}}}}},
@@ -758,8 +758,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Wrap an expression with optional Javadoc comments"}}}],
             "body": {
               "lambda": {
@@ -845,7 +845,7 @@
                 "domain": {"maybe": {"literal": {"string": {}}}},
                 "parameter": "mc"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -877,7 +877,7 @@
             "domain": {"variable": "hydra.java.syntax.AdditionalBound"},
             "parameter": "ab"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.AdditionalBound"}}},
@@ -975,7 +975,7 @@
             "domain": {"variable": "hydra.java.syntax.AdditiveExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.AdditiveExpression"}}},
@@ -1007,7 +1007,7 @@
             "domain": {"variable": "hydra.java.syntax.AmbiguousName"},
             "parameter": "an"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.AmbiguousName"}}},
@@ -1042,7 +1042,7 @@
             "domain": {"variable": "hydra.java.syntax.AndExpression"},
             "parameter": "ae"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.AndExpression"}}},
@@ -1065,7 +1065,7 @@
             "domain": {"variable": "hydra.java.syntax.AnnotatedIdentifier"},
             "parameter": "ai"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.AnnotatedIdentifier"}}},
@@ -1115,7 +1115,7 @@
             "domain": {"variable": "hydra.java.syntax.Annotation"},
             "parameter": "ann"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Annotation"}}},
@@ -1135,7 +1135,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -1155,7 +1155,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -1188,7 +1188,7 @@
                                             "field": "type",
                                             "typeName": "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"}}}},
                                     "type": {
-                                      "type": {"variable": "hydra.java.syntax.PrimitiveTypeWithAnnotations"},
+                                      "body": {"variable": "hydra.java.syntax.PrimitiveTypeWithAnnotations"},
                                       "variables": []}},
                                   {
                                     "name": "ai",
@@ -1200,7 +1200,7 @@
                                             "field": "array",
                                             "typeName": "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"}}}},
                                     "type": {
-                                      "type": {"variable": "hydra.java.syntax.ArrayInitializer"},
+                                      "body": {"variable": "hydra.java.syntax.ArrayInitializer"},
                                       "variables": []}}],
                                 "body": {
                                   "application": {
@@ -1267,7 +1267,7 @@
             "domain": {"variable": "hydra.java.syntax.ArrayCreationExpression"},
             "parameter": "ace"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ArrayCreationExpression"}}},
@@ -1287,7 +1287,7 @@
                         "argument": {"variable": "ai"},
                         "function": {"unwrap": "hydra.java.syntax.ArrayInitializer"}}},
                     "type": {
-                      "type": {
+                      "body": {
                         "list": {"list": {"variable": "hydra.java.syntax.VariableInitializer"}}},
                       "variables": []}}],
                 "body": {
@@ -1389,7 +1389,7 @@
             "domain": {"variable": "hydra.java.syntax.ArrayInitializer"},
             "parameter": "ai"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ArrayInitializer"}}},
@@ -1409,7 +1409,7 @@
                         "argument": {"variable": "at"},
                         "function": {
                           "project": {"field": "dims", "typeName": "hydra.java.syntax.ArrayType"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.Dims"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.Dims"}, "variables": []}},
                   {
                     "name": "variant",
                     "term": {
@@ -1418,7 +1418,7 @@
                         "function": {
                           "project": {"field": "variant", "typeName": "hydra.java.syntax.ArrayType"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ArrayType_Variant"},
+                      "body": {"variable": "hydra.java.syntax.ArrayType_Variant"},
                       "variables": []}},
                   {
                     "name": "varExpr",
@@ -1459,7 +1459,7 @@
                                     "domain": {"variable": "hydra.java.syntax.TypeVariable"},
                                     "parameter": "tv"}}}],
                             "typeName": "hydra.java.syntax.ArrayType_Variant"}}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -1473,7 +1473,7 @@
             "domain": {"variable": "hydra.java.syntax.ArrayType"},
             "parameter": "at"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ArrayType"}}},
@@ -1493,7 +1493,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -1514,7 +1514,7 @@
                         "function": {
                           "project": {"field": "lhs", "typeName": "hydra.java.syntax.Assignment"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.LeftHandSide"},
+                      "body": {"variable": "hydra.java.syntax.LeftHandSide"},
                       "variables": []}},
                   {
                     "name": "op",
@@ -1524,7 +1524,7 @@
                         "function": {
                           "project": {"field": "op", "typeName": "hydra.java.syntax.Assignment"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.AssignmentOperator"},
+                      "body": {"variable": "hydra.java.syntax.AssignmentOperator"},
                       "variables": []}},
                   {
                     "name": "rhs",
@@ -1534,7 +1534,7 @@
                         "function": {
                           "project": {"field": "expression", "typeName": "hydra.java.syntax.Assignment"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Expression"},
+                      "body": {"variable": "hydra.java.syntax.Expression"},
                       "variables": []}},
                   {
                     "name": "ctop",
@@ -1629,7 +1629,7 @@
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
                             "typeName": "hydra.java.syntax.AssignmentOperator"}}}},
-                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -1649,7 +1649,7 @@
             "domain": {"variable": "hydra.java.syntax.Assignment"},
             "parameter": "a"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Assignment"}}},
@@ -1689,7 +1689,7 @@
             "domain": {"variable": "hydra.java.syntax.AssignmentExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.AssignmentExpression"}}},
@@ -1727,7 +1727,7 @@
             "domain": {"variable": "hydra.java.syntax.Block"},
             "parameter": "b"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Block"}}},
@@ -1778,7 +1778,7 @@
             "domain": {"variable": "hydra.java.syntax.BlockStatement"},
             "parameter": "s"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.BlockStatement"}}},
@@ -1798,7 +1798,7 @@
                         "argument": {"variable": "bs"},
                         "function": {"unwrap": "hydra.java.syntax.BreakStatement"}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Identifier"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Identifier"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -1835,7 +1835,7 @@
             "domain": {"variable": "hydra.java.syntax.BreakStatement"},
             "parameter": "bs"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.BreakStatement"}}},
@@ -1888,7 +1888,7 @@
             "domain": {"variable": "hydra.java.syntax.CastExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.CastExpression"}}},
@@ -1908,7 +1908,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -1931,7 +1931,7 @@
                             "field": "refAndBounds",
                             "typeName": "hydra.java.syntax.CastExpression_NotPlusMinus"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.CastExpression_RefAndBounds"},
+                      "body": {"variable": "hydra.java.syntax.CastExpression_RefAndBounds"},
                       "variables": []}},
                   {
                     "name": "ex",
@@ -1943,7 +1943,7 @@
                             "field": "expression",
                             "typeName": "hydra.java.syntax.CastExpression_NotPlusMinus"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.UnaryExpression"},
+                      "body": {"variable": "hydra.java.syntax.UnaryExpression"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -1961,7 +1961,7 @@
             "domain": {"variable": "hydra.java.syntax.CastExpression_NotPlusMinus"},
             "parameter": "npm"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.CastExpression_NotPlusMinus"}}},
@@ -1984,7 +1984,7 @@
                             "field": "type",
                             "typeName": "hydra.java.syntax.CastExpression_Primitive"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.PrimitiveTypeWithAnnotations"},
+                      "body": {"variable": "hydra.java.syntax.PrimitiveTypeWithAnnotations"},
                       "variables": []}},
                   {
                     "name": "ex",
@@ -1996,7 +1996,7 @@
                             "field": "expression",
                             "typeName": "hydra.java.syntax.CastExpression_Primitive"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.UnaryExpression"},
+                      "body": {"variable": "hydra.java.syntax.UnaryExpression"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -2022,7 +2022,7 @@
             "domain": {"variable": "hydra.java.syntax.CastExpression_Primitive"},
             "parameter": "cp"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.CastExpression_Primitive"}}},
@@ -2045,7 +2045,7 @@
                             "field": "type",
                             "typeName": "hydra.java.syntax.CastExpression_RefAndBounds"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ReferenceType"},
+                      "body": {"variable": "hydra.java.syntax.ReferenceType"},
                       "variables": []}},
                   {
                     "name": "adds",
@@ -2057,7 +2057,7 @@
                             "field": "bounds",
                             "typeName": "hydra.java.syntax.CastExpression_RefAndBounds"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.AdditionalBound"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.AdditionalBound"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -2122,7 +2122,7 @@
             "domain": {"variable": "hydra.java.syntax.CastExpression_RefAndBounds"},
             "parameter": "rab"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.CastExpression_RefAndBounds"}}},
@@ -2160,7 +2160,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassBody"},
             "parameter": "cb"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassBody"}}},
@@ -2226,7 +2226,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
@@ -2249,7 +2249,7 @@
                             "field": "value",
                             "typeName": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
+                      "body": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
                       "variables": []}},
                   {
                     "name": "mc",
@@ -2260,7 +2260,7 @@
                           "project": {
                             "field": "comments",
                             "typeName": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
-                    "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
+                    "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -2274,7 +2274,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"},
             "parameter": "cbdwc"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
@@ -2317,7 +2317,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassDeclaration"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassDeclaration"}}},
@@ -2340,7 +2340,7 @@
                             "field": "qualifier",
                             "typeName": "hydra.java.syntax.ClassInstanceCreationExpression"}}}},
                     "type": {
-                      "type": {
+                      "body": {
                         "maybe": {
                           "variable": "hydra.java.syntax.ClassInstanceCreationExpression_Qualifier"}},
                       "variables": []}},
@@ -2354,7 +2354,7 @@
                             "field": "expression",
                             "typeName": "hydra.java.syntax.ClassInstanceCreationExpression"}}}},
                     "type": {
-                      "type": {
+                      "body": {
                         "variable": "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"},
                       "variables": []}}],
                 "body": {
@@ -2400,7 +2400,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassInstanceCreationExpression"},
             "parameter": "cice"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassInstanceCreationExpression"}}},
@@ -2441,7 +2441,7 @@
               "variable": "hydra.java.syntax.ClassInstanceCreationExpression_Qualifier"},
             "parameter": "q"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {
@@ -2462,7 +2462,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -2532,7 +2532,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassMemberDeclaration"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassMemberDeclaration"}}},
@@ -2632,7 +2632,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassModifier"}}},
@@ -2672,7 +2672,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassOrInterfaceType"},
             "parameter": "cit"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassOrInterfaceType"}}},
@@ -2695,7 +2695,7 @@
                             "field": "identifiers",
                             "typeName": "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.AnnotatedIdentifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.AnnotatedIdentifier"}},
                       "variables": []}},
                   {
                     "name": "margs",
@@ -2707,7 +2707,7 @@
                             "field": "typeArguments",
                             "typeName": "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -2753,7 +2753,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate"},
             "parameter": "coitti"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate"}}},
@@ -2774,7 +2774,7 @@
                         "function": {
                           "project": {"field": "annotations", "typeName": "hydra.java.syntax.ClassType"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Annotation"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Annotation"}},
                       "variables": []}},
                   {
                     "name": "qual",
@@ -2784,7 +2784,7 @@
                         "function": {
                           "project": {"field": "qualifier", "typeName": "hydra.java.syntax.ClassType"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ClassTypeQualifier"},
+                      "body": {"variable": "hydra.java.syntax.ClassTypeQualifier"},
                       "variables": []}},
                   {
                     "name": "id",
@@ -2794,7 +2794,7 @@
                         "function": {
                           "project": {"field": "identifier", "typeName": "hydra.java.syntax.ClassType"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
+                      "body": {"variable": "hydra.java.syntax.TypeIdentifier"},
                       "variables": []}},
                   {
                     "name": "args",
@@ -2804,7 +2804,7 @@
                         "function": {
                           "project": {"field": "arguments", "typeName": "hydra.java.syntax.ClassType"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
                       "variables": []}},
                   {
                     "name": "qualifiedId",
@@ -2863,7 +2863,7 @@
                                     "domain": {"variable": "hydra.java.syntax.ClassOrInterfaceType"},
                                     "parameter": "cit"}}}],
                             "typeName": "hydra.java.syntax.ClassTypeQualifier"}}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -2969,7 +2969,7 @@
             "domain": {"variable": "hydra.java.syntax.ClassType"},
             "parameter": "ct"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ClassType"}}},
@@ -3002,7 +3002,7 @@
                                             "field": "package",
                                             "typeName": "hydra.java.syntax.OrdinaryCompilationUnit"}}}},
                                     "type": {
-                                      "type": {"maybe": {"variable": "hydra.java.syntax.PackageDeclaration"}},
+                                      "body": {"maybe": {"variable": "hydra.java.syntax.PackageDeclaration"}},
                                       "variables": []}},
                                   {
                                     "name": "imports",
@@ -3014,7 +3014,7 @@
                                             "field": "imports",
                                             "typeName": "hydra.java.syntax.OrdinaryCompilationUnit"}}}},
                                     "type": {
-                                      "type": {"list": {"variable": "hydra.java.syntax.ImportDeclaration"}},
+                                      "body": {"list": {"variable": "hydra.java.syntax.ImportDeclaration"}},
                                       "variables": []}},
                                   {
                                     "name": "types",
@@ -3026,7 +3026,7 @@
                                             "field": "types",
                                             "typeName": "hydra.java.syntax.OrdinaryCompilationUnit"}}}},
                                     "type": {
-                                      "type": {
+                                      "body": {
                                         "list": {"variable": "hydra.java.syntax.TypeDeclarationWithComments"}},
                                       "variables": []}},
                                   {
@@ -3036,7 +3036,7 @@
                                         "application": {
                                           "argument": {"variable": "hydra.constants.warningAutoGeneratedFile"},
                                           "function": {"variable": "hydra.java.serde.singleLineComment"}}}},
-                                    "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                                    "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                                   {
                                     "name": "pkgSec",
                                     "term": {
@@ -3052,7 +3052,7 @@
                                                     "body": {"variable": "hydra.lib.maybes.map"},
                                                     "type": {"variable": "hydra.java.syntax.PackageDeclaration"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                                    "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                                   {
                                     "name": "importsSec",
                                     "term": {
@@ -3091,7 +3091,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                     "type": {"maybe": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                                    "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                                    "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                                   {
                                     "name": "typesSec",
                                     "term": {
@@ -3130,7 +3130,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                     "type": {"maybe": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                                    "type": {"type": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                                    "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -3152,7 +3152,7 @@
             "domain": {"variable": "hydra.java.syntax.CompilationUnit"},
             "parameter": "u"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.CompilationUnit"}}},
@@ -3187,7 +3187,7 @@
             "domain": {"variable": "hydra.java.syntax.ConditionalAndExpression"},
             "parameter": "cae"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConditionalAndExpression"}}},
@@ -3245,7 +3245,7 @@
             "domain": {"variable": "hydra.java.syntax.ConditionalExpression"},
             "parameter": "c"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConditionalExpression"}}},
@@ -3265,7 +3265,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -3285,7 +3285,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -3320,7 +3320,7 @@
             "domain": {"variable": "hydra.java.syntax.ConditionalOrExpression"},
             "parameter": "coe"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConditionalOrExpression"}}},
@@ -3343,7 +3343,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.ConstantDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.ConstantModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.ConstantModifier"}},
                       "variables": []}},
                   {
                     "name": "typ",
@@ -3352,7 +3352,7 @@
                         "argument": {"variable": "cd"},
                         "function": {
                           "project": {"field": "type", "typeName": "hydra.java.syntax.ConstantDeclaration"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.UnannType"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.UnannType"}, "variables": []}},
                   {
                     "name": "vars",
                     "term": {
@@ -3363,7 +3363,7 @@
                             "field": "variables",
                             "typeName": "hydra.java.syntax.ConstantDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.VariableDeclarator"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.VariableDeclarator"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -3446,7 +3446,7 @@
             "domain": {"variable": "hydra.java.syntax.ConstantDeclaration"},
             "parameter": "cd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConstantDeclaration"}}},
@@ -3466,7 +3466,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -3489,7 +3489,7 @@
                             "field": "invocation",
                             "typeName": "hydra.java.syntax.ConstructorBody"}}}},
                     "type": {
-                      "type": {
+                      "body": {
                         "maybe": {"variable": "hydra.java.syntax.ExplicitConstructorInvocation"}},
                       "variables": []}},
                   {
@@ -3502,7 +3502,7 @@
                             "field": "statements",
                             "typeName": "hydra.java.syntax.ConstructorBody"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.BlockStatement"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.BlockStatement"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -3557,7 +3557,7 @@
             "domain": {"variable": "hydra.java.syntax.ConstructorBody"},
             "parameter": "cb"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConstructorBody"}}},
@@ -3580,7 +3580,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.ConstructorDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.ConstructorModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.ConstructorModifier"}},
                       "variables": []}},
                   {
                     "name": "cons",
@@ -3592,7 +3592,7 @@
                             "field": "constructor",
                             "typeName": "hydra.java.syntax.ConstructorDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ConstructorDeclarator"},
+                      "body": {"variable": "hydra.java.syntax.ConstructorDeclarator"},
                       "variables": []}},
                   {
                     "name": "mthrows",
@@ -3604,7 +3604,7 @@
                             "field": "throws",
                             "typeName": "hydra.java.syntax.ConstructorDeclaration"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Throws"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Throws"}},
                       "variables": []}},
                   {
                     "name": "body",
@@ -3616,7 +3616,7 @@
                             "field": "body",
                             "typeName": "hydra.java.syntax.ConstructorDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ConstructorBody"},
+                      "body": {"variable": "hydra.java.syntax.ConstructorBody"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -3694,7 +3694,7 @@
             "domain": {"variable": "hydra.java.syntax.ConstructorDeclaration"},
             "parameter": "cd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConstructorDeclaration"}}},
@@ -3717,7 +3717,7 @@
                             "field": "parameters",
                             "typeName": "hydra.java.syntax.ConstructorDeclarator"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
                       "variables": []}},
                   {
                     "name": "name",
@@ -3729,7 +3729,7 @@
                             "field": "name",
                             "typeName": "hydra.java.syntax.ConstructorDeclarator"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.SimpleTypeName"},
+                      "body": {"variable": "hydra.java.syntax.SimpleTypeName"},
                       "variables": []}},
                   {
                     "name": "fparams",
@@ -3741,7 +3741,7 @@
                             "field": "formalParameters",
                             "typeName": "hydra.java.syntax.ConstructorDeclarator"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.FormalParameter"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.FormalParameter"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -3821,7 +3821,7 @@
             "domain": {"variable": "hydra.java.syntax.ConstructorDeclarator"},
             "parameter": "cd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConstructorDeclarator"}}},
@@ -3881,7 +3881,7 @@
             "domain": {"variable": "hydra.java.syntax.ConstructorModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ConstructorModifier"}}},
@@ -3901,7 +3901,7 @@
                         "argument": {"variable": "cs"},
                         "function": {"unwrap": "hydra.java.syntax.ContinueStatement"}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Identifier"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Identifier"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -3938,7 +3938,7 @@
             "domain": {"variable": "hydra.java.syntax.ContinueStatement"},
             "parameter": "cs"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ContinueStatement"}}},
@@ -3977,7 +3977,7 @@
             "domain": {"variable": "hydra.java.syntax.Dims"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Dims"}}},
@@ -3997,7 +3997,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -4065,7 +4065,7 @@
             "domain": {"variable": "hydra.java.syntax.ElementValue"},
             "parameter": "ev"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ElementValue"}}},
@@ -4086,7 +4086,7 @@
                         "function": {
                           "project": {"field": "key", "typeName": "hydra.java.syntax.ElementValuePair"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Identifier"},
+                      "body": {"variable": "hydra.java.syntax.Identifier"},
                       "variables": []}},
                   {
                     "name": "v",
@@ -4096,7 +4096,7 @@
                         "function": {
                           "project": {"field": "value", "typeName": "hydra.java.syntax.ElementValuePair"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ElementValue"},
+                      "body": {"variable": "hydra.java.syntax.ElementValue"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -4117,7 +4117,7 @@
             "domain": {"variable": "hydra.java.syntax.ElementValuePair"},
             "parameter": "evp"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ElementValuePair"}}},
@@ -4137,7 +4137,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -4235,7 +4235,7 @@
             "domain": {"variable": "hydra.java.syntax.EqualityExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.EqualityExpression"}}},
@@ -4270,7 +4270,7 @@
             "domain": {"variable": "hydra.java.syntax.ExclusiveOrExpression"},
             "parameter": "eoe"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}}},
@@ -4290,7 +4290,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -4330,7 +4330,7 @@
             "domain": {"variable": "hydra.java.syntax.Expression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Expression"}}},
@@ -4351,7 +4351,7 @@
                         "function": {
                           "project": {"field": "qualifier", "typeName": "hydra.java.syntax.ExpressionName"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.AmbiguousName"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.AmbiguousName"}},
                       "variables": []}},
                   {
                     "name": "id",
@@ -4363,7 +4363,7 @@
                             "field": "identifier",
                             "typeName": "hydra.java.syntax.ExpressionName"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Identifier"},
+                      "body": {"variable": "hydra.java.syntax.Identifier"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -4397,7 +4397,7 @@
             "domain": {"variable": "hydra.java.syntax.ExpressionName"},
             "parameter": "en"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ExpressionName"}}},
@@ -4420,7 +4420,7 @@
             "domain": {"variable": "hydra.java.syntax.ExpressionStatement"},
             "parameter": "es"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ExpressionStatement"}}},
@@ -4441,7 +4441,7 @@
                         "function": {
                           "project": {"field": "qualifier", "typeName": "hydra.java.syntax.FieldAccess"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.FieldAccess_Qualifier"},
+                      "body": {"variable": "hydra.java.syntax.FieldAccess_Qualifier"},
                       "variables": []}},
                   {
                     "name": "id",
@@ -4451,7 +4451,7 @@
                         "function": {
                           "project": {"field": "identifier", "typeName": "hydra.java.syntax.FieldAccess"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Identifier"},
+                      "body": {"variable": "hydra.java.syntax.Identifier"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -4524,7 +4524,7 @@
             "domain": {"variable": "hydra.java.syntax.FieldAccess"},
             "parameter": "fa"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FieldAccess"}}},
@@ -4547,7 +4547,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.FieldDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.FieldModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.FieldModifier"}},
                       "variables": []}},
                   {
                     "name": "typ",
@@ -4558,7 +4558,7 @@
                           "project": {
                             "field": "unannType",
                             "typeName": "hydra.java.syntax.FieldDeclaration"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.UnannType"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.UnannType"}, "variables": []}},
                   {
                     "name": "vars",
                     "term": {
@@ -4569,7 +4569,7 @@
                             "field": "variableDeclarators",
                             "typeName": "hydra.java.syntax.FieldDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.VariableDeclarator"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.VariableDeclarator"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -4649,7 +4649,7 @@
             "domain": {"variable": "hydra.java.syntax.FieldDeclaration"},
             "parameter": "fd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FieldDeclaration"}}},
@@ -4749,7 +4749,7 @@
             "domain": {"variable": "hydra.java.syntax.FieldModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FieldModifier"}}},
@@ -4775,7 +4775,7 @@
             "domain": {"variable": "hydra.java.syntax.FloatingPointLiteral"},
             "parameter": "fl"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FloatingPointLiteral"}}},
@@ -4815,7 +4815,7 @@
             "domain": {"variable": "hydra.java.syntax.FloatingPointType"},
             "parameter": "ft"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FloatingPointType"}}},
@@ -4835,7 +4835,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -4878,7 +4878,7 @@
             "domain": {"variable": "hydra.java.syntax.FormalParameter"},
             "parameter": "p"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FormalParameter"}}},
@@ -4901,7 +4901,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.FormalParameter_Simple"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.VariableModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.VariableModifier"}},
                       "variables": []}},
                   {
                     "name": "typ",
@@ -4912,7 +4912,7 @@
                           "project": {
                             "field": "type",
                             "typeName": "hydra.java.syntax.FormalParameter_Simple"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.UnannType"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.UnannType"}, "variables": []}},
                   {
                     "name": "id",
                     "term": {
@@ -4923,7 +4923,7 @@
                             "field": "id",
                             "typeName": "hydra.java.syntax.FormalParameter_Simple"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.VariableDeclaratorId"},
+                      "body": {"variable": "hydra.java.syntax.VariableDeclaratorId"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -4985,7 +4985,7 @@
             "domain": {"variable": "hydra.java.syntax.FormalParameter_Simple"},
             "parameter": "fps"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.FormalParameter_Simple"}}},
@@ -5005,7 +5005,7 @@
             "domain": {"variable": "hydra.java.syntax.Identifier"},
             "parameter": "id"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Identifier"}}},
@@ -5025,7 +5025,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -5048,7 +5048,7 @@
                             "field": "expression",
                             "typeName": "hydra.java.syntax.IfThenStatement"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Expression"},
+                      "body": {"variable": "hydra.java.syntax.Expression"},
                       "variables": []}},
                   {
                     "name": "thn",
@@ -5059,7 +5059,7 @@
                           "project": {
                             "field": "statement",
                             "typeName": "hydra.java.syntax.IfThenStatement"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.Statement"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.java.syntax.Statement"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -5094,7 +5094,7 @@
             "domain": {"variable": "hydra.java.syntax.IfThenStatement"},
             "parameter": "its"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.IfThenStatement"}}},
@@ -5169,7 +5169,7 @@
             "domain": {"variable": "hydra.java.syntax.ImportDeclaration"},
             "parameter": "imp"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ImportDeclaration"}}},
@@ -5204,7 +5204,7 @@
             "domain": {"variable": "hydra.java.syntax.InclusiveOrExpression"},
             "parameter": "ioe"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InclusiveOrExpression"}}},
@@ -5224,7 +5224,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -5243,7 +5243,7 @@
                       "application": {
                         "argument": {"variable": "il"},
                         "function": {"unwrap": "hydra.java.syntax.IntegerLiteral"}}},
-                    "type": {"type": {"literal": {"integer": {"bigint": {}}}}, "variables": []}},
+                    "type": {"body": {"literal": {"integer": {"bigint": {}}}}, "variables": []}},
                   {
                     "name": "suffix",
                     "term": {
@@ -5283,7 +5283,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                     "type": {"literal": {"string": {}}}}}}}}}}},
-                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -5300,7 +5300,7 @@
             "domain": {"variable": "hydra.java.syntax.IntegerLiteral"},
             "parameter": "il"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.IntegerLiteral"}}},
@@ -5370,7 +5370,7 @@
             "domain": {"variable": "hydra.java.syntax.IntegralType"},
             "parameter": "t"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.IntegralType"}}},
@@ -5408,7 +5408,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceBody"},
             "parameter": "ib"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceBody"}}},
@@ -5451,7 +5451,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceDeclaration"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceDeclaration"}}},
@@ -5511,7 +5511,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceMemberDeclaration"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceMemberDeclaration"}}},
@@ -5534,7 +5534,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.InterfaceMethodDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.InterfaceMethodModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.InterfaceMethodModifier"}},
                       "variables": []}},
                   {
                     "name": "header",
@@ -5546,7 +5546,7 @@
                             "field": "header",
                             "typeName": "hydra.java.syntax.InterfaceMethodDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.MethodHeader"},
+                      "body": {"variable": "hydra.java.syntax.MethodHeader"},
                       "variables": []}},
                   {
                     "name": "body",
@@ -5558,7 +5558,7 @@
                             "field": "body",
                             "typeName": "hydra.java.syntax.InterfaceMethodDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.MethodBody"},
+                      "body": {"variable": "hydra.java.syntax.MethodBody"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -5620,7 +5620,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceMethodDeclaration"},
             "parameter": "imd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceMethodDeclaration"}}},
@@ -5710,7 +5710,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceMethodModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceMethodModifier"}}},
@@ -5800,7 +5800,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceModifier"}}},
@@ -5820,7 +5820,7 @@
             "domain": {"variable": "hydra.java.syntax.InterfaceType"},
             "parameter": "it"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.InterfaceType"}}},
@@ -5840,7 +5840,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -5880,7 +5880,7 @@
             "domain": {"variable": "hydra.java.syntax.LambdaBody"},
             "parameter": "b"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LambdaBody"}}},
@@ -5903,7 +5903,7 @@
                             "field": "parameters",
                             "typeName": "hydra.java.syntax.LambdaExpression"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.LambdaParameters"},
+                      "body": {"variable": "hydra.java.syntax.LambdaParameters"},
                       "variables": []}},
                   {
                     "name": "body",
@@ -5913,7 +5913,7 @@
                         "function": {
                           "project": {"field": "body", "typeName": "hydra.java.syntax.LambdaExpression"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.LambdaBody"},
+                      "body": {"variable": "hydra.java.syntax.LambdaBody"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -5934,7 +5934,7 @@
             "domain": {"variable": "hydra.java.syntax.LambdaExpression"},
             "parameter": "le"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LambdaExpression"}}},
@@ -5989,7 +5989,7 @@
             "domain": {"variable": "hydra.java.syntax.LambdaParameters"},
             "parameter": "p"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LambdaParameters"}}},
@@ -6042,7 +6042,7 @@
             "domain": {"variable": "hydra.java.syntax.LeftHandSide"},
             "parameter": "lhs"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LeftHandSide"}}},
@@ -6126,7 +6126,7 @@
                                             "argument": {"variable": "c"},
                                             "function": {"variable": "hydra.lib.literals.uint16ToBigint"}}},
                                         "function": {"variable": "hydra.lib.literals.bigintToInt32"}}},
-                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -6306,7 +6306,7 @@
             "domain": {"variable": "hydra.java.syntax.Literal"},
             "parameter": "l"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Literal"}}},
@@ -6346,7 +6346,7 @@
             "domain": {"variable": "hydra.java.syntax.LocalVariableType"},
             "parameter": "t"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LocalVariableType"}}},
@@ -6369,7 +6369,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.LocalVariableDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.VariableModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.VariableModifier"}},
                       "variables": []}},
                   {
                     "name": "t",
@@ -6381,7 +6381,7 @@
                             "field": "type",
                             "typeName": "hydra.java.syntax.LocalVariableDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.LocalVariableType"},
+                      "body": {"variable": "hydra.java.syntax.LocalVariableType"},
                       "variables": []}},
                   {
                     "name": "decls",
@@ -6393,7 +6393,7 @@
                             "field": "declarators",
                             "typeName": "hydra.java.syntax.LocalVariableDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.VariableDeclarator"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.VariableDeclarator"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -6470,7 +6470,7 @@
             "domain": {"variable": "hydra.java.syntax.LocalVariableDeclaration"},
             "parameter": "lvd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LocalVariableDeclaration"}}},
@@ -6493,7 +6493,7 @@
             "domain": {"variable": "hydra.java.syntax.LocalVariableDeclarationStatement"},
             "parameter": "lvds"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.LocalVariableDeclarationStatement"}}},
@@ -6519,7 +6519,7 @@
             "domain": {"variable": "hydra.java.syntax.MarkerAnnotation"},
             "parameter": "ma"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MarkerAnnotation"}}},
@@ -6559,7 +6559,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodBody"},
             "parameter": "b"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodBody"}}},
@@ -6582,7 +6582,7 @@
                             "field": "annotations",
                             "typeName": "hydra.java.syntax.MethodDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Annotation"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Annotation"}},
                       "variables": []}},
                   {
                     "name": "mods",
@@ -6594,7 +6594,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.MethodDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.MethodModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.MethodModifier"}},
                       "variables": []}},
                   {
                     "name": "header",
@@ -6604,7 +6604,7 @@
                         "function": {
                           "project": {"field": "header", "typeName": "hydra.java.syntax.MethodDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.MethodHeader"},
+                      "body": {"variable": "hydra.java.syntax.MethodHeader"},
                       "variables": []}},
                   {
                     "name": "body",
@@ -6614,7 +6614,7 @@
                         "function": {
                           "project": {"field": "body", "typeName": "hydra.java.syntax.MethodDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.MethodBody"},
+                      "body": {"variable": "hydra.java.syntax.MethodBody"},
                       "variables": []}},
                   {
                     "name": "headerAndBody",
@@ -6675,7 +6675,7 @@
                                 "body": {"variable": "hydra.lib.maybes.cat"},
                                 "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.spaceSep"}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -6727,7 +6727,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodDeclaration"},
             "parameter": "md"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodDeclaration"}}},
@@ -6750,7 +6750,7 @@
                             "field": "identifier",
                             "typeName": "hydra.java.syntax.MethodDeclarator"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Identifier"},
+                      "body": {"variable": "hydra.java.syntax.Identifier"},
                       "variables": []}},
                   {
                     "name": "params",
@@ -6762,7 +6762,7 @@
                             "field": "formalParameters",
                             "typeName": "hydra.java.syntax.MethodDeclarator"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.FormalParameter"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.FormalParameter"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -6795,7 +6795,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodDeclarator"},
             "parameter": "md"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodDeclarator"}}},
@@ -6816,7 +6816,7 @@
                         "function": {
                           "project": {"field": "parameters", "typeName": "hydra.java.syntax.MethodHeader"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
                       "variables": []}},
                   {
                     "name": "result",
@@ -6825,7 +6825,7 @@
                         "argument": {"variable": "mh"},
                         "function": {
                           "project": {"field": "result", "typeName": "hydra.java.syntax.MethodHeader"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.Result"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.Result"}, "variables": []}},
                   {
                     "name": "decl",
                     "term": {
@@ -6834,7 +6834,7 @@
                         "function": {
                           "project": {"field": "declarator", "typeName": "hydra.java.syntax.MethodHeader"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.MethodDeclarator"},
+                      "body": {"variable": "hydra.java.syntax.MethodDeclarator"},
                       "variables": []}},
                   {
                     "name": "mthrows",
@@ -6844,7 +6844,7 @@
                         "function": {
                           "project": {"field": "throws", "typeName": "hydra.java.syntax.MethodHeader"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Throws"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Throws"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -6925,7 +6925,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodHeader"},
             "parameter": "mh"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodHeader"}}},
@@ -6946,7 +6946,7 @@
                         "function": {
                           "project": {"field": "header", "typeName": "hydra.java.syntax.MethodInvocation"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.MethodInvocation_Header"},
+                      "body": {"variable": "hydra.java.syntax.MethodInvocation_Header"},
                       "variables": []}},
                   {
                     "name": "args",
@@ -6958,7 +6958,7 @@
                             "field": "arguments",
                             "typeName": "hydra.java.syntax.MethodInvocation"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Expression"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Expression"}},
                       "variables": []}},
                   {
                     "name": "argSec",
@@ -6981,7 +6981,7 @@
                           "application": {
                             "argument": {"literal": {"boolean": true}},
                             "function": {"variable": "hydra.serialization.parenList"}}}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                   {
                     "name": "headerSec",
                     "term": {
@@ -7017,7 +7017,7 @@
                                                     "field": "variant",
                                                     "typeName": "hydra.java.syntax.MethodInvocation_Complex"}}}},
                                             "type": {
-                                              "type": {"variable": "hydra.java.syntax.MethodInvocation_Variant"},
+                                              "body": {"variable": "hydra.java.syntax.MethodInvocation_Variant"},
                                               "variables": []}},
                                           {
                                             "name": "targs",
@@ -7029,7 +7029,7 @@
                                                     "field": "typeArguments",
                                                     "typeName": "hydra.java.syntax.MethodInvocation_Complex"}}}},
                                             "type": {
-                                              "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
+                                              "body": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
                                               "variables": []}},
                                           {
                                             "name": "cid",
@@ -7041,7 +7041,7 @@
                                                     "field": "identifier",
                                                     "typeName": "hydra.java.syntax.MethodInvocation_Complex"}}}},
                                             "type": {
-                                              "type": {"variable": "hydra.java.syntax.Identifier"},
+                                              "body": {"variable": "hydra.java.syntax.Identifier"},
                                               "variables": []}},
                                           {
                                             "name": "idSec",
@@ -7100,7 +7100,7 @@
                                                         "body": {"variable": "hydra.lib.maybes.cat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
                                                 "function": {"variable": "hydra.serialization.noSep"}}},
-                                            "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                                            "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "cvar"},
@@ -7195,7 +7195,7 @@
                                     "domain": {"variable": "hydra.java.syntax.MethodInvocation_Complex"},
                                     "parameter": "cx"}}}],
                             "typeName": "hydra.java.syntax.MethodInvocation_Header"}}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {"list": [{"variable": "headerSec"}, {"variable": "argSec"}]},
@@ -7203,7 +7203,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodInvocation"},
             "parameter": "mi"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodInvocation"}}},
@@ -7313,7 +7313,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodModifier"}}},
@@ -7333,7 +7333,7 @@
             "domain": {"variable": "hydra.java.syntax.MethodName"},
             "parameter": "mn"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MethodName"}}},
@@ -7353,7 +7353,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -7485,7 +7485,7 @@
             "domain": {"variable": "hydra.java.syntax.MultiplicativeExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.MultiplicativeExpression"}}},
@@ -7507,7 +7507,7 @@
                           "project": {
                             "field": "typeName",
                             "typeName": "hydra.java.syntax.NormalAnnotation"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.TypeName"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.TypeName"}, "variables": []}},
                   {
                     "name": "pairs",
                     "term": {
@@ -7516,7 +7516,7 @@
                         "function": {
                           "project": {"field": "pairs", "typeName": "hydra.java.syntax.NormalAnnotation"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.ElementValuePair"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.ElementValuePair"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -7555,7 +7555,7 @@
             "domain": {"variable": "hydra.java.syntax.NormalAnnotation"},
             "parameter": "na"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.NormalAnnotation"}}},
@@ -7578,7 +7578,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.NormalClassDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.ClassModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.ClassModifier"}},
                       "variables": []}},
                   {
                     "name": "id",
@@ -7590,7 +7590,7 @@
                             "field": "identifier",
                             "typeName": "hydra.java.syntax.NormalClassDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
+                      "body": {"variable": "hydra.java.syntax.TypeIdentifier"},
                       "variables": []}},
                   {
                     "name": "tparams",
@@ -7602,7 +7602,7 @@
                             "field": "parameters",
                             "typeName": "hydra.java.syntax.NormalClassDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
                       "variables": []}},
                   {
                     "name": "msuperc",
@@ -7614,7 +7614,7 @@
                             "field": "extends",
                             "typeName": "hydra.java.syntax.NormalClassDeclaration"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.ClassType"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.ClassType"}},
                       "variables": []}},
                   {
                     "name": "superi",
@@ -7626,7 +7626,7 @@
                             "field": "implements",
                             "typeName": "hydra.java.syntax.NormalClassDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.InterfaceType"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.InterfaceType"}},
                       "variables": []}},
                   {
                     "name": "body",
@@ -7637,7 +7637,7 @@
                           "project": {
                             "field": "body",
                             "typeName": "hydra.java.syntax.NormalClassDeclaration"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.ClassBody"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.java.syntax.ClassBody"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -7831,7 +7831,7 @@
             "domain": {"variable": "hydra.java.syntax.NormalClassDeclaration"},
             "parameter": "ncd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.NormalClassDeclaration"}}},
@@ -7854,7 +7854,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.NormalInterfaceDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.InterfaceModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.InterfaceModifier"}},
                       "variables": []}},
                   {
                     "name": "id",
@@ -7866,7 +7866,7 @@
                             "field": "identifier",
                             "typeName": "hydra.java.syntax.NormalInterfaceDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
+                      "body": {"variable": "hydra.java.syntax.TypeIdentifier"},
                       "variables": []}},
                   {
                     "name": "tparams",
@@ -7878,7 +7878,7 @@
                             "field": "parameters",
                             "typeName": "hydra.java.syntax.NormalInterfaceDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
                       "variables": []}},
                   {
                     "name": "extends",
@@ -7890,7 +7890,7 @@
                             "field": "extends",
                             "typeName": "hydra.java.syntax.NormalInterfaceDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.InterfaceType"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.InterfaceType"}},
                       "variables": []}},
                   {
                     "name": "body",
@@ -7902,7 +7902,7 @@
                             "field": "body",
                             "typeName": "hydra.java.syntax.NormalInterfaceDeclaration"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.InterfaceBody"},
+                      "body": {"variable": "hydra.java.syntax.InterfaceBody"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -8068,7 +8068,7 @@
             "domain": {"variable": "hydra.java.syntax.NormalInterfaceDeclaration"},
             "parameter": "nid"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.NormalInterfaceDeclaration"}}},
@@ -8108,7 +8108,7 @@
             "domain": {"variable": "hydra.java.syntax.NumericType"},
             "parameter": "nt"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.NumericType"}}},
@@ -8131,7 +8131,7 @@
                             "field": "modifiers",
                             "typeName": "hydra.java.syntax.PackageDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.PackageModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.PackageModifier"}},
                       "variables": []}},
                   {
                     "name": "ids",
@@ -8143,7 +8143,7 @@
                             "field": "identifiers",
                             "typeName": "hydra.java.syntax.PackageDeclaration"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Identifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Identifier"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -8237,7 +8237,7 @@
             "domain": {"variable": "hydra.java.syntax.PackageDeclaration"},
             "parameter": "pd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PackageDeclaration"}}},
@@ -8257,7 +8257,7 @@
             "domain": {"variable": "hydra.java.syntax.PackageModifier"},
             "parameter": "pm"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PackageModifier"}}},
@@ -8289,7 +8289,7 @@
             "domain": {"variable": "hydra.java.syntax.PackageName"},
             "parameter": "pn"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PackageName"}}},
@@ -8321,7 +8321,7 @@
             "domain": {"variable": "hydra.java.syntax.PackageOrTypeName"},
             "parameter": "potn"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PackageOrTypeName"}}},
@@ -8341,7 +8341,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -8361,7 +8361,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -8427,7 +8427,7 @@
             "domain": {"variable": "hydra.java.syntax.PostfixExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PostfixExpression"}}},
@@ -8447,7 +8447,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -8467,7 +8467,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -8508,7 +8508,7 @@
             "domain": {"variable": "hydra.java.syntax.Primary"},
             "parameter": "p"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Primary"}}},
@@ -8654,7 +8654,7 @@
             "domain": {"variable": "hydra.java.syntax.PrimaryNoNewArrayExpression"},
             "parameter": "p"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
@@ -8694,7 +8694,7 @@
             "domain": {"variable": "hydra.java.syntax.PrimitiveType"},
             "parameter": "pt"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PrimitiveType"}}},
@@ -8717,7 +8717,7 @@
                             "field": "type",
                             "typeName": "hydra.java.syntax.PrimitiveTypeWithAnnotations"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.PrimitiveType"},
+                      "body": {"variable": "hydra.java.syntax.PrimitiveType"},
                       "variables": []}},
                   {
                     "name": "anns",
@@ -8729,7 +8729,7 @@
                             "field": "annotations",
                             "typeName": "hydra.java.syntax.PrimitiveTypeWithAnnotations"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Annotation"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Annotation"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -8786,7 +8786,7 @@
             "domain": {"variable": "hydra.java.syntax.PrimitiveTypeWithAnnotations"},
             "parameter": "ptwa"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.PrimitiveTypeWithAnnotations"}}},
@@ -8806,7 +8806,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -8856,7 +8856,7 @@
             "domain": {"variable": "hydra.java.syntax.ReferenceType"},
             "parameter": "rt"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ReferenceType"}}},
@@ -8939,7 +8939,7 @@
             "domain": {"variable": "hydra.java.syntax.RelationalExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.RelationalExpression"}}},
@@ -8980,7 +8980,7 @@
             "domain": {"variable": "hydra.java.syntax.RelationalExpression_GreaterThan"},
             "parameter": "gt"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.RelationalExpression_GreaterThan"}}},
@@ -9022,7 +9022,7 @@
               "variable": "hydra.java.syntax.RelationalExpression_GreaterThanEqual"},
             "parameter": "gte"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {
@@ -9064,7 +9064,7 @@
             "domain": {"variable": "hydra.java.syntax.RelationalExpression_InstanceOf"},
             "parameter": "io"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.RelationalExpression_InstanceOf"}}},
@@ -9105,7 +9105,7 @@
             "domain": {"variable": "hydra.java.syntax.RelationalExpression_LessThan"},
             "parameter": "lt"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.RelationalExpression_LessThan"}}},
@@ -9146,7 +9146,7 @@
             "domain": {"variable": "hydra.java.syntax.RelationalExpression_LessThanEqual"},
             "parameter": "lte"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.RelationalExpression_LessThanEqual"}}},
@@ -9186,7 +9186,7 @@
             "domain": {"variable": "hydra.java.syntax.Result"},
             "parameter": "r"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Result"}}},
@@ -9206,7 +9206,7 @@
                         "argument": {"variable": "rs"},
                         "function": {"unwrap": "hydra.java.syntax.ReturnStatement"}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Expression"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Expression"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -9243,7 +9243,7 @@
             "domain": {"variable": "hydra.java.syntax.ReturnStatement"},
             "parameter": "rs"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ReturnStatement"}}},
@@ -9375,7 +9375,7 @@
             "domain": {"variable": "hydra.java.syntax.ShiftExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ShiftExpression"}}},
@@ -9395,7 +9395,7 @@
             "domain": {"variable": "hydra.java.syntax.SimpleTypeName"},
             "parameter": "stn"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.SimpleTypeName"}}},
@@ -9417,7 +9417,7 @@
                           "project": {
                             "field": "name",
                             "typeName": "hydra.java.syntax.SingleElementAnnotation"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.TypeName"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.TypeName"}, "variables": []}},
                   {
                     "name": "mv",
                     "term": {
@@ -9428,7 +9428,7 @@
                             "field": "value",
                             "typeName": "hydra.java.syntax.SingleElementAnnotation"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.ElementValue"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.ElementValue"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -9485,7 +9485,7 @@
             "domain": {"variable": "hydra.java.syntax.SingleElementAnnotation"},
             "parameter": "sea"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.SingleElementAnnotation"}}},
@@ -9575,7 +9575,7 @@
             "domain": {"variable": "hydra.java.syntax.Statement"},
             "parameter": "s"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Statement"}}},
@@ -9677,7 +9677,7 @@
             "domain": {"variable": "hydra.java.syntax.StatementExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.StatementExpression"}}},
@@ -9832,7 +9832,7 @@
             "domain": {"variable": "hydra.java.syntax.StatementWithoutTrailingSubstatement"},
             "parameter": "s"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.StatementWithoutTrailingSubstatement"}}},
@@ -9852,7 +9852,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -9864,8 +9864,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Serialize a Java string literal with proper Unicode escaping."}}}],
             "body": {
@@ -9879,7 +9879,7 @@
                           "application": {
                             "argument": {"variable": "sl"},
                             "function": {"unwrap": "hydra.java.syntax.StringLiteral"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -9902,7 +9902,7 @@
                 "domain": {"variable": "hydra.java.syntax.StringLiteral"},
                 "parameter": "sl"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.StringLiteral"}}},
@@ -9922,7 +9922,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -9942,7 +9942,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -9974,7 +9974,7 @@
             "domain": {"variable": "hydra.java.syntax.ThrowStatement"},
             "parameter": "ts"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.ThrowStatement"}}},
@@ -9994,7 +9994,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -10014,7 +10014,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -10054,7 +10054,7 @@
             "domain": {"variable": "hydra.java.syntax.Type"},
             "parameter": "t"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Type"}}},
@@ -10094,7 +10094,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeArgument"},
             "parameter": "a"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeArgument"}}},
@@ -10149,7 +10149,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"},
             "parameter": "targs"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"}}},
@@ -10192,7 +10192,7 @@
                                             "field": "type",
                                             "typeName": "hydra.java.syntax.TypeBound_ClassOrInterface"}}}},
                                     "type": {
-                                      "type": {"variable": "hydra.java.syntax.ClassOrInterfaceType"},
+                                      "body": {"variable": "hydra.java.syntax.ClassOrInterfaceType"},
                                       "variables": []}},
                                   {
                                     "name": "additional",
@@ -10204,7 +10204,7 @@
                                             "field": "additional",
                                             "typeName": "hydra.java.syntax.TypeBound_ClassOrInterface"}}}},
                                     "type": {
-                                      "type": {"list": {"variable": "hydra.java.syntax.AdditionalBound"}},
+                                      "body": {"list": {"variable": "hydra.java.syntax.AdditionalBound"}},
                                       "variables": []}}],
                                 "body": {
                                   "application": {
@@ -10261,7 +10261,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeBound"},
             "parameter": "b"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeBound"}}},
@@ -10311,7 +10311,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeDeclaration"},
             "parameter": "d"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeDeclaration"}}},
@@ -10334,7 +10334,7 @@
                             "field": "value",
                             "typeName": "hydra.java.syntax.TypeDeclarationWithComments"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeDeclaration"},
+                      "body": {"variable": "hydra.java.syntax.TypeDeclaration"},
                       "variables": []}},
                   {
                     "name": "mc",
@@ -10345,7 +10345,7 @@
                           "project": {
                             "field": "comments",
                             "typeName": "hydra.java.syntax.TypeDeclarationWithComments"}}}},
-                    "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
+                    "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -10359,7 +10359,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeDeclarationWithComments"},
             "parameter": "tdwc"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeDeclarationWithComments"}}},
@@ -10379,7 +10379,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeIdentifier"},
             "parameter": "tid"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeIdentifier"}}},
@@ -10400,7 +10400,7 @@
                         "function": {
                           "project": {"field": "identifier", "typeName": "hydra.java.syntax.TypeName"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
+                      "body": {"variable": "hydra.java.syntax.TypeIdentifier"},
                       "variables": []}},
                   {
                     "name": "mqual",
@@ -10410,7 +10410,7 @@
                         "function": {
                           "project": {"field": "qualifier", "typeName": "hydra.java.syntax.TypeName"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.PackageOrTypeName"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.PackageOrTypeName"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -10444,7 +10444,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeName"},
             "parameter": "tn"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeName"}}},
@@ -10465,7 +10465,7 @@
                         "function": {
                           "project": {"field": "modifiers", "typeName": "hydra.java.syntax.TypeParameter"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeParameterModifier"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeParameterModifier"}},
                       "variables": []}},
                   {
                     "name": "id",
@@ -10475,7 +10475,7 @@
                         "function": {
                           "project": {"field": "identifier", "typeName": "hydra.java.syntax.TypeParameter"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
+                      "body": {"variable": "hydra.java.syntax.TypeIdentifier"},
                       "variables": []}},
                   {
                     "name": "bound",
@@ -10485,7 +10485,7 @@
                         "function": {
                           "project": {"field": "bound", "typeName": "hydra.java.syntax.TypeParameter"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.TypeBound"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.TypeBound"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -10571,7 +10571,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeParameter"},
             "parameter": "tp"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeParameter"}}},
@@ -10591,7 +10591,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeParameterModifier"},
             "parameter": "tpm"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeParameterModifier"}}},
@@ -10612,7 +10612,7 @@
                         "function": {
                           "project": {"field": "annotations", "typeName": "hydra.java.syntax.TypeVariable"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Annotation"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Annotation"}},
                       "variables": []}},
                   {
                     "name": "id",
@@ -10622,7 +10622,7 @@
                         "function": {
                           "project": {"field": "identifier", "typeName": "hydra.java.syntax.TypeVariable"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
+                      "body": {"variable": "hydra.java.syntax.TypeIdentifier"},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -10679,7 +10679,7 @@
             "domain": {"variable": "hydra.java.syntax.TypeVariable"},
             "parameter": "tv"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.TypeVariable"}}},
@@ -10699,7 +10699,7 @@
             "domain": {"variable": "hydra.java.syntax.UnannType"},
             "parameter": "ut"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.UnannType"}}},
@@ -10793,7 +10793,7 @@
             "domain": {"variable": "hydra.java.syntax.UnaryExpression"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.UnaryExpression"}}},
@@ -10871,7 +10871,7 @@
             "domain": {"variable": "hydra.java.syntax.UnaryExpressionNotPlusMinus"},
             "parameter": "e"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -10894,7 +10894,7 @@
                             "field": "typeArguments",
                             "typeName": "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.TypeArgument"}},
                       "variables": []}},
                   {
                     "name": "cit",
@@ -10906,7 +10906,7 @@
                             "field": "classOrInterface",
                             "typeName": "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate"},
+                      "body": {"variable": "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate"},
                       "variables": []}},
                   {
                     "name": "args",
@@ -10918,7 +10918,7 @@
                             "field": "arguments",
                             "typeName": "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Expression"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Expression"}},
                       "variables": []}},
                   {
                     "name": "mbody",
@@ -10930,7 +10930,7 @@
                             "field": "body",
                             "typeName": "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.ClassBody"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.ClassBody"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -11034,7 +11034,7 @@
               "variable": "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"},
             "parameter": "ucice"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {
@@ -11055,7 +11055,7 @@
                 "parameter": "_"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "t0"}}},
@@ -11076,7 +11076,7 @@
                         "function": {
                           "project": {"field": "id", "typeName": "hydra.java.syntax.VariableDeclarator"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.VariableDeclaratorId"},
+                      "body": {"variable": "hydra.java.syntax.VariableDeclaratorId"},
                       "variables": []}},
                   {
                     "name": "minit",
@@ -11088,7 +11088,7 @@
                             "field": "initializer",
                             "typeName": "hydra.java.syntax.VariableDeclarator"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.VariableInitializer"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.VariableInitializer"}},
                       "variables": []}},
                   {
                     "name": "idSec",
@@ -11096,7 +11096,7 @@
                       "application": {
                         "argument": {"variable": "id"},
                         "function": {"variable": "hydra.java.serde.writeVariableDeclaratorId"}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {"variable": "minit"},
@@ -11132,7 +11132,7 @@
             "domain": {"variable": "hydra.java.syntax.VariableDeclarator"},
             "parameter": "vd"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.VariableDeclarator"}}},
@@ -11155,7 +11155,7 @@
                             "field": "identifier",
                             "typeName": "hydra.java.syntax.VariableDeclaratorId"}}}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.Identifier"},
+                      "body": {"variable": "hydra.java.syntax.Identifier"},
                       "variables": []}},
                   {
                     "name": "mdims",
@@ -11167,7 +11167,7 @@
                             "field": "dims",
                             "typeName": "hydra.java.syntax.VariableDeclaratorId"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Dims"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Dims"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -11201,7 +11201,7 @@
             "domain": {"variable": "hydra.java.syntax.VariableDeclaratorId"},
             "parameter": "vdi"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.VariableDeclaratorId"}}},
@@ -11241,7 +11241,7 @@
             "domain": {"variable": "hydra.java.syntax.VariableInitializer"},
             "parameter": "i"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.VariableInitializer"}}},
@@ -11281,7 +11281,7 @@
             "domain": {"variable": "hydra.java.syntax.VariableModifier"},
             "parameter": "m"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.VariableModifier"}}},
@@ -11302,7 +11302,7 @@
                         "function": {
                           "project": {"field": "cond", "typeName": "hydra.java.syntax.WhileStatement"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.Expression"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.Expression"}},
                       "variables": []}},
                   {
                     "name": "body",
@@ -11311,7 +11311,7 @@
                         "argument": {"variable": "ws"},
                         "function": {
                           "project": {"field": "body", "typeName": "hydra.java.syntax.WhileStatement"}}}},
-                    "type": {"type": {"variable": "hydra.java.syntax.Statement"}, "variables": []}},
+                    "type": {"body": {"variable": "hydra.java.syntax.Statement"}, "variables": []}},
                   {
                     "name": "condSer",
                     "term": {
@@ -11340,7 +11340,7 @@
                                         "body": {"variable": "hydra.lib.maybes.maybe"},
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
-                    "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                    "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -11370,7 +11370,7 @@
             "domain": {"variable": "hydra.java.syntax.WhileStatement"},
             "parameter": "ws"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.WhileStatement"}}},
@@ -11391,7 +11391,7 @@
                         "function": {
                           "project": {"field": "annotations", "typeName": "hydra.java.syntax.Wildcard"}}}},
                     "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.Annotation"}},
+                      "body": {"list": {"variable": "hydra.java.syntax.Annotation"}},
                       "variables": []}},
                   {
                     "name": "mbounds",
@@ -11401,7 +11401,7 @@
                         "function": {
                           "project": {"field": "wildcard", "typeName": "hydra.java.syntax.Wildcard"}}}},
                     "type": {
-                      "type": {"maybe": {"variable": "hydra.java.syntax.WildcardBounds"}},
+                      "body": {"maybe": {"variable": "hydra.java.syntax.WildcardBounds"}},
                       "variables": []}}],
                 "body": {
                   "application": {
@@ -11474,7 +11474,7 @@
             "domain": {"variable": "hydra.java.syntax.Wildcard"},
             "parameter": "w"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.Wildcard"}}},
@@ -11532,7 +11532,7 @@
             "domain": {"variable": "hydra.java.syntax.WildcardBounds"},
             "parameter": "b"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.java.syntax.WildcardBounds"}}},

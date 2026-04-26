@@ -97,8 +97,8 @@ dslModule cx graph mod =
           Core.bindingTerm = dataTerm,
           Core.bindingType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+            Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
       Packaging.moduleNamespace = (dslNamespace (Packaging.moduleNamespace mod)),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -143,7 +143,7 @@ dslTypeScheme origType paramTypes resultType =
                     Core.functionTypeCodomain = acc})) wrappedResult paramTypes
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
-        Core.typeSchemeType = funType,
+        Core.typeSchemeBody = funType,
         Core.typeSchemeConstraints = Nothing}
 
 -- | Filter bindings to only DSL-eligible type definitions

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a list of descriptions to an RDF graph"}}}],
             "body": {
               "lambda": {
@@ -28,7 +28,7 @@
                 "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
                 "parameter": "ds"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Graph"},
               "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
@@ -40,8 +40,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create an empty description with a given node"}}}],
             "body": {
               "lambda": {
@@ -56,7 +56,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Node"},
                 "parameter": "node"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Description"},
               "domain": {"variable": "hydra.rdf.syntax.Node"}}},
@@ -68,8 +68,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "An empty LangStrings value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "An empty LangStrings value"}}}],
             "body": {
               "wrap": {
                 "body": {
@@ -81,7 +81,7 @@
                     "type": {"literal": {"string": {}}}}},
                 "typeName": "hydra.rdf.syntax.LangStrings"}}}},
         "type": {
-          "type": {"variable": "hydra.rdf.syntax.LangStrings"},
+          "body": {"variable": "hydra.rdf.syntax.LangStrings"},
           "variables": []}}},
     {
       "term": {
@@ -90,8 +90,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "An empty RDF graph"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "An empty RDF graph"}}}],
             "body": {
               "wrap": {
                 "body": {
@@ -99,7 +99,7 @@
                     "body": {"variable": "hydra.lib.sets.empty"},
                     "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                 "typeName": "hydra.rdf.syntax.Graph"}}}},
-        "type": {"type": {"variable": "hydra.rdf.syntax.Graph"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.rdf.syntax.Graph"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rdf.utils.encodeLiteral",
@@ -107,8 +107,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Encode a Hydra literal as an RDF literal"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Encode a Hydra literal as an RDF literal"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -571,7 +571,7 @@
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "lit"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Literal"},
               "domain": {"variable": "hydra.core.Literal"}}},
@@ -583,8 +583,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Create triples from a subject, predicate, and list of object nodes"}}}],
             "body": {
@@ -623,7 +623,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Resource"},
                 "parameter": "subj"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -641,8 +641,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Construct an IRI from a namespace and local name"}}}],
             "body": {
               "lambda": {
@@ -663,7 +663,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "ns"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -678,8 +678,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Construct a key IRI from a local name"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Construct a key IRI from a local name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -692,7 +692,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "local"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Iri"},
               "domain": {"literal": {"string": {}}}}},
@@ -704,14 +704,14 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "The key used for tracking blank node counters"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "rdfBlankNodeCounter"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rdf.utils.mergeGraphs",
@@ -719,8 +719,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Merge a list of RDF graphs into a single graph"}}}],
             "body": {
               "lambda": {
@@ -749,7 +749,7 @@
                 "domain": {"list": {"variable": "hydra.rdf.syntax.Graph"}},
                 "parameter": "graphs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Graph"},
               "domain": {"list": {"variable": "hydra.rdf.syntax.Graph"}}}},
@@ -761,8 +761,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -781,7 +781,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Iri"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -793,8 +793,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Generate the next blank node and an updated context"}}}],
             "body": {
               "lambda": {
@@ -811,7 +811,7 @@
                                 "argument": {"variable": "hydra.rdf.utils.key_rdfBlankNodeCounter"},
                                 "function": {"variable": "hydra.annotations.nextCount"}}}}},
                         "type": {
-                          "type": {
+                          "body": {
                             "pair": {
                               "first": {"literal": {"integer": {"int32": {}}}},
                               "second": {"variable": "hydra.context.Context"}}},
@@ -828,7 +828,7 @@
                                     "body": {"variable": "hydra.lib.pairs.first"},
                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                 "type": {"variable": "hydra.context.Context"}}}}},
-                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                       {
                         "name": "cx'",
                         "term": {
@@ -841,14 +841,14 @@
                                     "body": {"variable": "hydra.lib.pairs.second"},
                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                 "type": {"variable": "hydra.context.Context"}}}}},
-                        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.context.Context"}, "variables": []}}],
                     "body": {
                       "typeApplication": {
                         "body": {
                           "typeApplication": {
                             "body": {
                               "pair": {
-                                "@first": {
+                                "first": {
                                   "inject": {
                                     "field": {
                                       "name": "bnode",
@@ -866,13 +866,13 @@
                                                   "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                           "typeName": "hydra.rdf.syntax.BlankNode"}}},
                                     "typeName": "hydra.rdf.syntax.Resource"}},
-                                "@second": {"variable": "cx'"}}},
+                                "second": {"variable": "cx'"}}},
                             "type": {"variable": "hydra.rdf.syntax.Resource"}}},
                         "type": {"variable": "hydra.context.Context"}}}}},
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "pair": {
@@ -887,8 +887,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Construct a property IRI from a record name and field name"}}}],
             "body": {
@@ -905,7 +905,7 @@
                                 "argument": {"variable": "rname"},
                                 "function": {"variable": "hydra.names.qualifyName"}}},
                             "type": {
-                              "type": {"variable": "hydra.packaging.QualifiedName"},
+                              "body": {"variable": "hydra.packaging.QualifiedName"},
                               "variables": []}},
                           {
                             "name": "gname",
@@ -915,7 +915,7 @@
                                 "function": {
                                   "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "type": {
-                              "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
+                              "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                               "variables": []}},
                           {
                             "name": "local_",
@@ -924,7 +924,7 @@
                                 "argument": {"variable": "qualName"},
                                 "function": {
                                   "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "wrap": {
                             "body": {
@@ -967,7 +967,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "rname"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -982,8 +982,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Construct an RDF namespace IRI"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Construct an RDF namespace IRI"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -996,7 +996,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "local"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Iri"},
               "domain": {"literal": {"string": {}}}}},
@@ -1008,8 +1008,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a resource to a node"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a resource to a node"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1042,7 +1042,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Resource"},
                 "parameter": "r"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Node"},
               "domain": {"variable": "hydra.rdf.syntax.Resource"}}},
@@ -1054,8 +1054,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract subjects from a list of descriptions"}}}],
             "body": {
               "lambda": {
@@ -1076,7 +1076,7 @@
                 "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
                 "parameter": "descs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.rdf.syntax.Node"}},
               "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
@@ -1088,8 +1088,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Extract all triples from a list of descriptions"}}}],
             "body": {
               "lambda": {
@@ -1132,7 +1132,7 @@
                 "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
                 "parameter": "descs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.rdf.syntax.Triple"}},
               "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
@@ -1144,8 +1144,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Construct an XML Schema datatype IRI"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Construct an XML Schema datatype IRI"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1158,7 +1158,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "local"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.rdf.syntax.Iri"},
               "domain": {"literal": {"string": {}}}}},

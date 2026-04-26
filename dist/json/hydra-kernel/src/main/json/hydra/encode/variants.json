@@ -146,7 +146,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.variants.EliminationVariant"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.variants.EliminationVariant"}}},
@@ -251,7 +251,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.variants.FunctionVariant"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.variants.FunctionVariant"}}},
@@ -540,7 +540,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.variants.LiteralVariant"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.variants.LiteralVariant"}}},
@@ -1519,7 +1519,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.variants.TermVariant"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.variants.TermVariant"}}},
@@ -2314,7 +2314,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.variants.TypeVariant"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.variants.TypeVariant"}}},

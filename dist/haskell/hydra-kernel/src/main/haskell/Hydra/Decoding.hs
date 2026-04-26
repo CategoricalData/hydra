@@ -1128,8 +1128,8 @@ decodeModule cx graph mod =
           Core.bindingTerm = dataTerm,
           Core.bindingType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+            Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let decodedTypeDeps = Lists.map decodeNamespace (Packaging.moduleTypeDependencies mod)
           decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
@@ -1655,7 +1655,7 @@ decoderTypeScheme typ =
                     Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
-        Core.typeSchemeType = (decoderType typ),
+        Core.typeSchemeBody = (decoderType typ),
         Core.typeSchemeConstraints = constraints}
 
 -- | Build type scheme for a decoder function with element name
@@ -1670,7 +1670,7 @@ decoderTypeSchemeNamed ename typ =
                     Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
-        Core.typeSchemeType = (decoderTypeNamed ename typ),
+        Core.typeSchemeBody = (decoderTypeNamed ename typ),
         Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only decodable type definitions

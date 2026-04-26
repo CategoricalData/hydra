@@ -192,7 +192,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.util.CaseConvention"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.util.CaseConvention"}}},
@@ -343,7 +343,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.util.Comparison"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.util.Comparison"}}},
@@ -458,7 +458,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.util.Precision"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.util.Precision"}}},

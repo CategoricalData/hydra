@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Escape a single IRI character code to a string"}}}],
             "body": {
               "lambda": {
@@ -190,7 +190,7 @@
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -202,8 +202,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Escape a string for use in an IRI. Non-printable and special characters are replaced with ?"}}}],
             "body": {
@@ -230,7 +230,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},
@@ -242,8 +242,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Escape a single literal character code to a string"}}}],
             "body": {
               "lambda": {
@@ -359,7 +359,7 @@
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "c"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -371,8 +371,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Escape a string for use in an N-Triples literal"}}}],
             "body": {
               "lambda": {
@@ -398,7 +398,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},
@@ -410,8 +410,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an RDF graph to an N-Triples string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an RDF graph to an N-Triples string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -424,7 +424,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Graph"},
                 "parameter": "g"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.rdf.syntax.Graph"}}},
@@ -436,8 +436,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a blank node to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a blank node to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -459,7 +459,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
                 "parameter": "bnode"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.BlankNode"}}},
@@ -471,8 +471,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an RDF graph to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an RDF graph to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -503,7 +503,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Graph"},
                 "parameter": "g"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.Graph"}}},
@@ -515,8 +515,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert an IRI to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert an IRI to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -545,7 +545,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Iri"},
                 "parameter": "iri"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.Iri"}}},
@@ -557,8 +557,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a language tag to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a language tag to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -580,7 +580,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.LanguageTag"},
                 "parameter": "lang"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.LanguageTag"}}},
@@ -592,8 +592,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a literal to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a literal to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -606,7 +606,7 @@
                             "argument": {"variable": "lit"},
                             "function": {
                               "project": {"field": "lexicalForm", "typeName": "hydra.rdf.syntax.Literal"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "dt",
                         "term": {
@@ -614,7 +614,7 @@
                             "argument": {"variable": "lit"},
                             "function": {
                               "project": {"field": "datatypeIri", "typeName": "hydra.rdf.syntax.Literal"}}}},
-                        "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "lang",
                         "term": {
@@ -623,7 +623,7 @@
                             "function": {
                               "project": {"field": "languageTag", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}},
+                          "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}},
                           "variables": []}},
                       {
                         "name": "lexExpr",
@@ -641,7 +641,7 @@
                                     {"literal": {"string": "\""}}]},
                                 "function": {"variable": "hydra.lib.strings.cat"}}},
                             "function": {"variable": "hydra.serialization.cst"}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "suffix",
                         "term": {
@@ -672,7 +672,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"variable": "hydra.ast.Expr"}}},
                                         "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}}}}}},
-                        "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"list": [{"variable": "lexExpr"}, {"variable": "suffix"}]},
@@ -680,7 +680,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Literal"},
                 "parameter": "lit"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.Literal"}}},
@@ -692,8 +692,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a node to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a node to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -736,7 +736,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Node"},
                 "parameter": "n"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.Node"}}},
@@ -748,8 +748,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a resource to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a resource to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -782,7 +782,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Resource"},
                 "parameter": "r"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.Resource"}}},
@@ -794,8 +794,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a triple to an expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a triple to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -808,7 +808,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "subject", "typeName": "hydra.rdf.syntax.Triple"}}}},
-                        "type": {"type": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
                       {
                         "name": "pred",
                         "term": {
@@ -816,7 +816,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "predicate", "typeName": "hydra.rdf.syntax.Triple"}}}},
-                        "type": {"type": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "obj",
                         "term": {
@@ -824,7 +824,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "object", "typeName": "hydra.rdf.syntax.Triple"}}}},
-                        "type": {"type": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -849,7 +849,7 @@
                 "domain": {"variable": "hydra.rdf.syntax.Triple"},
                 "parameter": "t"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.rdf.syntax.Triple"}}},

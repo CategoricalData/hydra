@@ -54,7 +54,7 @@ testGroupForCollectionPrimitives =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
@@ -82,7 +82,7 @@ testGroupForCollectionPrimitives =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
@@ -106,7 +106,7 @@ testGroupForCollectionPrimitives =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
@@ -136,7 +136,7 @@ testGroupForCollectionPrimitives =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.math.negate"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                     Core.functionTypeCodomain = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -152,7 +152,7 @@ testGroupForCollectionPrimitives =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeSet (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
                     Core.functionTypeCodomain = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
@@ -183,7 +183,7 @@ testGroupForCollectionPrimitives =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
@@ -223,7 +223,7 @@ testGroupForCollectionPrimitives =
                   Core.letBody = (Core.TermVariable (Core.Name "g"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeMap (Core.MapType {
+                  Core.typeSchemeBody = (Core.TypeMap (Core.MapType {
                     Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.mapTypeValues = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -250,7 +250,7 @@ testGroupForCollectionPrimitives =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
@@ -283,7 +283,7 @@ testGroupForCollectionPrimitives =
                     Core.Name "t0",
                     (Core.Name "t1"),
                     (Core.Name "t2")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                       Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))})),
@@ -317,7 +317,7 @@ testGroupForCollectionPrimitives =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                  Core.typeSchemeBody = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
@@ -335,7 +335,7 @@ testGroupForCollectionPrimitives =
                       Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))])}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeMap (Core.MapType {
+                  Core.typeSchemeBody = (Core.TypeMap (Core.MapType {
                     Core.mapTypeKeys = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -357,7 +357,7 @@ testGroupForCollectionPrimitives =
                         (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))])}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeMap (Core.MapType {
+                  Core.typeSchemeBody = (Core.TypeMap (Core.MapType {
                     Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.mapTypeValues = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -385,7 +385,7 @@ testGroupForEithers =
                   (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -398,7 +398,7 @@ testGroupForEithers =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -417,7 +417,7 @@ testGroupForEithers =
                   (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "error"))))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -430,7 +430,7 @@ testGroupForEithers =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -449,7 +449,7 @@ testGroupForEithers =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                     Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t1"))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -463,7 +463,7 @@ testGroupForEithers =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
                     Core.eitherTypeRight = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -483,7 +483,7 @@ testGroupForEithers =
                   (Core.TermEither (Right (Core.TermLiteral (Core.LiteralBoolean True))))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                       Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                       Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})),
@@ -500,7 +500,7 @@ testGroupForEithers =
                   (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "foo"))))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                       Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -524,7 +524,7 @@ testGroupForEithers =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                       Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
@@ -543,7 +543,7 @@ testGroupForEithers =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                       Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t1")),
@@ -564,7 +564,7 @@ testGroupForEithers =
                   (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -579,7 +579,7 @@ testGroupForEithers =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeList (Core.TypeEither (Core.EitherType {
                       Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                       Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
@@ -608,7 +608,7 @@ testGroupForFolds =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.math.add"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
@@ -627,7 +627,7 @@ testGroupForFolds =
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                     Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -651,7 +651,7 @@ testGroupForFolds =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                  Core.typeSchemeBody = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
@@ -671,7 +671,7 @@ testGroupForFolds =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.math.negate"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                     Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -690,7 +690,7 @@ testGroupForFolds =
                   Core.applicationArgument = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                  Core.typeSchemeBody = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
@@ -707,7 +707,7 @@ testGroupForFolds =
                   Core.applicationArgument = (Core.TermMaybe Nothing)})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                  Core.typeSchemeBody = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
@@ -728,7 +728,7 @@ testGroupForFolds =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
                     Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -750,7 +750,7 @@ testGroupForFolds =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
                     Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -778,7 +778,7 @@ testGroupForLists =
                   (Core.TermLiteral (Core.LiteralString "bar"))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -796,7 +796,7 @@ testGroupForLists =
                   (Core.TermList [])]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))),
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -812,7 +812,7 @@ testGroupForLists =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -829,7 +829,7 @@ testGroupForLists =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -849,7 +849,7 @@ testGroupForLists =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -871,7 +871,7 @@ testGroupForLists =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -894,7 +894,7 @@ testGroupForLists =
                     (Core.TermVariable (Core.Name "x"))])})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -917,7 +917,7 @@ testGroupForMaps =
               (Core.TermLiteral (Core.LiteralString "lastName"), (Core.TermLiteral (Core.LiteralString "Dent")))])))),
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeMap (Core.MapType {
+              Core.typeSchemeBody = (Core.TypeMap (Core.MapType {
                 Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
                 Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)})),
               Core.typeSchemeConstraints = Nothing}))})),
@@ -932,7 +932,7 @@ testGroupForMaps =
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
-              Core.typeSchemeType = (Core.TypeMap (Core.MapType {
+              Core.typeSchemeBody = (Core.TypeMap (Core.MapType {
                 Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                 Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
               Core.typeSchemeConstraints = (Just (M.fromList [
@@ -957,7 +957,7 @@ testGroupForMaps =
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+              Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
@@ -985,7 +985,7 @@ testGroupForOptionals =
             Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+              Core.typeSchemeBody = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
               Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
@@ -997,7 +997,7 @@ testGroupForOptionals =
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
+              Core.typeSchemeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
               Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
@@ -1020,7 +1020,7 @@ testGroupForPairs =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1035,7 +1035,7 @@ testGroupForPairs =
                   (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 137.0)))]))))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1054,7 +1054,7 @@ testGroupForPairs =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                     Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1069,7 +1069,7 @@ testGroupForPairs =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                     Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1087,7 +1087,7 @@ testGroupForPairs =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "nested"))), (Core.TermLiteral (Core.LiteralBoolean True)))))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypePair (Core.PairType {
                       Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                       Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
@@ -1103,7 +1103,7 @@ testGroupForPairs =
                   Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))]))))))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypePair (Core.PairType {
                       Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -1127,7 +1127,7 @@ testGroupForPairs =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
                       Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
@@ -1146,7 +1146,7 @@ testGroupForPairs =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
                       Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
@@ -1168,7 +1168,7 @@ testGroupForPairs =
                   (Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))]))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1183,7 +1183,7 @@ testGroupForPairs =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypeList (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                     Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1201,7 +1201,7 @@ testGroupForPairs =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo")))))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1215,7 +1215,7 @@ testGroupForPairs =
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                     Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1230,7 +1230,7 @@ testGroupForPairs =
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
                     (Core.Name "t1")],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                     Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
@@ -1253,7 +1253,7 @@ testGroupForSets =
               Core.TermLiteral (Core.LiteralBoolean True)])))),
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeBoolean)),
+              Core.typeSchemeBody = (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeBoolean)),
               Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
@@ -1266,7 +1266,7 @@ testGroupForSets =
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))),
+              Core.typeSchemeBody = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))),
               Core.typeSchemeConstraints = (Just (M.fromList [
                 (Core.Name "t0", Core.TypeVariableMetadata {
                   Core.typeVariableMetadataClasses = (S.fromList [

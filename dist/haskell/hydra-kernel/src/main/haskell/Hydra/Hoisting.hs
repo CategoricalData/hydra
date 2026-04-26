@@ -55,9 +55,9 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                       Core.bindingTerm = (wrapAfterTypeLambdas varTypePairs (Core.bindingTerm b)),
                       Core.bindingType = (Maybes.map (\ts -> Core.TypeScheme {
                         Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-                        Core.typeSchemeType = (Lists.foldl (\acc -> \t -> Core.TypeFunction (Core.FunctionType {
+                        Core.typeSchemeBody = (Lists.foldl (\acc -> \t -> Core.TypeFunction (Core.FunctionType {
                           Core.functionTypeDomain = t,
-                          Core.functionTypeCodomain = acc})) (Core.typeSchemeType ts) (Lists.reverse varTypes)),
+                          Core.functionTypeCodomain = acc})) (Core.typeSchemeBody ts) (Lists.reverse varTypes)),
                         Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b))}, (Just (Core.bindingName b, (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
                       Core.applicationFunction = t,
                       Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable (Core.bindingName b)) freeVars)))))
@@ -73,7 +73,7 @@ bindingIsPolymorphic binding =
 bindingUsesContextTypeVars :: Graph.Graph -> Core.Binding -> Bool
 bindingUsesContextTypeVars cx binding =
     Maybes.maybe False (\ts ->
-      let freeInType = Variables.freeVariablesInType (Core.typeSchemeType ts)
+      let freeInType = Variables.freeVariablesInType (Core.typeSchemeBody ts)
           contextTypeVars = Graph.graphTypeVariables cx
       in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding)
 
@@ -147,7 +147,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     capturedTermVarTypes =
                             Lists.map (\typ -> Strip.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs))
                     freeInBindingType =
-                            Maybes.maybe Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeType ts)) (Core.bindingType b)
+                            Maybes.maybe Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeBody ts)) (Core.bindingType b)
                     freeInCapturedVarTypes = Sets.unions (Lists.map (\t -> Variables.freeVariablesInType t) capturedTermVarTypes)
                     capturedTypeVars =
                             Sets.toList (Sets.intersection (Graph.graphTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes))
@@ -157,9 +157,9 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     newTypeScheme =
                             Logic.ifElse (Equality.equal (Lists.length capturedTermVarTypes) (Lists.length capturedTermVarTypePairs)) (Maybes.map (\ts -> Core.TypeScheme {
                               Core.typeSchemeVariables = (Lists.nub (Lists.concat2 capturedTypeVars (Core.typeSchemeVariables ts))),
-                              Core.typeSchemeType = (Lists.foldl (\t -> \a -> Core.TypeFunction (Core.FunctionType {
+                              Core.typeSchemeBody = (Lists.foldl (\t -> \a -> Core.TypeFunction (Core.FunctionType {
                                 Core.functionTypeDomain = a,
-                                Core.functionTypeCodomain = t})) (Core.typeSchemeType ts) (Lists.reverse capturedTermVarTypes)),
+                                Core.functionTypeCodomain = t})) (Core.typeSchemeBody ts) (Lists.reverse capturedTermVarTypes)),
                               Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b)) Nothing
                     strippedTerm = Strip.stripTypeLambdas (Core.bindingTerm b)
                     termWithLambdas =

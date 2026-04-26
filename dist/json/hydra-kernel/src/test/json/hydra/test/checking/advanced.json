@@ -28,7 +28,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.advanced.annotatedTermsTests",
@@ -55,7 +55,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.advanced.topLevelAnnotationsTests",
@@ -797,7 +797,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.advanced.nestedAnnotationsTests",
@@ -1418,7 +1418,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.advanced.annotationsInComplexContextsTests",
@@ -2268,7 +2268,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Advanced type checking test cases: annotated terms and flows",
   "namespace": "hydra.test.checking.advanced",
   "termDependencies": ["hydra.test.testGraph", "hydra.rewriting"],

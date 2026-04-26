@@ -235,7 +235,7 @@ encodeLetBinding cx g outerTypeVars b =
           bterm = Core.bindingTerm b
           mts = Maybes.maybe (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts) (Core.bindingType b)
           isFn =
-                  Maybes.maybe False (\ts -> case (Strip.deannotateType (Core.typeSchemeType ts)) of
+                  Maybes.maybe False (\ts -> case (Strip.deannotateType (Core.typeSchemeBody ts)) of
                     Core.TypeFunction _ -> True
                     Core.TypeForall v0 -> case (Strip.deannotateType (Core.forallTypeBody v0)) of
                       Core.TypeFunction _ -> True
@@ -252,7 +252,7 @@ encodeLetBinding cx g outerTypeVars b =
         Syntax.defn_ValRhs = srhs}))))) (\ts ->
         let newVars = Lists.filter (\v -> Logic.not (Sets.member v outerTypeVars)) (Core.typeSchemeVariables ts)
             useDef = Logic.or isFn (Logic.not (Lists.null newVars))
-        in (Logic.ifElse useDef (encodeLocalDef cx g outerTypeVars bname bterm (Core.typeSchemeType ts)) (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Eithers.bind (encodeType cx g (Core.typeSchemeType ts)) (\styp -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
+        in (Logic.ifElse useDef (encodeLocalDef cx g outerTypeVars bname bterm (Core.typeSchemeBody ts)) (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Eithers.bind (encodeType cx g (Core.typeSchemeBody ts)) (\styp -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
           Syntax.defn_ValMods = [
             Syntax.ModLazy],
           Syntax.defn_ValPats = [
@@ -474,7 +474,7 @@ encodeTermDefinition cx g td =
       let name = Packaging.termDefinitionName td
           term = Packaging.termDefinitionTerm td
           lname = Utils.scalaEscapeName (Names.localNameOf name)
-          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Packaging.termDefinitionType td)
+          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionType td)
           isFunctionType =
                   case (Strip.deannotateType typ_) of
                     Core.TypeFunction _ -> True
@@ -601,7 +601,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Er
 encodeTypeDefinition cx g td =
 
       let name = Packaging.typeDefinitionName td
-          typ = Core.typeSchemeType (Packaging.typeDefinitionType td)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionType td)
           lname = Names.localNameOf name
           tname = Syntax.Type_Name {
                 Syntax.type_NameValue = lname}

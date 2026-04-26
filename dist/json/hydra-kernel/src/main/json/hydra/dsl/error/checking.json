@@ -47,14 +47,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A post-unification consistency check failure"}}}],
                     "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -66,8 +66,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A post-unification consistency check failure"}}}],
                       "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -119,14 +119,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A type that is not a forall type when one was expected"}}}],
                     "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -138,8 +138,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A type that is not a forall type when one was expected"}}}],
                       "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -191,14 +191,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A type that is not a function type when one was expected"}}}],
                     "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -210,8 +210,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A type that is not a function type when one was expected"}}}],
                       "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -263,13 +263,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A generic checking error"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A generic checking error"}}}],
                     "body": {"variable": "hydra.error.checking.OtherCheckingError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -281,8 +281,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A generic checking error"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A generic checking error"}}}],
                       "body": {"variable": "hydra.error.checking.OtherCheckingError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -333,15 +333,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A type constructor applied to the wrong number of arguments"}}}],
                     "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -353,8 +353,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A type constructor applied to the wrong number of arguments"}}}],
                       "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
@@ -407,14 +407,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A type mismatch between expected and actual types"}}}],
                     "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -426,8 +426,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A type mismatch between expected and actual types"}}}],
                       "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -479,13 +479,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
                     "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -497,8 +497,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
                       "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -549,8 +549,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
                     "body": {
@@ -558,7 +558,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -570,8 +570,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
                       "body": {
@@ -625,14 +625,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Multiple types that should be equal but are not"}}}],
                     "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -644,8 +644,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Multiple types that should be equal but are not"}}}],
                       "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -697,14 +697,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "A term variant that the type checker does not support"}}}],
                     "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -716,8 +716,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "A term variant that the type checker does not support"}}}],
                       "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -769,15 +769,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A lambda expression without a type annotation on its parameter"}}}],
                     "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -789,8 +789,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A lambda expression without a type annotation on its parameter"}}}],
                       "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
@@ -843,13 +843,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A let binding without a type annotation"}}}],
                     "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -861,8 +861,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A let binding without a type annotation"}}}],
                       "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -913,15 +913,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
                     "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -933,8 +933,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
                       "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}},
@@ -990,14 +990,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The substitution that failed the consistency check"}}}],
                     "body": {"variable": "hydra.typing.TypeSubst"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "substitution"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1009,8 +1009,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The substitution that failed the consistency check"}}}],
                       "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -1068,7 +1068,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1076,8 +1076,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The substitution that failed the consistency check"}}}],
                       "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1138,8 +1138,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The substitution that failed the consistency check"}}}],
                         "body": {"variable": "hydra.typing.TypeSubst"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1150,7 +1150,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1164,8 +1164,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The substitution that failed the consistency check"}}}],
                           "body": {"variable": "hydra.typing.TypeSubst"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -1241,8 +1241,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type arguments that were being applied"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "typeArguments"}},
@@ -1252,13 +1252,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The actual type encountered"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The actual type encountered"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "type"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1272,8 +1272,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The type arguments that were being applied"}}}],
                           "body": {"list": {"variable": "hydra.core.Type"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1282,8 +1282,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The actual type encountered"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1339,7 +1339,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1347,8 +1347,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The actual type encountered"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1408,7 +1408,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1416,8 +1416,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The type arguments that were being applied"}}}],
                       "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1526,8 +1526,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1537,7 +1537,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1551,8 +1551,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The actual type encountered"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1661,8 +1661,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type arguments that were being applied"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1672,7 +1672,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1686,8 +1686,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The type arguments that were being applied"}}}],
                           "body": {"list": {"variable": "hydra.core.Type"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1744,13 +1744,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The actual type encountered"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The actual type encountered"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "type"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1762,8 +1762,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The actual type encountered"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1819,7 +1819,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1827,8 +1827,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The actual type encountered"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1887,8 +1887,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1898,7 +1898,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1912,8 +1912,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The actual type encountered"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1988,8 +1988,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable error message"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "message"}},
@@ -1999,14 +1999,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The subterm path at which the error was observed"}}}],
                     "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "path"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2020,8 +2020,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable error message"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable error message"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2030,8 +2030,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path at which the error was observed"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2088,7 +2088,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2096,8 +2096,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path at which the error was observed"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2158,7 +2158,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2166,8 +2166,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A human-readable error message"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A human-readable error message"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -2276,8 +2276,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path at which the error was observed"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2288,7 +2288,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2302,8 +2302,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path at which the error was observed"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2413,8 +2413,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable error message"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2424,7 +2424,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2438,8 +2438,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable error message"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable error message"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2550,8 +2550,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                                    "key": "description",
+                                    "value": {"literal": {"string": "The type arguments that were provided"}}}],
                                 "body": {"list": {"variable": "hydra.core.Type"}}}},
                             "function": {"variable": "hydra.phantoms.TTerm"}}},
                         "parameter": "typeArguments"}},
@@ -2561,8 +2561,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "The actual number of type arguments provided"}}}],
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2573,8 +2573,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected number of type arguments"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "expectedArity"}},
@@ -2584,13 +2584,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The type being checked"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The type being checked"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "type"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2608,8 +2608,8 @@
                                 "annotated": {
                                   "annotation": [
                                     {
-                                      "@key": "description",
-                                      "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                                      "key": "description",
+                                      "value": {"literal": {"string": "The type arguments that were provided"}}}],
                                   "body": {"list": {"variable": "hydra.core.Type"}}}},
                               "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                       "domain": {
@@ -2618,8 +2618,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {"string": "The actual number of type arguments provided"}}}],
                               "body": {"literal": {"integer": {"int32": {}}}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2629,8 +2629,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The expected number of type arguments"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2639,8 +2639,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type being checked"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The type being checked"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2696,7 +2696,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2704,8 +2704,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type being checked"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The type being checked"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -2765,7 +2765,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2773,8 +2773,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The expected number of type arguments"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -2834,7 +2834,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2842,8 +2842,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The actual number of type arguments provided"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2904,7 +2904,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2912,8 +2912,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The type arguments that were provided"}}}],
                       "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -3122,8 +3122,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type being checked"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type being checked"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -3133,7 +3133,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3147,8 +3147,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The type being checked"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The type being checked"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -3357,8 +3357,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected number of type arguments"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -3368,7 +3368,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3382,8 +3382,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The expected number of type arguments"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -3592,8 +3592,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The actual number of type arguments provided"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3604,7 +3604,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3618,8 +3618,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The actual number of type arguments provided"}}}],
                           "body": {"literal": {"integer": {"int32": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3829,8 +3829,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type arguments that were provided"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -3840,7 +3840,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3854,8 +3854,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The type arguments that were provided"}}}],
                           "body": {"list": {"variable": "hydra.core.Type"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -3930,8 +3930,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "actualType"}},
@@ -3941,13 +3941,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The expected type"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The expected type"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "expectedType"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3961,8 +3961,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The actual type encountered"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -3971,8 +3971,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected type"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The expected type"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4028,7 +4028,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4036,8 +4036,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected type"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The expected type"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4097,7 +4097,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4105,8 +4105,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The actual type encountered"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4215,8 +4215,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expected type"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4226,7 +4226,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4240,8 +4240,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The expected type"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The expected type"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4350,8 +4350,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4361,7 +4361,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4375,8 +4375,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The actual type encountered"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4452,8 +4452,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type containing the unbound variables"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "type"}},
@@ -4463,13 +4463,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The set of unbound type variable names"}}}],
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "variables"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4483,8 +4483,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The type containing the unbound variables"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4493,8 +4493,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The set of unbound type variable names"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4551,7 +4551,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4559,8 +4559,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The set of unbound type variable names"}}}],
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4621,7 +4621,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4629,8 +4629,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The type containing the unbound variables"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4741,8 +4741,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The set of unbound type variable names"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4752,7 +4752,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4766,8 +4766,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The set of unbound type variable names"}}}],
                           "body": {"set": {"variable": "hydra.core.Name"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4878,8 +4878,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type containing the unbound variables"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4889,7 +4889,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4903,8 +4903,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The type containing the unbound variables"}}}],
                           "body": {"variable": "hydra.core.Type"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4980,8 +4980,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the undefined variable"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the undefined variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "name"}},
@@ -4991,14 +4991,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                     "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "path"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5013,8 +5013,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the undefined variable"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The name of the undefined variable"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5023,8 +5023,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -5083,7 +5083,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5091,8 +5091,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -5156,7 +5156,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5164,8 +5164,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the undefined variable"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of the undefined variable"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5277,8 +5277,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -5290,7 +5290,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5305,8 +5305,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -5419,8 +5419,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the undefined variable"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the undefined variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5431,7 +5431,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5446,8 +5446,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the undefined variable"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The name of the undefined variable"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5523,8 +5523,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A description of the context in which the types were expected to be equal"}}}],
                         "body": {"literal": {"string": {}}}}},
@@ -5536,13 +5536,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The list of types that are not all equal"}}}],
                     "body": {"list": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "types"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5556,8 +5556,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "A description of the context in which the types were expected to be equal"}}}],
                           "body": {"literal": {"string": {}}}}},
@@ -5568,8 +5568,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The list of types that are not all equal"}}}],
                       "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5625,7 +5625,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5633,8 +5633,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The list of types that are not all equal"}}}],
                       "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5694,7 +5694,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5702,8 +5702,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A description of the context in which the types were expected to be equal"}}}],
                       "body": {"literal": {"string": {}}}}},
@@ -5814,8 +5814,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The list of types that are not all equal"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5825,7 +5825,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5839,8 +5839,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The list of types that are not all equal"}}}],
                           "body": {"list": {"variable": "hydra.core.Type"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5949,8 +5949,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A description of the context in which the types were expected to be equal"}}}],
                         "body": {"literal": {"string": {}}}}},
@@ -5962,7 +5962,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5976,8 +5976,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "A description of the context in which the types were expected to be equal"}}}],
                           "body": {"literal": {"string": {}}}}},
@@ -6037,13 +6037,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The unsupported term variant"}}}],
                     "body": {"variable": "hydra.variants.TermVariant"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "termVariant"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6055,8 +6055,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The unsupported term variant"}}}],
                       "body": {"variable": "hydra.variants.TermVariant"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -6113,7 +6113,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6121,8 +6121,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The unsupported term variant"}}}],
                       "body": {"variable": "hydra.variants.TermVariant"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -6182,8 +6182,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The unsupported term variant"}}}],
                         "body": {"variable": "hydra.variants.TermVariant"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6193,7 +6193,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6207,8 +6207,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The unsupported term variant"}}}],
                           "body": {"variable": "hydra.variants.TermVariant"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6239,7 +6239,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.error.checking.UntypedLambdaError"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6293,13 +6293,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The untyped binding"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The untyped binding"}}}],
                     "body": {"variable": "hydra.core.Binding"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "binding"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6311,8 +6311,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The untyped binding"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The untyped binding"}}}],
                       "body": {"variable": "hydra.core.Binding"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -6368,7 +6368,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6376,8 +6376,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The untyped binding"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The untyped binding"}}}],
                       "body": {"variable": "hydra.core.Binding"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -6436,8 +6436,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The untyped binding"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The untyped binding"}}}],
                         "body": {"variable": "hydra.core.Binding"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6447,7 +6447,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6461,8 +6461,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The untyped binding"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The untyped binding"}}}],
                           "body": {"variable": "hydra.core.Binding"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6538,8 +6538,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the untyped variable"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the untyped variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "name"}},
@@ -6549,14 +6549,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                     "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "path"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6570,8 +6570,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the untyped variable"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The name of the untyped variable"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -6580,8 +6580,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -6639,7 +6639,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6647,8 +6647,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6710,7 +6710,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6718,8 +6718,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the untyped variable"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of the untyped variable"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -6830,8 +6830,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6842,7 +6842,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6856,8 +6856,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path at which the variable was referenced"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -6969,8 +6969,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the untyped variable"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the untyped variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -6980,7 +6980,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -6994,8 +6994,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the untyped variable"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The name of the untyped variable"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {

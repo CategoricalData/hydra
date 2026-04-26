@@ -271,8 +271,8 @@ encodeModule cx graph mod =
           Core.bindingTerm = dataTerm,
           Core.bindingType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+            Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
       Packaging.moduleNamespace = (encodeNamespace (Packaging.moduleNamespace mod)),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -673,7 +673,7 @@ encoderTypeScheme typ =
                     Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
-        Core.typeSchemeType = encoderFunType,
+        Core.typeSchemeBody = encoderFunType,
         Core.typeSchemeConstraints = constraints}
 
 -- | Construct a TypeScheme for an encoder function, with element name for nominal types
@@ -689,7 +689,7 @@ encoderTypeSchemeNamed ename typ =
                     Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
-        Core.typeSchemeType = encoderFunType,
+        Core.typeSchemeBody = encoderFunType,
         Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only encodable type definitions

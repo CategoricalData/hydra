@@ -44,7 +44,7 @@
             "domain": {"variable": "hydra.testing.Tag"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.testing.Tag"}}},
@@ -96,7 +96,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.testing.TestCase"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.testing.TestCase"}}},
@@ -276,7 +276,7 @@
             "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
@@ -473,7 +473,7 @@
             "domain": {"variable": "hydra.testing.TestGroup"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.testing.TestGroup"}}},
@@ -569,7 +569,7 @@
             "domain": {"variable": "hydra.testing.UniversalTestCase"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.testing.UniversalTestCase"}}},

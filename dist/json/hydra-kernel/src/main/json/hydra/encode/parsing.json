@@ -91,7 +91,7 @@
             "domain": {"variable": "hydra.parsing.ParseError"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.parsing.ParseError"}}},
@@ -204,7 +204,7 @@
                 "parameter": "a"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -316,7 +316,7 @@
                 "parameter": "a"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

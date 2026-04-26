@@ -7,12 +7,12 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly"}}}],
             "body": {"literal": {"integer": {"int32": 9}}}}},
-        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
+        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.java.language.javaLanguage",
@@ -20,8 +20,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Language constraints for Java"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Language constraints for Java"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -48,7 +48,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
                     "name": "literalVariants",
@@ -85,7 +85,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -110,7 +110,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -131,7 +131,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
                     "name": "integerTypes",
@@ -168,7 +168,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -261,7 +261,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -342,7 +342,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -355,7 +355,7 @@
                             "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "t0"}}},
@@ -391,7 +391,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.java.language.reservedWords",
@@ -399,8 +399,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "A set of reserved words in Java"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "A set of reserved words in Java"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -410,18 +410,18 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Special names reserved for use by Hydra"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Special names reserved for use by Hydra"}}}],
                         "body": {"list": [{"literal": {"string": "Elements"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "classNames",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "java.lang classes as of JDK 7\nSee: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html"}}}],
                         "body": {
@@ -522,15 +522,15 @@
                             {"literal": {"string": "VerifyError"}},
                             {"literal": {"string": "VirtualMachineError"}},
                             {"literal": {"string": "Void"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "keywords",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\nSee: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html"}}}],
                         "body": {
@@ -585,7 +585,7 @@
                             {"literal": {"string": "void"}},
                             {"literal": {"string": "volatile"}},
                             {"literal": {"string": "while"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "literals",
                     "term": {
@@ -593,7 +593,7 @@
                         {"literal": {"string": "false"}},
                         {"literal": {"string": "null"}},
                         {"literal": {"string": "true"}}]},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -612,7 +612,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for Java",
   "namespace": "hydra.java.language",
   "termDependencies": ["hydra.lexical"],

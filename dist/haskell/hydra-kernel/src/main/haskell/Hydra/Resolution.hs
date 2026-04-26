@@ -71,7 +71,7 @@ fieldTypes cx graph t =
         Core.TypeUnion v0 -> Right (toMap v0)
         Core.TypeVariable v0 -> Maybes.maybe (Eithers.bind (Lexical.requireBinding graph v0) (\el -> Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "type",
-          Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeType ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
+          Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeBody ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "record or union type",
           Errors.unexpectedShapeErrorActual = (ShowCore.type_ t)})))
@@ -131,7 +131,7 @@ instantiateTypeScheme cx scheme =
                   Maybes.map (\oldConstraints -> Maps.fromList (Lists.map (\kv -> (Maybes.fromMaybe (Pairs.first kv) (Maps.lookup (Pairs.first kv) nameSubst), (Pairs.second kv))) (Maps.toList oldConstraints))) (Core.typeSchemeConstraints scheme)
       in (Core.TypeScheme {
         Core.typeSchemeVariables = newVars,
-        Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme)),
+        Core.typeSchemeBody = (Substitution.substInType subst (Core.typeSchemeBody scheme)),
         Core.typeSchemeConstraints = renamedConstraints}, cx2)
 
 -- | Apply type arguments to a nominal type
@@ -214,6 +214,6 @@ typeToTypeScheme t0 =
                 Core.TypeForall v0 -> helper (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
                 _ -> Core.TypeScheme {
                   Core.typeSchemeVariables = (Lists.reverse vars),
-                  Core.typeSchemeType = t,
+                  Core.typeSchemeBody = t,
                   Core.typeSchemeConstraints = Nothing}
       in (helper [] t0)

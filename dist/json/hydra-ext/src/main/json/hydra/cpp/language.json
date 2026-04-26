@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Language constraints for C++"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Language constraints for C++"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -35,7 +35,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
                     "name": "literalVariants",
@@ -68,7 +68,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -89,7 +89,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -110,7 +110,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
                     "name": "integerTypes",
@@ -143,7 +143,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -232,7 +232,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -301,7 +301,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -314,7 +314,7 @@
                             "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "t0"}}},
@@ -350,7 +350,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.language.cppReservedWords",
@@ -358,8 +358,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "A set of reserved words in C++"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "A set of reserved words in C++"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -369,8 +369,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "C++ keywords, including C++11/14/17/20 additions"}}}],
                         "body": {
                           "list": [
@@ -466,15 +466,15 @@
                             {"literal": {"string": "while"}},
                             {"literal": {"string": "xor"}},
                             {"literal": {"string": "xor_eq"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "cppPreprocessor",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "C++ preprocessor directives"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "C++ preprocessor directives"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "#define"}},
@@ -489,15 +489,15 @@
                             {"literal": {"string": "#line"}},
                             {"literal": {"string": "#pragma"}},
                             {"literal": {"string": "#undef"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "cppStlTypes",
                     "term": {
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Common STL types and namespaces that should be treated as reserved"}}}],
                         "body": {
@@ -528,7 +528,7 @@
                             {"literal": {"string": "shared_ptr"}},
                             {"literal": {"string": "unique_ptr"}},
                             {"literal": {"string": "weak_ptr"}}]}}},
-                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraCppKeywords",
                     "term": {
@@ -537,12 +537,12 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}],
                             "body": {
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
                         "parameter": "t0"}},
-                    "type": {"type": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],
+                    "type": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -564,7 +564,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for C++",
   "namespace": "hydra.cpp.language",
   "termDependencies": ["hydra.lexical"],

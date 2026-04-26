@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Extract the name from a type, if it is a named type"}}}],
                 "body": {
                   "lambda": {
@@ -60,7 +60,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -75,8 +75,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Qualify a union field name, optionally prefixing with the Scala type name"}}}],
             "body": {
@@ -136,7 +136,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "dlft"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -154,8 +154,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Apply a Scala data expression to a list of arguments"}}}],
             "body": {
               "lambda": {
@@ -177,7 +177,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Data"},
                 "parameter": "fun"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -192,8 +192,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Apply explicit type parameters to a Scala expression (e.g. f[A, B])"}}}],
             "body": {
@@ -214,7 +214,7 @@
                                 "domain": {"variable": "hydra.scala.syntax.Type"},
                                 "parameter": "t"}},
                             "type": {
-                              "type": {
+                              "body": {
                                 "function": {
                                   "codomain": {"literal": {"string": {}}},
                                   "domain": {"variable": "hydra.scala.syntax.Type"}}},
@@ -234,7 +234,7 @@
                                             "body": {"variable": "hydra.lib.lists.map"},
                                             "type": {"variable": "hydra.scala.syntax.Type"}}},
                                         "type": {"literal": {"string": {}}}}}}}}},
-                            "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                            "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                           {
                             "name": "typeArgStr",
                             "term": {
@@ -251,7 +251,7 @@
                                             "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                     {"literal": {"string": "]"}}]},
                                 "function": {"variable": "hydra.lib.strings.cat"}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {"variable": "fun"},
@@ -283,7 +283,7 @@
                                                                     "function": {
                                                                       "project": {"field": "value", "typeName": "hydra.scala.syntax.Data_Name"}}}},
                                                                 "type": {
-                                                                  "type": {"variable": "hydra.scala.syntax.PredefString"},
+                                                                  "body": {"variable": "hydra.scala.syntax.PredefString"},
                                                                   "variables": []}},
                                                               {
                                                                 "name": "rawName",
@@ -291,7 +291,7 @@
                                                                   "application": {
                                                                     "argument": {"variable": "nameStr"},
                                                                     "function": {"unwrap": "hydra.scala.syntax.PredefString"}}},
-                                                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "argument": {
@@ -315,7 +315,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Data"},
                 "parameter": "fun"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -330,8 +330,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Scala assignment expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Scala assignment expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -352,7 +352,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Data"},
                 "parameter": "lhs"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -367,8 +367,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Sanitize a name for Scala: escape reserved words, replace invalid characters"}}}],
             "body": {
@@ -422,7 +422,7 @@
                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                             "function": {"variable": "hydra.lib.strings.fromList"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "sanitized2",
                         "term": {
@@ -447,7 +447,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "sanitized3",
                         "term": {
@@ -472,7 +472,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {"literal": {"string": {}}}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "needsBackticks",
                         "term": {
@@ -542,7 +542,7 @@
                                             "body": {"variable": "hydra.lib.sets.member"},
                                             "type": {"literal": {"string": {}}}}}}}}},
                                 "function": {"variable": "hydra.lib.logic.or"}}}}},
-                        "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "sanitized3"},
@@ -566,7 +566,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},
@@ -578,11 +578,11 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Reference to scalaReservedWords from the language module"}}}],
             "body": {"variable": "hydra.scala.language.scalaReservedWords"}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.scala.utils.scalaTypeName",
@@ -590,8 +590,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a Hydra name to a Scala type name"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Convert a Hydra name to a Scala type name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -638,7 +638,7 @@
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "qualify"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -653,8 +653,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Scala lambda (function) expression"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Scala lambda (function) expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -708,7 +708,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "v"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -726,8 +726,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Scala name reference"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Scala name reference"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -753,7 +753,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.scala.syntax.Data"},
               "domain": {"literal": {"string": {}}}}},
@@ -765,8 +765,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Create a Scala primitive reference from a Hydra name"}}}],
             "body": {
               "lambda": {
@@ -780,7 +780,7 @@
                             "argument": {"variable": "name"},
                             "function": {"variable": "hydra.names.qualifyName"}}},
                         "type": {
-                          "type": {"variable": "hydra.packaging.QualifiedName"},
+                          "body": {"variable": "hydra.packaging.QualifiedName"},
                           "variables": []}},
                       {
                         "name": "prefix",
@@ -804,7 +804,7 @@
                                         "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                         "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                             "function": {"unwrap": "hydra.packaging.Namespace"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "local",
                         "term": {
@@ -815,7 +815,7 @@
                                 "function": {
                                   "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "function": {"variable": "hydra.scala.utils.scalaEscapeName"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -835,7 +835,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.scala.syntax.Data"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -847,8 +847,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Apply a Scala type to a list of type arguments"}}}],
             "body": {
               "lambda": {
@@ -870,7 +870,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Type"},
                 "parameter": "t"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -885,8 +885,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Apply a Scala type to one type argument"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Apply a Scala type to one type argument"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -903,7 +903,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Type"},
                 "parameter": "t1"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -918,8 +918,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Apply a Scala type to two type arguments"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Apply a Scala type to two type arguments"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -940,7 +940,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Type"},
                 "parameter": "t1"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -958,8 +958,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params"}}}],
             "body": {
@@ -976,7 +976,7 @@
                                 "argument": {"variable": "name"},
                                 "function": {"unwrap": "hydra.core.Name"}}},
                             "function": {"variable": "hydra.formatting.capitalize"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "record": {
                         "fields": [
@@ -1018,7 +1018,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.scala.syntax.Type_Param"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -1030,8 +1030,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Scala type reference by name"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Scala type reference by name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1051,7 +1051,7 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.scala.syntax.Type"},
               "domain": {"literal": {"string": {}}}}},
@@ -1063,8 +1063,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Create a Scala pattern variable"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Create a Scala pattern variable"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1076,7 +1076,7 @@
                           "application": {
                             "argument": {"variable": "name"},
                             "function": {"unwrap": "hydra.core.Name"}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "inject": {
                         "field": {
@@ -1101,7 +1101,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.scala.syntax.Pat"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -1113,8 +1113,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a Scala type to its string representation"}}}],
             "body": {
               "lambda": {
@@ -1200,7 +1200,7 @@
                                                                         "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.scala.syntax.Type"}}},
                                                                     "type": {"literal": {"string": {}}}}}}}}},
-                                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                                       {
                                                         "name": "res",
                                                         "term": {
@@ -1211,7 +1211,7 @@
                                                                 "function": {
                                                                   "project": {"field": "res", "typeName": "hydra.scala.syntax.Type_Function"}}}},
                                                             "function": {"variable": "hydra.scala.utils.typeToString"}}},
-                                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
@@ -1250,7 +1250,7 @@
                                                 "function": {
                                                   "project": {"field": "tpe", "typeName": "hydra.scala.syntax.Type_Apply"}}}},
                                             "function": {"variable": "hydra.scala.utils.typeToString"}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                                       {
                                         "name": "argStrs",
                                         "term": {
@@ -1270,7 +1270,7 @@
                                                         "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"variable": "hydra.scala.syntax.Type"}}},
                                                     "type": {"literal": {"string": {}}}}}}}}},
-                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                     "body": {
                                       "application": {
                                         "argument": {
@@ -1293,7 +1293,7 @@
                 "domain": {"variable": "hydra.scala.syntax.Type"},
                 "parameter": "t"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.scala.syntax.Type"}}},

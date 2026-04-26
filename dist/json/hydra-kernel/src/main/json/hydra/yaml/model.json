@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.yaml.model.Node",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A YAML node (value)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A YAML node (value)"}}}],
               "body": {
                 "union": [
                   {
@@ -18,8 +18,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.yaml.model.Node"},
@@ -30,8 +30,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A scalar value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A scalar value"}}}],
                         "body": {"variable": "hydra.yaml.model.Scalar"}}}},
                   {
                     "name": "sequence",
@@ -39,20 +39,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A sequence of nodes"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A sequence of nodes"}}}],
                         "body": {"list": {"variable": "hydra.yaml.model.Node"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.yaml.model.Scalar",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here"}}}],
               "body": {
@@ -63,8 +63,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Represents a true/false value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Represents a true/false value"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "decimal",
@@ -72,8 +72,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
                         "body": {"literal": {"decimal": {}}}}}},
@@ -83,8 +83,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
                         "body": {"literal": {"float": {"bigfloat": {}}}}}}},
                   {
                     "name": "int",
@@ -92,8 +92,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}}},
                   {
@@ -102,8 +102,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Represents the lack of a value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Represents the lack of a value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "str",
@@ -111,8 +111,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A string value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
   "description": "A basic YAML representation model. Based on:\n  https://yaml.org/spec/1.2/spec.html\nThe Serialization and Presentation properties of YAML,\nincluding directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\nIn addition, tags are omitted from this model, and non-standard scalars are unsupported.",
