@@ -50,7 +50,13 @@
   ;; Load the kernel loader
   (load (merge-pathnames "loader.lisp" hydra-dir))
   ;; Load JSON reader
-  (load (merge-pathnames "json-reader.lisp" hydra-dir)))
+  (load (merge-pathnames "json-reader.lisp" hydra-dir))
+  ;; Override *hydra-gen-main-dir* to point at the dist/ generated content
+  ;; (loader.lisp defaults to heads/lisp/common-lisp/src/gen-main/..., which no
+  ;; longer exists; mirrors the override in run-tests.lisp).
+  (setf *hydra-gen-main-dir*
+        (merge-pathnames "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+                         hydra-dir)))
 
 (format t "Loading kernel...~%")
 (force-output)
@@ -144,18 +150,18 @@
 (defun resolve-coder (target)
   (cond
     ((string= target "python")
-     (list (symbol-value 'hydra_ext_python_coder_module_to_python)
-           (symbol-value 'hydra_ext_python_language_python_language)
+     (list (symbol-value 'hydra_python_coder_module_to_python)
+           (symbol-value 'hydra_python_language_python_language)
            (list nil t t nil)  ; flags: infer=f expand=t hoistCase=t hoistPoly=f
            "python"))
     ((string= target "java")
-     (list (symbol-value 'hydra_ext_java_coder_module_to_java)
-           (symbol-value 'hydra_ext_java_language_java_language)
+     (list (symbol-value 'hydra_java_coder_module_to_java)
+           (symbol-value 'hydra_java_language_java_language)
            (list nil t nil t)
            "java"))
     ((string= target "haskell")
-     (list (symbol-value 'hydra_ext_haskell_coder_module_to_haskell)
-           (symbol-value 'hydra_ext_haskell_language_haskell_language)
+     (list (symbol-value 'hydra_haskell_coder_module_to_haskell)
+           (symbol-value 'hydra_haskell_language_haskell_language)
            (list nil nil nil nil)
            "haskell"))
     ((or (string= target "clojure") (string= target "scheme")
@@ -167,8 +173,8 @@
                        ("common-lisp" . ".lisp") ("emacs-lisp" . ".el")))
             (dialect (cdr (assoc target dialect-map :test #'string=)))
             (ext (cdr (assoc target ext-map :test #'string=)))
-            (mtl (symbol-value 'hydra_ext_lisp_coder_module_to_lisp))
-            (pte (symbol-value 'hydra_ext_lisp_serde_program_to_expr)))
+            (mtl (symbol-value 'hydra_lisp_coder_module_to_lisp))
+            (pte (symbol-value 'hydra_lisp_serde_program_to_expr)))
        (list (lambda (mod)
                (lambda (defs)
                  (lambda (cx)
@@ -191,7 +197,7 @@
                                         (subseq ext 1))  ; ".lisp" -> "lisp"
                                         ns-val)))
                              (list :right (list (cons fp code))))))))))
-             (symbol-value 'hydra_ext_lisp_language_lisp_language)
+             (symbol-value 'hydra_lisp_language_lisp_language)
              (list nil nil nil nil)
              target)))
     (t (error "Unsupported target: ~A" target))))
