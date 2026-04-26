@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.query
 
 module Hydra.Decode.Query where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -16,7 +14,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 comparisonConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.ComparisonConstraint
 comparisonConstraint cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -37,7 +34,6 @@ comparisonConstraint cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 edge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Edge
 edge cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -48,7 +44,6 @@ edge cx raw =
           Query.edgeOut = field_out,
           Query.edgeIn = field_in})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 graphPattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.GraphPattern
 graphPattern cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -58,7 +53,6 @@ graphPattern cx raw =
           Query.graphPatternGraph = field_graph,
           Query.graphPatternPatterns = field_patterns}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 node :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Node
 node cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -76,7 +70,6 @@ node cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 path :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Path
 path cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -94,7 +87,6 @@ path cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 pathEquation :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PathEquation
 pathEquation cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -104,7 +96,6 @@ pathEquation cx raw =
           Query.pathEquationLeft = field_left,
           Query.pathEquationRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 pattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Pattern
 pattern cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -124,7 +115,6 @@ pattern cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 patternImplication :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PatternImplication
 patternImplication cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -134,7 +124,6 @@ patternImplication cx raw =
           Query.patternImplicationAntecedent = field_antecedent,
           Query.patternImplicationConsequent = field_consequent}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 query :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Query
 query cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -144,7 +133,6 @@ query cx raw =
           Query.queryVariables = field_variables,
           Query.queryPatterns = field_patterns}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 range :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Range
 range cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -166,7 +154,6 @@ range cx raw =
           Query.rangeMin = field_min,
           Query.rangeMax = field_max}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 regexQuantifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexQuantifier
 regexQuantifier cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -200,7 +187,6 @@ regexQuantifier cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 regexSequence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexSequence
 regexSequence cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -210,7 +196,6 @@ regexSequence cx raw =
           Query.regexSequencePath = field_path,
           Query.regexSequenceQuantifier = field_quantifier}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 step :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Step
 step cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -228,7 +213,6 @@ step cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 triplePattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.TriplePattern
 triplePattern cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -239,7 +223,6 @@ triplePattern cx raw =
           Query.triplePatternPredicate = field_predicate,
           Query.triplePatternObject = field_object})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 variable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Variable
 variable cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

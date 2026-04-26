@@ -215,8 +215,14 @@ customIndentBlock = define "customIndentBlock" $
 
 customIndent :: TTermDefinition (String -> String -> String)
 customIndent = define "customIndent" $
+  doc ("Indent every non-empty line of `s` by `idt`. Empty lines stay empty"
+    <> " (no trailing whitespace) so downstream byte-identity checks don't"
+    <> " care about indent depth.") $
   "idt" ~> "s" ~> Strings.cat $
-    Lists.intersperse (string "\n") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Strings.lines $ var "s"
+    Lists.intersperse (string "\n") $
+      Lists.map ("line" ~>
+        Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
+      Strings.lines $ var "s"
 
 dotSep :: TTermDefinition ([Expr] -> Expr)
 dotSep = define "dotSep" $
@@ -494,15 +500,21 @@ printExpr = define "printExpr" $
       "style" <~ Ast.indentedExpressionStyle (var "indentExpr") $
       "expr" <~ Ast.indentedExpressionExpr (var "indentExpr") $
       "lns" <~ Strings.lines (printExpr @@ var "expr") $
+      -- Indent prefix is applied only to non-empty lines; otherwise
+      -- empty lines pick up trailing whitespace and downstream tools
+      -- (host writers, byte-identity comparisons in the bootstrap
+      -- demo) have to strip it post-hoc.
+      "indentLine" <~ ("idt" ~> "line" ~>
+        Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
       "ilns" <~ cases _IndentStyle (var "style") Nothing [
-        _IndentStyle_allLines>>: "idt" ~> Lists.map ("line" ~> var "idt" ++ var "line") (var "lns"),
+        _IndentStyle_allLines>>: "idt" ~> Lists.map (var "indentLine" @@ var "idt") (var "lns"),
         _IndentStyle_subsequentLines>>: "idt" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
             (var "lns")
             (Maybes.fromMaybe (var "lns") $
               Maybes.map
                 ("uc" ~> Lists.cons (Pairs.first $ var "uc") $
-                  Lists.map ("line" ~> var "idt" ++ var "line") (Pairs.second $ var "uc"))
+                  Lists.map (var "indentLine" @@ var "idt") (Pairs.second $ var "uc"))
                 (Lists.uncons $ var "lns"))] $
       Strings.intercalate (string "\n") (var "ilns"),
     _Expr_seq>>: "seqExpr" ~>
@@ -512,9 +524,48 @@ printExpr = define "printExpr" $
       "spadl" <~ Ast.paddingLeft (var "spadding") $
       "spadr" <~ Ast.paddingRight (var "spadding") $
       "selements" <~ Ast.seqExprElements (var "seqExpr") $
-      "separator" <~ (var "pad" @@ var "spadl") ++ var "ssym" ++ (var "pad" @@ var "spadr") $
       "printedElements" <~ Lists.map ("el" ~> var "idt" @@ var "spadr" @@ (printExpr @@ var "el")) (var "selements") $
-      Strings.intercalate (var "separator") (var "printedElements"),
+      -- Trailing-whitespace defense: when stitching elements with the
+      -- separator `pad(spadl) ++ ssym ++ pad(spadr)`, whitespace in
+      -- the separator can dangle before/after a newline if an element
+      -- starts with `\n`. Result: "prev \nel" or "prev<sym> \nel".
+      --
+      -- Fix: build the joined string element-by-element. For each
+      -- element after the head, if it starts with `\n` then suppress
+      -- the whitespace parts of the separator (only the symbol stays).
+      "isNewlineWs" <~ ("ws" ~> cases _Ws (var "ws") (Just $ boolean False) [
+        _Ws_break>>: constant true,
+        _Ws_breakAndIndent>>: constant true,
+        _Ws_doubleBreak>>: constant true]) $
+      "spadlIsNewline" <~ var "isNewlineWs" @@ var "spadl" $
+      "spadrIsNewline" <~ var "isNewlineWs" @@ var "spadr" $
+      "joinElements" <~ ("acc" ~> "el" ~>
+        "elStartsWithNewline" <~ Maybes.maybe
+          (boolean False)
+          ("c" ~> Equality.equal (var "c") (int32 10))
+          (Strings.maybeCharAt (int32 0) (var "el")) $
+        "elIsEmpty" <~ Equality.equal (var "el") (string "") $
+        -- Suppress whitespace padding when the next element either
+        -- starts with `\n` (whitespace would dangle on previous line)
+        -- or is empty (whitespace would be at end of output unattached
+        -- to anything). Symbol stays in either case.
+        "padlEff" <~ Logic.ifElse
+          (Logic.or
+            (Logic.and (var "elStartsWithNewline") (Logic.not $ var "spadlIsNewline"))
+            (Logic.and (var "elIsEmpty") (Equality.equal (var "ssym") (string ""))))
+          (string "")
+          (var "pad" @@ var "spadl") $
+        "padrEff" <~ Logic.ifElse
+          (Logic.or
+            (Logic.and (var "elStartsWithNewline") (Logic.not $ var "spadrIsNewline"))
+            (Logic.and (var "elIsEmpty") (Equality.equal (var "ssym") (string ""))))
+          (string "")
+          (var "pad" @@ var "spadr") $
+        Strings.cat $ list [var "acc", var "padlEff", var "ssym", var "padrEff", var "el"]) $
+      Maybes.maybe
+        (string "")
+        ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements")))
+        (Lists.maybeHead $ var "printedElements"),
     _Expr_op>>: "opExpr" ~>
       "op" <~ Ast.opExprOp (var "opExpr") $
       "sym" <~ Ast.unSymbol (Ast.opSymbol $ var "op") $
@@ -525,7 +576,45 @@ printExpr = define "printExpr" $
       "r" <~ Ast.opExprRhs (var "opExpr") $
       "lhs" <~ var "idt" @@ var "padl" @@ (printExpr @@ var "l") $
       "rhs" <~ var "idt" @@ var "padr" @@ (printExpr @@ var "r") $
-      var "lhs" ++ (var "pad" @@ var "padl") ++ var "sym" ++ (var "pad" @@ var "padr") ++ var "rhs",
+      -- Two trailing-whitespace defenses around the inner separator:
+      --
+      -- 1. When sym is empty AND padr is one of the newline-emitting Ws
+      --    values, padl whitespace would land at the end of a line
+      --    (lhs + " " + "" + "\n" + rhs → "code \nrhs"). Suppress padl.
+      --
+      -- 2. When padr's pad string would land before a leading newline in
+      --    rhs (rhs starts with \n because the inner expression breaks),
+      --    drop padr's pad. Without this, "lhs sym <space>\nrhs" emits
+      --    a trailing space on the sym's line.
+      --
+      -- Newline-emitting Ws values are WsBreak, WsBreakAndIndent, and
+      -- WsDoubleBreak.
+      "padrIsNewline" <~ cases _Ws (var "padr") (Just $ boolean False) [
+        _Ws_break>>: constant true,
+        _Ws_breakAndIndent>>: constant true,
+        _Ws_doubleBreak>>: constant true] $
+      -- Suppress padl whitespace when:
+      --  (a) sym is empty AND padr is a newline (lhs's trailing space
+      --      would land at end of previous line), OR
+      --  (b) sym is empty AND rhs is empty (the entire trailing
+      --      separator is just whitespace with nothing after).
+      "padlEffective" <~ Logic.ifElse
+        (Logic.and (Equality.equal (var "sym") (string ""))
+                   (Logic.or (var "padrIsNewline")
+                             (Equality.equal (var "rhs") (string ""))))
+        (string "")
+        (var "pad" @@ var "padl") $
+      "padrPad" <~ (var "pad" @@ var "padr") $
+      "rhsStartsWithNewline" <~ Maybes.maybe
+        (boolean False)
+        ("c" ~> Equality.equal (var "c") (int32 10))
+        (Strings.maybeCharAt (int32 0) (var "rhs")) $
+      "padrEffective" <~ Logic.ifElse
+        (Logic.and (var "rhsStartsWithNewline")
+                   (Logic.not $ var "padrIsNewline"))
+        (string "")
+        (var "padrPad") $
+      var "lhs" ++ var "padlEffective" ++ var "sym" ++ var "padrEffective" ++ var "rhs",
     _Expr_brackets>>: "bracketExpr" ~>
       "brs" <~ Ast.bracketExprBrackets (var "bracketExpr") $
       "l" <~ Ast.unSymbol (Ast.bracketsOpen $ var "brs") $

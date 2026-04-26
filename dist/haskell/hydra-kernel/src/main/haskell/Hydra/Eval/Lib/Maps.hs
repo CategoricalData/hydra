@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Evaluation-level implementations of Map functions for the Hydra interpreter.
 
 module Hydra.Eval.Lib.Maps where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Show.Core as ShowCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Interpreter-friendly alter for Map terms.
 alter :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 alter cx g funTerm keyTerm mapTerm =
@@ -46,7 +43,6 @@ alter cx g funTerm keyTerm mapTerm =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
-
 -- | Interpreter-friendly bimap for Map terms.
 bimap :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 bimap cx g keyFun valFun mapTerm =
@@ -64,7 +60,6 @@ bimap cx g keyFun valFun mapTerm =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
-
 -- | Interpreter-friendly filter for Map terms.
 filter :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 filter cx g valPred mapTerm =
@@ -89,7 +84,6 @@ filter cx g valPred mapTerm =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
-
 -- | Interpreter-friendly filterWithKey for Map terms.
 filterWithKey :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 filterWithKey cx g pred mapTerm =
@@ -117,7 +111,6 @@ filterWithKey cx g pred mapTerm =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
-
 -- | Interpreter-friendly findWithDefault for Map terms.
 findWithDefault :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Term
 findWithDefault cx g defaultTerm keyTerm mapTerm =
@@ -130,7 +123,6 @@ findWithDefault cx g defaultTerm keyTerm mapTerm =
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
           Core.applicationArgument = keyTerm})),
         Core.applicationArgument = mapTerm}))}))
-
 -- | Interpreter-friendly map for Map terms.
 map :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 map cx g valFun mapTerm =
@@ -146,7 +138,6 @@ map cx g valFun mapTerm =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
-
 -- | Interpreter-friendly mapKeys for Map terms.
 mapKeys :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 mapKeys cx g keyFun mapTerm =

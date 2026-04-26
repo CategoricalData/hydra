@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Collection type checking test cases: lists, sets, maps
 
 module Hydra.Test.Checking.Collections where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -17,7 +15,6 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 allTests :: Testing.TestGroup
 allTests =
     Testing.TestGroup {
@@ -28,7 +25,6 @@ allTests =
         setsTests,
         mapsTests],
       Testing.testGroupCases = []}
-
 emptyListsTests :: Testing.TestGroup
 emptyListsTests =
     Testing.TestGroup {
@@ -69,7 +65,6 @@ emptyListsTests =
                 Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 listsInComplexContextsTests :: Testing.TestGroup
 listsInComplexContextsTests =
     Testing.TestGroup {
@@ -90,7 +85,6 @@ listsInComplexContextsTests =
               Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 listsOfLiteralsTests :: Testing.TestGroup
 listsOfLiteralsTests =
     Testing.TestGroup {
@@ -134,7 +128,6 @@ listsOfLiteralsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 listsTests :: Testing.TestGroup
 listsTests =
     Testing.TestGroup {
@@ -147,7 +140,6 @@ listsTests =
         nestedListsTests,
         listsInComplexContextsTests],
       Testing.testGroupCases = []}
-
 mapsInComplexContextsTests :: Testing.TestGroup
 mapsInComplexContextsTests =
     Testing.TestGroup {
@@ -197,7 +189,6 @@ mapsInComplexContextsTests =
               Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 mapsTests :: Testing.TestGroup
 mapsTests =
     Testing.TestGroup {
@@ -209,7 +200,6 @@ mapsTests =
         mapsInComplexContextsTests,
         mapsWithComplexTypesTests],
       Testing.testGroupCases = []}
-
 mapsWithComplexTypesTests :: Testing.TestGroup
 mapsWithComplexTypesTests =
     Testing.TestGroup {
@@ -265,7 +255,6 @@ mapsWithComplexTypesTests =
                 Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 monomorphicMapsTests :: Testing.TestGroup
 monomorphicMapsTests =
     Testing.TestGroup {
@@ -318,7 +307,6 @@ monomorphicMapsTests =
               Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeBoolean)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 monomorphicSetsTests :: Testing.TestGroup
 monomorphicSetsTests =
     Testing.TestGroup {
@@ -363,7 +351,6 @@ monomorphicSetsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeBoolean)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 nestedListsTests :: Testing.TestGroup
 nestedListsTests =
     Testing.TestGroup {
@@ -410,7 +397,6 @@ nestedListsTests =
                 Core.functionTypeCodomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 nestedSetsTests :: Testing.TestGroup
 nestedSetsTests =
     Testing.TestGroup {
@@ -451,7 +437,6 @@ nestedSetsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeSet (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 polymorphicListsTests :: Testing.TestGroup
 polymorphicListsTests =
     Testing.TestGroup {
@@ -511,7 +496,6 @@ polymorphicListsTests =
                   Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 polymorphicMapsTests :: Testing.TestGroup
 polymorphicMapsTests =
     Testing.TestGroup {
@@ -594,7 +578,6 @@ polymorphicMapsTests =
                   Core.mapTypeValues = (Core.TypeVariable (Core.Name "t0"))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 polymorphicSetsTests :: Testing.TestGroup
 polymorphicSetsTests =
     Testing.TestGroup {
@@ -653,7 +636,6 @@ polymorphicSetsTests =
                   Core.functionTypeCodomain = (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 setsInComplexContextsTests :: Testing.TestGroup
 setsInComplexContextsTests =
     Testing.TestGroup {
@@ -688,7 +670,6 @@ setsInComplexContextsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 setsTests :: Testing.TestGroup
 setsTests =
     Testing.TestGroup {
@@ -701,7 +682,6 @@ setsTests =
         nestedSetsTests,
         setsWithComplexTypesTests],
       Testing.testGroupCases = []}
-
 setsWithComplexTypesTests :: Testing.TestGroup
 setsWithComplexTypesTests =
     Testing.TestGroup {

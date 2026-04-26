@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.
 
 module Hydra.Test.TestSuite where
-
 import qualified Hydra.Test.Annotations as Annotations
 import qualified Hydra.Test.Checking.All as CheckingAll
 import qualified Hydra.Test.Dependencies as Dependencies
@@ -41,7 +39,6 @@ import qualified Hydra.Test.Variables as Variables
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | The group of all common tests
 allTests :: Testing.TestGroup
 allTests =

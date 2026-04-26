@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Inference tests for fundamental language features
 
 module Hydra.Test.Inference.Fundamentals where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -14,7 +12,6 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Fundamental language feature tests
 allTests :: Testing.TestGroup
 allTests =
@@ -29,7 +26,6 @@ allTests =
         testGroupForPolymorphism,
         testGroupForPrimitives],
       Testing.testGroupCases = []}
-
 testGroupForLambdas :: Testing.TestGroup
 testGroupForLambdas =
     Testing.TestGroup {
@@ -158,7 +154,6 @@ testGroupForLambdas =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 testGroupForLet :: Testing.TestGroup
 testGroupForLet =
     Testing.TestGroup {
@@ -1784,7 +1779,6 @@ testGroupForLet =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 testGroupForLiterals :: Testing.TestGroup
 testGroupForLiterals =
     Testing.TestGroup {
@@ -1832,7 +1826,6 @@ testGroupForLiterals =
               Core.typeSchemeConstraints = Nothing}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 testGroupForPathologicalTerms :: Testing.TestGroup
 testGroupForPathologicalTerms =
     Testing.TestGroup {
@@ -2126,7 +2119,6 @@ testGroupForPathologicalTerms =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 testGroupForPolymorphism :: Testing.TestGroup
 testGroupForPolymorphism =
     Testing.TestGroup {
@@ -2504,7 +2496,6 @@ testGroupForPolymorphism =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 testGroupForPrimitives :: Testing.TestGroup
 testGroupForPrimitives =
     Testing.TestGroup {

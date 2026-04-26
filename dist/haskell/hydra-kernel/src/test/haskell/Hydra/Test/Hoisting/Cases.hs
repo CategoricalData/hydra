@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for subterm hoisting and case statement hoisting
 
 module Hydra.Test.Hoisting.Cases where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Lexical as Lexical
@@ -13,7 +11,6 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Test cases for subterm hoisting and case statement hoisting
 allTests :: Testing.TestGroup
 allTests =

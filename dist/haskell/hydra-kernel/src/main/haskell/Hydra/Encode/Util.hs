@@ -1,14 +1,11 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.util
 
 module Hydra.Encode.Util where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 caseConvention :: Util.CaseConvention -> Core.Term
 caseConvention x =
     case x of
@@ -32,7 +29,6 @@ caseConvention x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "upperSnake"),
           Core.fieldTerm = Core.TermUnit}})
-
 comparison :: Util.Comparison -> Core.Term
 comparison x =
     case x of
@@ -51,7 +47,6 @@ comparison x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
           Core.fieldTerm = Core.TermUnit}})
-
 precision :: Util.Precision -> Core.Term
 precision x =
     case x of

@@ -347,13 +347,18 @@ sanitizeJavaComment = def "sanitizeJavaComment" $
 
 singleLineComment :: TTermDefinition (String -> Expr)
 singleLineComment = def "singleLineComment" $
-  doc "Create a single-line Java comment" $
-  lambda "c" $
-    Serialization.cst @@ (Strings.cat2 (string "// ") (sanitizeJavaComment @@ var "c"))
+  doc ("Create a single-line Java comment. Empty text emits `//` (no"
+    <> " trailing space) so blank line comments don't carry trailing whitespace.") $
+  lambda "c" $ lets [
+    "sanitized">: sanitizeJavaComment @@ var "c"] $
+    Serialization.cst @@ Logic.ifElse (Equality.equal (var "sanitized") (string ""))
+      (string "//")
+      (Strings.cat2 (string "// ") (var "sanitized"))
 
 withComments :: TTermDefinition (Maybe String -> Expr -> Expr)
 withComments = def "withComments" $
-  doc "Wrap an expression with optional Javadoc comments" $
+  doc ("Wrap an expression with optional Javadoc comments. Blank lines"
+    <> " inside the doc body emit ` *` (no trailing space) instead of ` * `.") $
   lambda "mc" $ lambda "expr" $
     Maybes.maybe
       (var "expr")
@@ -361,7 +366,9 @@ withComments = def "withComments" $
         Serialization.cst @@ (Strings.cat2 (string "/**\n")
           (Strings.cat2
             (Strings.intercalate (string "\n")
-              (Lists.map (lambda "l" $ Strings.cat2 (string " * ") (var "l"))
+              (Lists.map (lambda "l" $ Logic.ifElse (Equality.equal (var "l") (string ""))
+                  (string " *")
+                  (Strings.cat2 (string " * ") (var "l")))
                 (Strings.lines (sanitizeJavaComment @@ var "c"))))
             (string "\n */"))),
         var "expr"])
