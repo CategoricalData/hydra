@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for reducing terms and types, i.e. performing computations.
 
 module Hydra.Reduction where
-
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Context as Context
@@ -32,11 +30,9 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Alpha convert a variable in a term
 alphaConvert :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 alphaConvert vold vnew term = Variables.replaceFreeTermVariable vold (Core.TermVariable vnew) term
-
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
 betaReduceType :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error Core.Type
 betaReduceType cx graph typ =
@@ -63,7 +59,6 @@ betaReduceType cx graph typ =
                               _ -> Right r
                     in (Eithers.bind (recurse t) (\r -> findApp r))
       in (Rewriting.rewriteTypeM mapExpr typ)
-
 -- | Apply the special rules:
 -- |     ((\x.e1) e2) == e1, where x does not appear free in e1
 -- |   and
@@ -87,10 +82,8 @@ contractTerm term =
                       _ -> rec
                   _ -> rec
       in (Rewriting.rewriteTerm rewrite term)
-
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
-
 -- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
 etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTerm tx0 term0 =
@@ -269,7 +262,6 @@ etaExpandTerm tx0 term0 =
                         Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
                         Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v0))}))
       in (contractTerm (rewriteWithArgs [] tx0 term0))
-
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
 etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 etaExpandTypedTerm cx tx0 term0 =
@@ -380,7 +372,6 @@ etaExpandTypedTerm cx tx0 term0 =
                     in (recurse txt term)
                   _ -> recurseOrForce term
       in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
-
 -- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpansionArity :: Graph.Graph -> Core.Term -> Int
 etaExpansionArity graph term =
@@ -395,7 +386,6 @@ etaExpansionArity graph term =
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
       Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
       _ -> 0
-
 -- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: Core.Term -> Core.Term
 etaReduceTerm term =
@@ -430,7 +420,6 @@ etaReduceTerm term =
           Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
         Core.TermLambda v0 -> reduceLambda v0
         _ -> noChange
-
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
 reduceTerm cx graph eager term =
@@ -530,11 +519,9 @@ reduceTerm cx graph eager term =
           mapping =
                   \recurse -> \mid -> Eithers.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Right mid)) (\inner -> applyIfNullary eager inner [])
       in (Rewriting.rewriteTermM mapping term)
-
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Core.Term -> Bool
 termIsClosed term = Sets.null (Variables.freeVariablesInTerm term)
-
 -- | Whether a term has been fully reduced to a value
 termIsValue :: Core.Term -> Bool
 termIsValue term =

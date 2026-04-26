@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for type and term substitution operations
 
 module Hydra.Test.Substitution where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Show.Core as ShowCore
@@ -12,7 +10,6 @@ import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for type and term substitution operations
 allTests :: Testing.TestGroup
 allTests =

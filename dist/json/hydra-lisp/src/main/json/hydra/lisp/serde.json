@@ -415,11 +415,32 @@
                   "application": {
                     "argument": {
                       "application": {
-                        "argument": {"variable": "text"},
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "text"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": "; "}},
+                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                         "function": {
                           "application": {
-                            "argument": {"literal": {"string": "; "}},
-                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                            "argument": {"literal": {"string": ";"}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"literal": {"string": ""}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "text"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                            "type": {"literal": {"string": {}}}}}}}}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                    "type": {"literal": {"string": {}}}}}}}}}}},
                     "function": {"variable": "hydra.serialization.cst"}}}}},
             "domain": {"variable": "hydra.lisp.syntax.Comment"},
             "parameter": "c"}},
@@ -1331,18 +1352,43 @@
         "term": {
           "lambda": {
             "body": {
-              "application": {
-                "argument": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "text",
+                    "term": {
+                      "application": {
+                        "argument": {"variable": "ds"},
+                        "function": {"unwrap": "hydra.lisp.syntax.Docstring"}}},
+                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                "body": {
                   "application": {
                     "argument": {
-                      "list": [
-                        {"literal": {"string": ";; "}},
-                        {
+                      "application": {
+                        "argument": {
                           "application": {
-                            "argument": {"variable": "ds"},
-                            "function": {"unwrap": "hydra.lisp.syntax.Docstring"}}}]},
-                    "function": {"variable": "hydra.lib.strings.cat"}}},
-                "function": {"variable": "hydra.serialization.cst"}}},
+                            "argument": {"list": [{"literal": {"string": ";; "}}, {"variable": "text"}]},
+                            "function": {"variable": "hydra.lib.strings.cat"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"literal": {"string": ";;"}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"literal": {"string": ""}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "text"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                            "type": {"literal": {"string": {}}}}}}}}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                    "type": {"literal": {"string": {}}}}}}}}}}},
+                    "function": {"variable": "hydra.serialization.cst"}}}}},
             "domain": {"variable": "hydra.lisp.syntax.Docstring"},
             "parameter": "ds"}},
         "type": {

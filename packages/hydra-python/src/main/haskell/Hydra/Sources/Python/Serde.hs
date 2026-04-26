@@ -1294,8 +1294,14 @@ pythonFloatLiteralText = def "pythonFloatLiteralText" $
 
 toPythonComments :: TTermDefinition (String -> String)
 toPythonComments = def "toPythonComments" $
-  doc "Convert a doc string to Python comment format" $
+  doc ("Convert a doc string to Python comment format. Empty source lines"
+    <> " emit `#` (no trailing space) so blank comment lines don't carry"
+    <> " trailing whitespace into the generated file.") $
   lambda "doc_" $
     Logic.ifElse (Equality.equal (var "doc_") (string ""))
       (string "")
-      (Strings.intercalate (string "\n") (Lists.map (lambda "line" $ Strings.cat2 (string "# ") (var "line")) (Strings.lines (var "doc_"))))
+      (Strings.intercalate (string "\n") (Lists.map (lambda "line" $
+          Logic.ifElse (Equality.equal (var "line") (string ""))
+            (string "#")
+            (Strings.cat2 (string "# ") (var "line")))
+        (Strings.lines (var "doc_"))))

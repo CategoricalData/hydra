@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for hydra.lib.maybes primitives
 
 module Hydra.Test.Lib.Maybes where
-
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -13,7 +11,6 @@ import qualified Hydra.Show.Core as Core
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for hydra.lib.maybes primitives
 allTests :: Testing.TestGroup
 allTests =

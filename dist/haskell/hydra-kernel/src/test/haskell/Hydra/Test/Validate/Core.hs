@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for core term and type validation
 
 module Hydra.Test.Validate.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Lib.Maybes as Maybes
@@ -14,7 +12,6 @@ import qualified Hydra.Testing as Testing
 import qualified Hydra.Validate.Core as ValidateCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for core term and type validation
 allTests :: Testing.TestGroup
 allTests =
@@ -28,7 +25,6 @@ allTests =
         identityApplicationTests,
         variableShadowingTests],
       Testing.testGroupCases = []}
-
 duplicateBindingsTests :: Testing.TestGroup
 duplicateBindingsTests =
     Testing.TestGroup {
@@ -186,7 +182,6 @@ duplicateBindingsTests =
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 duplicateFieldsTests :: Testing.TestGroup
 duplicateFieldsTests =
     Testing.TestGroup {
@@ -278,7 +273,6 @@ duplicateFieldsTests =
               ErrorCore.duplicateFieldErrorName = (Core.Name "x")}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 emptyLetBindingsTests :: Testing.TestGroup
 emptyLetBindingsTests =
     Testing.TestGroup {
@@ -309,7 +303,6 @@ emptyLetBindingsTests =
               ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 identityApplicationTests :: Testing.TestGroup
 identityApplicationTests =
     Testing.TestGroup {
@@ -342,7 +335,6 @@ identityApplicationTests =
               ErrorCore.unnecessaryIdentityApplicationErrorLocation = (Paths.SubtermPath [])}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 variableShadowingTests :: Testing.TestGroup
 variableShadowingTests =
     Testing.TestGroup {

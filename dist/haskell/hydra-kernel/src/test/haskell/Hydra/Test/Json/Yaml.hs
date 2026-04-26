@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision
 
 module Hydra.Test.Json.Yaml where
-
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Json.Yaml.Decode as Decode
@@ -13,7 +11,6 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Hydra.Lib.Literals as Literals
-
 -- | Round-trip test cases for the JSON<->YAML decimal bridge
 allTests :: Testing.TestGroup
 allTests =

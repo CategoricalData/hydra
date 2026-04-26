@@ -155,7 +155,9 @@ optDesc = define "optDesc" $
           P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
           P3._Value_string>>: lambda "s" $ var "s"],
         "commentLines">: Lists.map
-          (lambda "line" $ Strings.cat2 (string "// ") (var "line"))
+          (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
+            (string "//")
+            (Strings.cat2 (string "// ") (var "line")))
           (Strings.lines (var "descStr")),
         "comment">: Serialization.cst @@ (Strings.intercalate (string "\n") (var "commentLines")),
         "sep">: Logic.ifElse (var "doubleNewline")

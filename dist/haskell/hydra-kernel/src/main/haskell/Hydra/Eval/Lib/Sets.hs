@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Evaluation-level implementations of Set functions for the Hydra interpreter.
 
 module Hydra.Eval.Lib.Sets where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -13,7 +11,6 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Interpreter-friendly set difference.
 difference :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 difference cx g set1Term set2Term =
@@ -32,7 +29,6 @@ difference cx g set1Term set2Term =
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.insert")),
           Core.applicationArgument = el})),
         Core.applicationArgument = acc}))})) (Core.TermSet (Sets.fromList [])) (Sets.toList elements)))
-
 -- | Interpreter-friendly set intersection.
 intersection :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 intersection cx g set1Term set2Term =
@@ -51,7 +47,6 @@ intersection cx g set1Term set2Term =
             Core.applicationArgument = el})),
           Core.applicationArgument = acc}))})),
       Core.applicationArgument = acc})) (Core.TermSet (Sets.fromList [])) (Sets.toList elements)))
-
 -- | Interpreter-friendly map for Set terms.
 map :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 map cx g fun setTerm =
@@ -60,7 +55,6 @@ map cx g fun setTerm =
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = fun,
         Core.applicationArgument = el})) (Sets.toList elements)))})))
-
 -- | Interpreter-friendly set union.
 union :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 union cx g set1Term set2Term =
@@ -69,7 +63,6 @@ union cx g set1Term set2Term =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.insert")),
         Core.applicationArgument = el})),
       Core.applicationArgument = acc})) set2Term (Sets.toList elements)))
-
 -- | Interpreter-friendly unions for list of Set terms.
 unions :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 unions cx g listTerm =

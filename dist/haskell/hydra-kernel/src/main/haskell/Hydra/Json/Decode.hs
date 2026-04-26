@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.
 
 module Hydra.Json.Decode where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -20,7 +18,6 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels.
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
@@ -44,7 +41,6 @@ decodeFloat ft value =
           "invalid float64 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v)))) (parseSpecialFloat v1)
         _ -> Left "expected number or special float string for float64"
-
 -- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
 decodeInteger :: Core.IntegerType -> Model.Value -> Either String Core.Term
 decodeInteger it value =
@@ -92,7 +88,6 @@ decodeInteger it value =
       Core.IntegerTypeUint16 ->
         let numResult = expectNumber value
         in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.decimalToBigint n))))) numResult)
-
 -- | Decode a JSON value to a literal term
 decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
 decodeLiteral lt value =
@@ -111,35 +106,30 @@ decodeLiteral lt value =
       Core.LiteralTypeString ->
         let strResult = expectString value
         in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)
-
 -- | Extract an array from a JSON value
 expectArray :: Model.Value -> Either String [Model.Value]
 expectArray value =
     case value of
       Model.ValueArray v0 -> Right v0
       _ -> Left "expected array"
-
 -- | Extract a number from a JSON value
 expectNumber :: Model.Value -> Either String Sci.Scientific
 expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
       _ -> Left "expected number"
-
 -- | Extract an object from a JSON value
 expectObject :: Model.Value -> Either String (M.Map String Model.Value)
 expectObject value =
     case value of
       Model.ValueObject v0 -> Right v0
       _ -> Left "expected object"
-
 -- | Extract a string from a JSON value
 expectString :: Model.Value -> Either String String
 expectString value =
     case value of
       Model.ValueString v0 -> Right v0
       _ -> Left "expected string"
-
 -- | Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches.
 fromJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Value -> Either String Core.Term
 fromJson types tname typ value =
@@ -272,7 +262,6 @@ fromJson types tname typ value =
         _ -> Left (Strings.cat [
           "unsupported type for JSON decoding: ",
           (ShowCore.type_ typ)])
-
 -- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =

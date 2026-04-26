@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON.
 
 module Hydra.Json.Yaml.Decode where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Decode as Decode
 import qualified Hydra.Json.Model as JsonModel
@@ -15,14 +13,12 @@ import qualified Hydra.Yaml.Model as YamlModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Decode a YAML node to a Hydra term via JSON decoding.
 fromYaml :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> YamlModel.Node -> Either String Core.Term
 fromYaml types tname typ node =
 
       let jsonResult = yamlToJson node
       in (Eithers.either (\err -> Left err) (\json -> Decode.fromJson types tname typ json) jsonResult)
-
 -- | Convert a YAML node to a JSON value. Fails for non-JSON YAML features (e.g. non-string mapping keys).
 yamlToJson :: YamlModel.Node -> Either String JsonModel.Value
 yamlToJson node =

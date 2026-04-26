@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for topological sorting algorithms
 
 module Hydra.Test.Sorting where
-
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
@@ -12,7 +10,6 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for topological sorting
 allTests :: Testing.TestGroup
 allTests =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Extraction and validation for hydra.util types
 
 module Hydra.Extract.Util where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -14,7 +12,6 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Extract a comparison from a term
 comparison :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Util.Comparison
 comparison cx graph term =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.
 
 module Hydra.Hoisting where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Graph as Graph
@@ -30,7 +28,6 @@ import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
 augmentBindingsWithNewFreeVars :: Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> ([Core.Binding], Typing.TermSubst)
 augmentBindingsWithNewFreeVars cx boundVars bindings =
@@ -63,12 +60,10 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                       Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable (Core.bindingName b)) freeVars)))))
           results = Lists.map augment bindings
       in (Lists.map Pairs.first results, (Typing.TermSubst (Maps.fromList (Maybes.cat (Lists.map Pairs.second results)))))
-
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: Core.Binding -> Bool
 bindingIsPolymorphic binding =
     Maybes.maybe False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Core.bindingType binding)
-
 -- | Check if a binding's type uses any type variables from the given Graph. Returns True if the free type variables in the binding's type intersect with the type variables in scope (graphTypeVariables).
 bindingUsesContextTypeVars :: Graph.Graph -> Core.Binding -> Bool
 bindingUsesContextTypeVars cx binding =
@@ -76,7 +71,6 @@ bindingUsesContextTypeVars cx binding =
       let freeInType = Variables.freeVariablesInType (Core.typeSchemeBody ts)
           contextTypeVars = Graph.graphTypeVariables cx
       in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding)
-
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
 countVarOccurrences :: Core.Name -> Core.Term -> Int
 countVarOccurrences name term =
@@ -85,7 +79,6 @@ countVarOccurrences name term =
       in case term of
         Core.TermVariable v0 -> Logic.ifElse (Equality.equal v0 name) (Math.add 1 childCount) childCount
         _ -> childCount
-
 -- | Transform a let-term by pulling ALL let bindings to the top level. This is useful for targets like Java that don't support nested let expressions at all. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistAllLetBindings :: Core.Let -> Core.Let
 hoistAllLetBindings let0 =
@@ -101,11 +94,9 @@ hoistAllLetBindings let0 =
                 Graph.graphSchemaTypes = Maps.empty,
                 Graph.graphTypeVariables = Sets.empty}
       in (hoistLetBindingsWithPredicate (\_ -> True) shouldHoistAll emptyCx let0)
-
 -- | Hoist case statements into local let bindings. This is useful for targets such as Python which only support case statements (match) at the top level. Case statements are hoisted only when they appear at non-top-level positions. Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS. Once through an application LHS, lambda bodies no longer count as pass-through.
 hoistCaseStatements :: Graph.Graph -> Core.Term -> Core.Term
 hoistCaseStatements = hoistSubterms shouldHoistCaseStatement
-
 -- | Hoist case statements into local let bindings for a list of bindings. This version operates prior to inference and uses an empty type context. It hoists case statements and their applied arguments into let bindings.
 hoistCaseStatementsInGraph :: [Core.Binding] -> [Core.Binding]
 hoistCaseStatementsInGraph bindings =
@@ -126,12 +117,10 @@ hoistCaseStatementsInGraph bindings =
                     Core.letBody = Core.TermUnit})
           term1 = hoistCaseStatements emptyTx term0
       in (Environment.termAsBindings term1)
-
 -- | Transform a let-term by pulling polymorphic let bindings to the top level, using Graph. A binding is hoisted if: (1) It is polymorphic (has non-empty typeSchemeVariables), OR (2) Its type uses type variables from the Graph (i.e., from enclosing type lambdas). Bindings which are already at the top level are not hoisted. If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding uses type variables from the context, those type variables are added to the binding's type scheme. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistLetBindingsWithContext :: (Core.Binding -> Bool) -> Graph.Graph -> Core.Let -> Core.Let
 hoistLetBindingsWithContext isParentBinding cx let0 =
     hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic cx let0
-
 -- | Transform a let-term by pulling let bindings to the top level. The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are eligible for hoisting. The shouldHoistBinding predicate takes the Graph and a subterm binding, and returns True if the binding should be hoisted. This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions. The Graph provides information about type variables and lambda variables in scope. If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding captures type variables from an enclosing type lambda scope, those type variables are added to the binding's type scheme, and references are replaced with type applications. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistLetBindingsWithPredicate :: (Core.Binding -> Bool) -> (Graph.Graph -> Core.Binding -> Bool) -> Graph.Graph -> Core.Let -> Core.Let
 hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
@@ -279,7 +268,6 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
       in Core.Let {
         Core.letBindings = (Lists.concat (Lists.map forBinding (Core.letBindings let0))),
         Core.letBody = (Core.letBody let0)}
-
 -- | Transform a let-term by pulling all polymorphic let bindings to the top level. This is useful to ensure that polymorphic bindings are not nested within other terms, which is unsupported by certain targets such as Java. Polymorphic bindings are those with a non-empty list of type scheme variables. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistPolymorphicLetBindings :: (Core.Binding -> Bool) -> Core.Let -> Core.Let
 hoistPolymorphicLetBindings isParentBinding let0 =
@@ -295,7 +283,6 @@ hoistPolymorphicLetBindings isParentBinding let0 =
                 Graph.graphSchemaTypes = Maps.empty,
                 Graph.graphTypeVariables = Sets.empty}
       in (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic emptyCx let0)
-
 -- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of SubtermSteps from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
 hoistSubterms :: (([Paths.SubtermStep], Core.Term) -> Bool) -> Graph.Graph -> Core.Term -> Core.Term
 hoistSubterms shouldHoist cx0 term0 =
@@ -399,33 +386,28 @@ hoistSubterms shouldHoist cx0 term0 =
                         _ -> (newCounter, recursedTerm)
                     _ -> recurse counter term
       in (Pairs.second (Rewriting.rewriteAndFoldTermWithGraphAndPath rewrite cx0 1 term0))
-
 isApplicationFunction :: Paths.SubtermStep -> Bool
 isApplicationFunction acc =
     case acc of
       Paths.SubtermStepApplicationFunction -> True
       _ -> False
-
 isLambdaBody :: Paths.SubtermStep -> Bool
 isLambdaBody acc =
     case acc of
       Paths.SubtermStepLambdaBody -> True
       _ -> False
-
 -- | Check if a term is a union elimination (case statement)
 isUnionElimination :: Core.Term -> Bool
 isUnionElimination term =
     case term of
       Core.TermCases _ -> True
       _ -> False
-
 -- | Check if a term is an application of a union elimination (case statement applied to an argument)
 isUnionEliminationApplication :: Core.Term -> Bool
 isUnionEliminationApplication term =
     case term of
       Core.TermApplication v0 -> isUnionElimination (Strip.deannotateAndDetypeTerm (Core.applicationFunction v0))
       _ -> False
-
 -- | Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].
 normalizePathForHoisting :: [Paths.SubtermStep] -> [Paths.SubtermStep]
 normalizePathForHoisting path =
@@ -439,11 +421,9 @@ normalizePathForHoisting path =
                       rest = Pairs.second uc2
                   in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Paths.SubtermStepLetBody (go rest)) (Lists.cons first (go afterFirst)))) (Lists.uncons afterFirst))) (Lists.uncons remaining)
       in (go path)
-
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.
 shouldHoistAll :: t0 -> t1 -> Bool
 shouldHoistAll _ _2 = True
-
 -- | Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
 shouldHoistCaseStatement :: ([Paths.SubtermStep], Core.Term) -> Bool
 shouldHoistCaseStatement pathAndTerm =
@@ -453,11 +433,9 @@ shouldHoistCaseStatement pathAndTerm =
       in (Logic.ifElse (Logic.not (Logic.or (isUnionElimination term) (isUnionEliminationApplication term))) False (
         let finalState = Lists.foldl (\st -> \acc -> updateHoistState acc st) (True, False) path
         in (Logic.not (Pairs.first finalState))))
-
 -- | Predicate for hoisting polymorphic bindings. Returns True if the binding is polymorphic (has type scheme variables) or if its type uses any type variables from the Graph.
 shouldHoistPolymorphic :: Graph.Graph -> Core.Binding -> Bool
 shouldHoistPolymorphic cx binding = Logic.or (bindingIsPolymorphic binding) (bindingUsesContextTypeVars cx binding)
-
 -- | Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state.
 updateHoistState :: Paths.SubtermStep -> (Bool, Bool) -> (Bool, Bool)
 updateHoistState accessor state =

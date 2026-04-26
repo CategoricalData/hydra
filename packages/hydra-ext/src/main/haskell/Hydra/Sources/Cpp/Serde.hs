@@ -1446,11 +1446,14 @@ encodeTernaryExpression = define "encodeTernaryExpression" $
 
 encodeToCppComments :: TTermDefinition (String -> Bool -> String)
 encodeToCppComments = define "toCppComments" $
-  doc "Convert a string to a C++ comment" $
+  doc ("Convert a string to a C++ comment. Empty single-line comments emit `//`"
+    <> " (no trailing space).") $
   lambda "s" $ lambda "isMultiline" $
     Logic.ifElse (var "isMultiline")
       (Strings.cat $ list [string "/* ", var "s", string " */"])
-      (Strings.cat2 (string "// ") (var "s"))
+      (Logic.ifElse (Equality.equal (var "s") (string ""))
+        (string "//")
+        (Strings.cat2 (string "// ") (var "s")))
 
 encodeTypeExpression :: TTermDefinition (Cpp.TypeExpression -> Expr)
 encodeTypeExpression = define "encodeTypeExpression" $
