@@ -140,7 +140,7 @@
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "float32",
-                                                                                              "term": {"literal": {"float": {"float32": "19.5429"}}}},
+                                                                                              "term": {"literal": {"float": {"float32": 19.5429}}}},
                                                                                             "typeName": "hydra.core.FloatValue"}}},
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}}],
@@ -168,7 +168,7 @@
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "float32",
-                                                                                              "term": {"literal": {"float": {"float32": "-155.6659"}}}},
+                                                                                              "term": {"literal": {"float": {"float32": -155.6659}}}},
                                                                                             "typeName": "hydra.core.FloatValue"}}},
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}}],
@@ -348,7 +348,7 @@
                                                                                                         "inject": {
                                                                                                           "field": {
                                                                                                             "name": "float32",
-                                                                                                            "term": {"literal": {"float": {"float32": "19.5429"}}}},
+                                                                                                            "term": {"literal": {"float": {"float32": 19.5429}}}},
                                                                                                           "typeName": "hydra.core.FloatValue"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}}],
@@ -1205,7 +1205,7 @@
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "float32",
-                                                                                              "term": {"literal": {"float": {"float32": "19.5429"}}}},
+                                                                                              "term": {"literal": {"float": {"float32": 19.5429}}}},
                                                                                             "typeName": "hydra.core.FloatValue"}}},
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}}],
@@ -1233,7 +1233,7 @@
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "float32",
-                                                                                              "term": {"literal": {"float": {"float32": "-155.6659"}}}},
+                                                                                              "term": {"literal": {"float": {"float32": -155.6659}}}},
                                                                                             "typeName": "hydra.core.FloatValue"}}},
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}}],
@@ -2446,9 +2446,7 @@
                                                                                                           "name": "float",
                                                                                                           "term": {
                                                                                                             "inject": {
-                                                                                                              "field": {
-                                                                                                                "name": "float32",
-                                                                                                                "term": {"literal": {"float": {"float32": "1.0"}}}},
+                                                                                                              "field": {"name": "float32", "term": {"literal": {"float": {"float32": 1}}}},
                                                                                                               "typeName": "hydra.core.FloatValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
@@ -2474,9 +2472,7 @@
                                                                                                           "name": "float",
                                                                                                           "term": {
                                                                                                             "inject": {
-                                                                                                              "field": {
-                                                                                                                "name": "float32",
-                                                                                                                "term": {"literal": {"float": {"float32": "2.0"}}}},
+                                                                                                              "field": {"name": "float32", "term": {"literal": {"float": {"float32": 2}}}},
                                                                                                               "typeName": "hydra.core.FloatValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
@@ -5390,7 +5386,7 @@
                                                                                                         "inject": {
                                                                                                           "field": {
                                                                                                             "name": "float32",
-                                                                                                            "term": {"literal": {"float": {"float32": "40.7128"}}}},
+                                                                                                            "term": {"literal": {"float": {"float32": 40.7128}}}},
                                                                                                           "typeName": "hydra.core.FloatValue"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}}],
@@ -5418,7 +5414,7 @@
                                                                                                         "inject": {
                                                                                                           "field": {
                                                                                                             "name": "float32",
-                                                                                                            "term": {"literal": {"float": {"float32": "-74.006"}}}},
+                                                                                                            "term": {"literal": {"float": {"float32": -74.006}}}},
                                                                                                           "typeName": "hydra.core.FloatValue"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}}],
@@ -12588,9 +12584,7 @@
                                                                                     "name": "float",
                                                                                     "term": {
                                                                                       "inject": {
-                                                                                        "field": {
-                                                                                          "name": "float32",
-                                                                                          "term": {"literal": {"float": {"float32": "3.14"}}}},
+                                                                                        "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.14}}}},
                                                                                         "typeName": "hydra.core.FloatValue"}}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}}}],
@@ -14982,9 +14976,7 @@
                                                                                               "name": "float",
                                                                                               "term": {
                                                                                                 "inject": {
-                                                                                                  "field": {
-                                                                                                    "name": "float32",
-                                                                                                    "term": {"literal": {"float": {"float32": "2.5"}}}},
+                                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 2.5}}}},
                                                                                                   "typeName": "hydra.core.FloatValue"}}},
                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                       "typeName": "hydra.core.Term"}}}],

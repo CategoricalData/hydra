@@ -324,9 +324,7 @@
                                                                       "lambda": {
                                                                         "body": {
                                                                           "inject": {
-                                                                            "field": {
-                                                                              "name": "float32",
-                                                                              "term": {"literal": {"float": {"float32": "0.0"}}}},
+                                                                            "field": {"name": "float32", "term": {"literal": {"float": {"float32": 0}}}},
                                                                             "typeName": "hydra.core.FloatValue"}},
                                                                         "domain": {"unit": {}},
                                                                         "parameter": "_"}}},

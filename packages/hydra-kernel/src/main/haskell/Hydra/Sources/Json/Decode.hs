@@ -104,6 +104,7 @@ module_ = Module {
       toDefinition decodeFloat,
       toDefinition decodeInteger,
       toDefinition parseSpecialFloat,
+      toDefinition parseSpecialFloat32,
       toDefinition expectString,
       toDefinition expectArray,
       toDefinition expectObject,
@@ -374,11 +375,11 @@ decodeLiteral = define "decodeLiteral" $
       Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
 
 -- | Decode a JSON value to a float term
--- Float64 and Bigfloat are decoded from JSON numbers or special sentinel strings; Float32 from string
--- Special values (NaN, Infinity, -Infinity) are accepted as JSON strings for all float types
+-- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
+-- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
 decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
-  doc "Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels." $
+  doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
   "ft" ~> "value" ~>
   cases _FloatType (var "ft") Nothing [
     -- Bigfloat: JSON number (Scientific) -> decimal -> float64 -> bigfloat. NaN/Inf are not
@@ -394,19 +395,16 @@ decodeFloat = define "decodeFloat" $
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
               Literals.float64ToBigfloat $ var "v")
             (parseSpecialFloat @@ var "s")],
-    -- Float32: JSON string -> parse as float32 (preserves exact precision; readFloat32
-    -- also handles NaN/Infinity/-Infinity sentinels natively).
+    -- Float32: JSON number (Scientific) -> float32, or special sentinel string
     _FloatType_float32>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readFloat32 $ var "s") $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or special float string for float32") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ Literals.decimalToFloat32 $ var "n",
+        _Value_string>>: "s" ~>
           Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid float32: ", var "s"])
+            (left $ Strings.cat $ list [string "invalid float32 sentinel: ", var "s"])
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
+            (parseSpecialFloat32 @@ var "s")],
     -- Float64: JSON number (Scientific) -> float64, or special sentinel string
     _FloatType_float64>>: constant $
       cases _Value (var "value")
@@ -432,6 +430,20 @@ parseSpecialFloat = define "parseSpecialFloat" $
        Logic.or (Equality.equal (var "s") (string "-Infinity"))
                 (Equality.equal (var "s") (string "-0.0")))
       (Literals.readFloat64 $ var "s")
+      Phantoms.nothing
+
+-- | Parse a string as an IEEE sentinel float32. Same accepted strings as 'parseSpecialFloat',
+-- but returns a float32 value.
+parseSpecialFloat32 :: TTermDefinition (String -> Maybe Float)
+parseSpecialFloat32 = define "parseSpecialFloat32" $
+  doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings." $
+  "s" ~>
+    Logic.ifElse
+      (Logic.or (Equality.equal (var "s") (string "NaN")) $
+       Logic.or (Equality.equal (var "s") (string "Infinity")) $
+       Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                (Equality.equal (var "s") (string "-0.0")))
+      (Literals.readFloat32 $ var "s")
       Phantoms.nothing
 
 -- | Decode a JSON value to an integer term
