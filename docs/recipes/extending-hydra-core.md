@@ -32,6 +32,7 @@ and serves as a reference for adding other constructs like pairs, sum types, etc
 - [Tips for Success](#tips-for-success)
 - [File Modification Checklist](#file-modification-checklist)
 - [Adding Fields to Existing Record Types](#adding-fields-to-existing-record-types)
+- [Renaming a field in an existing record type](#renaming-a-field-in-an-existing-record-type)
 
 ---
 
@@ -1230,6 +1231,121 @@ stack build
 - [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - Common test suite architecture
 - [Hydra Developers](https://github.com/CategoricalData/hydra/wiki/Developers) - Source code organization
 - [Main README](https://github.com/CategoricalData/hydra) - Project overview
+
+---
+
+## Renaming a field in an existing record type
+
+Renaming a record field is mechanically similar to adding one,
+but the bootstrap problem is different in shape and harder to solve atomically.
+A successful rename of `TypeScheme.type` → `TypeScheme.body` is captured in commit `8d5ee350a`
+and serves as the working example.
+A failed attempt to rename `Binding.type`, `TermDefinition.type`, `TypeDefinition.type`,
+and `Primitive.type` to `*.typeScheme` simultaneously revealed the depth of the cascade
+and is summarized at the end of this section as a cautionary tale.
+
+### Why renaming is harder than adding
+
+Adding a field requires touching every site that *constructs* the record
+(so that the new field gets a value).
+Renaming a field requires touching every site that *names* the field —
+which is a strict superset:
+constructors, projections (`recordType.field`), `with`-helpers,
+generated DSL helpers, generated encoders/decoders,
+plus every literal `Core.Name "<oldName>"` and `Core.LiteralString "<oldName>"`
+embedded in DSL terms that describe the record's encoding.
+
+The encoding-tier references are the trap.
+For each renamed field, the generated `Hydra/Sources/Encode/*.hs`
+and `Hydra/Sources/Decode/*.hs` files contain DSL-Term snippets that
+literally embed the wire-format key as a `LiteralString`,
+and these get type-checked when the encoder/decoder logic runs through inference.
+A missed reference produces a unification error far from the source —
+typically of shape "cannot unify record{...new field name...} with record{...old field name...}".
+
+### Step-by-step (suitable for a single-field rename of a less central type)
+
+1. **Update the schema.** In the kernel type definition file
+   (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/<Module>.hs`),
+   change the field name string. Update the `doc` line if appropriate.
+
+2. **Sweep DSL source files.** Rename:
+   - Generated accessor calls: `Module.fieldType` → `Module.fieldTypeScheme`
+   - Generated field constants: `_RecordName_fieldType` → `_RecordName_fieldTypeScheme`
+   - Generated `with`-helpers: `recordWithFieldType` → `recordWithFieldTypeScheme`
+   - Generated record-construction helpers (often positional, so just renaming the function name suffices)
+
+   Use `sed` with explicit `[^a-zA-Z0-9_]` boundary classes —
+   BSD `sed` on macOS does not honor `\b`, and a careless replacement
+   easily corrupts unrelated identifiers (e.g., a Java AST's `_CastExpression_Primitive_type`
+   when renaming a Hydra `_Primitive_type`).
+
+3. **Sweep hand-written record-syntax sites.** Search heads/ for
+   `recordField =` assignments and accessor calls without module prefix.
+   Common locations:
+   - `heads/haskell/src/main/haskell/Hydra/Dsl/Bootstrap.hs`
+   - `heads/haskell/src/main/haskell/Hydra/Module/Compat.hs`
+   - `heads/haskell/src/exec/verify-json-kernel/Main.hs`
+   - `heads/haskell/src/test/haskell/Hydra/EvalPrimitives.hs`
+   - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Bootstrap.hs`
+
+4. **Sweep heads in other languages.** For each handwritten `Generation.{java,py,scala}`,
+   `*.clj`, `*.scm`, `*.lisp`, etc., search for both the field name (in record syntax,
+   accessor syntax, and pattern matches) and rename.
+
+5. **Patch `dist/haskell` for the bootstrap.** The same renames must propagate to
+   `dist/haskell/hydra-kernel/src/main/haskell/Hydra/{Core,Packaging,Graph}.hs`
+   (data definitions and constructor record-field labels)
+   and `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/{Core,Packaging,Graph}.hs`
+   (accessor functions, `withX` setters, and the `Core.Name "<old>"` literal payloads
+   inside their bodies). Without this patch the source will not compile.
+   Use `sed` with explicit boundaries for the names; for the embedded `Core.Name "<old>"`
+   payloads, write a small Python script that tracks the surrounding `recordTypeName`
+   context so it only rewrites within the target records' scope.
+
+6. **Build.** `stack build` should succeed. If it does not, the error message
+   names the file and line; usually a missed callsite.
+
+7. **Run sync.** `bin/sync.sh --hosts haskell --targets haskell`. Watch for
+   "Type inference failed" errors during `update-json-main`. These almost always
+   indicate a literal `Core.Name "<oldName>"` or `Core.LiteralString "<oldName>"`
+   left behind in some Encode/Decode-tier source file that constructs a DSL Term.
+
+8. **Run sync again, full matrix.** Once Phase 1 succeeds,
+   `bin/sync.sh --hosts all --targets all` propagates the rename to every host.
+
+### When NOT to rename
+
+If the field appears in a deeply embedded type
+(`Binding`, used in every `let` term;
+`TermDefinition`, used in every term-level definition;
+`Primitive`, used in every primitive entry of every graph)
+the cascade is large enough that a one-shot rename is fragile.
+Even after exhaustively patching every visible reference,
+ghost references can persist in encode/decode-tier DSL Terms
+and surface as unification errors with metavariables that don't pinpoint the source.
+
+For these fields, prefer a two-phase approach in a dedicated branch:
+
+1. **Phase A**: introduce the new field name as an alias / additional constructor parameter,
+   keeping the old field name accepted by both encoder and decoder.
+2. **Phase B**: after the alias has propagated through `dist/json` and a clean sync,
+   remove the old field name.
+
+This is heavier in commits but separates the bootstrap-problem mechanics from the
+schema change. It also means the wire-format change crosses a clean release boundary
+rather than landing as one large atomic flip.
+
+### Cautionary tale
+
+In the work for issue #343, a single rename (`TypeScheme.type` → `TypeScheme.body`)
+landed cleanly because `TypeScheme` is constructed in only a handful of places.
+A subsequent attempt to rename the four `*.type` fields holding `TypeScheme` values
+(`Binding`, `TermDefinition`, `TypeDefinition`, `Primitive`) to `*.typeScheme` failed
+to converge despite ~10 iterations of patching, each surfacing a new tier of
+references. The work was reverted; the rename is deferred to a follow-up issue.
+The lesson: count both the constructor sites and the encode/decode-tier embeddings
+before committing to an atomic rename of a field on a deeply-used record.
 
 ---
 
