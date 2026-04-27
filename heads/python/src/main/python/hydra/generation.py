@@ -48,7 +48,7 @@ def bootstrap_schema_map():
     result = {}
     for name, typ in types_by_name.items():
         ts = f_type_to_type_scheme(typ)
-        result[name] = deannotate_type_recursive(ts.type)
+        result[name] = deannotate_type_recursive(ts.body)
     return FrozenDict(result)
 
 
@@ -217,7 +217,7 @@ def strip_term_types(m):
             stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.namespace, tuple(stripped), m.type_dependencies, m.term_dependencies, m.description)
+    return Module(m.description, m.namespace, m.term_dependencies, m.type_dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):
