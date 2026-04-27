@@ -517,8 +517,19 @@
   (exact (truncate (* (current-jiffy) 1000.0 (/ 1.0 (jiffies-per-second))))))
 
 (define (generate-sources coder language flags out-dir universe-mods mods-to-generate)
+  ;; Generate all modules in a single call. Splitting per-module breaks
+  ;; cross-module variable resolution: the kernel computes transitive term
+  ;; dependencies of mods-to-generate to build the data graph, and test
+  ;; modules contain undeclared cross-references (e.g.
+  ;; hydra.test.lib.chars references hydra.test.testGraph.testContext but
+  ;; doesn't declare hydra.test.testGraph in termDependencies). With the
+  ;; vhash maps fix, single-call codegen is fast enough.
   (let* ((bs-graph (bootstrap-graph))
-         (cx (make-hydra_context_in_context '() '()))
+         ;; Use hydra_context_context (3 fields: trace, messages, other),
+         ;; matching scala/java/haskell hosts. The kernel's checking and
+         ;; inference functions call (hydra_context_context-trace cx), which
+         ;; expects this record type, not hydra_context_in_context.
+         (cx (make-hydra_context_context '() '() hydra_lib_maps_empty))
          (do-infer (list-ref flags 0))
          (do-expand (list-ref flags 1))
          (do-hoist-case (list-ref flags 2))
