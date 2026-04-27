@@ -79,11 +79,11 @@ object Generation:
       case other => other
 
   private def decodeBinaryInModule(mod: Module): Module =
-    Module(mod.namespace, mod.definitions.map {
+    Module(mod.description, mod.namespace, mod.termDependencies, mod.typeDependencies, mod.definitions.map {
       case Definition.term(td) =>
         Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.`type`))
       case other => other
-    }, mod.termDependencies, mod.typeDependencies, mod.description)
+    })
 
   def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
     val modName: String = "hydra.packaging.Module"

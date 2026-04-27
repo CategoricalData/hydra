@@ -298,7 +298,7 @@ public class Generation {
         Map<Name, hydra.core.Type> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
             hydra.core.TypeScheme ts = hydra.Scoping.fTypeToTypeScheme(entry.getValue());
-            result.put(entry.getKey(), Strip.deannotateTypeRecursive(ts.type));
+            result.put(entry.getKey(), Strip.deannotateTypeRecursive(ts.body));
         }
         return result;
     }
@@ -531,7 +531,7 @@ public class Generation {
                 }
             });
         }
-        return new Module(m.namespace, stripped, m.typeDependencies, m.termDependencies, m.description);
+        return new Module(m.description, m.namespace, m.termDependencies, m.typeDependencies, stripped);
     }
 
     /**
