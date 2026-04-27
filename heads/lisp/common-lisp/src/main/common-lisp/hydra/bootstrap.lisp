@@ -324,13 +324,27 @@
                        (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
                        (test-mods (load-modules-from-json test-json-dir2 test-ns))
                        (all-universe (append all-mods test-mods))
+                       ;; Filter skip-emit test namespaces (e.g.
+                       ;; hydra.test.testEnv): these are type-only stubs whose
+                       ;; hand-written per-language counterparts are the
+                       ;; source of truth. Mirrors testSkipEmitNamespaces in
+                       ;; Hydra.Sources.Test.All and the equivalent filter in
+                       ;; heads/python/.../bootstrap.py.
+                       (test-mods-to-emit
+                         (remove-if
+                           (lambda (m)
+                             (let* ((ns (hydra_packaging_module-namespace m))
+                                    (ns-str (if (stringp ns) ns
+                                                (hydra_packaging_namespace-value ns))))
+                               (string= ns-str "hydra.test.testEnv")))
+                           test-mods))
                        (out-test (format nil "~A/common-lisp-to-~A/src/test/~A"
                                         *output-base* *target* subdir))
                        (test-start (get-internal-real-time)))
                   (format t "  Loaded ~A test modules.~%" (length test-mods))
                   (format t "~%Mapping test modules to ~A...~%" target-cap)
                   (force-output)
-                  (setf test-file-count (generate-sources coder language flags out-test all-universe test-mods))
+                  (setf test-file-count (generate-sources coder language flags out-test all-universe test-mods-to-emit))
                   (let ((test-secs (/ (- (get-internal-real-time) test-start) internal-time-units-per-second 1.0)))
                     (format t "  Generated ~A test files.~%" test-file-count)
                     (format t "  Time: ~,1Fs~%" test-secs))))

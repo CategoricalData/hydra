@@ -251,6 +251,16 @@
                               test-ns (read-manifest json-dir "testModules")
                               test-mods (load-mods test-json-dir test-ns)
                               all-universe (into (vec main-mods) test-mods)
+                              ;; Filter skip-emit test namespaces (e.g.
+                              ;; hydra.test.testEnv): these are type-only stubs
+                              ;; whose hand-written per-language counterparts
+                              ;; are the source of truth. Mirrors
+                              ;; testSkipEmitNamespaces in
+                              ;; Hydra.Sources.Test.All and the equivalent
+                              ;; filter in heads/python/.../bootstrap.py.
+                              ns-of (fn [m] (let [n (:namespace m)] (if (string? n) n (:value n))))
+                              test-skip-emit #{"hydra.test.testEnv"}
+                              test-mods-to-emit (filterv (fn [m] (not (contains? test-skip-emit (ns-of m)))) test-mods)
                               out-test (str out-dir "/src/test/" (:subdir coder-info))]
                           (println (str "  Loaded " (count test-mods) " test modules."))
                           (println)
@@ -259,7 +269,7 @@
                           (let [step-start3 (System/currentTimeMillis)
                                 count (gen-sources (:coder coder-info) (:language coder-info)
                                                     do-infer do-expand do-hoist-case do-hoist-poly
-                                                    out-test all-universe test-mods)
+                                                    out-test all-universe test-mods-to-emit)
                                 step-time3 (- (System/currentTimeMillis) step-start3)]
                             (println (str "  Generated " count " test files."))
                             (println (str "  Time: " (format-time step-time3)))
