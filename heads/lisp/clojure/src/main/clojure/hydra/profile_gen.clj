@@ -56,7 +56,7 @@
   (let [bs-graph (bootstrap-graph)
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns-str]
-            (let [file-path (str base-path "/" ((r 'hydra_code_generation_namespace_to_path) ns-str) ".json")
+            (let [file-path (str base-path "/" ((r 'hydra_codegen_namespace_to_path) ns-str) ".json")
                   obj (json/read-str (slurp file-path))
                   json-val (clojure-to-hydra-json obj)
                   mod-type (list :variable "hydra.module.Module")
@@ -64,7 +64,7 @@
                   _ (when (= (first json-result) :left)
                       (throw (RuntimeException. (str "JSON decode error for " ns-str ": " (second json-result)))))
                   term (second json-result)
-                  mod-result (((r 'hydra_decode_module_module) bs-graph) term)
+                  mod-result (((r 'hydra_decode_packaging_module) bs-graph) term)
                   _ (when (= (first mod-result) :left)
                       (throw (RuntimeException. (str "Module decode error for " ns-str ": " (second mod-result)))))]
               (second mod-result)))
@@ -145,7 +145,7 @@
                                                      (pte program)))
                                             ns-val (let [ns (:namespace mod)]
                                                      (if (string? ns) ns (:value ns)))
-                                            fp (str (@(rc 'hydra_code_generation_namespace_to_path) ns-val) ".clj")]
+                                            fp (str (@(rc 'hydra_codegen_namespace_to_path) ns-val) ".clj")]
                                         (list :right {fp code}))))))))))
             language (case target
                        "python" @(rc 'hydra_ext_python_language_python_language)
@@ -178,11 +178,11 @@
           (flush)
           (let [namespace-map (into {} (map (fn [m] [(:namespace m) m]) all-mods))
                 schema-mods (timed "schemaModDeps"
-                              #(((r 'hydra_code_generation_module_type_deps_transitive) namespace-map) all-mods))
+                              #(((r 'hydra_codegen_module_type_deps_transitive) namespace-map) all-mods))
                 schema-elements (vec (filter #(is-native-type %)
                                       (mapcat :definitions (concat schema-mods type-mods))))
                 data-mods (timed "dataModDeps"
-                            #(((r 'hydra_code_generation_module_term_deps_transitive) namespace-map) all-mods))
+                            #(((r 'hydra_codegen_module_term_deps_transitive) namespace-map) all-mods))
                 data-elements (vec (mapcat :definitions data-mods))
                 schema-graph (timed "schemaGraph"
                                #((((r 'hydra_lexical_elements_to_graph) bs-graph) {}) schema-elements))

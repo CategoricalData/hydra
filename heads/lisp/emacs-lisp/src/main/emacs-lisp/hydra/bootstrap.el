@@ -378,11 +378,13 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
           ;; Tests
           (when bootstrap-include-tests
             (princ (format "\nLoading test modules from JSON...\n"))
-            (let* ((test-json-dir2 (let ((pos (cl-search "gen-main" bootstrap-json-dir)))
+            (let* ((test-json-dir2 (let ((pos (cl-search "src/main/json" bootstrap-json-dir)))
+                                     ;; New per-source-set layout: main JSON at <pkg>/src/main/json,
+                                     ;; test JSON at <pkg>/src/test/json.
                                      (if pos
                                          (concat (substring bootstrap-json-dir 0 pos)
-                                                 "gen-test"
-                                                 (substring bootstrap-json-dir (+ pos 8)))
+                                                 "src/test/json"
+                                                 (substring bootstrap-json-dir (+ pos 13)))
                                        bootstrap-json-dir)))
                    (test-ns (bootstrap-read-manifest-field bootstrap-json-dir "testModules"))
                    (test-mods (bootstrap-load-modules-from-json test-json-dir2 test-ns))
