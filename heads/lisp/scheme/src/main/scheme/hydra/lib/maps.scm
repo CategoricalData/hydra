@@ -1,5 +1,7 @@
 (define-library (hydra lib maps)
-  (import (scheme base) (scheme write))
+  (import (scheme base) (scheme write)
+          (ice-9 vlist)
+          (only (guile) make-hash-table hash-ref hash-set! sort))
   (export hydra_lib_maps_alter
           hydra_lib_maps_bimap
           hydra_lib_maps_delete
@@ -29,12 +31,10 @@
     ;; for the bootstrap codegen pipeline (large namespace_map and
     ;; schema_types maps built via repeated insertion).
     ;;
-    ;; (ice-9 vlist) is brought in via use-modules rather than the
-    ;; define-library import block because the bootstrap loader strips the
-    ;; define-library wrapper and evaluates body forms in
-    ;; (interaction-environment); imports declared in the wrapper would be
-    ;; lost. Mirrors sets.scm.
-    (use-modules (ice-9 vlist))
+    ;; (ice-9 vlist) is imported in the define-library import block above
+    ;; (used by guile's normal R7RS load path) and pre-loaded via
+    ;; (use-modules (ice-9 vlist)) in bootstrap.scm (used by the bootstrap
+    ;; loader's strip-and-eval path).
 
     (define (obj->string x)
       (let ((p (open-output-string)))
