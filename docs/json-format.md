@@ -164,6 +164,25 @@ key/value list — duplicate keys would parse but should not be produced.
 Integer and float literals are themselves tagged with their precision class
 (`int8`/`int16`/`int32`/`int64`/`uint8`/.../`bigint` and `float32`/`float64`/`bigfloat`).
 
+### Float formatting
+
+`Literal.float` values — including both `float32` and `float64` precisions — encode symmetrically:
+
+- **Finite values** encode as JSON numbers, using shortest round-trip decimal representation:
+  the shortest decimal string that, when parsed back at the value's precision, returns the
+  original IEEE 754 bit pattern exactly.
+  The encoder does not "tidy" the input;
+  if the input is the float64 bit pattern `0.30000000000000004`, the encoder emits exactly that.
+- **Non-finite values and `-0.0`** encode as JSON strings — `"Infinity"`, `"-Infinity"`,
+  `"NaN"`, `"-0.0"` — because JSON's number grammar cannot represent these.
+
+Decoders accept both shapes for either precision.
+The schema disambiguates `float32` from `float64`, just as it disambiguates `int8` from `int64`;
+a JSON number `0.5` decodes to a `float32` value under one schema and a `float64` value under another.
+
+`Literal.float (bigfloat _)` is deprecated and will be retired in a future release;
+its current encoding is documented in the Haskell encoder source.
+
 ### String escapes
 
 A `Literal.string` value encodes as a JSON string. Within the string body:

@@ -18,7 +18,7 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
--- | Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels.
+-- | Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric.
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
     case ft of
@@ -28,13 +28,12 @@ decodeFloat ft value =
           "invalid bigfloat sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat v))))) (parseSpecialFloat v1)
         _ -> Left "expected number or special float string for bigfloat"
-      Core.FloatTypeFloat32 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readFloat32 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid float32: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) parsed)) strResult)
+      Core.FloatTypeFloat32 -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v1))))
+        Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
+          "invalid float32 sentinel: ",
+          v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) (parseSpecialFloat32 v1)
+        _ -> Left "expected number or special float string for float32"
       Core.FloatTypeFloat64 -> case value of
         Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v1))))
         Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
@@ -266,3 +265,7 @@ fromJson types tname typ value =
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
     Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat64 s) Nothing
+-- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings.
+parseSpecialFloat32 :: String -> Maybe Float
+parseSpecialFloat32 s =
+    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat32 s) Nothing

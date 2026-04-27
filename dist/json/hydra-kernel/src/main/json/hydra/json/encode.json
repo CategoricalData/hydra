@@ -3420,7 +3420,7 @@
                 "key": "description",
                 "value": {
                   "literal": {
-                    "string": "Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings."}}}],
+                    "string": "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3502,22 +3502,61 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "typeApplication": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "s",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "f"},
+                                            "function": {"variable": "hydra.lib.literals.showFloat32"}}},
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "either": {
-                                            "right": {
-                                              "inject": {
-                                                "field": {
-                                                  "name": "string",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "f"},
-                                                      "function": {"variable": "hydra.lib.literals.showFloat32"}}}},
-                                                "typeName": "hydra.json.model.Value"}}}},
-                                        "type": {"literal": {"string": {}}}}},
-                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                      "application": {
+                                        "argument": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "right": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "number",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "f"},
+                                                              "function": {"variable": "hydra.lib.literals.float32ToDecimal"}}}},
+                                                        "typeName": "hydra.json.model.Value"}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "type": {"variable": "hydra.json.model.Value"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {
+                                                        "right": {
+                                                          "inject": {
+                                                            "field": {"name": "string", "term": {"variable": "s"}},
+                                                            "typeName": "hydra.json.model.Value"}}}},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "type": {"variable": "hydra.json.model.Value"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {"variable": "hydra.json.encode.requiresJsonStringSentinel"}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {
+                                                      "either": {
+                                                        "left": {"literal": {"string": {}}},
+                                                        "right": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}},
                                 "domain": {"literal": {"float": {"float32": {}}}},
                                 "parameter": "f"}}},
                           {

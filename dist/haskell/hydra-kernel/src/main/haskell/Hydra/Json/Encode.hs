@@ -19,7 +19,7 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
--- | Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings.
+-- | Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold.
 encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
     case fv of
@@ -28,7 +28,9 @@ encodeFloat fv =
         in (Logic.ifElse (requiresJsonStringSentinel s) (Left (Strings.cat [
           "JSON cannot represent bigfloat value: ",
           s])) (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
-      Core.FloatValueFloat32 v0 -> Right (Model.ValueString (Literals.showFloat32 v0))
+      Core.FloatValueFloat32 v0 ->
+        let s = Literals.showFloat32 v0
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float32ToDecimal v0))))
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
         in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))

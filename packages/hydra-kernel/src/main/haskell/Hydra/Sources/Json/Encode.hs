@@ -442,14 +442,18 @@ encodeLiteral = define "encodeLiteral" $
 -- round-trippable through JSON.
 encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings." $
+  doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_bigfloat>>: "bf" ~>
       "s" <~ (Literals.showBigfloat $ var "bf") $
       Logic.ifElse (requiresJsonStringSentinel @@ var "s")
         (left $ Strings.cat $ list [string "JSON cannot represent bigfloat value: ", var "s"])
         (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
-    _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
+    _FloatValue_float32>>: "f" ~>
+      "s" <~ (Literals.showFloat32 $ var "f") $
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
+        (right $ Json.valueString $ var "s")
+        (right $ Json.valueNumber $ Literals.float32ToDecimal $ var "f"),
     _FloatValue_float64>>: "f" ~>
       "s" <~ (Literals.showFloat64 $ var "f") $
       Logic.ifElse (requiresJsonStringSentinel @@ var "s")
