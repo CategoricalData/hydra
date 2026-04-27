@@ -96,6 +96,12 @@
 (use-modules (srfi srfi-9))
 ;; Import bitwise operations (arithmetic-shift etc.) needed by literals
 (use-modules (srfi srfi-60))
+;; Import vlist/vhash bindings used by lib/sets.scm and lib/maps.scm.
+;; The bootstrap loader strips define-library wrappers and evaluates body
+;; forms in (interaction-environment); without this, vlist-null, vhash-cons
+;; etc. would be undefined when those library bodies run. CI's normal R7RS
+;; load path picks up the imports from each library's own import block.
+(use-modules (ice-9 vlist))
 ;; Load the JSON reader
 (load (string-append *script-dir* "json-reader.scm"))
 
