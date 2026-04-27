@@ -900,14 +900,14 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
                                                                           "term": {
                                                                             "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
@@ -1101,14 +1101,14 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
                                                                           "term": {
                                                                             "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -2520,7 +2520,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
@@ -2555,7 +2555,7 @@
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}}]}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
@@ -2965,7 +2965,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -2979,7 +2979,7 @@
                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -2989,7 +2989,7 @@
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}}},
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3003,7 +3003,7 @@
                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3161,7 +3161,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3170,7 +3170,7 @@
                                                                         "field": {"name": "string", "term": {"literal": {"string": "a"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3185,7 +3185,7 @@
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}}},
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3194,7 +3194,7 @@
                                                                         "field": {"name": "string", "term": {"literal": {"string": "b"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3357,7 +3357,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3371,7 +3371,7 @@
                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -3571,14 +3571,14 @@
                                                                       "term": {
                                                                         "map": [
                                                                           {
-                                                                            "@key": {
+                                                                            "key": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "variable",
                                                                                   "term": {
                                                                                     "wrap": {"body": {"literal": {"string": "k"}}, "typeName": "hydra.core.Name"}}},
                                                                                 "typeName": "hydra.core.Term"}},
-                                                                            "@value": {
+                                                                            "value": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "literal",
@@ -3785,7 +3785,7 @@
                                                                       "term": {
                                                                         "map": [
                                                                           {
-                                                                            "@key": {
+                                                                            "key": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "literal",
@@ -3794,7 +3794,7 @@
                                                                                       "field": {"name": "string", "term": {"literal": {"string": "key"}}},
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}},
-                                                                            "@value": {
+                                                                            "value": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "variable",
@@ -4016,14 +4016,14 @@
                                                                                     "term": {
                                                                                       "map": [
                                                                                         {
-                                                                                          "@key": {
+                                                                                          "key": {
                                                                                             "inject": {
                                                                                               "field": {
                                                                                                 "name": "variable",
                                                                                                 "term": {
                                                                                                   "wrap": {"body": {"literal": {"string": "k"}}, "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}},
-                                                                                          "@value": {
+                                                                                          "value": {
                                                                                             "inject": {
                                                                                               "field": {
                                                                                                 "name": "variable",
@@ -4263,14 +4263,14 @@
                                                                       "term": {
                                                                         "map": [
                                                                           {
-                                                                            "@key": {
+                                                                            "key": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "variable",
                                                                                   "term": {
                                                                                     "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                 "typeName": "hydra.core.Term"}},
-                                                                            "@value": {
+                                                                            "value": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "variable",
@@ -4482,14 +4482,14 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "map",
                                                                           "term": {
                                                                             "map": [
                                                                               {
-                                                                                "@key": {
+                                                                                "key": {
                                                                                   "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
@@ -4503,7 +4503,7 @@
                                                                                                 "typeName": "hydra.core.IntegerValue"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                "@value": {
+                                                                                "value": {
                                                                                   "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
@@ -4513,7 +4513,7 @@
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}]}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -4695,7 +4695,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -4704,14 +4704,14 @@
                                                                         "field": {"name": "string", "term": {"literal": {"string": "outer"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "map",
                                                                     "term": {
                                                                       "map": [
                                                                         {
-                                                                          "@key": {
+                                                                          "key": {
                                                                             "inject": {
                                                                               "field": {
                                                                                 "name": "literal",
@@ -4725,7 +4725,7 @@
                                                                                           "typeName": "hydra.core.IntegerValue"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}},
-                                                                          "@value": {
+                                                                          "value": {
                                                                             "inject": {
                                                                               "field": {
                                                                                 "name": "literal",
@@ -4930,7 +4930,7 @@
                                                                                   "term": {
                                                                                     "map": [
                                                                                       {
-                                                                                        "@key": {
+                                                                                        "key": {
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "literal",
@@ -4939,7 +4939,7 @@
                                                                                                   "field": {"name": "string", "term": {"literal": {"string": "key1"}}},
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                        "@value": {
+                                                                                        "value": {
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "literal",
@@ -4954,7 +4954,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "@key": {
+                                                                                        "key": {
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "literal",
@@ -4963,7 +4963,7 @@
                                                                                                   "field": {"name": "string", "term": {"literal": {"string": "key2"}}},
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                        "@value": {
+                                                                                        "value": {
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "literal",
@@ -5171,7 +5171,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -5180,7 +5180,7 @@
                                                                         "field": {"name": "string", "term": {"literal": {"string": "person1"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "record",
@@ -5405,7 +5405,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -5419,7 +5419,7 @@
                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "list",
@@ -5445,7 +5445,7 @@
                                                                             "typeName": "hydra.core.Term"}}]}},
                                                                   "typeName": "hydra.core.Term"}}},
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -5459,7 +5459,7 @@
                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "list",
@@ -5638,7 +5638,7 @@
                                                         "term": {
                                                           "map": [
                                                             {
-                                                              "@key": {
+                                                              "key": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -5647,7 +5647,7 @@
                                                                         "field": {"name": "string", "term": {"literal": {"string": "coords"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
-                                                              "@value": {
+                                                              "value": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "pair",
@@ -5657,7 +5657,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "pair": {
-                                                                                "@first": {
+                                                                                "first": {
                                                                                   "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
@@ -5671,7 +5671,7 @@
                                                                                                 "typeName": "hydra.core.IntegerValue"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                "@second": {
+                                                                                "second": {
                                                                                   "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
@@ -7175,7 +7175,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "set",
@@ -7210,7 +7210,7 @@
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}}]}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -7805,7 +7805,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -7819,7 +7819,7 @@
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -7846,7 +7846,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -7860,7 +7860,7 @@
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -8584,7 +8584,7 @@
                                                                   "term": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {
+                                                                        "key": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",
@@ -8593,7 +8593,7 @@
                                                                                   "field": {"name": "string", "term": {"literal": {"string": "key"}}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}},
-                                                                        "@value": {
+                                                                        "value": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",

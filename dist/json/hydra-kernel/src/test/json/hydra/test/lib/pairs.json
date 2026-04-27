@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for hydra.lib.pairs primitives"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for hydra.lib.pairs primitives"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -68,8 +68,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 5}}},
-                                                                              "@second": {"literal": {"string": "ab"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 5}}},
+                                                                              "second": {"literal": {"string": "ab"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -159,8 +159,8 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "pair": {
-                                                                          "@first": {"literal": {"integer": {"int32": 10}}},
-                                                                          "@second": {"literal": {"integer": {"int32": 2}}}}},
+                                                                          "first": {"literal": {"integer": {"int32": 10}}},
+                                                                          "second": {"literal": {"integer": {"int32": 2}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -240,8 +240,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 0}}},
-                                                                              "@second": {"literal": {"string": "hello"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 0}}},
+                                                                              "second": {"literal": {"string": "hello"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -331,8 +331,8 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "pair": {
-                                                                          "@first": {"literal": {"integer": {"int32": 0}}},
-                                                                          "@second": {"literal": {"integer": {"int32": 5}}}}},
+                                                                          "first": {"literal": {"integer": {"int32": 0}}},
+                                                                          "second": {"literal": {"integer": {"int32": 5}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -433,8 +433,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 42}}},
-                                                                              "@second": {"literal": {"string": "hello"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 42}}},
+                                                                              "second": {"literal": {"string": "hello"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -501,8 +501,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 0}}},
-                                                                              "@second": {"literal": {"string": "world"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 0}}},
+                                                                              "second": {"literal": {"string": "world"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -569,8 +569,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": -5}}},
-                                                                              "@second": {"literal": {"string": "test"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": -5}}},
+                                                                              "second": {"literal": {"string": "test"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -658,8 +658,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 42}}},
-                                                                              "@second": {"literal": {"string": "hello"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 42}}},
+                                                                              "second": {"literal": {"string": "hello"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -720,8 +720,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 0}}},
-                                                                              "@second": {"literal": {"string": ""}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 0}}},
+                                                                              "second": {"literal": {"string": ""}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -782,8 +782,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 123}}},
-                                                                              "@second": {"literal": {"string": "testing"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 123}}},
+                                                                              "second": {"literal": {"string": "testing"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {

@@ -60,10 +60,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [ExtractCore.ns, ShowCore.ns]
-    kernelTypesNamespaces $
-    Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ExtractCore.ns, ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")}
   where
     definitions = [
       toDefinition difference_,

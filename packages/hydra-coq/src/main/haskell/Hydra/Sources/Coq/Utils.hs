@@ -41,10 +41,12 @@ ns :: Namespace
 ns = Namespace "hydra.coq.utils"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "Pure helpers for the Coq code generator"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Pure helpers for the Coq code generator"}
   where
     definitions = [
       toDefinition buildConstructorCounts,

@@ -42,10 +42,12 @@ ns :: Namespace
 ns = Namespace "hydra.coq.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Formatting.ns, Serialization.ns]
-    (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Coq serializer: converts Coq AST to concrete Coq source code"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Formatting.ns, Serialization.ns],
+            moduleTypeDependencies = (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Coq serializer: converts Coq AST to concrete Coq source code"}
   where
     definitions = [
       toDefinition applicationToExpr,

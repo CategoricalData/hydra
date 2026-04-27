@@ -19,10 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.inference.failures"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Inference tests for expected failures")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Inference tests for expected failures")}
   where
     definitions = [
       Phantoms.toDefinition allTests,

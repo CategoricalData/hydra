@@ -98,10 +98,12 @@ ns :: Namespace
 ns = Namespace "hydra.python.utils"
 
 module_ :: Module
-module_ = Module ns definitions
-    [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns]
-    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Python utilities for constructing Python syntax trees"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns],
+            moduleTypeDependencies = (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Python utilities for constructing Python syntax trees"}
   where
     definitions = [
       toDefinition annotatedExpression,

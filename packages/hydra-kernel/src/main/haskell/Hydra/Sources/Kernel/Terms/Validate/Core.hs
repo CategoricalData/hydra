@@ -63,10 +63,12 @@ ns :: Namespace
 ns = Namespace "hydra.validate.core"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Rewriting.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Validation functions for core terms and types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Rewriting.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Validation functions for core terms and types"}
   where
    definitions = [
      toDefinition checkDuplicateBindings,

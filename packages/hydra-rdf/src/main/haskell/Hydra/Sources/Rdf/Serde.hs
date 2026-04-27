@@ -90,10 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.rdf.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Serialization.ns]
-    (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Serialization functions for converting RDF graphs to N-Triples format expressions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Serialization.ns],
+            moduleTypeDependencies = (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Serialization functions for converting RDF graphs to N-Triples format expressions"}
   where
     definitions = [
       toDefinition escapeIriChar,

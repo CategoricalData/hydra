@@ -63,13 +63,15 @@ ns :: Namespace
 ns = Namespace "hydra.sorting"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns]
-    kernelTypesNamespaces $
-    Just ("Utilities for sorting."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Utilities for sorting."
       <> " This module includes an implementation of Tarjan's algorithm,"
       <> " originally based on GraphSCC by Iavor S. Diatchki:"
-      <> " https://hackage.haskell.org/package/GraphSCC.")
+      <> " https://hackage.haskell.org/package/GraphSCC.")}
   where
    definitions = [
      toDefinition adjacencyListToMap,

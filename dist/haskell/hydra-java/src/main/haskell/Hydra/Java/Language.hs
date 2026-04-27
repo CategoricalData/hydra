@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints and reserved words for Java
 
 module Hydra.Java.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for Java
 javaLanguage :: Coders.Language
 javaLanguage =
@@ -100,11 +97,9 @@ javaLanguage =
           Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
-
 -- | The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly
 javaMaxTupleLength :: Int
 javaMaxTupleLength = 9
-
 -- | A set of reserved words in Java
 reservedWords :: S.Set String
 reservedWords =

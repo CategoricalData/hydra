@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Java code generator: converts Hydra modules to Java source code
 
 module Hydra.Java.Coder where
-
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
@@ -53,16 +51,13 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 addComment :: Syntax.ClassBodyDeclaration -> Core.FieldType -> t0 -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 addComment decl field cx g =
     Eithers.map (\c -> Syntax.ClassBodyDeclarationWithComments {
       Syntax.classBodyDeclarationWithCommentsValue = decl,
       Syntax.classBodyDeclarationWithCommentsComments = c}) (Annotations.commentsFromFieldType cx g field)
-
 analyzeJavaFunction :: JavaEnvironment.JavaEnvironment -> Core.Term -> Context.Context -> t0 -> Either t1 (Typing.FunctionStructure JavaEnvironment.JavaEnvironment)
 analyzeJavaFunction env term cx g = Analysis.analyzeFunctionTerm cx javaEnvGetGraph javaEnvSetGraph env term
-
 annotateBodyWithCod :: Core.Type -> Core.Term -> Core.Term
 annotateBodyWithCod typ term =
 
@@ -80,7 +75,6 @@ annotateBodyWithCod typ term =
             Core.applicationFunction = lhs,
             Core.applicationArgument = annotatedRhs})))
         _ -> setAnn term
-
 annotateLambdaArgs :: Core.Name -> [Core.Type] -> [Core.Term] -> t0 -> Graph.Graph -> Either t1 [Core.Term]
 annotateLambdaArgs cname tApps argTerms cx g =
     Logic.ifElse (Lists.null tApps) (Right argTerms) (Eithers.bind (Eithers.bind (Right (Lexical.lookupBinding g cname)) (\mel -> Maybes.cases mel (Right (Maybes.map (\prim -> Graph.primitiveType prim) (Maps.lookup cname (Graph.graphPrimitives g)))) (\el -> Right (Core.bindingType el)))) (\mts -> Maybes.cases mts (Right argTerms) (\ts ->
@@ -91,7 +85,6 @@ annotateLambdaArgs cname tApps argTerms cx g =
         let subst = Maps.fromList (Lists.zip schemeVars tApps)
             expectedTypes = peelExpectedTypes subst (Lists.length argTerms) schemeType
         in (Right (Lists.zipWith (\arg -> \mExpected -> propagateType mExpected arg) argTerms (Lists.concat2 expectedTypes (Lists.replicate (Lists.length argTerms) (Core.TypeVariable (Core.Name "unused")))))))))))
-
 applyCastIfSafe :: JavaEnvironment.Aliases -> Core.Type -> Syntax.Expression -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 applyCastIfSafe aliases castType expr cx g =
 
@@ -102,15 +95,12 @@ applyCastIfSafe aliases castType expr cx g =
                   Sets.fromList (Lists.filter (\v -> Logic.or (Sets.member v inScope) (isLambdaBoundVariable v)) (Sets.toList castVars))
           isSafe = Logic.or (Sets.null trusted) (Logic.or (Sets.null javaTypeVars) (Sets.null (Sets.difference javaTypeVars trusted)))
       in (Logic.ifElse isSafe (Eithers.bind (encodeType aliases Sets.empty castType cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression expr)))))) (Right expr))
-
 applyJavaArg :: Syntax.Expression -> Syntax.Expression -> Syntax.Expression
 applyJavaArg expr jarg =
     Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Right (Utils.javaExpressionToJavaPrimary expr))) (Syntax.Identifier JavaNames.applyMethodName) [
       jarg])
-
 applyOvergenSubstToTermAnnotations :: M.Map Core.Name Core.Type -> Core.Term -> t0 -> Graph.Graph -> Either t1 Core.Term
 applyOvergenSubstToTermAnnotations subst term0 cx g = Right (applyOvergenSubstToTermAnnotations_go subst g term0)
-
 applyOvergenSubstToTermAnnotations_go :: M.Map Core.Name Core.Type -> Graph.Graph -> Core.Term -> Core.Term
 applyOvergenSubstToTermAnnotations_go subst cx term =
     case term of
@@ -150,7 +140,6 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
         Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
         Core.typeLambdaBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.typeLambdaBody v0))})
       _ -> term
-
 applySubstFull :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 applySubstFull s t =
     case (Strip.deannotateType t) of
@@ -177,13 +166,11 @@ applySubstFull s t =
         Core.forallTypeParameter = (Core.forallTypeParameter v0),
         Core.forallTypeBody = (applySubstFull (Maps.delete (Core.forallTypeParameter v0) s) (Core.forallTypeBody v0))})
       _ -> t
-
 applySubstSimple :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 applySubstSimple subst t =
     case (Strip.deannotateType t) of
       Core.TypeVariable v0 -> Maps.findWithDefault t v0 subst
       _ -> t
-
 arraysCompareExpr :: String -> String -> Syntax.Expression
 arraysCompareExpr otherVar fname =
 
@@ -203,7 +190,6 @@ arraysCompareExpr otherVar fname =
         Syntax.methodInvocationArguments = [
           arg1,
           arg2]}))
-
 arraysEqualsClause :: String -> String -> Syntax.InclusiveOrExpression
 arraysEqualsClause tmpName fname =
 
@@ -221,7 +207,6 @@ arraysEqualsClause tmpName fname =
         Syntax.methodInvocationArguments = [
           thisArg,
           otherArg]})))
-
 augmentVariantClass :: JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Syntax.ClassDeclaration -> Syntax.ClassDeclaration
 augmentVariantClass aliases tparams elName cd =
     case cd of
@@ -246,7 +231,6 @@ augmentVariantClass aliases tparams elName cd =
           Syntax.normalClassDeclarationImplements = (Syntax.normalClassDeclarationImplements v0),
           Syntax.normalClassDeclarationBody = newBody}))
       _ -> cd
-
 bindingIsFunctionType :: Core.Binding -> Bool
 bindingIsFunctionType b =
     Maybes.maybe (case (Strip.deannotateTerm (Core.bindingTerm b)) of
@@ -260,7 +244,6 @@ bindingIsFunctionType b =
         Core.TypeFunction _ -> True
         _ -> False
       _ -> False) (Core.bindingType b)
-
 bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
 
@@ -273,7 +256,6 @@ bindingNameToFilePath name =
                     Packaging.qualifiedNameNamespace = ns_,
                     Packaging.qualifiedNameLocal = sanitized})
       in (Names.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (Packaging.FileExtension "java") unq)
-
 bindingsToStatements :: JavaEnvironment.JavaEnvironment -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.BlockStatement], JavaEnvironment.JavaEnvironment)
 bindingsToStatements env bindings cx g0 =
 
@@ -323,14 +305,12 @@ bindingsToStatements env bindings cx g0 =
                     JavaEnvironment.javaEnvironmentAliases = aliasesExtended,
                     JavaEnvironment.javaEnvironmentGraph = gExtended}
       in (Logic.ifElse (Lists.null bindings) (Right ([], envExtended)) (Eithers.bind (Eithers.mapList (\names -> Eithers.bind (Eithers.mapList (\n -> toDeclInit aliasesExtended gExtended recursiveVars flatBindings n cx g) names) (\inits -> Eithers.bind (Eithers.mapList (\n -> toDeclStatement envExtended aliasesExtended gExtended recursiveVars thunkedVars flatBindings n cx g) names) (\decls -> Right (Lists.concat2 (Maybes.cat inits) decls)))) sorted) (\groups -> Right (Lists.concat groups, envExtended))))
-
 boundTypeVariables :: Core.Type -> [Core.Name]
 boundTypeVariables typ =
     case typ of
       Core.TypeAnnotated v0 -> boundTypeVariables (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (boundTypeVariables (Core.forallTypeBody v0))
       _ -> []
-
 buildArgSubst :: S.Set Core.Name -> [Core.Type] -> [t0] -> M.Map Core.Name t0
 buildArgSubst schemeVarSet schemeDoms argTypes =
     Maps.fromList (Lists.bind (Lists.zip schemeDoms argTypes) (\p ->
@@ -340,13 +320,10 @@ buildArgSubst schemeVarSet schemeDoms argTypes =
         Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 schemeVarSet) [
           (v0, argType)] []
         _ -> []))
-
 buildCurriedLambda :: [Core.Name] -> Syntax.Expression -> Syntax.Expression
 buildCurriedLambda params inner = Lists.foldl (\acc -> \p -> Utils.javaLambda p acc) inner (Lists.reverse params)
-
 buildSubstFromAnnotations :: S.Set Core.Name -> Core.Term -> t0 -> Graph.Graph -> Either t1 (M.Map Core.Name Core.Name)
 buildSubstFromAnnotations schemeVarSet term cx g = Right (buildSubstFromAnnotations_go schemeVarSet g term)
-
 buildSubstFromAnnotations_go :: S.Set Core.Name -> Graph.Graph -> Core.Term -> M.Map Core.Name Core.Name
 buildSubstFromAnnotations_go schemeVarSet g term =
     case term of
@@ -381,11 +358,9 @@ buildSubstFromAnnotations_go schemeVarSet g term =
       Core.TermTypeLambda v0 -> buildSubstFromAnnotations_go schemeVarSet g (Core.typeLambdaBody v0)
       Core.TermEither v0 -> Eithers.either (\t -> buildSubstFromAnnotations_go schemeVarSet g t) (\t -> buildSubstFromAnnotations_go schemeVarSet g t) v0
       _ -> Maps.empty
-
 buildTypeSubst :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Type
 buildTypeSubst schemeVarSet schemeType actualType =
     buildTypeSubst_go schemeVarSet (Strip.deannotateType schemeType) (Strip.deannotateType actualType)
-
 buildTypeSubst_go :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Type
 buildTypeSubst_go svs st at =
 
@@ -420,11 +395,9 @@ buildTypeSubst_go svs st at =
           Core.TypeForall v1 -> goSub (Core.forallTypeBody v0) (Core.forallTypeBody v1)
           _ -> goSub (Core.forallTypeBody v0) at
         _ -> Maps.empty
-
 buildTypeVarSubst :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Name
 buildTypeVarSubst schemeVarSet freshTyp canonTyp =
     buildTypeVarSubst_go schemeVarSet (Strip.deannotateType freshTyp) (Strip.deannotateType canonTyp)
-
 buildTypeVarSubst_go :: S.Set Core.Name -> Core.Type -> Core.Type -> M.Map Core.Name Core.Name
 buildTypeVarSubst_go svs ft ct =
 
@@ -463,15 +436,12 @@ buildTypeVarSubst_go svs ft ct =
         _ -> case ct of
           Core.TypeForall v0 -> buildTypeVarSubst_go svs ft (Strip.deannotateType (Core.forallTypeBody v0))
           _ -> Maps.empty
-
 classModsPublic :: [Syntax.ClassModifier]
 classModsPublic = [
   Syntax.ClassModifierPublic]
-
 classifyDataReference :: Core.Name -> t0 -> Graph.Graph -> Either Errors.Error JavaEnvironment.JavaSymbolClass
 classifyDataReference name cx g =
     Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right JavaEnvironment.JavaSymbolClassLocalVariable) (\el -> Maybes.cases (Core.bindingType el) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no type scheme for element " (Core.unName (Core.bindingName el)))))) (\ts -> Right (classifyDataTerm ts (Core.bindingTerm el)))))
-
 classifyDataTerm :: Core.TypeScheme -> Core.Term -> JavaEnvironment.JavaSymbolClass
 classifyDataTerm ts term =
     Logic.ifElse (Dependencies.isLambda term) (
@@ -481,24 +451,20 @@ classifyDataTerm ts term =
       in (Logic.ifElse hasTypeParams (
         let n2 = classifyDataTerm_countLambdaParams (classifyDataTerm_stripTypeLambdas term)
         in (Logic.ifElse (Equality.gt n2 0) (JavaEnvironment.JavaSymbolClassHoistedLambda n2) JavaEnvironment.JavaSymbolClassNullaryFunction)) JavaEnvironment.JavaSymbolClassNullaryFunction))
-
 classifyDataTerm_countLambdaParams :: Core.Term -> Int
 classifyDataTerm_countLambdaParams t =
     case (Strip.deannotateTerm t) of
       Core.TermLambda v0 -> Math.add 1 (classifyDataTerm_countLambdaParams (Core.lambdaBody v0))
       Core.TermLet v0 -> classifyDataTerm_countLambdaParams (Core.letBody v0)
       _ -> 0
-
 classifyDataTerm_stripTypeLambdas :: Core.Term -> Core.Term
 classifyDataTerm_stripTypeLambdas t =
     case (Strip.deannotateTerm t) of
       Core.TermTypeLambda v0 -> classifyDataTerm_stripTypeLambdas (Core.typeLambdaBody v0)
       _ -> t
-
 cmpDeclStatement :: t0 -> Syntax.BlockStatement
 cmpDeclStatement aliases =
     Utils.variableDeclarationStatement aliases Utils.javaIntType (Utils.javaIdentifier "cmp") (Utils.javaIntExpression 0)
-
 cmpNotZeroExpr :: Syntax.Expression
 cmpNotZeroExpr =
     Utils.javaEqualityExpressionToJavaExpression (Syntax.EqualityExpressionNotEqual (Syntax.EqualityExpression_Binary {
@@ -511,13 +477,11 @@ cmpNotZeroExpr =
           Syntax.expressionNameIdentifier = (Utils.javaIdentifier "cmp")})))
     rhs =
         Utils.javaPostfixExpressionToJavaRelationalExpression (Syntax.PostfixExpressionPrimary (Utils.javaLiteralToJavaPrimary (Utils.javaInt 0)))
-
 collectForallParams :: Core.Type -> [Core.Name]
 collectForallParams t =
     case (Strip.deannotateType t) of
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallParams (Core.forallTypeBody v0))
       _ -> []
-
 collectLambdaDomains :: Core.Term -> ([Core.Type], Core.Term)
 collectLambdaDomains t =
     case (Strip.deannotateTerm t) of
@@ -525,22 +489,18 @@ collectLambdaDomains t =
         let rest = collectLambdaDomains (Core.lambdaBody v0)
         in (Lists.cons dom (Pairs.first rest), (Pairs.second rest)))
       _ -> ([], t)
-
 collectTypeApps :: Core.Term -> [Core.Type] -> (Core.Term, [Core.Type])
 collectTypeApps t acc =
     case (Strip.deannotateTerm t) of
       Core.TermTypeApplication v0 -> collectTypeApps (Core.typeApplicationTermBody v0) (Lists.cons (Core.typeApplicationTermType v0) acc)
       _ -> (Strip.deannotateTerm t, acc)
-
 collectTypeApps0 :: Core.Term -> [Core.Type] -> (Core.Term, [Core.Type])
 collectTypeApps0 t acc =
     case (Strip.deannotateTerm t) of
       Core.TermTypeApplication v0 -> collectTypeApps0 (Core.typeApplicationTermBody v0) (Lists.cons (Core.typeApplicationTermType v0) acc)
       _ -> (t, acc)
-
 collectTypeVars :: Core.Type -> S.Set Core.Name
 collectTypeVars typ = collectTypeVars_go (Strip.deannotateType typ)
-
 collectTypeVars_go :: Core.Type -> S.Set Core.Name
 collectTypeVars_go t =
     case t of
@@ -555,7 +515,6 @@ collectTypeVars_go t =
       Core.TypeEither v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.eitherTypeLeft v0))) (collectTypeVars_go (Strip.deannotateType (Core.eitherTypeRight v0)))
       Core.TypeForall v0 -> collectTypeVars_go (Strip.deannotateType (Core.forallTypeBody v0))
       _ -> Sets.empty
-
 comparableCompareExpr :: String -> String -> Syntax.Expression
 comparableCompareExpr otherVar fname =
 
@@ -565,7 +524,6 @@ comparableCompareExpr otherVar fname =
       in (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Comparing") (Syntax.Identifier "compare") [
         thisField,
         otherField]))
-
 compareAndReturnStmts :: String -> Core.FieldType -> [Syntax.BlockStatement]
 compareAndReturnStmts otherVar f =
     [
@@ -577,14 +535,12 @@ compareAndReturnStmts otherVar f =
         Syntax.ifThenStatementStatement = (Utils.javaReturnStatement (Just (Utils.javaExpressionNameToJavaExpression (Syntax.ExpressionName {
           Syntax.expressionNameQualifier = Nothing,
           Syntax.expressionNameIdentifier = (Utils.javaIdentifier "cmp")}))))})))]
-
 compareFieldExpr :: String -> Core.FieldType -> Syntax.Expression
 compareFieldExpr otherVar ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
           ftype = Core.fieldTypeType ft
       in (Logic.ifElse (isBinaryType ftype) (arraysCompareExpr otherVar fname) (Logic.ifElse (isNonComparableType ftype) (hashCodeCompareExpr otherVar fname) (comparableCompareExpr otherVar fname)))
-
 compareToBody :: t0 -> String -> [Core.FieldType] -> [Syntax.BlockStatement]
 compareToBody aliases otherVar fields =
 
@@ -597,7 +553,6 @@ compareToBody aliases otherVar fields =
           Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (compareFieldExpr otherVar firstField)))] (Lists.concat2 [
           cmpDeclStatement aliases] (Lists.concat2 (Lists.concat (Lists.map (\f -> compareAndReturnStmts otherVar f) (Lists.cons firstField (Maybes.fromMaybe [] (Lists.maybeInit restFields))))) [
           Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (compareFieldExpr otherVar (Maybes.fromMaybe firstField (Lists.maybeLast restFields)))))])))) (Lists.uncons fields)))
-
 compareToZeroClause :: String -> String -> Syntax.InclusiveOrExpression
 compareToZeroClause tmpName fname =
 
@@ -620,7 +575,6 @@ compareToZeroClause tmpName fname =
       in (Utils.javaEqualityExpressionToJavaInclusiveOrExpression (Syntax.EqualityExpressionEqual (Syntax.EqualityExpression_Binary {
         Syntax.equalityExpression_BinaryLhs = lhs,
         Syntax.equalityExpression_BinaryRhs = rhs})))
-
 constantDecl :: String -> JavaEnvironment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 constantDecl javaName aliases name cx g =
 
@@ -640,7 +594,6 @@ constantDecl javaName aliases name cx g =
                   arg] Nothing)
             var = Utils.javaVariableDeclarator (Syntax.Identifier javaName) (Just init)
         in (Right (noComment (Utils.javaMemberField mods jt var))))))
-
 constantDeclForFieldType :: JavaEnvironment.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 constantDeclForFieldType aliases ftyp cx g =
 
@@ -648,10 +601,8 @@ constantDeclForFieldType aliases ftyp cx g =
           javaName =
                   Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))
       in (constantDecl javaName aliases name cx g)
-
 constantDeclForTypeName :: JavaEnvironment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 constantDeclForTypeName aliases name cx g = constantDecl "TYPE_" aliases name cx g
-
 constructElementsInterface :: Packaging.Module -> [Syntax.InterfaceMemberDeclaration] -> (Core.Name, Syntax.CompilationUnit)
 constructElementsInterface mod members =
 
@@ -679,7 +630,6 @@ constructElementsInterface mod members =
         Syntax.ordinaryCompilationUnitImports = [],
         Syntax.ordinaryCompilationUnitTypes = [
           decl]})))
-
 correctCastType :: Core.Term -> [Core.Type] -> Core.Type -> t0 -> t1 -> Either t2 Core.Type
 correctCastType innerBody typeArgs fallback cx g =
     case (Strip.deannotateTerm innerBody) of
@@ -687,7 +637,6 @@ correctCastType innerBody typeArgs fallback cx g =
         Core.pairTypeFirst = (Maybes.fromMaybe fallback (Lists.maybeAt 0 typeArgs)),
         Core.pairTypeSecond = (Maybes.fromMaybe fallback (Lists.maybeAt 1 typeArgs))}))) (Right fallback)
       _ -> Right fallback
-
 correctTypeApps :: t0 -> Core.Name -> [Core.Term] -> [Core.Type] -> t1 -> Graph.Graph -> Either Errors.Error [Core.Type]
 correctTypeApps gr name args fallbackTypeApps cx g =
     Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right fallbackTypeApps) (\el -> Maybes.cases (Core.bindingType el) (Right fallbackTypeApps) (\ts ->
@@ -709,7 +658,6 @@ correctTypeApps gr name args fallbackTypeApps cx g =
           filteredFallback =
                   Logic.ifElse (Maps.null overgenSubst) filteredFallback0 (Lists.map (\t -> substituteTypeVarsWithTypes overgenSubst t) filteredFallback0)
       in (Logic.ifElse (Logic.or (Lists.null schemeVars) (Logic.not (Equality.equal (Lists.length schemeVars) (Lists.length filteredFallback)))) (Right filteredFallback) (correctTypeAppsWithArgs schemeVars filteredFallback schemeType args cx g)))))
-
 correctTypeAppsWithArgs :: [Core.Name] -> [Core.Type] -> Core.Type -> [Core.Term] -> t0 -> Graph.Graph -> Either Errors.Error [Core.Type]
 correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args cx g =
 
@@ -723,17 +671,14 @@ correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args cx g =
             domsMatch =
                     Lists.null (Lists.filter (\p -> Logic.not (typesMatch (Strip.deannotateType (Pairs.first p)) (Strip.deannotateType (Pairs.second p)))) (Lists.zip irDoms argTypes))
         in (Logic.ifElse domsMatch (Right fallbackTypeApps) (Right (resolveTypeApps schemeVars fallbackTypeApps (buildArgSubst schemeVarSet schemeDoms argTypes)))))))
-
 countFunctionParams :: Core.Type -> Int
 countFunctionParams t =
     case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Math.add 1 (countFunctionParams (Core.functionTypeCodomain v0))
       _ -> 0
-
 declarationForRecordType :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForRecordType isInner isSer aliases tparams elName fields cx g =
     declarationForRecordType_ isInner isSer aliases tparams elName Nothing fields cx g
-
 declarationForRecordType_ :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
     Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ -> Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> recordWithMethod aliases elName fields f cx g) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons -> Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
@@ -748,7 +693,6 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
                     (recordHashCodeMethod fields)] (Lists.concat2 comparableMethods withMethods))))
           ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
       in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))
-
 declarationForUnionType :: Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForUnionType isSer aliases tparams elName fields cx g =
     Eithers.bind (Eithers.mapList (\ft ->
@@ -847,7 +791,6 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
               mods = Lists.concat2 classModsPublic [
                     Syntax.ClassModifierAbstract]
           in (Right (Utils.javaClassDeclaration aliases tparams elName mods Nothing (interfaceTypes isSer aliases tparams elName) bodyDecls))))))))
-
 decodeTypeFromTerm :: Core.Term -> Maybe Core.Type
 decodeTypeFromTerm term =
     case (Strip.deannotateTerm term) of
@@ -874,7 +817,6 @@ decodeTypeFromTerm term =
           Core.TermInject v1 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v1))) "string") (Just (Core.TypeLiteral Core.LiteralTypeString)) Nothing
           _ -> Nothing) Nothing)))))) Nothing
       _ -> Nothing
-
 dedupBindings :: S.Set Core.Name -> [Core.Binding] -> [Core.Binding]
 dedupBindings inScope bs =
     Maybes.fromMaybe [] (Maybes.map (\p ->
@@ -893,7 +835,6 @@ dedupBindings inScope bs =
           Core.bindingName = newName,
           Core.bindingTerm = (Core.bindingTerm b),
           Core.bindingType = (Core.bindingType b)}) (dedupBindings (Sets.insert newName inScope) rest2))) (Lists.cons b (dedupBindings (Sets.insert name inScope) rest)))) (Lists.uncons bs))
-
 detectAccumulatorUnification :: [Core.Type] -> Core.Type -> [Core.Name] -> M.Map Core.Name Core.Type
 detectAccumulatorUnification doms cod tparams =
 
@@ -915,11 +856,9 @@ detectAccumulatorUnification doms cod tparams =
           danglingSubst =
                   Maybes.maybe Maps.empty (\cv -> Logic.ifElse (Sets.member cv domVars) Maps.empty (Maybes.maybe Maps.empty (\refVar -> Maps.singleton cv (Core.TypeVariable refVar)) (findSelfRefVar groupedByInput))) (findPairFirst cod)
       in (Maps.union (Maps.union (Maps.union (nameMapToTypeMap selfRefSubst) (nameMapToTypeMap codSubst)) danglingSubst) (nameMapToTypeMap directRefSubst))
-
 directRefSubstitution :: (Eq t0, Ord t0) => (S.Set t0 -> Maybe t0 -> M.Map t0 [t0] -> M.Map t0 t0)
 directRefSubstitution directInputVars codVar grouped =
     Lists.foldl (\subst -> \entry -> directRefSubstitution_processGroup directInputVars codVar subst (Pairs.first entry) (Pairs.second entry)) Maps.empty (Maps.toList grouped)
-
 directRefSubstitution_processGroup :: (Eq t0, Ord t0) => (S.Set t0 -> Maybe t0 -> M.Map t0 t0 -> t0 -> [t0] -> M.Map t0 t0)
 directRefSubstitution_processGroup directInputVars codVar subst inVar outVars =
 
@@ -928,13 +867,11 @@ directRefSubstitution_processGroup directInputVars codVar subst inVar outVars =
           safeNonSelfVars =
                   Lists.filter (\v -> Logic.and (Logic.not (Sets.member v directInputVars)) (Logic.not (Equality.equal (Just v) codVar))) nonSelfVars
       in (Logic.ifElse (Logic.and (Equality.gte selfRefCount 2) (Logic.not (Lists.null safeNonSelfVars))) (Lists.foldl (\s -> \v -> Maps.insert v inVar s) subst safeNonSelfVars) subst)
-
 domTypeArgs :: JavaEnvironment.Aliases -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error [Syntax.TypeArgument]
 domTypeArgs aliases d cx g =
 
       let args = extractTypeApplicationArgs (Strip.deannotateType d)
       in (Logic.ifElse (Logic.not (Lists.null args)) (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) args) (Right (javaTypeArgumentsForType d)))
-
 elementJavaIdentifier :: Bool -> Bool -> JavaEnvironment.Aliases -> Core.Name -> Syntax.Identifier
 elementJavaIdentifier isPrim isMethod aliases name =
 
@@ -943,26 +880,22 @@ elementJavaIdentifier isPrim isMethod aliases name =
           local = Packaging.qualifiedNameLocal qn
           sep = Logic.ifElse isMethod "::" "."
       in (Logic.ifElse isPrim (Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases ns_ (Formatting.capitalize local)) ".") JavaNames.applyMethodName)) (Maybes.cases ns_ (Syntax.Identifier (Utils.sanitizeJavaName local)) (\n -> Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases (namespaceParent n) (elementsClassName n)) sep) (Utils.sanitizeJavaName local)))))
-
 elementJavaIdentifier_qualify :: JavaEnvironment.Aliases -> Maybe Packaging.Namespace -> String -> String
 elementJavaIdentifier_qualify aliases mns s =
     Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Packaging.QualifiedName {
       Packaging.qualifiedNameNamespace = mns,
       Packaging.qualifiedNameLocal = s})))
-
 elementsClassName :: Packaging.Namespace -> String
 elementsClassName ns =
 
       let nsStr = Packaging.unNamespace ns
           parts = Strings.splitOn "." nsStr
       in (Formatting.sanitizeWithUnderscores Language.reservedWords (Formatting.capitalize (Maybes.fromMaybe nsStr (Lists.maybeLast parts))))
-
 elementsQualifiedName :: Packaging.Namespace -> Core.Name
 elementsQualifiedName ns =
     Names.unqualifyName (Packaging.QualifiedName {
       Packaging.qualifiedNameNamespace = (namespaceParent ns),
       Packaging.qualifiedNameLocal = (elementsClassName ns)})
-
 encodeApplication :: JavaEnvironment.JavaEnvironment -> Core.Application -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeApplication env app cx g0 =
 
@@ -998,7 +931,6 @@ encodeApplication env app cx g0 =
                           in (Logic.ifElse (Logic.not (Sets.null (Sets.difference allVars inScope))) [] (Logic.ifElse (Sets.null (Sets.difference allVars trusted)) typeApps [])))
             in (Eithers.bind (Logic.ifElse (Lists.null filteredTypeApps) (Right []) (correctTypeApps g v0 hargs filteredTypeApps cx g)) (\safeTypeApps -> Eithers.bind (filterPhantomTypeArgs v0 safeTypeApps cx g) (\finalTypeApps -> Eithers.bind (functionCall env False v0 hargs finalTypeApps cx g) (\initialCall -> Eithers.foldl (\acc -> \h -> Eithers.bind (encodeTerm env h cx g) (\jarg -> Right (applyJavaArg acc jarg))) initialCall rargs)))))))
           _ -> encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g)))))
-
 encodeApplication_fallback :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Graph.Graph -> [Core.Type] -> Core.Term -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
     Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal lhs))) (\mt -> Eithers.bind (Maybes.cases mt (Checking.typeOfTerm cx g lhs) (\typ -> Right typ)) (\t -> case (Strip.deannotateTypeParameters (Strip.deannotateType t)) of
@@ -1015,7 +947,6 @@ encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
           Core.TermUnwrap _ -> elimBranch
           _ -> defaultExpr
       _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))))
-
 encodeDefinitions :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map Core.Name Syntax.CompilationUnit)
 encodeDefinitions mod defs cx g =
 
@@ -1034,7 +965,6 @@ encodeDefinitions mod defs cx g =
                     in (isSerializableJavaType typ)) typeDefs
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition pkg aliases td cx g) nonTypedefDefs) (\typeUnits -> Eithers.bind (Logic.ifElse (Lists.null termDefs) (Right []) (Eithers.bind (Eithers.mapList (\td -> encodeTermDefinition env td cx g) termDefs) (\dataMembers -> Right [
         constructElementsInterface mod dataMembers]))) (\termUnits -> Right (Maps.fromList (Lists.concat2 typeUnits termUnits)))))
-
 encodeElimination :: JavaEnvironment.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeElimination env marg dom cod elimTerm cx g =
 
@@ -1087,7 +1017,6 @@ encodeElimination env marg dom cod elimTerm cx g =
                 wArg = Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier wVar)
             in (Utils.javaLambda wVar (withArg wArg))) (\jarg -> withArg jarg)))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "elimination case" (Strings.cat2 " in " "encodeElimination")))))
-
 encodeFunction :: JavaEnvironment.JavaEnvironment -> Core.Type -> Core.Type -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeFunction env dom cod funTerm cx g =
 
@@ -1132,7 +1061,6 @@ encodeFunction env dom cod funTerm cx g =
               _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected function type for lambda body, but got: " (ShowCore.type_ cod))))
             _ -> encodeLambdaFallback env2 v0)
         _ -> Right (encodeLiteral (Core.LiteralString (Strings.cat2 "Unimplemented function variant: " (ShowCore.term funTerm))))
-
 encodeFunctionFormTerm :: JavaEnvironment.JavaEnvironment -> [M.Map Core.Name Core.Term] -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeFunctionFormTerm env anns term cx g =
 
@@ -1140,7 +1068,6 @@ encodeFunctionFormTerm env anns term cx g =
       in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType term) (Checking.typeOfTerm cx g term) (\inferredType -> Right inferredType)) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
         Core.TypeFunction v0 -> encodeFunction env (Core.functionTypeDomain v0) (Core.functionTypeCodomain v0) term cx g
         _ -> encodeNullaryConstant env typ term cx g)))
-
 encodeFunctionPrimitiveByName :: JavaEnvironment.JavaEnvironment -> Core.Type -> Core.Type -> Core.Name -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeFunctionPrimitiveByName env dom cod name cx g =
 
@@ -1166,7 +1093,6 @@ encodeFunctionPrimitiveByName env dom cod name cx g =
         in (Eithers.bind (encodeType aliases Sets.empty (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = dom,
           Core.functionTypeCodomain = cod})) cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression curried))))))))
-
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
     case lit of
@@ -1179,7 +1105,6 @@ encodeLiteral lit =
       Core.LiteralFloat v0 -> encodeLiteral_encodeFloat v0
       Core.LiteralInteger v0 -> encodeLiteral_encodeInteger v0
       Core.LiteralString v0 -> encodeLiteral_litExp (Utils.javaString v0)
-
 encodeLiteralType :: Core.LiteralType -> t0 -> t1 -> Either t2 Syntax.Type
 encodeLiteralType lt cx g =
     case lt of
@@ -1214,10 +1139,8 @@ encodeLiteralType lt cx g =
           "java",
           "math"])) "BigInteger")
       Core.LiteralTypeString -> encodeLiteralType_simple "String" cx g
-
 encodeLiteralType_simple :: String -> t0 -> t1 -> Either t2 Syntax.Type
 encodeLiteralType_simple n cx g = Right (Utils.javaRefType [] Nothing n)
-
 encodeLiteral_encodeFloat :: Core.FloatValue -> Syntax.Expression
 encodeLiteral_encodeFloat f =
     case f of
@@ -1225,19 +1148,16 @@ encodeLiteral_encodeFloat f =
         encodeLiteral (Core.LiteralString (Literals.showBigfloat v0))] Nothing
       Core.FloatValueFloat32 v0 -> encodeLiteral_encodeFloat32 v0
       Core.FloatValueFloat64 v0 -> encodeLiteral_encodeFloat64 v0
-
 encodeLiteral_encodeFloat32 :: Float -> Syntax.Expression
 encodeLiteral_encodeFloat32 v =
 
       let s = Literals.showFloat32 v
       in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Float" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "NEGATIVE_INFINITY") (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToBigfloat v))))))))
-
 encodeLiteral_encodeFloat64 :: Double -> Syntax.Expression
 encodeLiteral_encodeFloat64 v =
 
       let s = Literals.showFloat64 v
       in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (Logic.ifElse (Equality.equal s "-0.0") (encodeLiteral_javaParseDouble "-0.0") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v))))))))
-
 encodeLiteral_encodeInteger :: Core.IntegerValue -> Syntax.Expression
 encodeLiteral_encodeInteger i =
     case i of
@@ -1252,30 +1172,24 @@ encodeLiteral_encodeInteger i =
       Core.IntegerValueUint32 v0 -> encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeLong)) (encodeLiteral_litExp (Syntax.LiteralInteger (Syntax.IntegerLiteral (Literals.uint32ToBigint v0))))
       Core.IntegerValueUint64 v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigInteger") Nothing) [
         encodeLiteral (Core.LiteralString (Literals.showBigint (Literals.uint64ToBigint v0)))] Nothing
-
 encodeLiteral_javaParseDouble :: String -> Syntax.Expression
 encodeLiteral_javaParseDouble value =
     Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "Double") (Syntax.Identifier "parseDouble") [
       encodeLiteral (Core.LiteralString value)])
-
 encodeLiteral_javaSpecialFloatExpr :: String -> String -> Syntax.Expression
 encodeLiteral_javaSpecialFloatExpr className fieldName =
     Utils.javaExpressionNameToJavaExpression (Syntax.ExpressionName {
       Syntax.expressionNameQualifier = (Just (Syntax.AmbiguousName [
         Syntax.Identifier className])),
       Syntax.expressionNameIdentifier = (Syntax.Identifier fieldName)})
-
 encodeLiteral_litExp :: Syntax.Literal -> Syntax.Expression
 encodeLiteral_litExp l = Utils.javaLiteralToJavaExpression l
-
 encodeLiteral_primCast :: Syntax.PrimitiveType -> Syntax.Expression -> Syntax.Expression
 encodeLiteral_primCast pt expr =
     Utils.javaCastExpressionToJavaExpression (Utils.javaCastPrimitive pt (Utils.javaExpressionToJavaUnaryExpression expr))
-
 encodeNullaryConstant :: t0 -> t1 -> Core.Term -> t2 -> t3 -> Either Errors.Error t4
 encodeNullaryConstant env typ funTerm cx g =
     Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (ShowCore.term funTerm))))))
-
 encodeNullaryConstant_typeArgsFromReturnType :: JavaEnvironment.Aliases -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error [Syntax.TypeArgument]
 encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
     case (Strip.deannotateType t) of
@@ -1289,7 +1203,6 @@ encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
         Syntax.TypeArgumentReference rk,
         (Syntax.TypeArgumentReference rv)]))))
       _ -> Right []
-
 encodeNullaryPrimitiveByName :: JavaEnvironment.JavaEnvironment -> Core.Type -> Core.Name -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeNullaryPrimitiveByName env typ name cx g =
 
@@ -1304,10 +1217,8 @@ encodeNullaryPrimitiveByName env typ name cx g =
             className = Syntax.Identifier (Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts)))
             methodName = Syntax.Identifier (Maybes.fromMaybe fullName (Lists.maybeLast parts))
         in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs className methodName targs []))))))
-
 encodeTerm :: JavaEnvironment.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeTerm env term cx g = encodeTermInternal env [] [] term cx g
-
 encodeTermDefinition :: JavaEnvironment.JavaEnvironment -> Packaging.TermDefinition -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.InterfaceMemberDeclaration
 encodeTermDefinition env tdef cx g =
 
@@ -1410,7 +1321,6 @@ encodeTermDefinition env tdef cx g =
                   let returnSt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jbody))
                   in (Right (Lists.concat2 bindingStmts [
                     returnSt]))))) (\methodBody -> Right (Utils.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)))))))))))))))
-
 encodeTermInternal :: JavaEnvironment.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeTermInternal env anns tyapps term cx g0 =
 
@@ -1577,7 +1487,6 @@ encodeTermInternal env anns tyapps term cx g0 =
                         expr])))) v1)))) (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g)
                   _ -> typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g)))))))
         _ -> Right (encodeLiteral (Core.LiteralString "Unimplemented term variant"))
-
 encodeTermTCO :: JavaEnvironment.JavaEnvironment -> Core.Name -> [Core.Name] -> M.Map Core.Name Core.Name -> Int -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error [Syntax.BlockStatement]
 encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
 
@@ -1695,7 +1604,6 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
               _ -> Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
                 Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])) (Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
             Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])))))
-
 encodeType :: JavaEnvironment.Aliases -> S.Set Core.Name -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Type
 encodeType aliases boundVars t cx g =
 
@@ -1731,7 +1639,6 @@ encodeType aliases boundVars t cx g =
           in (Eithers.bind (encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g) (\resolved -> Maybes.cases resolved (Right (Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Syntax.TypeReference (Utils.javaTypeVariable (Core.unName name))) (Logic.ifElse (isLambdaBoundVariable name) (Syntax.TypeReference (Utils.javaTypeVariable (Core.unName name))) (Logic.ifElse (isUnresolvedInferenceVar name) (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Utils.javaClassType [] JavaNames.javaLangPackageName "Object")))) (Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True [] name Nothing)))))) (\resolvedType -> encodeType aliases boundVars resolvedType cx g)))
         Core.TypeWrap _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type"))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "can't encode unsupported type in Java: " (ShowCore.type_ t))))
-
 encodeTypeDefinition :: Syntax.PackageDeclaration -> JavaEnvironment.Aliases -> Packaging.TypeDefinition -> Context.Context -> Graph.Graph -> Either Errors.Error (Core.Name, Syntax.CompilationUnit)
 encodeTypeDefinition pkg aliases tdef cx g =
 
@@ -1751,7 +1658,6 @@ encodeTypeDefinition pkg aliases tdef cx g =
           Syntax.ordinaryCompilationUnitImports = imports,
           Syntax.ordinaryCompilationUnitTypes = [
             tdecl]})))))))
-
 encodeType_resolveIfTypedef :: t0 -> S.Set Core.Name -> S.Set Core.Name -> Core.Name -> t1 -> Graph.Graph -> Either t2 (Maybe Core.Type)
 encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g =
     Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Right Nothing) (Logic.ifElse (isLambdaBoundVariable name) (Right Nothing) (
@@ -1761,7 +1667,6 @@ encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g =
         Core.TypeUnion _ -> Right Nothing
         Core.TypeWrap _ -> Right Nothing
         _ -> Right (Just (Core.typeSchemeBody ts)))))))
-
 encodeVariable :: JavaEnvironment.JavaEnvironment -> Core.Name -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeVariable env name cx g =
 
@@ -1790,11 +1695,9 @@ encodeVariable env name cx g =
         JavaEnvironment.JavaSymbolClassConstant -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases name))
         JavaEnvironment.JavaSymbolClassNullaryFunction -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation Nothing (elementJavaIdentifier False False aliases name) []))
         JavaEnvironment.JavaSymbolClassUnaryFunction -> Right (Utils.javaIdentifierToJavaExpression (elementJavaIdentifier False True aliases name))))))))))
-
 encodeVariable_buildCurried :: [Core.Name] -> Syntax.Expression -> Syntax.Expression
 encodeVariable_buildCurried params inner =
     Maybes.fromMaybe inner (Maybes.map (\p -> Utils.javaLambda (Pairs.first p) (encodeVariable_buildCurried (Pairs.second p) inner)) (Lists.uncons params))
-
 encodeVariable_hoistedLambdaCase :: JavaEnvironment.Aliases -> Core.Name -> Int -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeVariable_hoistedLambdaCase aliases name arity cx g =
 
@@ -1806,14 +1709,12 @@ encodeVariable_hoistedLambdaCase aliases name arity cx g =
       in (Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right lam) (\el -> Maybes.cases (Core.bindingType el) (Right lam) (\ts ->
         let typ = Core.typeSchemeBody ts
         in (Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression lam))))))))))
-
 eqClause :: String -> Core.FieldType -> Syntax.InclusiveOrExpression
 eqClause tmpName ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
           ftype = Core.fieldTypeType ft
       in (Logic.ifElse (isBinaryType ftype) (arraysEqualsClause tmpName fname) (Logic.ifElse (isBigNumericType ftype) (compareToZeroClause tmpName fname) (equalsClause tmpName fname)))
-
 equalsClause :: String -> String -> Syntax.InclusiveOrExpression
 equalsClause tmpName fname =
 
@@ -1831,7 +1732,6 @@ equalsClause tmpName fname =
         Syntax.methodInvocationArguments = [
           thisArg,
           otherArg]})))
-
 extractArgType :: t0 -> Core.Type -> Core.Type
 extractArgType _lhs typ =
     case typ of
@@ -1839,10 +1739,8 @@ extractArgType _lhs typ =
         Core.TypeApplication _ -> Core.applicationTypeArgument v0
         _ -> typ
       _ -> typ
-
 extractDirectReturn :: S.Set Core.Name -> Core.Type -> [(Core.Name, Core.Name)]
 extractDirectReturn tparamSet t = extractDirectReturn_go tparamSet t
-
 extractDirectReturn_go :: S.Set Core.Name -> Core.Type -> [(Core.Name, Core.Name)]
 extractDirectReturn_go tparamSet t =
     case (Strip.deannotateType t) of
@@ -1866,7 +1764,6 @@ extractDirectReturn_go tparamSet t =
             _ -> []) (extractDirectReturn_go tparamSet cod)
           _ -> extractDirectReturn_go tparamSet cod
       _ -> []
-
 extractInOutPair :: Core.Type -> [(Core.Name, Core.Name)]
 extractInOutPair t =
     case (Strip.deannotateType t) of
@@ -1881,23 +1778,18 @@ extractInOutPair t =
             _ -> []
         _ -> []
       _ -> []
-
 extractTypeApplicationArgs :: Core.Type -> [Core.Type]
 extractTypeApplicationArgs typ = Lists.reverse (extractTypeApplicationArgs_go typ)
-
 extractTypeApplicationArgs_go :: Core.Type -> [Core.Type]
 extractTypeApplicationArgs_go t =
     case t of
       Core.TypeApplication v0 -> Lists.cons (Core.applicationTypeArgument v0) (extractTypeApplicationArgs_go (Core.applicationTypeFunction v0))
       _ -> []
-
 fieldTypeToFormalParam :: JavaEnvironment.Aliases -> Core.FieldType -> t0 -> Graph.Graph -> Either Errors.Error Syntax.FormalParameter
 fieldTypeToFormalParam aliases ft cx g =
     Eithers.bind (encodeType aliases Sets.empty (Core.fieldTypeType ft) cx g) (\jt -> Right (Utils.javaTypeToJavaFormalParameter jt (Core.fieldTypeName ft)))
-
 filterByFlags :: [t0] -> [Bool] -> [t0]
 filterByFlags xs flags = Lists.map (\p -> Pairs.first p) (Lists.filter (\p -> Pairs.second p) (Lists.zip xs flags))
-
 filterPhantomTypeArgs :: Core.Name -> [Core.Type] -> t0 -> Graph.Graph -> Either t1 [Core.Type]
 filterPhantomTypeArgs calleeName allTypeArgs cx g =
     Eithers.bind (Right (Lexical.lookupBinding g calleeName)) (\mel -> Maybes.cases mel (Right allTypeArgs) (\el -> Maybes.cases (Core.bindingType el) (Right allTypeArgs) (\ts ->
@@ -1911,17 +1803,14 @@ filterPhantomTypeArgs calleeName allTypeArgs cx g =
           overgenSubst = detectAccumulatorUnification calleeDoms calleeCod schemeVars
           keepFlags = Lists.map (\v -> Logic.and (Sets.member v schemeTypeVars) (Logic.not (Maps.member v overgenSubst))) schemeVars
       in (Logic.ifElse (Logic.not (Equality.equal (Lists.length schemeVars) (Lists.length allTypeArgs))) (Right allTypeArgs) (Right (filterPhantomTypeArgs_filterAndApply allTypeArgs keepFlags overgenSubst))))))
-
 filterPhantomTypeArgs_filterAndApply :: [Core.Type] -> [Bool] -> M.Map Core.Name Core.Type -> [Core.Type]
 filterPhantomTypeArgs_filterAndApply allTypeArgs keepFlags overgenSubst =
 
       let filtered = Lists.map (\p -> Pairs.first p) (Lists.filter (\p -> Pairs.second p) (Lists.zip allTypeArgs keepFlags))
       in (Logic.ifElse (Logic.not (Maps.null overgenSubst)) (Lists.map (\t -> substituteTypeVarsWithTypes overgenSubst t) filtered) filtered)
-
 findMatchingLambdaVar :: Core.Name -> S.Set Core.Name -> Core.Name
 findMatchingLambdaVar name lambdaVars =
     Logic.ifElse (Sets.member name lambdaVars) name (Logic.ifElse (isLambdaBoundIn_isQualified name) (Maybes.fromMaybe name (Lists.find (\lv -> Logic.and (isLambdaBoundIn_isQualified lv) (Equality.equal (Names.localNameOf lv) (Names.localNameOf name))) (Sets.toList lambdaVars))) (Logic.ifElse (Sets.member (Core.Name (Names.localNameOf name)) lambdaVars) (Core.Name (Names.localNameOf name)) name))
-
 findPairFirst :: Core.Type -> Maybe Core.Name
 findPairFirst t =
     case (Strip.deannotateType t) of
@@ -1929,13 +1818,11 @@ findPairFirst t =
         Core.TypeVariable v1 -> Just v1
         _ -> Nothing
       _ -> Nothing
-
 findSelfRefVar :: (Eq t0, Ord t0) => (M.Map t0 [t0] -> Maybe t0)
 findSelfRefVar grouped =
 
       let selfRefs = Lists.filter (\entry -> Lists.elem (Pairs.first entry) (Pairs.second entry)) (Maps.toList grouped)
       in (Maybes.map (\entry -> Pairs.first entry) (Lists.maybeHead selfRefs))
-
 first20Primes :: [Integer]
 first20Primes =
     [
@@ -1959,13 +1846,11 @@ first20Primes =
       61,
       67,
       71]
-
 flattenApps :: Core.Term -> [Core.Term] -> ([Core.Term], Core.Term)
 flattenApps t acc =
     case (Strip.deannotateTerm t) of
       Core.TermApplication v0 -> flattenApps (Core.applicationFunction v0) (Lists.cons (Core.applicationArgument v0) acc)
       _ -> (acc, t)
-
 flattenBindings :: [Core.Binding] -> [Core.Binding]
 flattenBindings bindings =
     Lists.bind bindings (\b -> case (Strip.deannotateTerm (Core.bindingTerm b)) of
@@ -1976,16 +1861,13 @@ flattenBindings bindings =
           Core.bindingType = (Core.bindingType b)}]
       _ -> [
         b])
-
 freshJavaName :: Core.Name -> S.Set Core.Name -> Core.Name
 freshJavaName base avoid = freshJavaName_go base avoid 2
-
 freshJavaName_go :: Core.Name -> S.Set Core.Name -> Int -> Core.Name
 freshJavaName_go base avoid i =
 
       let candidate = Core.Name (Strings.cat2 (Core.unName base) (Literals.showInt32 i))
       in (Logic.ifElse (Sets.member candidate avoid) (freshJavaName_go base avoid (Math.add i 1)) candidate)
-
 functionCall :: JavaEnvironment.JavaEnvironment -> Bool -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 functionCall env isPrim name args typeApps cx g =
 
@@ -2021,16 +1903,13 @@ functionCall env isPrim name args typeApps cx g =
                             Packaging.qualifiedNameNamespace = (Just ns_),
                             Packaging.qualifiedNameLocal = (Formatting.capitalize localName)})))) (Strings.cat2 "." JavaNames.applyMethodName)))) (Syntax.Identifier (Utils.sanitizeJavaName localName))
               in (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs))))))))))))
-
 getCodomain :: M.Map Core.Name Core.Term -> t0 -> Graph.Graph -> Either Errors.Error Core.Type
 getCodomain ann cx g = Eithers.map (\ft -> Core.functionTypeCodomain ft) (getFunctionType ann cx g)
-
 getFunctionType :: M.Map Core.Name Core.Term -> t0 -> Graph.Graph -> Either Errors.Error Core.FunctionType
 getFunctionType ann cx g =
     Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g ann)) (\mt -> Maybes.cases mt (Left (Errors.ErrorOther (Errors.OtherError "type annotation is required for function and elimination terms in Java"))) (\t -> case t of
       Core.TypeFunction v0 -> Right v0
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected function type, got: " (ShowCore.type_ t))))))
-
 groupPairsByFirst :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
 groupPairsByFirst pairs =
     Lists.foldl (\m -> \p ->
@@ -2039,7 +1918,6 @@ groupPairsByFirst pairs =
       in (Maps.alter (\mv -> Maybes.maybe (Just [
         v]) (\vs -> Just (Lists.concat2 vs [
         v])) mv) k m)) Maps.empty pairs
-
 hashCodeCompareExpr :: String -> String -> Syntax.Expression
 hashCodeCompareExpr otherVar fname =
 
@@ -2069,7 +1947,6 @@ hashCodeCompareExpr otherVar fname =
         Syntax.methodInvocationArguments = [
           thisHashCode,
           otherHashCode]}))
-
 hashCodeMultPair :: Integer -> Core.Name -> Syntax.MultiplicativeExpression
 hashCodeMultPair i fname =
 
@@ -2089,13 +1966,11 @@ hashCodeMultPair i fname =
       in (Syntax.MultiplicativeExpressionTimes (Syntax.MultiplicativeExpression_Binary {
         Syntax.multiplicativeExpression_BinaryLhs = lhs,
         Syntax.multiplicativeExpression_BinaryRhs = rhs}))
-
 innerClassRef :: JavaEnvironment.Aliases -> Core.Name -> String -> Syntax.Identifier
 innerClassRef aliases name local =
 
       let id = Syntax.unIdentifier (Utils.nameToJavaName aliases name)
       in (Syntax.Identifier (Strings.cat2 (Strings.cat2 id ".") local))
-
 insertBranchVar :: Core.Name -> JavaEnvironment.JavaEnvironment -> JavaEnvironment.JavaEnvironment
 insertBranchVar name env =
 
@@ -2116,7 +1991,6 @@ insertBranchVar name env =
           JavaEnvironment.aliasesMethodCodomain = Nothing,
           JavaEnvironment.aliasesThunkedVars = (JavaEnvironment.aliasesThunkedVars aliases)},
         JavaEnvironment.javaEnvironmentGraph = (JavaEnvironment.javaEnvironmentGraph env)}
-
 interfaceTypes :: Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.InterfaceType]
 interfaceTypes isSer aliases tparams elName =
 
@@ -2138,7 +2012,6 @@ interfaceTypes isSer aliases tparams elName =
       in (Logic.ifElse isSer [
         javaSerializableType,
         javaComparableType] [])
-
 isBigNumericType :: Core.Type -> Bool
 isBigNumericType typ =
     case (Strip.deannotateType typ) of
@@ -2152,7 +2025,6 @@ isBigNumericType typ =
           _ -> False
         _ -> False
       _ -> False
-
 isBinaryType :: Core.Type -> Bool
 isBinaryType typ =
     case (Strip.deannotateType typ) of
@@ -2160,7 +2032,6 @@ isBinaryType typ =
         Core.LiteralTypeBinary -> True
         _ -> False
       _ -> False
-
 isFieldUnitType :: Core.Name -> Core.Name -> t0 -> Graph.Graph -> Either t1 Bool
 isFieldUnitType typeName fieldName cx g =
 
@@ -2168,23 +2039,18 @@ isFieldUnitType typeName fieldName cx g =
       in (Maybes.cases (Maps.lookup typeName schemaTypes) (Right False) (\ts -> case (Strip.deannotateType (Core.typeSchemeBody ts)) of
         Core.TypeUnion v0 -> Right (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) v0) False (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft))))
         _ -> Right False))
-
 isLambdaBoundIn :: Core.Name -> S.Set Core.Name -> Bool
 isLambdaBoundIn name lambdaVars =
     Logic.or (Sets.member name lambdaVars) (Logic.or (Logic.and (isLambdaBoundIn_isQualified name) (Maybes.isJust (Lists.find (\lv -> Logic.and (isLambdaBoundIn_isQualified lv) (Equality.equal (Names.localNameOf lv) (Names.localNameOf name))) (Sets.toList lambdaVars)))) (Logic.and (Logic.not (isLambdaBoundIn_isQualified name)) (Sets.member (Core.Name (Names.localNameOf name)) lambdaVars)))
-
 isLambdaBoundIn_isQualified :: Core.Name -> Bool
 isLambdaBoundIn_isQualified n = Maybes.isJust (Packaging.qualifiedNameNamespace (Names.qualifyName n))
-
 isLambdaBoundVariable :: Core.Name -> Bool
 isLambdaBoundVariable name =
 
       let v = Core.unName name
       in (Equality.lte (Strings.length v) 4)
-
 isLocalVariable :: Core.Name -> Bool
 isLocalVariable name = Maybes.isNothing (Packaging.qualifiedNameNamespace (Names.qualifyName name))
-
 isNonComparableType :: Core.Type -> Bool
 isNonComparableType typ =
     case (Strip.deannotateType typ) of
@@ -2196,16 +2062,12 @@ isNonComparableType typ =
         _ -> False
       Core.TypeForall v0 -> isNonComparableType (Core.forallTypeBody v0)
       _ -> False
-
 isRecursiveVariable :: JavaEnvironment.Aliases -> Core.Name -> Bool
 isRecursiveVariable aliases name = Sets.member name (JavaEnvironment.aliasesRecursiveVars aliases)
-
 isSerializableJavaType :: Core.Type -> Bool
 isSerializableJavaType typ = Predicates.isNominalType typ
-
 isSimpleName :: Core.Name -> Bool
 isSimpleName name = Equality.equal (Lists.length (Strings.splitOn "." (Core.unName name))) 1
-
 isUnresolvedInferenceVar :: Core.Name -> Bool
 isUnresolvedInferenceVar name =
 
@@ -2214,18 +2076,14 @@ isUnresolvedInferenceVar name =
         let firstCh = Pairs.first p
             rest = Pairs.second p
         in (Logic.ifElse (Logic.not (Equality.equal firstCh 116)) False (Logic.and (Logic.not (Lists.null rest)) (Lists.null (Lists.filter (\c -> Logic.not (isUnresolvedInferenceVar_isDigit c)) rest))))) (Lists.uncons chars)))
-
 isUnresolvedInferenceVar_isDigit :: Int -> Bool
 isUnresolvedInferenceVar_isDigit c = Logic.and (Equality.gte c 48) (Equality.lte c 57)
-
 java11Features :: JavaEnvironment.JavaFeatures
 java11Features = JavaEnvironment.JavaFeatures {
   JavaEnvironment.javaFeaturesSupportsDiamondOperator = True}
-
 java8Features :: JavaEnvironment.JavaFeatures
 java8Features = JavaEnvironment.JavaFeatures {
   JavaEnvironment.javaFeaturesSupportsDiamondOperator = False}
-
 javaComparableRefType :: Syntax.ReferenceType
 javaComparableRefType =
     Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
@@ -2233,29 +2091,22 @@ javaComparableRefType =
       Syntax.classTypeQualifier = Syntax.ClassTypeQualifierNone,
       Syntax.classTypeIdentifier = (Utils.javaTypeIdentifier "Comparable"),
       Syntax.classTypeArguments = []}))
-
 javaEnvGetGraph :: JavaEnvironment.JavaEnvironment -> Graph.Graph
 javaEnvGetGraph env = JavaEnvironment.javaEnvironmentGraph env
-
 javaEnvSetGraph :: Graph.Graph -> JavaEnvironment.JavaEnvironment -> JavaEnvironment.JavaEnvironment
 javaEnvSetGraph g env =
     JavaEnvironment.JavaEnvironment {
       JavaEnvironment.javaEnvironmentAliases = (JavaEnvironment.javaEnvironmentAliases env),
       JavaEnvironment.javaEnvironmentGraph = g}
-
 javaFeatures :: JavaEnvironment.JavaFeatures
 javaFeatures = java11Features
-
 javaIdentifierToString :: Syntax.Identifier -> String
 javaIdentifierToString id = Syntax.unIdentifier id
-
 javaTypeArgumentsForNamedType :: Core.Name -> t0 -> Graph.Graph -> Either Errors.Error [Syntax.TypeArgument]
 javaTypeArgumentsForNamedType tname cx g =
     Eithers.bind (Resolution.requireType cx g tname) (\typ -> Right (Lists.map (\tp_ -> Utils.typeParameterToTypeArgument tp_) (javaTypeParametersForType typ)))
-
 javaTypeArgumentsForType :: Core.Type -> [Syntax.TypeArgument]
 javaTypeArgumentsForType typ = Lists.reverse (Lists.map Utils.typeParameterToTypeArgument (javaTypeParametersForType typ))
-
 javaTypeParametersForType :: Core.Type -> [Syntax.TypeParameter]
 javaTypeParametersForType typ =
 
@@ -2264,30 +2115,25 @@ javaTypeParametersForType typ =
           freeVars = Lists.filter (\v -> isLambdaBoundVariable v) (Sets.toList (Variables.freeVariablesInType typ))
           vars = Lists.nub (Lists.concat2 boundVars freeVars)
       in (Lists.map toParam vars)
-
 javaTypeParametersForType_bvars :: Core.Type -> [Core.Name]
 javaTypeParametersForType_bvars t =
     case t of
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (javaTypeParametersForType_bvars (Core.forallTypeBody v0))
       _ -> []
-
 moduleToJava :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToJava mod defs cx g =
     Eithers.bind (encodeDefinitions mod defs cx g) (\units -> Right (Maps.fromList (Lists.map (\entry ->
       let name = Pairs.first entry
           unit = Pairs.second entry
       in (bindingNameToFilePath name, (Serialization.printExpr (Serialization.parenthesize (Serde.writeCompilationUnit unit))))) (Maps.toList units))))
-
 nameMapToTypeMap :: Ord t0 => (M.Map t0 Core.Name -> M.Map t0 Core.Type)
 nameMapToTypeMap m = Maps.map (\v -> Core.TypeVariable v) m
-
 namespaceParent :: Packaging.Namespace -> Maybe Packaging.Namespace
 namespaceParent ns =
 
       let parts = Strings.splitOn "." (Packaging.unNamespace ns)
           initParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
       in (Logic.ifElse (Lists.null initParts) Nothing (Just (Packaging.Namespace (Strings.intercalate "." initParts))))
-
 needsThunking :: Core.Term -> Bool
 needsThunking t =
     case (Strip.deannotateTerm t) of
@@ -2295,13 +2141,11 @@ needsThunking t =
       Core.TermTypeApplication _ -> True
       Core.TermTypeLambda _ -> True
       _ -> Lists.foldl (\b -> \st -> Logic.or b (needsThunking st)) False (Rewriting.subterms t)
-
 noComment :: Syntax.ClassBodyDeclaration -> Syntax.ClassBodyDeclarationWithComments
 noComment decl =
     Syntax.ClassBodyDeclarationWithComments {
       Syntax.classBodyDeclarationWithCommentsValue = decl,
       Syntax.classBodyDeclarationWithCommentsComments = Nothing}
-
 otherwiseBranch :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Core.Type -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 otherwiseBranch env aliases dom cod tname jcod targs d cx g =
 
@@ -2326,7 +2170,6 @@ otherwiseBranch env aliases dom cod tname jcod targs d cx g =
                       returnStmt]
             in (Right (noComment (Utils.methodDeclaration mods [] anns JavaNames.otherwiseMethodName [
               param] result (Just allStmts))))))))))
-
 peelDomainTypes :: Int -> Core.Type -> ([Core.Type], Core.Type)
 peelDomainTypes n t =
     Logic.ifElse (Equality.lte n 0) ([], t) (case (Strip.deannotateType t) of
@@ -2334,7 +2177,6 @@ peelDomainTypes n t =
         let rest = peelDomainTypes (Math.sub n 1) (Core.functionTypeCodomain v0)
         in (Lists.cons (Core.functionTypeDomain v0) (Pairs.first rest), (Pairs.second rest))
       _ -> ([], t))
-
 peelDomainsAndCod :: Int -> Core.Type -> ([Core.Type], Core.Type)
 peelDomainsAndCod n t =
     Logic.ifElse (Equality.lte n 0) ([], t) (case (Strip.deannotateType t) of
@@ -2342,13 +2184,11 @@ peelDomainsAndCod n t =
         let rest = peelDomainsAndCod (Math.sub n 1) (Core.functionTypeCodomain v0)
         in (Lists.cons (Core.functionTypeDomain v0) (Pairs.first rest), (Pairs.second rest))
       _ -> ([], t))
-
 peelExpectedTypes :: M.Map Core.Name Core.Type -> Int -> Core.Type -> [Core.Type]
 peelExpectedTypes subst n t =
     Logic.ifElse (Equality.equal n 0) [] (case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Lists.cons (applySubstFull subst (Core.functionTypeDomain v0)) (peelExpectedTypes subst (Math.sub n 1) (Core.functionTypeCodomain v0))
       _ -> [])
-
 propagateType :: Core.Type -> Core.Term -> Core.Term
 propagateType typ term =
 
@@ -2383,7 +2223,6 @@ propagateType typ term =
             Core.applicationFunction = annotatedFun,
             Core.applicationArgument = arg})))
         _ -> setTypeAnn term
-
 propagateType_propagateIntoLambda :: Core.Type -> Core.Term -> Core.Term
 propagateType_propagateIntoLambda cod t =
     case t of
@@ -2395,7 +2234,6 @@ propagateType_propagateIntoLambda cod t =
         Core.lambdaDomain = (Core.lambdaDomain v0),
         Core.lambdaBody = (propagateType cod (Core.lambdaBody v0))})
       _ -> t
-
 propagateType_rebuildLet :: Core.Term -> [Core.Binding] -> Core.Term -> Core.Term
 propagateType_rebuildLet t bindings newBody =
     case t of
@@ -2406,7 +2244,6 @@ propagateType_rebuildLet t bindings newBody =
         Core.letBindings = bindings,
         Core.letBody = newBody})
       _ -> t
-
 propagateTypesInAppChain :: Core.Type -> Core.Type -> Core.Term -> Core.Term
 propagateTypesInAppChain fixedCod resultType t =
 
@@ -2442,7 +2279,6 @@ propagateTypesInAppChain fixedCod resultType t =
             Core.applicationFunction = annotatedLhs,
             Core.applicationArgument = rhs})))
         _ -> Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ resultType)) t))
-
 rebuildApps :: Core.Term -> [Core.Term] -> Core.Type -> Core.Term
 rebuildApps f args fType =
     Logic.ifElse (Lists.null args) f (case (Strip.deannotateType fType) of
@@ -2459,7 +2295,6 @@ rebuildApps f args fType =
       _ -> Lists.foldl (\acc -> \a -> Core.TermApplication (Core.Application {
         Core.applicationFunction = acc,
         Core.applicationArgument = a})) f args)
-
 recordCompareToMethod :: JavaEnvironment.Aliases -> t0 -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 recordCompareToMethod aliases tparams elName fields =
 
@@ -2474,13 +2309,11 @@ recordCompareToMethod aliases tparams elName fields =
           result = Utils.javaTypeToJavaResult Utils.javaIntType
       in (Utils.methodDeclaration mods [] anns JavaNames.compareToMethodName [
         param] result (Just (compareToBody aliases JavaNames.otherInstanceName fields)))
-
 recordConstructor :: JavaEnvironment.Aliases -> Core.Name -> [Core.FieldType] -> t0 -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclaration
 recordConstructor aliases elName fields cx g =
 
       let assignStmts = Lists.map (\f -> Syntax.BlockStatementStatement (Utils.toAssignStmt (Core.fieldTypeName f))) fields
       in (Eithers.bind (Eithers.mapList (\f -> fieldTypeToFormalParam aliases f cx g) fields) (\params -> Right (Utils.makeConstructor aliases elName False params assignStmts)))
-
 recordEqualsMethod :: JavaEnvironment.Aliases -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 recordEqualsMethod aliases elName fields =
 
@@ -2504,7 +2337,6 @@ recordEqualsMethod aliases elName fields =
         instanceOfStmt,
         castStmt,
         returnAllFieldsEqual]))
-
 recordHashCodeMethod :: [Core.FieldType] -> Syntax.ClassBodyDeclaration
 recordHashCodeMethod fields =
 
@@ -2517,7 +2349,6 @@ recordHashCodeMethod fields =
                   Syntax.BlockStatementStatement (Logic.ifElse (Lists.null fields) (Utils.javaReturnStatement (Just (Utils.javaIntExpression 0))) (Utils.javaReturnStatement (Just (Utils.javaAdditiveExpressionToJavaExpression (Utils.addExpressions (Lists.zipWith hashCodeMultPair first20Primes (Lists.map (\f -> Core.fieldTypeName f) fields)))))))
       in (Utils.methodDeclaration mods [] anns JavaNames.hashCodeMethodName [] result (Just [
         returnSum]))
-
 recordMemberVar :: JavaEnvironment.Aliases -> Core.FieldType -> t0 -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclaration
 recordMemberVar aliases ft cx g =
 
@@ -2528,7 +2359,6 @@ recordMemberVar aliases ft cx g =
           fname = Core.fieldTypeName ft
           ftype = Core.fieldTypeType ft
       in (Eithers.bind (encodeType aliases Sets.empty ftype cx g) (\jt -> Right (Utils.javaMemberField mods jt (Utils.fieldNameToJavaVariableDeclarator fname))))
-
 recordWithMethod :: JavaEnvironment.Aliases -> Core.Name -> [Core.FieldType] -> Core.FieldType -> t0 -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclaration
 recordWithMethod aliases elName fields field cx g =
 
@@ -2545,7 +2375,6 @@ recordWithMethod aliases elName fields field cx g =
       in (Eithers.bind (fieldTypeToFormalParam aliases field cx g) (\param -> Right (Utils.methodDeclaration mods [] anns methodName [
         param] result (Just [
         returnStmt]))))
-
 resolveTypeApps :: [Core.Name] -> [Core.Type] -> M.Map Core.Name Core.Type -> [Core.Type]
 resolveTypeApps schemeVars fallbackTypeApps argSubst =
 
@@ -2556,15 +2385,12 @@ resolveTypeApps schemeVars fallbackTypeApps argSubst =
           remainingSubst = Maps.fromList (Lists.zip unresolvedVars unusedIrTypes)
           fullSubst = Maps.union argSubst remainingSubst
       in (Lists.map (\v -> Maps.findWithDefault (Core.TypeVariable v) v fullSubst) schemeVars)
-
 selfRefSubstitution :: (Eq t0, Ord t0) => (M.Map t0 [t0] -> M.Map t0 t0)
 selfRefSubstitution grouped =
     Lists.foldl (\subst -> \entry -> selfRefSubstitution_processGroup subst (Pairs.first entry) (Pairs.second entry)) Maps.empty (Maps.toList grouped)
-
 selfRefSubstitution_processGroup :: (Eq t0, Ord t0) => (M.Map t0 t0 -> t0 -> [t0] -> M.Map t0 t0)
 selfRefSubstitution_processGroup subst inVar outVars =
     Logic.ifElse (Lists.elem inVar outVars) (Lists.foldl (\s -> \v -> Logic.ifElse (Equality.equal v inVar) s (Maps.insert v inVar s)) subst outVars) subst
-
 serializableTypes :: Bool -> [Syntax.InterfaceType]
 serializableTypes isSer =
 
@@ -2576,14 +2402,12 @@ serializableTypes isSer =
                 Syntax.classTypeArguments = []})
       in (Logic.ifElse isSer [
         javaSerializableType] [])
-
 splitConstantInitializer :: Syntax.InterfaceMemberDeclaration -> [Syntax.InterfaceMemberDeclaration]
 splitConstantInitializer member =
     case member of
       Syntax.InterfaceMemberDeclarationConstant v0 -> Lists.bind (Syntax.constantDeclarationVariables v0) (splitConstantInitializer_splitVar (Syntax.constantDeclarationModifiers v0) (Syntax.constantDeclarationType v0))
       _ -> [
         member]
-
 splitConstantInitializer_splitVar :: [Syntax.ConstantModifier] -> Syntax.UnannType -> Syntax.VariableDeclarator -> [Syntax.InterfaceMemberDeclaration]
 splitConstantInitializer_splitVar mods utype vd =
 
@@ -2623,16 +2447,13 @@ splitConstantInitializer_splitVar mods utype vd =
             Syntax.constantDeclarationType = utype,
             Syntax.constantDeclarationVariables = [
               vd]})]))
-
 stripForalls :: Core.Type -> Core.Type
 stripForalls t =
     case (Strip.deannotateType t) of
       Core.TypeForall v0 -> stripForalls (Core.forallTypeBody v0)
       _ -> t
-
 substituteTypeVarsWithTypes :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 substituteTypeVarsWithTypes subst t = substituteTypeVarsWithTypes_go subst (Strip.deannotateType t)
-
 substituteTypeVarsWithTypes_go :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
 substituteTypeVarsWithTypes_go subst t =
     case (Strip.deannotateType t) of
@@ -2659,7 +2480,6 @@ substituteTypeVarsWithTypes_go subst t =
         Core.forallTypeParameter = (Core.forallTypeParameter v0),
         Core.forallTypeBody = (substituteTypeVarsWithTypes_go subst (Core.forallTypeBody v0))})
       _ -> t
-
 tagCmpNotZeroExpr :: Syntax.Expression
 tagCmpNotZeroExpr =
     Utils.javaEqualityExpressionToJavaExpression (Syntax.EqualityExpressionNotEqual (Syntax.EqualityExpression_Binary {
@@ -2672,7 +2492,6 @@ tagCmpNotZeroExpr =
           Syntax.expressionNameIdentifier = (Utils.javaIdentifier "tagCmp")})))
     rhs =
         Utils.javaPostfixExpressionToJavaRelationalExpression (Syntax.PostfixExpressionPrimary (Utils.javaLiteralToJavaPrimary (Utils.javaInt 0)))
-
 tagCompareExpr :: Syntax.Expression
 tagCompareExpr =
     Utils.javaMethodInvocationToJavaExpression (Syntax.MethodInvocation {
@@ -2713,14 +2532,12 @@ tagCompareExpr =
             Syntax.methodInvocation_ComplexTypeArguments = [],
             Syntax.methodInvocation_ComplexIdentifier = (Syntax.Identifier "getName")})),
           Syntax.methodInvocationArguments = []}
-
 takeTypeArgs :: String -> Int -> [Syntax.Type] -> t0 -> t1 -> Either Errors.Error [Syntax.TypeArgument]
 takeTypeArgs label n tyapps cx g =
     Logic.ifElse (Equality.lt (Lists.length tyapps) n) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
       "needed type arguments for ",
       label,
       ", found too few"])))) (Eithers.mapList (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt))) (Lists.take n tyapps))
-
 toClassDecl :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 toClassDecl isInner isSer aliases tparams elName t cx g =
 
@@ -2743,7 +2560,6 @@ toClassDecl isInner isSer aliases tparams elName t cx g =
             Core.fieldTypeName = (Core.Name "value"),
             Core.fieldTypeType = v0}] cx g
         _ -> wrap t
-
 toDeclInit :: JavaEnvironment.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error (Maybe Syntax.BlockStatement)
 toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
     Logic.ifElse (Sets.member name recursiveVars) (
@@ -2778,7 +2594,6 @@ toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
               artype = Utils.javaRefType [
                     rt] (Just pkg) "AtomicReference"
           in (Right (Just (Utils.variableDeclarationStatement aliasesExt artype id body))))))))) (Right Nothing)
-
 toDeclStatement :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.BlockStatement
 toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings name cx g =
 
@@ -2808,7 +2623,6 @@ toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings na
                       Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "hydra.util.Lazy") (Just targs)) [
                         supplierLambda] Nothing
           in (Right (Utils.variableDeclarationStatement aliasesExt lazyType id lazyExpr)))) (Right (Utils.variableDeclarationStatement aliasesExt jtype id rhs))))))))
-
 tryInferFunctionType :: Core.Term -> Maybe Core.Type
 tryInferFunctionType funTerm =
     case (Strip.deannotateTerm funTerm) of
@@ -2822,13 +2636,11 @@ tryInferFunctionType funTerm =
           Core.functionTypeDomain = dom,
           Core.functionTypeCodomain = cod})) mCod))
       _ -> Nothing
-
 typeAppFallbackCast :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 typeAppFallbackCast env aliases anns tyapps jatyp body typ cx g =
 
       let annotatedBody = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ typ)) body
       in (Eithers.bind (encodeTermInternal env anns (Lists.cons jatyp tyapps) annotatedBody cx g) (\jbody -> Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression jbody)))))))
-
 typeAppNullaryOrHoisted :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Core.Name -> JavaEnvironment.JavaSymbolClass -> [Core.Type] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName cls allTypeArgs cx g =
 
@@ -2850,11 +2662,9 @@ typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName 
                         Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs paramExprs)
             in (Right (buildCurriedLambda paramNames call))))))
         _ -> typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g
-
 typeArgsOrDiamond :: [Syntax.TypeArgument] -> Syntax.TypeArgumentsOrDiamond
 typeArgsOrDiamond args =
     Logic.ifElse (JavaEnvironment.javaFeaturesSupportsDiamondOperator javaFeatures) Syntax.TypeArgumentsOrDiamondDiamond (Syntax.TypeArgumentsOrDiamondArguments args)
-
 typesMatch :: Core.Type -> Core.Type -> Bool
 typesMatch a b =
     case a of
@@ -2865,14 +2675,12 @@ typesMatch a b =
         Core.TypeWrap v1 -> Equality.equal v0 v1
         _ -> True
       _ -> True
-
 unwrapReturnType :: Core.Type -> Core.Type
 unwrapReturnType t =
     case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> unwrapReturnType (Core.functionTypeCodomain v0)
       Core.TypeApplication v0 -> unwrapReturnType (Core.applicationTypeArgument v0)
       _ -> t
-
 variantCompareToMethod :: JavaEnvironment.Aliases -> t0 -> Core.Name -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 variantCompareToMethod aliases tparams parentName variantName fields =
 
@@ -2908,7 +2716,6 @@ variantCompareToMethod aliases tparams parentName variantName fields =
                     tagReturnStmt] valueCompareStmt
       in (Utils.methodDeclaration mods [] anns JavaNames.compareToMethodName [
         param] result (Just body))
-
 visitBranch :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Field -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 visitBranch env aliases dom tname jcod targs field cx g =
 
@@ -2939,7 +2746,6 @@ visitBranch env aliases dom tname jcod targs field cx g =
                 in (Right (noComment (Utils.methodDeclaration mods [] anns JavaNames.visitMethodName [
                   param] result (Just allStmts)))))))))))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (ShowCore.term (Core.fieldTerm field)))))
-
 withLambda :: JavaEnvironment.JavaEnvironment -> Core.Lambda -> (JavaEnvironment.JavaEnvironment -> t0) -> t0
 withLambda env lam k =
     Environment.withLambdaContext javaEnvGetGraph javaEnvSetGraph env lam (\env1 ->
@@ -2964,16 +2770,13 @@ withLambda env lam k =
                     JavaEnvironment.javaEnvironmentAliases = aliases2,
                     JavaEnvironment.javaEnvironmentGraph = (JavaEnvironment.javaEnvironmentGraph env1)}
       in (k env2))
-
 withTypeLambda :: JavaEnvironment.JavaEnvironment -> Core.TypeLambda -> (JavaEnvironment.JavaEnvironment -> t0) -> t0
 withTypeLambda = Environment.withTypeLambdaContext javaEnvGetGraph javaEnvSetGraph
-
 wrapInSupplierLambda :: Syntax.Expression -> Syntax.Expression
 wrapInSupplierLambda expr =
     Syntax.ExpressionLambda (Syntax.LambdaExpression {
       Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersTuple []),
       Syntax.lambdaExpressionBody = (Syntax.LambdaBodyExpression expr)})
-
 wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> ([Syntax.Expression], (Maybe String))
 wrapLazyArguments name args =
 

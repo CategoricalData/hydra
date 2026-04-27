@@ -9,7 +9,15 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.error.checking"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.error.checking"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.encode.paths"),
+        (Packaging.Namespace "hydra.encode.typing"),
+        (Packaging.Namespace "hydra.encode.variants")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.error.checking"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.checkingError"),
@@ -1246,12 +1254,4 @@ module_ =
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.paths"),
-        (Packaging.Namespace "hydra.encode.typing"),
-        (Packaging.Namespace "hydra.encode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.error.checking"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.error.checking")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

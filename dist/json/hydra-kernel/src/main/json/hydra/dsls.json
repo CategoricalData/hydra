@@ -424,6 +424,23 @@
                                                                 "record": {
                                                                   "fields": [
                                                                     {
+                                                                      "name": "description",
+                                                                      "term": {
+                                                                        "maybe": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "list": [
+                                                                                {"literal": {"string": "DSL functions for "}},
+                                                                                {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "mod"},
+                                                                                        "function": {
+                                                                                          "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                                    "function": {"unwrap": "hydra.packaging.Namespace"}}}]},
+                                                                            "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                                                                    {
                                                                       "name": "namespace",
                                                                       "term": {
                                                                         "application": {
@@ -433,60 +450,6 @@
                                                                               "function": {
                                                                                 "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                                                           "function": {"variable": "hydra.dsls.dslNamespace"}}}},
-                                                                    {
-                                                                      "name": "definitions",
-                                                                      "term": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "dslBindings"},
-                                                                                  "function": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"variable": "hydra.lib.lists.concat"},
-                                                                                      "type": {"variable": "hydra.core.Binding"}}}}},
-                                                                              "function": {"variable": "hydra.dsls.deduplicateBindings"}}},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "body": {
-                                                                                    "inject": {
-                                                                                      "field": {
-                                                                                        "name": "term",
-                                                                                        "term": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "name",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "b"},
-                                                                                                    "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}}},
-                                                                                              {
-                                                                                                "name": "term",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "b"},
-                                                                                                    "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}},
-                                                                                              {
-                                                                                                "name": "type",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "b"},
-                                                                                                    "function": {"project": {"field": "type", "typeName": "hydra.core.Binding"}}}}}],
-                                                                                            "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}},
-                                                                                  "domain": {"variable": "hydra.core.Binding"},
-                                                                                  "parameter": "b"}},
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"variable": "hydra.lib.lists.map"},
-                                                                                      "type": {"variable": "hydra.core.Binding"}}},
-                                                                                  "type": {"variable": "hydra.packaging.Definition"}}}}}}}},
                                                                     {
                                                                       "name": "termDependencies",
                                                                       "term": {
@@ -545,22 +508,59 @@
                                                                               "body": {"variable": "hydra.lib.lists.nub"},
                                                                               "type": {"variable": "hydra.packaging.Namespace"}}}}}},
                                                                     {
-                                                                      "name": "description",
+                                                                      "name": "definitions",
                                                                       "term": {
-                                                                        "maybe": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "list": [
-                                                                                {"literal": {"string": "DSL functions for "}},
-                                                                                {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "mod"},
-                                                                                        "function": {
-                                                                                          "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                                                    "function": {"unwrap": "hydra.packaging.Namespace"}}}]},
-                                                                            "function": {"variable": "hydra.lib.strings.cat"}}}}}],
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "dslBindings"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.lists.concat"},
+                                                                                      "type": {"variable": "hydra.core.Binding"}}}}},
+                                                                              "function": {"variable": "hydra.dsls.deduplicateBindings"}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "term",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "name",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "b"},
+                                                                                                    "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}}},
+                                                                                              {
+                                                                                                "name": "term",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "b"},
+                                                                                                    "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}},
+                                                                                              {
+                                                                                                "name": "type",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "b"},
+                                                                                                    "function": {"project": {"field": "type", "typeName": "hydra.core.Binding"}}}}}],
+                                                                                            "typeName": "hydra.packaging.TermDefinition"}}},
+                                                                                      "typeName": "hydra.packaging.Definition"}},
+                                                                                  "domain": {"variable": "hydra.core.Binding"},
+                                                                                  "parameter": "b"}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.lists.map"},
+                                                                                      "type": {"variable": "hydra.core.Binding"}}},
+                                                                                  "type": {"variable": "hydra.packaging.Definition"}}}}}}}}],
                                                                   "typeName": "hydra.packaging.Module"}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"maybe": {"variable": "hydra.packaging.Module"}}}},

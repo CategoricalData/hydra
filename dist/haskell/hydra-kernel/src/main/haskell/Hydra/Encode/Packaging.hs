@@ -35,11 +35,11 @@ module_ x =
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
       Core.recordFields = [
         Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))},
+        Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (namespace (Packaging.moduleNamespace x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "definitions"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Packaging.moduleDefinitions x))},
         Core.Field {
           Core.fieldName = (Core.Name "termDependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Packaging.moduleTermDependencies x))},
@@ -47,8 +47,8 @@ module_ x =
           Core.fieldName = (Core.Name "typeDependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Packaging.moduleTypeDependencies x))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))}]})
+          Core.fieldName = (Core.Name "definitions"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Packaging.moduleDefinitions x))}]})
 namespace :: Packaging.Namespace -> Core.Term
 namespace x =
     Core.TermWrap (Core.WrappedTerm {

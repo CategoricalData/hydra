@@ -31,10 +31,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.generation"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Generation.ns, ShowCore.ns, TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for code generation operations such as inferModules and inferModulesGiven")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Generation.ns, ShowCore.ns, TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for code generation operations such as inferModules and inferModulesGiven")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -94,21 +96,21 @@ idAScheme = T.poly ["a"] (T.function (T.var "a") (T.var "a"))
 
 modA :: TTerm Module
 modA = Packaging.module_
+  Phantoms.nothing
   nsA
+  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list [
     typedTermDef nameIdA (Terms.lambda "x" (Terms.var "x")) idAScheme])
-  (Phantoms.list ([] :: [TTerm Namespace]))
-  (Phantoms.list ([] :: [TTerm Namespace]))
-  Phantoms.nothing
 
 modB :: TTerm Module
 modB = Packaging.module_
+  Phantoms.nothing
   nsB
-  (Phantoms.list [
-    untypedTermDef nameUseId (Terms.apply (Terms.var "hydra.testInput.a.idA") (Terms.int32 42))])
   (Phantoms.list [nsA])
   (Phantoms.list ([] :: [TTerm Namespace]))
-  Phantoms.nothing
+  (Phantoms.list [
+    untypedTermDef nameUseId (Terms.apply (Terms.var "hydra.testInput.a.idA") (Terms.int32 42))])
 
 universeMods :: TTerm [Module]
 universeMods = Phantoms.list [modA, modB]
@@ -154,16 +156,19 @@ funkyTerm = Terms.lambda "x" (Terms.lambda "y" (Terms.lambda "z" (Terms.var "z")
 
 modV :: TTerm Module
 modV = Packaging.module_
-  nsV
-  (Phantoms.list [typedTermDef nameFunky funkyTerm funkyScheme])
-  (Phantoms.list ([] :: [TTerm Namespace]))
-  (Phantoms.list ([] :: [TTerm Namespace]))
   Phantoms.nothing
+  nsV
+  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list [typedTermDef nameFunky funkyTerm funkyScheme])
 
 -- useFunky = funky "foo" 7 100
 modW :: TTerm Module
 modW = Packaging.module_
+  Phantoms.nothing
   nsW
+  (Phantoms.list [nsV])
+  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list [
     untypedTermDef nameUseFunky
       (Terms.apply
@@ -172,9 +177,6 @@ modW = Packaging.module_
                        (Terms.string "foo"))
           (Terms.int32 7))
         (Terms.int32 100))])
-  (Phantoms.list [nsV])
-  (Phantoms.list ([] :: [TTerm Namespace]))
-  Phantoms.nothing
 
 vacuousUniverse :: TTerm [Module]
 vacuousUniverse = Phantoms.list [modV, modW]

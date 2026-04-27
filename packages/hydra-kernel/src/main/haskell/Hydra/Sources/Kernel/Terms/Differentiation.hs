@@ -65,10 +65,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Strip.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Source-to-source automatic differentiation for Float64 terms."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Source-to-source automatic differentiation for Float64 terms."}
   where
     definitions = [
       toDefinition differentiateBinary,

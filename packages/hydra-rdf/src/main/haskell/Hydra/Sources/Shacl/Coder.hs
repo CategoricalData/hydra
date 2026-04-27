@@ -95,10 +95,12 @@ ns :: Namespace
 ns = Namespace "hydra.shacl.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Names.ns, Strip.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns]
-    (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Names.ns, Strip.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns],
+            moduleTypeDependencies = (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"}
   where
     definitions = [
       toDefinition common,

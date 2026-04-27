@@ -92,10 +92,12 @@ ns :: Namespace
 ns = Namespace "hydra.java.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns]
-    (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Java serializer: converts Java AST to concrete syntax"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns],
+            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Java serializer: converts Java AST to concrete syntax"}
   where
     definitions = [
       toDefinition escapeJavaChar,

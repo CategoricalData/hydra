@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for hydra.lib.eithers primitives"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for hydra.lib.eithers primitives"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -72,7 +72,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "either": {
-                                                                                      "@right": {
+                                                                                      "right": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "s"},
                                                                                           "function": {"variable": "hydra.lib.strings.length"}}}}},
@@ -84,7 +84,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 0}}}}},
+                                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 0}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                               "function": {
@@ -108,7 +108,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "ab"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "ab"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       "function": {
@@ -166,7 +166,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@right": {"literal": {"integer": {"int32": 2}}}}},
+                                                                      "body": {"either": {"right": {"literal": {"integer": {"int32": 2}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -248,7 +248,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "either": {
-                                                                                      "@right": {
+                                                                                      "right": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "s"},
                                                                                           "function": {"variable": "hydra.lib.strings.length"}}}}},
@@ -260,7 +260,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 0}}}}},
+                                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 0}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                               "function": {
@@ -284,7 +284,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": ""}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": ""}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       "function": {
@@ -342,7 +342,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 0}}}}},
+                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 0}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -424,7 +424,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "either": {
-                                                                                      "@right": {
+                                                                                      "right": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "s"},
                                                                                           "function": {"variable": "hydra.lib.strings.length"}}}}},
@@ -436,7 +436,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 0}}}}},
+                                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 0}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                               "function": {
@@ -460,7 +460,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 42}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 42}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       "function": {
@@ -518,7 +518,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 42}}}}},
+                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 42}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -611,7 +611,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 5}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 5}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -695,7 +695,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 10}}}}},
+                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 10}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -769,7 +769,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"string": "ab"}}}},
+                                                                          "body": {"either": {"right": {"literal": {"string": "ab"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -853,7 +853,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@right": {"literal": {"integer": {"int32": 2}}}}},
+                                                                      "body": {"either": {"right": {"literal": {"integer": {"int32": 2}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -946,7 +946,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 42}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 42}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"unit": {}}}},
                                                                   "function": {
@@ -1011,7 +1011,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"string": "test"}}}},
+                                                                          "body": {"either": {"right": {"literal": {"string": "test"}}}},
                                                                           "type": {"unit": {}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1095,7 +1095,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"string": "test"}}}},
+                                                                          "body": {"either": {"right": {"literal": {"string": "test"}}}},
                                                                           "type": {"unit": {}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1160,7 +1160,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 42}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 42}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"unit": {}}}},
                                                                   "function": {
@@ -1244,7 +1244,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 42}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 42}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"unit": {}}}},
                                                                   "function": {
@@ -1314,7 +1314,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"string": "test"}}}},
+                                                                          "body": {"either": {"right": {"literal": {"string": "test"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1401,7 +1401,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"string": "test"}}}},
+                                                                          "body": {"either": {"right": {"literal": {"string": "test"}}}},
                                                                           "type": {"unit": {}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1471,7 +1471,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 42}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 42}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1560,7 +1560,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 5}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 5}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1653,7 +1653,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"string": "ab"}}}},
+                                                                          "body": {"either": {"right": {"literal": {"string": "ab"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "function": {
@@ -1767,28 +1767,28 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 1}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 1}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "a"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 2}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 2}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "b"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -1884,14 +1884,14 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 1}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 1}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"unit": {}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 2}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 2}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"unit": {}}}}]},
                                                                   "function": {
@@ -1987,14 +1987,14 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "a"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "b"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2205,28 +2205,28 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 1}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 1}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "a"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 2}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 2}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "b"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2319,14 +2319,14 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "a"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "a"}}}},
                                                                               "type": {"unit": {}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "b"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "b"}}}},
                                                                               "type": {"unit": {}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2419,14 +2419,14 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 1}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 1}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 2}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 2}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2629,28 +2629,28 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 1}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 1}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "a"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 2}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 2}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "b"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2733,11 +2733,11 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "pair": {
-                                                                          "@first": {
+                                                                          "first": {
                                                                             "list": [
                                                                               {"literal": {"integer": {"int32": 1}}},
                                                                               {"literal": {"integer": {"int32": 2}}}]},
-                                                                          "@second": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}]}}},
+                                                                          "second": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}]}}},
                                                                       "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                   "type": {"list": {"literal": {"string": {}}}}}},
                                                               "function": {
@@ -2839,14 +2839,14 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 1}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 1}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@left": {"literal": {"integer": {"int32": 2}}}}},
+                                                                              "body": {"either": {"left": {"literal": {"integer": {"int32": 2}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2929,11 +2929,11 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "pair": {
-                                                                          "@first": {
+                                                                          "first": {
                                                                             "list": [
                                                                               {"literal": {"integer": {"int32": 1}}},
                                                                               {"literal": {"integer": {"int32": 2}}}]},
-                                                                          "@second": {
+                                                                          "second": {
                                                                             "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
                                                                       "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                   "type": {"list": {"literal": {"string": {}}}}}},
@@ -3036,14 +3036,14 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "a"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"either": {"@right": {"literal": {"string": "b"}}}},
+                                                                              "body": {"either": {"right": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -3126,11 +3126,11 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "pair": {
-                                                                          "@first": {
+                                                                          "first": {
                                                                             "typeApplication": {
                                                                               "body": {"list": []},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                          "@second": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}]}}},
+                                                                          "second": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}]}}},
                                                                       "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                   "type": {"list": {"literal": {"string": {}}}}}},
                                                               "function": {
@@ -3313,11 +3313,11 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "pair": {
-                                                                          "@first": {
+                                                                          "first": {
                                                                             "typeApplication": {
                                                                               "body": {"list": []},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                          "@second": {
+                                                                          "second": {
                                                                             "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
                                                                       "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                   "type": {"list": {"literal": {"string": {}}}}}},
@@ -3437,7 +3437,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@right": {"literal": {"integer": {"int32": 5}}}}},
+                                                                          "body": {"either": {"right": {"literal": {"integer": {"int32": 5}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "function": {
@@ -3508,7 +3508,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@right": {"literal": {"integer": {"int32": 10}}}}},
+                                                                      "body": {"either": {"right": {"literal": {"integer": {"int32": 10}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -3582,7 +3582,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"either": {"@left": {"literal": {"integer": {"int32": 99}}}}},
+                                                                          "body": {"either": {"left": {"literal": {"integer": {"int32": 99}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "function": {
@@ -3653,7 +3653,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@left": {"literal": {"integer": {"int32": 99}}}}},
+                                                                      "body": {"either": {"left": {"literal": {"integer": {"int32": 99}}}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
@@ -3759,7 +3759,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
+                                                                                          "right": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"integer": {"int32": 2}}},
                                                                                               "function": {
@@ -3774,7 +3774,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                                          "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                                           "type": {"literal": {"string": {}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "function": {
@@ -3868,7 +3868,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "either": {
-                                                                          "@right": {
+                                                                          "right": {
                                                                             "list": [
                                                                               {"literal": {"integer": {"int32": 2}}},
                                                                               {"literal": {"integer": {"int32": 4}}},
@@ -3972,7 +3972,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
+                                                                                          "right": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"integer": {"int32": 2}}},
                                                                                               "function": {
@@ -3987,7 +3987,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                                          "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                                           "type": {"literal": {"string": {}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "function": {
@@ -4079,7 +4079,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                      "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                               "function": {
@@ -4178,7 +4178,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
+                                                                                          "right": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"integer": {"int32": 2}}},
                                                                                               "function": {
@@ -4193,7 +4193,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                                          "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                                           "type": {"literal": {"string": {}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "function": {
@@ -4287,7 +4287,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "either": {
-                                                                          "@right": {
+                                                                          "right": {
                                                                             "typeApplication": {
                                                                               "body": {"list": []},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -4405,7 +4405,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
+                                                                                          "right": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"integer": {"int32": 2}}},
                                                                                               "function": {
@@ -4420,7 +4420,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                                          "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                                           "type": {"literal": {"string": {}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "function": {
@@ -4513,7 +4513,7 @@
                                                                   "body": {
                                                                     "typeApplication": {
                                                                       "body": {
-                                                                        "either": {"@right": {"maybe": {"literal": {"integer": {"int32": 10}}}}}},
+                                                                        "either": {"right": {"maybe": {"literal": {"integer": {"int32": 10}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "type": {"maybe": {"literal": {"integer": {"int32": {}}}}}}},
                                                               "function": {
@@ -4609,7 +4609,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
+                                                                                          "right": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"integer": {"int32": 2}}},
                                                                                               "function": {
@@ -4624,7 +4624,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                                          "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                                           "type": {"literal": {"string": {}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "function": {
@@ -4716,7 +4716,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                      "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   "type": {"maybe": {"literal": {"integer": {"int32": {}}}}}}},
                                                               "function": {
@@ -4815,7 +4815,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
+                                                                                          "right": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"integer": {"int32": 2}}},
                                                                                               "function": {
@@ -4830,7 +4830,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"either": {"@left": {"literal": {"string": "zero"}}}},
+                                                                                          "body": {"either": {"left": {"literal": {"string": "zero"}}}},
                                                                                           "type": {"literal": {"string": {}}}}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                   "function": {
@@ -4924,7 +4924,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "either": {
-                                                                          "@right": {
+                                                                          "right": {
                                                                             "typeApplication": {
                                                                               "body": {"maybe": null},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}}}},

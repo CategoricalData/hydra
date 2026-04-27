@@ -9,7 +9,13 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.tabular"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.tabular"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.encode.relational")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.tabular"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.tabular.columnType"),
@@ -349,10 +355,4 @@ module_ =
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.tabular.TableType")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.relational")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.tabular"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.tabular")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

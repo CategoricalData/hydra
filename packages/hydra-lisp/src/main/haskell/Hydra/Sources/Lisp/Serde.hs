@@ -44,10 +44,12 @@ ns :: Namespace
 ns = Namespace "hydra.lisp.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Formatting.ns, Serialization.ns]
-    (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Formatting.ns, Serialization.ns],
+            moduleTypeDependencies = (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme"}
   where
     definitions = [
       toDefinition andExpressionToExpr,

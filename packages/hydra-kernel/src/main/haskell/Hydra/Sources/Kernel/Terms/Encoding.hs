@@ -70,10 +70,12 @@ ns :: Namespace
 ns = Namespace "hydra.encoding"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns]
-    kernelTypesNamespaces $
-    Just "Functions for generating term encoders from type modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
       toDefinition encodeBinding,
@@ -522,20 +524,20 @@ encodeModule = define "encodeModule" $
         -- The encoder module depends on encoder modules for both the type and term dependencies
         -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
         right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "Term encoders for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
-            (var "encodedBindings"))
           -- Transform both type and term dependency namespaces to their encoder namespaces
           (Lists.nub (Lists.concat2
             (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTypeDependencies (var "mod")))
             (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTermDependencies (var "mod")))))
           -- The encoder module depends on the original type module
           (list [Packaging.moduleNamespace (var "mod")])
-          (just (Strings.cat $ list [
-            string "Term encoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingType $ var "b")))
+            (var "encodedBindings")))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
 encodeName :: TTermDefinition (Name -> Term)

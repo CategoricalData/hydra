@@ -51,10 +51,12 @@ ns :: Namespace
 ns = Namespace "hydra.coq.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, CoqLanguage.ns]
-    (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Coq code generator: converts Hydra modules to Coq source"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, CoqLanguage.ns],
+            moduleTypeDependencies = (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Coq code generator: converts Hydra modules to Coq source"}
   where
     definitions = [
       toDefinition coqArrow,

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Round-trip test cases for the JSON<->YAML decimal bridge"}}}],
             "body": {
               "record": {

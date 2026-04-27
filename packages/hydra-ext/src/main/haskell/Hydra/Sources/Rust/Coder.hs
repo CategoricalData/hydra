@@ -53,11 +53,13 @@ ns :: Namespace
 ns = Namespace "hydra.rust.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [moduleNamespace RustSerdeSource.module_, moduleNamespace RustLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns]
-    (RustSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Rust code generator: converts Hydra type and term modules to Rust source code"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [moduleNamespace RustSerdeSource.module_, moduleNamespace RustLanguageSource.module_,
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns],
+            moduleTypeDependencies = (RustSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Rust code generator: converts Hydra type and term modules to Rust source code"}
   where
     definitions = [
       toDefinition encodeEnumVariant,

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for type unification operations"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for type unification operations"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -1799,8 +1799,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -2117,8 +2117,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -2431,8 +2431,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -2752,8 +2752,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -2929,9 +2929,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -3087,8 +3087,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -3264,9 +3264,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -3415,8 +3415,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -3592,9 +3592,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "variable",
@@ -3753,8 +3753,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -3930,9 +3930,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -4095,8 +4095,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -4458,8 +4458,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -4635,9 +4635,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -4652,9 +4652,9 @@
                                                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                                                 "typeName": "hydra.core.Type"}}},
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -4856,8 +4856,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -5187,8 +5187,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -5364,9 +5364,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -5562,8 +5562,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -5739,9 +5739,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -5756,9 +5756,9 @@
                                                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                                                 "typeName": "hydra.core.Type"}}},
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -5951,8 +5951,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -6128,9 +6128,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -6145,9 +6145,9 @@
                                                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                                                 "typeName": "hydra.core.Type"}}},
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -6338,8 +6338,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -6515,9 +6515,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "k"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -6527,9 +6527,9 @@
                                                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                                                 "typeName": "hydra.core.Type"}}},
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -6693,8 +6693,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -6870,9 +6870,9 @@
                                                                                       "body": {
                                                                                         "map": [
                                                                                           {
-                                                                                            "@key": {
+                                                                                            "key": {
                                                                                               "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}},
-                                                                                            "@value": {
+                                                                                            "value": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
@@ -7013,8 +7013,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -7336,8 +7336,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -7609,8 +7609,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {
@@ -7842,8 +7842,8 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "pair": {
-                                                                                                          "@first": {"variable": "n"},
-                                                                                                          "@second": {
+                                                                                                          "first": {"variable": "n"},
+                                                                                                          "second": {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {

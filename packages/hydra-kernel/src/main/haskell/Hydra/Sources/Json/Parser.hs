@@ -89,10 +89,12 @@ jsonParserDefinition :: String -> TTerm a -> TTermDefinition a
 jsonParserDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module ns definitions
-    [Parsers.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "JSON parser using Hydra parser combinators"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Parsers.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "JSON parser using Hydra parser combinators"}
   where
     ns = Namespace "hydra.json.parser"
     definitions = [

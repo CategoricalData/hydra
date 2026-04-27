@@ -62,10 +62,12 @@ ns :: Namespace
 ns = Namespace "hydra.substitution"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Rewriting.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just ("Variable substitution in type and term expressions.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Rewriting.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Variable substitution in type and term expressions.")}
   where
    definitions = [
      toDefinition composeTypeSubst,

@@ -19,10 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.inference.algorithmW"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Algorithm W inference tests")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Algorithm W inference tests")}
   where
     definitions = [
       Phantoms.toDefinition allTests,

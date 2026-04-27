@@ -29,10 +29,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.pairs"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Namespace "hydra.reduction", Namespace "hydra.show.core"]
-    kernelTypesNamespaces $
-    Just "Test cases for hydra.lib.pairs primitives"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Test cases for hydra.lib.pairs primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]
 

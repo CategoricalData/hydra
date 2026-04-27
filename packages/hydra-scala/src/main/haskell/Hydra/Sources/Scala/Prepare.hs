@@ -24,10 +24,12 @@ ns :: Namespace
 ns = Namespace "hydra.scala.prepare"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Strip.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "Type preparation functions for Scala code generation"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Type preparation functions for Scala code generation"}
   where
     definitions = [
       toDefinition prepareFloatType,

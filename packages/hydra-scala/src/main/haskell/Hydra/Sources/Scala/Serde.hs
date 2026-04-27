@@ -91,10 +91,12 @@ ns :: Namespace
 ns = Namespace "hydra.scala.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Serialization.ns, JavaSerdeSource.ns]
-    (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Serialization functions for converting Scala AST to abstract expressions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Serialization.ns, JavaSerdeSource.ns],
+            moduleTypeDependencies = (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Serialization functions for converting Scala AST to abstract expressions"}
   where
     definitions = [
       toDefinition dotOp,

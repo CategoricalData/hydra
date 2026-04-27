@@ -40,7 +40,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 -- | Build a schema map (Name -> Type) from a graph's schema types
 buildSchemaMap :: Graph.Graph -> M.Map Core.Name Core.Type
-buildSchemaMap g = Maps.map (\ts -> Strip.deannotateType (Core.typeSchemeType ts)) (Graph.graphSchemaTypes g)
+buildSchemaMap g = Maps.map (\ts -> Strip.deannotateType (Core.typeSchemeBody ts)) (Graph.graphSchemaTypes g)
 -- | Decode a single module from a JSON value
 decodeModuleFromJson :: Graph.Graph -> [Packaging.Module] -> Model.Value -> Either Errors.Error Packaging.Module
 decodeModuleFromJson bsGraph universeModules jsonVal =
@@ -107,8 +107,8 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
@@ -159,8 +159,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions mod))))) modsToGenerate
           termModulesToGenerate =
                   Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
@@ -184,8 +184,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaMods typeModulesToGenerate))
           dataMods = moduleTermDepsTransitive namespaceMap modsToGenerate
           dataElements =
@@ -229,16 +229,16 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Packaging.DefinitionType v0 -> Packaging.typeDefinitionName v0
               refreshModule =
                       \els -> \m -> Packaging.Module {
+                        Packaging.moduleDescription = (Packaging.moduleDescription m),
                         Packaging.moduleNamespace = (Packaging.moduleNamespace m),
+                        Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
+                        Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
                         Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
                           Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
                           Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                             Packaging.termDefinitionName = (Core.bindingName b),
                             Packaging.termDefinitionTerm = (Core.bindingTerm b),
-                            Packaging.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) els)) (Packaging.moduleDefinitions m))),
-                        Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
-                        Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
-                        Packaging.moduleDescription = (Packaging.moduleDescription m)}
+                            Packaging.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) els)) (Packaging.moduleDefinitions m)))}
               allBindings = Lexical.graphToBindings g1
               refreshedMods = Lists.map (\m -> refreshModule allBindings m) termModulesToGenerate
               dedupDefs = \defs -> Maps.elems (Maps.fromList (Lists.map (\d -> (Packaging.termDefinitionName d, d)) defs))
@@ -340,14 +340,14 @@ moduleToSourceModule m =
                     Packaging.termDefinitionTerm = (EncodePackaging.module_ m),
                     Packaging.termDefinitionType = Nothing})
       in Packaging.Module {
+        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unNamespace (Packaging.moduleNamespace m)))),
         Packaging.moduleNamespace = sourceNs,
-        Packaging.moduleDefinitions = [
-          moduleDef],
         Packaging.moduleTermDependencies = [
           modTypeNs],
         Packaging.moduleTypeDependencies = [
           modTypeNs],
-        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unNamespace (Packaging.moduleNamespace m))))}
+        Packaging.moduleDefinitions = [
+          moduleDef]}
 -- | Compute transitive closure of type dependencies for a set of modules
 moduleTypeDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
 moduleTypeDepsTransitive nsMap modules =
@@ -376,8 +376,8 @@ modulesToGraph bsGraph universeModules modules =
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
@@ -419,16 +419,16 @@ refreshModule inferredElements m =
         Core.bindingTerm = (Packaging.termDefinitionTerm v0),
         Core.bindingType = (Packaging.termDefinitionType v0)})
       _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
+      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleNamespace = (Packaging.moduleNamespace m),
+      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
+      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
       Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
         Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
         Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
-          Packaging.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)) (Packaging.moduleDefinitions m))),
-      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
-      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
-      Packaging.moduleDescription = (Packaging.moduleDescription m)})
+          Packaging.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)) (Packaging.moduleDefinitions m)))})
 -- | Compute transitive closure of module dependencies
 transitiveDeps :: (Packaging.Module -> [Packaging.Namespace]) -> M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> S.Set Packaging.Namespace
 transitiveDeps getDeps nsMap startMods =

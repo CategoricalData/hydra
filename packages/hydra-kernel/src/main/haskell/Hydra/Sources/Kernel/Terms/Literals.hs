@@ -56,10 +56,12 @@ ns :: Namespace
 ns = Namespace "hydra.literals"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just "Conversion functions for literal values."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Conversion functions for literal values."}
   where
    definitions = [
      toDefinition bigfloatToFloatValue,

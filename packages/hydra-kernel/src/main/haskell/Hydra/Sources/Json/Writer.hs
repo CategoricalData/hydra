@@ -88,10 +88,12 @@ jsonSerdeDefinition :: String -> TTerm a -> TTermDefinition a
 jsonSerdeDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module ns definitions
-    [Serialization.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "JSON serialization functions using the Hydra AST"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Serialization.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "JSON serialization functions using the Hydra AST"}
   where
     ns = Namespace "hydra.json.writer"
     definitions = [

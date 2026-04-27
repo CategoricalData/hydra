@@ -41,11 +41,14 @@ bootstrapTypeModules = [
   Util.module_]
 
 module_ :: Module
-module_ = Module ns [bindingToDefinition typesByNameBinding] [] [Namespace "hydra.core"] $
-    Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = [bindingToDefinition typesByNameBinding],
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Namespace "hydra.core"],
+            moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
-      ++ " which is subject to method size limits for large modules like hydra.core.")
-
+      ++ " which is subject to method size limits for large modules like hydra.core.")}
 typesByNameBinding :: Binding
 typesByNameBinding = Binding {
     bindingName = Name "hydra.json.bootstrap.typesByName",

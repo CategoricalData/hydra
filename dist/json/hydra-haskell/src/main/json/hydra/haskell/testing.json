@@ -323,12 +323,33 @@
                                   "record": {
                                     "fields": [
                                       {
+                                        "name": "description",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "mod"},
+                                            "function": {
+                                              "project": {"field": "description", "typeName": "hydra.packaging.Module"}}}}},
+                                      {
                                         "name": "namespace",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "mod"},
                                             "function": {
                                               "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}},
+                                      {
+                                        "name": "termDependencies",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "mod"},
+                                            "function": {
+                                              "project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}}},
+                                      {
+                                        "name": "typeDependencies",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "mod"},
+                                            "function": {
+                                              "project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}}},
                                       {
                                         "name": "definitions",
                                         "term": {
@@ -373,28 +394,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"variable": "hydra.core.Binding"}}},
-                                                    "type": {"variable": "hydra.packaging.Definition"}}}}}}}},
-                                      {
-                                        "name": "termDependencies",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "mod"},
-                                            "function": {
-                                              "project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}}},
-                                      {
-                                        "name": "typeDependencies",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "mod"},
-                                            "function": {
-                                              "project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}}},
-                                      {
-                                        "name": "description",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "mod"},
-                                            "function": {
-                                              "project": {"field": "description", "typeName": "hydra.packaging.Module"}}}}}],
+                                                    "type": {"variable": "hydra.packaging.Definition"}}}}}}}}],
                                     "typeName": "hydra.packaging.Module"}},
                                 "type": {"body": {"variable": "hydra.packaging.Module"}, "variables": []}}],
                             "body": {

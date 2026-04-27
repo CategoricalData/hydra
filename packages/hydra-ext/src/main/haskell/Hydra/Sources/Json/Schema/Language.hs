@@ -79,12 +79,12 @@ import qualified Data.Maybe                                as Y
 
 
 module_ :: Module
-module_ = Module (Namespace "hydra.json.schema.language")
-  [toDefinition jsonSchemaLanguage]
-  [Reflect.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for JSON Schema"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.json.schema.language"),
+            moduleDefinitions = [toDefinition jsonSchemaLanguage],
+            moduleTermDependencies = [Reflect.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints for JSON Schema"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 

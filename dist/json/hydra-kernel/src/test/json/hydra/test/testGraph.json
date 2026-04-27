@@ -13,11 +13,11 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {
+                            "first": {
                               "wrap": {
                                 "body": {"literal": {"string": "testDataArthur"}},
                                 "typeName": "hydra.core.Name"}},
-                            "@second": {"variable": "hydra.test.testTerms.testDataArthur"}}},
+                            "second": {"variable": "hydra.test.testTerms.testDataArthur"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Term"}}}]},
             "function": {
@@ -46,8 +46,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeBuddyListA"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeBuddyListA"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -56,8 +56,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeBuddyListB"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeBuddyListB"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -66,8 +66,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeComparisonName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeComparison"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeComparisonName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeComparison"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -76,8 +76,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeEitherName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeEither"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeEitherName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeEither"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -86,8 +86,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeHydraLiteralType"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeHydraLiteralType"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -96,8 +96,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeHydraType"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeHydraType"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -106,8 +106,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeIntListName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeIntList"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeIntListName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeIntList"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -116,8 +116,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeLatLonName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeLatLon"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeLatLonName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeLatLon"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -126,8 +126,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeLatLonPoly"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeLatLonPoly"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -136,8 +136,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeListName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeList"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeListName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeList"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -146,8 +146,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeNumberName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeNumber"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeNumberName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeNumber"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -156,8 +156,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypePersonName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypePerson"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypePersonName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypePerson"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -166,8 +166,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypePersonOrSomethingName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypePersonOrSomething"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypePersonOrSomethingName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypePersonOrSomething"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -176,8 +176,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapperName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapper"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapperName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapper"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -186,8 +186,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeSimpleNumberName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeSimpleNumber"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeSimpleNumberName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeSimpleNumber"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -196,8 +196,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeStringAliasName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeStringAlias"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeStringAliasName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeStringAlias"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -206,8 +206,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeSymmetricTripleName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeSymmetricTriple"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeSymmetricTripleName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeSymmetricTriple"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -216,8 +216,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeTimestampName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeTimestamp"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeTimestampName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeTimestamp"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -226,8 +226,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeTripleName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeTriple"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeTripleName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeTriple"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -236,8 +236,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeUnionMonomorphicName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeUnionMonomorphic"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeUnionMonomorphicName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeUnionMonomorphic"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -246,9 +246,9 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {
+                            "first": {
                               "variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursive"}}},
+                            "second": {"variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursive"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {
@@ -257,8 +257,8 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "@first": {"variable": "hydra.test.testTypes.testTypeUnitName"},
-                            "@second": {"variable": "hydra.test.testTypes.testTypeUnit"}}},
+                            "first": {"variable": "hydra.test.testTypes.testTypeUnitName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeUnit"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}}]},
             "function": {

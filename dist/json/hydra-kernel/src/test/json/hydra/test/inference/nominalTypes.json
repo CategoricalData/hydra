@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Nominal type tests"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Nominal type tests"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -1096,7 +1096,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "pair": {
-                                                                                              "@first": {
+                                                                                              "first": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
@@ -1110,7 +1110,7 @@
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                              "@second": {
+                                                                                              "second": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",

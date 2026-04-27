@@ -83,12 +83,12 @@ definition_ :: String -> TTerm a -> TTermDefinition a
 definition_ = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.protobuf.language")
-  [toDefinition protobufLanguage, toDefinition protobufReservedWords]
-  [Lexical.ns, Strip.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for Protobuf v3"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.protobuf.language"),
+            moduleDefinitions = [toDefinition protobufLanguage, toDefinition protobufReservedWords],
+            moduleTermDependencies = [Lexical.ns, Strip.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints for Protobuf v3"}
 protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $ lets [

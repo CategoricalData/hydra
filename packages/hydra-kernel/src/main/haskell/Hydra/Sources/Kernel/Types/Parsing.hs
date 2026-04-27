@@ -16,8 +16,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
-    Just "Parser combinator types for text parsing"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "Parser combinator types for text parsing"}
   where
     definitions = [
       parseError,

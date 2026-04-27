@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for eta expansion of terms"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for eta expansion of terms"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -1849,7 +1849,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "pair": {
-                                                                                                            "@first": {
+                                                                                                            "first": {
                                                                                                               "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "project",
@@ -1867,7 +1867,7 @@
                                                                                                                               "typeName": "hydra.core.Name"}}}],
                                                                                                                       "typeName": "hydra.core.Projection"}}},
                                                                                                                 "typeName": "hydra.core.Term"}},
-                                                                                                            "@second": {
+                                                                                                            "second": {
                                                                                                               "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "literal",
@@ -1933,7 +1933,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "pair": {
-                                                                                                        "@first": {
+                                                                                                        "first": {
                                                                                                           "inject": {
                                                                                                             "field": {
                                                                                                               "name": "lambda",
@@ -1990,7 +1990,7 @@
                                                                                                                           "typeName": "hydra.core.Term"}}}],
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}},
-                                                                                                        "@second": {
+                                                                                                        "second": {
                                                                                                           "inject": {
                                                                                                             "field": {
                                                                                                               "name": "literal",

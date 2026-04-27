@@ -716,6 +716,13 @@
                   "record": {
                     "fields": [
                       {
+                        "name": "description",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {
+                              "project": {"field": "description", "typeName": "hydra.packaging.Module"}}}}},
+                      {
                         "name": "namespace",
                         "term": {
                           "application": {
@@ -725,13 +732,6 @@
                                 "function": {
                                   "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
-                      {
-                        "name": "definitions",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "m"},
-                            "function": {
-                              "project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}}},
                       {
                         "name": "termDependencies",
                         "term": {
@@ -747,12 +747,12 @@
                             "function": {
                               "project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}}},
                       {
-                        "name": "description",
+                        "name": "definitions",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
                             "function": {
-                              "project": {"field": "description", "typeName": "hydra.packaging.Module"}}}}}],
+                              "project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}}}],
                     "typeName": "hydra.packaging.Module"}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "m"}}}},

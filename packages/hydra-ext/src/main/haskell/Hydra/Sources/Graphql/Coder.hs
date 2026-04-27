@@ -93,12 +93,14 @@ ns :: Namespace
 ns = Namespace "hydra.graphql.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleNamespace GraphqlLanguage.module_,
-      GraphqlSerde.ns]
-    (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces) $
-    Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"
+      GraphqlSerde.ns],
+            moduleTypeDependencies = (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"}
   where
     definitions = [
       toDefinition descriptionFromType,

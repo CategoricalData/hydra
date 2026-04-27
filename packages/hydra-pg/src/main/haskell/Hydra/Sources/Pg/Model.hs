@@ -23,10 +23,14 @@ pg :: String -> Type
 pg = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
-    Just ("A typed property graph data model. " ++
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A typed property graph data model. " ++
       "Property graphs are parameterized a type for property and id values, " ++
-      "while property graph schemas are parameterized by a type for property and id types")
+      "while property graph schemas are parameterized by a type for property and id types")}
   where
     definitions = [
       adjacentEdge,

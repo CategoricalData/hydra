@@ -90,10 +90,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_]
-    KernelTypes.kernelTypesNamespaces $
-    Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."}
   where
     definitions = [
       toDefinition toJson,

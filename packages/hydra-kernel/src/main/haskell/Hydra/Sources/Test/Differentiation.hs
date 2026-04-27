@@ -30,10 +30,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.differentiation"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Diff.ns, Variables.ns, ShowCore.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for automatic differentiation")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Diff.ns, Variables.ns, ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for automatic differentiation")}
   where
     definitions = [Phantoms.toDefinition allTests]
 

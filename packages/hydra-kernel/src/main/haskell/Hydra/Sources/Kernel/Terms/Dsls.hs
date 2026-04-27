@@ -41,10 +41,12 @@ ns :: Namespace
 ns = Namespace "hydra.dsls"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, Formatting.ns, Names.ns, Strip.ns]
-    kernelTypesNamespaces $
-    Just "Functions for generating domain-specific DSL modules from type modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, Formatting.ns, Names.ns, Strip.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
       toDefinition dslBindingName,
@@ -573,17 +575,17 @@ dslModule = define "dslModule" $
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "DSL functions for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
-            (deduplicateBindings @@ Lists.concat (var "dslBindings")))
           -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
           (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleTypeDependencies (var "mod"))))
           -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
           (Lists.nub (Lists.concat2
             (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
             (Packaging.moduleTypeDependencies (var "mod"))))
-          (just (Strings.cat $ list [
-            string "DSL functions for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingType $ var "b")))
+            (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))

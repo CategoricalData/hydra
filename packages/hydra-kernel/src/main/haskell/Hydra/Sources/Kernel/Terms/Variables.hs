@@ -78,10 +78,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Names.ns, Rewriting.ns]
-    kernelTypesNamespaces $
-    Just ("Free variable analysis, term-level substitution, and unshadowing")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Names.ns, Rewriting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
   where
    definitions = [
      toDefinition freeTypeVariablesInTerm,

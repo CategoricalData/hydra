@@ -77,13 +77,15 @@ ns :: Namespace
 ns = Namespace "hydra.protobuf.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
-      moduleNamespace DecodeCore.module_]
-    (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
+      moduleNamespace DecodeCore.module_],
+            moduleTypeDependencies = (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"}
   where
     definitions = [
       toDefinition collectStructuralTypes,

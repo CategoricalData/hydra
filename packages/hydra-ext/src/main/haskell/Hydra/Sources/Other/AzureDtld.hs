@@ -85,13 +85,17 @@ writableField cat = "writable">:
   T.maybe T.boolean
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [] $
-    Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [],
+            moduleDescription = Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++
       "  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\n" ++
       "DTLD features which are not currently included in this model:\n" ++
       "  * geospatial schemas (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#geospatial-schemas)\n" ++
       "  * semantic types and units (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#semantic-types)\n" ++
-      "  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)")
+      "  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)")}
   where
     definitions = [
       command,

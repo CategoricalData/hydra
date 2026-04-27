@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.shacl.language")
-  [toDefinition shaclLanguage]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for W3C SHACL"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.shacl.language"),
+            moduleDefinitions = [toDefinition shaclLanguage],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints for W3C SHACL"}
 shaclLanguage :: TTermDefinition Language
 shaclLanguage = define "shaclLanguage" $
   doc "Language constraints for W3C SHACL" $ lets [

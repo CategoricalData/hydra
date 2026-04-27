@@ -62,10 +62,12 @@ ns :: Namespace
 ns = Namespace "hydra.unification"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns]
-    kernelTypesNamespaces $
-    Just ("Utilities for type unification.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Utilities for type unification.")}
   where
    definitions = [
      toDefinition joinTypes,

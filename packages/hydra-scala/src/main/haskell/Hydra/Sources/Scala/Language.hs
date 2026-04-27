@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.scala.language")
-  [toDefinition scalaLanguage, toDefinition scalaReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for Scala"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.scala.language"),
+            moduleDefinitions = [toDefinition scalaLanguage, toDefinition scalaReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for Scala"}
 scalaLanguage :: TTermDefinition Language
 scalaLanguage = define "scalaLanguage" $
   doc "Language constraints for Scala" $ lets [

@@ -50,11 +50,13 @@ ns :: Namespace
 ns = Namespace "hydra.haskell.testing"
 
 module_ :: Module
-module_ = Module ns definitions
-    [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns]
-    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Haskell test code generation for HSpec-based generation tests"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
+     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns],
+            moduleTypeDependencies = (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
   where
     definitions = [
       toDefinition addNamespacesToNamespaces,
@@ -101,14 +103,14 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
           _Binding_type>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
+      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_namespace>>: Packaging.moduleNamespace (var "mod"),
+      _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
+      _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
         (Core.bindingType $ var "b")))
-        (var "testBindings"),
-      _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
-      _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
-      _Module_description>>: project _Module _Module_description @@ var "mod"]] $
+        (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap
         (lambda "e" $ ShowError.error_ @@ var "e")

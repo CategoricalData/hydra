@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for hydra.formatting"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for hydra.formatting"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -35,8 +35,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for case conversion"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for case conversion"}}}],
             "body": {
               "record": {
                 "fields": [

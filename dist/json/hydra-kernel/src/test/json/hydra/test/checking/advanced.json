@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Advanced type checking test cases"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Advanced type checking test cases"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -1023,7 +1023,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "annotated",
@@ -1055,7 +1055,7 @@
                                                                                       "type": {"variable": "hydra.core.Term"}}}}],
                                                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "annotated",
@@ -1586,14 +1586,14 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "pair": {
-                                                                                                "@first": {
+                                                                                                "first": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
                                                                                                       "term": {
                                                                                                         "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                                "@second": {
+                                                                                                "second": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",

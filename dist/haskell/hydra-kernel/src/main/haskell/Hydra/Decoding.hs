@@ -1120,11 +1120,10 @@ decodeModule cx graph mod =
           decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
           allDecodedDeps = Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps)
       in (Right (Just (Packaging.Module {
+        Packaging.moduleDescription = (Just (Strings.cat [
+          "Term decoders for ",
+          (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
         Packaging.moduleNamespace = (decodeNamespace (Packaging.moduleNamespace mod)),
-        Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.bindingName b),
-          Packaging.termDefinitionTerm = (Core.bindingTerm b),
-          Packaging.termDefinitionType = (Core.bindingType b)})) decodedBindings),
         Packaging.moduleTermDependencies = (Lists.concat2 [
           Packaging.Namespace "hydra.extract.core",
           (Packaging.Namespace "hydra.lexical"),
@@ -1132,9 +1131,10 @@ decodeModule cx graph mod =
         Packaging.moduleTypeDependencies = [
           Packaging.moduleNamespace mod,
           (Packaging.Namespace "hydra.util")],
-        Packaging.moduleDescription = (Just (Strings.cat [
-          "Term decoders for ",
-          (Packaging.unNamespace (Packaging.moduleNamespace mod))]))}))))))
+        Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionTerm = (Core.bindingTerm b),
+          Packaging.termDefinitionType = (Core.bindingType b)})) decodedBindings)}))))))
 -- | Generate a decoder module namespace from a source module namespace
 decodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 decodeNamespace ns =

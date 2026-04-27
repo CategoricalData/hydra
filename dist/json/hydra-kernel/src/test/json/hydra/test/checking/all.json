@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "The group of all type checking tests"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "The group of all type checking tests"}}}],
             "body": {
               "record": {
                 "fields": [

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for hydra.lib.maps primitives"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for hydra.lib.maps primitives"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -63,11 +63,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 3}}},
@@ -129,14 +129,14 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "b"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "b"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                    "@value": {"literal": {"string": "new"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 3}}},
+                                                                    "value": {"literal": {"string": "new"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -209,11 +209,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 2}}},
@@ -275,11 +275,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "updated"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "updated"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -350,11 +350,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 2}}},
@@ -417,8 +417,8 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -508,11 +508,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -593,11 +593,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "A"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "A"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 4}}},
-                                                                    "@value": {"literal": {"string": "B"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 4}}},
+                                                                    "value": {"literal": {"string": "B"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -841,11 +841,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -933,14 +933,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -1277,14 +1277,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "ab"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "ab"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -1386,11 +1386,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                    "@value": {"literal": {"string": "ab"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 3}}},
+                                                                    "value": {"literal": {"string": "ab"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -1461,11 +1461,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -1833,14 +1833,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -1912,11 +1912,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "b"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "b"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                    "@value": {"literal": {"string": "c"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 3}}},
+                                                                    "value": {"literal": {"string": "c"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -1987,8 +1987,8 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -2296,11 +2296,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 2}}},
@@ -2362,11 +2362,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 3}}},
@@ -2452,8 +2452,8 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {"literal": {"integer": {"int32": 1}}},
-                                                                                  "@second": {"literal": {"string": "a"}}}},
+                                                                                  "first": {"literal": {"integer": {"int32": 1}}},
+                                                                                  "second": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
@@ -2462,8 +2462,8 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {"literal": {"integer": {"int32": 2}}},
-                                                                                  "@second": {"literal": {"string": "b"}}}},
+                                                                                  "first": {"literal": {"integer": {"int32": 2}}},
+                                                                                  "second": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2517,11 +2517,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "b"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "b"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -2597,8 +2597,8 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {"literal": {"integer": {"int32": 1}}},
-                                                                                  "@second": {"literal": {"string": "a"}}}},
+                                                                                  "first": {"literal": {"integer": {"int32": 1}}},
+                                                                                  "second": {"literal": {"string": "a"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}},
                                                                       {
@@ -2607,8 +2607,8 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {"literal": {"integer": {"int32": 1}}},
-                                                                                  "@second": {"literal": {"string": "b"}}}},
+                                                                                  "first": {"literal": {"integer": {"int32": 1}}},
+                                                                                  "second": {"literal": {"string": "b"}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"string": {}}}}}]},
                                                                   "function": {
@@ -2662,8 +2662,8 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "b"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "b"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -2880,11 +2880,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"string": "c"}},
@@ -2942,14 +2942,14 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "b"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "b"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                    "@value": {"literal": {"string": "c"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 3}}},
+                                                                    "value": {"literal": {"string": "c"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -3020,11 +3020,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"string": "updated"}},
@@ -3082,11 +3082,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "updated"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "updated"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -3216,8 +3216,8 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "x"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "x"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -3307,14 +3307,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -3406,14 +3406,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -3616,11 +3616,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 2}}},
@@ -3711,11 +3711,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 3}}},
@@ -3919,11 +3919,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -3988,11 +3988,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "A"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "A"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "B"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "B"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -4220,11 +4220,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -4292,11 +4292,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 4}}},
-                                                                    "@value": {"literal": {"string": "b"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 4}}},
+                                                                    "value": {"literal": {"string": "b"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -4527,11 +4527,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 2}}},
@@ -4596,11 +4596,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 3}}},
@@ -4810,8 +4810,8 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -4892,14 +4892,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 2}}},
@@ -4954,11 +4954,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                    "@value": {"literal": {"string": "c"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 3}}},
+                                                                    "value": {"literal": {"string": "c"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -5031,11 +5031,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"integer": {"int32": 4}}},
@@ -5090,11 +5090,11 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "b"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "b"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -5364,8 +5364,8 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 42}}},
-                                                                    "@value": {"literal": {"string": "hello"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 42}}},
+                                                                    "value": {"literal": {"string": "hello"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -5455,14 +5455,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -5524,8 +5524,8 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 42}}},
-                                                                        "@value": {"literal": {"string": "test"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 42}}},
+                                                                        "value": {"literal": {"string": "test"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -5666,11 +5666,11 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -5747,8 +5747,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 1}}},
-                                                                              "@second": {"literal": {"string": "a"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 1}}},
+                                                                              "second": {"literal": {"string": "a"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   {
@@ -5757,8 +5757,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 2}}},
-                                                                              "@second": {"literal": {"string": "b"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 2}}},
+                                                                              "second": {"literal": {"string": "b"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}]},
                                                               "function": {
@@ -5851,14 +5851,14 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "b"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "b"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -5935,8 +5935,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 1}}},
-                                                                              "@second": {"literal": {"string": "a"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 1}}},
+                                                                              "second": {"literal": {"string": "a"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   {
@@ -5945,8 +5945,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 2}}},
-                                                                              "@second": {"literal": {"string": "b"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 2}}},
+                                                                              "second": {"literal": {"string": "b"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}},
                                                                   {
@@ -5955,8 +5955,8 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {"literal": {"integer": {"int32": 3}}},
-                                                                              "@second": {"literal": {"string": "c"}}}},
+                                                                              "first": {"literal": {"integer": {"int32": 3}}},
+                                                                              "second": {"literal": {"string": "c"}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}]},
                                                               "function": {
@@ -6235,21 +6235,21 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                        "@value": {"literal": {"string": "x"}}},
+                                                                        "key": {"literal": {"integer": {"int32": 2}}},
+                                                                        "value": {"literal": {"string": "x"}}},
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                        "@value": {"literal": {"string": "c"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 3}}},
+                                                                        "value": {"literal": {"string": "c"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
                                                                         "map": [
                                                                           {
-                                                                            "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                            "@value": {"literal": {"string": "a"}}},
+                                                                            "key": {"literal": {"integer": {"int32": 1}}},
+                                                                            "value": {"literal": {"string": "a"}}},
                                                                           {
-                                                                            "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                            "@value": {"literal": {"string": "b"}}}]},
+                                                                            "key": {"literal": {"integer": {"int32": 2}}},
+                                                                            "value": {"literal": {"string": "b"}}}]},
                                                                       "function": {
                                                                         "typeApplication": {
                                                                           "body": {
@@ -6301,14 +6301,14 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 2}}},
-                                                                    "@value": {"literal": {"string": "b"}}},
+                                                                    "key": {"literal": {"integer": {"int32": 2}}},
+                                                                    "value": {"literal": {"string": "b"}}},
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 3}}},
-                                                                    "@value": {"literal": {"string": "c"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 3}}},
+                                                                    "value": {"literal": {"string": "c"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -6386,8 +6386,8 @@
                                                                       "argument": {
                                                                         "map": [
                                                                           {
-                                                                            "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                            "@value": {"literal": {"string": "a"}}}]},
+                                                                            "key": {"literal": {"integer": {"int32": 1}}},
+                                                                            "value": {"literal": {"string": "a"}}}]},
                                                                       "function": {
                                                                         "typeApplication": {
                                                                           "body": {
@@ -6439,8 +6439,8 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
@@ -6511,8 +6511,8 @@
                                                                   "argument": {
                                                                     "map": [
                                                                       {
-                                                                        "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                        "@value": {"literal": {"string": "a"}}}]},
+                                                                        "key": {"literal": {"integer": {"int32": 1}}},
+                                                                        "value": {"literal": {"string": "a"}}}]},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -6571,8 +6571,8 @@
                                                               "argument": {
                                                                 "map": [
                                                                   {
-                                                                    "@key": {"literal": {"integer": {"int32": 1}}},
-                                                                    "@value": {"literal": {"string": "a"}}}]},
+                                                                    "key": {"literal": {"integer": {"int32": 1}}},
+                                                                    "value": {"literal": {"string": "a"}}}]},
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {

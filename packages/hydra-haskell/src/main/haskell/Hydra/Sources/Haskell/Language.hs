@@ -86,12 +86,12 @@ ns :: Namespace
 ns = Namespace "hydra.haskell.language"
 
 module_ :: Module
-module_ = Module ns
-  [toDefinition haskellLanguage, toDefinition reservedWords]
-  []
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for Haskell"
-
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = [toDefinition haskellLanguage, toDefinition reservedWords],
+            moduleTermDependencies = [],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for Haskell"}
 haskellLanguage :: TTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [

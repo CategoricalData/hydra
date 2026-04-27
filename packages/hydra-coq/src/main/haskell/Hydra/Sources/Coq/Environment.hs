@@ -27,8 +27,12 @@ core :: String -> Type
 core = typeref Core.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
-    Just "Environment types for Coq code generation"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "Environment types for Coq code generation"}
   where
     definitions = [
       coqEnvironment]

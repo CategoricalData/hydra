@@ -27,10 +27,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.testEnv"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns]
-    kernelTypesNamespaces $
-    Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")}
   where
    definitions = [
      Phantoms.toDefinition testContext,

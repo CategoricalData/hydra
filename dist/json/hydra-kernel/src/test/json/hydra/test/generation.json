@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for code generation operations"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for code generation operations"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -67,11 +67,29 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                            {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -134,25 +152,7 @@
                                                                                                     "body": {"maybe": null},
                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}}]},
                                                                   "function": {
                                                                     "application": {
@@ -162,11 +162,27 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.a"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -264,33 +280,35 @@
                                                                                                                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                           "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}},
                                                                           {
                                                                             "record": {
                                                                               "fields": [
+                                                                                {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -353,25 +371,7 @@
                                                                                                         "body": {"maybe": null},
                                                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "list": [
-                                                                                      {
-                                                                                        "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}}]},
                                                                       "function": {
                                                                         "application": {
@@ -528,11 +528,29 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                            {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -595,25 +613,7 @@
                                                                                                     "body": {"maybe": null},
                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}}]},
                                                                   "function": {
                                                                     "application": {
@@ -623,11 +623,27 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.a"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -725,33 +741,35 @@
                                                                                                                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                           "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}},
                                                                           {
                                                                             "record": {
                                                                               "fields": [
+                                                                                {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -814,25 +832,7 @@
                                                                                                         "body": {"maybe": null},
                                                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "list": [
-                                                                                      {
-                                                                                        "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}}]},
                                                                       "function": {
                                                                         "application": {
@@ -1017,11 +1017,27 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                            {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.a"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -1119,33 +1135,35 @@
                                                                                                                   "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                       "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}},
                                                                       {
                                                                         "record": {
                                                                           "fields": [
+                                                                            {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                             {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -1208,25 +1226,7 @@
                                                                                                     "body": {"maybe": null},
                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}}]},
                                                                   "function": {
                                                                     "application": {
@@ -1236,11 +1236,27 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.a"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -1338,33 +1354,35 @@
                                                                                                                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                           "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}},
                                                                           {
                                                                             "record": {
                                                                               "fields": [
+                                                                                {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -1427,25 +1445,7 @@
                                                                                                         "body": {"maybe": null},
                                                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "list": [
-                                                                                      {
-                                                                                        "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}}]},
                                                                       "function": {
                                                                         "application": {
@@ -1602,11 +1602,27 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                            {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.a"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -1704,33 +1720,35 @@
                                                                                                                   "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                       "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}},
                                                                       {
                                                                         "record": {
                                                                           "fields": [
+                                                                            {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                             {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -1793,25 +1811,7 @@
                                                                                                     "body": {"maybe": null},
                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}}]},
                                                                   "function": {
                                                                     "application": {
@@ -1821,11 +1821,27 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.a"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -1923,33 +1939,35 @@
                                                                                                                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                           "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}},
                                                                           {
                                                                             "record": {
                                                                               "fields": [
+                                                                                {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.b"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
+                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -2012,25 +2030,7 @@
                                                                                                         "body": {"maybe": null},
                                                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "list": [
-                                                                                      {
-                                                                                        "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.testInput.a"}},
-                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}}]},
                                                                       "function": {
                                                                         "application": {
@@ -2215,11 +2215,29 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                            {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "wrap": {
                                                                                   "body": {"literal": {"string": "hydra.testInput.w"}},
                                                                                   "typeName": "hydra.packaging.Namespace"}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "hydra.testInput.v"}},
+                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"list": []},
+                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -2331,25 +2349,7 @@
                                                                                                     "body": {"maybe": null},
                                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                             "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                      "typeName": "hydra.packaging.Definition"}}]}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.testInput.v"}},
-                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"list": []},
-                                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                      "typeName": "hydra.packaging.Definition"}}]}}],
                                                                           "typeName": "hydra.packaging.Module"}}]},
                                                                   "function": {
                                                                     "application": {
@@ -2359,11 +2359,27 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.v"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -2543,33 +2559,35 @@
                                                                                                                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                                                                                                           "typeName": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}},
                                                                           {
                                                                             "record": {
                                                                               "fields": [
+                                                                                {
+                                                                                  "name": "description",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
                                                                                   "name": "namespace",
                                                                                   "term": {
                                                                                     "wrap": {
                                                                                       "body": {"literal": {"string": "hydra.testInput.w"}},
                                                                                       "typeName": "hydra.packaging.Namespace"}}},
+                                                                                {
+                                                                                  "name": "termDependencies",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "hydra.testInput.v"}},
+                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
+                                                                                {
+                                                                                  "name": "typeDependencies",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                                 {
                                                                                   "name": "definitions",
                                                                                   "term": {
@@ -2681,25 +2699,7 @@
                                                                                                         "body": {"maybe": null},
                                                                                                         "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                                 "typeName": "hydra.packaging.TermDefinition"}}},
-                                                                                          "typeName": "hydra.packaging.Definition"}}]}},
-                                                                                {
-                                                                                  "name": "termDependencies",
-                                                                                  "term": {
-                                                                                    "list": [
-                                                                                      {
-                                                                                        "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.testInput.v"}},
-                                                                                          "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                                {
-                                                                                  "name": "typeDependencies",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"list": []},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                                {
-                                                                                  "name": "description",
-                                                                                  "term": {
-                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                                                                          "typeName": "hydra.packaging.Definition"}}]}}],
                                                                               "typeName": "hydra.packaging.Module"}}]},
                                                                       "function": {
                                                                         "application": {

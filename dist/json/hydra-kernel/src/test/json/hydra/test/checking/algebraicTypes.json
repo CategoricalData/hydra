@@ -464,7 +464,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -478,7 +478,7 @@
                                                                                     "typeName": "hydra.core.IntegerValue"}}},
                                                                               "typeName": "hydra.core.Literal"}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -643,7 +643,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -652,7 +652,7 @@
                                                                               "field": {"name": "string", "term": {"literal": {"string": "test"}}},
                                                                               "typeName": "hydra.core.Literal"}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -812,7 +812,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -821,7 +821,7 @@
                                                                               "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
                                                                               "typeName": "hydra.core.Literal"}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -1031,14 +1031,14 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {
+                                                                                  "first": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "variable",
                                                                                         "term": {
                                                                                           "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "@second": {
+                                                                                  "second": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "literal",
@@ -1250,7 +1250,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {
+                                                                                  "first": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "literal",
@@ -1259,7 +1259,7 @@
                                                                                             "field": {"name": "string", "term": {"literal": {"string": "constant"}}},
                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "@second": {
+                                                                                  "second": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "variable",
@@ -1486,14 +1486,14 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "pair": {
-                                                                                                "@first": {
+                                                                                                "first": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
                                                                                                       "term": {
                                                                                                         "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                                "@second": {
+                                                                                                "second": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
@@ -1738,14 +1738,14 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "pair": {
-                                                                                  "@first": {
+                                                                                  "first": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "variable",
                                                                                         "term": {
                                                                                           "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}},
-                                                                                  "@second": {
+                                                                                  "second": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "variable",
@@ -1965,7 +1965,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -1979,7 +1979,7 @@
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -2001,7 +2001,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -2015,7 +2015,7 @@
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -2208,7 +2208,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "pair": {
-                                                                                              "@first": {
+                                                                                              "first": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
@@ -2222,7 +2222,7 @@
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                              "@second": {
+                                                                                              "second": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
@@ -2428,7 +2428,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "pair",
@@ -2438,7 +2438,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "pair": {
-                                                                                      "@first": {
+                                                                                      "first": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "literal",
@@ -2452,7 +2452,7 @@
                                                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                           "typeName": "hydra.core.Term"}},
-                                                                                      "@second": {
+                                                                                      "second": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "literal",
@@ -2464,7 +2464,7 @@
                                                                                   "type": {"variable": "hydra.core.Term"}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "pair",
@@ -2474,7 +2474,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "pair": {
-                                                                                      "@first": {
+                                                                                      "first": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "literal",
@@ -2483,7 +2483,7 @@
                                                                                                 "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                           "typeName": "hydra.core.Term"}},
-                                                                                      "@second": {
+                                                                                      "second": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "literal",
@@ -2703,7 +2703,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
@@ -2738,7 +2738,7 @@
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}}]}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -2912,7 +2912,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -2926,7 +2926,7 @@
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -2948,7 +2948,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "pair": {
-                                                                              "@first": {
+                                                                              "first": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -2962,7 +2962,7 @@
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                   "typeName": "hydra.core.Term"}},
-                                                                              "@second": {
+                                                                              "second": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -3158,7 +3158,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "record",
@@ -3245,7 +3245,7 @@
                                                                                           "typeName": "hydra.core.Field"}}]}}],
                                                                               "typeName": "hydra.core.Record"}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -3415,7 +3415,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "@first": {
+                                                                    "first": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -3424,7 +3424,7 @@
                                                                               "field": {"name": "string", "term": {"literal": {"string": "name"}}},
                                                                               "typeName": "hydra.core.Literal"}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "@second": {
+                                                                    "second": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "record",
@@ -3715,7 +3715,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -3896,7 +3896,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -4067,7 +4067,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -4261,7 +4261,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -4442,7 +4442,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -4613,7 +4613,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -4826,7 +4826,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "either": {
-                                                                                  "@left": {
+                                                                                  "left": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "variable",
@@ -5047,7 +5047,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "either": {
-                                                                                  "@right": {
+                                                                                  "right": {
                                                                                     "inject": {
                                                                                       "field": {
                                                                                         "name": "variable",
@@ -5340,7 +5340,7 @@
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
                                                                                                                           "either": {
-                                                                                                                            "@left": {
+                                                                                                                            "left": {
                                                                                                                               "inject": {
                                                                                                                                 "field": {
                                                                                                                                   "name": "variable",
@@ -5364,7 +5364,7 @@
                                                                                                         "typeApplication": {
                                                                                                           "body": {
                                                                                                             "either": {
-                                                                                                              "@right": {
+                                                                                                              "right": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
                                                                                                                     "name": "variable",
@@ -5610,7 +5610,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@left": {
+                                                                              "left": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -5632,7 +5632,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@right": {
+                                                                              "right": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -5830,7 +5830,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "either": {
-                                                                                              "@right": {
+                                                                                              "right": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
@@ -6056,7 +6056,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "either",
@@ -6066,7 +6066,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "either": {
-                                                                                      "@left": {
+                                                                                      "left": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "literal",
@@ -6287,7 +6287,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "either",
@@ -6297,7 +6297,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "either": {
-                                                                                      "@right": {
+                                                                                      "right": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "literal",
@@ -6508,7 +6508,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "literal",
@@ -6679,7 +6679,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "list",
@@ -6892,7 +6892,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@left": {
+                                                                              "left": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -6914,7 +6914,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@right": {
+                                                                              "right": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -6941,7 +6941,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "either": {
-                                                                              "@left": {
+                                                                              "left": {
                                                                                 "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
@@ -7137,7 +7137,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "record",
@@ -7382,7 +7382,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "record",
@@ -9941,7 +9941,7 @@
                                                                 "term": {
                                                                   "map": [
                                                                     {
-                                                                      "@key": {
+                                                                      "key": {
                                                                         "inject": {
                                                                           "field": {
                                                                             "name": "literal",
@@ -9950,7 +9950,7 @@
                                                                                 "field": {"name": "string", "term": {"literal": {"string": "key"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}},
-                                                                      "@value": {
+                                                                      "value": {
                                                                         "inject": {
                                                                           "field": {
                                                                             "name": "literal",

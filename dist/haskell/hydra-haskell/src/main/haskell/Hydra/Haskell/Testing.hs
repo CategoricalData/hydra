@@ -58,14 +58,14 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Core.bindingType = Nothing}) testTerms
           tempModule =
                   Packaging.Module {
+                    Packaging.moduleDescription = (Packaging.moduleDescription mod),
                     Packaging.moduleNamespace = (Packaging.moduleNamespace mod),
+                    Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies mod),
+                    Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies mod),
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
                       Packaging.termDefinitionTerm = (Core.bindingTerm b),
-                      Packaging.termDefinitionType = (Core.bindingType b)})) testBindings),
-                    Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies mod),
-                    Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies mod),
-                    Packaging.moduleDescription = (Packaging.moduleDescription mod)}
+                      Packaging.termDefinitionType = (Core.bindingType b)})) testBindings)}
       in (Eithers.bind (Eithers.bimap (\e -> Errors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))

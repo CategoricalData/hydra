@@ -93,14 +93,16 @@ ns :: Namespace
 ns = Namespace "hydra.haskell.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns, HaskellOperators.ns]
-    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just ("Haskell operator precendence and associativity are drawn from:\n"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns, HaskellOperators.ns],
+            moduleTypeDependencies = (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
       <> "Operator names are drawn (loosely) from:\n"
-      <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators")
+      <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators")}
   where
     definitions = [
       toDefinition alternativeToExpr,

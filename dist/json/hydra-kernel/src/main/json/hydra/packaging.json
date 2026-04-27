@@ -106,6 +106,16 @@
               "body": {
                 "record": [
                   {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "An optional human-readable description of the module"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                  {
                     "name": "namespace",
                     "type": {
                       "annotated": {
@@ -115,15 +125,6 @@
                             "value": {
                               "literal": {"string": "A common prefix for all element names in the module"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
-                  {
-                    "name": "definitions",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The definitions in this module"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.Definition"}}}}},
                   {
                     "name": "termDependencies",
                     "type": {
@@ -147,15 +148,14 @@
                                 "string": "Any modules which the type expressions of this module directly depend upon"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
                   {
-                    "name": "description",
+                    "name": "definitions",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {"string": "An optional human-readable description of the module"}}}],
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                            "value": {"literal": {"string": "The definitions in this module"}}}],
+                        "body": {"list": {"variable": "hydra.packaging.Definition"}}}}}]}}},
           "variables": []}}},
     {
       "type": {

@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.rust.language")
-  [toDefinition rustLanguage, toDefinition rustReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for Rust"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.rust.language"),
+            moduleDefinitions = [toDefinition rustLanguage, toDefinition rustReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for Rust"}
 rustLanguage :: TTermDefinition Language
 rustLanguage = define "rustLanguage" $
     doc "Language constraints for Rust" $ lets [

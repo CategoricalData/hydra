@@ -24,9 +24,13 @@ gql = typeref ns
 
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns]
-  $ Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
-    ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
+    ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")}
   where
     definitions = [
       gqlProgram,

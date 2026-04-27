@@ -56,10 +56,12 @@ ns :: Namespace
 ns = Namespace "hydra.parsers"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just "General-purpose parser combinators"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "General-purpose parser combinators"}
   where
    definitions = [
      toDefinition alt,

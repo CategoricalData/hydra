@@ -87,14 +87,16 @@ ns :: Namespace
 ns = Namespace "hydra.codegen"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
-     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_]
-    kernelTypesNamespaces $
-    Just "Pure code generation pipeline for bootstrapping Hydra across languages."
+     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Pure code generation pipeline for bootstrapping Hydra across languages."}
   where
     definitions = [
       toDefinition namespaceToPath,
@@ -327,7 +329,10 @@ generateSourceFiles = define "generateSourceFiles" $
         _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]) $
       "refreshModule" <~ ("els" ~> "m" ~>
         Packaging.module_
+          (Packaging.moduleDescription $ var "m")
           (Packaging.moduleNamespace $ var "m")
+          (Packaging.moduleTermDependencies $ var "m")
+          (Packaging.moduleTypeDependencies $ var "m")
           (Maybes.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
               _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
@@ -337,10 +342,7 @@ generateSourceFiles = define "generateSourceFiles" $
                   (Core.bindingTerm $ var "b")
                   (Core.bindingType $ var "b")))
                 (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els"))])
-            (Packaging.moduleDefinitions $ var "m"))
-          (Packaging.moduleTermDependencies $ var "m")
-          (Packaging.moduleTypeDependencies $ var "m")
-          (Packaging.moduleDescription $ var "m")) $
+            (Packaging.moduleDefinitions $ var "m"))) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
       "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
       -- Deduplicate definitions by name to avoid duplicate functions in generated code
@@ -414,11 +416,11 @@ moduleToSourceModule = define "moduleToSourceModule" $
     (encoderFor _Module @@ var "m")
     nothing) $
   Packaging.module_
-    (var "sourceNs")
-    (list [var "moduleDef"])
-    (list [var "modTypeNs"])
-    (list [var "modTypeNs"])
     (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
+    (var "sourceNs")
+    (list [var "modTypeNs"])
+    (list [var "modTypeNs"])
+    (list [var "moduleDef"])
 
 -- | Generate the lexicon content from a graph.
 -- Lists all primitives, types, and terms with their types.
@@ -465,7 +467,10 @@ refreshModule = define "refreshModule" $
   Logic.ifElse (Logic.not $ hasTermDefinitions (var "m"))
     (var "m")
     (Packaging.module_
+      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleNamespace $ var "m")
+      (Packaging.moduleTermDependencies $ var "m")
+      (Packaging.moduleTypeDependencies $ var "m")
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [
           _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
@@ -476,10 +481,7 @@ refreshModule = define "refreshModule" $
               (Core.bindingType $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
               (var "inferredElements"))])
-        (Packaging.moduleDefinitions $ var "m"))
-      (Packaging.moduleTermDependencies $ var "m")
-      (Packaging.moduleTypeDependencies $ var "m")
-      (Packaging.moduleDescription $ var "m"))
+        (Packaging.moduleDefinitions $ var "m")))
 
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)

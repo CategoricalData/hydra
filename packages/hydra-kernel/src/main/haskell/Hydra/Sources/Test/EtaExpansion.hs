@@ -28,10 +28,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.etaExpansion"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for eta expansion of terms")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for eta expansion of terms")}
   where
     definitions = [
       Phantoms.toDefinition allTests]

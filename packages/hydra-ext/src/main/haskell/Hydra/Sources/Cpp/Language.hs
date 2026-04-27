@@ -84,12 +84,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.cpp.language")
-  [toDefinition cppLanguage, toDefinition cppReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for C++"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.cpp.language"),
+            moduleDefinitions = [toDefinition cppLanguage, toDefinition cppReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for C++"}
 cppLanguage :: TTermDefinition Language
 cppLanguage = define "cppLanguage" $
   doc "Language constraints for C++" $ lets [

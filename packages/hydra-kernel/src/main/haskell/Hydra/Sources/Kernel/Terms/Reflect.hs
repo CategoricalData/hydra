@@ -61,10 +61,12 @@ ns :: Namespace
 ns = Namespace "hydra.reflect"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")}
   where
     definitions = [
       toDefinition eliminationVariants,

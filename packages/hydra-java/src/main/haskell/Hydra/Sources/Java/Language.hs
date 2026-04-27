@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.java.language")
-  [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for Java"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.java.language"),
+            moduleDefinitions = [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for Java"}
 javaMaxTupleLength :: TTermDefinition Int
 javaMaxTupleLength = define "javaMaxTupleLength" $
   doc ("The maximum supported length of a tuple in Hydra-Java. "

@@ -9,7 +9,20 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term decoders for hydra.coders"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.coders"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core"),
+        (Packaging.Namespace "hydra.decode.context"),
+        (Packaging.Namespace "hydra.decode.errors"),
+        (Packaging.Namespace "hydra.decode.graph"),
+        (Packaging.Namespace "hydra.decode.variants")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.coders",
+        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.coders.coderDirection"),
@@ -455,17 +468,4 @@ module_ =
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.coders.TraversalOrder"))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core"),
-        (Packaging.Namespace "hydra.decode.context"),
-        (Packaging.Namespace "hydra.decode.errors"),
-        (Packaging.Namespace "hydra.decode.graph"),
-        (Packaging.Namespace "hydra.decode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.coders",
-        (Packaging.Namespace "hydra.util")],
-      Packaging.moduleDescription = (Just "Term decoders for hydra.coders")}
+            Core.typeSchemeConstraints = Nothing}))}))]}
