@@ -198,7 +198,7 @@
               main-ns (read-manifest json-dir "mainModules")
               eval-ns (read-manifest json-dir "evalLibModules")
               all-kernel-ns (into (vec main-ns) eval-ns)
-              main-mods (load-mods false json-dir all-kernel-ns)
+              main-mods (load-mods json-dir all-kernel-ns)
               step-time (- (System/currentTimeMillis) step-start)
               total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]
           (println (str "  Loaded " (count main-mods) " modules (" total-bindings " bindings)."))
@@ -225,7 +225,7 @@
               (flush))
 
             ;; Generate main modules
-            (let [out-main (str out-dir "/src/gen-main/" (:subdir coder-info))]
+            (let [out-main (str out-dir "/src/main/" (:subdir coder-info))]
               (println (str "Mapping " (count mods-to-generate) " modules to " target-cap "..."))
               (println (str "  Universe: " (count all-main-mods) " modules"))
               (println (str "  Output: " out-main))
@@ -245,13 +245,13 @@
                 ;; Optionally generate test modules
                 (let [test-file-count
                       (if (:include-tests opts)
-                        (let [test-json-dir (.replace ^String json-dir "gen-main/json" "gen-test/json")
+                        (let [test-json-dir (.replace ^String json-dir "src/main/json" "src/test/json")
                               _ (println "Loading test modules from JSON...")
                               _ (flush)
                               test-ns (read-manifest json-dir "testModules")
-                              test-mods (load-mods false test-json-dir test-ns)
+                              test-mods (load-mods test-json-dir test-ns)
                               all-universe (into (vec main-mods) test-mods)
-                              out-test (str out-dir "/src/gen-test/" (:subdir coder-info))]
+                              out-test (str out-dir "/src/test/" (:subdir coder-info))]
                           (println (str "  Loaded " (count test-mods) " test modules."))
                           (println)
                           (println (str "Mapping test modules to " target-cap "..."))

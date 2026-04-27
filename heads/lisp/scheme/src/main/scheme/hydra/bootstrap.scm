@@ -239,7 +239,7 @@
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
     "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
     "decode/graph.scm" "decode/json/model.scm"
-    "decode/module.scm"
+    "decode/packaging.scm"
     "decode/parsing.scm" "decode/phantoms.scm" "decode/query.scm"
     "decode/relational.scm" "decode/tabular.scm" "decode/testing.scm"
     "decode/topology.scm" "decode/typing.scm" "decode/util.scm"
@@ -248,7 +248,7 @@
     "encode/paths.scm" "encode/ast.scm" "encode/classes.scm"
     "encode/coders.scm" "encode/context.scm" "encode/core.scm"
     "encode/error/core.scm" "encode/error/checking.scm" "encode/errors.scm"
-    "encode/json/model.scm" "encode/module.scm"
+    "encode/json/model.scm" "encode/packaging.scm"
     "encode/parsing.scm" "encode/phantoms.scm" "encode/query.scm"
     "encode/relational.scm" "encode/tabular.scm" "encode/testing.scm"
     "encode/topology.scm" "encode/typing.scm" "encode/util.scm"
@@ -576,7 +576,7 @@
                      (reverse filtered))
                    all-mods))
              (out-main (string-append *output-base* "/scheme-to-" *target*
-                                      "/src/gen-main/" subdir)))
+                                      "/src/main/" subdir)))
 
         (when *kernel-only*
           (display (string-append "\nFiltering to kernel modules: "
@@ -625,7 +625,7 @@
                      (test-mods (load-modules-from-json test-json-dir test-ns))
                      (all-universe (append all-mods test-mods))
                      (out-test (string-append *output-base* "/scheme-to-" *target*
-                                              "/src/gen-test/" subdir)))
+                                              "/src/test/" subdir)))
                 (display (string-append "  Loaded " (number->string (length test-mods))
                                         " test modules.\n"))
                 (display (string-append "\nMapping test modules to " target-cap "...\n"))

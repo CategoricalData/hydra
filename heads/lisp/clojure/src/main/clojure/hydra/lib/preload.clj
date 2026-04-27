@@ -41,9 +41,9 @@
 
 (def ^:private gen-ns-names
   "All generated namespaces to pre-create."
-  ["hydra.core" "hydra.error.checking" "hydra.error.core" "hydra.error.module"
+  ["hydra.core" "hydra.error.checking" "hydra.error.core" "hydra.error.packaging"
    "hydra.error" "hydra.context"
-   "hydra.graph" "hydra.module" "hydra.phantoms"
+   "hydra.graph" "hydra.packaging" "hydra.phantoms"
    "hydra.coders" "hydra.ast" "hydra.testing"
    "hydra.typing" "hydra.query" "hydra.relational" "hydra.tabular"
    "hydra.classes" "hydra.topology" "hydra.parsing"
@@ -111,9 +111,9 @@
   "Generated main namespaces in dependency order.
    Each module is loaded and its vars globalized before the next."
   [;; Core types (no cross-module term references)
-   "hydra.core" "hydra.error.checking" "hydra.error.core" "hydra.error.module"
+   "hydra.core" "hydra.error.checking" "hydra.error.core" "hydra.error.packaging"
    "hydra.error" "hydra.context"
-   "hydra.graph" "hydra.module" "hydra.phantoms" "hydra.coders"
+   "hydra.graph" "hydra.packaging" "hydra.phantoms" "hydra.coders"
    "hydra.ast" "hydra.testing" "hydra.typing"
    "hydra.query" "hydra.relational" "hydra.tabular"
    "hydra.classes" "hydra.topology" "hydra.parsing" "hydra.variants"
