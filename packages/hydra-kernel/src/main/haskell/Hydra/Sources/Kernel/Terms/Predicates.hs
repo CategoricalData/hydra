@@ -85,10 +85,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns]
-    kernelTypesNamespaces $
-    Just ("Type and term classification predicates")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Type and term classification predicates")}
   where
     definitions = [
       toDefinition isComplexBinding,

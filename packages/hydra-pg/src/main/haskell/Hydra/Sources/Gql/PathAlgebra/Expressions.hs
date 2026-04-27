@@ -26,8 +26,12 @@ expr :: String -> Type
 expr = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] kernelTypesNamespaces $
-    Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"}
   where
     definitions = [
       queryExpression, pathExpression, baseExpression, graphReference,

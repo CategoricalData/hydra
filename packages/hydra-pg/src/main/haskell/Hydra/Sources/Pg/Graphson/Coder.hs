@@ -92,10 +92,12 @@ ns :: Namespace
 ns = Namespace "hydra.pg.graphson.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    []  -- term dependencies (none needed - we use primitive operations)
-    (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, JsonModel.ns]) $  -- type dependencies
-    Just "Encoding functions for converting GraphSON syntax to JSON."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, JsonModel.ns]),
+            moduleDescription = Just "Encoding functions for converting GraphSON syntax to JSON."}
   where
     definitions = [
       toDefinition adjacentEdgeToJson,

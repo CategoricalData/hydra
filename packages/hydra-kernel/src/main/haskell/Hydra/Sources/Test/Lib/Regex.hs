@@ -23,10 +23,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.regex"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"]
-    kernelTypesNamespaces
-    (Just "Test cases for hydra.lib.regex primitives")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for hydra.lib.regex primitives")}
   where
     definitions = [
         Phantoms.toDefinition allTests]

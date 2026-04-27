@@ -39,7 +39,10 @@ allTests =
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
@@ -53,36 +56,33 @@ allTests =
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.a"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
+                        Packaging.termDefinitionType = Nothing})]}] [
+                  Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
+                    Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleTermDependencies = [
                       Packaging.Namespace "hydra.testInput.a"],
                     Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}] [
-                  Packaging.Module {
-                    Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}])),
+                        Packaging.termDefinitionType = Nothing})]}])),
                 Testing.universalTestCaseExpected = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
@@ -93,7 +93,10 @@ allTests =
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
@@ -107,36 +110,33 @@ allTests =
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.a"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
+                        Packaging.termDefinitionType = Nothing})]}] [
+                  Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
+                    Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleTermDependencies = [
                       Packaging.Namespace "hydra.testInput.a"],
                     Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}] [
-                  Packaging.Module {
-                    Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}]))})),
+                        Packaging.termDefinitionType = Nothing})]}]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -152,7 +152,10 @@ allTests =
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
@@ -166,25 +169,25 @@ allTests =
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.a"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}] [
+                        Packaging.termDefinitionType = Nothing})]}] [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
@@ -198,23 +201,20 @@ allTests =
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.a"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}])),
+                        Packaging.termDefinitionType = Nothing})]}])),
                 Testing.universalTestCaseExpected = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
@@ -225,7 +225,10 @@ allTests =
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
@@ -239,25 +242,25 @@ allTests =
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.a"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}] [
+                        Packaging.termDefinitionType = Nothing})]}] [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
@@ -271,23 +274,20 @@ allTests =
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.a"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}]))})),
+                        Packaging.termDefinitionType = Nothing})]}]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -303,7 +303,10 @@ allTests =
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.v"),
+                    Packaging.moduleTermDependencies = [],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.v.funky"),
@@ -329,12 +332,13 @@ allTests =
                               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t2")),
                                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t2"))}))}))})),
-                          Core.typeSchemeConstraints = Nothing}))})],
-                    Packaging.moduleTermDependencies = [],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing},
+                          Core.typeSchemeConstraints = Nothing}))})]},
                   Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.w"),
+                    Packaging.moduleTermDependencies = [
+                      Packaging.Namespace "hydra.testInput.v"],
+                    Packaging.moduleTypeDependencies = [],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.w.useFunky"),
@@ -345,13 +349,13 @@ allTests =
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
-                        Packaging.termDefinitionType = Nothing})],
+                        Packaging.termDefinitionType = Nothing})]}] [
+                  Packaging.Module {
+                    Packaging.moduleDescription = Nothing,
+                    Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.w"),
                     Packaging.moduleTermDependencies = [
                       Packaging.Namespace "hydra.testInput.v"],
                     Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}] [
-                  Packaging.Module {
-                    Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.w"),
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.w.useFunky"),
@@ -362,11 +366,7 @@ allTests =
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
-                        Packaging.termDefinitionType = Nothing})],
-                    Packaging.moduleTermDependencies = [
-                      Packaging.Namespace "hydra.testInput.v"],
-                    Packaging.moduleTypeDependencies = [],
-                    Packaging.moduleDescription = Nothing}])),
+                        Packaging.termDefinitionType = Nothing})]}])),
                 Testing.universalTestCaseExpected = "hydra.testInput.w.useFunky :: (int32) = (hydra.testInput.v.funky\10216string\10217\10216int32\10217\10216int32\10217 @ \"foo\" @ 7:int32 @ 100:int32)\n"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],

@@ -23,8 +23,12 @@ pbAny :: String -> Type
 pbAny = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"}
   where
     definitions = [any_]
 

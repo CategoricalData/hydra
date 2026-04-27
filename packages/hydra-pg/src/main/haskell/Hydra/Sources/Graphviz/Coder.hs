@@ -88,10 +88,12 @@ ns :: Namespace
 ns = Namespace "hydra.graphviz.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ShowPaths.ns, Names.ns, Rewriting.ns]
-    (DotSyntax.ns:kernelTypesNamespaces) $
-    Just "Functions for converting Hydra terms to Graphviz DOT graphs"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ShowPaths.ns, Names.ns, Rewriting.ns],
+            moduleTypeDependencies = (DotSyntax.ns:kernelTypesNamespaces),
+            moduleDescription = Just "Functions for converting Hydra terms to Graphviz DOT graphs"}
   where
     definitions = [
       toDefinition labelAttr,

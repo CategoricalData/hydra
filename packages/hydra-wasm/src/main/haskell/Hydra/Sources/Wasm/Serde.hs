@@ -93,10 +93,12 @@ ns :: Namespace
 ns = Namespace "hydra.wasm.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns]
-    (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "WebAssembly serializer: converts WAT AST to concrete WAT text format"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns],
+            moduleTypeDependencies = (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "WebAssembly serializer: converts WAT AST to concrete WAT text format"}
   where
     definitions = [
       -- Top-level serialization

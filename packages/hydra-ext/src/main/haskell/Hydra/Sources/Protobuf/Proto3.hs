@@ -23,10 +23,14 @@ proto3 :: String -> Type
 proto3 = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
       ++ "This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto,"
-      ++ " as well as the proto3 reference documentation")
+      ++ " as well as the proto3 reference documentation")}
   where
     definitions = [
       definition,

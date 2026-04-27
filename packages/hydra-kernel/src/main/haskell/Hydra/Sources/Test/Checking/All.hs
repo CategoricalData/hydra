@@ -25,8 +25,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.all"
 
 module_ :: Module
-module_ = Module ns definitions namespaces kernelTypesNamespaces $
-    Just "Hydra's type checking test suite"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = namespaces,
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Hydra's type checking test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]
     namespaces = [

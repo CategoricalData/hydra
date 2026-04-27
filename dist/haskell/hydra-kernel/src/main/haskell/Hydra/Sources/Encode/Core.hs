@@ -9,7 +9,12 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.core"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.core"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core"],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.core"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.core.annotatedTerm"),
@@ -4535,9 +4540,4 @@ module_ =
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.WrappedTerm")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core"],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.core"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.core")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

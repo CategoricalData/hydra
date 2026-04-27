@@ -86,11 +86,13 @@ ns :: Namespace
 ns = Namespace "hydra.adapt"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Simple, one-way adapters for types and terms"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Simple, one-way adapters for types and terms"}
   where
     definitions = [
       toDefinition adaptFloatType,

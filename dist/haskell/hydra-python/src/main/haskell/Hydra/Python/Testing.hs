@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Python test code generation codec for pytest-based generation tests
 
 module Hydra.Python.Testing where
-
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,7 +14,6 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Build the complete Python test module content
 buildPythonTestModule :: t0 -> Testing.TestGroup -> String -> String
 buildPythonTestModule testModule testGroup testBody =
@@ -32,12 +29,10 @@ buildPythonTestModule testModule testGroup testBody =
         header,
         testBody,
         "\n"])
-
 -- | Format a test name for Python (snake_case with test_ prefix)
 formatPythonTestName :: String -> String
 formatPythonTestName name =
     Strings.cat2 "test_" (Strings.fromList (Lists.map (\c -> Logic.ifElse (Chars.isAlphaNum c) (Chars.toLower c) 95) (Strings.toList name)))
-
 -- | Generate a single pytest test case from a test case with metadata
 generatePythonTestCase :: [String] -> Testing.TestCaseWithMetadata -> Either t0 [String]
 generatePythonTestCase groupPath tcm =
@@ -62,11 +57,9 @@ generatePythonTestCase groupPath tcm =
               ") == (",
               expected_,
               ")"])])
-
 -- | Generate a Python test file for a test group
 generatePythonTestFile :: Packaging.Module -> Testing.TestGroup -> t0 -> Either t1 (String, String)
 generatePythonTestFile testModule testGroup _g = generateTestFileWithPythonCodec testModule testGroup
-
 -- | Generate test hierarchy for Python with nested subgroups
 generatePythonTestGroupHierarchy :: [String] -> Testing.TestGroup -> Either t0 String
 generatePythonTestGroupHierarchy groupPath testGroup =
@@ -87,7 +80,6 @@ generatePythonTestGroupHierarchy groupPath testGroup =
           testCasesStr,
           (Logic.ifElse (Logic.or (Equality.equal testCasesStr "") (Equality.equal subgroupsStr "")) "" "\n\n"),
           subgroupsStr])))))
-
 -- | Generate a complete test file for Python
 generateTestFileWithPythonCodec :: Packaging.Module -> Testing.TestGroup -> Either t0 (String, String)
 generateTestFileWithPythonCodec testModule testGroup =

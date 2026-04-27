@@ -32,10 +32,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.hoisting.cases"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ShowCore.ns, HoistingModule.ns, Lexical.ns]
-    kernelTypesNamespaces $
-    Just "Test cases for subterm hoisting and case statement hoisting"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ShowCore.ns, HoistingModule.ns, Lexical.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Test cases for subterm hoisting and case statement hoisting"}
   where
     definitions = [Phantoms.toDefinition allTests]
 

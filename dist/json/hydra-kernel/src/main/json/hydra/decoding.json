@@ -9834,6 +9834,23 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {
+                                                                              "name": "description",
+                                                                              "term": {
+                                                                                "maybe": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "list": [
+                                                                                        {"literal": {"string": "Term decoders for "}},
+                                                                                        {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "mod"},
+                                                                                                "function": {
+                                                                                                  "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                                            "function": {"unwrap": "hydra.packaging.Namespace"}}}]},
+                                                                                    "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                                                                            {
                                                                               "name": "namespace",
                                                                               "term": {
                                                                                 "application": {
@@ -9843,6 +9860,44 @@
                                                                                       "function": {
                                                                                         "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                                                                   "function": {"variable": "hydra.decoding.decodeNamespace"}}}},
+                                                                            {
+                                                                              "name": "termDependencies",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "allDecodedDeps"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "hydra.extract.core"}},
+                                                                                              "typeName": "hydra.packaging.Namespace"}},
+                                                                                          {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "hydra.lexical"}},
+                                                                                              "typeName": "hydra.packaging.Namespace"}},
+                                                                                          {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "hydra.rewriting"}},
+                                                                                              "typeName": "hydra.packaging.Namespace"}}]},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                                          "type": {"variable": "hydra.packaging.Namespace"}}}}}}}},
+                                                                            {
+                                                                              "name": "typeDependencies",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "mod"},
+                                                                                      "function": {
+                                                                                        "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "hydra.util"}},
+                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
                                                                             {
                                                                               "name": "definitions",
                                                                               "term": {
@@ -9887,62 +9942,7 @@
                                                                                             "typeApplication": {
                                                                                               "body": {"variable": "hydra.lib.lists.map"},
                                                                                               "type": {"variable": "hydra.core.Binding"}}},
-                                                                                          "type": {"variable": "hydra.packaging.Definition"}}}}}}}},
-                                                                            {
-                                                                              "name": "termDependencies",
-                                                                              "term": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "allDecodedDeps"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "wrap": {
-                                                                                              "body": {"literal": {"string": "hydra.extract.core"}},
-                                                                                              "typeName": "hydra.packaging.Namespace"}},
-                                                                                          {
-                                                                                            "wrap": {
-                                                                                              "body": {"literal": {"string": "hydra.lexical"}},
-                                                                                              "typeName": "hydra.packaging.Namespace"}},
-                                                                                          {
-                                                                                            "wrap": {
-                                                                                              "body": {"literal": {"string": "hydra.rewriting"}},
-                                                                                              "typeName": "hydra.packaging.Namespace"}}]},
-                                                                                      "function": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"variable": "hydra.lib.lists.concat2"},
-                                                                                          "type": {"variable": "hydra.packaging.Namespace"}}}}}}}},
-                                                                            {
-                                                                              "name": "typeDependencies",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "mod"},
-                                                                                      "function": {
-                                                                                        "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                                                  {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.util"}},
-                                                                                      "typeName": "hydra.packaging.Namespace"}}]}},
-                                                                            {
-                                                                              "name": "description",
-                                                                              "term": {
-                                                                                "maybe": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "list": [
-                                                                                        {"literal": {"string": "Term decoders for "}},
-                                                                                        {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "mod"},
-                                                                                                "function": {
-                                                                                                  "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                                                            "function": {"unwrap": "hydra.packaging.Namespace"}}}]},
-                                                                                    "function": {"variable": "hydra.lib.strings.cat"}}}}}],
+                                                                                          "type": {"variable": "hydra.packaging.Definition"}}}}}}}}],
                                                                           "typeName": "hydra.packaging.Module"}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"maybe": {"variable": "hydra.packaging.Module"}}}}}}}}}},

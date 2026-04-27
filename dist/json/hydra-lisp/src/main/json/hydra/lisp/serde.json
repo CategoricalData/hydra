@@ -1360,7 +1360,7 @@
                       "application": {
                         "argument": {"variable": "ds"},
                         "function": {"unwrap": "hydra.lisp.syntax.Docstring"}}},
-                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {

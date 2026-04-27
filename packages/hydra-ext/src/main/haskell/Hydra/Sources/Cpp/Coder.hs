@@ -62,14 +62,16 @@ ns :: Namespace
 ns = Namespace "hydra.cpp.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [moduleNamespace CppLanguageSource.module_,
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_]
-    (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "C++ code generator: converts Hydra modules to C++ header files"
+      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_],
+            moduleTypeDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "C++ code generator: converts Hydra modules to C++ header files"}
   where
     definitions = [
       -- Cpp AST helper functions

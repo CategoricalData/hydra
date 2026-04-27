@@ -23,10 +23,14 @@ gson :: String -> Type
 gson = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
-    Just ("A syntax model for TinkerPop's GraphSON format."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A syntax model for TinkerPop's GraphSON format."
       ++ " This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions."
-      ++ " See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.")
+      ++ " See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.")}
   where
     definitions = [
       bigDecimalValue,

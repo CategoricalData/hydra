@@ -29,10 +29,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.json.writer"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Namespace "hydra.json.writer"]
-    kernelTypesNamespaces
-    (Just "Test cases for JSON serialization")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Namespace "hydra.json.writer"],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for JSON serialization")}
   where
     definitions = [
         Phantoms.toDefinition allTests]

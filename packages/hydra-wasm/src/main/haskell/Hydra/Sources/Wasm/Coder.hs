@@ -57,11 +57,13 @@ ns :: Namespace
 ns = Namespace "hydra.wasm.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [moduleNamespace WasmSerdeSource.module_, moduleNamespace WasmLanguageSource.module_,
-      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns]
-    (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "WebAssembly code generator: converts Hydra type and term modules to WAT source code"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [moduleNamespace WasmSerdeSource.module_, moduleNamespace WasmLanguageSource.module_,
+      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns],
+            moduleTypeDependencies = (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "WebAssembly code generator: converts Hydra type and term modules to WAT source code"}
   where
     definitions = [
       toDefinition buildFieldOffsets,

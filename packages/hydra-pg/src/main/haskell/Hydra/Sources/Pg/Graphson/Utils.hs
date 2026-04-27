@@ -97,10 +97,12 @@ ns :: Namespace
 ns = Namespace "hydra.pg.graphson.utils"
 
 module_ :: Module
-module_ = Module ns definitions
-    [GraphsonConstruct.ns, Strip.ns]  -- term dependencies
-    (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]) $  -- type dependencies
-    Just "Utility functions for GraphSON encoding and property graph conversion."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [GraphsonConstruct.ns, Strip.ns],
+            moduleTypeDependencies = (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]),
+            moduleDescription = Just "Utility functions for GraphSON encoding and property graph conversion."}
   where
     definitions = [
       toDefinition elementsToVerticesWithAdjacentEdges,

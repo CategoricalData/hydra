@@ -105,10 +105,12 @@ ns :: Namespace
 ns = Namespace "hydra.pg.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns]
-    (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Property graph element coders for mapping Hydra terms to property graph elements"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns],
+            moduleTypeDependencies = (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Property graph element coders for mapping Hydra terms to property graph elements"}
   where
     definitions = [
       toDefinition check,

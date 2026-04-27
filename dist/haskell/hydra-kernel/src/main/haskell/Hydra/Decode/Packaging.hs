@@ -44,16 +44,16 @@ module_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Eithers.bind (ExtractCore.requireField "termDependencies" (ExtractCore.decodeList namespace) fieldMap cx) (\field_termDependencies -> Eithers.bind (ExtractCore.requireField "typeDependencies" (ExtractCore.decodeList namespace) fieldMap cx) (\field_typeDependencies -> Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Right (Packaging.Module {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (ExtractCore.requireField "termDependencies" (ExtractCore.decodeList namespace) fieldMap cx) (\field_termDependencies -> Eithers.bind (ExtractCore.requireField "typeDependencies" (ExtractCore.decodeList namespace) fieldMap cx) (\field_typeDependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
+          Packaging.moduleDescription = field_description,
           Packaging.moduleNamespace = field_namespace,
-          Packaging.moduleDefinitions = field_definitions,
           Packaging.moduleTermDependencies = field_termDependencies,
           Packaging.moduleTypeDependencies = field_typeDependencies,
-          Packaging.moduleDescription = field_description})))))))
+          Packaging.moduleDefinitions = field_definitions})))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 namespace :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Namespace
 namespace cx raw =

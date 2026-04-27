@@ -9,7 +9,16 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.coders"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.coders"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.encode.context"),
+        (Packaging.Namespace "hydra.encode.errors"),
+        (Packaging.Namespace "hydra.encode.graph"),
+        (Packaging.Namespace "hydra.encode.variants")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.coders"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.coders.coderDirection"),
@@ -231,13 +240,4 @@ module_ =
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.coders.TraversalOrder")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.context"),
-        (Packaging.Namespace "hydra.encode.errors"),
-        (Packaging.Namespace "hydra.encode.graph"),
-        (Packaging.Namespace "hydra.encode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.coders"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.coders")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

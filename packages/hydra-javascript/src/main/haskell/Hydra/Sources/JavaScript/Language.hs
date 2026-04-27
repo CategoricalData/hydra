@@ -84,12 +84,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.javaScript.language")
-  [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.javaScript.language"),
+            moduleDefinitions = [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"}
 javaScriptLanguage :: TTermDefinition Language
 javaScriptLanguage = define "javaScriptLanguage" $
     doc "Language constraints for JavaScript (ECMAScript 2024)" $ lets [

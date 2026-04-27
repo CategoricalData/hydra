@@ -24,8 +24,12 @@ osv = typeref ns
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [] $
-    Just "See https://ossf.github.io/osv-schema"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [],
+            moduleDescription = Just "See https://ossf.github.io/osv-schema"}
   where
     definitions = [
       credited,

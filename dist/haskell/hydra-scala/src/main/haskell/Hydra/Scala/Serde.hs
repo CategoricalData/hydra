@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Serialization functions for converting Scala AST to abstract expressions
 
 module Hydra.Scala.Serde where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Java.Serde as Serde
 import qualified Hydra.Lib.Equality as Equality
@@ -17,7 +15,6 @@ import qualified Hydra.Scala.Syntax as Syntax
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | The dot operator for member access
 dotOp :: Ast.Op
 dotOp =
@@ -28,11 +25,9 @@ dotOp =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityLeft}
-
 -- | The function arrow operator (=>)
 functionArrowOp :: Ast.Op
 functionArrowOp = Serialization.op "=>" (Math.negate 1) Ast.AssociativityRight
-
 -- | The match operator
 matchOp :: Ast.Op
 matchOp =
@@ -43,11 +38,9 @@ matchOp =
         Ast.paddingRight = (Ast.WsBreakAndIndent "  ")},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone}
-
 scalaFloatLiteralText :: String -> String -> String -> String
 scalaFloatLiteralText prefix suffix s =
     Logic.ifElse (Equality.equal s "NaN") (Strings.cat2 prefix ".NaN") (Logic.ifElse (Equality.equal s "Infinity") (Strings.cat2 prefix ".PositiveInfinity") (Logic.ifElse (Equality.equal s "-Infinity") (Strings.cat2 prefix ".NegativeInfinity") (Strings.cat2 s suffix)))
-
 -- | Convert a case clause to an expression
 writeCase :: Syntax.Case -> Ast.Expr
 writeCase c =
@@ -59,7 +52,6 @@ writeCase c =
         (writePat pat),
         (Serialization.cst "=>"),
         (writeTerm term)])
-
 -- | Convert function data to an expression
 writeData_FunctionData :: Syntax.Data_FunctionData -> Ast.Expr
 writeData_FunctionData ft =
@@ -76,11 +68,9 @@ writeData_FunctionData ft =
           Serialization.parenList False (Lists.map writeData_Param params),
           (Serialization.cst "=>"),
           bodyExpr]))
-
 -- | Convert a data name to an expression
 writeData_Name :: Syntax.Data_Name -> Ast.Expr
 writeData_Name dn = Serialization.cst (Syntax.unPredefString (Syntax.data_NameValue dn))
-
 -- | Convert a data parameter to an expression
 writeData_Param :: Syntax.Data_Param -> Ast.Expr
 writeData_Param dp =
@@ -92,14 +82,12 @@ writeData_Param dp =
         (Maybes.map (\t -> Serialization.spaceSep [
           Serialization.cst ":",
           (writeType t)]) stype)]))
-
 -- | Convert a data reference to an expression
 writeData_Ref :: Syntax.Data_Ref -> Ast.Expr
 writeData_Ref ref =
     case ref of
       Syntax.Data_RefName v0 -> writeData_Name v0
       Syntax.Data_RefSelect v0 -> writeData_Select v0
-
 -- | Convert a data select to an expression
 writeData_Select :: Syntax.Data_Select -> Ast.Expr
 writeData_Select sel =
@@ -107,7 +95,6 @@ writeData_Select sel =
       let arg = Syntax.data_SelectQual sel
           name = Syntax.data_SelectName sel
       in (Serialization.ifx dotOp (writeTerm arg) (writeTerm (Syntax.DataRef (Syntax.Data_RefName name))))
-
 -- | Convert a definition to an expression
 writeDefn :: Syntax.Defn -> Ast.Expr
 writeDefn def =
@@ -236,7 +223,6 @@ writeDefn def =
             writeData_Name name,
             params]),
           extendsClause])
-
 -- | Convert an import/export statement to an expression
 writeImportExportStat :: Syntax.ImportExportStat -> Ast.Expr
 writeImportExportStat ie =
@@ -244,7 +230,6 @@ writeImportExportStat ie =
       Syntax.ImportExportStatImport v0 ->
         let importers = Syntax.importImporters v0
         in (Serialization.newlineSep (Lists.map writeImporter importers))
-
 -- | Convert an importer to an expression
 writeImporter :: Syntax.Importer -> Ast.Expr
 writeImporter imp =
@@ -271,11 +256,9 @@ writeImporter imp =
         (Serialization.noSep [
           Serialization.cst refName,
           forImportees])])
-
 -- | Convert an init to an expression
 writeInit :: Syntax.Init -> Ast.Expr
 writeInit init = writeType (Syntax.initTpe init)
-
 -- | Convert a literal to an expression
 writeLit :: Syntax.Lit -> Ast.Expr
 writeLit lit =
@@ -291,7 +274,6 @@ writeLit lit =
       Syntax.LitString v0 -> Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString v0) "\""))
       Syntax.LitBytes v0 -> Serialization.cst (Strings.cat2 "Array[Byte](" (Strings.cat2 (Strings.intercalate ", " (Lists.map (\b -> Strings.cat2 (Literals.showInt32 b) ".toByte") v0)) ")"))
       _ -> Serialization.cst "TODO:literal"
-
 -- | Convert a modifier to an expression
 writeMod :: Syntax.Mod -> Ast.Expr
 writeMod m =
@@ -305,13 +287,11 @@ writeMod m =
       Syntax.ModLazy -> Serialization.cst "lazy"
       Syntax.ModPrivate _ -> Serialization.cst "private"
       Syntax.ModProtected _ -> Serialization.cst "protected"
-
 -- | Convert a name to an expression
 writeName :: Syntax.Name -> Ast.Expr
 writeName name =
     case name of
       Syntax.NameValue v0 -> Serialization.cst v0
-
 -- | Convert a pattern to an expression
 writePat :: Syntax.Pat -> Ast.Expr
 writePat pat =
@@ -324,7 +304,6 @@ writePat pat =
           (Serialization.parenList False (Lists.map writePat args))]))
       Syntax.PatVar v0 -> writeData_Name (Syntax.pat_VarName v0)
       Syntax.PatWildcard -> Serialization.cst "_"
-
 -- | Convert a package to an expression
 writePkg :: Syntax.Pkg -> Ast.Expr
 writePkg pkg =
@@ -339,7 +318,6 @@ writePkg pkg =
         [
           package],
         (Lists.map writeStat stats)]))
-
 -- | Convert a statement to an expression
 writeStat :: Syntax.Stat -> Ast.Expr
 writeStat stat =
@@ -347,7 +325,6 @@ writeStat stat =
       Syntax.StatTerm v0 -> writeTerm v0
       Syntax.StatDefn v0 -> writeDefn v0
       Syntax.StatImportExport v0 -> writeImportExportStat v0
-
 -- | Convert a term to an expression
 writeTerm :: Syntax.Data -> Ast.Expr
 writeTerm term =
@@ -376,7 +353,6 @@ writeTerm term =
       Syntax.DataBlock v0 ->
         let stats = Syntax.data_BlockStats v0
         in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map writeStat stats)))
-
 -- | Convert a type to an expression
 writeType :: Syntax.Type -> Ast.Expr
 writeType typ =
@@ -401,11 +377,9 @@ writeType typ =
           writeType body,
           (Serialization.bracketList Serialization.inlineStyle (Lists.map writeType_Param params))])
       Syntax.TypeVar v0 -> writeType_Name (Syntax.type_VarName v0)
-
 -- | Convert a type name to an expression
 writeType_Name :: Syntax.Type_Name -> Ast.Expr
 writeType_Name tn = Serialization.cst (Syntax.type_NameValue tn)
-
 -- | Convert a type parameter to an expression
 writeType_Param :: Syntax.Type_Param -> Ast.Expr
 writeType_Param tp = writeName (Syntax.type_ParamName tp)

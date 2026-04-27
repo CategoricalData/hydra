@@ -11,7 +11,16 @@ import qualified Data.Set as S
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term decoders for hydra.relational"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.relational"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.relational",
+        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.relational.columnName"),
@@ -915,13 +924,4 @@ module_ =
                     Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.relational.Row")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.relational",
-        (Packaging.Namespace "hydra.util")],
-      Packaging.moduleDescription = (Just "Term decoders for hydra.relational")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

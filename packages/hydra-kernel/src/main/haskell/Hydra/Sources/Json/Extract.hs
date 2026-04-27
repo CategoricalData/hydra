@@ -88,10 +88,12 @@ ns :: Namespace
 ns = Namespace "hydra.extract.json"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    KernelTypes.kernelTypesNamespaces $
-    Just "Utilities for extracting values from JSON objects"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Utilities for extracting values from JSON objects"}
   where
     definitions = [
       toDefinition expectArray,

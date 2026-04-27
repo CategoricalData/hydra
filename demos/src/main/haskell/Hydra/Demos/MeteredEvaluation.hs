@@ -28,7 +28,12 @@ import Prelude hiding ((++))
 testNs = Namespace "hydra.demos.meteredEvaluation"
 
 testModule :: Module
-testModule = Module testNs definitions [] [] Nothing
+testModule = Module {
+               moduleNamespace = testNs,
+               moduleDefinitions = definitions,
+               moduleTermDependencies = [],
+               moduleTypeDependencies = [],
+               moduleDescription = Nothing}
   where
     test local tterm = TTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
     definitions = [

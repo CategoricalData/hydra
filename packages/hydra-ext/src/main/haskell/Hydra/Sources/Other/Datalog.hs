@@ -18,8 +18,12 @@ dl :: String -> Type
 dl = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [] $
-    Just "A basic Datalog model"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [],
+            moduleDescription = Just "A basic Datalog model"}
   where
     definitions = [
       constant,

@@ -76,11 +76,11 @@ encodeListList lists = Core.TermList (Lists.map (\l -> encodeIntList l) lists)
 transformModule :: Packaging.Module -> Packaging.Module
 transformModule m =
     Packaging.Module {
+      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleNamespace = (addGenerationPrefix (Packaging.moduleNamespace m)),
-      Packaging.moduleDefinitions = (Packaging.moduleDefinitions m),
       Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
       Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
-      Packaging.moduleDescription = (Packaging.moduleDescription m)}
+      Packaging.moduleDefinitions = (Packaging.moduleDefinitions m)}
 -- | Pass through test cases unchanged
 transformTestCase :: t0 -> Maybe t0
 transformTestCase tcm = Just tcm

@@ -80,10 +80,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Scoping.ns]
-    kernelTypesNamespaces $
-    Just "Core rewrite and fold combinators for terms and types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Scoping.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Core rewrite and fold combinators for terms and types"}
   where
    definitions = [
      toDefinition applyInsideTypeLambdasAndAnnotations,

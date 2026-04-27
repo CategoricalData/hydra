@@ -23,10 +23,14 @@ pathAlg :: String -> Type
 pathAlg = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A syntax model for the path algebra grammar by Angles et al."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A syntax model for the path algebra grammar by Angles et al."
       ++ " See the paper \"Path-based Algebraic Foundations of Graph Query Languages\""
-      ++ " and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser")
+      ++ " and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser")}
   where
     definitions = terminals ++ nonterminals
 

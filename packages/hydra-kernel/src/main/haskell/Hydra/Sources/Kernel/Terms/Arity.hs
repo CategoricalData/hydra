@@ -58,10 +58,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just "Functions dealing with arguments and arity."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions dealing with arguments and arity."}
   where
     definitions = [
       toDefinition primitiveArity,

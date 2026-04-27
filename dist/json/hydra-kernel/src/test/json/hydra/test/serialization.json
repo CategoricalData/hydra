@@ -115,8 +115,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for AST serialization"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for AST serialization"}}}],
             "body": {
               "record": {
                 "fields": [

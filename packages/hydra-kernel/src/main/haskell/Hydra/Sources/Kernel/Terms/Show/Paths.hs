@@ -58,10 +58,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.paths"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Names.ns, Rewriting.ns]
-    kernelTypesNamespaces $
-    Just ("Utilities for working with subterm steps and paths.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Names.ns, Rewriting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Utilities for working with subterm steps and paths.")}
   where
    definitions = [
      toDefinition subtermStep,

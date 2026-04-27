@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.pegasus.language")
-  [toDefinition pdlLanguage]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for LinkedIn Pegasus (PDL)"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.pegasus.language"),
+            moduleDefinitions = [toDefinition pdlLanguage],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints for LinkedIn Pegasus (PDL)"}
 pdlLanguage :: TTermDefinition Language
 pdlLanguage = define "pdlLanguage" $
   doc "Language constraints for LinkedIn Pegasus (PDL)" $ lets [

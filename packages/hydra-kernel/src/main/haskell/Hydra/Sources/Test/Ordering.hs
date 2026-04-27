@@ -28,10 +28,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.ordering"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns]
-    kernelTypesNamespaces $
-    Just "Test cases for Ord instance comparisons on complex Hydra types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Test cases for Ord instance comparisons on complex Hydra types"}
   where
     definitions = [Phantoms.toDefinition allTests]
 

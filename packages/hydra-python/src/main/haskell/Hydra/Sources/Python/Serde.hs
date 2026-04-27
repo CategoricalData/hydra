@@ -93,10 +93,12 @@ ns :: Namespace
 ns = Namespace "hydra.python.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns]
-    (PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Python serializer: converts Python AST to concrete syntax"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns],
+            moduleTypeDependencies = (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Python serializer: converts Python AST to concrete syntax"}
   where
     definitions = [
       toDefinition encodeAnnotatedRhs,

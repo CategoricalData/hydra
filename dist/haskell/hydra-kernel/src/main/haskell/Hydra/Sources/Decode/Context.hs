@@ -9,7 +9,16 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term decoders for hydra.context"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.context"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.context",
+        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.context.context"),
@@ -334,13 +343,4 @@ module_ =
                     Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "e"))}))}))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.context",
-        (Packaging.Namespace "hydra.util")],
-      Packaging.moduleDescription = (Just "Term decoders for hydra.context")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

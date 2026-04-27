@@ -30,9 +30,13 @@ defArgument name typ = define name $ T.union [
 
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
-      ++ "(master branch, as of 2024-06-30).")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
+      ++ "(master branch, as of 2024-06-30).")}
   where
     definitions = [
       queryList,

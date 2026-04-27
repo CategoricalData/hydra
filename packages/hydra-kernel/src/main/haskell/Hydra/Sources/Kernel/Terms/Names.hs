@@ -63,10 +63,12 @@ ns :: Namespace
 ns = Namespace "hydra.names"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, Constants.ns, Formatting.ns]
-    kernelTypesNamespaces $
-    Just ("Functions for working with qualified names.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, Constants.ns, Formatting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Functions for working with qualified names.")}
   where
    definitions = [
      toDefinition compactName,

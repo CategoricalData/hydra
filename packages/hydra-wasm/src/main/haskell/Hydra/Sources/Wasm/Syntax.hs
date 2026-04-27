@@ -26,9 +26,13 @@ wasm :: String -> Type
 wasm = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
-      ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
+      ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06")}
   where
     definitions = moduleLevel ++ types ++ functions ++ instructions ++ memory
       ++ globals ++ tables ++ imports ++ exports ++ literals

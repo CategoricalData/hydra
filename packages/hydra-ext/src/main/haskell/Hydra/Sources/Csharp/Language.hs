@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.csharp.language")
-  [toDefinition csharpLanguage, toDefinition csharpReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for C Sharp (C#)"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.csharp.language"),
+            moduleDefinitions = [toDefinition csharpLanguage, toDefinition csharpReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for C Sharp (C#)"}
 csharpLanguage :: TTermDefinition Language
 csharpLanguage = define "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [

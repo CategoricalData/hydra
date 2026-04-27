@@ -23,8 +23,12 @@ meta :: String -> Type
 meta = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A Scala syntax model based on Scalameta (https://scalameta.org)"}
   where
     definitions = [
       predefString,

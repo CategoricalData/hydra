@@ -64,10 +64,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.errors"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ShowCore.ns, ShowErrorCore.ns, ShowVariants.ns, ShowTyping.ns, Formatting.ns]
-    kernelTypesNamespaces $
-    Just "String representations of hydra.error types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ShowCore.ns, ShowErrorCore.ns, ShowVariants.ns, ShowTyping.ns, Formatting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "String representations of hydra.error types"}
   where
    definitions = [
      toDefinition checkingError,

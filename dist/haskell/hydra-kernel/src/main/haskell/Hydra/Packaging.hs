@@ -39,23 +39,23 @@ _Library_primitives = Core.Name "primitives"
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
 data Module =
   Module {
+    -- | An optional human-readable description of the module
+    moduleDescription :: (Maybe String),
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
-    -- | The definitions in this module
-    moduleDefinitions :: [Definition],
     -- | Any modules which the term expressions of this module directly depend upon
     moduleTermDependencies :: [Namespace],
     -- | Any modules which the type expressions of this module directly depend upon
     moduleTypeDependencies :: [Namespace],
-    -- | An optional human-readable description of the module
-    moduleDescription :: (Maybe String)}
+    -- | The definitions in this module
+    moduleDefinitions :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 _Module = Core.Name "hydra.packaging.Module"
+_Module_description = Core.Name "description"
 _Module_namespace = Core.Name "namespace"
-_Module_definitions = Core.Name "definitions"
 _Module_termDependencies = Core.Name "termDependencies"
 _Module_typeDependencies = Core.Name "typeDependencies"
-_Module_description = Core.Name "description"
+_Module_definitions = Core.Name "definitions"
 -- | A prefix for element names
 newtype Namespace =
   Namespace {

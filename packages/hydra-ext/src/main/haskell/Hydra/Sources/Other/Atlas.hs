@@ -29,10 +29,14 @@ xsd :: String -> Type
 xsd = typeref (XmlSchema.ns)
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [XmlSchema.ns] [] $
-    Just ("The Apache Atlas meta-model\n" ++
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [XmlSchema.ns],
+            moduleTypeDependencies = [],
+            moduleDescription = Just ("The Apache Atlas meta-model\n" ++
       "Based on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n" ++
-      "  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model")
+      "  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model")}
   where
     definitions = [
       atlasAttribute,

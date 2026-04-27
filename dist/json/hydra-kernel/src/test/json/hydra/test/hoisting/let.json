@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Test cases for let-binding hoisting transformations"}}}],
             "body": {
               "record": {
@@ -14192,7 +14192,7 @@
                                                                                                                                                                                     "typeApplication": {
                                                                                                                                                                                       "body": {
                                                                                                                                                                                         "pair": {
-                                                                                                                                                                                          "@first": {
+                                                                                                                                                                                          "first": {
                                                                                                                                                                                             "inject": {
                                                                                                                                                                                               "field": {
                                                                                                                                                                                                 "name": "typeApplication",
@@ -14219,7 +14219,7 @@
                                                                                                                                                                                                             "typeName": "hydra.core.Type"}}}],
                                                                                                                                                                                                     "typeName": "hydra.core.TypeApplicationTerm"}}},
                                                                                                                                                                                               "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                          "@second": {
+                                                                                                                                                                                          "second": {
                                                                                                                                                                                             "inject": {
                                                                                                                                                                                               "field": {
                                                                                                                                                                                                 "name": "application",
@@ -14768,7 +14768,7 @@
                                                                                                                                                       "typeApplication": {
                                                                                                                                                         "body": {
                                                                                                                                                           "pair": {
-                                                                                                                                                            "@first": {
+                                                                                                                                                            "first": {
                                                                                                                                                               "inject": {
                                                                                                                                                                 "field": {
                                                                                                                                                                   "name": "typeApplication",
@@ -14795,7 +14795,7 @@
                                                                                                                                                                               "typeName": "hydra.core.Type"}}}],
                                                                                                                                                                       "typeName": "hydra.core.TypeApplicationTerm"}}},
                                                                                                                                                                 "typeName": "hydra.core.Term"}},
-                                                                                                                                                            "@second": {
+                                                                                                                                                            "second": {
                                                                                                                                                               "inject": {
                                                                                                                                                                 "field": {
                                                                                                                                                                   "name": "application",

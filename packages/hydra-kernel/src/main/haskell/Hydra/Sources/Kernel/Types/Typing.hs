@@ -17,8 +17,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns, Context.ns] [Core.ns, Context.ns] $
-    Just "Types supporting type inference and type reconstruction."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns, Context.ns],
+            moduleTypeDependencies = [Core.ns, Context.ns],
+            moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
     definitions = [
       functionStructure,

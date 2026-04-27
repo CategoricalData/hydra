@@ -16,8 +16,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
-    Just "A model which provides a common syntax tree for Hydra serializers"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A model which provides a common syntax tree for Hydra serializers"}
   where
     definitions = [
       associativity,

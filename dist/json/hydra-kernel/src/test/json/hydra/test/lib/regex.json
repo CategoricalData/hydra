@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Test cases for hydra.lib.regex primitives"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Test cases for hydra.lib.regex primitives"}}}],
             "body": {
               "record": {
                 "fields": [

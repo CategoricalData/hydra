@@ -29,9 +29,13 @@ json :: String -> Type
 json = typeref $ JsonModel.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [JsonModel.ns] [Core.ns] $
-    Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
-      "  https://linkedin.github.io/rest.li/pdl_schema")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [JsonModel.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
+      "  https://linkedin.github.io/rest.li/pdl_schema")}
   where
     definitions = [
       annotations,

@@ -21,10 +21,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.algebraicTypes"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns, Namespace "hydra.rewriting"]
-    kernelTypesNamespaces
-    (Just "Algebraic type checking test cases: unit, pairs, eithers, optionals")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns, Namespace "hydra.rewriting"],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Algebraic type checking test cases: unit, pairs, eithers, optionals")}
   where
     definitions = [
       Phantoms.toDefinition allTests,

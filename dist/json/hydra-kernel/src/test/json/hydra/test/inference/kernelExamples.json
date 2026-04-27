@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Examples from the Hydra kernel"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Examples from the Hydra kernel"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -921,7 +921,7 @@
                                                                                                                                                                                         "typeApplication": {
                                                                                                                                                                                           "body": {
                                                                                                                                                                                             "pair": {
-                                                                                                                                                                                              "@first": {
+                                                                                                                                                                                              "first": {
                                                                                                                                                                                                 "inject": {
                                                                                                                                                                                                   "field": {
                                                                                                                                                                                                     "name": "variable",
@@ -930,7 +930,7 @@
                                                                                                                                                                                                         "body": {"literal": {"string": "subst"}},
                                                                                                                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                              "@second": {
+                                                                                                                                                                                              "second": {
                                                                                                                                                                                                 "inject": {
                                                                                                                                                                                                   "field": {
                                                                                                                                                                                                     "name": "variable",
@@ -1364,7 +1364,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "pair": {
-                                                                                                                          "@first": {
+                                                                                                                          "first": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "variable",
@@ -1373,7 +1373,7 @@
                                                                                                                                     "body": {"literal": {"string": "subst"}},
                                                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                                                               "typeName": "hydra.core.Term"}},
-                                                                                                                          "@second": {
+                                                                                                                          "second": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "variable",
@@ -1748,7 +1748,7 @@
                                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                                             "body": {
                                                                                                                                                                                               "pair": {
-                                                                                                                                                                                                "@first": {
+                                                                                                                                                                                                "first": {
                                                                                                                                                                                                   "inject": {
                                                                                                                                                                                                     "field": {
                                                                                                                                                                                                       "name": "variable",
@@ -1757,7 +1757,7 @@
                                                                                                                                                                                                           "body": {"literal": {"string": "subst"}},
                                                                                                                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                     "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                "@second": {
+                                                                                                                                                                                                "second": {
                                                                                                                                                                                                   "inject": {
                                                                                                                                                                                                     "field": {
                                                                                                                                                                                                       "name": "variable",
@@ -2284,7 +2284,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "pair": {
-                                                                                                                          "@first": {
+                                                                                                                          "first": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "application",
@@ -2315,7 +2315,7 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Application"}}},
                                                                                                                               "typeName": "hydra.core.Term"}},
-                                                                                                                          "@second": {
+                                                                                                                          "second": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "application",

@@ -18,8 +18,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Graph.ns, Module.ns] [Core.ns] $
-    Just "A model for Hydra transformation workflows"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Graph.ns, Module.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A model for Hydra transformation workflows"}
   where
     definitions = [
       hydraSchemaSpec,

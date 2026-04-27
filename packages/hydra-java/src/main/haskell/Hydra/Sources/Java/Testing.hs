@@ -102,10 +102,12 @@ ns :: Namespace
 ns = Namespace "hydra.java.testing"
 
 module_ :: Module
-module_ = Module ns definitions
-    [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns]
-    (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Java test code generation codec for JUnit-based generation tests"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns],
+            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Java test code generation codec for JUnit-based generation tests"}
   where
     definitions = [
       toDefinition buildJavaTestModule,

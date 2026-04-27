@@ -91,10 +91,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just ("Module dependency namespace analysis")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Module dependency namespace analysis")}
   where
     definitions = [
       toDefinition addNamesToNamespaces,

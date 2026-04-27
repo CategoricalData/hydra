@@ -18,9 +18,13 @@ shex :: String -> Type
 shex = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [] $
-    Just ("A Shex model. Based on the BNF at:\n" ++
-        "  https://github.com/shexSpec/grammar/blob/master/bnf")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [],
+            moduleDescription = Just ("A Shex model. Based on the BNF at:\n" ++
+        "  https://github.com/shexSpec/grammar/blob/master/bnf")}
   where
     definitions = [
       shexDoc,

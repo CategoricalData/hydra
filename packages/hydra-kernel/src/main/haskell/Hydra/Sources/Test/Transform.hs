@@ -65,10 +65,12 @@ ns = Namespace "hydra.test.transform"
 
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, Sorting.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, Sorting.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"}
   where
     definitions = [
       toDefinition addGenerationPrefix,
@@ -210,11 +212,11 @@ transformModule = define "transformModule" $
   doc "Transform module with generation namespace" $
   lambda "m" $
     Packaging.module_
+      (project _Module _Module_description @@ var "m")
       (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
-      (project _Module _Module_definitions @@ var "m")
       (project _Module _Module_termDependencies @@ var "m")
       (project _Module _Module_typeDependencies @@ var "m")
-      (project _Module _Module_description @@ var "m")
+      (project _Module _Module_definitions @@ var "m")
 
 
 -- | Transform a test case (pass through unchanged — all test cases are now universal)

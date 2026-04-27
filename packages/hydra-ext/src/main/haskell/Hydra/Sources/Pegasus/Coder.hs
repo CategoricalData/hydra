@@ -98,10 +98,12 @@ ns :: Namespace
 ns = Namespace "hydra.pegasus.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns]
-    (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns],
+            moduleTypeDependencies = (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"}
   where
     definitions = [
       toDefinition constructModule,

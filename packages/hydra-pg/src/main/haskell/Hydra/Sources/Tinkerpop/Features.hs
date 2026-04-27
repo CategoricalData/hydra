@@ -29,14 +29,18 @@ supports :: String -> String -> FieldType
 supports name comment = ("supports" ++ capitalize name)>: doc comment T.boolean
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
       "  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n" ++
       "\n" ++
       "An interface that represents the capabilities of a Graph implementation.\n" ++
       "By default all methods of features return true and it is up to implementers to disable feature they don't support.\n" ++
       "Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\n" ++
-      "For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().")
+      "For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().")}
   where
     definitions = [
       dataTypeFeatures,

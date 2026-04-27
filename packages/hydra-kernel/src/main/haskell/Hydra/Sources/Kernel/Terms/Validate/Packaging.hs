@@ -29,10 +29,12 @@ ns :: Namespace
 ns = Namespace "hydra.validate.packaging"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, Names.ns]
-    kernelTypesNamespaces $
-    Just "Validation functions for modules and packages"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, Names.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [
       toDefinition checkConflictingModuleNamespaces,

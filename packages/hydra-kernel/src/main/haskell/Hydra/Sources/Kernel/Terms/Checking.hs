@@ -114,11 +114,13 @@ ns :: Namespace
 ns = Namespace "hydra.checking"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"}
   where
     definitions = [
       toDefinition allEqual,

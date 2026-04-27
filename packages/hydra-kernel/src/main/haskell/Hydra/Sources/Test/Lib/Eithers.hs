@@ -33,10 +33,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.eithers"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Namespace "hydra.reduction", ShowCore.ns]
-    kernelTypesNamespaces $
-    Just "Test cases for hydra.lib.eithers primitives"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Namespace "hydra.reduction", ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Test cases for hydra.lib.eithers primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]
 

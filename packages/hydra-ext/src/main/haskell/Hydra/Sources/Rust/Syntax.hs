@@ -26,9 +26,13 @@ rust :: String -> Type
 rust = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A Rust syntax model, based on the Rust Reference grammar"
-      ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A Rust syntax model, based on the Rust Reference grammar"
+      ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29")}
   where
     definitions = crateLevel ++ items ++ useDeclarations ++ structDefinitions
       ++ enumDefinitions ++ functionDefinitions ++ typeAliases ++ constStaticMod

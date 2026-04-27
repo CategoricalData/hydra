@@ -10,7 +10,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: Graph.Primitive -> Int
-primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeType arg_2)) (Graph.primitiveType arg_)
+primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeBody arg_2)) (Graph.primitiveType arg_)
 -- | Find the arity (expected number of arguments) of a term
 termArity :: Core.Term -> Int
 termArity x =
@@ -32,7 +32,7 @@ typeArity x =
       _ -> 0
 -- | Find the arity (expected number of arguments) of a type scheme
 typeSchemeArity :: Core.TypeScheme -> Int
-typeSchemeArity arg_ = typeArity (Core.typeSchemeType arg_)
+typeSchemeArity arg_ = typeArity (Core.typeSchemeBody arg_)
 -- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 uncurryType :: Core.Type -> [Core.Type]
 uncurryType t =

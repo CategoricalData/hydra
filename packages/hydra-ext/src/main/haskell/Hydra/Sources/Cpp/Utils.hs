@@ -107,10 +107,12 @@ ns :: Namespace
 ns = Namespace "hydra.cpp.utils"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "C++ utilities for constructing C++ syntax trees"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "C++ utilities for constructing C++ syntax trees"}
   where
     definitions = [
       toDefinition constParameter,

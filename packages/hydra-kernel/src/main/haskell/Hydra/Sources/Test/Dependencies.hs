@@ -31,10 +31,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.dependencies"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ShowCore.ns, DependenciesModule.ns, TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for dependency analysis and let-term transformations")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ShowCore.ns, DependenciesModule.ns, TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for dependency analysis and let-term transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]
 

@@ -9,7 +9,14 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.error.core"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.error.core"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.paths",
+        (Packaging.Namespace "hydra.encode.core"),
+        (Packaging.Namespace "hydra.encode.variants")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.error.core"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.duplicateBindingError"),
@@ -3367,11 +3374,4 @@ module_ =
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.core.InvalidTypeError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.paths",
-        (Packaging.Namespace "hydra.encode.core"),
-        (Packaging.Namespace "hydra.encode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.error.core"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.error.core")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

@@ -51,11 +51,13 @@ ns :: Namespace
 ns = Namespace "hydra.coq.generate"
 
 module_ :: Module
-module_ = Module ns definitions
-    [CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
-     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
+     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline"}
   where
     definitions = [
       toDefinition buildAxiomOnlyContent,

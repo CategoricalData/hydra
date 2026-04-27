@@ -32,10 +32,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.serialization"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Serialization.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for AST serialization")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Serialization.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for AST serialization")}
   where
     definitions = [
       Phantoms.toDefinition arrowOp,

@@ -20,8 +20,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Context.ns, Error.ns, Graph.ns, Variants.ns] [Core.ns] $
-    Just "Abstractions for paired transformations between languages"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Context.ns, Error.ns, Graph.ns, Variants.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "Abstractions for paired transformations between languages"}
   where
     definitions = [
       adapter,

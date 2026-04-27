@@ -83,12 +83,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.typeScript.language")
-  [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords]
-  [Strip.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for TypeScript"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.typeScript.language"),
+            moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
+            moduleTermDependencies = [Strip.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints for TypeScript"}
 typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
   doc "Language constraints for TypeScript" $ lets [

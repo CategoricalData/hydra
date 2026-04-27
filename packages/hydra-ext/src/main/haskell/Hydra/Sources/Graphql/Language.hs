@@ -83,12 +83,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.graphql.language")
-  [toDefinition graphqlLanguage, toDefinition graphqlReservedWords]
-  [Lexical.ns, Strip.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for GraphQL"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.graphql.language"),
+            moduleDefinitions = [toDefinition graphqlLanguage, toDefinition graphqlReservedWords],
+            moduleTermDependencies = [Lexical.ns, Strip.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for GraphQL"}
 graphqlLanguage :: TTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $
   doc "Language constraints for GraphQL" $ lets [

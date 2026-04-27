@@ -32,10 +32,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]) $
-    Just "Native YAML serialization: YAML Node to String"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
+            moduleDescription = Just "Native YAML serialization: YAML Node to String"}
   where
     definitions = [
       toDefinition escapeSingleQuotes,

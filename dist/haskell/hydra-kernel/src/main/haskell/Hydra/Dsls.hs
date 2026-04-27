@@ -93,18 +93,18 @@ dslModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
+      Packaging.moduleDescription = (Just (Strings.cat [
+        "DSL functions for ",
+        (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
       Packaging.moduleNamespace = (dslNamespace (Packaging.moduleNamespace mod)),
-      Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
-        Packaging.termDefinitionName = (Core.bindingName b),
-        Packaging.termDefinitionTerm = (Core.bindingTerm b),
-        Packaging.termDefinitionType = (Core.bindingType b)})) (deduplicateBindings (Lists.concat dslBindings))),
       Packaging.moduleTermDependencies = (Lists.nub (Lists.map dslNamespace (Packaging.moduleTypeDependencies mod))),
       Packaging.moduleTypeDependencies = (Lists.nub (Lists.concat2 [
         Packaging.moduleNamespace mod,
         (Packaging.Namespace "hydra.phantoms")] (Packaging.moduleTypeDependencies mod))),
-      Packaging.moduleDescription = (Just (Strings.cat [
-        "DSL functions for ",
-        (Packaging.unNamespace (Packaging.moduleNamespace mod))]))})))))
+      Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+        Packaging.termDefinitionName = (Core.bindingName b),
+        Packaging.termDefinitionTerm = (Core.bindingTerm b),
+        Packaging.termDefinitionType = (Core.bindingType b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
 -- | Generate a DSL module namespace from a source module namespace
 dslNamespace :: Packaging.Namespace -> Packaging.Namespace
 dslNamespace ns =

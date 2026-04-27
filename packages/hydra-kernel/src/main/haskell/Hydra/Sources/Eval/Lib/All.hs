@@ -91,9 +91,11 @@ evalLibNamespaces :: [Namespace]
 evalLibNamespaces = Prelude.map moduleNamespace evalLibModules
 
 module_ :: Module
-module_ = Module ns definitions
-    evalLibNamespaces
-    kernelTypesNamespaces $
-    Just ("Registry of evaluation-level primitive implementations for the Hydra interpreter.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = evalLibNamespaces,
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Registry of evaluation-level primitive implementations for the Hydra interpreter.")}
   where
     definitions = []

@@ -75,10 +75,12 @@ ns :: Namespace
 ns = Namespace "hydra.decoding"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns]
-    kernelTypesNamespaces $
-    Just "Functions for generating term decoders from type modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for generating term decoders from type modules"}
   where
     definitions = [
       toDefinition collectForallVariables,
@@ -645,11 +647,10 @@ decodeModule = define "decodeModule" $
         -- Use nub to remove duplicates (a module may appear in both type and term dependencies)
         "allDecodedDeps" <~ (primitive _lists_nub @@ Lists.concat2 (var "decodedTypeDeps") (var "decodedTermDeps")) $
         right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "Term decoders for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (decodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
-            (var "decodedBindings"))
           (Lists.concat2
             (list [
               (Packaging.namespace $ string "hydra.extract.core"),
@@ -659,9 +660,10 @@ decodeModule = define "decodeModule" $
           (list [
             Packaging.moduleNamespace (var "mod"),
             Packaging.namespace $ string "hydra.util"])
-          (just (Strings.cat $ list [
-            string "Term decoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingType $ var "b")))
+            (var "decodedBindings")))))
 
 -- | Generate a decoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.decode.util"

@@ -18,8 +18,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"}
   where
     definitions = [
       alternative,

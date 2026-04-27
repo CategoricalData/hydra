@@ -19,10 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.inference.fundamentals"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Inference tests for fundamental language features")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Inference tests for fundamental language features")}
   where
     definitions = [
       Phantoms.toDefinition allTests,

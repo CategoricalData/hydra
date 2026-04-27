@@ -66,10 +66,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-   [Strip.ns, ShowCore.ns, ShowError.ns]
-    kernelTypesNamespaces $
-    Just ("A module for lexical operations over graphs.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns, ShowCore.ns, ShowError.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("A module for lexical operations over graphs.")}
   where
     definitions = [
       toDefinition buildGraph,

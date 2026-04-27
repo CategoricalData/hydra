@@ -34,10 +34,12 @@ ns :: Namespace
 ns = Namespace "hydra.coq.language"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Formatting.ns]
-    (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Language constraints for Coq code generation"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Formatting.ns],
+            moduleTypeDependencies = (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Language constraints for Coq code generation"}
   where
     definitions = [
       toDefinition coqLanguage,

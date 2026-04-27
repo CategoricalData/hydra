@@ -9,7 +9,16 @@ import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term decoders for hydra.testing"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.testing"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.testing",
+        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.testing.tag"),
@@ -900,13 +909,4 @@ module_ =
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.testing.UniversalTestCase"))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.testing",
-        (Packaging.Namespace "hydra.util")],
-      Packaging.moduleDescription = (Just "Term decoders for hydra.testing")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

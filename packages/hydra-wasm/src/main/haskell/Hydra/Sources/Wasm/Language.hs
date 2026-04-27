@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.wasm.language")
-  [toDefinition wasmLanguage, toDefinition wasmReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for WebAssembly (WAT text format)"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.wasm.language"),
+            moduleDefinitions = [toDefinition wasmLanguage, toDefinition wasmReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for WebAssembly (WAT text format)"}
 wasmLanguage :: TTermDefinition Language
 wasmLanguage = define "wasmLanguage" $
     doc "Language constraints for WebAssembly" $ lets [

@@ -85,11 +85,13 @@ ns :: Namespace
 ns = Namespace "hydra.java.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns]
-    (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Java code generator: converts Hydra modules to Java source code"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns],
+            moduleTypeDependencies = (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Java code generator: converts Hydra modules to Java source code"}
   where
     definitions = [
       toDefinition addComment,

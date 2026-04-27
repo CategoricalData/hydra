@@ -28,10 +28,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.strip"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ShowCore.ns, StripModule.ns, TestGraph.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for annotation and type stripping operations")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ShowCore.ns, StripModule.ns, TestGraph.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for annotation and type stripping operations")}
   where
     definitions = [Phantoms.toDefinition allTests]
 

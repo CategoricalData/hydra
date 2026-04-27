@@ -17,8 +17,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns, Relational.ns] [Core.ns] $
-    Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns, Relational.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"}
   where
     definitions = [
       columnType,
