@@ -983,6 +983,7 @@
            "error/core.scm"
            "error/checking.scm"
            "error/packaging.scm"
+           "errors.scm"
            "context.scm"
            "graph.scm"
            "packaging.scm"
