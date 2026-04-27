@@ -411,6 +411,7 @@ give the user a brief status update approximately every 10 minutes.
 |---------|--------|
 | `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
 | `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
+| `/bootstrap(others)` | shorthand for `bin/run-bootstrapping-demo.sh --hosts scala,lisp --targets python`. This is a narrow bootstrapping pass which simply checks whether the "other" hosts can bootstrap Python.
 | `/lexicon()` | Run `bin/regenerate-lexicon.sh` to refresh `docs/hydra-lexicon.txt` from the current Haskell kernel. Run on demand and as part of the pre-release flow; not part of regular sync. |
 | `/maintenance()` | Run all maintenance checks per the [full maintenance pass](docs/recipes/maintenance.md#full-maintenance-pass) procedure. |
 | `/save()` | Save status to the plan document. Session may terminate. |

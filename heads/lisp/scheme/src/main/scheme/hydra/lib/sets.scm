@@ -22,6 +22,11 @@
     ;; Sets use Guile's vhash for O(1) amortized membership test and insert.
     ;; A set is a vhash mapping elements to #t.
     ;; Sorted lists from generated code are transparently converted on first use.
+    ;;
+    ;; (ice-9 vlist) is imported in the define-library import block above
+    ;; (used by guile's normal R7RS load path) and pre-loaded via
+    ;; (use-modules (ice-9 vlist)) in bootstrap.scm (used by the bootstrap
+    ;; loader's strip-and-eval path).
 
     (define (obj->string x)
       (let ((p (open-output-string)))

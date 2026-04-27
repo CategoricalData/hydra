@@ -55,7 +55,13 @@
                         (expand-file-name "hydra/bootstrap.el" default-directory)))
        (hydra-dir (file-name-directory script-path)))
   ;; Load the kernel loader
-  (load (expand-file-name "loader.el" hydra-dir) nil t))
+  (load (expand-file-name "loader.el" hydra-dir) nil t)
+  ;; Override gen-main and gen-test dirs to point at the dist/ generated content
+  ;; (loader.el defaults to heads/lisp/emacs-lisp/src/gen-main/..., which no
+  ;; longer exists; mirrors the override in run-tests.el).
+  (let ((dist-base (expand-file-name "../../../../../../../dist/emacs-lisp/hydra-kernel/" hydra-dir)))
+    (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
+    (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))))
 
 (princ "Loading kernel...\n")
 
@@ -81,11 +87,11 @@
 ;; Emacs's C stack during byte-compilation or at runtime.
 ;; The skip list covers code generation, adaptation, type checking, inference,
 ;; and rewriting modules which have deeply recursive generated code.
-;; Ext coder modules (hydra_ext_*) ARE compiled — they need it for performance
+;; Ext coder modules (hydra_*) ARE compiled — they need it for performance
 ;; and compile+run successfully.
 (fset 'hydra-byte-compile-all
   (lambda ()
-    (let ((skip-prefixes '("hydra_code_generation_" "hydra_reduction_"
+    (let ((skip-prefixes '("hydra_codegen_" "hydra_reduction_"
                            "hydra_adapt_" "hydra_checking_" "hydra_inference_"
                            "hydra_hoisting_" "hydra_encoding_" "hydra_decoding_"
                            "hydra_rewriting_" "hydra_schemas_")))
@@ -175,7 +181,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 
 (defun bootstrap-namespace-to-path (ns)
   "Convert a namespace string to a file path."
-  (funcall (symbol-value 'hydra_code_generation_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
 
 ;; ============================================================================
 ;; Module loading from JSON
@@ -186,15 +192,15 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   (let* ((file-path (format "%s/%s.json" bootstrap-json-dir (bootstrap-namespace-to-path ns-str)))
          (json-obj (bootstrap-read-json-file file-path))
          (hydra-json (bootstrap-json-to-hydra json-obj))
-         (mod-type (list :variable "hydra.module.Module"))
+         (mod-type (list :variable "hydra.packaging.Module"))
          (json-result (funcall (funcall (funcall (funcall
                         (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.module.Module") mod-type) hydra-json)))
+                        "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq (car json-result) :left)
       (error "JSON decode error for %s: %s" ns-str (cadr json-result)))
     (let* ((term (cadr json-result))
            (mod-result (funcall (funcall
-                         (symbol-value 'hydra_decode_module_module) bs-graph) term)))
+                         (symbol-value 'hydra_decode_packaging_module) bs-graph) term)))
       (when (eq (car mod-result) :left)
         (error "Module decode error for %s: %s" ns-str (cadr mod-result)))
       (cadr mod-result))))
@@ -225,18 +231,18 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   "Resolve the coder, language, flags, and subdirectory for TARGET."
   (cond
    ((string= target "python")
-    (list (symbol-value 'hydra_ext_python_coder_module_to_python)
-          (symbol-value 'hydra_ext_python_language_python_language)
+    (list (symbol-value 'hydra_python_coder_module_to_python)
+          (symbol-value 'hydra_python_language_python_language)
           (list nil t t nil)
           "python"))
    ((string= target "java")
-    (list (symbol-value 'hydra_ext_java_coder_module_to_java)
-          (symbol-value 'hydra_ext_java_language_java_language)
+    (list (symbol-value 'hydra_java_coder_module_to_java)
+          (symbol-value 'hydra_java_language_java_language)
           (list nil t nil t)
           "java"))
    ((string= target "haskell")
-    (list (symbol-value 'hydra_ext_haskell_coder_module_to_haskell)
-          (symbol-value 'hydra_ext_haskell_language_haskell_language)
+    (list (symbol-value 'hydra_haskell_coder_module_to_haskell)
+          (symbol-value 'hydra_haskell_language_haskell_language)
           (list nil nil nil nil)
           "haskell"))
    ((or (string= target "clojure") (string= target "scheme")
@@ -247,8 +253,8 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                         ("common-lisp" . ".lisp") ("emacs-lisp" . ".el")))
            (dialect (cdr (assoc target dialect-alist)))
            (ext (cdr (assoc target ext-alist)))
-           (mtl (symbol-value 'hydra_ext_lisp_coder_module_to_lisp))
-           (pte (symbol-value 'hydra_ext_lisp_serde_program_to_expr)))
+           (mtl (symbol-value 'hydra_lisp_coder_module_to_lisp))
+           (pte (symbol-value 'hydra_lisp_serde_program_to_expr)))
       (list (lambda (mod)
               (lambda (defs)
                 (lambda (cx)
@@ -264,7 +270,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                                          (if (stringp ns) ns (cdr (assoc :value ns)))))
                                (fp (format "%s%s" (bootstrap-namespace-to-path ns-val) ext)))
                           (list :right (list (cons fp code))))))))))
-            (symbol-value 'hydra_ext_lisp_language_lisp_language)
+            (symbol-value 'hydra_lisp_language_lisp_language)
             (list nil nil nil nil)
             target)))
    (t (error "Unsupported target: %s" target))))
@@ -287,7 +293,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
          (result (condition-case err
                      (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
                        (funcall (funcall
-                         (symbol-value 'hydra_code_generation_generate_source_files)
+                         (symbol-value 'hydra_codegen_generate_source_files)
                          coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                        bs-graph) universe-mods) mods-to-generate) cx)
                    (error (princ (format "  GENERATE ERROR: %s\n" err)) (list :left (format "%s" err)))))
@@ -318,10 +324,10 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
 (hydra-set-function-bindings)
 
 ;; Ensure target_python_version is set (may be dropped by loader retry mechanism)
-(unless (boundp 'hydra_ext_python_coder_target_python_version)
-  (when (boundp 'hydra_ext_python_utils_target_python_version)
-    (setq hydra_ext_python_coder_target_python_version
-          (symbol-value 'hydra_ext_python_utils_target_python_version))))
+(unless (boundp 'hydra_python_coder_target_python_version)
+  (when (boundp 'hydra_python_utils_target_python_version)
+    (setq hydra_python_coder_target_python_version
+          (symbol-value 'hydra_python_utils_target_python_version))))
 
 (let ((coder-info (bootstrap-resolve-coder bootstrap-target))
       (target-cap (concat (upcase (substring bootstrap-target 0 1))
@@ -356,7 +362,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                                           (string-match-p "hydra\\.json\\.yaml\\." ns-str)))))
                                 all-mods)
                 all-mods))
-             (out-main (format "%s/emacs-lisp-to-%s/src/gen-main/%s"
+             (out-main (format "%s/emacs-lisp-to-%s/src/main/%s"
                                bootstrap-output-base bootstrap-target subdir)))
 
         (when bootstrap-kernel-only
@@ -372,20 +378,36 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
           ;; Tests
           (when bootstrap-include-tests
             (princ (format "\nLoading test modules from JSON...\n"))
-            (let* ((test-json-dir2 (let ((pos (cl-search "gen-main" bootstrap-json-dir)))
+            (let* ((test-json-dir2 (let ((pos (cl-search "src/main/json" bootstrap-json-dir)))
+                                     ;; New per-source-set layout: main JSON at <pkg>/src/main/json,
+                                     ;; test JSON at <pkg>/src/test/json.
                                      (if pos
                                          (concat (substring bootstrap-json-dir 0 pos)
-                                                 "gen-test"
-                                                 (substring bootstrap-json-dir (+ pos 8)))
+                                                 "src/test/json"
+                                                 (substring bootstrap-json-dir (+ pos 13)))
                                        bootstrap-json-dir)))
                    (test-ns (bootstrap-read-manifest-field bootstrap-json-dir "testModules"))
                    (test-mods (bootstrap-load-modules-from-json test-json-dir2 test-ns))
                    (all-universe (append all-mods test-mods))
-                   (out-test (format "%s/emacs-lisp-to-%s/src/gen-test/%s"
+                   ;; Filter skip-emit test namespaces (e.g.
+                   ;; hydra.test.testEnv): these are type-only stubs whose
+                   ;; hand-written per-language counterparts are the source
+                   ;; of truth. Mirrors testSkipEmitNamespaces in
+                   ;; Hydra.Sources.Test.All and the equivalent filter in
+                   ;; heads/python/.../bootstrap.py.
+                   (test-mods-to-emit
+                     (cl-remove-if
+                       (lambda (m)
+                         (let* ((ns (hydra_packaging_module-namespace m))
+                                (ns-str (if (stringp ns) ns
+                                            (hydra_packaging_namespace-value ns))))
+                           (string= ns-str "hydra.test.testEnv")))
+                       test-mods))
+                   (out-test (format "%s/emacs-lisp-to-%s/src/test/%s"
                                      bootstrap-output-base bootstrap-target subdir)))
               (princ (format "  Loaded %d test modules.\n" (length test-mods)))
               (princ (format "\nMapping test modules to %s...\n" target-cap))
-              (let ((test-count (bootstrap-generate-sources coder language flags out-test all-universe test-mods)))
+              (let ((test-count (bootstrap-generate-sources coder language flags out-test all-universe test-mods-to-emit)))
                 (princ (format "  Generated %d test files.\n" test-count)))))
 
           (princ (format "\n==========================================\n"))

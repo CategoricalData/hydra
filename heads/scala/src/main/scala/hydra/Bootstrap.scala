@@ -173,21 +173,31 @@ import _root_.java.io.File
     println()
 
     val allUniverse = allMainMods ++ testMods
+
+    // Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+    // type-only stubs in the DSL whose hand-written per-language counterparts
+    // are the source of truth. Emitting them would overwrite hand-written code
+    // that registers primitives for the test graph. Mirrors
+    // testSkipEmitNamespaces in Hydra.Sources.Test.All and the equivalent
+    // filter in heads/python/.../bootstrap.py.
+    val testSkipEmit = Set("hydra.test.testEnv")
+    val testModsToEmit = testMods.filter(m => !testSkipEmit.contains(m.namespace))
+
     val outTest = outDir + File.separator + "src/test"
 
     println(s"Mapping test modules to $targetCap...")
     println(s"  Universe: ${allUniverse.size} modules")
-    println(s"  Generating: ${testMods.size} test modules")
+    println(s"  Generating: ${testModsToEmit.size} test modules")
     println(s"  Output: $outTest")
     println()
 
     stepStart = System.currentTimeMillis()
 
     testFileCount = tgt match
-      case "haskell" => Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods)
-      case "java" => Generation.writeJava(outTest + "/java", allUniverse, testMods)
-      case "python" => Generation.writePython(outTest + "/python", allUniverse, testMods)
-      case "scala" => Generation.writeScala(outTest + "/scala", allUniverse, testMods)
+      case "haskell" => Generation.writeHaskell(outTest + "/haskell", allUniverse, testModsToEmit)
+      case "java" => Generation.writeJava(outTest + "/java", allUniverse, testModsToEmit)
+      case "python" => Generation.writePython(outTest + "/python", allUniverse, testModsToEmit)
+      case "scala" => Generation.writeScala(outTest + "/scala", allUniverse, testModsToEmit)
       case _ => 0
 
     stepTime = System.currentTimeMillis() - stepStart

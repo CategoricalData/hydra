@@ -96,6 +96,12 @@
 (use-modules (srfi srfi-9))
 ;; Import bitwise operations (arithmetic-shift etc.) needed by literals
 (use-modules (srfi srfi-60))
+;; Import vlist/vhash bindings used by lib/sets.scm and lib/maps.scm.
+;; The bootstrap loader strips define-library wrappers and evaluates body
+;; forms in (interaction-environment); without this, vlist-null, vhash-cons
+;; etc. would be undefined when those library bodies run. CI's normal R7RS
+;; load path picks up the imports from each library's own import block.
+(use-modules (ice-9 vlist))
 ;; Load the JSON reader
 (load (string-append *script-dir* "json-reader.scm"))
 
@@ -165,24 +171,26 @@
                 (else (eval form (interaction-environment))))
               (loop))))))))
 
-;; Determine the gen-main base directory
+;; Determine the gen-main base directory: resolves to
+;;   <worktree>/dist/scheme/hydra-kernel/src/main/scheme/hydra/
+;; given that *script-dir* is
+;;   <worktree>/heads/lisp/scheme/src/main/scheme/hydra/
+;; (find "heads/lisp/scheme/" and replace with "dist/scheme/hydra-kernel/").
 (define *gen-main-base*
   (let* ((main-dir *script-dir*)
-         ;; Go from src/main/scheme/hydra/ up to src/ then into gen-main/scheme/hydra/
          (len (string-length main-dir))
-         ;; Find "src/main/" and replace with "src/gen-main/"
+         (needle "heads/lisp/scheme/")
+         (nlen (string-length needle))
          (pos (let loop ((i 0))
                 (cond
-                  ((>= i (- len 8)) #f)
-                  ((and (char=? (string-ref main-dir i) #\s)
-                        (>= (- len i) 9)
-                        (equal? (substring main-dir i (+ i 9)) "src/main/"))
-                   i)
+                  ((> (+ i nlen) len) #f)
+                  ((equal? (substring main-dir i (+ i nlen)) needle) i)
                   (else (loop (+ i 1)))))))
     (if pos
-        (string-append (substring main-dir 0 pos) "src/gen-main/"
-                       (substring main-dir (+ pos 9)))
-        ;; Fallback: relative path
+        (string-append (substring main-dir 0 pos)
+                       "dist/scheme/hydra-kernel/"
+                       (substring main-dir (+ pos nlen)))
+        ;; Fallback: legacy gen-main location
         (string-append main-dir "../../gen-main/scheme/hydra/"))))
 
 (display "Loading kernel...\n")
@@ -211,7 +219,10 @@
       (force-output (current-output-port))
       (hydra-load-file path))))
 
-;; Load modules needed for JSON decode and code generation
+;; Load modules needed for JSON decode and code generation. Stale entries
+;; (extract/helpers, tarjan, coder_utils, code_generation, show/meta) were
+;; renamed/removed; current names are codegen.scm, etc. Missing files
+;; silently no-op via (file-exists? path) check.
 (for-each load-additional-module
   '("literals.scm"
     "reflect.scm"
@@ -220,24 +231,30 @@
     "templates.scm"
     "encoding.scm"
     "decoding.scm"
-    "extract/helpers.scm"
     "extract/util.scm"
     "extract/json.scm"
-    "tarjan.scm"
-    "coder_utils.scm"
     "adapt.scm"
-    "code_generation.scm"
+    "codegen.scm"
+    "analysis.scm"
+    "dependencies.scm"
+    "differentiation.scm"
+    "environment.scm"
+    "predicates.scm"
+    "resolution.scm"
+    "scoping.scm"
+    "strip.scm"
+    "variables.scm"
     ;; Show modules
     "show/core.scm" "show/error/core.scm" "show/errors.scm" "show/graph.scm"
-    "show/meta.scm" "show/typing.scm" "show/util.scm" "show/paths.scm"
+    "show/typing.scm" "show/util.scm" "show/paths.scm" "show/variants.scm"
     ;; Validate
-    "validate/core.scm"
-    ;; Decode modules (needed by hydra_decode_module_module)
+    "validate/core.scm" "validate/packaging.scm"
+    ;; Decode modules (needed by hydra_decode_packaging_module)
     "decode/paths.scm" "decode/ast.scm" "decode/classes.scm"
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
     "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
-    "decode/graph.scm" "decode/json/model.scm"
-    "decode/module.scm"
+    "decode/json/model.scm"
+    "decode/packaging.scm"
     "decode/parsing.scm" "decode/phantoms.scm" "decode/query.scm"
     "decode/relational.scm" "decode/tabular.scm" "decode/testing.scm"
     "decode/topology.scm" "decode/typing.scm" "decode/util.scm"
@@ -246,7 +263,7 @@
     "encode/paths.scm" "encode/ast.scm" "encode/classes.scm"
     "encode/coders.scm" "encode/context.scm" "encode/core.scm"
     "encode/error/core.scm" "encode/error/checking.scm" "encode/errors.scm"
-    "encode/json/model.scm" "encode/module.scm"
+    "encode/json/model.scm" "encode/packaging.scm"
     "encode/parsing.scm" "encode/phantoms.scm" "encode/query.scm"
     "encode/relational.scm" "encode/tabular.scm" "encode/testing.scm"
     "encode/topology.scm" "encode/typing.scm" "encode/util.scm"
@@ -263,30 +280,39 @@
 (hydra-load-native-lib (string-append *script-dir* "prims.scm"))
 (hydra-load-native-lib (string-append *script-dir* "lib/libraries.scm"))
 
-;; Load coder modules based on target
+;; Load coder modules based on target. Coder modules use define-record-type
+;; with field names where the accessor needs to be a first-class procedure
+;; (e.g. (lambda (v) (record-accessor v))). Guile's built-in
+;; define-record-type creates syntax-transformer accessors that fail when
+;; used as first-class values. We use load-coder-module-simple, which
+;; rewrites define-record-type forms into alist-based defines.
 (define (load-coder-modules target)
   (let ((coder-files
           (cond
             ((equal? target "haskell")
-             '("ext/haskell/syntax.scm" "ext/haskell/operators.scm"
-               "ext/haskell/language.scm" "ext/haskell/utils.scm"
-               "ext/haskell/serde.scm" "ext/haskell/coder.scm"))
+             '("haskell/syntax.scm" "haskell/operators.scm"
+               "haskell/language.scm" "haskell/utils.scm"
+               "haskell/serde.scm" "haskell/coder.scm"))
             ((equal? target "java")
-             '("ext/java/syntax.scm" "ext/java/language.scm" "ext/java/names.scm"
-               "ext/java/environment.scm" "ext/java/utils.scm"
-               "ext/java/serde.scm" "ext/java/coder.scm"))
+             '("java/syntax.scm" "java/language.scm" "java/names.scm"
+               "java/environment.scm" "java/utils.scm"
+               "java/serde.scm" "java/coder.scm"))
             ((equal? target "python")
-             '("ext/python/syntax.scm" "ext/python/language.scm" "ext/python/names.scm"
-               "ext/python/environment.scm" "ext/python/utils.scm"
-               "ext/python/serde.scm" "ext/python/coder.scm"))
+             '("python/syntax.scm" "python/language.scm" "python/names.scm"
+               "python/environment.scm" "python/utils.scm"
+               "python/serde.scm" "python/coder.scm"))
             ((or (equal? target "clojure") (equal? target "scheme")
                  (equal? target "common-lisp") (equal? target "emacs-lisp"))
-             '("ext/lisp/syntax.scm" "ext/lisp/language.scm"
-               "ext/lisp/serde.scm" "ext/lisp/coder.scm"))
+             '("lisp/syntax.scm" "lisp/language.scm"
+               "lisp/serde.scm" "lisp/coder.scm"))
             (else '()))))
     (for-each
       (lambda (f)
-        (load-additional-module f))
+        (let ((path (string-append *gen-main-base* f)))
+          (when (file-exists? path)
+            (display (string-append "  Loading " f " (alist-rec)...\n"))
+            (force-output (current-output-port))
+            (load-coder-module-simple path))))
       coder-files)))
 
 (display "  Loading coder modules...\n")
@@ -345,7 +371,16 @@
           (loop (cdr pairs) (cons (cons name stripped) result))))))
 
 (define (namespace-to-path ns)
-  (hydra_code_generation_namespace_to_path ns))
+  ;; Convert "hydra.foo.bar" to "hydra/foo/bar" for the filesystem path.
+  ;; The kernel function hydra_names_namespace_to_file_path requires a
+  ;; case_conv + ext argument bundle; for our use (locating the JSON file
+  ;; on disk, where path mirrors namespace exactly), we only need '.' -> '/'.
+  (let ((len (string-length ns)))
+    (let loop ((i 0) (result '()))
+      (if (>= i len)
+          (list->string (reverse result))
+          (let ((c (string-ref ns i)))
+            (loop (+ i 1) (cons (if (char=? c #\.) #\/ c) result)))))))
 
 ;; ============================================================================
 ;; Module loading from JSON
@@ -355,14 +390,14 @@
   (let* ((file-path (string-append json-dir "/" (namespace-to-path ns-str) ".json"))
          (json-obj (json-read-file file-path))
          (hydra-json (scheme-to-hydra-json json-obj))
-         (mod-type (list 'variable "hydra.module.Module"))
+         (mod-type (list 'variable "hydra.packaging.Module"))
          (json-result ((((hydra_json_decode_from_json schema-map)
-                          "hydra.module.Module") mod-type) hydra-json)))
+                          "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq? (car json-result) 'left)
       (error (string-append "JSON decode error for " ns-str ": ")
              (cadr json-result)))
     (let* ((term (cadr json-result))
-           (mod-result ((hydra_decode_module_module bs-graph) term)))
+           (mod-result ((hydra_decode_packaging_module bs-graph) term)))
       (when (eq? (car mod-result) 'left)
         (error (string-append "Module decode error for " ns-str ": ")
                (cadr mod-result)))
@@ -393,25 +428,25 @@
 (define (resolve-coder target)
   (cond
     ((equal? target "python")
-     (list hydra_ext_python_coder_module_to_python
-           hydra_ext_python_language_python_language
+     (list hydra_python_coder_module_to_python
+           hydra_python_language_python_language
            (list #f #t #t #f)   ; flags: infer=f expand=t hoistCase=t hoistPoly=f
            "python"))
     ((equal? target "java")
-     (list hydra_ext_java_coder_module_to_java
-           hydra_ext_java_language_java_language
+     (list hydra_java_coder_module_to_java
+           hydra_java_language_java_language
            (list #f #t #f #t)
            "java"))
     ((equal? target "haskell")
-     (list hydra_ext_haskell_coder_module_to_haskell
-           hydra_ext_haskell_language_haskell_language
+     (list hydra_haskell_coder_module_to_haskell
+           hydra_haskell_language_haskell_language
            (list #f #f #f #f)
            "haskell"))
     ((or (equal? target "clojure") (equal? target "scheme")
          (equal? target "common-lisp") (equal? target "emacs-lisp"))
      ;; Lisp target uses Lisp coder with dialect parameter
-     (let ((mtl hydra_ext_lisp_coder_module_to_lisp)
-           (pte hydra_ext_lisp_serde_program_to_expr)
+     (let ((mtl hydra_lisp_coder_module_to_lisp)
+           (pte hydra_lisp_serde_program_to_expr)
            (dialect (cond ((equal? target "clojure") (list 'clojure '()))
                           ((equal? target "scheme") (list 'scheme '()))
                           ((equal? target "common-lisp") (list 'common_lisp '()))
@@ -427,9 +462,9 @@
                                   (code (hydra_serialization_print_expr
                                           (hydra_serialization_parenthesize
                                             (pte program))))
-                                  (ns-val (let ((ns (hydra_module_module-namespace mod)))
+                                  (ns-val (let ((ns (hydra_packaging_module-namespace mod)))
                                             (if (string? ns) ns
-                                                (hydra_module_namespace-value ns))))
+                                                (hydra_packaging_namespace-value ns))))
                                   (ext (cond ((equal? target "clojure") "clj")
                                              ((equal? target "scheme") "scm")
                                              ((equal? target "common-lisp") "lisp")
@@ -440,7 +475,7 @@
                                                   (list 'lower_snake '())))
                                   (fp (((hydra_names_namespace_to_file_path case-conv) ext) ns-val)))
                              (list 'right (list (cons fp code))))))))))
-             hydra_ext_lisp_language_lisp_language
+             hydra_lisp_language_lisp_language
              (list #f #f #f #f)
              (cond ((equal? target "clojure") "clojure")
                    ((equal? target "scheme") "scheme")
@@ -488,14 +523,25 @@
   (exact (truncate (* (current-jiffy) 1000.0 (/ 1.0 (jiffies-per-second))))))
 
 (define (generate-sources coder language flags out-dir universe-mods mods-to-generate)
+  ;; Generate all modules in a single call. Splitting per-module breaks
+  ;; cross-module variable resolution: the kernel computes transitive term
+  ;; dependencies of mods-to-generate to build the data graph, and test
+  ;; modules contain undeclared cross-references (e.g.
+  ;; hydra.test.lib.chars references hydra.test.testGraph.testContext but
+  ;; doesn't declare hydra.test.testGraph in termDependencies). With the
+  ;; vhash maps fix, single-call codegen is fast enough.
   (let* ((bs-graph (bootstrap-graph))
-         (cx (make-hydra_context_in_context '() '()))
+         ;; Use hydra_context_context (3 fields: trace, messages, other),
+         ;; matching scala/java/haskell hosts. The kernel's checking and
+         ;; inference functions call (hydra_context_context-trace cx), which
+         ;; expects this record type, not hydra_context_in_context.
+         (cx (make-hydra_context_context '() '() hydra_lib_maps_empty))
          (do-infer (list-ref flags 0))
          (do-expand (list-ref flags 1))
          (do-hoist-case (list-ref flags 2))
          (do-hoist-poly (list-ref flags 3))
          (t0 (current-time-millis))
-         (result ((((((((((hydra_code_generation_generate_source_files
+         (result ((((((((((hydra_codegen_generate_source_files
                             coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                        bs-graph) universe-mods) mods-to-generate) cx)))
     (when (eq? (car result) 'left)
@@ -540,37 +586,22 @@
            (all-ns (append main-ns eval-ns))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (apply + (map (lambda (m)
-                                           (let ((els (hydra_module_module-definitions m)))
+                                           (let ((els (hydra_packaging_module-definitions m)))
                                              (if (list? els) (length els) 0)))
                                          all-mods))))
       (display (string-append "  Loaded " (number->string (length all-mods))
                               " modules (" (number->string total-bindings) " bindings).\n"))
       (force-output (current-output-port))
 
-      ;; Filter if needed
-      (let* ((mods-to-generate
-               (if *kernel-only*
-                   (let ((filtered '()))
-                     (for-each
-                       (lambda (m)
-                         (let* ((ns (hydra_module_module-namespace m))
-                                (ns-str (if (string? ns) ns
-                                            (if (hydra_module_namespace? ns)
-                                                (hydra_module_namespace-value ns)
-                                                ns))))
-                           (unless (or (string-prefix? "hydra." ns-str)
-                                       (string-prefix? "hydra.json.yaml." ns-str))
-                             (set! filtered (cons m filtered)))))
-                       all-mods)
-                     (reverse filtered))
-                   all-mods))
+      ;; Filter modules. Note: in scheme's case the universe already comes from
+      ;; manifest.mainModules + evalLibModules (which are all the kernel +
+      ;; eval-lib namespaces). There is no separate set of "coder packages" to
+      ;; exclude here; --kernel-only is therefore a no-op and we generate the
+      ;; entire loaded universe. (The Haskell host's bootstrap-from-json sees
+      ;; both kernel and ext modules and uses --kernel-only to exclude ext.)
+      (let* ((mods-to-generate all-mods)
              (out-main (string-append *output-base* "/scheme-to-" *target*
-                                      "/src/gen-main/" subdir)))
-
-        (when *kernel-only*
-          (display (string-append "\nFiltering to kernel modules: "
-                                  (number->string (length mods-to-generate))
-                                  " of " (number->string (length all-mods)) "\n")))
+                                      "/src/main/" subdir)))
 
         (display (string-append "\nMapping " (number->string (length mods-to-generate))
                                 " modules to " target-cap "...\n"))
@@ -590,29 +621,54 @@
               (display "\nLoading test modules from JSON...\n")
               (force-output (current-output-port))
               (let* ((test-json-dir
-                       ;; Replace gen-main with gen-test in json-dir
-                       (let ((pos (let loop ((i 0))
-                                    (cond
-                                      ((>= i (- (string-length *json-dir*) 8)) #f)
-                                      ((equal? (substring *json-dir* i (+ i 8)) "gen-main") i)
-                                      (else (loop (+ i 1)))))))
+                       ;; Derive the test-json dir from *json-dir*. The new
+                       ;; per-source-set layout has main JSON at
+                       ;;   <pkg>/src/main/json/...
+                       ;; and test JSON at
+                       ;;   <pkg>/src/test/json/... .
+                       ;; Substitute "src/main/json" with "src/test/json".
+                       (let* ((needle "src/main/json")
+                              (replacement "src/test/json")
+                              (nlen (string-length needle))
+                              (jlen (string-length *json-dir*))
+                              (pos (let loop ((i 0))
+                                     (cond
+                                       ((> (+ i nlen) jlen) #f)
+                                       ((equal? (substring *json-dir* i (+ i nlen)) needle) i)
+                                       (else (loop (+ i 1)))))))
                          (if pos
                              (string-append (substring *json-dir* 0 pos)
-                                            "gen-test"
-                                            (substring *json-dir* (+ pos 8)
-                                                       (string-length *json-dir*)))
+                                            replacement
+                                            (substring *json-dir* (+ pos nlen) jlen))
                              *json-dir*)))
                      (test-ns (read-manifest-field *json-dir* "testModules"))
                      (test-mods (load-modules-from-json test-json-dir test-ns))
                      (all-universe (append all-mods test-mods))
+                     ;; Filter skip-emit test namespaces (e.g.
+                     ;; hydra.test.testEnv): these are type-only stubs whose
+                     ;; hand-written per-language counterparts are the source
+                     ;; of truth. Mirrors testSkipEmitNamespaces in
+                     ;; Hydra.Sources.Test.All and the equivalent filter in
+                     ;; heads/python/.../bootstrap.py.
+                     (test-mods-to-emit
+                       (let loop ((ms test-mods) (out '()))
+                         (cond
+                           ((null? ms) (reverse out))
+                           (else
+                             (let* ((m (car ms))
+                                    (ns (hydra_packaging_module-namespace m))
+                                    (ns-str (if (string? ns) ns (hydra_packaging_namespace-value ns))))
+                               (if (equal? ns-str "hydra.test.testEnv")
+                                   (loop (cdr ms) out)
+                                   (loop (cdr ms) (cons m out))))))))
                      (out-test (string-append *output-base* "/scheme-to-" *target*
-                                              "/src/gen-test/" subdir)))
+                                              "/src/test/" subdir)))
                 (display (string-append "  Loaded " (number->string (length test-mods))
                                         " test modules.\n"))
                 (display (string-append "\nMapping test modules to " target-cap "...\n"))
                 (force-output (current-output-port))
                 (let* ((test-start (get-internal-real-time))
-                       (tc (generate-sources coder language flags out-test all-universe test-mods))
+                       (tc (generate-sources coder language flags out-test all-universe test-mods-to-emit))
                        (test-elapsed (exact->inexact (/ (- (get-internal-real-time) test-start) internal-time-units-per-second))))
                   (set! test-count tc)
                   (display (string-append "  Generated " (number->string test-count)
