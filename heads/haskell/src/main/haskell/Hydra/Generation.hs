@@ -598,7 +598,10 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     writeFile filePath (jsonStr ++ "\n")
     putStrLn $ "Wrote manifest: " ++ filePath
   where
-    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
+    -- Sort namespace strings lexicographically for cross-host byte stability;
+    -- see docs/json-format.md "Stability of byte order".
+    namespacesJson mods = Json.ValueArray $ fmap Json.ValueString
+      (L.sort (fmap (unNamespace . moduleNamespace) mods))
 
 -- | Write per-package manifest.json files at
 -- <root>/<pkg>/src/main/json/manifest.json for every package owning at least
@@ -649,7 +652,10 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
       writeFile filePath (jsonStr ++ "\n")
       putStrLn $ "Wrote manifest: " ++ filePath
   where
-    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
+    -- Sort namespace strings lexicographically for cross-host byte stability;
+    -- see docs/json-format.md "Stability of byte order".
+    namespacesJson mods = Json.ValueArray $ fmap Json.ValueString
+      (L.sort (fmap (unNamespace . moduleNamespace) mods))
 
 ----------------------------------------
 -- JSON Module Import
