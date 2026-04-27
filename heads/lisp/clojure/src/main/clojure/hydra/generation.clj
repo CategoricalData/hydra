@@ -82,12 +82,12 @@
     (when (= (first json-result) :left)
       (throw (RuntimeException. (str "Module JSON decode error: " (second json-result)))))
     (let [term (second json-result)
-          mod-result (((r 'hydra_decode_module_module) bs-graph) term)]
+          mod-result (((r 'hydra_decode_packaging_module) bs-graph) term)]
       (when (= (first mod-result) :left)
         (throw (RuntimeException. (str "Module decode error: " (second mod-result)))))
       (let [mod (second mod-result)]
         (if do-strip-type-schemes
-          ((r 'hydra_code_generation_strip_module_type_schemes) mod)
+          ((r 'hydra_codegen_strip_module_type_schemes) mod)
           mod)))))
 
 (defn load-modules-from-json
@@ -97,7 +97,7 @@
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns]
             (let [ns-str (if (string? ns) ns (:value ns))
-                  file-path (str base-path "/" ((r 'hydra_code_generation_namespace_to_path) ns-str) ".json")
+                  file-path (str base-path "/" ((r 'hydra_codegen_namespace_to_path) ns-str) ".json")
                   json-val (parse-json-file file-path)
                   mod (decode-module bs-graph schema-map strip-type-schemes json-val)]
               (println (str "  Loaded: " ns-str))
@@ -122,7 +122,7 @@
         t0 (System/currentTimeMillis)
         _ (println (str "  [gen] Starting generate_source_files at " (java.time.Instant/now)))
         _ (flush)
-        result (((((((((((r 'hydra_code_generation_generate_source_files)
+        result (((((((((((r 'hydra_codegen_generate_source_files)
                           coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                      bs-graph) universe) modules-to-generate) cx)
         files (unwrap-either result)
