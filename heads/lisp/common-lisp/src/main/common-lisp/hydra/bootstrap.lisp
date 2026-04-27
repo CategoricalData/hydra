@@ -289,7 +289,7 @@
                                         (search "hydra.json.yaml." ns-str)))))
                               all-mods)
                    all-mods))
-             (out-main (format nil "~A/common-lisp-to-~A/src/gen-main/~A"
+             (out-main (format nil "~A/common-lisp-to-~A/src/main/~A"
                                *output-base* *target* subdir)))
 
         (when *kernel-only*
@@ -324,7 +324,7 @@
                        (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
                        (test-mods (load-modules-from-json test-json-dir2 test-ns))
                        (all-universe (append all-mods test-mods))
-                       (out-test (format nil "~A/common-lisp-to-~A/src/gen-test/~A"
+                       (out-test (format nil "~A/common-lisp-to-~A/src/test/~A"
                                         *output-base* *target* subdir))
                        (test-start (get-internal-real-time)))
                   (format t "  Loaded ~A test modules.~%" (length test-mods))

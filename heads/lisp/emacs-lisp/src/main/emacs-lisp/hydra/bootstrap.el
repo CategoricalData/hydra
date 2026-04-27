@@ -362,7 +362,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                                           (string-match-p "hydra\\.json\\.yaml\\." ns-str)))))
                                 all-mods)
                 all-mods))
-             (out-main (format "%s/emacs-lisp-to-%s/src/gen-main/%s"
+             (out-main (format "%s/emacs-lisp-to-%s/src/main/%s"
                                bootstrap-output-base bootstrap-target subdir)))
 
         (when bootstrap-kernel-only
@@ -389,7 +389,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    (test-ns (bootstrap-read-manifest-field bootstrap-json-dir "testModules"))
                    (test-mods (bootstrap-load-modules-from-json test-json-dir2 test-ns))
                    (all-universe (append all-mods test-mods))
-                   (out-test (format "%s/emacs-lisp-to-%s/src/gen-test/%s"
+                   (out-test (format "%s/emacs-lisp-to-%s/src/test/%s"
                                      bootstrap-output-base bootstrap-target subdir)))
               (princ (format "  Loaded %d test modules.\n" (length test-mods)))
               (princ (format "\nMapping test modules to %s...\n" target-cap))
