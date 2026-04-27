@@ -1,6 +1,7 @@
 (define-library (hydra lib sets)
   (import (scheme base)
           (scheme write)
+          (ice-9 vlist)
           (only (guile) make-hash-table hash-ref hash-set! hash-fold sort))
   (export hydra_lib_sets_delete
           hydra_lib_sets_difference
@@ -22,12 +23,10 @@
     ;; A set is a vhash mapping elements to #t.
     ;; Sorted lists from generated code are transparently converted on first use.
     ;;
-    ;; Note: (ice-9 vlist) is brought in via use-modules rather than the
-    ;; define-library import block because the bootstrap loader strips the
-    ;; define-library wrapper and evaluates body forms in (interaction-environment).
-    ;; Imports declared in the wrapper would be lost; use-modules executes as a
-    ;; body form and persists.
-    (use-modules (ice-9 vlist))
+    ;; (ice-9 vlist) is imported in the define-library import block above
+    ;; (used by guile's normal R7RS load path) and pre-loaded via
+    ;; (use-modules (ice-9 vlist)) in bootstrap.scm (used by the bootstrap
+    ;; loader's strip-and-eval path).
 
     (define (obj->string x)
       (let ((p (open-output-string)))
