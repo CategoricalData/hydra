@@ -213,7 +213,10 @@
       (force-output (current-output-port))
       (hydra-load-file path))))
 
-;; Load modules needed for JSON decode and code generation
+;; Load modules needed for JSON decode and code generation. Stale entries
+;; (extract/helpers, tarjan, coder_utils, code_generation, show/meta) were
+;; renamed/removed; current names are codegen.scm, etc. Missing files
+;; silently no-op via (file-exists? path) check.
 (for-each load-additional-module
   '("literals.scm"
     "reflect.scm"
@@ -222,23 +225,29 @@
     "templates.scm"
     "encoding.scm"
     "decoding.scm"
-    "extract/helpers.scm"
     "extract/util.scm"
     "extract/json.scm"
-    "tarjan.scm"
-    "coder_utils.scm"
     "adapt.scm"
-    "code_generation.scm"
+    "codegen.scm"
+    "analysis.scm"
+    "dependencies.scm"
+    "differentiation.scm"
+    "environment.scm"
+    "predicates.scm"
+    "resolution.scm"
+    "scoping.scm"
+    "strip.scm"
+    "variables.scm"
     ;; Show modules
     "show/core.scm" "show/error/core.scm" "show/errors.scm" "show/graph.scm"
-    "show/meta.scm" "show/typing.scm" "show/util.scm" "show/paths.scm"
+    "show/typing.scm" "show/util.scm" "show/paths.scm" "show/variants.scm"
     ;; Validate
-    "validate/core.scm"
+    "validate/core.scm" "validate/packaging.scm"
     ;; Decode modules (needed by hydra_decode_packaging_module)
     "decode/paths.scm" "decode/ast.scm" "decode/classes.scm"
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
     "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
-    "decode/graph.scm" "decode/json/model.scm"
+    "decode/json/model.scm"
     "decode/packaging.scm"
     "decode/parsing.scm" "decode/phantoms.scm" "decode/query.scm"
     "decode/relational.scm" "decode/tabular.scm" "decode/testing.scm"
@@ -265,7 +274,12 @@
 (hydra-load-native-lib (string-append *script-dir* "prims.scm"))
 (hydra-load-native-lib (string-append *script-dir* "lib/libraries.scm"))
 
-;; Load coder modules based on target
+;; Load coder modules based on target. Coder modules use define-record-type
+;; with field names where the accessor needs to be a first-class procedure
+;; (e.g. (lambda (v) (record-accessor v))). Guile's built-in
+;; define-record-type creates syntax-transformer accessors that fail when
+;; used as first-class values. We use load-coder-module-simple, which
+;; rewrites define-record-type forms into alist-based defines.
 (define (load-coder-modules target)
   (let ((coder-files
           (cond
@@ -288,7 +302,11 @@
             (else '()))))
     (for-each
       (lambda (f)
-        (load-additional-module f))
+        (let ((path (string-append *gen-main-base* f)))
+          (when (file-exists? path)
+            (display (string-append "  Loading " f " (alist-rec)...\n"))
+            (force-output (current-output-port))
+            (load-coder-module-simple path))))
       coder-files)))
 
 (display "  Loading coder modules...\n")
@@ -558,30 +576,15 @@
                               " modules (" (number->string total-bindings) " bindings).\n"))
       (force-output (current-output-port))
 
-      ;; Filter if needed
-      (let* ((mods-to-generate
-               (if *kernel-only*
-                   (let ((filtered '()))
-                     (for-each
-                       (lambda (m)
-                         (let* ((ns (hydra_packaging_module-namespace m))
-                                (ns-str (if (string? ns) ns
-                                            (if (hydra_packaging_namespace? ns)
-                                                (hydra_packaging_namespace-value ns)
-                                                ns))))
-                           (unless (or (string-prefix? "hydra." ns-str)
-                                       (string-prefix? "hydra.json.yaml." ns-str))
-                             (set! filtered (cons m filtered)))))
-                       all-mods)
-                     (reverse filtered))
-                   all-mods))
+      ;; Filter modules. Note: in scheme's case the universe already comes from
+      ;; manifest.mainModules + evalLibModules (which are all the kernel +
+      ;; eval-lib namespaces). There is no separate set of "coder packages" to
+      ;; exclude here; --kernel-only is therefore a no-op and we generate the
+      ;; entire loaded universe. (The Haskell host's bootstrap-from-json sees
+      ;; both kernel and ext modules and uses --kernel-only to exclude ext.)
+      (let* ((mods-to-generate all-mods)
              (out-main (string-append *output-base* "/scheme-to-" *target*
                                       "/src/main/" subdir)))
-
-        (when *kernel-only*
-          (display (string-append "\nFiltering to kernel modules: "
-                                  (number->string (length mods-to-generate))
-                                  " of " (number->string (length all-mods)) "\n")))
 
         (display (string-append "\nMapping " (number->string (length mods-to-generate))
                                 " modules to " target-cap "...\n"))
