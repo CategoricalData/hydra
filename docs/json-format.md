@@ -164,6 +164,67 @@ key/value list — duplicate keys would parse but should not be produced.
 Integer and float literals are themselves tagged with their precision class
 (`int8`/`int16`/`int32`/`int64`/`uint8`/.../`bigint` and `float32`/`float64`/`bigfloat`).
 
+### String escapes
+
+A `Literal.string` value encodes as a JSON string. Within the string body:
+
+- `"` (U+0022) is always escaped as `\"`.
+- `\` (U+005C) is always escaped as `\\`.
+- The five JSON shortcut escapes are used where applicable: `\b` (U+0008), `\f` (U+000C),
+  `\n` (U+000A), `\r` (U+000D), `\t` (U+0009).
+- Other control characters (U+0000 through U+001F not covered by the shortcuts) are
+  escaped as `\u00XX` with lowercase hex digits.
+- All other characters are emitted as their literal UTF-8 byte sequences. This includes:
+  - Forward slash `/` (no `\/` escape produced; decoders must accept either form).
+  - Non-ASCII characters such as `é`, `中`, `🎉` — emitted as multi-byte UTF-8.
+- Code points above U+FFFF (supplementary plane) are emitted as their literal 4-byte UTF-8
+  sequence, not as `\uXXXX\uXXXX` surrogate pairs. Decoders must accept either form.
+
+Hydra strings are assumed to be well-formed Unicode.
+Behavior on malformed input (lone surrogates, invalid byte sequences) is a decode error.
+
+## Stability of byte order
+
+For consumers that hash file bytes (digests, content-addressed caches, byte-equality assertions in tests),
+the encoder must produce identical bytes for identical input across runs and across host languages.
+Most ordering questions are settled by other rules above:
+
+- Record types preserve DSL declaration order ([Records](#records)).
+- Record-term object keys are alphabetical by field name ([Records](#records)).
+- `Type.map` / `Term.map` arrays preserve the source map's iteration order ([Maps](#maps)).
+- Tagged-union objects have exactly one key.
+
+Two further cases are not covered by those rules and need their own pinning:
+
+### JSON object keys (non-Map cases)
+
+Some files use plain JSON objects whose keys are simple strings — `digest.json`'s `hashes` field is
+the canonical example.
+For these, writers must emit keys in **lexicographic order** (Unicode code-point order, equivalent to
+`LC_ALL=C` sort).
+This rule does **not** apply to `Map` values, which use the `[{"key", "value"}]` envelope and preserve
+source-map iteration order, nor to record-term JSON objects (alphabetical by field name, which is the same
+rule applied separately).
+
+### Manifest array values
+
+`manifest.json` files (per package, under `dist/json/<pkg>/src/main/json/manifest.json`) list each module
+namespace owned by the package, grouped by category (`mainModules`, `dslModules`, `evalLibModules`, etc.).
+Each array's entries must be sorted **lexicographically by namespace string**.
+This is independent of the source code's enumeration order — the wire-format requirement is
+sorted; the runtime code that drives the writer should sort before encoding.
+
+### Trailing whitespace and line endings
+
+Every JSON file under `dist/json/` ends with a single LF (`\n`, U+000A) byte after the final
+closing brace.
+No other trailing bytes (spaces, tabs, CR, additional newlines) appear at end-of-file or end-of-line.
+Line endings inside the file are LF only; CRLF is not produced on any platform.
+
+Indentation inside the file is 2 spaces per nesting level.
+Pretty-printing collapses leaf values onto the parent line where doing so does not
+exceed an internal soft-wrap budget.
+
 ## Format versioning
 
 Encoding changes are gated by a `formatVersion` integer carried at the top level of each
@@ -204,7 +265,8 @@ A conforming encoder must:
 - Emit byte-identical output for byte-identical input modules.
 - Preserve declared field order in record types (see [Records](#records)).
 - Sort record-term object keys alphabetically by field name.
-- Sort `digest.json` hash keys alphabetically.
+- Sort plain JSON-object keys lexicographically (e.g., `digest.json`'s `hashes`)
+  and `manifest.json` array values lexicographically (see [Stability of byte order](#stability-of-byte-order)).
 - Emit `null` only for `Maybe.Nothing`; never as a generic sentinel.
 
 A conforming decoder must:
