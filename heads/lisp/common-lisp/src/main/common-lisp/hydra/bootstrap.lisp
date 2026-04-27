@@ -312,12 +312,14 @@
               (when *include-tests*
                 (format t "~%Loading test modules from JSON...~%")
                 (force-output)
-                (let* ((test-json-dir2 (let ((pos (search "gen-main" *json-dir*)))
+                (let* ((test-json-dir2 (let ((pos (search "src/main/json" *json-dir*)))
+                                         ;; New per-source-set layout: main JSON at <pkg>/src/main/json,
+                                         ;; test JSON at <pkg>/src/test/json.
                                          (if pos
                                              (concatenate 'string
                                                (subseq *json-dir* 0 pos)
-                                               "gen-test"
-                                               (subseq *json-dir* (+ pos 8)))
+                                               "src/test/json"
+                                               (subseq *json-dir* (+ pos 13)))
                                              *json-dir*)))
                        (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
                        (test-mods (load-modules-from-json test-json-dir2 test-ns))
