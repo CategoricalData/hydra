@@ -252,7 +252,7 @@ object Generation:
       else throw new RuntimeException(s"Expected boolean at position $pos")
 
     private def parseNull(): Value =
-      if input.startsWith("null", pos) then { pos += 4; Value.array(Seq.empty) }
+      if input.startsWith("null", pos) then { pos += 4; Value.`null` }
       else throw new RuntimeException(s"Expected null at position $pos")
 
     private def parseNumber(): Value =

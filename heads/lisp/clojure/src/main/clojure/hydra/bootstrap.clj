@@ -73,8 +73,8 @@
           ["hydra.haskell.ast" "hydra.haskell.language"
            "hydra.haskell.operators" "hydra.haskell.utils"
            "hydra.haskell.serde" "hydra.haskell.coder"])
-        {:coder @(rc 'hydra_ext_haskell_coder_module_to_haskell)
-         :language @(rc 'hydra_ext_haskell_language_haskell_language)
+        {:coder @(rc 'hydra_haskell_coder_module_to_haskell)
+         :language @(rc 'hydra_haskell_language_haskell_language)
          :flags [false false false false]
          :subdir "haskell"})
     "java"
@@ -82,8 +82,8 @@
           ["hydra.java.syntax" "hydra.java.language" "hydra.java.names"
            "hydra.java.environment" "hydra.java.utils"
            "hydra.java.serde" "hydra.java.coder"])
-        {:coder @(rc 'hydra_ext_java_coder_module_to_java)
-         :language @(rc 'hydra_ext_java_language_java_language)
+        {:coder @(rc 'hydra_java_coder_module_to_java)
+         :language @(rc 'hydra_java_language_java_language)
          :flags [false true false true]
          :subdir "java"})
     "python"
@@ -92,17 +92,17 @@
            "hydra.python.environment" "hydra.python.utils"
            "hydra.python.serde" "hydra.python.coder"])
         (preload/install-coder-performance-patches!)
-        {:coder @(rc 'hydra_ext_python_coder_module_to_python)
-         :language @(rc 'hydra_ext_python_language_python_language)
+        {:coder @(rc 'hydra_python_coder_module_to_python)
+         :language @(rc 'hydra_python_language_python_language)
          :flags [false true true false]
          :subdir "python"})
     ("clojure" "scheme" "common-lisp" "emacs-lisp")
     (do (load-coder-modules!
           ["hydra.lisp.syntax" "hydra.lisp.language"
            "hydra.lisp.serde" "hydra.lisp.coder"])
-        (let [module-to-lisp @(rc 'hydra_ext_lisp_coder_module_to_lisp)
-              program-to-expr @(rc 'hydra_ext_lisp_serde_program_to_expr)
-              lang @(rc 'hydra_ext_lisp_language_lisp_language)
+        (let [module-to-lisp @(rc 'hydra_lisp_coder_module_to_lisp)
+              program-to-expr @(rc 'hydra_lisp_serde_program_to_expr)
+              lang @(rc 'hydra_lisp_language_lisp_language)
               dialect (case target
                         "clojure"    (list :clojure nil)
                         "scheme"     (list :scheme nil)
@@ -198,7 +198,7 @@
               main-ns (read-manifest json-dir "mainModules")
               eval-ns (read-manifest json-dir "evalLibModules")
               all-kernel-ns (into (vec main-ns) eval-ns)
-              main-mods (load-mods false json-dir all-kernel-ns)
+              main-mods (load-mods json-dir all-kernel-ns)
               step-time (- (System/currentTimeMillis) step-start)
               total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]
           (println (str "  Loaded " (count main-mods) " modules (" total-bindings " bindings)."))
@@ -225,7 +225,7 @@
               (flush))
 
             ;; Generate main modules
-            (let [out-main (str out-dir "/src/gen-main/" (:subdir coder-info))]
+            (let [out-main (str out-dir "/src/main/" (:subdir coder-info))]
               (println (str "Mapping " (count mods-to-generate) " modules to " target-cap "..."))
               (println (str "  Universe: " (count all-main-mods) " modules"))
               (println (str "  Output: " out-main))
@@ -245,13 +245,23 @@
                 ;; Optionally generate test modules
                 (let [test-file-count
                       (if (:include-tests opts)
-                        (let [test-json-dir (.replace ^String json-dir "gen-main/json" "gen-test/json")
+                        (let [test-json-dir (.replace ^String json-dir "src/main/json" "src/test/json")
                               _ (println "Loading test modules from JSON...")
                               _ (flush)
                               test-ns (read-manifest json-dir "testModules")
-                              test-mods (load-mods false test-json-dir test-ns)
+                              test-mods (load-mods test-json-dir test-ns)
                               all-universe (into (vec main-mods) test-mods)
-                              out-test (str out-dir "/src/gen-test/" (:subdir coder-info))]
+                              ;; Filter skip-emit test namespaces (e.g.
+                              ;; hydra.test.testEnv): these are type-only stubs
+                              ;; whose hand-written per-language counterparts
+                              ;; are the source of truth. Mirrors
+                              ;; testSkipEmitNamespaces in
+                              ;; Hydra.Sources.Test.All and the equivalent
+                              ;; filter in heads/python/.../bootstrap.py.
+                              ns-of (fn [m] (let [n (:namespace m)] (if (string? n) n (:value n))))
+                              test-skip-emit #{"hydra.test.testEnv"}
+                              test-mods-to-emit (filterv (fn [m] (not (contains? test-skip-emit (ns-of m)))) test-mods)
+                              out-test (str out-dir "/src/test/" (:subdir coder-info))]
                           (println (str "  Loaded " (count test-mods) " test modules."))
                           (println)
                           (println (str "Mapping test modules to " target-cap "..."))
@@ -259,7 +269,7 @@
                           (let [step-start3 (System/currentTimeMillis)
                                 count (gen-sources (:coder coder-info) (:language coder-info)
                                                     do-infer do-expand do-hoist-case do-hoist-poly
-                                                    out-test all-universe test-mods)
+                                                    out-test all-universe test-mods-to-emit)
                                 step-time3 (- (System/currentTimeMillis) step-start3)]
                             (println (str "  Generated " count " test files."))
                             (println (str "  Time: " (format-time step-time3)))

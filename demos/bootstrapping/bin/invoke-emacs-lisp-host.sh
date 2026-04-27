@@ -10,7 +10,7 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_EL_DIR="$HYDRA_ROOT/heads/lisp/hydra-emacs-lisp"
+HYDRA_EL_DIR="$HYDRA_ROOT/heads/lisp/emacs-lisp"
 
 # Parse arguments (pass through to EL bootstrap)
 TARGET=""
@@ -55,12 +55,12 @@ esac
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
     echo "  Coder modules not found. Generating from per-package JSON..."
     cd "$HYDRA_ROOT/heads/haskell"
-    stack build bootstrap-from-json 2>&1 | grep -v "^$"
+    stack build hydra:exe:bootstrap-from-json
     stack exec bootstrap-from-json -- \
         --target emacs-lisp \
-        --output "$HYDRA_EL_DIR" \
+        --output "$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel" \
         --include-coders \
-        --json-dir "$HYDRA_ROOT/dist/json" 2>&1
+        --dist-json-root "$HYDRA_ROOT/dist/json" 2>&1
     echo "  Coder modules generated."
     echo ""
 fi

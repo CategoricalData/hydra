@@ -50,7 +50,13 @@
   ;; Load the kernel loader
   (load (merge-pathnames "loader.lisp" hydra-dir))
   ;; Load JSON reader
-  (load (merge-pathnames "json-reader.lisp" hydra-dir)))
+  (load (merge-pathnames "json-reader.lisp" hydra-dir))
+  ;; Override *hydra-gen-main-dir* to point at the dist/ generated content
+  ;; (loader.lisp defaults to heads/lisp/common-lisp/src/gen-main/..., which no
+  ;; longer exists; mirrors the override in run-tests.lisp).
+  (setf *hydra-gen-main-dir*
+        (merge-pathnames "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+                         hydra-dir)))
 
 (format t "Loading kernel...~%")
 (force-output)
@@ -103,7 +109,7 @@
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_code_generation_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
 
 ;; --- Module loading from JSON ---
 
@@ -111,15 +117,15 @@
   (let* ((file-path (format nil "~A/~A.json" json-dir (namespace-to-path ns-str)))
          (json-obj (json-read-file file-path))
          (hydra-json (cl-to-hydra-json json-obj))
-         (mod-type (list :variable "hydra.module.Module"))
+         (mod-type (list :variable "hydra.packaging.Module"))
          (json-result (funcall (funcall (funcall (funcall
                         (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.module.Module") mod-type) hydra-json)))
+                        "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq (first json-result) :left)
       (error "JSON decode error for ~A: ~A" ns-str (second json-result)))
     (let* ((term (second json-result))
            (mod-result (funcall (funcall
-                         (symbol-value 'hydra_decode_module_module) bs-graph) term)))
+                         (symbol-value 'hydra_decode_packaging_module) bs-graph) term)))
       (when (eq (first mod-result) :left)
         (error "Module decode error for ~A: ~A" ns-str (second mod-result)))
       (second mod-result))))
@@ -144,18 +150,18 @@
 (defun resolve-coder (target)
   (cond
     ((string= target "python")
-     (list (symbol-value 'hydra_ext_python_coder_module_to_python)
-           (symbol-value 'hydra_ext_python_language_python_language)
+     (list (symbol-value 'hydra_python_coder_module_to_python)
+           (symbol-value 'hydra_python_language_python_language)
            (list nil t t nil)  ; flags: infer=f expand=t hoistCase=t hoistPoly=f
            "python"))
     ((string= target "java")
-     (list (symbol-value 'hydra_ext_java_coder_module_to_java)
-           (symbol-value 'hydra_ext_java_language_java_language)
+     (list (symbol-value 'hydra_java_coder_module_to_java)
+           (symbol-value 'hydra_java_language_java_language)
            (list nil t nil t)
            "java"))
     ((string= target "haskell")
-     (list (symbol-value 'hydra_ext_haskell_coder_module_to_haskell)
-           (symbol-value 'hydra_ext_haskell_language_haskell_language)
+     (list (symbol-value 'hydra_haskell_coder_module_to_haskell)
+           (symbol-value 'hydra_haskell_language_haskell_language)
            (list nil nil nil nil)
            "haskell"))
     ((or (string= target "clojure") (string= target "scheme")
@@ -167,8 +173,8 @@
                        ("common-lisp" . ".lisp") ("emacs-lisp" . ".el")))
             (dialect (cdr (assoc target dialect-map :test #'string=)))
             (ext (cdr (assoc target ext-map :test #'string=)))
-            (mtl (symbol-value 'hydra_ext_lisp_coder_module_to_lisp))
-            (pte (symbol-value 'hydra_ext_lisp_serde_program_to_expr)))
+            (mtl (symbol-value 'hydra_lisp_coder_module_to_lisp))
+            (pte (symbol-value 'hydra_lisp_serde_program_to_expr)))
        (list (lambda (mod)
                (lambda (defs)
                  (lambda (cx)
@@ -191,7 +197,7 @@
                                         (subseq ext 1))  ; ".lisp" -> "lisp"
                                         ns-val)))
                              (list :right (list (cons fp code))))))))))
-             (symbol-value 'hydra_ext_lisp_language_lisp_language)
+             (symbol-value 'hydra_lisp_language_lisp_language)
              (list nil nil nil nil)
              target)))
     (t (error "Unsupported target: ~A" target))))
@@ -209,7 +215,7 @@
          (result (handler-case
                    (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
                      (funcall (funcall
-                       (symbol-value 'hydra_code_generation_generate_source_files)
+                       (symbol-value 'hydra_codegen_generate_source_files)
                        coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                      bs-graph) universe-mods) mods-to-generate) cx)
                    (undefined-function (e)
@@ -283,7 +289,7 @@
                                         (search "hydra.json.yaml." ns-str)))))
                               all-mods)
                    all-mods))
-             (out-main (format nil "~A/common-lisp-to-~A/src/gen-main/~A"
+             (out-main (format nil "~A/common-lisp-to-~A/src/main/~A"
                                *output-base* *target* subdir)))
 
         (when *kernel-only*
@@ -306,23 +312,39 @@
               (when *include-tests*
                 (format t "~%Loading test modules from JSON...~%")
                 (force-output)
-                (let* ((test-json-dir2 (let ((pos (search "gen-main" *json-dir*)))
+                (let* ((test-json-dir2 (let ((pos (search "src/main/json" *json-dir*)))
+                                         ;; New per-source-set layout: main JSON at <pkg>/src/main/json,
+                                         ;; test JSON at <pkg>/src/test/json.
                                          (if pos
                                              (concatenate 'string
                                                (subseq *json-dir* 0 pos)
-                                               "gen-test"
-                                               (subseq *json-dir* (+ pos 8)))
+                                               "src/test/json"
+                                               (subseq *json-dir* (+ pos 13)))
                                              *json-dir*)))
                        (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
                        (test-mods (load-modules-from-json test-json-dir2 test-ns))
                        (all-universe (append all-mods test-mods))
-                       (out-test (format nil "~A/common-lisp-to-~A/src/gen-test/~A"
+                       ;; Filter skip-emit test namespaces (e.g.
+                       ;; hydra.test.testEnv): these are type-only stubs whose
+                       ;; hand-written per-language counterparts are the
+                       ;; source of truth. Mirrors testSkipEmitNamespaces in
+                       ;; Hydra.Sources.Test.All and the equivalent filter in
+                       ;; heads/python/.../bootstrap.py.
+                       (test-mods-to-emit
+                         (remove-if
+                           (lambda (m)
+                             (let* ((ns (hydra_packaging_module-namespace m))
+                                    (ns-str (if (stringp ns) ns
+                                                (hydra_packaging_namespace-value ns))))
+                               (string= ns-str "hydra.test.testEnv")))
+                           test-mods))
+                       (out-test (format nil "~A/common-lisp-to-~A/src/test/~A"
                                         *output-base* *target* subdir))
                        (test-start (get-internal-real-time)))
                   (format t "  Loaded ~A test modules.~%" (length test-mods))
                   (format t "~%Mapping test modules to ~A...~%" target-cap)
                   (force-output)
-                  (setf test-file-count (generate-sources coder language flags out-test all-universe test-mods))
+                  (setf test-file-count (generate-sources coder language flags out-test all-universe test-mods-to-emit))
                   (let ((test-secs (/ (- (get-internal-real-time) test-start) internal-time-units-per-second 1.0)))
                     (format t "  Generated ~A test files.~%" test-file-count)
                     (format t "  Time: ~,1Fs~%" test-secs))))
