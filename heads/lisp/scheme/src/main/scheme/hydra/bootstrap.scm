@@ -624,6 +624,23 @@
                      (test-ns (read-manifest-field *json-dir* "testModules"))
                      (test-mods (load-modules-from-json test-json-dir test-ns))
                      (all-universe (append all-mods test-mods))
+                     ;; Filter skip-emit test namespaces (e.g.
+                     ;; hydra.test.testEnv): these are type-only stubs whose
+                     ;; hand-written per-language counterparts are the source
+                     ;; of truth. Mirrors testSkipEmitNamespaces in
+                     ;; Hydra.Sources.Test.All and the equivalent filter in
+                     ;; heads/python/.../bootstrap.py.
+                     (test-mods-to-emit
+                       (let loop ((ms test-mods) (out '()))
+                         (cond
+                           ((null? ms) (reverse out))
+                           (else
+                             (let* ((m (car ms))
+                                    (ns (hydra_packaging_module-namespace m))
+                                    (ns-str (if (string? ns) ns (hydra_packaging_namespace-value ns))))
+                               (if (equal? ns-str "hydra.test.testEnv")
+                                   (loop (cdr ms) out)
+                                   (loop (cdr ms) (cons m out))))))))
                      (out-test (string-append *output-base* "/scheme-to-" *target*
                                               "/src/test/" subdir)))
                 (display (string-append "  Loaded " (number->string (length test-mods))
@@ -631,7 +648,7 @@
                 (display (string-append "\nMapping test modules to " target-cap "...\n"))
                 (force-output (current-output-port))
                 (let* ((test-start (get-internal-real-time))
-                       (tc (generate-sources coder language flags out-test all-universe test-mods))
+                       (tc (generate-sources coder language flags out-test all-universe test-mods-to-emit))
                        (test-elapsed (exact->inexact (/ (- (get-internal-real-time) test-start) internal-time-units-per-second))))
                   (set! test-count tc)
                   (display (string-append "  Generated " (number->string test-count)

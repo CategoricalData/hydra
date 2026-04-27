@@ -389,11 +389,25 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    (test-ns (bootstrap-read-manifest-field bootstrap-json-dir "testModules"))
                    (test-mods (bootstrap-load-modules-from-json test-json-dir2 test-ns))
                    (all-universe (append all-mods test-mods))
+                   ;; Filter skip-emit test namespaces (e.g.
+                   ;; hydra.test.testEnv): these are type-only stubs whose
+                   ;; hand-written per-language counterparts are the source
+                   ;; of truth. Mirrors testSkipEmitNamespaces in
+                   ;; Hydra.Sources.Test.All and the equivalent filter in
+                   ;; heads/python/.../bootstrap.py.
+                   (test-mods-to-emit
+                     (cl-remove-if
+                       (lambda (m)
+                         (let* ((ns (hydra_packaging_module-namespace m))
+                                (ns-str (if (stringp ns) ns
+                                            (hydra_packaging_namespace-value ns))))
+                           (string= ns-str "hydra.test.testEnv")))
+                       test-mods))
                    (out-test (format "%s/emacs-lisp-to-%s/src/test/%s"
                                      bootstrap-output-base bootstrap-target subdir)))
               (princ (format "  Loaded %d test modules.\n" (length test-mods)))
               (princ (format "\nMapping test modules to %s...\n" target-cap))
-              (let ((test-count (bootstrap-generate-sources coder language flags out-test all-universe test-mods)))
+              (let ((test-count (bootstrap-generate-sources coder language flags out-test all-universe test-mods-to-emit)))
                 (princ (format "  Generated %d test files.\n" test-count)))))
 
           (princ (format "\n==========================================\n"))
