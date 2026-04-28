@@ -1,8 +1,9 @@
 {
+  "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.javaScript.operators": "a073f2b533ceed744223eb21e32d8e34026a87cf67c3dba91369562dd70e6737",
-    "hydra.javaScript.serde": "0f5e20ad08fce8c843e7443b736bc21fd34eb1653da65140fcb82015d43598ff",
-    "hydra.javaScript.syntax": "081105d283977bf9cab3db995653c431a644136ccf6dc8895dd75da5d9cba42e"
+    "hydra.javaScript.operators": "a427098e3def37395b0daa34e570824f99510af1c6524ee3ec9f28154b052244",
+    "hydra.javaScript.serde": "372a9c5b077d2fb698f6821fb4fa52e3ed1482fbe192bba1a09dd7aecadbc228",
+    "hydra.javaScript.syntax": "8d33f552f67be09422e42924cdcb5993456441ced14318e9bf792125adca7486"
   }
 }

@@ -902,12 +902,12 @@
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"variable": "field_name"}},
                                                                                           {"name": "term", "term": {"variable": "field_term"}},
-                                                                                          {"name": "typeScheme", "term": {"variable": "field_type"}}],
+                                                                                          {"name": "typeScheme", "term": {"variable": "field_typeScheme"}}],
                                                                                         "typeName": "hydra.core.Binding"}}}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                             "type": {"variable": "hydra.core.Binding"}}},
                                                                         "domain": {"maybe": {"variable": "hydra.core.TypeScheme"}},
-                                                                        "parameter": "field_type"}},
+                                                                        "parameter": "field_typeScheme"}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {

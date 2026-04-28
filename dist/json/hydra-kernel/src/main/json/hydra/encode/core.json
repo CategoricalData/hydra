@@ -419,7 +419,7 @@
                                       "name": "name",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "type"}},
+                                          "body": {"literal": {"string": "typeScheme"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
