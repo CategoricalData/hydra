@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.AnnotationSchema",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -33,7 +33,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.EdgeSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -102,7 +102,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.ElementSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -120,7 +120,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.PropertySpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -155,7 +155,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.Schema",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -238,7 +238,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.ValueSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -275,7 +275,7 @@
     {
       "type": {
         "name": "hydra.pg.mapping.VertexSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

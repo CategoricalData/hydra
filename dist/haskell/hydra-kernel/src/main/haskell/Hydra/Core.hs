@@ -59,13 +59,13 @@ data Binding =
     bindingName :: Name,
     -- | The term to which the variable is bound
     bindingTerm :: Term,
-    -- | The optional type of the bound term
-    bindingType :: (Maybe TypeScheme)}
+    -- | The optional type scheme of the bound term
+    bindingTypeScheme :: (Maybe TypeScheme)}
   deriving (Eq, Ord, Read, Show)
 _Binding = Name "hydra.core.Binding"
 _Binding_name = Name "name"
 _Binding_term = Name "term"
-_Binding_type = Name "type"
+_Binding_typeScheme = Name "typeScheme"
 -- | A union elimination; a case statement
 data CaseStatement =
   CaseStatement {

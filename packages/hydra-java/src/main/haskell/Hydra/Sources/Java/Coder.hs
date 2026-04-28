@@ -351,9 +351,9 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
         "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "cname") $
         Maybes.cases (var "mel")
           (right (Maybes.map
-              (lambda "prim" $ Graph.primitiveType (var "prim"))
+              (lambda "prim" $ Graph.primitiveTypeScheme (var "prim"))
               (Maps.lookup (var "cname") (Graph.graphPrimitives (var "g")))))
-          (lambda "el" $ right (Core.bindingType (var "el")))) $
+          (lambda "el" $ right (Core.bindingTypeScheme (var "el")))) $
       Maybes.cases (var "mts")
         (right (var "argTerms"))
         (lambda "ts" $
@@ -454,7 +454,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
           (Lists.map (lambda "fld" $ Core.field (Core.fieldName (var "fld")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.fieldTerm (var "fld"))) (Core.caseStatementCases (var "cs")))),
       _Term_let>>: lambda "lt" $
         Core.termLet (Core.let_
-          (Lists.map (lambda "b" $ Core.binding (Core.bindingName (var "b")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.bindingTerm (var "b")) (Core.bindingType (var "b"))) (Core.letBindings (var "lt")))
+          (Lists.map (lambda "b" $ Core.binding (Core.bindingName (var "b")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.bindingTerm (var "b")) (Core.bindingTypeScheme (var "b"))) (Core.letBindings (var "lt")))
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.letBody (var "lt"))),
       _Term_typeApplication>>: lambda "ta" $
         Core.termTypeApplication (Core.typeApplicationTerm
@@ -599,7 +599,7 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
             cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
               (Just $ boolean False) [
               _Type_function>>: lambda "_ft2" $ boolean True]])
-      (Core.bindingType (var "b"))
+      (Core.bindingTypeScheme (var "b"))
 
 -- | Decode a Type from its term encoding (limited subset).
 
@@ -1047,7 +1047,7 @@ classifyDataReference = def "classifyDataReference" $
       -- Not found: treat as local variable
       (right $ inject JavaHelpers._JavaSymbolClass JavaHelpers._JavaSymbolClass_localVariable unit)
       (lambda "el" $
-        Maybes.cases (Core.bindingType (var "el"))
+        Maybes.cases (Core.bindingTypeScheme (var "el"))
           (Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "no type scheme for element ") ((unwrap _Name @@ Core.bindingName (var "el")))) (var "cx"))
           (lambda "ts" $
             right $ classifyDataTerm @@ var "ts" @@ Core.bindingTerm (var "el")))
@@ -1381,7 +1381,7 @@ correctTypeApps = def "correctTypeApps" $
     Maybes.cases (var "mel")
       (right (var "fallbackTypeApps"))
       (lambda "el" $
-        Maybes.cases (Core.bindingType (var "el"))
+        Maybes.cases (Core.bindingTypeScheme (var "el"))
           (right (var "fallbackTypeApps"))
           (lambda "ts" $
             "schemeType" <~ Core.typeSchemeBody (var "ts") $
@@ -1707,10 +1707,10 @@ dedupBindings = def "dedupBindings" $
             (lambda "b2" $ Core.binding
               (Core.bindingName (var "b2"))
               (Variables.substituteVariables @@ var "subst" @@ Core.bindingTerm (var "b2"))
-              (Core.bindingType (var "b2")))
+              (Core.bindingTypeScheme (var "b2")))
             (var "rest") $
           Lists.cons
-            (Core.binding (var "newName") (Core.bindingTerm (var "b")) (Core.bindingType (var "b")))
+            (Core.binding (var "newName") (Core.bindingTerm (var "b")) (Core.bindingTypeScheme (var "b")))
             (dedupBindings @@ Sets.insert (var "newName") (var "inScope") @@ var "rest2"))
          (Lists.cons (var "b")
            (dedupBindings @@ Sets.insert (var "name") (var "inScope") @@ var "rest")))
@@ -2000,7 +2000,7 @@ encodeDefinitions = def "encodeDefinitions" $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out typedefs (non-record/union/wrap types)
     "nonTypedefDefs" <~ Lists.filter (lambda "td" $
-      "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
+      "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td") $
       isSerializableJavaType @@ (var "typ"))
       (var "typeDefs") $
     "typeUnits" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
@@ -2519,7 +2519,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "ts" <~ Maybes.maybe
       (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
       ("x" ~> var "x")
-      (project _TermDefinition _TermDefinition_type @@ var "tdef") $
+      (project _TermDefinition _TermDefinition_typeScheme @@ var "tdef") $
     -- Unshadow variables
     ("term" <~ (Variables.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
@@ -3424,7 +3424,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   lambda "pkg" $ lambda "aliases" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "tdef") $
-    "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "tdef") $
+    "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "tdef") $
     -- Check if serializable
     "serializable" <~ (isSerializableJavaType @@ var "typ") $
     "imports" <~ Logic.ifElse (var "serializable")
@@ -3564,7 +3564,7 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
     Maybes.cases (var "mel")
       (right (var "lam"))
       (lambda "el" $
-        Maybes.cases (Core.bindingType (var "el"))
+        Maybes.cases (Core.bindingTypeScheme (var "el"))
           (right (var "lam"))
           (lambda "ts" $
             "typ" <~ Core.typeSchemeBody (var "ts") $
@@ -3729,7 +3729,7 @@ filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
     Maybes.cases (var "mel")
       (right (var "allTypeArgs"))
       (lambda "el" $
-        Maybes.cases (Core.bindingType (var "el"))
+        Maybes.cases (Core.bindingTypeScheme (var "el"))
           (right (var "allTypeArgs"))
           (lambda "ts" $
             "schemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
@@ -3831,7 +3831,7 @@ flattenBindings = def "flattenBindings" $
         _Term_let>>: lambda "lt" $
           Lists.concat2
             (flattenBindings @@ Core.letBindings (var "lt"))
-            (list [Core.binding (Core.bindingName (var "b")) (Core.letBody (var "lt")) (Core.bindingType (var "b"))])])
+            (list [Core.binding (Core.bindingName (var "b")) (Core.letBody (var "lt")) (Core.bindingTypeScheme (var "b"))])])
 
 -- | Generate a unique name by appending increasing integers, avoiding a given set.
 freshJavaName :: TTermDefinition (Name -> S.Set Name -> Name)
@@ -4427,12 +4427,12 @@ propagateType = def "propagateType" $
         -- Propagate into let binding values using each binding's type scheme
         "propagatedBindings" <~ Lists.map
           ("b" ~>
-            optCases (Core.bindingType $ var "b")
+            optCases (Core.bindingTypeScheme $ var "b")
               (var "b")
               ("ts" ~> Core.binding
                 (Core.bindingName $ var "b")
                 (propagateType @@ (Core.typeSchemeBody $ var "ts") @@ (Core.bindingTerm $ var "b"))
-                (Core.bindingType $ var "b")))
+                (Core.bindingTypeScheme $ var "b")))
           (Core.letBindings (var "lt")) $
         var "setTypeAnn" @@
           (propagateType_rebuildLet @@ var "term"
@@ -4942,7 +4942,7 @@ toDeclInit = def "toDeclInit" $
     Logic.ifElse (Sets.member (var "name") (var "recursiveVars"))
       ("binding" <~ Maybes.fromMaybe (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
         "value" <~ Core.bindingTerm (var "binding") $
-        "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
+        "typ" <<~ Maybes.cases (Core.bindingTypeScheme (var "binding"))
           (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
           (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
         "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
@@ -4967,7 +4967,7 @@ toDeclStatement = def "toDeclStatement" $
     "cx" ~> "g" ~>
     "binding" <~ Maybes.fromMaybe (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
     "value" <~ Core.bindingTerm (var "binding") $
-    "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
+    "typ" <<~ Maybes.cases (Core.bindingTypeScheme (var "binding"))
       (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
       (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
     "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $

@@ -173,7 +173,7 @@ testGroupForCollectionPrimitives =
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.map")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList"))})),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
@@ -206,7 +206,7 @@ testGroupForCollectionPrimitives =
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.map")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList"))})),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -215,7 +215,7 @@ testGroupForCollectionPrimitives =
                           (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
                             Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                             (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))]))})),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "g"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],

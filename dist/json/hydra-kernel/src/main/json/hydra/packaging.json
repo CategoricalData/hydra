@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.packaging.Definition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -36,7 +36,7 @@
     {
       "type": {
         "name": "hydra.packaging.FileExtension",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -50,7 +50,7 @@
     {
       "type": {
         "name": "hydra.packaging.Library",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -94,7 +94,7 @@
     {
       "type": {
         "name": "hydra.packaging.Module",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -160,7 +160,7 @@
     {
       "type": {
         "name": "hydra.packaging.Namespace",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -172,7 +172,7 @@
     {
       "type": {
         "name": "hydra.packaging.Namespaces",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -216,7 +216,7 @@
     {
       "type": {
         "name": "hydra.packaging.Package",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -268,7 +268,7 @@
     {
       "type": {
         "name": "hydra.packaging.PackageName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -282,7 +282,7 @@
     {
       "type": {
         "name": "hydra.packaging.QualifiedName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -315,7 +315,7 @@
     {
       "type": {
         "name": "hydra.packaging.TermDefinition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -345,7 +345,7 @@
                             "value": {"literal": {"string": "The term being defined"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
-                    "name": "type",
+                    "name": "typeScheme",
                     "type": {
                       "annotated": {
                         "annotation": [
@@ -359,7 +359,7 @@
     {
       "type": {
         "name": "hydra.packaging.TypeDefinition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -380,7 +380,7 @@
                             "value": {"literal": {"string": "The name of the type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
-                    "name": "type",
+                    "name": "typeScheme",
                     "type": {
                       "annotated": {
                         "annotation": [

@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.graph.Graph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -118,7 +118,7 @@
     {
       "type": {
         "name": "hydra.graph.Primitive",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -137,14 +137,13 @@
                             "value": {"literal": {"string": "The unique name of the primitive function"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
-                    "name": "type",
+                    "name": "typeScheme",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {"string": "The type signature of the primitive function"}}}],
+                            "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}},
                   {
                     "name": "implementation",
@@ -173,7 +172,7 @@
     {
       "type": {
         "name": "hydra.graph.TermCoder",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

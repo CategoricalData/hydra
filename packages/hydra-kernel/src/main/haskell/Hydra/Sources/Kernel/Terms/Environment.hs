@@ -108,7 +108,7 @@ definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   "el" ~>
   Maybes.maybe (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")) (var "cx"))
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
-    (Core.bindingType (var "el"))
+    (Core.bindingTypeScheme (var "el"))
 
 graphAsLet :: TTermDefinition ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $
@@ -208,7 +208,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
             ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded"))
             (var "decodeType" @@ Core.bindingTerm (var "el")))
           (right nothing)]) $
-    "mts" <<~  optCases (Core.bindingType (var "el"))
+    "mts" <<~  optCases (Core.bindingTypeScheme (var "el"))
       (Eithers.map ("typ" ~> just $ Scoping.fTypeToTypeScheme @@ var "typ") $ var "decodeType" @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))

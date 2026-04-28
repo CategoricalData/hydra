@@ -64,7 +64,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.tabular.ColumnType"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -159,7 +159,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -238,7 +238,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.tabular.HeaderRow"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -382,7 +382,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -483,7 +483,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.tabular.TableType"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

@@ -65,7 +65,7 @@ object Generation:
       case Term.lambda(lam) =>
         Term.lambda(Lambda(lam.parameter, lam.domain, decodeBinaryLiteralsDepth(lam.body, d)))
       case Term.let(lt) =>
-        Term.let(Let(lt.bindings.map(b => Binding(b.name, decodeBinaryLiteralsDepth(b.term, d), b.`type`)),
+        Term.let(Let(lt.bindings.map(b => Binding(b.name, decodeBinaryLiteralsDepth(b.term, d), b.typeScheme)),
           decodeBinaryLiteralsDepth(lt.body, d)))
       case Term.list(elems) => Term.list(elems.map(e => decodeBinaryLiteralsDepth(e, d)))
       case Term.record(rec) =>
@@ -81,7 +81,7 @@ object Generation:
   private def decodeBinaryInModule(mod: Module): Module =
     Module(mod.description, mod.namespace, mod.termDependencies, mod.typeDependencies, mod.definitions.map {
       case Definition.term(td) =>
-        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.`type`))
+        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.typeScheme))
       case other => other
     })
 

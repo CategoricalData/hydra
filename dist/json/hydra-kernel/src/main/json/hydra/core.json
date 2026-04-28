@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.core.AnnotatedTerm",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -37,7 +37,7 @@
     {
       "type": {
         "name": "hydra.core.AnnotatedType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -71,7 +71,7 @@
     {
       "type": {
         "name": "hydra.core.Application",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -103,7 +103,7 @@
     {
       "type": {
         "name": "hydra.core.ApplicationType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -135,7 +135,7 @@
     {
       "type": {
         "name": "hydra.core.Binding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -165,19 +165,19 @@
                             "value": {"literal": {"string": "The term to which the variable is bound"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
-                    "name": "type",
+                    "name": "typeScheme",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "The optional type of the bound term"}}}],
+                            "value": {"literal": {"string": "The optional type scheme of the bound term"}}}],
                         "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.core.CaseStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -220,7 +220,7 @@
     {
       "type": {
         "name": "hydra.core.EitherType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -253,7 +253,7 @@
     {
       "type": {
         "name": "hydra.core.PairType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -285,7 +285,7 @@
     {
       "type": {
         "name": "hydra.core.Field",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -316,7 +316,7 @@
     {
       "type": {
         "name": "hydra.core.FieldType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -347,7 +347,7 @@
     {
       "type": {
         "name": "hydra.core.FloatType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -387,7 +387,7 @@
     {
       "type": {
         "name": "hydra.core.FloatValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -427,7 +427,7 @@
     {
       "type": {
         "name": "hydra.core.ForallType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -460,7 +460,7 @@
     {
       "type": {
         "name": "hydra.core.FunctionType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -492,7 +492,7 @@
     {
       "type": {
         "name": "hydra.core.Injection",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -526,7 +526,7 @@
     {
       "type": {
         "name": "hydra.core.IntegerType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -620,7 +620,7 @@
     {
       "type": {
         "name": "hydra.core.IntegerValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -716,7 +716,7 @@
     {
       "type": {
         "name": "hydra.core.Lambda",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -756,7 +756,7 @@
     {
       "type": {
         "name": "hydra.core.Let",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -790,7 +790,7 @@
     {
       "type": {
         "name": "hydra.core.Literal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -858,7 +858,7 @@
     {
       "type": {
         "name": "hydra.core.LiteralType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -928,7 +928,7 @@
     {
       "type": {
         "name": "hydra.core.MapType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -957,7 +957,7 @@
     {
       "type": {
         "name": "hydra.core.Name",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -970,7 +970,7 @@
     {
       "type": {
         "name": "hydra.core.Projection",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1001,7 +1001,7 @@
     {
       "type": {
         "name": "hydra.core.Record",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1035,7 +1035,7 @@
     {
       "type": {
         "name": "hydra.core.Term",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1246,7 +1246,7 @@
     {
       "type": {
         "name": "hydra.core.Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1408,7 +1408,7 @@
     {
       "type": {
         "name": "hydra.core.TypeApplicationTerm",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1440,7 +1440,7 @@
     {
       "type": {
         "name": "hydra.core.TypeLambda",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1472,7 +1472,7 @@
     {
       "type": {
         "name": "hydra.core.TypeScheme",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1520,7 +1520,7 @@
     {
       "type": {
         "name": "hydra.core.TypeVariableMetadata",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1545,7 +1545,7 @@
     {
       "type": {
         "name": "hydra.core.WrappedTerm",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

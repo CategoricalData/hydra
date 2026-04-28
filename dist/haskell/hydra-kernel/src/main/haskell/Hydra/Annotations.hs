@@ -145,7 +145,7 @@ isNativeType el =
       in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
+        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingTypeScheme el))
 -- | Return a zero-indexed counter for the given key and updated context (pure version)
 nextCount :: Core.Name -> Context.Context -> (Int, Context.Context)
 nextCount key cx =

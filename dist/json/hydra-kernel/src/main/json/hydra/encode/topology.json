@@ -58,7 +58,7 @@
                 "keys": {"literal": {"integer": {"int32": {}}}},
                 "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
             "parameter": "m"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -414,7 +414,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.topology.TarjanState"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -441,7 +441,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"literal": {"integer": {"int32": {}}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

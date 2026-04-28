@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.python.environment.PythonVersion",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -18,7 +18,7 @@
     {
       "type": {
         "name": "hydra.python.environment.PythonEnvironment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -108,7 +108,7 @@
     {
       "type": {
         "name": "hydra.python.environment.PythonModuleMetadata",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -164,7 +164,7 @@
     {
       "type": {
         "name": "hydra.python.environment.PyGraph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

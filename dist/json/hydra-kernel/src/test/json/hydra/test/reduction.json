@@ -10342,7 +10342,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -10441,7 +10441,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -10530,7 +10530,7 @@
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -10619,7 +10619,7 @@
                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -11047,7 +11047,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for term reduction/evaluation mechanics",
   "namespace": "hydra.test.reduction",
   "termDependencies": ["hydra.reduction", "hydra.inference", "hydra.show.core"],

@@ -86,7 +86,7 @@
                     "body": {"variable": "hydra.packaging.Namespace"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "first"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -170,7 +170,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -240,7 +240,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -373,7 +373,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -512,7 +512,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -684,7 +684,7 @@
                     "body": {"variable": "hydra.packaging.Namespace"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "namespace"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -794,7 +794,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -865,7 +865,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -935,7 +935,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1006,7 +1006,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1242,7 +1242,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1482,7 +1482,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1722,7 +1722,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1964,7 +1964,7 @@
                 "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2077,7 +2077,7 @@
                     "body": {"variable": "hydra.packaging.Namespace"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "namespace"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2164,7 +2164,7 @@
                   "variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2237,7 +2237,7 @@
                   "variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2374,7 +2374,7 @@
                   "variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2518,7 +2518,7 @@
                   "variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2631,7 +2631,7 @@
                     "body": {"variable": "hydra.packaging.Namespace"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "namespace"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2714,7 +2714,7 @@
                 "argument": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2785,7 +2785,7 @@
                 "argument": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2917,7 +2917,7 @@
                 "argument": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3055,7 +3055,7 @@
                 "argument": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3134,7 +3134,7 @@
                     "body": {"variable": "hydra.packaging.Namespace"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "namespace"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3204,7 +3204,7 @@
                 "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3284,7 +3284,7 @@
                 "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3362,7 +3362,7 @@
                     "body": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3437,7 +3437,7 @@
                       "variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3512,7 +3512,7 @@
                     "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3586,7 +3586,7 @@
                     "body": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3660,7 +3660,7 @@
                     "body": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3732,7 +3732,7 @@
                     "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

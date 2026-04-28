@@ -519,7 +519,7 @@ def prim0(
         return result
 
     return Primitive(
-        name=name, type=build_type_scheme(variables, output.type), implementation=impl
+        name=name, type_scheme=build_type_scheme(variables, output.type), implementation=impl
     )
 
 
@@ -550,7 +550,7 @@ def prim1(
 
     return Primitive(
         name=name,
-        type=build_type_scheme(variables, types.function(input1.type, output.type)),
+        type_scheme=build_type_scheme(variables, types.function(input1.type, output.type)),
         implementation=impl,
     )
 
@@ -589,7 +589,7 @@ def prim2(
 
     return Primitive(
         name=name,
-        type=build_type_scheme(
+        type_scheme=build_type_scheme(
             variables,
             types.function(input1.type, types.function(input2.type, output.type)),
         ),
@@ -638,7 +638,7 @@ def prim3(
 
     return Primitive(
         name=name,
-        type=build_type_scheme(
+        type_scheme=build_type_scheme(
             variables,
             types.function(
                 input1.type,

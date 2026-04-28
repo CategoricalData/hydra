@@ -90,7 +90,8 @@ checkForUnboundTypeVariables cx tx term0 =
                         let forBinding =
                                 \b ->
                                   let bterm = Core.bindingTerm b
-                                      newVars = Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b)
+                                      newVars =
+                                              Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingTypeScheme b)
                                       newTrace = Lists.cons (Core.unName (Core.bindingName b)) trace
                                   in (checkRecursive newVars newTrace (Just b) bterm)
                         in (Eithers.bind (Eithers.mapList forBinding (Core.letBindings v0)) (\_ -> recurse (Core.letBody v0)))
@@ -354,7 +355,7 @@ typeOfLet cx tx typeArgs letTerm =
           bnames = Lists.map Core.bindingName bs
           bindingType =
                   \b -> Maybes.maybe (Left (Errors.ErrorChecking (Checking.CheckingErrorUntypedLetBinding (Checking.UntypedLetBindingError {
-                    Checking.untypedLetBindingErrorBinding = b})))) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Core.bindingType b)
+                    Checking.untypedLetBindingErrorBinding = b})))) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Core.bindingTypeScheme b)
           btypesResult =
                   Lists.foldl (\acc -> \b -> Eithers.bind acc (\accR ->
                     let types = Pairs.first accR
@@ -498,7 +499,7 @@ typeOfPair cx tx typeArgs p =
 typeOfPrimitive :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either Errors.Error (Core.Type, Context.Context)
 typeOfPrimitive cx tx typeArgs name =
 
-      let rawTs = Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx))
+      let rawTs = Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Errors.ErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
         ErrorCore.undefinedTermVariableErrorLocation = (Paths.SubtermPath []),
         ErrorCore.undefinedTermVariableErrorName = name}))) (\tsRaw ->
@@ -629,7 +630,7 @@ typeOfVariable cx tx typeArgs name =
                     in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
       in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
         ErrorCore.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
-        ErrorCore.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
+        ErrorCore.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
 -- | Reconstruct the type of a wrapped term (Either/Context version)
 typeOfWrappedTerm :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.WrappedTerm -> Either Errors.Error (Core.Type, Context.Context)
 typeOfWrappedTerm cx tx typeArgs wt =

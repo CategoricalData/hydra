@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.variants.EliminationVariant",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -20,7 +20,7 @@
     {
       "type": {
         "name": "hydra.variants.FunctionVariant",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -36,7 +36,7 @@
     {
       "type": {
         "name": "hydra.variants.LiteralVariant",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -55,7 +55,7 @@
     {
       "type": {
         "name": "hydra.variants.TermVariant",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -90,7 +90,7 @@
     {
       "type": {
         "name": "hydra.variants.TypeVariant",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

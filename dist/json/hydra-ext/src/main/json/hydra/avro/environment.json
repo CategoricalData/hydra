@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.avro.environment.AvroQualifiedName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -35,7 +35,7 @@
     {
       "type": {
         "name": "hydra.avro.environment.AvroForeignKey",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -74,7 +74,7 @@
     {
       "type": {
         "name": "hydra.avro.environment.AvroPrimaryKey",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -112,7 +112,7 @@
     {
       "type": {
         "name": "hydra.avro.environment.AvroEnvironment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -172,7 +172,7 @@
     {
       "type": {
         "name": "hydra.avro.environment.EncodeEnvironment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

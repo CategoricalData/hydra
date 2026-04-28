@@ -50,7 +50,7 @@
                         "parameter": "env"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -90,7 +90,7 @@
                         "parameter": "env"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -119,7 +119,7 @@
                   "application": {
                     "argument": {"literal": {"boolean": false}},
                     "function": {"variable": "hydra.python.names.encodeName"}}}}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -162,7 +162,7 @@
                     "parameter": "fname"}},
                 "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                 "parameter": "env"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -200,7 +200,7 @@
                                           "project": {
                                             "field": "namespaces",
                                             "typeName": "hydra.python.environment.PythonEnvironment"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "application": {
                                           "argument": {"variable": "hydra.python.syntax.DottedName"},
@@ -216,7 +216,7 @@
                                             "body": {
                                               "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "pair": {
                                           "first": {"variable": "hydra.packaging.Namespace"},
@@ -234,7 +234,7 @@
                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                 "type": {"variable": "hydra.packaging.Namespace"}}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                                    "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                                   {
                                     "name": "boundVars",
                                     "term": {
@@ -256,7 +256,7 @@
                                               "map": {
                                                 "keys": {"variable": "hydra.core.Name"},
                                                 "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "map": {
                                           "keys": {"variable": "hydra.core.Name"},
@@ -268,7 +268,7 @@
                                       "application": {
                                         "argument": {"variable": "name"},
                                         "function": {"variable": "hydra.names.qualifyName"}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"variable": "hydra.packaging.QualifiedName"},
                                       "variables": []}},
                                   {
@@ -278,7 +278,7 @@
                                         "argument": {"variable": "qualName"},
                                         "function": {
                                           "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                       "variables": []}},
                                   {
@@ -288,7 +288,7 @@
                                         "argument": {"variable": "qualName"},
                                         "function": {
                                           "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "pyLocal",
                                     "term": {
@@ -307,7 +307,7 @@
                                                         "typeName": "hydra.util.CaseConvention"}},
                                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
                                         "function": {"variable": "hydra.python.names.sanitizePythonName"}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "pyNs",
                                     "term": {
@@ -354,7 +354,7 @@
                                                 "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                         "domain": {"variable": "hydra.packaging.Namespace"},
                                         "parameter": "nsVal"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "function": {
                                           "codomain": {"literal": {"string": {}}},
@@ -495,7 +495,7 @@
                     "parameter": "conv"}},
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "isQualified"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -536,7 +536,7 @@
                                   "project": {
                                     "field": "namespaces",
                                     "typeName": "hydra.python.environment.PythonEnvironment"}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {
                                 "application": {
                                   "argument": {"variable": "hydra.python.syntax.DottedName"},
@@ -552,7 +552,7 @@
                                     "body": {
                                       "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {
                                 "pair": {
                                   "first": {"variable": "hydra.packaging.Namespace"},
@@ -570,7 +570,7 @@
                                         "body": {"variable": "hydra.lib.pairs.first"},
                                         "type": {"variable": "hydra.packaging.Namespace"}}},
                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                            "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                            "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                           {
                             "name": "boundVars",
                             "term": {
@@ -592,7 +592,7 @@
                                       "map": {
                                         "keys": {"variable": "hydra.core.Name"},
                                         "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {
                                 "map": {
                                   "keys": {"variable": "hydra.core.Name"},
@@ -604,7 +604,7 @@
                               "application": {
                                 "argument": {"variable": "name"},
                                 "function": {"variable": "hydra.names.qualifyName"}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {"variable": "hydra.packaging.QualifiedName"},
                               "variables": []}},
                           {
@@ -614,7 +614,7 @@
                                 "argument": {"variable": "qualName"},
                                 "function": {
                                   "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                               "variables": []}},
                           {
@@ -624,7 +624,7 @@
                                 "argument": {"variable": "qualName"},
                                 "function": {
                                   "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -733,7 +733,7 @@
                     "parameter": "name"}},
                 "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
                 "parameter": "env"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -802,7 +802,7 @@
                     "typeName": "hydra.python.syntax.DottedName"}},
                 "domain": {"variable": "hydra.packaging.Namespace"},
                 "parameter": "nsVal"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.DottedName"},
@@ -831,7 +831,7 @@
                     "typeName": "hydra.python.syntax.Name"}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Name"},
@@ -850,7 +850,7 @@
               "application": {
                 "argument": {"variable": "hydra.python.language.pythonReservedWords"},
                 "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -876,7 +876,7 @@
                         "field": {"name": "lowerSnake", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -905,7 +905,7 @@
                         "field": {"name": "pascal", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -926,7 +926,7 @@
                   "literal": {
                     "string": "Whether to use __future__ annotations for forward references"}}}],
             "body": {"literal": {"boolean": true}}}},
-        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.python.names.variableReference",
@@ -962,7 +962,7 @@
                                                   "application": {
                                                     "argument": {"literal": {"boolean": true}},
                                                     "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
-                                    "type": {"body": {"variable": "hydra.python.syntax.Name"}, "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.python.syntax.Name"}, "variables": []}},
                                   {
                                     "name": "unquoted",
                                     "term": {
@@ -1102,7 +1102,7 @@
                                                       "typeName": "hydra.python.syntax.Conjunction"}}]},
                                               "typeName": "hydra.python.syntax.Disjunction"}}},
                                         "typeName": "hydra.python.syntax.Expression"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"variable": "hydra.python.syntax.Expression"},
                                       "variables": []}},
                                   {
@@ -1114,7 +1114,7 @@
                                           "project": {
                                             "field": "namespaces",
                                             "typeName": "hydra.python.environment.PythonEnvironment"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "application": {
                                           "argument": {"variable": "hydra.python.syntax.DottedName"},
@@ -1130,7 +1130,7 @@
                                             "body": {
                                               "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "pair": {
                                           "first": {"variable": "hydra.packaging.Namespace"},
@@ -1148,14 +1148,14 @@
                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                 "type": {"variable": "hydra.packaging.Namespace"}}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                                    "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                                   {
                                     "name": "mns",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "name"},
                                         "function": {"variable": "hydra.names.namespaceOf"}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                       "variables": []}},
                                   {
@@ -1189,7 +1189,7 @@
                                                         "body": {"variable": "hydra.lib.maybes.maybe"},
                                                         "type": {"literal": {"boolean": {}}}}},
                                                     "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
-                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
+                                    "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "unquoted"},
@@ -1370,7 +1370,7 @@
                     "parameter": "quoted"}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
                 "parameter": "conv"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1445,7 +1445,7 @@
                     "parameter": "env"}},
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "isQualified"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

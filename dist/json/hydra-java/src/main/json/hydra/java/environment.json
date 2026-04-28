@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.java.environment.JavaSymbolClass",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -64,7 +64,7 @@
     {
       "type": {
         "name": "hydra.java.environment.JavaFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -87,7 +87,7 @@
     {
       "type": {
         "name": "hydra.java.environment.Aliases",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -246,7 +246,7 @@
     {
       "type": {
         "name": "hydra.java.environment.JavaEnvironment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

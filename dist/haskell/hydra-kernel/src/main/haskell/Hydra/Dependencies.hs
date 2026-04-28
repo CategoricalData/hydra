@@ -43,7 +43,7 @@ flattenLetTerms term =
               \binding ->
                 let key0 = Core.bindingName binding
                     val0 = Core.bindingTerm binding
-                    t = Core.bindingType binding
+                    t = Core.bindingTypeScheme binding
                 in case val0 of
                   Core.TermAnnotated v0 ->
                     let val1 = Core.annotatedTermBody v0
@@ -52,7 +52,7 @@ flattenLetTerms term =
                                 rewriteBinding (Core.Binding {
                                   Core.bindingName = key0,
                                   Core.bindingTerm = val1,
-                                  Core.bindingType = t})
+                                  Core.bindingTypeScheme = t})
                         innerBinding = Pairs.first recursive
                         deps = Pairs.second recursive
                         val2 = Core.bindingTerm innerBinding
@@ -61,7 +61,7 @@ flattenLetTerms term =
                       Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                         Core.annotatedTermBody = val2,
                         Core.annotatedTermAnnotation = ann})),
-                      Core.bindingType = t}, deps)
+                      Core.bindingTypeScheme = t}, deps)
                   Core.TermLet v0 ->
                     let bindings1 = Core.letBindings v0
                         body1 = Core.letBody v0
@@ -75,15 +75,15 @@ flattenLetTerms term =
                                 \b -> Core.Binding {
                                   Core.bindingName = (qualify (Core.bindingName b)),
                                   Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
-                                  Core.bindingType = (Core.bindingType b)}
+                                  Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                     in (Core.Binding {
                       Core.bindingName = key0,
                       Core.bindingTerm = newBody,
-                      Core.bindingType = t}, (Lists.map newBinding bindings1))
+                      Core.bindingTypeScheme = t}, (Lists.map newBinding bindings1))
                   _ -> (Core.Binding {
                     Core.bindingName = key0,
                     Core.bindingTerm = val0,
-                    Core.bindingType = t}, [])
+                    Core.bindingTypeScheme = t}, [])
           flattenBodyLet =
                   \bindings -> \body -> case body of
                     Core.TermLet v0 ->
@@ -137,7 +137,7 @@ liftLambdaAboveLet term0 =
                         \b -> Core.Binding {
                           Core.bindingName = (Core.bindingName b),
                           Core.bindingTerm = (rewrite recurse (Core.bindingTerm b)),
-                          Core.bindingType = (Core.bindingType b)}
+                          Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                     rewriteBindings = \bs -> Lists.map rewriteBinding bs
                     digForLambdas =
                             \original -> \cons -> \term2 -> case term2 of
@@ -292,7 +292,7 @@ topologicalSortTypeDefinitions :: [Packaging.TypeDefinition] -> [[Packaging.Type
 topologicalSortTypeDefinitions defs =
 
       let toPair =
-              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionType def)))))
+              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def)))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)

@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.ConflictingModuleNamespaceError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -38,7 +38,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.ConflictingVariantNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -93,7 +93,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.DefinitionNotInModuleNamespaceError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -128,7 +128,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.DuplicateDefinitionNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -162,7 +162,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.DuplicateModuleNamespaceError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -186,7 +186,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.InvalidModuleError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -234,7 +234,7 @@
     {
       "type": {
         "name": "hydra.error.packaging.InvalidPackageError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

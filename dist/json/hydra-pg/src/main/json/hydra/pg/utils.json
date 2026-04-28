@@ -38,7 +38,7 @@
                     "term": {"literal": {"string": "inEdgeLabel"}}},
                   {"name": "ignore", "term": {"literal": {"string": "ignore"}}}],
                 "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
-        "type": {
+        "typeScheme": {
           "body": {"variable": "hydra.pg.mapping.AnnotationSchema"},
           "variables": []}}},
     {
@@ -406,7 +406,7 @@
                         "type": {"unit": {}}}},
                     "type": {"literal": {"string": {}}}}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "application": {
               "argument": {"literal": {"string": {}}},
@@ -515,7 +515,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -635,7 +635,7 @@
                         "function": {"variable": "hydra.pg.model.LazyGraph"}}},
                     "parameter": "lg"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -705,7 +705,7 @@
                                                                                           "type": {"variable": "t2"}}}}},
                                                                                   "function": {"unwrap": "hydra.pg.model.VertexLabel"}}}},
                                                                             "typeName": "hydra.json.model.Value"}},
-                                                                        "type": {"body": {"variable": "hydra.json.model.Value"}, "variables": []}}],
+                                                                        "typeScheme": {"body": {"variable": "hydra.json.model.Value"}, "variables": []}}],
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {
@@ -765,7 +765,7 @@
                                                                                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                            "type": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
+                                                                                                                            "typeScheme": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                                                                                                           {
                                                                                                                             "name": "v",
                                                                                                                             "term": {
@@ -778,7 +778,7 @@
                                                                                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                            "type": {"body": {"variable": "t2"}, "variables": []}}],
+                                                                                                                            "typeScheme": {"body": {"variable": "t2"}, "variables": []}}],
                                                                                                                         "body": {
                                                                                                                           "application": {
                                                                                                                             "argument": {
@@ -1167,7 +1167,7 @@
                                                                                                           "type": {"variable": "t2"}}}}},
                                                                                                   "function": {"unwrap": "hydra.pg.model.EdgeLabel"}}}},
                                                                                             "typeName": "hydra.json.model.Value"}},
-                                                                                        "type": {"body": {"variable": "hydra.json.model.Value"}, "variables": []}}],
+                                                                                        "typeScheme": {"body": {"variable": "hydra.json.model.Value"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "application": {
                                                                                         "argument": {
@@ -1227,7 +1227,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                                            "type": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
+                                                                                                                                            "typeScheme": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                                                                                                                           {
                                                                                                                                             "name": "v",
                                                                                                                                             "term": {
@@ -1240,7 +1240,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                                            "type": {"body": {"variable": "t2"}, "variables": []}}],
+                                                                                                                                            "typeScheme": {"body": {"variable": "t2"}, "variables": []}}],
                                                                                                                                         "body": {
                                                                                                                                           "application": {
                                                                                                                                             "argument": {
@@ -1752,7 +1752,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1889,7 +1889,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2047,7 +2047,7 @@
                         "function": {"variable": "hydra.pg.model.Graph"}}},
                     "parameter": "g"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2220,7 +2220,7 @@
                                                                                                             "function": {"variable": "hydra.pg.model.ElementTree"}}},
                                                                                                         "parameter": "t"}},
                                                                                                     "parameter": "t3"}},
-                                                                                                "type": {
+                                                                                                "typeScheme": {
                                                                                                   "body": {
                                                                                                     "function": {
                                                                                                       "codomain": {
@@ -2403,7 +2403,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

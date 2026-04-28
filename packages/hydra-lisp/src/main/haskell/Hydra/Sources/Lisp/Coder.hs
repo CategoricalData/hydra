@@ -765,7 +765,7 @@ encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> E
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
@@ -1020,7 +1020,7 @@ moduleToLisp = def "moduleToLisp" $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out type aliases (non-nominal types)
     "typeDefs" <~ Lists.filter (lambda "td" $
-      Predicates.isNominalType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "td")))
+      Predicates.isNominalType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $

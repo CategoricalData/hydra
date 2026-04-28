@@ -553,7 +553,7 @@ graphWithTypeVariables original newVal =
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 primitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
-primitive name type_ implementation =
+primitive name typeScheme implementation =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
       Core.recordFields = [
@@ -561,8 +561,8 @@ primitive name type_ implementation =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)},
+          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldTerm = (Phantoms.unTTerm typeScheme)},
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm implementation)}]}))
@@ -580,12 +580,12 @@ primitiveName x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-primitiveType :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme
-primitiveType x =
+primitiveTypeScheme :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme
+primitiveTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionField = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
 primitiveWithImplementation original newVal =
@@ -600,11 +600,11 @@ primitiveWithImplementation original newVal =
               Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
@@ -618,11 +618,11 @@ primitiveWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
@@ -631,8 +631,8 @@ primitiveWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
               Core.projectionField = (Core.Name "implementation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-primitiveWithType :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Graph.Primitive
-primitiveWithType original newVal =
+primitiveWithTypeScheme :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Graph.Primitive
+primitiveWithTypeScheme original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
       Core.recordFields = [
@@ -644,7 +644,7 @@ primitiveWithType original newVal =
               Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),

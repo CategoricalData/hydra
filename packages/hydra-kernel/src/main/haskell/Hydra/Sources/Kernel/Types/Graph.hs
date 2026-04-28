@@ -67,8 +67,8 @@ primitive = define "Primitive" $
     "name">:
       doc "The unique name of the primitive function"
       Core.name,
-    "type">:
-      doc "The type signature of the primitive function"
+    "typeScheme">:
+      doc "The type scheme of the primitive function"
       Core.typeScheme,
     "implementation">:
       doc ("A concrete implementation of the primitive function."

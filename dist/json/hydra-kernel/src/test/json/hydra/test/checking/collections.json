@@ -25,7 +25,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.listsTests",
@@ -54,7 +54,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.listsOfLiteralsTests",
@@ -702,7 +702,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.emptyListsTests",
@@ -1250,7 +1250,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.polymorphicListsTests",
@@ -1885,7 +1885,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.nestedListsTests",
@@ -2459,7 +2459,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.listsInComplexContextsTests",
@@ -2710,7 +2710,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.mapsTests",
@@ -2739,7 +2739,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.monomorphicMapsTests",
@@ -3498,7 +3498,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.polymorphicMapsTests",
@@ -4423,7 +4423,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.mapsInComplexContextsTests",
@@ -4973,7 +4973,7 @@
                                                                                             "typeName": "hydra.core.Term"}}}]}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -5115,7 +5115,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.mapsWithComplexTypesTests",
@@ -5833,7 +5833,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.setsTests",
@@ -5863,7 +5863,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.monomorphicSetsTests",
@@ -6488,7 +6488,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.polymorphicSetsTests",
@@ -7116,7 +7116,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.setsInComplexContextsTests",
@@ -7436,7 +7436,7 @@
                                                                                           "typeName": "hydra.core.Term"}}]}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -7561,7 +7561,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.nestedSetsTests",
@@ -8152,7 +8152,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.collections.setsWithComplexTypesTests",
@@ -8731,7 +8731,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Collection type checking test cases: lists, sets, maps",
   "namespace": "hydra.test.checking.collections",
   "termDependencies": ["hydra.test.testGraph", "hydra.rewriting"],

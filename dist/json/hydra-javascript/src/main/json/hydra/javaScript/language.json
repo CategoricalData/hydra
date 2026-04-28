@@ -35,7 +35,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
@@ -68,7 +68,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
@@ -85,7 +85,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
@@ -106,7 +106,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
@@ -127,7 +127,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
@@ -224,7 +224,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
@@ -305,7 +305,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
@@ -318,7 +318,7 @@
                             "domain": {"variable": "t0"},
                             "parameter": "_"}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
@@ -355,7 +355,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.language.javaScriptReservedWords",
@@ -419,7 +419,7 @@
                             {"literal": {"string": "while"}},
                             {"literal": {"string": "with"}},
                             {"literal": {"string": "yield"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "futureReserved",
                     "term": {
@@ -436,7 +436,7 @@
                             {"literal": {"string": "private"}},
                             {"literal": {"string": "protected"}},
                             {"literal": {"string": "public"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "strictModeReserved",
                     "term": {
@@ -449,7 +449,7 @@
                           "list": [
                             {"literal": {"string": "arguments"}},
                             {"literal": {"string": "eval"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "builtIns",
                     "term": {
@@ -508,7 +508,7 @@
                             {"literal": {"string": "process"}},
                             {"literal": {"string": "require"}},
                             {"literal": {"string": "window"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraJavaScriptKeywords",
                     "term": {
@@ -539,7 +539,7 @@
                             {"literal": {"string": "TERM_UNIT"}},
                             {"literal": {"string": "TERM_VARIABLE"}},
                             {"literal": {"string": "TERM_WRAP"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -559,7 +559,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for JavaScript (ECMAScript 2024)",
   "namespace": "hydra.javaScript.language",
   "termDependencies": ["hydra.lexical"],

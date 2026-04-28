@@ -146,7 +146,7 @@ termDefinition = define "TermDefinition" $
     "term">:
       doc "The term being defined"
       Core.term,
-    "type">:
+    "typeScheme">:
       doc "The type scheme of the term, including any class constraints" $
       T.maybe Core.typeScheme]
 
@@ -157,6 +157,6 @@ typeDefinition = define "TypeDefinition" $
     "name">:
       doc "The name of the type"
       Core.name,
-    "type">:
+    "typeScheme">:
       doc "The type scheme being defined"
       Core.typeScheme]

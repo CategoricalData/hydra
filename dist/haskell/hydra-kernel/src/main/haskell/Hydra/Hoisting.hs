@@ -50,12 +50,12 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                     in (Logic.ifElse (Logic.or (Lists.null freeVars) (Logic.not (Equality.equal (Lists.length varTypes) (Lists.length varTypePairs)))) (b, Nothing) (Core.Binding {
                       Core.bindingName = (Core.bindingName b),
                       Core.bindingTerm = (wrapAfterTypeLambdas varTypePairs (Core.bindingTerm b)),
-                      Core.bindingType = (Maybes.map (\ts -> Core.TypeScheme {
+                      Core.bindingTypeScheme = (Maybes.map (\ts -> Core.TypeScheme {
                         Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
                         Core.typeSchemeBody = (Lists.foldl (\acc -> \t -> Core.TypeFunction (Core.FunctionType {
                           Core.functionTypeDomain = t,
                           Core.functionTypeCodomain = acc})) (Core.typeSchemeBody ts) (Lists.reverse varTypes)),
-                        Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b))}, (Just (Core.bindingName b, (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
+                        Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingTypeScheme b))}, (Just (Core.bindingName b, (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
                       Core.applicationFunction = t,
                       Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable (Core.bindingName b)) freeVars)))))
           results = Lists.map augment bindings
@@ -63,14 +63,14 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: Core.Binding -> Bool
 bindingIsPolymorphic binding =
-    Maybes.maybe False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Core.bindingType binding)
+    Maybes.maybe False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Core.bindingTypeScheme binding)
 -- | Check if a binding's type uses any type variables from the given Graph. Returns True if the free type variables in the binding's type intersect with the type variables in scope (graphTypeVariables).
 bindingUsesContextTypeVars :: Graph.Graph -> Core.Binding -> Bool
 bindingUsesContextTypeVars cx binding =
     Maybes.maybe False (\ts ->
       let freeInType = Variables.freeVariablesInType (Core.typeSchemeBody ts)
           contextTypeVars = Graph.graphTypeVariables cx
-      in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding)
+      in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingTypeScheme binding)
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
 countVarOccurrences :: Core.Name -> Core.Term -> Int
 countVarOccurrences name term =
@@ -136,7 +136,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     capturedTermVarTypes =
                             Lists.map (\typ -> Strip.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs))
                     freeInBindingType =
-                            Maybes.maybe Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeBody ts)) (Core.bindingType b)
+                            Maybes.maybe Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeBody ts)) (Core.bindingTypeScheme b)
                     freeInCapturedVarTypes = Sets.unions (Lists.map (\t -> Variables.freeVariablesInType t) capturedTermVarTypes)
                     capturedTypeVars =
                             Sets.toList (Sets.intersection (Graph.graphTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes))
@@ -149,7 +149,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                               Core.typeSchemeBody = (Lists.foldl (\t -> \a -> Core.TypeFunction (Core.FunctionType {
                                 Core.functionTypeDomain = a,
                                 Core.functionTypeCodomain = t})) (Core.typeSchemeBody ts) (Lists.reverse capturedTermVarTypes)),
-                              Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b)) Nothing
+                              Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingTypeScheme b)) Nothing
                     strippedTerm = Strip.stripTypeLambdas (Core.bindingTerm b)
                     termWithLambdas =
                             Lists.foldl (\t -> \p -> Core.TermLambda (Core.Lambda {
@@ -172,7 +172,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             (Core.Binding {
                               Core.bindingName = globalBindingName,
                               Core.bindingTerm = termWithTypeLambdas,
-                              Core.bindingType = newTypeScheme}, replacement)
+                              Core.bindingTypeScheme = newTypeScheme}, replacement)
                     newPairs = Lists.cons newBindingAndReplacement bindingAndReplacementPairs
                 in (newPairs, newUsedNames)
           rewrite =
@@ -223,11 +223,11 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             bodySubst = Substitution.substituteInTerm bodyOnlySubst body
                             cacheBindings =
                                     Lists.map (\p ->
-                                      let origType = Maybes.maybe Nothing (\b -> Core.bindingType b) (Maps.lookup (Pairs.first p) hoistBindingMap)
+                                      let origType = Maybes.maybe Nothing (\b -> Core.bindingTypeScheme b) (Maps.lookup (Pairs.first p) hoistBindingMap)
                                       in Core.Binding {
                                         Core.bindingName = (Pairs.first p),
                                         Core.bindingTerm = (Pairs.second p),
-                                        Core.bindingType = origType}) multiRefPairs
+                                        Core.bindingTypeScheme = origType}) multiRefPairs
                             bodyWithCache =
                                     Logic.ifElse (Lists.null cacheBindings) bodySubst (Core.TermLet (Core.Let {
                                       Core.letBindings = cacheBindings,
@@ -262,7 +262,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     in (Lists.cons (Core.Binding {
                       Core.bindingName = (Core.bindingName b),
                       Core.bindingTerm = resultTerm,
-                      Core.bindingType = (Core.bindingType b)}) resultBindings)
+                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) resultBindings)
           forBinding = \b -> Logic.ifElse (isParentBinding b) (forActiveBinding b) [
                 b]
       in Core.Let {
@@ -333,7 +333,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                                 Core.Binding {
                                                   Core.bindingName = bindingName,
                                                   Core.bindingTerm = wrappedTerm,
-                                                  Core.bindingType = Nothing}
+                                                  Core.bindingTypeScheme = Nothing}
                                     in ((Math.add newCounter 1, (Lists.cons newBinding newBindings)), reference)) (newAcc, processedTerm))
                     result = Rewriting.rewriteAndFoldTermWithGraphAndPath collectAndReplace cx (counter, []) subterm
                     finalAcc = Pairs.first result
@@ -361,7 +361,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                               Core.Binding {
                                                 Core.bindingName = (Core.bindingName binding),
                                                 Core.bindingTerm = newValue,
-                                                Core.bindingType = (Core.bindingType binding)}
+                                                Core.bindingTypeScheme = (Core.bindingTypeScheme binding)}
                                   in (Lists.cons newBinding acc)
                         newBindingsReversed = Lists.foldl processBinding [] bindings
                         newBindings = Lists.reverse newBindingsReversed

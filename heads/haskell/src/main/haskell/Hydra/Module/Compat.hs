@@ -21,7 +21,7 @@ bindingToDefinition :: Binding -> Definition
 bindingToDefinition b = DefinitionTerm $ TermDefinition {
   termDefinitionName = bindingName b,
   termDefinitionTerm = bindingTerm b,
-  termDefinitionType = bindingType b}
+  termDefinitionTypeScheme = bindingTypeScheme b}
 
 -- | Convert a Definition back to a Binding.
 definitionToBinding :: Definition -> Binding
@@ -29,9 +29,9 @@ definitionToBinding d = case d of
   DefinitionTerm td -> Binding {
     bindingName = termDefinitionName td,
     bindingTerm = termDefinitionTerm td,
-    bindingType = termDefinitionType td}
+    bindingTypeScheme = termDefinitionTypeScheme td}
   DefinitionType td ->
-    let encoded = EncodeCore.type_ (typeSchemeBody $ typeDefinitionType td)
+    let encoded = EncodeCore.type_ (typeSchemeBody $ typeDefinitionTypeScheme td)
         annotated = TermAnnotated (AnnotatedTerm {
           annotatedTermBody = encoded,
           annotatedTermAnnotation = M.fromList [
@@ -39,7 +39,7 @@ definitionToBinding d = case d of
     in Binding {
       bindingName = typeDefinitionName td,
       bindingTerm = annotated,
-      bindingType = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
+      bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
 -- | Extract all definitions from a module as Bindings.
 moduleBindings :: Module -> [Binding]

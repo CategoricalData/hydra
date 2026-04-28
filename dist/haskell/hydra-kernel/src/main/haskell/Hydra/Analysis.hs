@@ -95,7 +95,7 @@ definitionDependencyNamespaces defs =
 
       let defNames =
               \def -> case def of
-                Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionType v0))
+                Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0))
                 Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionTerm v0)
           allNames = Sets.unions (Lists.map defNames defs)
       in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
@@ -109,7 +109,7 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
                     deannotatedTerm = Strip.deannotateTerm term
                     dataNames = Dependencies.termDependencyNames binds withPrims withNoms term
                     schemaNames =
-                            Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts)) (Core.bindingType el)) Sets.empty
+                            Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts)) (Core.bindingTypeScheme el)) Sets.empty
                 in (Logic.ifElse (Predicates.isEncodedType deannotatedTerm) (Eithers.map (\typ -> Sets.unions [
                   dataNames,
                   schemaNames,
@@ -267,14 +267,14 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                   in Core.Binding {
                     Core.bindingName = name,
                     Core.bindingTerm = dataTerm,
-                    Core.bindingType = (Just (Core.TypeScheme {
+                    Core.bindingTypeScheme = (Just (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingType = (Packaging.termDefinitionType v0)})
+                  Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleNamespace mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
 -- | Create namespaces mapping for definitions

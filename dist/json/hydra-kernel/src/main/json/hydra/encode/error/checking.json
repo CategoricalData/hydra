@@ -521,7 +521,7 @@
                     "domain": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.error.checking.CheckingError"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -576,7 +576,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.IncorrectUnificationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -673,7 +673,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.NotAForallTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -727,7 +727,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -815,7 +815,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.OtherCheckingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -990,7 +990,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.TypeArityMismatchError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1066,7 +1066,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.TypeMismatchError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1164,7 +1164,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1242,7 +1242,7 @@
             "domain": {
               "variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1352,7 +1352,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.UnequalTypesError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1407,7 +1407,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1442,7 +1442,7 @@
                 "domain": {"variable": "t0"},
                 "parameter": "x"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1496,7 +1496,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.UntypedLetBindingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1573,7 +1573,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

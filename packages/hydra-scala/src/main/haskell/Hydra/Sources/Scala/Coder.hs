@@ -433,7 +433,7 @@ encodeLetBinding = def "encodeLetBinding" $
     "bname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (Core.bindingName $ var "b")),
     "bterm">: Core.bindingTerm $ var "b",
     -- Effective type scheme: binding's own type, or fall back to graph's bound types
-    "mts">: optCases (Core.bindingType $ var "b")
+    "mts">: optCases (Core.bindingTypeScheme $ var "b")
       (Maps.lookup (Core.bindingName $ var "b") (Graph.graphBoundTypes $ var "g"))
       ("ts" ~> just (var "ts")),
     -- Check if the binding has a function type
@@ -814,7 +814,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
       (unaryFunction Core.typeSchemeBody)
-      (project _TermDefinition _TermDefinition_type @@ var "td"),
+      (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
       (Just false)
@@ -962,7 +962,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TypeDefinition _TypeDefinition_name @@ var "td",
-    "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "td",
+    "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td",
     "lname">: Names.localNameOf @@ var "name",
     "tname">: record _Type_Name [_Type_Name_value>>: var "lname"],
     "dname">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],

@@ -366,7 +366,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either t2 Syntax
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionType tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
           lname = qualifiedSnakeName name
           dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
@@ -518,7 +518,7 @@ moduleToLisp dialect mod defs0 cx g =
           allTypeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
           typeDefs =
-                  Lists.filter (\td -> Predicates.isNominalType (Core.typeSchemeBody (Packaging.typeDefinitionType td))) allTypeDefs
+                  Lists.filter (\td -> Predicates.isNominalType (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td))) allTypeDefs
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition dialect cx g) termDefs) (\termItems ->
         let allItems = Lists.concat2 typeItems termItems
             nsName = Packaging.unNamespace (Packaging.moduleNamespace mod)

@@ -285,7 +285,7 @@
                         "values": {"variable": "hydra.core.Term"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "boundTerms"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -466,7 +466,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -539,7 +539,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -612,7 +612,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -686,7 +686,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -757,7 +757,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -830,7 +830,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -903,7 +903,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -975,7 +975,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1410,7 +1410,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1853,7 +1853,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2297,7 +2297,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2739,7 +2739,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3180,7 +3180,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3623,7 +3623,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4065,7 +4065,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4505,7 +4505,7 @@
                 "argument": {"variable": "hydra.graph.Graph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4582,13 +4582,13 @@
                                                   "name": "name",
                                                   "term": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "type"}},
+                                                      "body": {"literal": {"string": "typeScheme"}},
                                                       "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
                                                     "application": {
-                                                      "argument": {"variable": "type"},
+                                                      "argument": {"variable": "typeScheme"},
                                                       "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -4642,11 +4642,10 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {"string": "The type signature of the primitive function"}}}],
+                            "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "type"}},
+                "parameter": "typeScheme"}},
             "domain": {
               "application": {
                 "argument": {
@@ -4658,7 +4657,7 @@
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4700,8 +4699,7 @@
                           "annotation": [
                             {
                               "key": "description",
-                              "value": {
-                                "literal": {"string": "The type signature of the primitive function"}}}],
+                              "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
                           "body": {"variable": "hydra.core.TypeScheme"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4766,7 +4764,7 @@
                 "argument": {"variable": "hydra.graph.Primitive"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4786,7 +4784,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.graph.primitiveType",
+        "name": "hydra.dsl.graph.primitiveTypeScheme",
         "term": {
           "lambda": {
             "body": {
@@ -4817,7 +4815,7 @@
                                             "name": "field",
                                             "term": {
                                               "wrap": {
-                                                "body": {"literal": {"string": "type"}},
+                                                "body": {"literal": {"string": "typeScheme"}},
                                                 "typeName": "hydra.core.Name"}}}],
                                         "typeName": "hydra.core.Projection"}}},
                                   "typeName": "hydra.core.Term"}}},
@@ -4835,7 +4833,7 @@
                 "argument": {"variable": "hydra.graph.Primitive"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4845,8 +4843,7 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {
-                            "literal": {"string": "The type signature of the primitive function"}}}],
+                          "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
                       "body": {"variable": "hydra.core.TypeScheme"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4905,7 +4902,7 @@
                 "argument": {"variable": "hydra.graph.Primitive"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4986,7 +4983,7 @@
                                               "name": "name",
                                               "term": {
                                                 "wrap": {
-                                                  "body": {"literal": {"string": "type"}},
+                                                  "body": {"literal": {"string": "typeScheme"}},
                                                   "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
@@ -5016,7 +5013,7 @@
                                                                           "name": "field",
                                                                           "term": {
                                                                             "wrap": {
-                                                                              "body": {"literal": {"string": "type"}},
+                                                                              "body": {"literal": {"string": "typeScheme"}},
                                                                               "typeName": "hydra.core.Name"}}}],
                                                                       "typeName": "hydra.core.Projection"}}},
                                                                 "typeName": "hydra.core.Term"}}},
@@ -5098,7 +5095,7 @@
                 "argument": {"variable": "hydra.graph.Primitive"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5124,7 +5121,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.graph.primitiveWithType",
+        "name": "hydra.dsl.graph.primitiveWithTypeScheme",
         "term": {
           "lambda": {
             "body": {
@@ -5205,7 +5202,7 @@
                                               "name": "name",
                                               "term": {
                                                 "wrap": {
-                                                  "body": {"literal": {"string": "type"}},
+                                                  "body": {"literal": {"string": "typeScheme"}},
                                                   "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
@@ -5274,8 +5271,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {"string": "The type signature of the primitive function"}}}],
+                            "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5284,7 +5280,7 @@
                 "argument": {"variable": "hydra.graph.Primitive"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5300,8 +5296,7 @@
                           "annotation": [
                             {
                               "key": "description",
-                              "value": {
-                                "literal": {"string": "The type signature of the primitive function"}}}],
+                              "value": {"literal": {"string": "The type scheme of the primitive function"}}}],
                           "body": {"variable": "hydra.core.TypeScheme"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5392,7 +5387,7 @@
                                               "name": "name",
                                               "term": {
                                                 "wrap": {
-                                                  "body": {"literal": {"string": "type"}},
+                                                  "body": {"literal": {"string": "typeScheme"}},
                                                   "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
@@ -5422,7 +5417,7 @@
                                                                           "name": "field",
                                                                           "term": {
                                                                             "wrap": {
-                                                                              "body": {"literal": {"string": "type"}},
+                                                                              "body": {"literal": {"string": "typeScheme"}},
                                                                               "typeName": "hydra.core.Name"}}}],
                                                                       "typeName": "hydra.core.Projection"}}},
                                                                 "typeName": "hydra.core.Term"}}},
@@ -5484,7 +5479,7 @@
                 "argument": {"variable": "hydra.graph.Primitive"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5657,7 +5652,7 @@
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "type"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5779,7 +5774,7 @@
                     "function": {"variable": "hydra.graph.TermCoder"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5854,7 +5849,7 @@
                     "function": {"variable": "hydra.graph.TermCoder"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5942,7 +5937,7 @@
                     "function": {"variable": "hydra.graph.TermCoder"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -6137,7 +6132,7 @@
                     "function": {"variable": "hydra.graph.TermCoder"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -6344,7 +6339,7 @@
                     "function": {"variable": "hydra.graph.TermCoder"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -6561,7 +6556,7 @@
                     "function": {"variable": "hydra.graph.TermCoder"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

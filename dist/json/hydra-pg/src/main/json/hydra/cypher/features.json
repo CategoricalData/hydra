@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.CypherFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -237,7 +237,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ArithmeticFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -304,7 +304,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.AtomFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -391,7 +391,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ComparisonFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -458,7 +458,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.DeleteFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -489,7 +489,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.FunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -646,7 +646,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.AggregateFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -769,7 +769,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.DatabaseFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -793,7 +793,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.GenAIFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -817,7 +817,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.GraphFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -874,7 +874,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ListFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1019,7 +1019,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.LoadCSVFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1054,7 +1054,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.LogarithmicFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1121,7 +1121,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.NumericFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1211,7 +1211,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.PredicateFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1290,7 +1290,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ScalarFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1543,7 +1543,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.SpatialFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1589,7 +1589,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.StringFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1789,7 +1789,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.TemporalDurationFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1856,7 +1856,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.TemporalInstantFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2163,7 +2163,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.TrigonometricFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2301,7 +2301,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.VectorFunctionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2336,7 +2336,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ListFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2367,7 +2367,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.LiteralFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2447,7 +2447,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.LogicalFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2496,7 +2496,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.MatchFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2527,7 +2527,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.MergeFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2567,7 +2567,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.NodePatternFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2631,7 +2631,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.NullFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2662,7 +2662,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.PathFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2684,7 +2684,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ProcedureCallFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2724,7 +2724,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ProjectionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2801,7 +2801,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.QuantifierFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2850,7 +2850,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.RangeLiteralFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2910,7 +2910,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.ReadingFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2951,7 +2951,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.RelationshipDirectionFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3004,7 +3004,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.RelationshipPatternFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3048,7 +3048,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.RemoveFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3079,7 +3079,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.SetFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3129,7 +3129,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.StringFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3179,7 +3179,7 @@
     {
       "type": {
         "name": "hydra.cypher.features.UpdatingFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

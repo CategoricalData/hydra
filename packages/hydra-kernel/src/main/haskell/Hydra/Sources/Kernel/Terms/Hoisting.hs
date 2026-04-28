@@ -109,7 +109,7 @@ bindingIsPolymorphic :: TTermDefinition (Binding -> Bool)
 bindingIsPolymorphic = define "bindingIsPolymorphic" $
   doc "Check if a binding has a polymorphic type (non-empty list of type scheme variables)" $
   "binding" ~>
-  optCases (Core.bindingType $ var "binding")
+  optCases (Core.bindingTypeScheme $ var "binding")
     false  -- No type scheme means monomorphic (or untyped)
     ("ts" ~> Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts")
 
@@ -122,7 +122,7 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
     <> " Returns True if the free type variables in the binding's type intersect with"
     <> " the type variables in scope (graphTypeVariables).") $
   "cx" ~> "binding" ~>
-  optCases (Core.bindingType $ var "binding")
+  optCases (Core.bindingTypeScheme $ var "binding")
     false  -- No type scheme means no type variables used
     ("ts" ~>
       "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts") $
@@ -179,7 +179,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
               ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
               (Core.typeSchemeBody $ var "ts")
               (Lists.reverse $ var "varTypes"))
-            (Core.typeSchemeConstraints $ var "ts")) (Core.bindingType $ var "b")))
+            (Core.typeSchemeConstraints $ var "ts")) (Core.bindingTypeScheme $ var "b")))
         (just $ pair
           (Core.bindingName $ var "b")
           (Lists.foldl
@@ -239,7 +239,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- Captured type vars include those free in the binding's type AND those free in captured term var types.
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
-    "freeInBindingType" <~ optCases (Core.bindingType $ var "b")
+    "freeInBindingType" <~ optCases (Core.bindingTypeScheme $ var "b")
       Sets.empty
       ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeBody $ var "ts")) $
     "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Variables.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
@@ -260,7 +260,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
             (Core.typeSchemeBody $ var "ts")
             (Lists.reverse $ var "capturedTermVarTypes"))
           (Core.typeSchemeConstraints $ var "ts"))
-       (Core.bindingType $ var "b"))
+       (Core.bindingTypeScheme $ var "b"))
       nothing $
 
     -- Strip only outer type lambda wrappers from the original term (preserving type application wrappers).
@@ -418,7 +418,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           ("p" ~>
             "origType" <~ optCases (Maps.lookup (Pairs.first $ var "p") (var "hoistBindingMap"))
               nothing
-              ("b" ~> Core.bindingType $ var "b") $
+              ("b" ~> Core.bindingTypeScheme $ var "b") $
             Core.binding (Pairs.first $ var "p") (Pairs.second $ var "p") (var "origType"))
           (var "multiRefPairs") $
 
@@ -845,7 +845,7 @@ hoistSubterms = define "hoistSubterms" $
       -- Each sibling starts fresh with counter 1 - prefix makes names unique
       "result" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "namePrefix" @@ var "bindingPathPrefix" @@ (Core.bindingTerm (var "binding")) $
       "newValue" <~ Pairs.second (var "result") $
-      "newBinding" <~ Core.binding (Core.bindingName (var "binding")) (var "newValue") (Core.bindingType (var "binding")) $
+      "newBinding" <~ Core.binding (Core.bindingName (var "binding")) (var "newValue") (Core.bindingTypeScheme (var "binding")) $
       Lists.cons (var "newBinding") (var "acc")) $
     -- Fold over bindings, starting with empty list
     "newBindingsReversed" <~ Lists.foldl (var "processBinding") (list ([] :: [TTerm Binding])) (var "bindings") $

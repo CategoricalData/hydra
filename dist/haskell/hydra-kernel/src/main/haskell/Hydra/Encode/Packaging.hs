@@ -111,7 +111,7 @@ termDefinition x =
           Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionTerm x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.typeScheme opt)) (Packaging.termDefinitionType x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.typeScheme opt)) (Packaging.termDefinitionTypeScheme x))}]})
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =
     Core.TermRecord (Core.Record {
@@ -121,5 +121,5 @@ typeDefinition x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Packaging.typeDefinitionName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionType x))}]})
+          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionTypeScheme x))}]})

@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.pg.model.AdjacentEdge",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -61,7 +61,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Direction",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -78,7 +78,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Edge",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An edge"}}}],
@@ -139,7 +139,7 @@
     {
       "type": {
         "name": "hydra.pg.model.EdgeLabel",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -151,7 +151,7 @@
     {
       "type": {
         "name": "hydra.pg.model.EdgeType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -223,7 +223,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Element",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -251,7 +251,7 @@
     {
       "type": {
         "name": "hydra.pg.model.ElementKind",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -266,7 +266,7 @@
     {
       "type": {
         "name": "hydra.pg.model.ElementTree",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -297,7 +297,7 @@
     {
       "type": {
         "name": "hydra.pg.model.ElementType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -325,7 +325,7 @@
     {
       "type": {
         "name": "hydra.pg.model.ElementTypeTree",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -356,7 +356,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Graph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -392,7 +392,7 @@
     {
       "type": {
         "name": "hydra.pg.model.GraphSchema",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -444,7 +444,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Label",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -459,7 +459,7 @@
     {
       "type": {
         "name": "hydra.pg.model.LazyGraph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -491,7 +491,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Property",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -525,7 +525,7 @@
     {
       "type": {
         "name": "hydra.pg.model.PropertyKey",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -537,7 +537,7 @@
     {
       "type": {
         "name": "hydra.pg.model.PropertyType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -582,7 +582,7 @@
     {
       "type": {
         "name": "hydra.pg.model.Vertex",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A vertex"}}}],
@@ -625,7 +625,7 @@
     {
       "type": {
         "name": "hydra.pg.model.VertexLabel",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -639,7 +639,7 @@
     {
       "type": {
         "name": "hydra.pg.model.VertexType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -689,7 +689,7 @@
     {
       "type": {
         "name": "hydra.pg.model.VertexWithAdjacentEdges",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

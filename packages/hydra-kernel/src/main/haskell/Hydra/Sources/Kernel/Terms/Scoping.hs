@@ -140,7 +140,7 @@ extendGraphForLet = define "extendGraphForLet" $
     (Maps.union
       (Maps.fromList $ Maybes.cat $ Lists.map
         ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
-          (Core.bindingType $ var "b"))
+          (Core.bindingTypeScheme $ var "b"))
         (var "bindings"))
       (Graph.graphBoundTypes $ var "g"))
     (Graph.graphClassConstraints $ var "g")
@@ -194,7 +194,7 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
   "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
     Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "bindings"))) $
+      (Core.bindingTypeScheme (var "b"))) (var "bindings"))) $
   Graph.graph
     (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
     (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))

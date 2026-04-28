@@ -36,8 +36,9 @@ freeTypeVariablesInTerm term0 =
                       Core.TermLet v0 ->
                         let forBinding =
                                 \b ->
-                                  let newVars = Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b)
-                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeBody ts)) (Core.bindingType b)))
+                                  let newVars =
+                                          Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingTypeScheme b)
+                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeBody ts)) (Core.bindingTypeScheme b)))
                         in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v0))) (recurse (Core.letBody v0)))
                       Core.TermTypeApplication v0 -> Sets.union (tryType vars (Core.typeApplicationTermType v0)) (recurse (Core.typeApplicationTermBody v0))
                       Core.TermTypeLambda v0 -> Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v0))) (recurse (Core.typeLambdaBody v0))
@@ -139,7 +140,7 @@ normalizeTypeVariablesInTerm term =
                                                                             Core.Binding {
                                                                               Core.bindingName = (Core.bindingName b),
                                                                               Core.bindingTerm = newVal,
-                                                                              Core.bindingType = Nothing}
+                                                                              Core.bindingTypeScheme = Nothing}
                                                                 in (step (Lists.cons b1 acc) tl)
                                                       withType =
                                                               \ts ->
@@ -166,12 +167,12 @@ normalizeTypeVariablesInTerm term =
                                                                             Core.Binding {
                                                                               Core.bindingName = (Core.bindingName b),
                                                                               Core.bindingTerm = newVal,
-                                                                              Core.bindingType = (Just (Core.TypeScheme {
+                                                                              Core.bindingTypeScheme = (Just (Core.TypeScheme {
                                                                                 Core.typeSchemeVariables = newVars,
                                                                                 Core.typeSchemeBody = (substType newSubst typ),
                                                                                 Core.typeSchemeConstraints = newConstraints}))}
                                                                 in (step (Lists.cons b1 acc) tl)
-                                                  in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b))) (Lists.uncons bs)
+                                                  in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingTypeScheme b))) (Lists.uncons bs)
                                         bindings1 = step [] bindings0
                                     in (Core.TermLet (Core.Let {
                                       Core.letBindings = bindings1,

@@ -26,7 +26,7 @@ binding el =
                   Maybes.maybe "" (\ts -> Strings.cat [
                     ":(",
                     (typeScheme ts),
-                    ")"]) (Core.bindingType el)
+                    ")"]) (Core.bindingTypeScheme el)
       in (Strings.cat [
         name,
         typeStr,

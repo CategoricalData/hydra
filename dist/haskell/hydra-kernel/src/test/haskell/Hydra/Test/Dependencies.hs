@@ -114,13 +114,13 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLet (Core.Let {
                     Core.letBindings = [
                       Core.Binding {
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x"),
                       (Core.TermVariable (Core.Name "y"))])}))})))),
@@ -129,11 +129,11 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "x"),
                     (Core.TermVariable (Core.Name "y"))])})))})),
@@ -147,7 +147,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
                       Core.bindingTerm = (Core.TermLet (Core.Let {
@@ -155,15 +155,15 @@ allTests =
                           Core.Binding {
                             Core.bindingName = (Core.Name "x"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                            Core.bindingType = Nothing},
+                            Core.bindingTypeScheme = Nothing},
                           Core.Binding {
                             Core.bindingName = (Core.Name "y"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                            Core.bindingType = Nothing}],
+                            Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x"),
                           (Core.TermVariable (Core.Name "y"))])})),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
                     (Core.TermVariable (Core.Name "b"))])})))),
@@ -172,21 +172,21 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b_x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b_y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
                       Core.bindingTerm = (Core.TermList [
                         Core.TermVariable (Core.Name "b_x"),
                         (Core.TermVariable (Core.Name "b_y"))]),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
                     (Core.TermVariable (Core.Name "b"))])})))})),
@@ -200,7 +200,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
                       Core.bindingTerm = (Core.TermLet (Core.Let {
@@ -208,7 +208,7 @@ allTests =
                           Core.Binding {
                             Core.bindingName = (Core.Name "x"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                            Core.bindingType = Nothing},
+                            Core.bindingTypeScheme = Nothing},
                           Core.Binding {
                             Core.bindingName = (Core.Name "y"),
                             Core.bindingTerm = (Core.TermLet (Core.Let {
@@ -216,21 +216,21 @@ allTests =
                                 Core.Binding {
                                   Core.bindingName = (Core.Name "p"),
                                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
-                                  Core.bindingType = Nothing},
+                                  Core.bindingTypeScheme = Nothing},
                                 Core.Binding {
                                   Core.bindingName = (Core.Name "q"),
                                   Core.bindingTerm = (Core.TermList [
                                     Core.TermVariable (Core.Name "x"),
                                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))]),
-                                  Core.bindingType = Nothing}],
+                                  Core.bindingTypeScheme = Nothing}],
                               Core.letBody = (Core.TermList [
                                 Core.TermVariable (Core.Name "a"),
                                 (Core.TermVariable (Core.Name "q"))])})),
-                            Core.bindingType = Nothing}],
+                            Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x"),
                           (Core.TermVariable (Core.Name "y"))])})),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
                     (Core.TermVariable (Core.Name "b"))])})))),
@@ -239,33 +239,33 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b_x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b_y_p"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b_y_q"),
                       Core.bindingTerm = (Core.TermList [
                         Core.TermVariable (Core.Name "b_x"),
                         (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))]),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b_y"),
                       Core.bindingTerm = (Core.TermList [
                         Core.TermVariable (Core.Name "a"),
                         (Core.TermVariable (Core.Name "b_y_q"))]),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
                       Core.bindingTerm = (Core.TermList [
                         Core.TermVariable (Core.Name "b_x"),
                         (Core.TermVariable (Core.Name "b_y"))]),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "a"),
                     (Core.TermVariable (Core.Name "b"))])})))})),
@@ -284,7 +284,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -297,7 +297,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -322,14 +322,14 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -344,7 +344,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
@@ -354,7 +354,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -366,7 +366,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -385,7 +385,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -403,7 +403,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
@@ -416,7 +416,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -428,22 +428,22 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -455,11 +455,11 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "z"),
                     Core.lambdaDomain = Nothing,
@@ -472,11 +472,11 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing},
+                        Core.bindingTypeScheme = Nothing},
                       Core.Binding {
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -488,13 +488,13 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLet (Core.Let {
                     Core.letBindings = [
                       Core.Binding {
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "z"),
                       Core.lambdaDomain = Nothing,
@@ -507,13 +507,13 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLet (Core.Let {
                       Core.letBindings = [
                         Core.Binding {
                           Core.bindingName = (Core.Name "y"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -525,7 +525,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -534,7 +534,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
@@ -544,13 +544,13 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLet (Core.Let {
                       Core.letBindings = [
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -562,7 +562,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -574,7 +574,7 @@ allTests =
                           Core.Binding {
                             Core.bindingName = (Core.Name "b"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                            Core.bindingType = Nothing}],
+                            Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "a"))}))}))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
@@ -587,13 +587,13 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "a"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "b"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                            Core.bindingType = Nothing}],
+                            Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "a"))}))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -611,7 +611,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
@@ -624,7 +624,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -637,7 +637,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
@@ -652,7 +652,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -665,7 +665,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
@@ -681,7 +681,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.annotatedTermAnnotation = M.empty}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -694,7 +694,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -716,7 +716,7 @@ allTests =
                           Core.Binding {
                             Core.bindingName = (Core.Name "x"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                            Core.bindingType = Nothing}],
+                            Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.annotatedTermAnnotation = M.empty}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -729,7 +729,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -744,7 +744,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                       Core.annotatedTermBody = (Core.TermVariable (Core.Name "x")),
                       Core.annotatedTermAnnotation = M.empty}))}))})))})),
@@ -762,7 +762,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Core.annotatedTermAnnotation = M.empty})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -774,7 +774,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -789,7 +789,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
@@ -805,7 +805,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -819,7 +819,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
@@ -829,7 +829,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "z"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "w"),
                       Core.lambdaDomain = Nothing,
@@ -843,7 +843,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}),
                   (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "w"),
@@ -853,7 +853,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -869,12 +869,12 @@ allTests =
                           Core.Binding {
                             Core.bindingName = (Core.Name "x"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                            Core.bindingType = Nothing}],
+                            Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
@@ -888,9 +888,9 @@ allTests =
                             Core.Binding {
                               Core.bindingName = (Core.Name "x"),
                               Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                              Core.bindingType = Nothing}],
+                              Core.bindingTypeScheme = Nothing}],
                           Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -902,7 +902,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -915,7 +915,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "x"))}))}), (Core.TermLiteral (Core.LiteralString "test")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -927,7 +927,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -936,7 +936,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "z"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "w"),
                     Core.lambdaDomain = Nothing,
@@ -949,7 +949,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "x"))}))}), (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "w"),
                   Core.lambdaDomain = Nothing,
@@ -958,7 +958,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "z"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -973,7 +973,7 @@ allTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "x"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "inner"),
                       Core.lambdaDomain = Nothing,
@@ -989,7 +989,7 @@ allTests =
                         Core.Binding {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.bindingType = Nothing}],
+                          Core.bindingTypeScheme = Nothing}],
                       Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},

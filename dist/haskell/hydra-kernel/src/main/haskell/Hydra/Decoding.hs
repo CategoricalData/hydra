@@ -80,7 +80,7 @@ decodeBinding cx graph b =
     Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
       Core.bindingName = (decodeBindingName (Core.bindingName b)),
       Core.bindingTerm = (decodeTypeNamed (Core.bindingName b) typ),
-      Core.bindingType = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))}))
+      Core.bindingTypeScheme = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))}))
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: Core.Name -> Core.Name
 decodeBindingName n =
@@ -1111,10 +1111,10 @@ decodeModule cx graph mod =
         in Core.Binding {
           Core.bindingName = name,
           Core.bindingTerm = dataTerm,
-          Core.bindingType = (Just (Core.TypeScheme {
+          Core.bindingTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let decodedTypeDeps = Lists.map decodeNamespace (Packaging.moduleTypeDependencies mod)
           decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
@@ -1134,7 +1134,7 @@ decodeModule cx graph mod =
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
-          Packaging.termDefinitionType = (Core.bindingType b)})) decodedBindings)}))))))
+          Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) decodedBindings)}))))))
 -- | Generate a decoder module namespace from a source module namespace
 decodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 decodeNamespace ns =
@@ -1227,7 +1227,7 @@ decodeRecordTypeImpl tname rt =
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
-                                Core.bindingType = Nothing}],
+                                Core.bindingTypeScheme = Nothing}],
                             Core.letBody = decodeBody}))}))}]})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -1378,7 +1378,7 @@ decodeUnionTypeNamed ename rt =
                                     Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
                                     Core.projectionField = (Core.Name "field")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
+                                Core.bindingTypeScheme = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "fname"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -1386,7 +1386,7 @@ decodeUnionTypeNamed ename rt =
                                     Core.projectionTypeName = (Core.Name "hydra.core.Field"),
                                     Core.projectionField = (Core.Name "name")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
-                                Core.bindingType = Nothing},
+                                Core.bindingTypeScheme = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "fterm"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -1394,13 +1394,13 @@ decodeUnionTypeNamed ename rt =
                                     Core.projectionTypeName = (Core.Name "hydra.core.Field"),
                                     Core.projectionField = (Core.Name "term")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
-                                Core.bindingType = Nothing},
+                                Core.bindingTypeScheme = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "variantMap"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
                                   Core.applicationArgument = (Core.TermList (Lists.map toVariantPair rt))})),
-                                Core.bindingType = Nothing}],
+                                Core.bindingTypeScheme = Nothing}],
                             Core.letBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermApplication (Core.Application {

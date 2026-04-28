@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtermEdge",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -46,7 +46,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtermGraph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -79,7 +79,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtermNode",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -121,7 +121,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtermPath",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -135,7 +135,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtermStep",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -335,7 +335,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtypeEdge",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -378,7 +378,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtypeGraph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -411,7 +411,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtypeNode",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -453,7 +453,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtypePath",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -467,7 +467,7 @@
     {
       "type": {
         "name": "hydra.paths.SubtypeStep",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

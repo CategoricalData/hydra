@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Alternative",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -43,7 +43,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Assertion",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -74,7 +74,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ClassAssertion",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -105,7 +105,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.CaseRhs",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -118,7 +118,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Constructor",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -149,7 +149,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.OrdinaryConstructor",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -180,7 +180,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.RecordConstructor",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -211,7 +211,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ConstructorWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -243,7 +243,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.DataDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -301,7 +301,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.DataOrNewtype",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -316,7 +316,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.DeclarationWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -348,7 +348,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Declaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -397,7 +397,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.DeclarationHead",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -437,7 +437,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ApplicationDeclarationHead",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -468,7 +468,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Deriving",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -480,7 +480,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Export",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -511,7 +511,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Expression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -686,7 +686,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ApplicationExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -717,7 +717,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.CaseExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -748,7 +748,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ConstructRecordExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -779,7 +779,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.IfExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -819,7 +819,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.InfixApplicationExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -859,7 +859,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.LambdaExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -890,7 +890,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.LetExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -921,7 +921,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.PrefixApplicationExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -952,7 +952,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.SectionExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -983,7 +983,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.TypeSignatureExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1014,7 +1014,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.UpdateRecordExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1045,7 +1045,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Field",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1076,7 +1076,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.FieldWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1105,7 +1105,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.FieldUpdate",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1136,7 +1136,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Import",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1185,7 +1185,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.SpecImport",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1216,7 +1216,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ImportModifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1231,7 +1231,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ImportExportSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1272,7 +1272,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.SubspecImportExportSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1303,7 +1303,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Literal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1370,7 +1370,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.LocalBinding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1401,7 +1401,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.LocalBindings",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1413,7 +1413,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Module",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1453,7 +1453,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ModuleHead",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1493,7 +1493,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ModuleName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1505,7 +1505,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Name",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A name"}}}],
@@ -1542,7 +1542,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.NamePart",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1554,7 +1554,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Operator",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1585,7 +1585,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Pattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1686,7 +1686,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ApplicationPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1717,7 +1717,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.AsPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1748,7 +1748,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.RecordPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1779,7 +1779,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.TypedPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1810,7 +1810,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.PatternField",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1841,7 +1841,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.QualifiedName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1872,7 +1872,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.RightHandSide",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1884,7 +1884,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Statement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1896,7 +1896,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1981,7 +1981,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ApplicationType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2012,7 +2012,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ContextType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2044,7 +2044,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.FunctionType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2075,7 +2075,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.InfixType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2115,7 +2115,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.TypeDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2146,7 +2146,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.TypeSignature",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2174,7 +2174,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.TypedBinding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2205,7 +2205,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.ValueBinding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2227,7 +2227,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.SimpleValueBinding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2267,7 +2267,7 @@
     {
       "type": {
         "name": "hydra.haskell.syntax.Variable",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

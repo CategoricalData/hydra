@@ -33,7 +33,7 @@ buildGraph elements environment primitives =
           mergedTerms = Maps.union elementTerms letTerms
           filteredTerms = Maps.filterWithKey (\k -> \_v -> Logic.not (Maps.member k primitives)) mergedTerms
           elementTypes =
-                  Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) elements))
+                  Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingTypeScheme b)) elements))
           filteredTypes = Maps.filterWithKey (\k -> \_v -> Logic.not (Maps.member k primitives)) elementTypes
       in Graph.Graph {
         Graph.graphBoundTerms = filteredTerms,
@@ -134,7 +134,7 @@ graphToBindings g =
       in Core.Binding {
         Core.bindingName = name,
         Core.bindingTerm = term,
-        Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g))
+        Core.bindingTypeScheme = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g))
 -- | Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones.
 graphWithPrimitives :: [Graph.Primitive] -> [Graph.Primitive] -> Graph.Graph
 graphWithPrimitives builtIn userProvided =
@@ -148,7 +148,7 @@ lookupBinding graph name =
     Maybes.map (\term -> Core.Binding {
       Core.bindingName = name,
       Core.bindingTerm = term,
-      Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes graph))}) (Maps.lookup name (Graph.graphBoundTerms graph))
+      Core.bindingTypeScheme = (Maps.lookup name (Graph.graphBoundTypes graph))}) (Maps.lookup name (Graph.graphBoundTerms graph))
 -- | Look up a primitive function in a graph by name
 lookupPrimitive :: Graph.Graph -> Core.Name -> Maybe Graph.Primitive
 lookupPrimitive graph name = Maps.lookup name (Graph.graphPrimitives graph)
@@ -206,7 +206,7 @@ requirePrimitive graph name =
 requirePrimitiveType :: Graph.Graph -> Core.Name -> Either Errors.Error Core.TypeScheme
 requirePrimitiveType tx name =
 
-      let mts = Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx))
+      let mts = Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
         Errors.noSuchPrimitiveErrorName = name})))) (\ts -> Right ts) mts)
 requireTerm :: Graph.Graph -> Core.Name -> Either Errors.Error Core.Term

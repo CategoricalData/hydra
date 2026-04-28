@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.cpp.environment.CppEnvironment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

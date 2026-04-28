@@ -34,7 +34,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
@@ -67,7 +67,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
@@ -92,7 +92,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
@@ -113,7 +113,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
@@ -162,7 +162,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
@@ -255,7 +255,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
@@ -336,7 +336,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
@@ -349,7 +349,7 @@
                             "domain": {"variable": "t0"},
                             "parameter": "_"}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
@@ -386,7 +386,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.scala.language.scalaReservedWords",
@@ -454,7 +454,7 @@
                             {"literal": {"string": "while"}},
                             {"literal": {"string": "with"}},
                             {"literal": {"string": "yield"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "classNames",
                     "term": {
@@ -502,7 +502,7 @@
                             {"literal": {"string": "Symbol"}},
                             {"literal": {"string": "Unit"}},
                             {"literal": {"string": "ValueOf"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraScalaKeywords",
                     "term": {
@@ -516,7 +516,7 @@
                             "body": {
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
                         "parameter": "t0"}},
-                    "type": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],
+                    "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -537,7 +537,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for Scala",
   "namespace": "hydra.scala.language",
   "termDependencies": ["hydra.lexical"],

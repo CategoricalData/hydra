@@ -70,7 +70,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.DuplicateBindingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -144,7 +144,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.DuplicateFieldError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -220,7 +220,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UndefinedFieldError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -296,7 +296,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UnexpectedTermVariantError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -372,7 +372,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UnexpectedTypeVariantError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -460,7 +460,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.ConstantConditionError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -536,7 +536,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyCaseStatementError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -590,7 +590,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyLetBindingsError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -644,7 +644,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyTermAnnotationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -698,7 +698,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyTypeNameInTermError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -775,7 +775,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -851,7 +851,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.InvalidLetBindingNameError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -928,7 +928,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -982,7 +982,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.NestedTermAnnotationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1058,7 +1058,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.RedundantWrapUnwrapError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1132,7 +1132,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.SelfApplicationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1208,7 +1208,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.TermVariableShadowingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1286,7 +1286,7 @@
             "domain": {
               "variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1363,7 +1363,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UndefinedTermVariableError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1441,7 +1441,7 @@
             "domain": {
               "variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1521,7 +1521,7 @@
             "domain": {
               "variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1601,7 +1601,7 @@
             "domain": {
               "variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1678,7 +1678,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UnknownPrimitiveNameError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1733,7 +1733,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1809,7 +1809,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2691,7 +2691,7 @@
                     "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.error.core.InvalidTermError"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2768,7 +2768,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2845,7 +2845,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2899,7 +2899,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyRecordTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2953,7 +2953,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyTypeAnnotationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3007,7 +3007,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.EmptyUnionTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3084,7 +3084,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.InvalidForallParameterNameError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3161,7 +3161,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3215,7 +3215,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.NestedTypeAnnotationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3292,7 +3292,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3369,7 +3369,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.NonComparableSetElementTypeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3445,7 +3445,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.SingleVariantUnionError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3522,7 +3522,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3598,7 +3598,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.UndefinedTypeVariableError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -3653,7 +3653,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.error.core.VoidInNonBottomPositionError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -4218,7 +4218,7 @@
                     "domain": {"variable": "hydra.error.core.VoidInNonBottomPositionError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.error.core.InvalidTypeError"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

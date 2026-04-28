@@ -43,7 +43,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.DecodingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -63,7 +63,7 @@
                 "domain": {"variable": "t0"},
                 "parameter": "_"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -622,7 +622,7 @@
                     "domain": {"variable": "hydra.errors.UnificationError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.errors.Error"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -914,7 +914,7 @@
                     "domain": {"variable": "hydra.errors.UnexpectedShapeError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.errors.ExtractionError"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1044,7 +1044,7 @@
                     "domain": {"variable": "hydra.errors.UnificationInferenceError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.errors.InferenceError"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1096,7 +1096,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.MultipleBindingsError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1148,7 +1148,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.MultipleFieldsError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1202,7 +1202,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.NoMatchingFieldError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1254,7 +1254,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.NoSuchBindingError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1306,7 +1306,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.NoSuchPrimitiveError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1326,7 +1326,7 @@
                 "domain": {"variable": "t0"},
                 "parameter": "_"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1375,7 +1375,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.OtherError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1459,7 +1459,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.OtherInferenceError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1508,7 +1508,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.OtherResolutionError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1716,7 +1716,7 @@
                     "domain": {"variable": "hydra.errors.UnexpectedShapeError"},
                     "parameter": "y"}}}],
             "typeName": "hydra.errors.ResolutionError"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1812,7 +1812,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.UnexpectedShapeError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1916,7 +1916,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.UnificationError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1992,7 +1992,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.errors.UnificationInferenceError"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

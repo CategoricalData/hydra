@@ -89,7 +89,7 @@ etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTerm tx0 term0 =
 
       let primTypes =
-              Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
+              Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveTypeScheme _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
           termArityWithContext =
                   \tx -> \term -> case term of
                     Core.TermAnnotated v0 -> termArityWithContext tx (Core.annotatedTermBody v0)
@@ -225,7 +225,7 @@ etaExpandTerm tx0 term0 =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
                                       Core.bindingTerm = (rewriteWithArgs [] tx1 (Core.bindingTerm b)),
-                                      Core.bindingType = (Core.bindingType b)}
+                                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                             result =
                                     Core.TermLet (Core.Let {
                                       Core.letBindings = (Lists.map mapBinding (Core.letBindings v0)),
@@ -384,7 +384,7 @@ etaExpansionArity graph term =
       Core.TermUnwrap _ -> 1
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
+      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingTypeScheme b))
       _ -> 0
 -- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: Core.Term -> Core.Term
@@ -509,7 +509,7 @@ reduceTerm cx graph eager term =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
                                       Core.bindingTerm = (Variables.replaceFreeTermVariable (Core.bindingName b) (letExpr b) (Core.bindingTerm b)),
-                                      Core.bindingType = (Core.bindingType b)}
+                                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                             expandedBindings = Lists.map expandBinding bindings
                             substituteBinding = \term2 -> \b -> Variables.replaceFreeTermVariable (Core.bindingName b) (Core.bindingTerm b) term2
                             substituteAll = \bs -> \term2 -> Lists.foldl substituteBinding term2 bs

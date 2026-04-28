@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.BoundingBox",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -18,7 +18,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.CoordinateRange",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "min", "type": {"literal": {"float": {"bigfloat": {}}}}},
@@ -27,7 +27,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Feature",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -82,7 +82,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.FeatureCollection",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -103,7 +103,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.GeometryCollection",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -124,7 +124,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Geometry",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -158,7 +158,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Id",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "number", "type": {"literal": {"float": {"bigfloat": {}}}}},
@@ -167,7 +167,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.LineString",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -188,7 +188,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.MultiLineString",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -209,7 +209,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.MultiPoint",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -230,7 +230,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.MultiPolygon",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -251,7 +251,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Object",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -275,7 +275,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Point",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -296,7 +296,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Polygon",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -317,7 +317,7 @@
     {
       "type": {
         "name": "hydra.geojson.model.Position",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

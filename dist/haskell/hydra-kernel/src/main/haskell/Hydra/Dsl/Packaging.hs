@@ -646,7 +646,7 @@ qualifiedNameWithNamespace original newVal =
               Core.projectionField = (Core.Name "local")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 termDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
-termDefinition name term type_ =
+termDefinition name term typeScheme =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
       Core.recordFields = [
@@ -657,8 +657,8 @@ termDefinition name term type_ =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Phantoms.unTTerm term)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldTerm = (Phantoms.unTTerm typeScheme)}]}))
 termDefinitionName :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Name
 termDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -673,12 +673,12 @@ termDefinitionTerm x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
         Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-termDefinitionType :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme)
-termDefinitionType x =
+termDefinitionTypeScheme :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme)
+termDefinitionTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionField = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 termDefinitionWithName :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.TermDefinition
 termDefinitionWithName original newVal =
@@ -696,11 +696,11 @@ termDefinitionWithName original newVal =
               Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 termDefinitionWithTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Packaging.TermDefinition
 termDefinitionWithTerm original newVal =
@@ -718,14 +718,14 @@ termDefinitionWithTerm original newVal =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-termDefinitionWithType :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
-termDefinitionWithType original newVal =
+termDefinitionWithTypeScheme :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Packaging.TermDefinition
+termDefinitionWithTypeScheme original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
       Core.recordFields = [
@@ -744,10 +744,10 @@ termDefinitionWithType original newVal =
               Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 typeDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Packaging.TypeDefinition
-typeDefinition name type_ =
+typeDefinition name typeScheme =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
       Core.recordFields = [
@@ -755,8 +755,8 @@ typeDefinition name type_ =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldTerm = (Phantoms.unTTerm typeScheme)}]}))
 typeDefinitionName :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.Name
 typeDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -764,12 +764,12 @@ typeDefinitionName x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-typeDefinitionType :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.TypeScheme
-typeDefinitionType x =
+typeDefinitionTypeScheme :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.TypeScheme
+typeDefinitionTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionField = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 typeDefinitionWithName :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.TypeDefinition
 typeDefinitionWithName original newVal =
@@ -780,14 +780,14 @@ typeDefinitionWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-typeDefinitionWithType :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Packaging.TypeDefinition
-typeDefinitionWithType original newVal =
+typeDefinitionWithTypeScheme :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Packaging.TypeDefinition
+typeDefinitionWithTypeScheme original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
       Core.recordFields = [
@@ -799,7 +799,7 @@ typeDefinitionWithType original newVal =
               Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 unFileExtension :: Phantoms.TTerm Packaging.FileExtension -> Phantoms.TTerm String
 unFileExtension x =

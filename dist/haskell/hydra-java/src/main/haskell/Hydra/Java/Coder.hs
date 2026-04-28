@@ -77,7 +77,7 @@ annotateBodyWithCod typ term =
         _ -> setAnn term
 annotateLambdaArgs :: Core.Name -> [Core.Type] -> [Core.Term] -> t0 -> Graph.Graph -> Either t1 [Core.Term]
 annotateLambdaArgs cname tApps argTerms cx g =
-    Logic.ifElse (Lists.null tApps) (Right argTerms) (Eithers.bind (Eithers.bind (Right (Lexical.lookupBinding g cname)) (\mel -> Maybes.cases mel (Right (Maybes.map (\prim -> Graph.primitiveType prim) (Maps.lookup cname (Graph.graphPrimitives g)))) (\el -> Right (Core.bindingType el)))) (\mts -> Maybes.cases mts (Right argTerms) (\ts ->
+    Logic.ifElse (Lists.null tApps) (Right argTerms) (Eithers.bind (Eithers.bind (Right (Lexical.lookupBinding g cname)) (\mel -> Maybes.cases mel (Right (Maybes.map (\prim -> Graph.primitiveTypeScheme prim) (Maps.lookup cname (Graph.graphPrimitives g)))) (\el -> Right (Core.bindingTypeScheme el)))) (\mts -> Maybes.cases mts (Right argTerms) (\ts ->
       let schemeType = Core.typeSchemeBody ts
           schemeTypeVars = collectTypeVars schemeType
           schemeVars = Lists.filter (\v -> Sets.member v schemeTypeVars) (Core.typeSchemeVariables ts)
@@ -131,7 +131,7 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
         Core.letBindings = (Lists.map (\b -> Core.Binding {
           Core.bindingName = (Core.bindingName b),
           Core.bindingTerm = (applyOvergenSubstToTermAnnotations_go subst cx (Core.bindingTerm b)),
-          Core.bindingType = (Core.bindingType b)}) (Core.letBindings v0)),
+          Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Core.letBindings v0)),
         Core.letBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.letBody v0))})
       Core.TermTypeApplication v0 -> Core.TermTypeApplication (Core.TypeApplicationTerm {
         Core.typeApplicationTermBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.typeApplicationTermBody v0)),
@@ -243,7 +243,7 @@ bindingIsFunctionType b =
       Core.TypeForall v0 -> case (Strip.deannotateType (Core.forallTypeBody v0)) of
         Core.TypeFunction _ -> True
         _ -> False
-      _ -> False) (Core.bindingType b)
+      _ -> False) (Core.bindingTypeScheme b)
 bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
 
@@ -441,7 +441,7 @@ classModsPublic = [
   Syntax.ClassModifierPublic]
 classifyDataReference :: Core.Name -> t0 -> Graph.Graph -> Either Errors.Error JavaEnvironment.JavaSymbolClass
 classifyDataReference name cx g =
-    Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right JavaEnvironment.JavaSymbolClassLocalVariable) (\el -> Maybes.cases (Core.bindingType el) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no type scheme for element " (Core.unName (Core.bindingName el)))))) (\ts -> Right (classifyDataTerm ts (Core.bindingTerm el)))))
+    Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right JavaEnvironment.JavaSymbolClassLocalVariable) (\el -> Maybes.cases (Core.bindingTypeScheme el) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no type scheme for element " (Core.unName (Core.bindingName el)))))) (\ts -> Right (classifyDataTerm ts (Core.bindingTerm el)))))
 classifyDataTerm :: Core.TypeScheme -> Core.Term -> JavaEnvironment.JavaSymbolClass
 classifyDataTerm ts term =
     Logic.ifElse (Dependencies.isLambda term) (
@@ -639,7 +639,7 @@ correctCastType innerBody typeArgs fallback cx g =
       _ -> Right fallback
 correctTypeApps :: t0 -> Core.Name -> [Core.Term] -> [Core.Type] -> t1 -> Graph.Graph -> Either Errors.Error [Core.Type]
 correctTypeApps gr name args fallbackTypeApps cx g =
-    Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right fallbackTypeApps) (\el -> Maybes.cases (Core.bindingType el) (Right fallbackTypeApps) (\ts ->
+    Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right fallbackTypeApps) (\el -> Maybes.cases (Core.bindingTypeScheme el) (Right fallbackTypeApps) (\ts ->
       let schemeType = Core.typeSchemeBody ts
           allSchemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)
           schemeTypeVars = collectTypeVars schemeType
@@ -830,11 +830,11 @@ dedupBindings inScope bs =
                     Lists.map (\b2 -> Core.Binding {
                       Core.bindingName = (Core.bindingName b2),
                       Core.bindingTerm = (Variables.substituteVariables subst (Core.bindingTerm b2)),
-                      Core.bindingType = (Core.bindingType b2)}) rest
+                      Core.bindingTypeScheme = (Core.bindingTypeScheme b2)}) rest
         in (Lists.cons (Core.Binding {
           Core.bindingName = newName,
           Core.bindingTerm = (Core.bindingTerm b),
-          Core.bindingType = (Core.bindingType b)}) (dedupBindings (Sets.insert newName inScope) rest2))) (Lists.cons b (dedupBindings (Sets.insert name inScope) rest)))) (Lists.uncons bs))
+          Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (dedupBindings (Sets.insert newName inScope) rest2))) (Lists.cons b (dedupBindings (Sets.insert name inScope) rest)))) (Lists.uncons bs))
 detectAccumulatorUnification :: [Core.Type] -> Core.Type -> [Core.Name] -> M.Map Core.Name Core.Type
 detectAccumulatorUnification doms cod tparams =
 
@@ -961,7 +961,7 @@ encodeDefinitions mod defs cx g =
           termDefs = Pairs.second partitioned
           nonTypedefDefs =
                   Lists.filter (\td ->
-                    let typ = Core.typeSchemeBody (Packaging.typeDefinitionType td)
+                    let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)
                     in (isSerializableJavaType typ)) typeDefs
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition pkg aliases td cx g) nonTypedefDefs) (\typeUnits -> Eithers.bind (Logic.ifElse (Lists.null termDefs) (Right []) (Eithers.bind (Eithers.mapList (\td -> encodeTermDefinition env td cx g) termDefs) (\dataMembers -> Right [
         constructElementsInterface mod dataMembers]))) (\termUnits -> Right (Maps.fromList (Lists.concat2 typeUnits termUnits)))))
@@ -1228,7 +1228,7 @@ encodeTermDefinition env tdef cx g =
                   Maybes.maybe (Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                    Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionType tdef)
+                    Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionTypeScheme tdef)
           term = Variables.unshadowVariables term0
       in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
         let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)
@@ -1643,7 +1643,7 @@ encodeTypeDefinition :: Syntax.PackageDeclaration -> JavaEnvironment.Aliases -> 
 encodeTypeDefinition pkg aliases tdef cx g =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionType tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
           serializable = isSerializableJavaType typ
           imports =
                   Logic.ifElse serializable [
@@ -1706,7 +1706,7 @@ encodeVariable_hoistedLambdaCase aliases name arity cx g =
           call =
                   Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation Nothing (elementJavaIdentifier False False aliases name) paramExprs)
           lam = encodeVariable_buildCurried paramNames call
-      in (Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right lam) (\el -> Maybes.cases (Core.bindingType el) (Right lam) (\ts ->
+      in (Eithers.bind (Right (Lexical.lookupBinding g name)) (\mel -> Maybes.cases mel (Right lam) (\el -> Maybes.cases (Core.bindingTypeScheme el) (Right lam) (\ts ->
         let typ = Core.typeSchemeBody ts
         in (Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression lam))))))))))
 eqClause :: String -> Core.FieldType -> Syntax.InclusiveOrExpression
@@ -1792,7 +1792,7 @@ filterByFlags :: [t0] -> [Bool] -> [t0]
 filterByFlags xs flags = Lists.map (\p -> Pairs.first p) (Lists.filter (\p -> Pairs.second p) (Lists.zip xs flags))
 filterPhantomTypeArgs :: Core.Name -> [Core.Type] -> t0 -> Graph.Graph -> Either t1 [Core.Type]
 filterPhantomTypeArgs calleeName allTypeArgs cx g =
-    Eithers.bind (Right (Lexical.lookupBinding g calleeName)) (\mel -> Maybes.cases mel (Right allTypeArgs) (\el -> Maybes.cases (Core.bindingType el) (Right allTypeArgs) (\ts ->
+    Eithers.bind (Right (Lexical.lookupBinding g calleeName)) (\mel -> Maybes.cases mel (Right allTypeArgs) (\el -> Maybes.cases (Core.bindingTypeScheme el) (Right allTypeArgs) (\ts ->
       let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)
           schemeTypeVars = collectTypeVars (Core.typeSchemeBody ts)
           schemeType = Core.typeSchemeBody ts
@@ -1858,7 +1858,7 @@ flattenBindings bindings =
         Core.Binding {
           Core.bindingName = (Core.bindingName b),
           Core.bindingTerm = (Core.letBody v0),
-          Core.bindingType = (Core.bindingType b)}]
+          Core.bindingTypeScheme = (Core.bindingTypeScheme b)}]
       _ -> [
         b])
 freshJavaName :: Core.Name -> S.Set Core.Name -> Core.Name
@@ -2204,7 +2204,7 @@ propagateType typ term =
                   Lists.map (\b -> Maybes.maybe b (\ts -> Core.Binding {
                     Core.bindingName = (Core.bindingName b),
                     Core.bindingTerm = (propagateType (Core.typeSchemeBody ts) (Core.bindingTerm b)),
-                    Core.bindingType = (Core.bindingType b)}) (Core.bindingType b)) (Core.letBindings v0)
+                    Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Core.bindingTypeScheme b)) (Core.letBindings v0)
           in (setTypeAnn (propagateType_rebuildLet term propagatedBindings (propagateType typ (Core.letBody v0))))
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
@@ -2567,9 +2567,9 @@ toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
               Maybes.fromMaybe (Core.Binding {
                 Core.bindingName = name,
                 Core.bindingTerm = Core.TermUnit,
-                Core.bindingType = Nothing}) (Lists.maybeHead (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
+                Core.bindingTypeScheme = Nothing}) (Lists.maybeHead (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
           value = Core.bindingTerm binding
-      in (Eithers.bind (Maybes.cases (Core.bindingType binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeBody ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
+      in (Eithers.bind (Maybes.cases (Core.bindingTypeScheme binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeBody ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
         let id = Utils.variableToJavaIdentifier name
             arid = Syntax.Identifier "java.util.concurrent.atomic.AtomicReference"
             aid =
@@ -2601,9 +2601,9 @@ toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings na
               Maybes.fromMaybe (Core.Binding {
                 Core.bindingName = name,
                 Core.bindingTerm = Core.TermUnit,
-                Core.bindingType = Nothing}) (Lists.maybeHead (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
+                Core.bindingTypeScheme = Nothing}) (Lists.maybeHead (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
           value = Core.bindingTerm binding
-      in (Eithers.bind (Maybes.cases (Core.bindingType binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeBody ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
+      in (Eithers.bind (Maybes.cases (Core.bindingTypeScheme binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeBody ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
         let id = Utils.variableToJavaIdentifier name
             annotatedValue = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ typ)) value
         in (Eithers.bind (encodeTerm envExt annotatedValue cx g) (\rhs -> Logic.ifElse (Sets.member name recursiveVars) (Right (Syntax.BlockStatementStatement (Utils.javaMethodInvocationToJavaStatement (Utils.methodInvocation (Just (Left (Syntax.ExpressionName {

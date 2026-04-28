@@ -412,11 +412,11 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The term to which the variable is bound")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "type"),
+            Core.fieldTypeName = (Core.Name "typeScheme"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))),
               Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The optional type of the bound term")))])}))}]),
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The optional type scheme of the bound term")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A field with an optional type scheme, used to bind variables to terms in a 'let' expression")))])}))),
       (Core.Name "hydra.core.CaseStatement", (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1610,11 +1610,11 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The unique name of the primitive function")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "type"),
+            Core.fieldTypeName = (Core.Name "typeScheme"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme")),
               Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type signature of the primitive function")))])}))},
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type scheme of the primitive function")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "implementation"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1834,7 +1834,7 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The term being defined")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "type"),
+            Core.fieldTypeName = (Core.Name "typeScheme"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))),
               Core.annotatedTypeAnnotation = (M.fromList [
@@ -1850,7 +1850,7 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the type")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "type"),
+            Core.fieldTypeName = (Core.Name "typeScheme"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme")),
               Core.annotatedTypeAnnotation = (M.fromList [

@@ -3,14 +3,14 @@
     {
       "type": {
         "name": "hydra.avro.schema.Array",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [{"name": "items", "type": {"variable": "hydra.avro.schema.Schema"}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Enum",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -39,7 +39,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Field",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -118,7 +118,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Fixed",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -135,14 +135,14 @@
     {
       "type": {
         "name": "hydra.avro.schema.Map",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [{"name": "values", "type": {"variable": "hydra.avro.schema.Schema"}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Named",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -203,7 +203,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.NamedType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "enum", "type": {"variable": "hydra.avro.schema.Enum"}},
@@ -213,7 +213,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Order",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "ascending", "type": {"unit": {}}},
@@ -223,7 +223,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Primitive",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -301,7 +301,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Record",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -317,7 +317,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Schema",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.avro.schema.Array"}},
@@ -341,7 +341,7 @@
     {
       "type": {
         "name": "hydra.avro.schema.Union",
-        "type": {
+        "typeScheme": {
           "body": {"wrap": {"list": {"variable": "hydra.avro.schema.Schema"}}},
           "variables": []}}}],
   "description": "A model for Avro schemas. Based on the Avro 1.11.1 specification:\n  https://avro.apache.org/docs/1.11.1/specification",

@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.Definition",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -16,7 +16,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.EnumDefinition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -56,7 +56,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.EnumValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -96,11 +96,11 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.EnumValueName",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.Field",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -158,7 +158,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.FieldName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -170,7 +170,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.FieldType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "map", "type": {"variable": "hydra.protobuf.proto3.MapType"}},
@@ -187,11 +187,11 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.FileReference",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.MapType",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -204,7 +204,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.MessageDefinition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -244,7 +244,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.Option",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -279,11 +279,11 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.PackageName",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.ProtoFile",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -310,7 +310,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.ScalarType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -338,7 +338,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.SimpleType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -359,7 +359,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.TypeName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -372,7 +372,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.TypeReference",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -384,7 +384,7 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.Value",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

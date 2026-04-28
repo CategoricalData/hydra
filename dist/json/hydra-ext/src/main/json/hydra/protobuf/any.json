@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.protobuf.any.Any",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

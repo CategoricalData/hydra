@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.stac.items.Asset",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -71,7 +71,7 @@
     {
       "type": {
         "name": "hydra.stac.items.Item",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -143,7 +143,7 @@
     {
       "type": {
         "name": "hydra.stac.items.Link",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -200,11 +200,11 @@
     {
       "type": {
         "name": "hydra.stac.items.MediaType",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.stac.items.RelationType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -226,7 +226,7 @@
     {
       "type": {
         "name": "hydra.stac.items.Role",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -286,7 +286,7 @@
     {
       "type": {
         "name": "hydra.stac.items.StacRelationType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -346,15 +346,15 @@
     {
       "type": {
         "name": "hydra.stac.items.StacVersion",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Uri",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Url",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "A model for SpatioTemporal Asset Catalog (STAC) Items. See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md",
   "namespace": "hydra.stac.items",
   "termDependencies": ["hydra.geojson.model", "hydra.iana.linkrelations"],

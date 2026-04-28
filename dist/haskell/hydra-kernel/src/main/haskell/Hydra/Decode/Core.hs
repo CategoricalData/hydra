@@ -53,10 +53,10 @@ binding cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "type" (ExtractCore.decodeMaybe typeScheme) fieldMap cx) (\field_type -> Right (Core.Binding {
+        in (Eithers.bind (ExtractCore.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "typeScheme" (ExtractCore.decodeMaybe typeScheme) fieldMap cx) (\field_type -> Right (Core.Binding {
           Core.bindingName = field_name,
           Core.bindingTerm = field_term,
-          Core.bindingType = field_type})))))
+          Core.bindingTypeScheme = field_type})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 caseStatement :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseStatement
 caseStatement cx raw =

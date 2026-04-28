@@ -47,7 +47,7 @@ duplicateBindingsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -60,11 +60,11 @@ duplicateBindingsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing},
+                  Core.bindingTypeScheme = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "y"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -77,11 +77,11 @@ duplicateBindingsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing},
+                  Core.bindingTypeScheme = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath []),
@@ -99,11 +99,11 @@ duplicateBindingsTests =
                   Core.Binding {
                     Core.bindingName = (Core.Name "a"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                    Core.bindingType = Nothing},
+                    Core.bindingTypeScheme = Nothing},
                   Core.Binding {
                     Core.bindingName = (Core.Name "a"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    Core.bindingType = Nothing}],
+                    Core.bindingTypeScheme = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "a"))}))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath [
@@ -119,17 +119,17 @@ duplicateBindingsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermLet (Core.Let {
                 Core.letBindings = [
                   Core.Binding {
                     Core.bindingName = (Core.Name "y"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    Core.bindingType = Nothing},
+                    Core.bindingTypeScheme = Nothing},
                   Core.Binding {
                     Core.bindingName = (Core.Name "y"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
-                    Core.bindingType = Nothing}],
+                    Core.bindingTypeScheme = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "y"))}))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath [
@@ -149,13 +149,13 @@ duplicateBindingsTests =
                       Core.Binding {
                         Core.bindingName = (Core.Name "a"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                        Core.bindingType = Nothing},
+                        Core.bindingTypeScheme = Nothing},
                       Core.Binding {
                         Core.bindingName = (Core.Name "a"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "a"))})),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath [
@@ -171,13 +171,13 @@ duplicateBindingsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermLet (Core.Let {
                 Core.letBindings = [
                   Core.Binding {
                     Core.bindingName = (Core.Name "x"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    Core.bindingType = Nothing}],
+                    Core.bindingTypeScheme = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -257,7 +257,7 @@ duplicateFieldsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "r"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermRecord (Core.Record {
                 Core.recordTypeName = (Core.Name "Point"),
                 Core.recordFields = [
@@ -288,7 +288,7 @@ emptyLetBindingsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -376,7 +376,7 @@ variableShadowingTests =
                   Core.Binding {
                     Core.bindingName = (Core.Name "x"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                    Core.bindingType = Nothing}],
+                    Core.bindingTypeScheme = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,

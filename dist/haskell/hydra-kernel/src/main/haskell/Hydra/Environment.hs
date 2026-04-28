@@ -31,7 +31,7 @@ definitionAsTypeApplicationTerm el =
       Errors.unexpectedShapeErrorExpected = "typed binding",
       Errors.unexpectedShapeErrorActual = "untyped binding"})))) (\ts -> Right (Core.TypeApplicationTerm {
       Core.typeApplicationTermBody = (Core.bindingTerm el),
-      Core.typeApplicationTermType = (Core.typeSchemeBody ts)})) (Core.bindingType el)
+      Core.typeApplicationTermType = (Core.typeSchemeBody ts)})) (Core.bindingTypeScheme el)
 -- | Convert bindings and a body to a let expression
 graphAsLet :: [Core.Binding] -> Core.Term -> Core.Let
 graphAsLet bindings body =
@@ -109,7 +109,7 @@ schemaGraphToTypingEnvironment g =
                       Core.typeSchemeConstraints = Nothing})) (Eithers.map Maybes.pure (decodeTypeScheme (Core.bindingTerm el))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                      Core.typeSchemeConstraints = Nothing})) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (forTerm (Strip.deannotateTerm (Core.bindingTerm el))))) (Core.bindingType el)) (\mts -> Right (Maybes.map (\ts -> (Core.bindingName el, ts)) mts)))
+                      Core.typeSchemeConstraints = Nothing})) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (forTerm (Strip.deannotateTerm (Core.bindingTerm el))))) (Core.bindingTypeScheme el)) (\mts -> Right (Maybes.map (\ts -> (Core.bindingName el, ts)) mts)))
       in (Eithers.map (\mpairs -> Maps.fromList (Maybes.cat mpairs)) (Eithers.mapList toPair (Lexical.graphToBindings g)))
 -- | Extract the bindings from a let term, or return an empty list for other terms
 termAsBindings :: Core.Term -> [Core.Binding]
@@ -127,7 +127,7 @@ typesToDefinitions typeMap =
                 in Core.Binding {
                   Core.bindingName = name,
                   Core.bindingTerm = (EncodeCore.type_ (Pairs.second pair)),
-                  Core.bindingType = Nothing}
+                  Core.bindingTypeScheme = Nothing}
       in (Lists.map toElement (Maps.toList typeMap))
 -- | Execute a computation in the context of a lambda body, extending the type context with the lambda parameter
 withLambdaContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> t0 -> Core.Lambda -> (t1 -> t2) -> t2

@@ -182,7 +182,7 @@ mapsInComplexContextsTests =
                   Core.bindingTerm = (Core.TermMap (M.fromList [
                     (Core.TermLiteral (Core.LiteralString "key1"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))),
                     (Core.TermLiteral (Core.LiteralString "key2"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 200))))])),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "lookup"))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeMap (Core.MapType {
               Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
@@ -665,7 +665,7 @@ setsInComplexContextsTests =
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))])),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "numbers"))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,

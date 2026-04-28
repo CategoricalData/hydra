@@ -109,7 +109,7 @@ binding = define "binding" $
   "typeStr" <~ Maybes.maybe
     (string "")
     ("ts" ~> Strings.concat [string ":(", typeScheme @@ var "ts", string ")"])
-    (Core.bindingType $ var "el") $
+    (Core.bindingTypeScheme $ var "el") $
   Strings.cat $ list [
     var "name",
     var "typeStr",

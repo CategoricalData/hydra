@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelForwardTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -47,7 +47,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelReverseTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -91,7 +91,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelRoundTripAvroTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -137,7 +137,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelRoundTripHydraTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -183,7 +183,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelForwardTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -236,7 +236,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelReverseTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -290,7 +290,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelRoundTripJsonTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -345,7 +345,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelRoundTripTermTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -400,7 +400,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.UnionTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -461,7 +461,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.NameMappingTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -515,7 +515,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.LossinessTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -583,7 +583,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.SchemaSerializationTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -628,7 +628,7 @@
     {
       "type": {
         "name": "hydra.avro.testing.AvroTestCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

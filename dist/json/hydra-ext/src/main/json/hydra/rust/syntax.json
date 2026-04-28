@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Crate",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -27,7 +27,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Item",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -139,7 +139,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ItemWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -181,7 +181,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UseDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -214,7 +214,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UseTree",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -265,7 +265,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UsePath",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -287,7 +287,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UseRename",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -318,7 +318,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UseGroup",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -351,7 +351,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.StructDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -429,7 +429,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.StructBody",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -469,7 +469,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.StructField",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -518,7 +518,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TupleField",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -549,7 +549,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.EnumDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -627,7 +627,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.EnumVariant",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -667,7 +667,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.EnumVariantBody",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -707,7 +707,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FnDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -821,7 +821,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FnParam",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -852,7 +852,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.SelfParam",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -868,7 +868,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.MethodParam",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -901,7 +901,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TypeAlias",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -960,7 +960,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ConstDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1019,7 +1019,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.StaticDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1086,7 +1086,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ModDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1136,7 +1136,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ImplBlock",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1204,7 +1204,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ImplItem",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1244,7 +1244,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ImplMethod",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1339,7 +1339,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TraitDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1426,7 +1426,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TraitItem",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1466,7 +1466,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TraitMethod",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1543,7 +1543,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TraitType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1592,7 +1592,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TraitConst",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1641,7 +1641,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.GenericParam",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1673,7 +1673,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TypeParamBound",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1704,7 +1704,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Lifetime",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1727,7 +1727,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.WhereClause",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1750,7 +1750,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.WherePredicate",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1781,7 +1781,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1912,7 +1912,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TypePath",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1945,7 +1945,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.PathSegment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1976,7 +1976,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.GenericArguments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2016,7 +2016,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.AngleBracketedArgs",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2038,7 +2038,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.GenericArg",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2087,7 +2087,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TypeBinding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2119,7 +2119,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ParenthesizedArgs",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2151,7 +2151,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ReferenceType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2191,7 +2191,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ArrayType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2223,7 +2223,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FnPointerType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2255,7 +2255,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.RawPointerType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2287,7 +2287,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Expression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2597,7 +2597,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ExprPath",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2628,7 +2628,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.CallExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2659,7 +2659,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.MethodCallExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2708,7 +2708,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FieldAccessExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2739,7 +2739,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TupleIndexExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2770,7 +2770,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ClosureExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2819,7 +2819,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ClosureParam",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2850,7 +2850,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.IfExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2890,7 +2890,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.IfCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2921,7 +2921,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.MatchExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2952,7 +2952,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.MatchArm",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2992,7 +2992,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.LoopExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3023,7 +3023,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.WhileExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3064,7 +3064,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ForExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3113,7 +3113,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.BinaryExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3153,7 +3153,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.BinaryOp",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3184,7 +3184,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UnaryExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3215,7 +3215,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.UnaryOp",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3230,7 +3230,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.RefExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3261,7 +3261,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.StructExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3302,7 +3302,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FieldValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3333,7 +3333,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ArrayExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3364,7 +3364,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.IndexExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3395,7 +3395,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.RangeExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3435,7 +3435,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.CastExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3466,7 +3466,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TypeAscriptionExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3497,7 +3497,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.AssignExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3528,7 +3528,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.CompoundAssignExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3568,7 +3568,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.CompoundAssignOp",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3591,7 +3591,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.MacroInvocation",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3631,7 +3631,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.MacroDelimiter",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3647,7 +3647,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Statement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3696,7 +3696,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.LetStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3745,7 +3745,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Block",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3776,7 +3776,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Pattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3908,7 +3908,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.IdentifierPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3948,7 +3948,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.RefPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -3979,7 +3979,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.StructPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4020,7 +4020,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FieldPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4051,7 +4051,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.TupleStructPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4082,7 +4082,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.RangePattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4122,7 +4122,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Literal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4207,7 +4207,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.IntegerLiteral",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4238,7 +4238,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.FloatLiteral",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4270,7 +4270,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Attribute",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4314,7 +4314,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.Visibility",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4363,7 +4363,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.LetCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -4394,7 +4394,7 @@
     {
       "type": {
         "name": "hydra.rust.syntax.ArrayRepeat",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

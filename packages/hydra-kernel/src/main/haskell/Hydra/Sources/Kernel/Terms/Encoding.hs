@@ -512,7 +512,7 @@ encodeModule = define "encodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -536,7 +536,7 @@ encodeModule = define "encodeModule" $
           (list [Packaging.moduleNamespace (var "mod")])
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
+            (Core.bindingTypeScheme $ var "b")))
             (var "encodedBindings")))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)

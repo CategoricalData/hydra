@@ -246,7 +246,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
           "bterm" <~ Core.bindingTerm (var "b") $
-          "newVars" <~ optCases (Core.bindingType $ var "b")
+          "newVars" <~ optCases (Core.bindingTypeScheme $ var "b")
              (var "vars")
              ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
           "newTrace" <~ Lists.cons (Core.unName $ Core.bindingName $ var "b") (var "trace") $
@@ -594,7 +594,7 @@ typeOfLet = define "typeOfLet" $
     Maybes.maybe
       (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUntypedLetBinding $ ErrorsChecking.untypedLetBindingError (var "b")) (var "cx"))
       ("ts" ~> right $ Scoping.typeSchemeToFType @@ var "ts")
-      (Core.bindingType $ var "b")) $
+      (Core.bindingTypeScheme $ var "b")) $
   -- Get binding types, threading errors through the fold
   "btypesResult" <~ Lists.foldl
     ("acc" ~> "b" ~>
@@ -753,7 +753,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   -- Look up the primitive directly in the graph's primitives map and extract its type.
   -- This avoids reconstructing a Map Name TypeScheme on every call (O(p) per call).
-  "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+  "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Maybes.maybe
     (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
@@ -907,7 +907,7 @@ typeOfVariable = define "typeOfVariable" $
     (Maybes.maybe
       (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
       (var "forScheme")
-      (Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+      (Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
         (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx"))))
     (var "forScheme")
     (var "rawTypeScheme")

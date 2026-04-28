@@ -107,7 +107,7 @@ globalConstructorCounts = define "globalConstructorCounts" $
         ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TTerm (Maybe (String, Type)))) [
           _Definition_type>>: "td" ~> Phantoms.just $ pair
             (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
-            (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td")])
+            (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
         (Packaging.moduleDefinitions $ var "m"))
       (var "modules")] $
     CoqUtils.buildConstructorCounts @@ var "allTypeDefs"
@@ -126,7 +126,7 @@ globalSanitizedAccessors = define "globalSanitizedAccessors" $
           ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TTerm (Maybe (String, Type)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
-              (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td")])
+              (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
           (Packaging.moduleDefinitions $ var "m")] $
         CoqUtils.sortTypeDefsSCC @@ var "typeDefs")
       (var "modules")] $
@@ -1104,13 +1104,13 @@ moduleToCoq = define "moduleToCoq" $
     ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TTerm (Maybe (String, Type)))) [
       _Definition_type>>: "td" ~> Phantoms.just $ pair
         (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
-        (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td")])
+        (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
     (var "defs")) $
   "termDefs" <~ Maybes.cat (Lists.map
     ("def_" ~> cases _Definition (var "def_")
       (Just (Phantoms.nothing :: TTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
-        "mts" <~ (Packaging.termDefinitionType $ var "td") $
+        "mts" <~ (Packaging.termDefinitionTypeScheme $ var "td") $
         "vs" <~ Maybes.maybe
           (list ([] :: [TTerm Name]))
           ("ts" ~> Core.typeSchemeVariables $ var "ts")

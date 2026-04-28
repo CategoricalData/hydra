@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.ast.Associativity",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -20,7 +20,7 @@
     {
       "type": {
         "name": "hydra.ast.BlockStyle",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -62,7 +62,7 @@
     {
       "type": {
         "name": "hydra.ast.BracketExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -103,7 +103,7 @@
     {
       "type": {
         "name": "hydra.ast.Brackets",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -134,7 +134,7 @@
     {
       "type": {
         "name": "hydra.ast.Expr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -194,7 +194,7 @@
     {
       "type": {
         "name": "hydra.ast.IndentedExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -225,7 +225,7 @@
     {
       "type": {
         "name": "hydra.ast.IndentStyle",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -257,7 +257,7 @@
     {
       "type": {
         "name": "hydra.ast.Op",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -306,7 +306,7 @@
     {
       "type": {
         "name": "hydra.ast.OpExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -346,7 +346,7 @@
     {
       "type": {
         "name": "hydra.ast.Padding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -377,7 +377,7 @@
     {
       "type": {
         "name": "hydra.ast.Precedence",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -389,7 +389,7 @@
     {
       "type": {
         "name": "hydra.ast.SeqExpr",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -422,7 +422,7 @@
     {
       "type": {
         "name": "hydra.ast.Symbol",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -432,7 +432,7 @@
     {
       "type": {
         "name": "hydra.ast.Ws",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

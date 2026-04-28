@@ -524,7 +524,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -670,7 +670,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.mapping.EdgeSpec"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -761,7 +761,7 @@
                     "domain": {"variable": "hydra.pg.mapping.EdgeSpec"},
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.mapping.ElementSpec"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -833,7 +833,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.mapping.PropertySpec"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -943,7 +943,7 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.mapping.ValueSpec"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1054,7 +1054,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.mapping.VertexSpec"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

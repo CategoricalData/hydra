@@ -144,7 +144,7 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.context.Context"),
                                     Core.projectionField = (Core.Name "other")})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
@@ -207,7 +207,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.context.InContext"),
                                       Core.projectionField = (Core.Name "context")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "e"],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {

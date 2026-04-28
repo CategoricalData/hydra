@@ -1081,7 +1081,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     -- Emit a type section entry for function types
     cases _Type (var "dtyp") (Just $
@@ -1254,7 +1254,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
         (var "sigEither")) $
     -- Primitives: walk graph.primitives -> Map Name Primitive, extract type from each.
     "primEntries" <~ Maybes.cat (Lists.map
-      (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (DslGraph.primitiveType (Pairs.second (var "kv"))))
+      (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (DslGraph.primitiveTypeScheme (Pairs.second (var "kv"))))
       (Maps.toList (DslGraph.graphPrimitives (var "g")))) $
     -- Cross-module bound term types: walk graph.boundTypes -> Map Name TypeScheme.
     "boundEntries" <~ Maybes.cat (Lists.map
@@ -1263,7 +1263,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
     -- Current module's own term defs: use their optional TypeScheme field directly.
     "localEntries" <~ Maybes.cat (Lists.map
       (lambda "td" $
-        Maybes.bind (Packaging.termDefinitionType (var "td"))
+        Maybes.bind (Packaging.termDefinitionTypeScheme (var "td"))
           (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
       (var "termDefs")) $
     Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"]))
@@ -1282,7 +1282,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typ" <~ Maybes.maybe
       (Core.typeUnit)
       (unaryFunction Core.typeSchemeBody)
-      (Packaging.termDefinitionType (var "tdef")) $
+      (Packaging.termDefinitionTypeScheme (var "tdef")) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
     "paramNames" <~ Pairs.first (var "extracted") $

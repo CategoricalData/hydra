@@ -47,7 +47,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.memberOp",
@@ -95,7 +95,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.optionalChainOp",
@@ -145,7 +145,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.exponentiateOp",
@@ -168,7 +168,7 @@
                       "application": {
                         "argument": {"literal": {"string": "**"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.multiplyOp",
@@ -191,7 +191,7 @@
                       "application": {
                         "argument": {"literal": {"string": "*"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.divideOp",
@@ -214,7 +214,7 @@
                       "application": {
                         "argument": {"literal": {"string": "/"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.moduloOp",
@@ -237,7 +237,7 @@
                       "application": {
                         "argument": {"literal": {"string": "%"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.addOp",
@@ -260,7 +260,7 @@
                       "application": {
                         "argument": {"literal": {"string": "+"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.subtractOp",
@@ -283,7 +283,7 @@
                       "application": {
                         "argument": {"literal": {"string": "-"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.lessThanOp",
@@ -306,7 +306,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.lessThanOrEqualOp",
@@ -329,7 +329,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.greaterThanOp",
@@ -352,7 +352,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.greaterThanOrEqualOp",
@@ -375,7 +375,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.inOp",
@@ -398,7 +398,7 @@
                       "application": {
                         "argument": {"literal": {"string": "in"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.instanceOfOp",
@@ -421,7 +421,7 @@
                       "application": {
                         "argument": {"literal": {"string": "instanceof"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.equalOp",
@@ -444,7 +444,7 @@
                       "application": {
                         "argument": {"literal": {"string": "=="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.notEqualOp",
@@ -467,7 +467,7 @@
                       "application": {
                         "argument": {"literal": {"string": "!="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.strictEqualOp",
@@ -490,7 +490,7 @@
                       "application": {
                         "argument": {"literal": {"string": "==="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.strictNotEqualOp",
@@ -513,7 +513,7 @@
                       "application": {
                         "argument": {"literal": {"string": "!=="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.bitwiseAndOp",
@@ -536,7 +536,7 @@
                       "application": {
                         "argument": {"literal": {"string": "&"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.bitwiseXorOp",
@@ -559,7 +559,7 @@
                       "application": {
                         "argument": {"literal": {"string": "^"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.bitwiseOrOp",
@@ -582,7 +582,7 @@
                       "application": {
                         "argument": {"literal": {"string": "|"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.leftShiftOp",
@@ -605,7 +605,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<<"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.rightShiftOp",
@@ -628,7 +628,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">>"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.unsignedRightShiftOp",
@@ -651,7 +651,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">>>"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.logicalAndOp",
@@ -674,7 +674,7 @@
                       "application": {
                         "argument": {"literal": {"string": "&&"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.logicalOrOp",
@@ -697,7 +697,7 @@
                       "application": {
                         "argument": {"literal": {"string": "||"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.nullishCoalescingOp",
@@ -720,7 +720,7 @@
                       "application": {
                         "argument": {"literal": {"string": "??"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.assignOp",
@@ -743,7 +743,7 @@
                       "application": {
                         "argument": {"literal": {"string": "="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.arrowOp",
@@ -766,7 +766,7 @@
                       "application": {
                         "argument": {"literal": {"string": "=>"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.ternaryOp",
@@ -790,7 +790,7 @@
                       "application": {
                         "argument": {"literal": {"string": "?"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.commaOp",
@@ -813,7 +813,7 @@
                       "application": {
                         "argument": {"literal": {"string": ","}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.defineOp",
@@ -836,7 +836,7 @@
                       "application": {
                         "argument": {"literal": {"string": "="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.javaScript.operators.colonOp",
@@ -859,7 +859,7 @@
                       "application": {
                         "argument": {"literal": {"string": ":"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}}],
   "description": "AST operators for JavaScript with precedence and associativity",
   "namespace": "hydra.javaScript.operators",
   "termDependencies": ["hydra.serialization"],

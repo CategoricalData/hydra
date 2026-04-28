@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.Module",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -37,7 +37,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ModuleField",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -140,7 +140,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ValType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -207,7 +207,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.FuncType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -238,7 +238,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.FuncTypeRef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -271,7 +271,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.TypeUse",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -314,7 +314,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.TypeDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -345,7 +345,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.Func",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -395,7 +395,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.FuncLocal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -427,7 +427,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.Param",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -458,7 +458,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.BrTableArgs",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -489,7 +489,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.Instruction",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -786,7 +786,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.BlockInstruction",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -827,7 +827,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.BlockType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -866,7 +866,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.MemArg",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -897,7 +897,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.MemoryInstruction",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -928,7 +928,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.IfInstruction",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -978,7 +978,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.NumericOp",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1012,7 +1012,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.MemoryDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1043,7 +1043,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.DataSegment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1085,7 +1085,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.DataMode",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1119,7 +1119,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.Limits",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1150,7 +1150,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.GlobalDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1191,7 +1191,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.GlobalType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1222,7 +1222,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.TableDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1262,7 +1262,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ElemActive",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1293,7 +1293,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ElemSegment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1344,7 +1344,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ElemMode",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1390,7 +1390,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.RefType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1422,7 +1422,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ImportDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1463,7 +1463,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ImportDesc",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1514,7 +1514,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ImportFunc",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1546,7 +1546,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ImportGlobal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1577,7 +1577,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ImportMemory",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1608,7 +1608,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ImportTable",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1648,7 +1648,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ExportDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1679,7 +1679,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ExportDesc",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1729,7 +1729,7 @@
     {
       "type": {
         "name": "hydra.wasm.syntax.ConstValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

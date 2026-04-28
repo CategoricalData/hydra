@@ -78,10 +78,10 @@ buildFunctionSignatures cx g termDefs =
                     sigEither = extractSignature cx g (Core.typeSchemeBody ts)
                 in (Eithers.either (\_err -> Nothing) (\sig -> Just (snakeName, sig)) sigEither)
           primEntries =
-                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Graph.primitiveType (Pairs.second kv)))) (Maps.toList (Graph.graphPrimitives g)))
+                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Graph.primitiveTypeScheme (Pairs.second kv)))) (Maps.toList (Graph.graphPrimitives g)))
           boundEntries = Maybes.cat (Lists.map (\kv -> toSigEntry kv) (Maps.toList (Graph.graphBoundTypes g)))
           localEntries =
-                  Maybes.cat (Lists.map (\td -> Maybes.bind (Packaging.termDefinitionType td) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
+                  Maybes.cat (Lists.map (\td -> Maybes.bind (Packaging.termDefinitionTypeScheme td) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
       in (Maps.fromList (Lists.concat [
         primEntries,
         boundEntries,
@@ -673,7 +673,7 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Core.unName name)
-          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Packaging.termDefinitionType tdef)
+          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
           extracted = extractLambdaParams term
           paramNames = Pairs.first extracted
           innerBody = Pairs.second extracted
@@ -739,7 +739,7 @@ encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionType tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
           dtyp = Strip.deannotateType typ
       in case dtyp of
         Core.TypeFunction _ -> Eithers.bind (extractParamTypes cx g typ) (\paramTypes -> Eithers.bind (encodeType cx g typ) (\resultTypes -> Right [

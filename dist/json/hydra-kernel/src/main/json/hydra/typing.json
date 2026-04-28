@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.typing.FunctionStructure",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -88,7 +88,7 @@
     {
       "type": {
         "name": "hydra.typing.InferenceResult",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -155,7 +155,7 @@
     {
       "type": {
         "name": "hydra.typing.TermSubst",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -171,7 +171,7 @@
     {
       "type": {
         "name": "hydra.typing.TypeConstraint",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -215,7 +215,7 @@
     {
       "type": {
         "name": "hydra.typing.TypeSubst",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

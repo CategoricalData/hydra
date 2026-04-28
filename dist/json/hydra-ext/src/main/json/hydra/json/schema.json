@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.json.schema.Document",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "id", "type": {"maybe": {"literal": {"string": {}}}}},
@@ -19,17 +19,17 @@
     {
       "type": {
         "name": "hydra.json.schema.Keyword",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.json.schema.Schema",
-        "type": {
+        "typeScheme": {
           "body": {"wrap": {"list": {"variable": "hydra.json.schema.Restriction"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.json.schema.Restriction",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "type", "type": {"variable": "hydra.json.schema.Type"}},
@@ -57,7 +57,7 @@
     {
       "type": {
         "name": "hydra.json.schema.Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.json.schema.TypeName"}},
@@ -68,7 +68,7 @@
     {
       "type": {
         "name": "hydra.json.schema.TypeName",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "string", "type": {"unit": {}}},
@@ -82,7 +82,7 @@
     {
       "type": {
         "name": "hydra.json.schema.StringRestriction",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "minLength", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -94,11 +94,11 @@
     {
       "type": {
         "name": "hydra.json.schema.RegularExpression",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.json.schema.NumericRestriction",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "minimum", "type": {"variable": "hydra.json.schema.Limit"}},
@@ -110,7 +110,7 @@
     {
       "type": {
         "name": "hydra.json.schema.Limit",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "value", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -119,7 +119,7 @@
     {
       "type": {
         "name": "hydra.json.schema.ArrayRestriction",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "items", "type": {"variable": "hydra.json.schema.Items"}},
@@ -133,7 +133,7 @@
     {
       "type": {
         "name": "hydra.json.schema.Items",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -146,7 +146,7 @@
     {
       "type": {
         "name": "hydra.json.schema.AdditionalItems",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "any", "type": {"literal": {"boolean": {}}}},
@@ -155,7 +155,7 @@
     {
       "type": {
         "name": "hydra.json.schema.ObjectRestriction",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -192,7 +192,7 @@
     {
       "type": {
         "name": "hydra.json.schema.SchemaOrArray",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}},
@@ -203,7 +203,7 @@
     {
       "type": {
         "name": "hydra.json.schema.MultipleRestriction",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -223,7 +223,7 @@
     {
       "type": {
         "name": "hydra.json.schema.SchemaReference",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
   "namespace": "hydra.json.schema",
   "termDependencies": ["hydra.json.model"],

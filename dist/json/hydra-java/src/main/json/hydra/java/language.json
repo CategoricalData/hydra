@@ -12,7 +12,7 @@
                   "literal": {
                     "string": "The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly"}}}],
             "body": {"literal": {"integer": {"int32": 9}}}}},
-        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.java.language.javaLanguage",
@@ -47,7 +47,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
@@ -84,7 +84,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
@@ -109,7 +109,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
@@ -130,7 +130,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
@@ -167,7 +167,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
@@ -260,7 +260,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
@@ -341,7 +341,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
@@ -354,7 +354,7 @@
                             "domain": {"variable": "t0"},
                             "parameter": "_"}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
@@ -391,7 +391,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.java.language.reservedWords",
@@ -413,7 +413,7 @@
                             "key": "description",
                             "value": {"literal": {"string": "Special names reserved for use by Hydra"}}}],
                         "body": {"list": [{"literal": {"string": "Elements"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "classNames",
                     "term": {
@@ -522,7 +522,7 @@
                             {"literal": {"string": "VerifyError"}},
                             {"literal": {"string": "VirtualMachineError"}},
                             {"literal": {"string": "Void"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "keywords",
                     "term": {
@@ -585,7 +585,7 @@
                             {"literal": {"string": "void"}},
                             {"literal": {"string": "volatile"}},
                             {"literal": {"string": "while"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "literals",
                     "term": {
@@ -593,7 +593,7 @@
                         {"literal": {"string": "false"}},
                         {"literal": {"string": "null"}},
                         {"literal": {"string": "true"}}]},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -612,7 +612,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for Java",
   "namespace": "hydra.java.language",
   "termDependencies": ["hydra.lexical"],

@@ -208,7 +208,7 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
       "forBinding" <~ ("b" ~>
         "bname" <~ (Core.bindingName $ var "b") $
         "bterm" <~ (Core.bindingTerm $ var "b") $
-        optCases (Core.bindingType $ var "b")
+        optCases (Core.bindingTypeScheme $ var "b")
           (Core.binding (var "bname") (bindUnboundTypeVariables @@ var "cx" @@ var "bterm") nothing)
           ("ts" ~>
             "bvars" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
@@ -390,7 +390,7 @@ inferTypeOf = define "inferTypeOf" $
   Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "bindings"))
     ("binding" <<~ headOrFail @@ string "inferTypeOf: single binding expected" @@ var "bindings" $
      "term1" <~ Core.bindingTerm (var "binding") $
-     "mts" <~ Core.bindingType (var "binding") $
+     "mts" <~ Core.bindingTypeScheme (var "binding") $
      Maybes.maybe
        (Ctx.failInContext (Error.errorOther $ Error.otherError (string "Expected a type scheme")) (var "fcx2"))
        ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2"))
@@ -893,7 +893,7 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
         @@ Core.typeSchemeBody (var "ts")
         @@ Substitution.idTypeSubst
         @@ var "constraints"))
-    (Maybes.map (unaryFunction Graph.primitiveType) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx"))
+    (Maybes.map (unaryFunction Graph.primitiveTypeScheme) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx"))
 
 inferTypeOfProjection :: TTermDefinition (Context -> Graph -> Projection -> Prelude.Either Error InferenceResult)
 inferTypeOfProjection = define "inferTypeOfProjection" $
@@ -1052,7 +1052,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
           @@ Core.typeSchemeBody (var "ts")
           @@ Substitution.idTypeSubst
           @@ var "constraints"))
-      (Maybes.map (unaryFunction Graph.primitiveType) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")))
+      (Maybes.map (unaryFunction Graph.primitiveTypeScheme) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")))
     -- Found in graphBoundTypes: use the type scheme directly
     ("scheme" ~>
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
@@ -1203,7 +1203,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
           (var "acc")
           ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")
           (Core.typeSchemeConstraints $ var "ts"))
-        (Core.bindingType $ var "b"))
+        (Core.bindingTypeScheme $ var "b"))
     Maps.empty
     (var "bins0") $
   "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
@@ -1313,7 +1313,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
             @@ var "u_prime"
             @@ string "original binding type") $
         right (Substitution.substInClassConstraints @@ var "unifySubst" @@ var "freshConstraints"))
-      (Core.bindingType $ var "binding") $
+      (Core.bindingTypeScheme $ var "binding") $
 
     "c1" <~ mergeClassConstraints @@ var "c1Inferred" @@ var "originalBindingConstraints" $
 

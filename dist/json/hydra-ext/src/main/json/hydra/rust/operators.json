@@ -22,7 +22,7 @@
                       "application": {
                         "argument": {"literal": {"string": "="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.addAssignOp",
@@ -45,7 +45,7 @@
                       "application": {
                         "argument": {"literal": {"string": "+="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.subAssignOp",
@@ -68,7 +68,7 @@
                       "application": {
                         "argument": {"literal": {"string": "-="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.mulAssignOp",
@@ -91,7 +91,7 @@
                       "application": {
                         "argument": {"literal": {"string": "*="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.divAssignOp",
@@ -114,7 +114,7 @@
                       "application": {
                         "argument": {"literal": {"string": "/="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.remAssignOp",
@@ -137,7 +137,7 @@
                       "application": {
                         "argument": {"literal": {"string": "%="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitAndAssignOp",
@@ -160,7 +160,7 @@
                       "application": {
                         "argument": {"literal": {"string": "&="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitOrAssignOp",
@@ -183,7 +183,7 @@
                       "application": {
                         "argument": {"literal": {"string": "|="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitXorAssignOp",
@@ -206,7 +206,7 @@
                       "application": {
                         "argument": {"literal": {"string": "^="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.shlAssignOp",
@@ -229,7 +229,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<<="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.shrAssignOp",
@@ -252,7 +252,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">>="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.rangeOp",
@@ -275,7 +275,7 @@
                       "application": {
                         "argument": {"literal": {"string": ".."}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.rangeInclusiveOp",
@@ -298,7 +298,7 @@
                       "application": {
                         "argument": {"literal": {"string": "..="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.orOp",
@@ -321,7 +321,7 @@
                       "application": {
                         "argument": {"literal": {"string": "||"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.andOp",
@@ -344,7 +344,7 @@
                       "application": {
                         "argument": {"literal": {"string": "&&"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.eqOp",
@@ -367,7 +367,7 @@
                       "application": {
                         "argument": {"literal": {"string": "=="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.neOp",
@@ -390,7 +390,7 @@
                       "application": {
                         "argument": {"literal": {"string": "!="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.ltOp",
@@ -413,7 +413,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.leOp",
@@ -436,7 +436,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.gtOp",
@@ -459,7 +459,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.geOp",
@@ -482,7 +482,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">="}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitOrOp",
@@ -505,7 +505,7 @@
                       "application": {
                         "argument": {"literal": {"string": "|"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitXorOp",
@@ -528,7 +528,7 @@
                       "application": {
                         "argument": {"literal": {"string": "^"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitAndOp",
@@ -551,7 +551,7 @@
                       "application": {
                         "argument": {"literal": {"string": "&"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.shlOp",
@@ -574,7 +574,7 @@
                       "application": {
                         "argument": {"literal": {"string": "<<"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.shrOp",
@@ -597,7 +597,7 @@
                       "application": {
                         "argument": {"literal": {"string": ">>"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.addOp",
@@ -620,7 +620,7 @@
                       "application": {
                         "argument": {"literal": {"string": "+"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.subOp",
@@ -643,7 +643,7 @@
                       "application": {
                         "argument": {"literal": {"string": "-"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.mulOp",
@@ -666,7 +666,7 @@
                       "application": {
                         "argument": {"literal": {"string": "*"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.divOp",
@@ -689,7 +689,7 @@
                       "application": {
                         "argument": {"literal": {"string": "/"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.remOp",
@@ -712,7 +712,7 @@
                       "application": {
                         "argument": {"literal": {"string": "%"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.asOp",
@@ -735,7 +735,7 @@
                       "application": {
                         "argument": {"literal": {"string": "as"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.colonOp",
@@ -758,7 +758,7 @@
                       "application": {
                         "argument": {"literal": {"string": ":"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.negOp",
@@ -806,7 +806,7 @@
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.notOp",
@@ -854,7 +854,7 @@
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.derefOp",
@@ -902,7 +902,7 @@
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.refOp",
@@ -950,7 +950,7 @@
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.appOp",
@@ -998,7 +998,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.fieldOp",
@@ -1046,7 +1046,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.methodOp",
@@ -1094,7 +1094,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.arrowOp",
@@ -1117,7 +1117,7 @@
                       "application": {
                         "argument": {"literal": {"string": "->"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.fatArrowOp",
@@ -1140,7 +1140,7 @@
                       "application": {
                         "argument": {"literal": {"string": "=>"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.doubleColonOp",
@@ -1190,7 +1190,7 @@
                         "field": {"name": "left", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rust.operators.colonColonOp",
@@ -1213,7 +1213,7 @@
                       "application": {
                         "argument": {"literal": {"string": ":"}},
                         "function": {"variable": "hydra.serialization.op"}}}}}}}}},
-        "type": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}}],
   "description": "AST operators for Rust serialization",
   "namespace": "hydra.rust.operators",
   "termDependencies": ["hydra.serialization"],

@@ -115,20 +115,20 @@ data TermDefinition =
     -- | The term being defined
     termDefinitionTerm :: Core.Term,
     -- | The type scheme of the term, including any class constraints
-    termDefinitionType :: (Maybe Core.TypeScheme)}
+    termDefinitionTypeScheme :: (Maybe Core.TypeScheme)}
   deriving (Eq, Ord, Read, Show)
 _TermDefinition = Core.Name "hydra.packaging.TermDefinition"
 _TermDefinition_name = Core.Name "name"
 _TermDefinition_term = Core.Name "term"
-_TermDefinition_type = Core.Name "type"
+_TermDefinition_typeScheme = Core.Name "typeScheme"
 -- | A type-level definition, including a name and the type scheme
 data TypeDefinition =
   TypeDefinition {
     -- | The name of the type
     typeDefinitionName :: Core.Name,
     -- | The type scheme being defined
-    typeDefinitionType :: Core.TypeScheme}
+    typeDefinitionTypeScheme :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 _TypeDefinition = Core.Name "hydra.packaging.TypeDefinition"
 _TypeDefinition_name = Core.Name "name"
-_TypeDefinition_type = Core.Name "type"
+_TypeDefinition_typeScheme = Core.Name "typeScheme"

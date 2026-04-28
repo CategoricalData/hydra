@@ -95,7 +95,7 @@ rewriteAndFoldTerm f term0 =
                               in (Pairs.first r, Core.Binding {
                                 Core.bindingName = (Core.bindingName binding),
                                 Core.bindingTerm = (Pairs.second r),
-                                Core.bindingType = (Core.bindingType binding)})
+                                Core.bindingTypeScheme = (Core.bindingTypeScheme binding)})
                     dflt = (val0, term02)
                 in case term02 of
                   Core.TermAnnotated v0 -> forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
@@ -247,7 +247,7 @@ rewriteAndFoldTermWithPath f term0 =
                               in (Pairs.first r, Core.Binding {
                                 Core.bindingName = (Core.bindingName binding),
                                 Core.bindingTerm = (Pairs.second r),
-                                Core.bindingType = (Core.bindingType binding)})
+                                Core.bindingTypeScheme = (Core.bindingTypeScheme binding)})
                     dflt = (val0, term02)
                 in case term02 of
                   Core.TermAnnotated v0 -> forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
@@ -373,7 +373,7 @@ rewriteTerm f term0 =
                                       \b -> Core.Binding {
                                         Core.bindingName = (Core.bindingName b),
                                         Core.bindingTerm = (recurse (Core.bindingTerm b)),
-                                        Core.bindingType = (Core.bindingType b)}
+                                        Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                               in Core.Let {
                                 Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
                                 Core.letBody = (recurse (Core.letBody lt))}
@@ -441,7 +441,7 @@ rewriteTermM f term0 =
                             \b -> Eithers.bind (recurse (Core.bindingTerm b)) (\v -> Right (Core.Binding {
                               Core.bindingName = (Core.bindingName b),
                               Core.bindingTerm = v,
-                              Core.bindingType = (Core.bindingType b)}))
+                              Core.bindingTypeScheme = (Core.bindingTypeScheme b)}))
                 in case term of
                   Core.TermAnnotated v0 -> Eithers.bind (recurse (Core.annotatedTermBody v0)) (\ex -> Right (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = ex,
@@ -528,7 +528,7 @@ rewriteTermWithContext f cx0 term0 =
                                       \b -> Core.Binding {
                                         Core.bindingName = (Core.bindingName b),
                                         Core.bindingTerm = (recurse (Core.bindingTerm b)),
-                                        Core.bindingType = (Core.bindingType b)}
+                                        Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                               in Core.Let {
                                 Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
                                 Core.letBody = (recurse (Core.letBody lt))}
@@ -597,7 +597,7 @@ rewriteTermWithContextM f cx0 term0 =
                             \b -> Eithers.bind (recurse (Core.bindingTerm b)) (\v -> Right (Core.Binding {
                               Core.bindingName = (Core.bindingName b),
                               Core.bindingTerm = v,
-                              Core.bindingType = (Core.bindingType b)}))
+                              Core.bindingTypeScheme = (Core.bindingTypeScheme b)}))
                 in case term of
                   Core.TermAnnotated v0 -> Eithers.bind (recurse (Core.annotatedTermBody v0)) (\ex -> Right (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = ex,

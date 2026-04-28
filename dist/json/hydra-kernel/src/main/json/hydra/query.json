@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.query.ComparisonConstraint",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -22,7 +22,7 @@
     {
       "type": {
         "name": "hydra.query.Edge",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -68,7 +68,7 @@
     {
       "type": {
         "name": "hydra.query.GraphPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -101,7 +101,7 @@
     {
       "type": {
         "name": "hydra.query.Node",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -149,7 +149,7 @@
     {
       "type": {
         "name": "hydra.query.Path",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -191,7 +191,7 @@
     {
       "type": {
         "name": "hydra.query.PathEquation",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -224,7 +224,7 @@
     {
       "type": {
         "name": "hydra.query.Pattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -286,7 +286,7 @@
     {
       "type": {
         "name": "hydra.query.PatternImplication",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -323,7 +323,7 @@
     {
       "type": {
         "name": "hydra.query.Query",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -354,7 +354,7 @@
     {
       "type": {
         "name": "hydra.query.Range",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -385,7 +385,7 @@
     {
       "type": {
         "name": "hydra.query.RegexQuantifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -468,7 +468,7 @@
     {
       "type": {
         "name": "hydra.query.RegexSequence",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -499,7 +499,7 @@
     {
       "type": {
         "name": "hydra.query.Step",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -542,7 +542,7 @@
     {
       "type": {
         "name": "hydra.query.TriplePattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -582,7 +582,7 @@
     {
       "type": {
         "name": "hydra.query.Variable",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

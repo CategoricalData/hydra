@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -58,7 +58,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef_Cardinality",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "single", "type": {"unit": {}}},
@@ -68,7 +68,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef_IndexType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "default", "type": {"unit": {}}},
@@ -77,7 +77,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasBaseTypeDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -123,7 +123,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasConstraintDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -144,7 +144,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasEntityDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -198,7 +198,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasRelationshipAttributeDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -219,7 +219,7 @@
     {
       "type": {
         "name": "hydra.atlas.AtlasStructDef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -239,7 +239,7 @@
     {
       "type": {
         "name": "hydra.atlas.TypeCategory",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "primitive", "type": {"unit": {}}},

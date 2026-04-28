@@ -189,7 +189,7 @@
                                 "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "c"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -229,7 +229,7 @@
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -358,7 +358,7 @@
                                 "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "c"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -397,7 +397,7 @@
                     "function": {"variable": "hydra.lib.strings.cat"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -423,7 +423,7 @@
                     "function": {"variable": "hydra.serialization.printExpr"}}},
                 "domain": {"variable": "hydra.rdf.syntax.Graph"},
                 "parameter": "g"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -458,7 +458,7 @@
                     "function": {"variable": "hydra.serialization.noSep"}}},
                 "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
                 "parameter": "bnode"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -502,7 +502,7 @@
                     "function": {"variable": "hydra.serialization.newlineSep"}}},
                 "domain": {"variable": "hydra.rdf.syntax.Graph"},
                 "parameter": "g"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -544,7 +544,7 @@
                     "function": {"variable": "hydra.serialization.noSep"}}},
                 "domain": {"variable": "hydra.rdf.syntax.Iri"},
                 "parameter": "iri"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -579,7 +579,7 @@
                     "function": {"variable": "hydra.serialization.noSep"}}},
                 "domain": {"variable": "hydra.rdf.syntax.LanguageTag"},
                 "parameter": "lang"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -606,7 +606,7 @@
                             "argument": {"variable": "lit"},
                             "function": {
                               "project": {"field": "lexicalForm", "typeName": "hydra.rdf.syntax.Literal"}}}},
-                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "dt",
                         "term": {
@@ -614,7 +614,7 @@
                             "argument": {"variable": "lit"},
                             "function": {
                               "project": {"field": "datatypeIri", "typeName": "hydra.rdf.syntax.Literal"}}}},
-                        "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "lang",
                         "term": {
@@ -622,7 +622,7 @@
                             "argument": {"variable": "lit"},
                             "function": {
                               "project": {"field": "languageTag", "typeName": "hydra.rdf.syntax.Literal"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}},
                           "variables": []}},
                       {
@@ -641,7 +641,7 @@
                                     {"literal": {"string": "\""}}]},
                                 "function": {"variable": "hydra.lib.strings.cat"}}},
                             "function": {"variable": "hydra.serialization.cst"}}},
-                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "suffix",
                         "term": {
@@ -672,14 +672,14 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"variable": "hydra.ast.Expr"}}},
                                         "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}}}}}},
-                        "type": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
+                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"list": [{"variable": "lexExpr"}, {"variable": "suffix"}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.rdf.syntax.Literal"},
                 "parameter": "lit"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -735,7 +735,7 @@
                         "typeName": "hydra.rdf.syntax.Node"}}}},
                 "domain": {"variable": "hydra.rdf.syntax.Node"},
                 "parameter": "n"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -781,7 +781,7 @@
                         "typeName": "hydra.rdf.syntax.Resource"}}}},
                 "domain": {"variable": "hydra.rdf.syntax.Resource"},
                 "parameter": "r"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -808,7 +808,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "subject", "typeName": "hydra.rdf.syntax.Triple"}}}},
-                        "type": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
                       {
                         "name": "pred",
                         "term": {
@@ -816,7 +816,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "predicate", "typeName": "hydra.rdf.syntax.Triple"}}}},
-                        "type": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "obj",
                         "term": {
@@ -824,7 +824,7 @@
                             "argument": {"variable": "t"},
                             "function": {
                               "project": {"field": "object", "typeName": "hydra.rdf.syntax.Triple"}}}},
-                        "type": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
+                        "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -848,7 +848,7 @@
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.rdf.syntax.Triple"},
                 "parameter": "t"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},

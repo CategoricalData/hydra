@@ -41,7 +41,7 @@
                                           "project": {
                                             "field": "dataTypeFeatures",
                                             "typeName": "hydra.tinkerpop.features.VertexPropertyFeatures"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"},
                                       "variables": []}},
                                   {
@@ -77,7 +77,7 @@
                                             "domain": {"variable": "t1"},
                                             "parameter": "v"}},
                                         "parameter": "t1"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "function": {
                                           "codomain": {
@@ -167,11 +167,11 @@
                                                     "field": "supportsBooleanArrayValues",
                                                     "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                             "function": {"variable": "hydra.lib.logic.or"}}}}},
-                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "supportsLiterals",
                                     "term": {"literal": {"boolean": true}},
-                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "supportsMaps",
                                     "term": {
@@ -181,7 +181,7 @@
                                           "project": {
                                             "field": "supportsMapValues",
                                             "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
-                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "eliminationVariants",
                                     "term": {
@@ -191,7 +191,7 @@
                                             "body": {"variable": "hydra.lib.sets.empty"},
                                             "type": {"variable": "t1"}}},
                                         "parameter": "t1"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "t1"}},
                                       "constraints": [{"key": "t1", "value": {"classes": ["ordering"]}}],
                                       "variables": ["t1"]}},
@@ -330,7 +330,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.sets.fromList"},
                                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                                       "variables": []}},
                                   {
@@ -387,7 +387,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.sets.fromList"},
                                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "hydra.core.FloatType"}},
                                       "variables": []}},
                                   {
@@ -399,7 +399,7 @@
                                             "body": {"variable": "hydra.lib.sets.empty"},
                                             "type": {"variable": "t1"}}},
                                         "parameter": "t1"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "t1"}},
                                       "constraints": [{"key": "t1", "value": {"classes": ["ordering"]}}],
                                       "variables": ["t1"]}},
@@ -457,7 +457,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.sets.fromList"},
                                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "hydra.core.IntegerType"}},
                                       "variables": []}},
                                   {
@@ -525,7 +525,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.sets.fromList"},
                                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                                       "variables": []}},
                                   {
@@ -603,7 +603,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.sets.fromList"},
                                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                                       "variables": []}},
                                   {
@@ -619,7 +619,7 @@
                                                   "application": {
                                                     "argument": {"variable": "typ"},
                                                     "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                                "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {"variable": "dt"},
@@ -840,7 +840,7 @@
                                                     "typeName": "hydra.core.Type"}}}}}},
                                         "domain": {"variable": "hydra.core.Type"},
                                         "parameter": "typ"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "function": {
                                           "codomain": {"literal": {"boolean": {}}},
@@ -885,7 +885,7 @@
                     "domain": {"variable": "hydra.coders.LanguageName"},
                     "parameter": "name"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

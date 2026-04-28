@@ -4,142 +4,142 @@
       "term": {
         "name": "hydra.avro.schemaJson.avro_aliases",
         "term": {"literal": {"string": "aliases"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_array",
         "term": {"literal": {"string": "array"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_ascending",
         "term": {"literal": {"string": "ascending"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_boolean",
         "term": {"literal": {"string": "boolean"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_bytes",
         "term": {"literal": {"string": "bytes"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_default",
         "term": {"literal": {"string": "default"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_descending",
         "term": {"literal": {"string": "descending"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_doc",
         "term": {"literal": {"string": "doc"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_double",
         "term": {"literal": {"string": "double"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_enum",
         "term": {"literal": {"string": "enum"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_fields",
         "term": {"literal": {"string": "fields"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_fixed",
         "term": {"literal": {"string": "fixed"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_float",
         "term": {"literal": {"string": "float"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_ignore",
         "term": {"literal": {"string": "ignore"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_int",
         "term": {"literal": {"string": "int"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_items",
         "term": {"literal": {"string": "items"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_long",
         "term": {"literal": {"string": "long"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_map",
         "term": {"literal": {"string": "map"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_name",
         "term": {"literal": {"string": "name"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_namespace",
         "term": {"literal": {"string": "namespace"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_null",
         "term": {"literal": {"string": "null"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_order",
         "term": {"literal": {"string": "order"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_record",
         "term": {"literal": {"string": "record"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_size",
         "term": {"literal": {"string": "size"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_string",
         "term": {"literal": {"string": "string"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_symbols",
         "term": {"literal": {"string": "symbols"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_type",
         "term": {"literal": {"string": "type"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.avro_values",
         "term": {"literal": {"string": "values"}},
-        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.avro.schemaJson.err",
@@ -179,7 +179,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -239,7 +239,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -297,7 +297,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -352,7 +352,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -411,7 +411,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -469,7 +469,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -571,7 +571,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -662,7 +662,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -755,7 +755,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -848,7 +848,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -903,7 +903,7 @@
                         "parameter": "k"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1030,7 +1030,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1165,7 +1165,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1202,7 +1202,7 @@
                     "function": {"variable": "hydra.json.writer.printJson"}}},
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "v"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -1279,7 +1279,7 @@
                         "type": {"variable": "hydra.json.model.Value"}}}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1368,7 +1368,7 @@
                         "typeName": "hydra.avro.schema.Schema"}}}},
                 "domain": {"variable": "hydra.avro.schema.Schema"},
                 "parameter": "schema"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1456,7 +1456,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.avro.schema.Primitive"},
                 "parameter": "p"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1521,7 +1521,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.avro.schema.Array"},
                 "parameter": "arr"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1585,7 +1585,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.avro.schema.Map"},
                 "parameter": "mp"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1831,7 +1831,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.avro.schema.Named"},
                 "parameter": "n"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1888,7 +1888,7 @@
                         "typeName": "hydra.avro.schema.NamedType"}}}},
                 "domain": {"variable": "hydra.avro.schema.NamedType"},
                 "parameter": "nt"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2025,7 +2025,7 @@
                             "second": {"variable": "hydra.json.model.Value"}}}}}}},
                 "domain": {"variable": "hydra.avro.schema.Enum"},
                 "parameter": "e"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2088,7 +2088,7 @@
                         "type": {"variable": "hydra.json.model.Value"}}}]},
                 "domain": {"variable": "hydra.avro.schema.Fixed"},
                 "parameter": "f"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2158,7 +2158,7 @@
                         "type": {"variable": "hydra.json.model.Value"}}}]},
                 "domain": {"variable": "hydra.avro.schema.Record"},
                 "parameter": "r"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2454,7 +2454,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.avro.schema.Field"},
                 "parameter": "f"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -2516,7 +2516,7 @@
                     "type": {"variable": "hydra.json.model.Value"}}},
                 "domain": {"variable": "hydra.avro.schema.Order"},
                 "parameter": "o"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2560,7 +2560,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.avro.schema.Union"},
                 "parameter": "u"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -2647,7 +2647,7 @@
                       "map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}},
                     "parameter": "m"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2725,7 +2725,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2878,7 +2878,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3036,7 +3036,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3146,7 +3146,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3315,7 +3315,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3632,7 +3632,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3679,7 +3679,7 @@
                                                 "argument": {"variable": "n"},
                                                 "function": {"variable": "hydra.lib.literals.decimalToBigint"}}},
                                             "function": {"variable": "hydra.lib.literals.bigintToInt32"}}},
-                                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                     "body": {
                                       "typeApplication": {
                                         "body": {
@@ -3732,7 +3732,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3842,7 +3842,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4075,7 +4075,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4379,7 +4379,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4539,7 +4539,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4770,7 +4770,7 @@
                                 "type": {"maybe": {"variable": "hydra.avro.schema.Primitive"}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.avro.schema.Primitive"}},
@@ -4932,7 +4932,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5158,7 +5158,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5220,7 +5220,7 @@
                                                             "body": {"variable": "hydra.lib.pairs.first"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"variable": "t0"}}}}},
-                                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                               {
                                                 "name": "v",
                                                 "term": {
@@ -5233,7 +5233,7 @@
                                                             "body": {"variable": "hydra.lib.pairs.second"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"variable": "t0"}}}}},
-                                                "type": {"body": {"variable": "t0"}, "variables": []}}],
+                                                "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {
@@ -5337,7 +5337,7 @@
                       "map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}},
                     "parameter": "m"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

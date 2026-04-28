@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Credited",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
@@ -14,7 +14,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Ecosystem",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -28,7 +28,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Entry",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -78,7 +78,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Event",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -95,7 +95,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Id",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -109,7 +109,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Markdown",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -121,7 +121,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.OsvVersion",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -135,7 +135,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Package",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -149,7 +149,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.PackageVersions",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "package", "type": {"variable": "hydra.osv.schema.Package"}},
@@ -163,7 +163,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Reference",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -174,7 +174,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.ReferenceType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -188,7 +188,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Severity",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -201,11 +201,11 @@
     {
       "type": {
         "name": "hydra.osv.schema.SeverityScore",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.osv.schema.SeverityType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -218,7 +218,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.Timestamp",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -231,11 +231,11 @@
     {
       "type": {
         "name": "hydra.osv.schema.Url",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.osv.schema.Version",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -248,7 +248,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.VersionOrStar",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -262,7 +262,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.VersionOrZero",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -276,7 +276,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.VersionRange",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.osv.schema.VersionType"}},
@@ -290,7 +290,7 @@
     {
       "type": {
         "name": "hydra.osv.schema.VersionType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

@@ -30,7 +30,7 @@ encodeBinding cx graph b =
     Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
       Core.bindingName = (encodeBindingName (Core.bindingName b)),
       Core.bindingTerm = (encodeTypeNamed (Core.bindingName b) typ),
-      Core.bindingType = (Just (encoderTypeSchemeNamed (Core.bindingName b) typ))}))
+      Core.bindingTypeScheme = (Just (encoderTypeSchemeNamed (Core.bindingName b) typ))}))
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: Core.Name -> Core.Name
 encodeBindingName n =
@@ -255,10 +255,10 @@ encodeModule cx graph mod =
         in Core.Binding {
           Core.bindingName = name,
           Core.bindingTerm = dataTerm,
-          Core.bindingType = (Just (Core.TypeScheme {
+          Core.bindingTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
       Packaging.moduleDescription = (Just (Strings.cat [
         "Term encoders for ",
@@ -270,7 +270,7 @@ encodeModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
-        Packaging.termDefinitionType = (Core.bindingType b)})) encodedBindings)})))))
+        Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) encodedBindings)})))))
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term
 encodeName n =

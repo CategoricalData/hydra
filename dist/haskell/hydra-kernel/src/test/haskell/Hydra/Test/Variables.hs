@@ -148,14 +148,14 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -167,7 +167,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -177,7 +177,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -192,7 +192,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -202,7 +202,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -217,7 +217,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermVariable (Core.Name "bar")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "a")),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -227,7 +227,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermVariable (Core.Name "bar")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "a")),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -242,7 +242,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -257,7 +257,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -277,7 +277,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermVariable (Core.Name "bar")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "a")),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -292,7 +292,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "foo"),
                       Core.bindingTerm = (Core.TermVariable (Core.Name "bar")),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
                         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "a")),
                         Core.typeSchemeConstraints = Nothing}))}],
@@ -315,7 +315,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -333,7 +333,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -359,7 +359,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a",
                           (Core.Name "b")],
@@ -385,7 +385,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0",
                           (Core.Name "t1")],
@@ -413,7 +413,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -434,7 +434,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -460,7 +460,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -475,7 +475,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})),
-                        Core.bindingType = (Just (Core.TypeScheme {
+                        Core.bindingTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "b"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -495,7 +495,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -510,7 +510,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})),
-                        Core.bindingType = (Just (Core.TypeScheme {
+                        Core.bindingTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "t0"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -535,7 +535,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -550,7 +550,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Core.bindingType = (Just (Core.TypeScheme {
+                        Core.bindingTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -568,7 +568,7 @@ allTests =
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -583,7 +583,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Core.bindingType = (Just (Core.TypeScheme {
+                        Core.bindingTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "t0"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -610,7 +610,7 @@ allTests =
                               Core.lambdaParameter = (Core.Name "x"),
                               Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "a"))),
                               Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                            Core.bindingType = (Just (Core.TypeScheme {
+                            Core.bindingTypeScheme = (Just (Core.TypeScheme {
                               Core.typeSchemeVariables = [
                                 Core.Name "a"],
                               Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -623,7 +623,7 @@ allTests =
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id2")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -645,7 +645,7 @@ allTests =
                               Core.lambdaParameter = (Core.Name "x"),
                               Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
                               Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                            Core.bindingType = (Just (Core.TypeScheme {
+                            Core.bindingTypeScheme = (Just (Core.TypeScheme {
                               Core.typeSchemeVariables = [
                                 Core.Name "t1"],
                               Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -658,7 +658,7 @@ allTests =
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id2")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -685,7 +685,7 @@ allTests =
                               Core.lambdaParameter = (Core.Name "x"),
                               Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "b"))),
                               Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                            Core.bindingType = (Just (Core.TypeScheme {
+                            Core.bindingTypeScheme = (Just (Core.TypeScheme {
                               Core.typeSchemeVariables = [
                                 Core.Name "b"],
                               Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -698,7 +698,7 @@ allTests =
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id2")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -720,7 +720,7 @@ allTests =
                               Core.lambdaParameter = (Core.Name "x"),
                               Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
                               Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                            Core.bindingType = (Just (Core.TypeScheme {
+                            Core.bindingTypeScheme = (Just (Core.TypeScheme {
                               Core.typeSchemeVariables = [
                                 Core.Name "t1"],
                               Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -733,7 +733,7 @@ allTests =
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id2")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0"],
                         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -766,7 +766,7 @@ allTests =
                                   Core.lambdaParameter = (Core.Name "z"),
                                   Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "c"))),
                                   Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "z"), (Core.TermVariable (Core.Name "y"))))})),
-                                Core.bindingType = (Just (Core.TypeScheme {
+                                Core.bindingTypeScheme = (Just (Core.TypeScheme {
                                   Core.typeSchemeVariables = [
                                     Core.Name "c"],
                                   Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -778,7 +778,7 @@ allTests =
                             Core.letBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "fun2")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "a",
                           (Core.Name "b")],
@@ -813,7 +813,7 @@ allTests =
                                   Core.lambdaParameter = (Core.Name "z"),
                                   Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t2"))),
                                   Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "z"), (Core.TermVariable (Core.Name "y"))))})),
-                                Core.bindingType = (Just (Core.TypeScheme {
+                                Core.bindingTypeScheme = (Just (Core.TypeScheme {
                                   Core.typeSchemeVariables = [
                                     Core.Name "t2"],
                                   Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -825,7 +825,7 @@ allTests =
                             Core.letBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "fun2")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})),
-                      Core.bindingType = (Just (Core.TypeScheme {
+                      Core.bindingTypeScheme = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [
                           Core.Name "t0",
                           (Core.Name "t1")],
@@ -907,14 +907,14 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -926,7 +926,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -938,7 +938,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -1057,7 +1057,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -1067,7 +1067,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
@@ -1082,11 +1082,11 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -1098,11 +1098,11 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing},
+                      Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
@@ -1119,13 +1119,13 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLet (Core.Let {
                     Core.letBindings = [
                       Core.Binding {
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
@@ -1135,13 +1135,13 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLet (Core.Let {
                     Core.letBindings = [
                       Core.Binding {
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x2"),
                       Core.lambdaDomain = Nothing,
@@ -1493,7 +1493,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
@@ -1506,7 +1506,7 @@ allTests =
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                      Core.bindingType = Nothing}],
+                      Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x2"),
                     Core.lambdaDomain = Nothing,
@@ -1530,7 +1530,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))),
@@ -1545,7 +1545,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x2"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})),
-                        Core.bindingType = Nothing}],
+                        Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),

@@ -59,7 +59,7 @@ bindUnboundTypeVariables cx term0 =
                                 in (Maybes.maybe (Core.Binding {
                                   Core.bindingName = bname,
                                   Core.bindingTerm = (bindUnboundTypeVariables cx bterm),
-                                  Core.bindingType = Nothing}) (\ts ->
+                                  Core.bindingTypeScheme = Nothing}) (\ts ->
                                   let bvars = Sets.fromList (Core.typeSchemeVariables ts)
                                       excluded = Sets.union svars bvars
                                       inType = Sets.difference (Variables.freeVariablesInType (Core.typeSchemeBody ts)) excluded
@@ -79,7 +79,7 @@ bindUnboundTypeVariables cx term0 =
                                   in Core.Binding {
                                     Core.bindingName = bname,
                                     Core.bindingTerm = bterm2,
-                                    Core.bindingType = (Just ts2)}) (Core.bindingType b))
+                                    Core.bindingTypeScheme = (Just ts2)}) (Core.bindingTypeScheme b))
                       in (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map forBinding (Core.letBindings v0)),
                         Core.letBody = (bindUnboundTypeVariables cx (Core.letBody v0))}))
@@ -222,7 +222,7 @@ inferTypeOf fcx cx term =
                   Core.Binding {
                     Core.bindingName = (Core.Name "ignoredVariableName"),
                     Core.bindingTerm = term,
-                    Core.bindingType = Nothing}],
+                    Core.bindingTypeScheme = Nothing}],
                 Core.letBody = (Core.TermLiteral (Core.LiteralString "ignoredBody"))})
       in (Eithers.bind (inferTypeOfTerm fcx cx letTerm "infer type of term") (\result ->
         let fcx2 = Typing.inferenceResultContext result
@@ -230,7 +230,7 @@ inferTypeOf fcx cx term =
           let bindings = Core.letBindings letResult
           in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (Eithers.bind (headOrFail "inferTypeOf: single binding expected" bindings) (\binding ->
             let term1 = Core.bindingTerm binding
-                mts = Core.bindingType binding
+                mts = Core.bindingTypeScheme binding
             in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "Expected a type scheme"))) (\ts -> Right ((term1, ts), fcx2)) mts))) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
             "Expected a single binding with a type scheme, but got: ",
             (Literals.showInt32 (Lists.length bindings)),
@@ -612,7 +612,7 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
               constraintsWithS2 = Substitution.substInClassConstraints s2 inferredConstraints
               composedSubst = Substitution.composeTypeSubst s1 s2
               originalBindingConstraints =
-                      Lists.foldl (\acc -> \b -> Maybes.maybe acc (\ts -> Maybes.maybe acc (\c -> mergeClassConstraints acc c) (Core.typeSchemeConstraints ts)) (Core.bindingType b)) Maps.empty bins0
+                      Lists.foldl (\acc -> \b -> Maybes.maybe acc (\ts -> Maybes.maybe acc (\c -> mergeClassConstraints acc c) (Core.typeSchemeConstraints ts)) (Core.bindingTypeScheme b)) Maps.empty bins0
               originalConstraintsSubst = Substitution.substInClassConstraints composedSubst originalBindingConstraints
               allInferredConstraints = mergeClassConstraints constraintsWithS2 originalConstraintsSubst
               mergedConstraints = mergeClassConstraints (Graph.graphClassConstraints g2base) allInferredConstraints
@@ -652,7 +652,7 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
                           in Core.Binding {
                             Core.bindingName = name,
                             Core.bindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst sbody s2) typeLambdaTerm),
-                            Core.bindingType = (Just finalTs)}
+                            Core.bindingTypeScheme = (Just finalTs)}
                 bins1 = Lists.map createBinding (Lists.zip tsbins1 bterms1Subst)
                 bodyConstraints = Substitution.substInClassConstraints sbody (Typing.inferenceResultClassConstraints bodyResult)
                 bindingConstraintsSubst = Substitution.substInClassConstraints sbody constraintsWithS2
@@ -769,7 +769,7 @@ inferTypeOfPrimitive fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveTypeScheme (Maps.lookup name (Graph.graphPrimitives cx)))
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Either Errors.Error Typing.InferenceResult
 inferTypeOfProjection fcx cx proj =
@@ -888,7 +888,7 @@ inferTypeOfVariable fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveTypeScheme (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
@@ -946,7 +946,7 @@ inferTypesOfTemporaryBindings fcx cx bins =
             let tsResult = Resolution.instantiateTypeScheme fcx2 ts
                 instantiatedTs = Pairs.first tsResult
                 freshConstraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints instantiatedTs)
-            in (Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeBody instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints)))) (Core.bindingType binding)) (\originalBindingConstraints ->
+            in (Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeBody instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints)))) (Core.bindingTypeScheme binding)) (\originalBindingConstraints ->
             let c1 = mergeClassConstraints c1Inferred originalBindingConstraints
             in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 (Substitution.substInContext u cx) tl) (\rp2 ->
               let result2 = Pairs.first rp2

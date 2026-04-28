@@ -191,7 +191,7 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.util.CaseConvention"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -342,7 +342,7 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.util.Comparison"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -457,7 +457,7 @@
                     "domain": {"literal": {"integer": {"int32": {}}}},
                     "parameter": "y"}}}],
             "typeName": "hydra.util.Precision"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

@@ -28,7 +28,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.applicationsTests",
@@ -63,7 +63,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.simpleFunctionApplicationsTests",
@@ -615,7 +615,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.partialApplicationsTests",
@@ -993,7 +993,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.higherOrderApplicationsTests",
@@ -1126,7 +1126,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1219,7 +1219,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1535,7 +1535,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1628,7 +1628,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1721,7 +1721,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1912,7 +1912,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.polymorphicApplicationsTests",
@@ -2004,7 +2004,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2299,7 +2299,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2608,7 +2608,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2789,7 +2789,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.applicationsInComplexContextsTests",
@@ -3482,7 +3482,7 @@
                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -3884,7 +3884,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.applicationsWithComplexArgumentsTests",
@@ -4013,7 +4013,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -4316,7 +4316,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -4474,7 +4474,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.lambdasTests",
@@ -4507,7 +4507,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.simpleLambdasTests",
@@ -4890,7 +4890,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.multiParameterLambdasTests",
@@ -5730,7 +5730,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.lambdasWithOperationsTests",
@@ -6516,7 +6516,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.nestedLambdasTests",
@@ -6887,7 +6887,7 @@
                                                                                                   "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -7123,7 +7123,7 @@
                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -7295,7 +7295,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.lambdasInComplexContextsTests",
@@ -8093,7 +8093,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.higherOrderLambdasTests",
@@ -9065,7 +9065,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.letTermsTests",
@@ -9098,7 +9098,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.simpleLetBindingsTests",
@@ -9176,7 +9176,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -9347,7 +9347,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -9372,7 +9372,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -9532,7 +9532,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.letTermsWithShadowingTests",
@@ -9612,7 +9612,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -9842,7 +9842,7 @@
                                                                                                   "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -10139,7 +10139,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -10177,7 +10177,7 @@
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -10215,7 +10215,7 @@
                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"maybe": null},
@@ -10388,7 +10388,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -10418,7 +10418,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -10471,7 +10471,7 @@
                                                                                                                 "wrap": {"body": {"literal": {"string": "y"}}, "typeName": "hydra.core.Name"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"maybe": null},
@@ -10668,7 +10668,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.recursiveBindingsTests",
@@ -10804,7 +10804,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -10951,7 +10951,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.mutualRecursionTests",
@@ -11086,7 +11086,7 @@
                                                                                       "typeName": "hydra.core.Record"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -11165,7 +11165,7 @@
                                                                                       "typeName": "hydra.core.Record"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -11391,7 +11391,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -11482,7 +11482,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -11627,7 +11627,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.nestedLetTermsTests",
@@ -11705,7 +11705,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -11790,7 +11790,7 @@
                                                                                                     "typeName": "hydra.core.Application"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -11875,7 +11875,7 @@
                                                                                                                   "typeName": "hydra.core.Application"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"maybe": null},
@@ -12064,7 +12064,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -12160,7 +12160,7 @@
                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -12374,7 +12374,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -12427,7 +12427,7 @@
                                                                                                                 "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"maybe": null},
@@ -12642,7 +12642,7 @@
                                                                                                   "wrap": {"body": {"literal": {"string": "z"}}, "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -12790,7 +12790,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.letWithComplexExpressionsTests",
@@ -12890,7 +12890,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -12917,7 +12917,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -13178,7 +13178,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -13208,7 +13208,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -13435,7 +13435,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -13789,7 +13789,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -13882,7 +13882,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -13975,7 +13975,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -14166,7 +14166,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.literalsTests",
@@ -14195,7 +14195,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.booleanLiteralsTests",
@@ -14464,7 +14464,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.stringLiteralsTests",
@@ -14856,7 +14856,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.integerLiteralsTests",
@@ -16086,7 +16086,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.floatLiteralsTests",
@@ -16514,7 +16514,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.literalsInComplexContextsTests",
@@ -16967,7 +16967,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.primitivesTests",
@@ -17002,7 +17002,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.nullaryPrimitivesTests",
@@ -17339,7 +17339,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.unaryPrimitivesTests",
@@ -17828,7 +17828,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.binaryPrimitivesTests",
@@ -18470,7 +18470,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.ternaryPrimitivesTests",
@@ -18949,7 +18949,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.monomorphicVsPolymorphicTests",
@@ -19535,7 +19535,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.higherOrderPrimitivesTests",
@@ -20259,7 +20259,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.primitivesInComplexContextsTests",
@@ -20402,7 +20402,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -20495,7 +20495,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -21049,7 +21049,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.variablesTests",
@@ -21081,7 +21081,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.simpleVariableLookupTests",
@@ -21334,7 +21334,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -21502,7 +21502,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -21532,7 +21532,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -21692,7 +21692,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.variableScopingTests",
@@ -21995,7 +21995,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -22033,7 +22033,7 @@
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -22208,7 +22208,7 @@
                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -22436,7 +22436,7 @@
                                                                                                   "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
-                                                                                          "name": "type",
+                                                                                          "name": "typeScheme",
                                                                                           "term": {
                                                                                             "typeApplication": {
                                                                                               "body": {"maybe": null},
@@ -22718,7 +22718,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.polymorphicVariablesTests",
@@ -22810,7 +22810,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -23023,7 +23023,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -23340,7 +23340,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -23543,7 +23543,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.variablesInComplexContextsTests",
@@ -24456,7 +24456,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.checking.fundamentals.recursiveVariablesTests",
@@ -24595,7 +24595,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -24825,7 +24825,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -24916,7 +24916,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -25061,7 +25061,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives",
   "namespace": "hydra.test.checking.fundamentals",
   "termDependencies": ["hydra.test.testGraph", "hydra.rewriting"],

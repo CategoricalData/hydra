@@ -34,7 +34,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.EliminationVariant"}},
                       "variables": []}},
                   {
@@ -67,7 +67,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
@@ -88,7 +88,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
@@ -109,7 +109,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.FunctionVariant"}},
                       "variables": []}},
                   {
@@ -142,7 +142,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
@@ -231,7 +231,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
@@ -300,7 +300,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
@@ -313,7 +313,7 @@
                             "domain": {"variable": "t0"},
                             "parameter": "_"}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
@@ -350,7 +350,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.language.cppReservedWords",
@@ -466,7 +466,7 @@
                             {"literal": {"string": "while"}},
                             {"literal": {"string": "xor"}},
                             {"literal": {"string": "xor_eq"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "cppPreprocessor",
                     "term": {
@@ -489,7 +489,7 @@
                             {"literal": {"string": "#line"}},
                             {"literal": {"string": "#pragma"}},
                             {"literal": {"string": "#undef"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "cppStlTypes",
                     "term": {
@@ -528,7 +528,7 @@
                             {"literal": {"string": "shared_ptr"}},
                             {"literal": {"string": "unique_ptr"}},
                             {"literal": {"string": "weak_ptr"}}]}}},
-                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraCppKeywords",
                     "term": {
@@ -542,7 +542,7 @@
                             "body": {
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
                         "parameter": "t0"}},
-                    "type": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],
+                    "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -564,7 +564,7 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.sets.fromList"},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for C++",
   "namespace": "hydra.cpp.language",
   "termDependencies": ["hydra.lexical"],

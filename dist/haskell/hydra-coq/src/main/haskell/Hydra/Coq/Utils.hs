@@ -46,7 +46,7 @@ buildFieldMapping modules =
       Packaging.DefinitionType v0 ->
         let qname = Core.unName (Packaging.typeDefinitionName v0)
             tname = localName qname
-            ty = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
+            ty = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
             extracted = extractTypeParams ty
             bodyTy = Pairs.second extracted
         in case bodyTy of
@@ -79,7 +79,7 @@ collectFreeTypeVars tm =
         in (Logic.ifElse (isTypeVarLike paramName) (Sets.delete paramName allVars) allVars)
       Core.TermLet v0 ->
         let bindVars =
-                Sets.unions (Lists.map (\b -> Sets.union (collectFreeTypeVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\sch -> collectFreeTypeVarsInTypeScheme sch) (Core.bindingType b))) (Core.letBindings v0))
+                Sets.unions (Lists.map (\b -> Sets.union (collectFreeTypeVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\sch -> collectFreeTypeVarsInTypeScheme sch) (Core.bindingTypeScheme b))) (Core.letBindings v0))
         in (Sets.union bindVars (collectFreeTypeVars (Core.letBody v0)))
       Core.TermList v0 -> Sets.unions (Lists.map (\el -> collectFreeTypeVars el) v0)
       Core.TermMaybe v0 -> Maybes.maybe Sets.empty (\el -> collectFreeTypeVars el) v0
@@ -219,14 +219,14 @@ encodeMutualLetGroup grp body =
                     in Core.Binding {
                       Core.bindingName = (Core.bindingName b),
                       Core.bindingTerm = (mkProj bvar i),
-                      Core.bindingType = (Core.bindingType b)}) (Lists.zip (Math.range 0 (Math.sub n 1)) grp)
+                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Lists.zip (Math.range 0 (Math.sub n 1)) grp)
           innerProjBindings = mkProjBindings innerBundleVar
           outerProjBindings = mkProjBindings outerBundleVar
           strippedBindings =
                   Lists.map (\b -> Core.Binding {
                     Core.bindingName = (Core.bindingName b),
                     Core.bindingTerm = (stripHydraFix (Core.bindingName b) (Core.bindingTerm b)),
-                    Core.bindingType = (Core.bindingType b)}) grp
+                    Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) grp
           mkPair =
                   \ts -> Maybes.fromMaybe (Core.TermVariable (Core.Name "tt")) (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Core.TermPair (Pairs.first p, (mkPair (Pairs.second p))))) (Lists.uncons ts))
           pairExpr = mkPair (Lists.map (\b -> Core.bindingTerm b) strippedBindings)
@@ -242,7 +242,7 @@ encodeMutualLetGroup grp body =
                   Core.Binding {
                     Core.bindingName = bundleName,
                     Core.bindingTerm = fixTerm,
-                    Core.bindingType = Nothing}
+                    Core.bindingTypeScheme = Nothing}
       in (Core.TermLet (Core.Let {
         Core.letBindings = [
           bundleBinding],
@@ -396,7 +396,7 @@ normalizeInnerTypeLambdas term =
                         Core.letBindings = (Lists.map (\b -> Core.Binding {
                           Core.bindingName = (Core.bindingName b),
                           Core.bindingTerm = (f recurse polyNames2 (Core.bindingTerm b)),
-                          Core.bindingType = (Logic.ifElse (isTypeLambdaTerm (Core.bindingTerm b)) Nothing (Core.bindingType b))}) (Core.letBindings v0)),
+                          Core.bindingTypeScheme = (Logic.ifElse (isTypeLambdaTerm (Core.bindingTerm b)) Nothing (Core.bindingTypeScheme b))}) (Core.letBindings v0)),
                         Core.letBody = (f recurse polyNames2 (Core.letBody v0))}))
                     Core.TermTypeLambda v0 -> f recurse polyNames (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.typeLambdaParameter v0),
@@ -468,7 +468,7 @@ reorderLetBindings term0 =
                               Lists.map (\grp -> Lists.map (\b -> Core.Binding {
                                 Core.bindingName = (Core.bindingName b),
                                 Core.bindingTerm = (reorderLetBindings (Core.bindingTerm b)),
-                                Core.bindingType = (Core.bindingType b)}) grp) groups
+                                Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) grp) groups
                   in (rebuildMutualLets groups2 (reorderLetBindings innerBody))
                 _ -> recurse tm
       in (Rewriting.rewriteTerm f term0)

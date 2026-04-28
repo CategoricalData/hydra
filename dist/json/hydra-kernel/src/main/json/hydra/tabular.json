@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.tabular.ColumnType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -19,7 +19,7 @@
     {
       "type": {
         "name": "hydra.tabular.DataRow",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -36,7 +36,7 @@
     {
       "type": {
         "name": "hydra.tabular.HeaderRow",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -50,7 +50,7 @@
     {
       "type": {
         "name": "hydra.tabular.Table",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -94,7 +94,7 @@
     {
       "type": {
         "name": "hydra.tabular.TableType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

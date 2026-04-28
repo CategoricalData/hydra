@@ -119,12 +119,12 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
         Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
-          "newVars" <~ optCases (Core.bindingType $ var "b")
+          "newVars" <~ optCases (Core.bindingTypeScheme $ var "b")
              (var "vars")
              ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
           Sets.union
             (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
-            (optCases (Core.bindingType $ var "b")
+            (optCases (Core.bindingTypeScheme $ var "b")
               Sets.empty
               ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeBody $ var "ts")))) $
         Sets.union
@@ -303,7 +303,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
               (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ") (var "newConstraints")) $
             -- Note: do not advance 'next' for the next sibling; keep current 'next'
             var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
-          optCases (Core.bindingType $ var "b")
+          optCases (Core.bindingTypeScheme $ var "b")
                -- Untyped binding: rewrite its term with current state; 'next' unchanged for siblings
                (var "noType")
                -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM

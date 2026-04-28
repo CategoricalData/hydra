@@ -209,7 +209,7 @@ differentiateTerm dx term =
         Core.letBindings = (Lists.map (\b -> Core.Binding {
           Core.bindingName = (Core.bindingName b),
           Core.bindingTerm = (differentiateTerm dx (Core.bindingTerm b)),
-          Core.bindingType = Nothing}) (Core.letBindings v0)),
+          Core.bindingTypeScheme = Nothing}) (Core.letBindings v0)),
         Core.letBody = (differentiateTerm dx (Core.letBody v0))})
       Core.TermAnnotated v0 -> differentiateTerm dx (Core.annotatedTermBody v0)
       Core.TermList v0 -> Core.TermList (Lists.map (differentiateTerm dx) v0)

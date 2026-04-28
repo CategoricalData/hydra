@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.Closed",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -22,7 +22,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.CommonConstraint",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -298,7 +298,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.CommonProperties",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -390,7 +390,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.Definition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -410,7 +410,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.NodeKind",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -466,7 +466,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.NodeShape",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -484,7 +484,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.Pattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -501,7 +501,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.PropertyShape",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -567,7 +567,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.PropertyShapeConstraint",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -648,7 +648,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.QualifiedValueShape",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -678,7 +678,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.Reference",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -718,7 +718,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.Severity",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -755,7 +755,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.Shape",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -774,7 +774,7 @@
     {
       "type": {
         "name": "hydra.shacl.model.ShapesGraph",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

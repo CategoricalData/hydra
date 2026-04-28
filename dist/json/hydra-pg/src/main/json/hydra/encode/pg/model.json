@@ -162,7 +162,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -366,7 +366,7 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.model.Direction"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -551,7 +551,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -609,7 +609,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.model.EdgeLabel"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -795,7 +795,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "t"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -926,7 +926,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1040,7 +1040,7 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.model.ElementKind"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1171,7 +1171,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1302,7 +1302,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "t"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1444,7 +1444,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "t"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1632,7 +1632,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1823,7 +1823,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "t"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1923,7 +1923,7 @@
                     "domain": {"variable": "hydra.pg.model.EdgeLabel"},
                     "parameter": "y"}}}],
             "typeName": "hydra.pg.model.Label"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2082,7 +2082,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2180,7 +2180,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2238,7 +2238,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.model.PropertyKey"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2364,7 +2364,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "t"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2516,7 +2516,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2574,7 +2574,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.pg.model.VertexLabel"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2719,7 +2719,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "t"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2920,7 +2920,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "v"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

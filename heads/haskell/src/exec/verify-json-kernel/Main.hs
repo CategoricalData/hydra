@@ -234,7 +234,7 @@ stripTypeAnnotations m = m {
   where
     stripDef (DefinitionTerm td) = DefinitionTerm td {
       termDefinitionTerm = Strip.removeTypesFromTerm (termDefinitionTerm td),
-      termDefinitionType = Just $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
+      termDefinitionTypeScheme = Just $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
     stripDef d = d
 
 -- | Find the first difference between two modules

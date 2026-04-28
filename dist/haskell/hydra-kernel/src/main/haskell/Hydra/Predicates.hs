@@ -32,7 +32,7 @@ isComplexBinding :: Graph.Graph -> Core.Binding -> Bool
 isComplexBinding tc b =
 
       let term = Core.bindingTerm b
-          mts = Core.bindingType b
+          mts = Core.bindingTypeScheme b
       in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
         let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
             isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeBody ts)) 0
@@ -56,7 +56,7 @@ isComplexVariable tc name =
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
         in (Maybes.maybe (
           let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
-          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveType prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveTypeScheme prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =

@@ -48,7 +48,7 @@ datatype gname lname typ = Binding {
       annotatedTermBody = Encode.type_ typ,
       annotatedTermAnnotation = M.fromList [
         (Name "type", TermVariable (Name "hydra.core.Type"))]})),
-    bindingType = Just (TypeScheme {
+    bindingTypeScheme = Just (TypeScheme {
       typeSchemeVariables = [],
       typeSchemeBody = TypeVariable (Name "hydra.core.Type"),
       typeSchemeConstraints = Nothing})}

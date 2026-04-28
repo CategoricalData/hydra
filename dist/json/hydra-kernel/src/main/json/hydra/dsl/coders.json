@@ -151,7 +151,7 @@
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "isLossy"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -290,7 +290,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -385,7 +385,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -478,7 +478,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -571,7 +571,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -834,7 +834,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1107,7 +1107,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1378,7 +1378,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1657,7 +1657,7 @@
                                 "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1842,7 +1842,7 @@
                     "body": {"variable": "hydra.graph.Graph"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "graph"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1952,7 +1952,7 @@
                 "argument": {"variable": "hydra.coders.AdapterContext"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2022,7 +2022,7 @@
                 "argument": {"variable": "hydra.coders.AdapterContext"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2091,7 +2091,7 @@
                 "argument": {"variable": "hydra.coders.AdapterContext"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2287,7 +2287,7 @@
                 "argument": {"variable": "hydra.coders.AdapterContext"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2473,7 +2473,7 @@
                 "argument": {"variable": "hydra.coders.AdapterContext"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2674,7 +2674,7 @@
                 "argument": {"variable": "hydra.coders.AdapterContext"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2827,7 +2827,7 @@
                         "domain": {"variable": "t1"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "encode"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2962,7 +2962,7 @@
                                 "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3070,7 +3070,7 @@
                                 "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3253,7 +3253,7 @@
                                 "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3454,7 +3454,7 @@
                                 "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3622,7 +3622,7 @@
                         "domain": {"variable": "hydra.context.Context"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "encode"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3737,7 +3737,7 @@
                         "function": {"variable": "hydra.coders.Coder"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3829,7 +3829,7 @@
                         "function": {"variable": "hydra.coders.Coder"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3992,7 +3992,7 @@
                         "function": {"variable": "hydra.coders.Coder"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4167,7 +4167,7 @@
                         "function": {"variable": "hydra.coders.Coder"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4253,7 +4253,7 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "application": {
               "argument": {"variable": "hydra.coders.CoderDirection"},
@@ -4298,7 +4298,7 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "application": {
               "argument": {"variable": "hydra.coders.CoderDirection"},
@@ -4388,7 +4388,7 @@
                     "body": {"variable": "hydra.coders.LanguageName"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4470,7 +4470,7 @@
                 "argument": {"variable": "hydra.coders.Language"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4539,7 +4539,7 @@
                 "argument": {"variable": "hydra.coders.Language"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4669,7 +4669,7 @@
                 "argument": {"variable": "hydra.coders.Language"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -4805,7 +4805,7 @@
                 "argument": {"variable": "hydra.coders.Language"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5092,7 +5092,7 @@
                     "body": {"set": {"variable": "hydra.variants.EliminationVariant"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "eliminationVariants"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5250,7 +5250,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5319,7 +5319,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5388,7 +5388,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5457,7 +5457,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5526,7 +5526,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5595,7 +5595,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5664,7 +5664,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -5733,7 +5733,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -6167,7 +6167,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -6602,7 +6602,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -7037,7 +7037,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -7472,7 +7472,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -7907,7 +7907,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -8342,7 +8342,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -8777,7 +8777,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -9217,7 +9217,7 @@
                 "argument": {"variable": "hydra.coders.LanguageConstraints"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -9280,7 +9280,7 @@
                 "argument": {"literal": {"string": {}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -9331,7 +9331,7 @@
                 "argument": {"variable": "hydra.coders.LanguageName"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -9382,7 +9382,7 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "application": {
               "argument": {"variable": "hydra.coders.TraversalOrder"},
@@ -9427,7 +9427,7 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "application": {
               "argument": {"variable": "hydra.coders.TraversalOrder"},

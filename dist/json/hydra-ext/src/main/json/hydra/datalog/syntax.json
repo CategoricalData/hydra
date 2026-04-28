@@ -3,25 +3,25 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Constant",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Relation",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Variable",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program",
-        "type": {
+        "typeScheme": {
           "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program_Elmt",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "Fact", "type": {"variable": "hydra.datalog.syntax.Fact"}},
@@ -30,7 +30,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Fact",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -43,7 +43,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Rule",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
@@ -54,7 +54,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Atom",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -67,7 +67,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomList",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
@@ -78,7 +78,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomList_Multiple",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
@@ -89,7 +89,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Term",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -102,7 +102,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.TermList",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
@@ -113,7 +113,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.TermList_Multiple",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "Term", "type": {"variable": "hydra.datalog.syntax.Term"}},
@@ -124,7 +124,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantList",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -137,7 +137,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantList_Multiple",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
