@@ -22,7 +22,7 @@
                             "body": {"variable": "hydra.lib.sets.empty"},
                             "type": {"variable": "t0"}}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "t0"}},
                       "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
                       "variables": ["t0"]}},
@@ -56,7 +56,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
@@ -77,7 +77,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
@@ -89,7 +89,7 @@
                             "body": {"variable": "hydra.lib.sets.empty"},
                             "type": {"variable": "t0"}}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "t0"}},
                       "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
                       "variables": ["t0"]}},
@@ -111,7 +111,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
@@ -164,7 +164,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
@@ -225,7 +225,7 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                    "type": {
+                    "typeScheme": {
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
@@ -238,7 +238,7 @@
                             "domain": {"variable": "t0"},
                             "parameter": "_"}},
                         "parameter": "t0"}},
-                    "type": {
+                    "typeScheme": {
                       "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
@@ -283,7 +283,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
   "description": "Language constraints for LinkedIn Pegasus (PDL)",
   "namespace": "hydra.pegasus.language",
   "termDependencies": ["hydra.lexical"],

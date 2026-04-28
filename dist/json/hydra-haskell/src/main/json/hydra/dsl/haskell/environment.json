@@ -149,7 +149,7 @@
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "usesByteString"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -262,7 +262,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -333,7 +333,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -405,7 +405,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -477,7 +477,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -713,7 +713,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -955,7 +955,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1198,7 +1198,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1441,7 +1441,7 @@
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

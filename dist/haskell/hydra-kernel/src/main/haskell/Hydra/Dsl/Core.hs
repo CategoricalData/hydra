@@ -231,7 +231,7 @@ applicationWithFunction original newVal =
               Core.projectionField = (Core.Name "argument")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 binding :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Core.Binding
-binding name term type_ =
+binding name term typeScheme =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.Binding"),
       Core.recordFields = [
@@ -242,8 +242,8 @@ binding name term type_ =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Phantoms.unTTerm term)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldTerm = (Phantoms.unTTerm typeScheme)}]}))
 bindingName :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm Core.Name
 bindingName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -258,12 +258,12 @@ bindingTerm x =
         Core.projectionTypeName = (Core.Name "hydra.core.Binding"),
         Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-bindingType :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm (Maybe Core.TypeScheme)
-bindingType x =
+bindingTypeScheme :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm (Maybe Core.TypeScheme)
+bindingTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.core.Binding"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionField = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 bindingWithName :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Binding
 bindingWithName original newVal =
@@ -281,11 +281,11 @@ bindingWithName original newVal =
               Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.core.Binding"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 bindingWithTerm :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Binding
 bindingWithTerm original newVal =
@@ -303,14 +303,14 @@ bindingWithTerm original newVal =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.core.Binding"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "typeScheme")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-bindingWithType :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Core.Binding
-bindingWithType original newVal =
+bindingWithTypeScheme :: Phantoms.TTerm Core.Binding -> Phantoms.TTerm (Maybe Core.TypeScheme) -> Phantoms.TTerm Core.Binding
+bindingWithTypeScheme original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.Binding"),
       Core.recordFields = [
@@ -329,7 +329,7 @@ bindingWithType original newVal =
               Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 caseStatement :: Phantoms.TTerm Core.Name -> Phantoms.TTerm (Maybe Core.Term) -> Phantoms.TTerm [Core.Field] -> Phantoms.TTerm Core.CaseStatement
 caseStatement typeName default_ cases =

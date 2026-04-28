@@ -202,7 +202,7 @@ showDef d = Phantoms.cases _Definition d Nothing [
         Maybes.maybe
           (Phantoms.string "<no scheme>")
           ("ts" ~> ShowCore.typeScheme # var "ts")
-          (Packaging.termDefinitionType (var "td")),
+          (Packaging.termDefinitionTypeScheme (var "td")),
         Phantoms.string " = ",
         ShowCore.term # (Packaging.termDefinitionTerm (var "td")),
         Phantoms.string "\n"]]

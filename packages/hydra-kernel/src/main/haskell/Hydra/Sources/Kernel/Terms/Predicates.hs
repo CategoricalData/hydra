@@ -115,7 +115,7 @@ isComplexBinding = define "isComplexBinding" $
   doc "Check if a binding needs to be treated as a function" $
   "tc" ~> "b" ~>
   "term" <~ Core.bindingTerm (var "b") $
-  "mts" <~ Core.bindingType (var "b") $
+  "mts" <~ Core.bindingTypeScheme (var "b") $
   -- Bindings without type schemes are complex (e.g., lifted case expressions)
   Maybes.cases (var "mts")
     (isComplexTerm @@ var "tc" @@ var "term") $
@@ -166,7 +166,7 @@ isComplexVariable = define "isComplexVariable" $
             -- If not in graph at all, assume mutual recursion (complex)
             (boolean True)
             -- If a primitive, non-nullary iff type arity > 0
-            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ Graph.primitiveType (var "prim")) (int32 0))
+            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ Graph.primitiveTypeScheme (var "prim")) (int32 0))
             (var "primLookup"))
          -- If in graph, check if the binding itself is non-nullary (a function).
          -- Non-nullary bindings are always complex (they take parameters).

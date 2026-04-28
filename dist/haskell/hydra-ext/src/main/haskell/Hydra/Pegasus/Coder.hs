@@ -253,7 +253,7 @@ toPair mod aliases schemaPair =
 typeToSchema :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> t1 -> Packaging.TypeDefinition -> Either Errors.Error (Pdl.NamedSchema, [t2])
 typeToSchema cx g aliases mod typeDef =
 
-      let typ = Core.typeSchemeBody (Packaging.typeDefinitionType typeDef)
+      let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme typeDef)
       in (Eithers.bind (encodeType cx g aliases typ) (\res ->
         let ptype = Eithers.either (\schema -> Pdl.NamedSchemaTypeTyperef schema) (\t -> t) res
         in (Eithers.bind (Annotations.getTypeDescription cx g typ) (\descr ->

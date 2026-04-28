@@ -30,7 +30,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.algorithmW.testGroupForSystemF",
@@ -302,7 +302,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -514,7 +514,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -773,7 +773,7 @@
                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -987,7 +987,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1223,7 +1223,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -1636,7 +1636,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2027,7 +2027,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2347,7 +2347,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2455,7 +2455,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2871,7 +2871,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -2979,7 +2979,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -3392,7 +3392,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -3500,7 +3500,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -3916,7 +3916,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -4031,7 +4031,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
-                                                                            "name": "type",
+                                                                            "name": "typeScheme",
                                                                             "term": {
                                                                               "typeApplication": {
                                                                                 "body": {"maybe": null},
@@ -4316,7 +4316,7 @@
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Algorithm W inference tests",
   "namespace": "hydra.test.inference.algorithmW",
   "termDependencies": ["hydra.test.testGraph"],

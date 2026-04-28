@@ -23,7 +23,7 @@
                             "argument": {"variable": "anns"},
                             "function": {
                               "project": {"field": "doc", "typeName": "hydra.pegasus.pdl.Annotations"}}}},
-                        "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
+                        "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "d"},
@@ -49,7 +49,7 @@
                                 "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.Annotations"},
                 "parameter": "anns"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.ast.Expr"}},
@@ -79,7 +79,7 @@
                                 "function": {
                                   "project": {"field": "name", "typeName": "hydra.pegasus.pdl.EnumField"}}}},
                             "function": {"unwrap": "hydra.pegasus.pdl.EnumFieldName"}}},
-                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "anns",
                         "term": {
@@ -87,7 +87,7 @@
                             "argument": {"variable": "ef"},
                             "function": {
                               "project": {"field": "annotations", "typeName": "hydra.pegasus.pdl.EnumField"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"variable": "hydra.pegasus.pdl.Annotations"},
                           "variables": []}}],
                     "body": {
@@ -102,7 +102,7 @@
                             "function": {"variable": "hydra.pegasus.serde.withAnnotations"}}}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.EnumField"},
                 "parameter": "ef"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -135,7 +135,7 @@
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.pegasus.pdl.QualifiedName"},
                 "parameter": "qn"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -164,7 +164,7 @@
                               "project": {
                                 "field": "qualifiedName",
                                 "typeName": "hydra.pegasus.pdl.NamedSchema"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"variable": "hydra.pegasus.pdl.QualifiedName"},
                           "variables": []}},
                       {
@@ -174,7 +174,7 @@
                             "argument": {"variable": "ns"},
                             "function": {
                               "project": {"field": "type", "typeName": "hydra.pegasus.pdl.NamedSchema"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"variable": "hydra.pegasus.pdl.NamedSchemaType"},
                           "variables": []}},
                       {
@@ -184,7 +184,7 @@
                             "argument": {"variable": "ns"},
                             "function": {
                               "project": {"field": "annotations", "typeName": "hydra.pegasus.pdl.NamedSchema"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"variable": "hydra.pegasus.pdl.Annotations"},
                           "variables": []}}],
                     "body": {
@@ -209,7 +209,7 @@
                                                     "argument": {"variable": "rs"},
                                                     "function": {
                                                       "project": {"field": "fields", "typeName": "hydra.pegasus.pdl.RecordSchema"}}}},
-                                                "type": {
+                                                "typeScheme": {
                                                   "body": {"list": {"variable": "hydra.pegasus.pdl.RecordField"}},
                                                   "variables": []}}],
                                             "body": {
@@ -264,7 +264,7 @@
                                                     "argument": {"variable": "es"},
                                                     "function": {
                                                       "project": {"field": "fields", "typeName": "hydra.pegasus.pdl.EnumSchema"}}}},
-                                                "type": {
+                                                "typeScheme": {
                                                   "body": {"list": {"variable": "hydra.pegasus.pdl.EnumField"}},
                                                   "variables": []}}],
                                             "body": {
@@ -339,7 +339,7 @@
                             "function": {"variable": "hydra.pegasus.serde.withAnnotations"}}}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.NamedSchema"},
                 "parameter": "ns"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -417,7 +417,7 @@
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.pegasus.pdl.PrimitiveType"},
                 "parameter": "pt"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -447,7 +447,7 @@
                                 "function": {
                                   "project": {"field": "name", "typeName": "hydra.pegasus.pdl.QualifiedName"}}}},
                             "function": {"unwrap": "hydra.pegasus.pdl.Name"}}},
-                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "ns",
                         "term": {
@@ -455,7 +455,7 @@
                             "argument": {"variable": "qn"},
                             "function": {
                               "project": {"field": "namespace", "typeName": "hydra.pegasus.pdl.QualifiedName"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"maybe": {"variable": "hydra.pegasus.pdl.Namespace"}},
                           "variables": []}},
                       {
@@ -495,7 +495,7 @@
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.cat"},
                                 "type": {"literal": {"string": {}}}}}}},
-                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -508,7 +508,7 @@
                         "function": {"variable": "hydra.serialization.cst"}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.QualifiedName"},
                 "parameter": "qn"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -538,7 +538,7 @@
                                 "function": {
                                   "project": {"field": "name", "typeName": "hydra.pegasus.pdl.RecordField"}}}},
                             "function": {"unwrap": "hydra.pegasus.pdl.FieldName"}}},
-                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "schema",
                         "term": {
@@ -546,7 +546,7 @@
                             "argument": {"variable": "rf"},
                             "function": {
                               "project": {"field": "value", "typeName": "hydra.pegasus.pdl.RecordField"}}}},
-                        "type": {"body": {"variable": "hydra.pegasus.pdl.Schema"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.pegasus.pdl.Schema"}, "variables": []}},
                       {
                         "name": "optional",
                         "term": {
@@ -554,7 +554,7 @@
                             "argument": {"variable": "rf"},
                             "function": {
                               "project": {"field": "optional", "typeName": "hydra.pegasus.pdl.RecordField"}}}},
-                        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "anns",
                         "term": {
@@ -562,7 +562,7 @@
                             "argument": {"variable": "rf"},
                             "function": {
                               "project": {"field": "annotations", "typeName": "hydra.pegasus.pdl.RecordField"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"variable": "hydra.pegasus.pdl.Annotations"},
                           "variables": []}}],
                     "body": {
@@ -633,7 +633,7 @@
                             "function": {"variable": "hydra.pegasus.serde.withAnnotations"}}}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.RecordField"},
                 "parameter": "rf"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -784,7 +784,7 @@
                         "typeName": "hydra.pegasus.pdl.Schema"}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.Schema"},
                 "parameter": "schema"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -814,7 +814,7 @@
                                 "function": {
                                   "project": {"field": "namespace", "typeName": "hydra.pegasus.pdl.SchemaFile"}}}},
                             "function": {"unwrap": "hydra.pegasus.pdl.Namespace"}}},
-                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "pkg",
                         "term": {
@@ -822,7 +822,7 @@
                             "argument": {"variable": "sf"},
                             "function": {
                               "project": {"field": "package", "typeName": "hydra.pegasus.pdl.SchemaFile"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"maybe": {"variable": "hydra.pegasus.pdl.Package"}},
                           "variables": []}},
                       {
@@ -832,7 +832,7 @@
                             "argument": {"variable": "sf"},
                             "function": {
                               "project": {"field": "imports", "typeName": "hydra.pegasus.pdl.SchemaFile"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"list": {"variable": "hydra.pegasus.pdl.QualifiedName"}},
                           "variables": []}},
                       {
@@ -842,7 +842,7 @@
                             "argument": {"variable": "sf"},
                             "function": {
                               "project": {"field": "schemas", "typeName": "hydra.pegasus.pdl.SchemaFile"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"list": {"variable": "hydra.pegasus.pdl.NamedSchema"}},
                           "variables": []}},
                       {
@@ -866,7 +866,7 @@
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.pure"},
                                 "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "typeScheme": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "packageSec",
                         "term": {
@@ -901,7 +901,7 @@
                                         "body": {"variable": "hydra.lib.maybes.map"},
                                         "type": {"variable": "hydra.pegasus.pdl.Package"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "typeScheme": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "importsSec",
                         "term": {
@@ -945,7 +945,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {"maybe": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                        "type": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                        "typeScheme": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "schemaSecs",
                         "term": {
@@ -974,7 +974,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.pegasus.pdl.NamedSchema"}}},
                                     "type": {"maybe": {"variable": "hydra.ast.Expr"}}}}}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"list": {"maybe": {"variable": "hydra.ast.Expr"}}},
                           "variables": []}}],
                     "body": {
@@ -1002,7 +1002,7 @@
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.SchemaFile"},
                 "parameter": "sf"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -1029,7 +1029,7 @@
                             "argument": {"variable": "um"},
                             "function": {
                               "project": {"field": "alias", "typeName": "hydra.pegasus.pdl.UnionMember"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"maybe": {"variable": "hydra.pegasus.pdl.FieldName"}},
                           "variables": []}},
                       {
@@ -1039,7 +1039,7 @@
                             "argument": {"variable": "um"},
                             "function": {
                               "project": {"field": "value", "typeName": "hydra.pegasus.pdl.UnionMember"}}}},
-                        "type": {"body": {"variable": "hydra.pegasus.pdl.Schema"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.pegasus.pdl.Schema"}, "variables": []}},
                       {
                         "name": "anns",
                         "term": {
@@ -1047,7 +1047,7 @@
                             "argument": {"variable": "um"},
                             "function": {
                               "project": {"field": "annotations", "typeName": "hydra.pegasus.pdl.UnionMember"}}}},
-                        "type": {
+                        "typeScheme": {
                           "body": {"variable": "hydra.pegasus.pdl.Annotations"},
                           "variables": []}}],
                     "body": {
@@ -1108,7 +1108,7 @@
                             "function": {"variable": "hydra.pegasus.serde.withAnnotations"}}}}}}},
                 "domain": {"variable": "hydra.pegasus.pdl.UnionMember"},
                 "parameter": "um"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
@@ -1154,7 +1154,7 @@
                     "parameter": "expr"}},
                 "domain": {"variable": "hydra.pegasus.pdl.Annotations"},
                 "parameter": "anns"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

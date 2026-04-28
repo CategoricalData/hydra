@@ -75,7 +75,7 @@ module_ = Module {
 primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  (typeArity <.> unaryFunction Core.typeSchemeBody <.> unaryFunction Graph.primitiveType)
+  (typeArity <.> unaryFunction Core.typeSchemeBody <.> unaryFunction Graph.primitiveTypeScheme)
 
 termArity :: TTermDefinition (Term -> Int)
 termArity = define "termArity" $

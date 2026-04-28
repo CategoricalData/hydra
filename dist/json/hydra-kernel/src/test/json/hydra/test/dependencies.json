@@ -734,7 +734,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -777,7 +777,7 @@
                                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "typeScheme",
                                                                                                           "term": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"maybe": null},
@@ -851,7 +851,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -881,7 +881,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -980,7 +980,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -1030,7 +1030,7 @@
                                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                     {
-                                                                                                                      "name": "type",
+                                                                                                                      "name": "typeScheme",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
@@ -1060,7 +1060,7 @@
                                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                     {
-                                                                                                                      "name": "type",
+                                                                                                                      "name": "typeScheme",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
@@ -1092,7 +1092,7 @@
                                                                                                       "typeName": "hydra.core.Let"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -1164,7 +1164,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1196,7 +1196,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1228,7 +1228,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1269,7 +1269,7 @@
                                                                                                       "typeName": "hydra.core.Term"}}]}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1368,7 +1368,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -1418,7 +1418,7 @@
                                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                     {
-                                                                                                                      "name": "type",
+                                                                                                                      "name": "typeScheme",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
@@ -1468,7 +1468,7 @@
                                                                                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                                               {
-                                                                                                                                                "name": "type",
+                                                                                                                                                "name": "typeScheme",
                                                                                                                                                 "term": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {"maybe": null},
@@ -1512,7 +1512,7 @@
                                                                                                                                                               "typeName": "hydra.core.Term"}}]}},
                                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                                               {
-                                                                                                                                                "name": "type",
+                                                                                                                                                "name": "typeScheme",
                                                                                                                                                 "term": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {"maybe": null},
@@ -1544,7 +1544,7 @@
                                                                                                                                 "typeName": "hydra.core.Let"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                     {
-                                                                                                                      "name": "type",
+                                                                                                                      "name": "typeScheme",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
@@ -1576,7 +1576,7 @@
                                                                                                       "typeName": "hydra.core.Let"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -1648,7 +1648,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1680,7 +1680,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1712,7 +1712,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1760,7 +1760,7 @@
                                                                                                       "typeName": "hydra.core.Term"}}]}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1801,7 +1801,7 @@
                                                                                                       "typeName": "hydra.core.Term"}}]}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1842,7 +1842,7 @@
                                                                                                       "typeName": "hydra.core.Term"}}]}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -1962,7 +1962,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -2056,7 +2056,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -2234,7 +2234,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -2292,7 +2292,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -2394,7 +2394,7 @@
                                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "typeScheme",
                                                                                                           "term": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"maybe": null},
@@ -2471,7 +2471,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -2558,7 +2558,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -2688,7 +2688,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -2811,7 +2811,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -2907,7 +2907,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -2996,7 +2996,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -3021,7 +3021,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -3099,7 +3099,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -3124,7 +3124,7 @@
                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -3229,7 +3229,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -3254,7 +3254,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -3348,7 +3348,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -3373,7 +3373,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -3460,7 +3460,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -3498,7 +3498,7 @@
                                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "typeScheme",
                                                                                                           "term": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"maybe": null},
@@ -3594,7 +3594,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -3632,7 +3632,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -3721,7 +3721,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -3776,7 +3776,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -3855,7 +3855,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -3893,7 +3893,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -3982,7 +3982,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -4059,7 +4059,7 @@
                                                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "type",
+                                                                                                                                      "name": "typeScheme",
                                                                                                                                       "term": {
                                                                                                                                         "typeApplication": {
                                                                                                                                           "body": {"maybe": null},
@@ -4157,7 +4157,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -4200,7 +4200,7 @@
                                                                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                 {
-                                                                                                                                  "name": "type",
+                                                                                                                                  "name": "typeScheme",
                                                                                                                                   "term": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {"maybe": null},
@@ -4325,7 +4325,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -4421,7 +4421,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -4519,7 +4519,7 @@
                                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "typeScheme",
                                                                                                           "term": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"maybe": null},
@@ -4631,7 +4631,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -4727,7 +4727,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -4848,7 +4848,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -4944,7 +4944,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -5101,7 +5101,7 @@
                                                                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                 {
-                                                                                                                                  "name": "type",
+                                                                                                                                  "name": "typeScheme",
                                                                                                                                   "term": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {"maybe": null},
@@ -5199,7 +5199,7 @@
                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -5311,7 +5311,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -5442,7 +5442,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -5537,7 +5537,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -5653,7 +5653,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -5782,7 +5782,7 @@
                                                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                               {
-                                                                                                                "name": "type",
+                                                                                                                "name": "typeScheme",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"maybe": null},
@@ -5890,7 +5890,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -5961,7 +5961,7 @@
                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
-                                                                                                      "name": "type",
+                                                                                                      "name": "typeScheme",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"maybe": null},
@@ -6062,7 +6062,7 @@
                                                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                               {
-                                                                                                                "name": "type",
+                                                                                                                "name": "typeScheme",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"maybe": null},
@@ -6133,7 +6133,7 @@
                                                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                               {
-                                                                                                                "name": "type",
+                                                                                                                "name": "typeScheme",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"maybe": null},
@@ -6241,7 +6241,7 @@
                                                                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                     {
-                                                                                                                      "name": "type",
+                                                                                                                      "name": "typeScheme",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
@@ -6278,7 +6278,7 @@
                                                                                                       "typeName": "hydra.core.Let"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
-                                                                                            "name": "type",
+                                                                                            "name": "typeScheme",
                                                                                             "term": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"maybe": null},
@@ -6373,7 +6373,7 @@
                                                                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                               {
-                                                                                                                                "name": "type",
+                                                                                                                                "name": "typeScheme",
                                                                                                                                 "term": {
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {"maybe": null},
@@ -6393,7 +6393,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -6488,7 +6488,7 @@
                                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "typeScheme",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
                                                                                                                   "body": {"maybe": null},
@@ -6604,7 +6604,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -6713,7 +6713,7 @@
                                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "typeScheme",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
                                                                                                                   "body": {"maybe": null},
@@ -6784,7 +6784,7 @@
                                                                                                                         "typeName": "hydra.core.Literal"}}},
                                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                                             {
-                                                                                                              "name": "type",
+                                                                                                              "name": "typeScheme",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
                                                                                                                   "body": {"maybe": null},
@@ -6891,7 +6891,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -6962,7 +6962,7 @@
                                                                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
-                                                                                                                        "name": "type",
+                                                                                                                        "name": "typeScheme",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"maybe": null},
@@ -7071,7 +7071,7 @@
                                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                         {
-                                                                                                          "name": "type",
+                                                                                                          "name": "typeScheme",
                                                                                                           "term": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"maybe": null},
@@ -7190,7 +7190,7 @@
                                                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -8422,7 +8422,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for dependency analysis and let-term transformations",
   "namespace": "hydra.test.dependencies",
   "termDependencies": ["hydra.show.core", "hydra.dependencies", "hydra.test.testGraph"],

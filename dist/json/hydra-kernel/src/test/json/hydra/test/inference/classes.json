@@ -40,7 +40,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForMonomorphicConstraints",
@@ -1911,7 +1911,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForPrimitiveReferences",
@@ -4971,7 +4971,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForPartialApplication",
@@ -6405,7 +6405,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForLetBindings",
@@ -6572,7 +6572,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -6915,7 +6915,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -7160,7 +7160,7 @@
                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -7505,7 +7505,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -7812,7 +7812,7 @@
                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -8057,7 +8057,7 @@
                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
-                                                                                        "name": "type",
+                                                                                        "name": "typeScheme",
                                                                                         "term": {
                                                                                           "typeApplication": {
                                                                                             "body": {"maybe": null},
@@ -8397,7 +8397,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForComposition",
@@ -9417,7 +9417,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForNestedContainers",
@@ -10412,7 +10412,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.classes.testGroupForCollectionTerms",
@@ -13123,7 +13123,7 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Inference tests for type class constraints (ordering and equality)",
   "namespace": "hydra.test.inference.classes",
   "termDependencies": ["hydra.test.testGraph"],

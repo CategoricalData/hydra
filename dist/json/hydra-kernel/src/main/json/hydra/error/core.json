@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.error.core.DuplicateBindingError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -36,7 +36,7 @@
     {
       "type": {
         "name": "hydra.error.core.DuplicateFieldError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -69,7 +69,7 @@
     {
       "type": {
         "name": "hydra.error.core.UndefinedFieldError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -103,7 +103,7 @@
     {
       "type": {
         "name": "hydra.error.core.UnexpectedTermVariantError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -134,7 +134,7 @@
     {
       "type": {
         "name": "hydra.error.core.UnexpectedTypeVariantError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -165,7 +165,7 @@
     {
       "type": {
         "name": "hydra.error.core.ConstantConditionError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -199,7 +199,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyCaseStatementError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -232,7 +232,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyLetBindingsError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -257,7 +257,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyTermAnnotationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -282,7 +282,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyTypeNameInTermError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -307,7 +307,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidLambdaParameterNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -340,7 +340,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidLetBindingNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -373,7 +373,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidTypeLambdaParameterNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -406,7 +406,7 @@
     {
       "type": {
         "name": "hydra.error.core.NestedTermAnnotationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -431,7 +431,7 @@
     {
       "type": {
         "name": "hydra.error.core.RedundantWrapUnwrapError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -465,7 +465,7 @@
     {
       "type": {
         "name": "hydra.error.core.SelfApplicationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -499,7 +499,7 @@
     {
       "type": {
         "name": "hydra.error.core.TermVariableShadowingError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -533,7 +533,7 @@
     {
       "type": {
         "name": "hydra.error.core.TypeVariableShadowingInTypeLambdaError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -566,7 +566,7 @@
     {
       "type": {
         "name": "hydra.error.core.UndefinedTermVariableError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -600,7 +600,7 @@
     {
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableInBindingTypeError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -633,7 +633,7 @@
     {
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -666,7 +666,7 @@
     {
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -700,7 +700,7 @@
     {
       "type": {
         "name": "hydra.error.core.UnknownPrimitiveNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -734,7 +734,7 @@
     {
       "type": {
         "name": "hydra.error.core.UnnecessaryIdentityApplicationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -759,7 +759,7 @@
     {
       "type": {
         "name": "hydra.error.core.UntypedTermVariableError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -793,7 +793,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidTermError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1033,7 +1033,7 @@
     {
       "type": {
         "name": "hydra.error.core.DuplicateRecordTypeFieldNamesError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1065,7 +1065,7 @@
     {
       "type": {
         "name": "hydra.error.core.DuplicateUnionTypeFieldNamesError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1097,7 +1097,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyRecordTypeError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1121,7 +1121,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyTypeAnnotationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1145,7 +1145,7 @@
     {
       "type": {
         "name": "hydra.error.core.EmptyUnionTypeError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1169,7 +1169,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidForallParameterNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1202,7 +1202,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidTypeSchemeVariableNameError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1235,7 +1235,7 @@
     {
       "type": {
         "name": "hydra.error.core.NestedTypeAnnotationError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1259,7 +1259,7 @@
     {
       "type": {
         "name": "hydra.error.core.NonComparableMapKeyTypeError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1292,7 +1292,7 @@
     {
       "type": {
         "name": "hydra.error.core.NonComparableSetElementTypeError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1325,7 +1325,7 @@
     {
       "type": {
         "name": "hydra.error.core.SingleVariantUnionError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1358,7 +1358,7 @@
     {
       "type": {
         "name": "hydra.error.core.TypeVariableShadowingInForallError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1391,7 +1391,7 @@
     {
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1424,7 +1424,7 @@
     {
       "type": {
         "name": "hydra.error.core.VoidInNonBottomPositionError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1449,7 +1449,7 @@
     {
       "type": {
         "name": "hydra.error.core.InvalidTypeError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

@@ -82,7 +82,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -129,14 +129,14 @@
                                               "application": {
                                                 "argument": {"variable": "ft"},
                                                 "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
-                                            "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
+                                            "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                           {
                                             "name": "typ",
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "ft"},
                                                 "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                            "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                         "body": {
                                           "application": {
                                             "argument": {
@@ -215,7 +215,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -255,7 +255,7 @@
                     "function": {"variable": "hydra.formatting.nonAlnumToUnderscores"}}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -369,7 +369,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -457,7 +457,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -492,7 +492,7 @@
                           "application": {
                             "argument": {"variable": "ft"},
                             "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -513,7 +513,7 @@
                             "typeName": "hydra.core.Type"}}}}}},
                 "domain": {"variable": "hydra.core.FieldType"},
                 "parameter": "ft"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"boolean": {}}},
@@ -601,7 +601,7 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -650,7 +650,7 @@
                     "typeName": "hydra.json.schema.Restriction"}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.schema.Restriction"},

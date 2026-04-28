@@ -415,7 +415,7 @@ etaExpandTerm = define "etaExpandTerm" $
         "mapBinding" <~ ("b" ~> Core.binding
           (Core.bindingName $ var "b")
           (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.bindingTerm (var "b"))
-          (Core.bindingType $ var "b")) $
+          (Core.bindingTypeScheme $ var "b")) $
         "result" <~ Core.termLet (Core.let_
           (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
           (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.letBody (var "lt"))) $
@@ -657,7 +657,7 @@ etaExpansionArity = define "etaExpansionArity" $
         ("ts" ~> Arity.typeArity @@ (Core.typeSchemeBody $ var "ts"))
         (Maybes.bind
           (Lexical.lookupBinding @@ var "graph" @@ var "name")
-          ("b" ~> Core.bindingType $ var "b"))]
+          ("b" ~> Core.bindingTypeScheme $ var "b"))]
 
 etaReduceTerm :: TTermDefinition (Term -> Term)
 etaReduceTerm = define "etaReduceTerm" $
@@ -856,7 +856,7 @@ reduceTerm = define "reduceTerm" $
               @@ (Core.bindingName $ var "b")
               @@ (var "letExpr" @@ var "b")
               @@ (Core.bindingTerm $ var "b"))
-            (Core.bindingType $ var "b")) $
+            (Core.bindingTypeScheme $ var "b")) $
         "expandedBindings" <~ Lists.map (var "expandBinding") (var "bindings") $
         -- Substitute each binding into the term (foldl takes acc -> elem -> acc)
         "substituteBinding" <~ ("term" ~> "b" ~>

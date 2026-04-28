@@ -64,7 +64,7 @@
                     "parameter": "typ"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -118,7 +118,7 @@
                     "parameter": "baseSpecs"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -176,7 +176,7 @@
                     "parameter": "mbody"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -232,7 +232,7 @@
                     "typeName": "hydra.cpp.syntax.Declaration"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Declaration"},
@@ -259,7 +259,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppUnaryExpressionToCppExpression"}}},
                 "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"},
                 "parameter": "pf"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -286,7 +286,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}},
                 "domain": {"variable": "hydra.cpp.syntax.PrimaryExpression"},
                 "parameter": "prim"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -325,7 +325,7 @@
                     "typeName": "hydra.cpp.syntax.Expression"}},
                 "domain": {"variable": "hydra.cpp.syntax.UnaryExpression"},
                 "parameter": "ue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -394,7 +394,7 @@
                     "typeName": "hydra.cpp.syntax.LogicalOrExpression"}},
                 "domain": {"variable": "hydra.cpp.syntax.UnaryExpression"},
                 "parameter": "ue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.LogicalOrExpression"},
@@ -435,7 +435,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "targetType"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -461,7 +461,7 @@
                     "typeName": "hydra.cpp.syntax.CompoundStatement"}},
                 "domain": {"list": {"variable": "hydra.cpp.syntax.Statement"}},
                 "parameter": "stmts"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.CompoundStatement"},
@@ -487,7 +487,7 @@
                     "function": {"variable": "hydra.cpp.utils.createReferenceType"}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
@@ -516,7 +516,7 @@
                         "function": {"variable": "hydra.cpp.utils.createQualifiedType"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
@@ -562,7 +562,7 @@
                     "domain": {"list": {"variable": "t0"}},
                     "parameter": "params"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.FunctionBody"},
@@ -609,7 +609,7 @@
                     "parameter": "valueName"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "enumName"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -659,7 +659,7 @@
                     "parameter": "args"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "funcName"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -704,7 +704,7 @@
                     "parameter": "decls"}},
                 "domain": {"list": {"variable": "hydra.cpp.syntax.IncludeDirective"}},
                 "parameter": "includes"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -733,7 +733,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -802,7 +802,7 @@
                     "parameter": "body"}},
                 "domain": {"list": {"variable": "hydra.cpp.syntax.Parameter"}},
                 "parameter": "params"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -841,7 +841,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "val"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -877,7 +877,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"integer": {"bigint": {}}}},
                 "parameter": "val"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -913,7 +913,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "val"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -955,7 +955,7 @@
                     "parameter": "member"}},
                 "domain": {"variable": "hydra.cpp.syntax.Expression"},
                 "parameter": "objExpr"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -992,7 +992,7 @@
                     "parameter": "qualifier"}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1024,7 +1024,7 @@
                         "function": {"variable": "hydra.cpp.utils.createQualifiedType"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
@@ -1052,7 +1052,7 @@
                     "typeName": "hydra.cpp.syntax.Statement"}},
                 "domain": {"variable": "hydra.cpp.syntax.Expression"},
                 "parameter": "expr"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Statement"},
@@ -1076,7 +1076,7 @@
                       "field": {"name": "returnVoid", "term": {"unit": {}}},
                       "typeName": "hydra.cpp.syntax.JumpStatement"}}},
                 "typeName": "hydra.cpp.syntax.Statement"}}}},
-        "type": {"body": {"variable": "hydra.cpp.syntax.Statement"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.Statement"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createTemplateType",
@@ -1126,7 +1126,7 @@
                     "parameter": "args"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1156,7 +1156,7 @@
                           "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                     "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                 "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
-        "type": {"body": {"variable": "hydra.cpp.syntax.Expression"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.Expression"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createThrowStmt",
@@ -1191,7 +1191,7 @@
                     "parameter": "arg"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "exceptionType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1274,7 +1274,7 @@
                           "typeName": "hydra.cpp.syntax.FunctionCallOperation"}}},
                     "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                 "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
-        "type": {"body": {"variable": "hydra.cpp.syntax.Expression"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.Expression"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createTypeNameExpr",
@@ -1300,7 +1300,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "typeName"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -1327,7 +1327,7 @@
                           "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                     "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                 "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
-        "type": {"body": {"variable": "hydra.cpp.syntax.Expression"}, "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.Expression"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.emptyFunctionBody",
@@ -1349,7 +1349,7 @@
                           "type": {"variable": "hydra.cpp.syntax.Statement"}}},
                       "typeName": "hydra.cpp.syntax.CompoundStatement"}}},
                 "typeName": "hydra.cpp.syntax.FunctionBody"}}}},
-        "type": {
+        "typeScheme": {
           "body": {"variable": "hydra.cpp.syntax.FunctionBody"},
           "variables": []}}},
     {
@@ -1676,7 +1676,7 @@
                         "typeName": "hydra.cpp.syntax.Expression"}}}},
                 "domain": {"variable": "hydra.cpp.syntax.Expression"},
                 "parameter": "expr"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.PostfixExpression"},
@@ -1701,7 +1701,7 @@
                       "field": {"name": "protected", "term": {"unit": {}}},
                       "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
                 "typeName": "hydra.cpp.syntax.MemberSpecification"}}}},
-        "type": {
+        "typeScheme": {
           "body": {"variable": "hydra.cpp.syntax.MemberSpecification"},
           "variables": []}}},
     {
@@ -1723,7 +1723,7 @@
                       "field": {"name": "public", "term": {"unit": {}}},
                       "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
                 "typeName": "hydra.cpp.syntax.MemberSpecification"}}}},
-        "type": {
+        "typeScheme": {
           "body": {"variable": "hydra.cpp.syntax.MemberSpecification"},
           "variables": []}}},
     {
@@ -1756,7 +1756,7 @@
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -1791,7 +1791,7 @@
                     "typeName": "hydra.cpp.syntax.TypeExpression"}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
@@ -1827,7 +1827,7 @@
                     "parameter": "typ"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

@@ -2076,7 +2076,7 @@
                                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
-                                                                                                                    "name": "type",
+                                                                                                                    "name": "typeScheme",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
@@ -2219,7 +2219,7 @@
                                                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                               {
-                                                                                                                "name": "type",
+                                                                                                                "name": "typeScheme",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"maybe": null},
@@ -3288,7 +3288,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -3456,7 +3456,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -3605,7 +3605,7 @@
                                                                                                                   "typeName": "hydra.core.Application"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -3813,7 +3813,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -3958,7 +3958,7 @@
                                                                                                                   "typeName": "hydra.core.Projection"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -4148,7 +4148,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -4330,7 +4330,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -4520,7 +4520,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -4701,7 +4701,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -4962,7 +4962,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -5214,7 +5214,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -5475,7 +5475,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -5766,7 +5766,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -6027,7 +6027,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -6279,7 +6279,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -6562,7 +6562,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -6875,7 +6875,7 @@
                                                                                                                   "typeName": "hydra.core.TypeLambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -7180,7 +7180,7 @@
                                                                                                               "typeName": "hydra.core.TypeLambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -9068,7 +9068,7 @@
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -9386,7 +9386,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -9769,7 +9769,7 @@
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -10213,7 +10213,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -10746,7 +10746,7 @@
                                                                                                                                             "typeName": "hydra.core.Lambda"}}},
                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                 {
-                                                                                                                                  "name": "type",
+                                                                                                                                  "name": "typeScheme",
                                                                                                                                   "term": {
                                                                                                                                     "maybe": {
                                                                                                                                       "record": {
@@ -10879,7 +10879,7 @@
                                                                                                                   "typeName": "hydra.core.Let"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -11170,7 +11170,7 @@
                                                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                                                             {
-                                                                                                                              "name": "type",
+                                                                                                                              "name": "typeScheme",
                                                                                                                               "term": {
                                                                                                                                 "maybe": {
                                                                                                                                   "record": {
@@ -11381,7 +11381,7 @@
                                                                                                               "typeName": "hydra.core.Let"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -12529,7 +12529,7 @@
                                                                                                                   "typeName": "hydra.core.CaseStatement"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -12764,7 +12764,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -13005,7 +13005,7 @@
                                                                                                                   "typeName": "hydra.core.Application"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -13238,7 +13238,7 @@
                                                                                                               "typeName": "hydra.core.Application"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -13456,7 +13456,7 @@
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -13707,7 +13707,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -13979,7 +13979,7 @@
                                                                                                                   "typeName": "hydra.core.TypeApplicationTerm"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -14305,7 +14305,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -14663,7 +14663,7 @@
                                                                                                                   "typeName": "hydra.core.Application"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -14984,7 +14984,7 @@
                                                                                                               "typeName": "hydra.core.Application"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -15286,7 +15286,7 @@
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -15645,7 +15645,7 @@
                                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -15983,7 +15983,7 @@
                                                                                                                                 "typeName": "hydra.core.TypeLambda"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                     {
-                                                                                                                      "name": "type",
+                                                                                                                      "name": "typeScheme",
                                                                                                                       "term": {
                                                                                                                         "maybe": {
                                                                                                                           "record": {
@@ -16348,7 +16348,7 @@
                                                                                                                             "typeName": "hydra.core.TypeLambda"}}},
                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "typeScheme",
                                                                                                                   "term": {
                                                                                                                     "maybe": {
                                                                                                                       "record": {
@@ -16543,7 +16543,7 @@
                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "maybe": {
                                                                                                             "record": {
@@ -16801,7 +16801,7 @@
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "maybe": {
                                                                                                         "record": {
@@ -17532,7 +17532,7 @@
                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
-                                                                                                        "name": "type",
+                                                                                                        "name": "typeScheme",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"maybe": null},
@@ -17627,7 +17627,7 @@
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
-                                                                                                    "name": "type",
+                                                                                                    "name": "typeScheme",
                                                                                                     "term": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {"maybe": null},
@@ -19511,7 +19511,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for eta expansion of terms",
   "namespace": "hydra.test.etaExpansion",
   "termDependencies": ["hydra.test.testGraph"],

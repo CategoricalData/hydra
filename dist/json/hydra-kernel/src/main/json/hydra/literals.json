@@ -66,7 +66,7 @@
                     "parameter": "bf"}},
                 "domain": {"variable": "hydra.core.FloatType"},
                 "parameter": "ft"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -231,7 +231,7 @@
                     "parameter": "bi"}},
                 "domain": {"variable": "hydra.core.IntegerType"},
                 "parameter": "it"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -282,7 +282,7 @@
                         "domain": {"literal": {"float": {"float64": {}}}},
                         "parameter": "f64"}}}],
                 "typeName": "hydra.core.FloatValue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"float": {"bigfloat": {}}}},
@@ -389,7 +389,7 @@
                         "domain": {"literal": {"integer": {"uint64": {}}}},
                         "parameter": "ui64"}}}],
                 "typeName": "hydra.core.IntegerValue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"integer": {"bigint": {}}}},

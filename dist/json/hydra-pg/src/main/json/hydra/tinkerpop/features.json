@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.DataTypeFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -188,7 +188,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.EdgeFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -239,7 +239,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.EdgePropertyFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -256,7 +256,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.ElementFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -357,7 +357,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.ExtraFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -381,7 +381,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.Features",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -426,7 +426,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.GraphFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -528,7 +528,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.PropertyFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -556,7 +556,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.VariableFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -583,7 +583,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.VertexFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -667,7 +667,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.features.VertexPropertyFeatures",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

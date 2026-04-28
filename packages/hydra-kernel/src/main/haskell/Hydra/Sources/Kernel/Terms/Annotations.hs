@@ -305,7 +305,7 @@ isNativeType = define "isNativeType" $
     ("ts" ~> Logic.and
       (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
       (Logic.not (var "isFlaggedAsFirstClassType")))
-    (Core.bindingType (var "el"))
+    (Core.bindingTypeScheme (var "el"))
 
 nextCount :: TTermDefinition (Name -> Context -> (Int, Context))
 nextCount = define "nextCount" $

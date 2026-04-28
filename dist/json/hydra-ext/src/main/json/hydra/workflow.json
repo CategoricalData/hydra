@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.workflow.HydraSchemaSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -38,7 +38,7 @@
     {
       "type": {
         "name": "hydra.workflow.SchemaSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -83,7 +83,7 @@
     {
       "type": {
         "name": "hydra.workflow.TransformWorkflow",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

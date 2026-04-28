@@ -626,7 +626,7 @@ decodeModule = define "decodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -662,7 +662,7 @@ decodeModule = define "decodeModule" $
             Packaging.namespace $ string "hydra.util"])
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
+            (Core.bindingTypeScheme $ var "b")))
             (var "decodedBindings")))))
 
 -- | Generate a decoder module namespace from a source module namespace

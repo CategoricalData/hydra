@@ -54,7 +54,7 @@ testGraph testTypes = let
       ]
     boundTerms = M.fromList $ fmap (\b -> (bindingName b, bindingTerm b)) kernelTermBindings
     boundTypes = M.fromList
-      [ (bindingName b, ts) | b <- kernelTermBindings, Just ts <- [bindingType b] ]
+      [ (bindingName b, ts) | b <- kernelTermBindings, Just ts <- [bindingTypeScheme b] ]
     base = emptyGraph
   in base {
     graphPrimitives = primsMap,

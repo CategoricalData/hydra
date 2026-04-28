@@ -255,7 +255,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "defNames" <~ ("def" ~> cases _Definition (var "def")
     Nothing [
     _Definition_type>>: "typeDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")),
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")),
     _Definition_term>>: "termDef" ~>
       Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef")]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
@@ -272,7 +272,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
       (Maybes.maybe Sets.empty
         ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts"))
-        (Core.bindingType (var "el")))
+        (Core.bindingTypeScheme (var "el")))
       Sets.empty $
     -- Handle encoded types: decode as Type and extract type dependency names
     Logic.ifElse (Predicates.isEncodedType @@ var "deannotatedTerm")
@@ -503,10 +503,10 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   "allBindings" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
-        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td")),
+        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionTerm $ var "td")
-          (Packaging.termDefinitionType $ var "td"))])
+          (Packaging.termDefinitionTypeScheme $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
     ("deps" ~> Sets.delete (Packaging.moduleNamespace (var "mod")) (var "deps"))

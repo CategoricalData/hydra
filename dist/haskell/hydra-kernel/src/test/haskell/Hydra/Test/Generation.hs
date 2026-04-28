@@ -34,7 +34,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionType v0)),
+                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionTypeScheme v0)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
@@ -50,7 +50,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -69,7 +69,7 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}] [
+                        Packaging.termDefinitionTypeScheme = Nothing})]}] [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
@@ -82,13 +82,13 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}])),
+                        Packaging.termDefinitionTypeScheme = Nothing})]}])),
                 Testing.universalTestCaseExpected = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionType v0)),
+                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionTypeScheme v0)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
@@ -104,7 +104,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -123,7 +123,7 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}] [
+                        Packaging.termDefinitionTypeScheme = Nothing})]}] [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
@@ -136,7 +136,7 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}]))})),
+                        Packaging.termDefinitionTypeScheme = Nothing})]}]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -147,7 +147,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionType v0)),
+                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionTypeScheme v0)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
@@ -163,7 +163,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -182,7 +182,7 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}] [
+                        Packaging.termDefinitionTypeScheme = Nothing})]}] [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
@@ -195,7 +195,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -214,13 +214,13 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}])),
+                        Packaging.termDefinitionTypeScheme = Nothing})]}])),
                 Testing.universalTestCaseExpected = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionType v0)),
+                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionTypeScheme v0)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModules TestGraph.testContext TestGraph.testGraph [
@@ -236,7 +236,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -255,7 +255,7 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}] [
+                        Packaging.termDefinitionTypeScheme = Nothing})]}] [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.a"),
@@ -268,7 +268,7 @@ allTests =
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
                           Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -287,7 +287,7 @@ allTests =
                         Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                        Packaging.termDefinitionType = Nothing})]}]))})),
+                        Packaging.termDefinitionTypeScheme = Nothing})]}]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -298,7 +298,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionType v0)),
+                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Packaging.termDefinitionTypeScheme v0)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionTerm v0)),
                     "\n"]) (Packaging.moduleDefinitions m))) ms)) (Codegen.inferModulesGiven TestGraph.testContext TestGraph.testGraph [
@@ -320,7 +320,7 @@ allTests =
                               Core.lambdaParameter = (Core.Name "z"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))}))})),
-                        Packaging.termDefinitionType = (Just (Core.TypeScheme {
+                        Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "t0",
                             (Core.Name "t1"),
@@ -349,7 +349,7 @@ allTests =
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
-                        Packaging.termDefinitionType = Nothing})]}] [
+                        Packaging.termDefinitionTypeScheme = Nothing})]}] [
                   Packaging.Module {
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.w"),
@@ -366,7 +366,7 @@ allTests =
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
-                        Packaging.termDefinitionType = Nothing})]}])),
+                        Packaging.termDefinitionTypeScheme = Nothing})]}])),
                 Testing.universalTestCaseExpected = "hydra.testInput.w.useFunky :: (int32) = (hydra.testInput.v.funky\10216string\10217\10216int32\10217\10216int32\10217 @ \"foo\" @ 7:int32 @ 100:int32)\n"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],

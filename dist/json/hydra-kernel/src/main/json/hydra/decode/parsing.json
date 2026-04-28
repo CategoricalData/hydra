@@ -39,7 +39,7 @@
                                                       "application": {
                                                         "argument": {"variable": "record"},
                                                         "function": {"variable": "hydra.extract.core.toFieldMap"}}},
-                                                    "type": {
+                                                    "typeScheme": {
                                                       "body": {
                                                         "map": {
                                                           "keys": {"variable": "hydra.core.Name"},
@@ -396,7 +396,7 @@
                 "parameter": "raw"}},
             "domain": {"variable": "hydra.graph.Graph"},
             "parameter": "cx"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -451,21 +451,21 @@
                                                               "application": {
                                                                 "argument": {"variable": "inj"},
                                                                 "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
-                                                            "type": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
+                                                            "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                           {
                                                             "name": "fname",
                                                             "term": {
                                                               "application": {
                                                                 "argument": {"variable": "field"},
                                                                 "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
-                                                            "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
+                                                            "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                           {
                                                             "name": "fterm",
                                                             "term": {
                                                               "application": {
                                                                 "argument": {"variable": "field"},
                                                                 "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
-                                                            "type": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
+                                                            "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                           {
                                                             "name": "variantMap",
                                                             "term": {
@@ -620,7 +620,7 @@
                                                                                 "argument": {"variable": "t0"},
                                                                                 "function": {"variable": "hydra.parsing.ParseResult"}}}}},
                                                                         "domain": {"variable": "hydra.core.Term"}}}}}}},
-                                                            "type": {
+                                                            "typeScheme": {
                                                               "body": {
                                                                 "map": {
                                                                   "keys": {"variable": "hydra.core.Name"},
@@ -793,7 +793,7 @@
                     "domain": {"variable": "hydra.graph.Graph"}}},
                 "parameter": "a"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -863,7 +863,7 @@
                                                               "application": {
                                                                 "argument": {"variable": "record"},
                                                                 "function": {"variable": "hydra.extract.core.toFieldMap"}}},
-                                                            "type": {
+                                                            "typeScheme": {
                                                               "body": {
                                                                 "map": {
                                                                   "keys": {"variable": "hydra.core.Name"},
@@ -1148,7 +1148,7 @@
                     "domain": {"variable": "hydra.graph.Graph"}}},
                 "parameter": "a"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

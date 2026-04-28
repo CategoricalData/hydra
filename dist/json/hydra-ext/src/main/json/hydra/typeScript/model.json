@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.typeScript.model.FunctionType",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -14,7 +14,7 @@
     {
       "type": {
         "name": "hydra.typeScript.model.Parameter",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
@@ -23,7 +23,7 @@
     {
       "type": {
         "name": "hydra.typeScript.model.PrimitiveType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -102,7 +102,7 @@
     {
       "type": {
         "name": "hydra.typeScript.model.Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {

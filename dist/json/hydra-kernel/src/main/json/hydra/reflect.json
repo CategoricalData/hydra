@@ -25,7 +25,7 @@
                   "inject": {
                     "field": {"name": "wrap", "term": {"unit": {}}},
                     "typeName": "hydra.variants.EliminationVariant"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.variants.EliminationVariant"}},
           "variables": []}}},
     {
@@ -72,7 +72,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.FloatType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.util.Precision"},
@@ -102,7 +102,7 @@
                   "inject": {
                     "field": {"name": "float64", "term": {"unit": {}}},
                     "typeName": "hydra.core.FloatType"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.core.FloatType"}},
           "variables": []}}},
     {
@@ -149,7 +149,7 @@
                         "domain": {"literal": {"float": {"float64": {}}}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.FloatValue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.FloatType"},
@@ -176,7 +176,7 @@
                   "inject": {
                     "field": {"name": "lambda", "term": {"unit": {}}},
                     "typeName": "hydra.variants.FunctionVariant"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.variants.FunctionVariant"}},
           "variables": []}}},
     {
@@ -257,7 +257,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.IntegerType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"boolean": {}}},
@@ -366,7 +366,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.IntegerType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.util.Precision"},
@@ -419,7 +419,7 @@
                   "inject": {
                     "field": {"name": "uint64", "term": {"unit": {}}},
                     "typeName": "hydra.core.IntegerType"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.core.IntegerType"}},
           "variables": []}}},
     {
@@ -526,7 +526,7 @@
                         "domain": {"literal": {"integer": {"uint64": {}}}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.IntegerValue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.IntegerType"},
@@ -626,7 +626,7 @@
                         "domain": {"literal": {"string": {}}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.Literal"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.LiteralType"},
@@ -707,7 +707,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.LiteralType"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.LiteralVariant"},
@@ -790,7 +790,7 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.lib.lists.concat"},
                     "type": {"variable": "hydra.core.LiteralType"}}}}}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.core.LiteralType"}},
           "variables": []}}},
     {
@@ -815,7 +815,7 @@
                     "function": {"variable": "hydra.reflect.literalTypeVariant"}}},
                 "domain": {"variable": "hydra.core.Literal"},
                 "parameter": "arg_"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.LiteralVariant"},
@@ -856,7 +856,7 @@
                   "inject": {
                     "field": {"name": "string", "term": {"unit": {}}},
                     "typeName": "hydra.variants.LiteralVariant"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.variants.LiteralVariant"}},
           "variables": []}}},
     {
@@ -1092,7 +1092,7 @@
                         "domain": {"variable": "hydra.core.WrappedTerm"},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.Term"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.TermVariant"},
@@ -1194,7 +1194,7 @@
                   "inject": {
                     "field": {"name": "wrap", "term": {"unit": {}}},
                     "typeName": "hydra.variants.TermVariant"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.variants.TermVariant"}},
           "variables": []}}},
     {
@@ -1381,7 +1381,7 @@
                         "domain": {"variable": "hydra.core.Type"},
                         "parameter": "_"}}}],
                 "typeName": "hydra.core.Type"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.variants.TypeVariant"},
@@ -1466,7 +1466,7 @@
                   "inject": {
                     "field": {"name": "void", "term": {"unit": {}}},
                     "typeName": "hydra.variants.TypeVariant"}}]}}},
-        "type": {
+        "typeScheme": {
           "body": {"list": {"variable": "hydra.variants.TypeVariant"}},
           "variables": []}}}],
   "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",

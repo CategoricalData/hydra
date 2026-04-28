@@ -31,7 +31,7 @@
                                             "body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"unwrap": "hydra.pg.model.EdgeLabel"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "id",
                                 "term": {
@@ -44,7 +44,7 @@
                                             "body": {"project": {"field": "id", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "outId",
                                 "term": {
@@ -57,7 +57,7 @@
                                             "body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "inId",
                                 "term": {
@@ -70,7 +70,7 @@
                                             "body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -148,7 +148,7 @@
                                       "application": {
                                         "argument": {"literal": {"string": ", "}},
                                         "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -176,7 +176,7 @@
                         "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -276,7 +276,7 @@
                         "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -321,7 +321,7 @@
                                         "body": {
                                           "project": {"field": "vertices", "typeName": "hydra.pg.model.LazyGraph"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {
                                     "list": {
                                       "application": {
@@ -338,7 +338,7 @@
                                         "body": {
                                           "project": {"field": "edges", "typeName": "hydra.pg.model.LazyGraph"}},
                                         "type": {"variable": "t0"}}}}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {
                                     "list": {
                                       "application": {
@@ -445,7 +445,7 @@
                         "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -502,7 +502,7 @@
                         "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -548,7 +548,7 @@
                                             "body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"unwrap": "hydra.pg.model.VertexLabel"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "id",
                                 "term": {
@@ -561,7 +561,7 @@
                                             "body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}},
                                             "type": {"variable": "t0"}}}}},
                                     "function": {"variable": "printValue"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -639,7 +639,7 @@
                                       "application": {
                                         "argument": {"literal": {"string": ", "}},
                                         "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -662,7 +662,7 @@
                         "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

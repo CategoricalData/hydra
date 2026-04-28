@@ -264,7 +264,7 @@ checkTerm = define "checkTerm" $
         -- T10. UndefinedTypeVariableInBindingTypeError (typed mode only)
         Logic.ifElse (var "typed")
           (firstError @@ (Lists.map
-            ("b" ~> Maybes.cases (Core.bindingType $ var "b")
+            ("b" ~> Maybes.cases (Core.bindingTypeScheme $ var "b")
               noError
               ("ts" ~> checkUndefinedTypeVariablesInTypeScheme
                 @@ var "path" @@ var "cx" @@ var "ts"

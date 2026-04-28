@@ -3851,7 +3851,7 @@
                                                   "name": "name",
                                                   "term": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "type"}},
+                                                      "body": {"literal": {"string": "typeScheme"}},
                                                       "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "type",
@@ -3895,7 +3895,7 @@
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "string",
-                                                                                  "term": {"literal": {"string": "The optional type of the bound term"}}},
+                                                                                  "term": {"literal": {"string": "The optional type scheme of the bound term"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}]}}],
                                                             "typeName": "hydra.core.AnnotatedType"}}},
@@ -14948,7 +14948,7 @@
                                                   "name": "name",
                                                   "term": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "type"}},
+                                                      "body": {"literal": {"string": "typeScheme"}},
                                                       "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "type",
@@ -14987,8 +14987,7 @@
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {"string": "The type signature of the primitive function"}}},
+                                                                                  "term": {"literal": {"string": "The type scheme of the primitive function"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}]}}],
                                                             "typeName": "hydra.core.AnnotatedType"}}},
@@ -17165,7 +17164,7 @@
                                                   "name": "name",
                                                   "term": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "type"}},
+                                                      "body": {"literal": {"string": "typeScheme"}},
                                                       "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "type",
@@ -17324,7 +17323,7 @@
                                                   "name": "name",
                                                   "term": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "type"}},
+                                                      "body": {"literal": {"string": "typeScheme"}},
                                                       "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "type",
@@ -17754,7 +17753,7 @@
                                           "typeName": "hydra.core.Term"}}}]}}],
                             "typeName": "hydra.core.AnnotatedType"}}},
                       "typeName": "hydra.core.Type"}}}}}]},
-        "type": {
+        "typeScheme": {
           "body": {
             "map": {
               "keys": {"variable": "hydra.core.Name"},

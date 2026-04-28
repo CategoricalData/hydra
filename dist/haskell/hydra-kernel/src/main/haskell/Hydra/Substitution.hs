@@ -122,7 +122,7 @@ substTypesInTerm subst term0 =
                                       \b -> Core.Binding {
                                         Core.bindingName = (Core.bindingName b),
                                         Core.bindingTerm = (substTypesInTerm subst (Core.bindingTerm b)),
-                                        Core.bindingType = (Maybes.map (substInTypeScheme subst) (Core.bindingType b))}
+                                        Core.bindingTypeScheme = (Maybes.map (substInTypeScheme subst) (Core.bindingTypeScheme b))}
                               in (Core.TermLet (Core.Let {
                                 Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
                                 Core.letBody = (substTypesInTerm subst (Core.letBody l))}))
@@ -150,7 +150,7 @@ substituteInBinding subst b =
     Core.Binding {
       Core.bindingName = (Core.bindingName b),
       Core.bindingTerm = (substituteInTerm subst (Core.bindingTerm b)),
-      Core.bindingType = (Core.bindingType b)}
+      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
 -- | Apply a type substitution to a type constraint
 substituteInConstraint :: Typing.TypeSubst -> Typing.TypeConstraint -> Typing.TypeConstraint
 substituteInConstraint subst c =
@@ -185,7 +185,7 @@ substituteInTerm subst term0 =
                                               \b -> Core.Binding {
                                                 Core.bindingName = (Core.bindingName b),
                                                 Core.bindingTerm = (substituteInTerm subst2 (Core.bindingTerm b)),
-                                                Core.bindingType = (Core.bindingType b)}
+                                                Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                                   in (Core.TermLet (Core.Let {
                                     Core.letBindings = (Lists.map rewriteBinding bindings),
                                     Core.letBody = (substituteInTerm subst2 (Core.letBody lt))}))

@@ -160,7 +160,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.variants.TermVariant"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -298,7 +298,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.variants.TypeVariant"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},

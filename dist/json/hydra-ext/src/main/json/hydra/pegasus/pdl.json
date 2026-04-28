@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.Annotations",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -20,7 +20,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.EnumField",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -33,11 +33,11 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.EnumFieldName",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.EnumSchema",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -47,11 +47,11 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.FieldName",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.NamedSchema",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -67,7 +67,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.NamedSchemaType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -79,19 +79,19 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.Name",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Namespace",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Package",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.PrimitiveType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "boolean", "type": {"unit": {}}},
@@ -105,11 +105,11 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.PropertyKey",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Property",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.pegasus.pdl.PropertyKey"}},
@@ -120,7 +120,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.QualifiedName",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.pegasus.pdl.Name"}},
@@ -131,7 +131,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.RecordField",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -155,7 +155,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.RecordSchema",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -175,7 +175,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.Schema",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
@@ -198,7 +198,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.SchemaFile",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -217,7 +217,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.UnionMember",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -238,7 +238,7 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.UnionSchema",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

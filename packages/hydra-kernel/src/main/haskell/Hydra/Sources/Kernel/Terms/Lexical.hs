@@ -124,7 +124,7 @@ buildGraph = define "buildGraph" $
   -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)
   "elementTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
     Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "elements"))) $
+      (Core.bindingTypeScheme (var "b"))) (var "elements"))) $
   "filteredTypes" <~ Maps.filterWithKey ("k" ~> "_v" ~>
     Logic.not (Maps.member (var "k") (var "primitives"))) (var "elementTypes") $
   Graph.graph
@@ -337,7 +337,7 @@ requirePrimitiveType :: TTermDefinition (Graph -> Name -> Either Error TypeSchem
 requirePrimitiveType = define "requirePrimitiveType" $
   "tx" ~> "name" ~>
   -- Look up the primitive directly and extract its type, avoiding O(p) map reconstruction.
-  "mts" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+  "mts" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   optCases (var "mts")
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))

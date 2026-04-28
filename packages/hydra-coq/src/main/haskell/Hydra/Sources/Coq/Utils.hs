@@ -554,7 +554,7 @@ buildFieldMapping = define "buildFieldMapping" $
           _Definition_type>>: "td" ~> lets [
             "qname">: unwrap _Name @@ (Packaging.typeDefinitionName $ var "td"),
             "tname">: localName @@ var "qname",
-            "ty">: Core.typeSchemeBody (Packaging.typeDefinitionType $ var "td"),
+            "ty">: Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme $ var "td"),
             "extracted">: extractTypeParams @@ var "ty",
             "bodyTy">: Pairs.second (var "extracted")] $
             cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm ((String, String), String)])) [
@@ -680,7 +680,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
           (collectFreeTypeVars @@ (Core.bindingTerm $ var "b"))
           (Maybes.maybe (Sets.empty :: TTerm (S.Set String))
             (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")
-            (Core.bindingType $ var "b")))
+            (Core.bindingTypeScheme $ var "b")))
         (Core.letBindings $ var "lt")] $
       Sets.union (var "bindVars") (collectFreeTypeVars @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
@@ -881,7 +881,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
             (var "f" @@ var "recurse" @@ var "polyNames2" @@ (Core.bindingTerm $ var "b"))
             (Logic.ifElse (isTypeLambdaTerm @@ (Core.bindingTerm $ var "b"))
               (Phantoms.nothing :: TTerm (Maybe TypeScheme))
-              (Core.bindingType $ var "b")))
+              (Core.bindingTypeScheme $ var "b")))
             (Core.letBindings $ var "lt"))
           (var "f" @@ var "recurse" @@ var "polyNames2" @@ (Core.letBody $ var "lt")),
       _Term_typeLambda>>: "tl" ~>
@@ -1032,7 +1032,7 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
       Core.binding
         (Core.bindingName $ var "b")
         (var "mkProj" @@ var "bvar" @@ var "i")
-        (Core.bindingType $ var "b"))
+        (Core.bindingTypeScheme $ var "b"))
       (Lists.zip
         (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
         (var "grp"))) $
@@ -1043,7 +1043,7 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
     ("b" ~> Core.binding
       (Core.bindingName $ var "b")
       (stripHydraFix @@ (Core.bindingName $ var "b") @@ (Core.bindingTerm $ var "b"))
-      (Core.bindingType $ var "b"))
+      (Core.bindingTypeScheme $ var "b"))
     (var "grp") $
   -- Build a nested pair from the stripped binding terms
   "mkPair" <~ ("ts" ~>
@@ -1105,7 +1105,7 @@ reorderLetBindings = define "reorderLetBindings" $
             ("b" ~> Core.binding
               (Core.bindingName $ var "b")
               (reorderLetBindings @@ (Core.bindingTerm $ var "b"))
-              (Core.bindingType $ var "b"))
+              (Core.bindingTypeScheme $ var "b"))
             (var "grp"))
           (var "groups") $
         rebuildMutualLets @@ var "groups2" @@ (reorderLetBindings @@ var "innerBody")]) $

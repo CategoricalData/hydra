@@ -28,7 +28,7 @@
                                       "application": {
                                         "argument": {"variable": "tg"},
                                         "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "desc",
                                     "term": {
@@ -36,7 +36,7 @@
                                         "argument": {"variable": "tg"},
                                         "function": {
                                           "project": {"field": "description", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                    "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                   {
                                     "name": "subgroups",
                                     "term": {
@@ -44,7 +44,7 @@
                                         "argument": {"variable": "tg"},
                                         "function": {
                                           "project": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"list": {"variable": "hydra.testing.TestGroup"}},
                                       "variables": []}},
                                   {
@@ -53,7 +53,7 @@
                                       "application": {
                                         "argument": {"variable": "tg"},
                                         "function": {"project": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
                                       "variables": []}}],
                                 "body": {
@@ -170,7 +170,7 @@
                         "parameter": "g"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -210,7 +210,7 @@
                                         "argument": {"variable": "tcm"},
                                         "function": {
                                           "project": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "tcase",
                                     "term": {
@@ -218,7 +218,7 @@
                                         "argument": {"variable": "tcm"},
                                         "function": {
                                           "project": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"body": {"variable": "hydra.testing.TestCase"}, "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.testing.TestCase"}, "variables": []}},
                                   {
                                     "name": "desc",
                                     "term": {
@@ -228,7 +228,7 @@
                                           "project": {
                                             "field": "description",
                                             "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                    "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                   {
                                     "name": "tags_",
                                     "term": {
@@ -236,7 +236,7 @@
                                         "argument": {"variable": "tcm"},
                                         "function": {
                                           "project": {"field": "tags", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"body": {"list": {"variable": "hydra.testing.Tag"}}, "variables": []}}],
+                                    "typeScheme": {"body": {"list": {"variable": "hydra.testing.Tag"}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -276,7 +276,7 @@
                         "parameter": "g"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -351,7 +351,7 @@
                     "parameter": "term"}},
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "g"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

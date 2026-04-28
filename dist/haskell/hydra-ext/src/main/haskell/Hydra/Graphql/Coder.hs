@@ -184,7 +184,7 @@ encodeType cx g prefixes typ =
 
 encodeTypeDefinition :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Packaging.TypeDefinition -> Either Errors.Error Syntax.TypeDefinition
 encodeTypeDefinition cx g prefixes tdef =
-    encodeNamedType cx g prefixes (Packaging.typeDefinitionName tdef) (Core.typeSchemeBody (Packaging.typeDefinitionType tdef))
+    encodeNamedType cx g prefixes (Packaging.typeDefinitionName tdef) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef))
 
 encodeTypeName :: M.Map Packaging.Namespace String -> Core.Name -> Syntax.Name
 encodeTypeName prefixes name =

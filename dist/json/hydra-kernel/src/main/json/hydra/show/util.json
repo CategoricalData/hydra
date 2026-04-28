@@ -48,7 +48,7 @@
                         "typeName": "hydra.util.CaseConvention"}}}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
                 "parameter": "c"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -95,7 +95,7 @@
                         "typeName": "hydra.util.Comparison"}}}},
                 "domain": {"variable": "hydra.util.Comparison"},
                 "parameter": "c"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},

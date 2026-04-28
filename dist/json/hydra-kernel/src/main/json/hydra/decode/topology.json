@@ -22,7 +22,7 @@
                         "body": {"variable": "hydra.extract.core.decodeMap"},
                         "type": {"literal": {"integer": {"int32": {}}}}}},
                     "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -76,7 +76,7 @@
                                                       "application": {
                                                         "argument": {"variable": "record"},
                                                         "function": {"variable": "hydra.extract.core.toFieldMap"}}},
-                                                    "type": {
+                                                    "typeScheme": {
                                                       "body": {
                                                         "map": {
                                                           "keys": {"variable": "hydra.core.Name"},
@@ -822,7 +822,7 @@
                 "parameter": "raw"}},
             "domain": {"variable": "hydra.graph.Graph"},
             "parameter": "cx"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -961,7 +961,7 @@
                 "parameter": "raw"}},
             "domain": {"variable": "hydra.graph.Graph"},
             "parameter": "cx"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

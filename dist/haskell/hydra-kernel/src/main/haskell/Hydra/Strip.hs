@@ -101,7 +101,7 @@ removeTypeAnnotationsFromTerm term =
                             \b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
                               Core.bindingTerm = (Core.bindingTerm b),
-                              Core.bindingType = Nothing}
+                              Core.bindingTypeScheme = Nothing}
                 in case rewritten of
                   Core.TermLet v0 -> Core.TermLet (Core.Let {
                     Core.letBindings = (Lists.map stripBinding (Core.letBindings v0)),
@@ -121,7 +121,7 @@ removeTypesFromTerm term =
                             \b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
                               Core.bindingTerm = (Core.bindingTerm b),
-                              Core.bindingType = Nothing}
+                              Core.bindingTypeScheme = Nothing}
                 in case rewritten of
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.lambdaParameter v0),

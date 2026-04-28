@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -25,7 +25,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.FieldRepetitionType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -70,7 +70,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.Statistics",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -113,7 +113,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.DecimalType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -130,7 +130,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.TimeUnit",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "millis", "type": {"unit": {}}},
@@ -140,7 +140,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.TimestampType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -159,7 +159,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.TimeType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -178,7 +178,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.IntType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -195,7 +195,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.LogicalType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -333,7 +333,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.SchemaElement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -423,7 +423,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.Encoding",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -526,7 +526,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.CompressionCodec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -572,7 +572,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.PageType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "dataPage", "type": {"unit": {}}},
@@ -583,7 +583,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.BoundaryOrder",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -601,7 +601,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.DataPageHeader",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -661,11 +661,11 @@
     {
       "type": {
         "name": "hydra.parquet.format.IndexPageHeader",
-        "type": {"body": {"record": []}, "variables": []}}},
+        "typeScheme": {"body": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.DictionaryPageHeader",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -709,7 +709,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.DataPageHeaderV2",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -804,7 +804,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterAlgorithm",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -826,7 +826,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterHash",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -850,7 +850,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterCompression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -862,7 +862,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterHeader",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -913,7 +913,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.PageHeader",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -976,7 +976,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.KeyValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -991,7 +991,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.SortingColumn",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1035,7 +1035,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.PageEncodingStats",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1077,7 +1077,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.ColumnMetaData",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1230,11 +1230,11 @@
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithFooterKey",
-        "type": {"body": {"record": []}, "variables": []}}},
+        "typeScheme": {"body": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithColumnKey",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1259,7 +1259,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.ColumnCryptoMetaData",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -1272,7 +1272,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.ColumnChunk",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1365,7 +1365,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.RowGroup",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1446,7 +1446,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.ColumnOrder",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1472,7 +1472,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.PageLocation",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1510,7 +1510,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.OffsetIndex",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1528,7 +1528,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.ColumnIndex",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1588,7 +1588,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.AesGcmV1",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1622,7 +1622,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.AesGcmCtrV1",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -1656,7 +1656,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionAlgorithm",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -1669,7 +1669,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.FileMetaData",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1773,7 +1773,7 @@
     {
       "type": {
         "name": "hydra.parquet.format.FileCryptoMetaData",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

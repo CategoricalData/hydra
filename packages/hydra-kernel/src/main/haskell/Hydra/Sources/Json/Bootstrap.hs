@@ -53,7 +53,7 @@ typesByNameBinding :: Binding
 typesByNameBinding = Binding {
     bindingName = Name "hydra.json.bootstrap.typesByName",
     bindingTerm = typesByNameTerm,
-    bindingType = Nothing}
+    bindingTypeScheme = Nothing}
 
 -- | Build a Term-level map from Name to Type, by extracting all bindings
 -- from the bootstrap type modules. Each binding in a kernel type module

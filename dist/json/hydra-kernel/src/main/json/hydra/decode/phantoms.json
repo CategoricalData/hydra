@@ -45,7 +45,7 @@
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
                                                                     "function": {"variable": "hydra.extract.core.toFieldMap"}}},
-                                                                "type": {
+                                                                "typeScheme": {
                                                                   "body": {
                                                                     "map": {
                                                                       "keys": {"variable": "hydra.core.Name"},
@@ -235,7 +235,7 @@
                     "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -385,7 +385,7 @@
                     "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -448,7 +448,7 @@
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
                                                                     "function": {"variable": "hydra.extract.core.toFieldMap"}}},
-                                                                "type": {
+                                                                "typeScheme": {
                                                                   "body": {
                                                                     "map": {
                                                                       "keys": {"variable": "hydra.core.Name"},
@@ -638,7 +638,7 @@
                     "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

@@ -41,7 +41,7 @@ deduplicateBindings bindings =
         Core.Binding {
           Core.bindingName = (Core.Name uniqueName),
           Core.bindingTerm = (Core.bindingTerm b),
-          Core.bindingType = (Core.bindingType b)}])) [] bindings
+          Core.bindingTypeScheme = (Core.bindingTypeScheme b)}])) [] bindings
 -- | Generate a binding name for a DSL function from a type name
 dslBindingName :: Core.Name -> Core.Name
 dslBindingName n =
@@ -88,10 +88,10 @@ dslModule cx graph mod =
         in Core.Binding {
           Core.bindingName = name,
           Core.bindingTerm = dataTerm,
-          Core.bindingType = (Just (Core.TypeScheme {
+          Core.bindingTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
       Packaging.moduleDescription = (Just (Strings.cat [
         "DSL functions for ",
@@ -104,7 +104,7 @@ dslModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
-        Packaging.termDefinitionType = (Core.bindingType b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
+        Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
 -- | Generate a DSL module namespace from a source module namespace
 dslNamespace :: Packaging.Namespace -> Packaging.Namespace
 dslNamespace ns =
@@ -217,7 +217,7 @@ generateRecordAccessor origType typeName ft =
       in Core.Binding {
         Core.bindingName = accessorName,
         Core.bindingTerm = body,
-        Core.bindingType = (Just ts)}
+        Core.bindingTypeScheme = (Just ts)}
 -- | Generate a record constructor function
 generateRecordConstructor :: Core.Type -> Core.Name -> [Core.FieldType] -> [Core.Binding]
 generateRecordConstructor origType typeName fieldTypes =
@@ -270,7 +270,7 @@ generateRecordConstructor origType typeName fieldTypes =
         Core.Binding {
           Core.bindingName = (dslBindingName typeName),
           Core.bindingTerm = body,
-          Core.bindingType = (Just ts)}]
+          Core.bindingTypeScheme = (Just ts)}]
 -- | Generate a withXxx record field updater function
 generateRecordWithUpdater :: Core.Type -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Core.Binding
 generateRecordWithUpdater origType typeName allFields targetField =
@@ -366,7 +366,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
       in Core.Binding {
         Core.bindingName = updaterName,
         Core.bindingTerm = body,
-        Core.bindingType = (Just ts)}
+        Core.bindingTypeScheme = (Just ts)}
 -- | Generate a union injection helper
 generateUnionInjector :: Core.Type -> Core.Name -> Core.FieldType -> Core.Binding
 generateUnionInjector origType typeName ft =
@@ -433,7 +433,7 @@ generateUnionInjector origType typeName ft =
       in Core.Binding {
         Core.bindingName = injectorName,
         Core.bindingTerm = body,
-        Core.bindingType = (Just ts)}
+        Core.bindingTypeScheme = (Just ts)}
 -- | Generate wrap/unwrap accessors for a wrapped type
 generateWrappedTypeAccessors :: Core.Type -> Core.Name -> Core.Type -> [Core.Binding]
 generateWrappedTypeAccessors origType typeName innerType =
@@ -512,11 +512,11 @@ generateWrappedTypeAccessors origType typeName innerType =
         Core.Binding {
           Core.bindingName = wrapName,
           Core.bindingTerm = wrapBody,
-          Core.bindingType = (Just wrapTs)},
+          Core.bindingTypeScheme = (Just wrapTs)},
         Core.Binding {
           Core.bindingName = unwrapName,
           Core.bindingTerm = unwrapBody,
-          Core.bindingType = (Just unwrapTs)}]
+          Core.bindingTypeScheme = (Just unwrapTs)}]
 -- | Check if a binding is eligible for DSL generation
 isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding)
 isDslEligibleBinding cx graph b =

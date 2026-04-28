@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.coders.Adapter",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -76,7 +76,7 @@
     {
       "type": {
         "name": "hydra.coders.AdapterContext",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -135,7 +135,7 @@
     {
       "type": {
         "name": "hydra.coders.Bicoder",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -210,7 +210,7 @@
     {
       "type": {
         "name": "hydra.coders.Coder",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -271,7 +271,7 @@
     {
       "type": {
         "name": "hydra.coders.CoderDirection",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -288,7 +288,7 @@
     {
       "type": {
         "name": "hydra.coders.Language",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -322,7 +322,7 @@
     {
       "type": {
         "name": "hydra.coders.LanguageConstraints",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -414,7 +414,7 @@
     {
       "type": {
         "name": "hydra.coders.LanguageName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -426,7 +426,7 @@
     {
       "type": {
         "name": "hydra.coders.SymmetricAdapter",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -458,7 +458,7 @@
     {
       "type": {
         "name": "hydra.coders.TraversalOrder",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -490,7 +490,7 @@
     {
       "type": {
         "name": "hydra.coders.TypeAdapter",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

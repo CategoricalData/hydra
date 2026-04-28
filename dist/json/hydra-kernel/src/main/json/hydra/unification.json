@@ -30,7 +30,7 @@
                                           "application": {
                                             "argument": {"variable": "left"},
                                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -40,7 +40,7 @@
                                               "application": {
                                                 "argument": {"variable": "right"},
                                                 "function": {"variable": "hydra.strip.deannotateType"}}},
-                                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                            "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -69,7 +69,7 @@
                                                         "parameter": "r"}},
                                                     "domain": {"variable": "hydra.core.Type"},
                                                     "parameter": "l"}},
-                                                "type": {
+                                                "typeScheme": {
                                                   "body": {
                                                     "function": {
                                                       "codomain": {
@@ -127,7 +127,7 @@
                                                                 "type": {"variable": "hydra.errors.UnificationError"}}},
                                                             "type": {"variable": "t1"}}},
                                                         "parameter": "t1"}},
-                                                    "type": {
+                                                    "typeScheme": {
                                                       "body": {
                                                         "either": {
                                                           "left": {"variable": "hydra.errors.UnificationError"},
@@ -178,7 +178,7 @@
                                                                                 "left": {"variable": "hydra.errors.UnificationError"},
                                                                                 "right": {"list": {"variable": "t1"}}}}}}}}}}}},
                                                             "parameter": "t1"}},
-                                                        "type": {
+                                                        "typeScheme": {
                                                           "body": {
                                                             "either": {
                                                               "left": {"variable": "hydra.errors.UnificationError"},
@@ -263,7 +263,7 @@
                                                                     "parameter": "rights"}},
                                                                 "domain": {"list": {"variable": "hydra.core.Type"}},
                                                                 "parameter": "lefts"}},
-                                                            "type": {
+                                                            "typeScheme": {
                                                               "body": {
                                                                 "function": {
                                                                   "codomain": {
@@ -468,7 +468,7 @@
                                                                         "parameter": "right"}},
                                                                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                     "parameter": "left"}},
-                                                                "type": {
+                                                                "typeScheme": {
                                                                   "body": {
                                                                     "function": {
                                                                       "codomain": {
@@ -1095,7 +1095,7 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1156,7 +1156,7 @@
                                                                 "function": {
                                                                   "project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -1170,7 +1170,7 @@
                                                                     "function": {
                                                                       "project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                 "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                                            "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -1181,7 +1181,7 @@
                                                                     "argument": {"variable": "c"},
                                                                     "function": {
                                                                       "project": {"field": "comment", "typeName": "hydra.typing.TypeConstraint"}}}},
-                                                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
@@ -1203,7 +1203,7 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "v"},
                                                                                             "function": {"variable": "hydra.substitution.singletonTypeSubst"}}}}},
-                                                                                    "type": {"body": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
+                                                                                    "typeScheme": {"body": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
                                                                                     "bindings": [
@@ -1220,7 +1220,7 @@
                                                                                                     "function": {"variable": "hydra.substitution.composeTypeSubst"}}}}},
                                                                                             "domain": {"variable": "hydra.typing.TypeSubst"},
                                                                                             "parameter": "s"}},
-                                                                                        "type": {
+                                                                                        "typeScheme": {
                                                                                           "body": {
                                                                                             "function": {
                                                                                               "codomain": {"variable": "hydra.typing.TypeSubst"},
@@ -1267,7 +1267,7 @@
                                                                             "parameter": "t"}},
                                                                         "domain": {"variable": "hydra.core.Name"},
                                                                         "parameter": "v"}},
-                                                                    "type": {
+                                                                    "typeScheme": {
                                                                       "body": {
                                                                         "function": {
                                                                           "codomain": {
@@ -1376,7 +1376,7 @@
                                                                                 "parameter": "t"}},
                                                                             "domain": {"variable": "hydra.core.Name"},
                                                                             "parameter": "v"}},
-                                                                        "type": {
+                                                                        "typeScheme": {
                                                                           "body": {
                                                                             "function": {
                                                                               "codomain": {
@@ -1427,7 +1427,7 @@
                                                                                                         "type": {"variable": "t1"}}}}}}}}},
                                                                                         "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                                                                                         "parameter": "constraints2"}},
-                                                                                    "type": {
+                                                                                    "typeScheme": {
                                                                                       "body": {
                                                                                         "function": {
                                                                                           "codomain": {
@@ -1467,7 +1467,7 @@
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                             "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
-                                                                            "type": {
+                                                                            "typeScheme": {
                                                                               "body": {
                                                                                 "either": {
                                                                                   "left": {"variable": "hydra.errors.UnificationError"},
@@ -1499,7 +1499,7 @@
                                                                                                 "parameter": "name"}}}],
                                                                                         "default": {"variable": "noVars"},
                                                                                         "typeName": "hydra.core.Type"}}}},
-                                                                                "type": {
+                                                                                "typeScheme": {
                                                                                   "body": {
                                                                                     "either": {
                                                                                       "left": {"variable": "hydra.errors.UnificationError"},
@@ -1721,7 +1721,7 @@
                                                 "parameter": "rest"}},
                                             "domain": {"variable": "hydra.typing.TypeConstraint"},
                                             "parameter": "c"}},
-                                        "type": {
+                                        "typeScheme": {
                                           "body": {
                                             "function": {
                                               "codomain": {
@@ -1809,7 +1809,7 @@
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1864,7 +1864,7 @@
                                                     "parameter": "r"}},
                                                 "domain": {"variable": "hydra.core.Type"},
                                                 "parameter": "l"}},
-                                            "type": {
+                                            "typeScheme": {
                                               "body": {
                                                 "function": {
                                                   "codomain": {
@@ -1922,7 +1922,7 @@
                     "parameter": "cx"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2002,7 +2002,7 @@
                     "parameter": "cx"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2090,7 +2090,7 @@
                                     "parameter": "typ"}},
                                 "domain": {"literal": {"boolean": {}}},
                                 "parameter": "b"}},
-                            "type": {
+                            "typeScheme": {
                               "body": {
                                 "function": {
                                   "codomain": {
@@ -2122,7 +2122,7 @@
                     "parameter": "typ0"}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "var"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

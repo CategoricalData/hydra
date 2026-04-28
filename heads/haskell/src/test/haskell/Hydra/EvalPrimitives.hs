@@ -39,7 +39,7 @@ evalLibraries = [
 mkPrim :: Name -> Int -> (Context -> Graph -> [Term] -> Either Error Term) -> Primitive
 mkPrim name arity impl = Primitive {
   primitiveName = name,
-  primitiveType = dummyType arity,
+  primitiveTypeScheme = dummyType arity,
   primitiveImplementation = impl}
 
 dummyType :: Int -> TypeScheme

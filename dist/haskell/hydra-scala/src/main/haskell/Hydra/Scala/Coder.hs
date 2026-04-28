@@ -224,7 +224,7 @@ encodeLetBinding cx g outerTypeVars b =
 
       let bname = Utils.scalaEscapeName (Core.unName (Core.bindingName b))
           bterm = Core.bindingTerm b
-          mts = Maybes.maybe (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts) (Core.bindingType b)
+          mts = Maybes.maybe (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts) (Core.bindingTypeScheme b)
           isFn =
                   Maybes.maybe False (\ts -> case (Strip.deannotateType (Core.typeSchemeBody ts)) of
                     Core.TypeFunction _ -> True
@@ -461,7 +461,7 @@ encodeTermDefinition cx g td =
       let name = Packaging.termDefinitionName td
           term = Packaging.termDefinitionTerm td
           lname = Utils.scalaEscapeName (Names.localNameOf name)
-          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionType td)
+          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme td)
           isFunctionType =
                   case (Strip.deannotateType typ_) of
                     Core.TypeFunction _ -> True
@@ -586,7 +586,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Er
 encodeTypeDefinition cx g td =
 
       let name = Packaging.typeDefinitionName td
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionType td)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)
           lname = Names.localNameOf name
           tname = Syntax.Type_Name {
                 Syntax.type_NameValue = lname}

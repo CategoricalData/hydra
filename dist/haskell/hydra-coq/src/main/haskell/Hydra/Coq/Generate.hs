@@ -466,7 +466,7 @@ globalConstructorCounts modules =
 
       let allTypeDefs =
               Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\def_ -> case def_ of
-                Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+                Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions m))) modules)
       in (Utils.buildConstructorCounts allTypeDefs)
 
@@ -482,7 +482,7 @@ globalSanitizedAccessors modules =
               Lists.concat (Lists.map (\m ->
                 let typeDefs =
                         Maybes.cat (Lists.map (\def_ -> case def_ of
-                          Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+                          Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
                           _ -> Nothing) (Packaging.moduleDefinitions m))
                 in (Utils.sortTypeDefsSCC typeDefs)) modules)
       in (Utils.collectSanitizedAccessors allTypeGroups)
@@ -717,12 +717,12 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
           isAxiomOnly = Lists.elem nsStr axiomOnlyModules
           typeDefs =
                   Maybes.cat (Lists.map (\def_ -> case def_ of
-                    Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
+                    Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
                     _ -> Nothing) defs)
           termDefs =
                   Maybes.cat (Lists.map (\def_ -> case def_ of
                     Packaging.DefinitionTerm v0 ->
-                      let mts = Packaging.termDefinitionType v0
+                      let mts = Packaging.termDefinitionTypeScheme v0
                           vs = Maybes.maybe [] (\ts -> Core.typeSchemeVariables ts) mts
                           mty = Maybes.map (\ts -> Core.typeSchemeBody ts) mts
                       in (Just (Utils.localName (Core.unName (Packaging.termDefinitionName v0)), (Packaging.termDefinitionTerm v0, (vs, mty))))

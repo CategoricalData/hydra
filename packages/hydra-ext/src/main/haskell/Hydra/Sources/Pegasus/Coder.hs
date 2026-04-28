@@ -452,7 +452,7 @@ toPair = def "toPair" $
 typeToSchema :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Module -> TypeDefinition -> Either Error (PDL.NamedSchema, [PDL.QualifiedName]))
 typeToSchema = def "typeToSchema" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
     "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
     "ptype" <~ (Eithers.either_
       (lambda "schema" $ inject PDL._NamedSchemaType PDL._NamedSchemaType_typeref (var "schema"))

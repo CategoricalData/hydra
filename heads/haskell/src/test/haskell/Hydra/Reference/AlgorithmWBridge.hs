@@ -38,7 +38,7 @@ hydraTermToStlc context term = case term of
       prim <- case M.lookup name prims of
         Nothing -> Left $ "no such primitive: " ++ Core.unName name
         Just p -> Right p
-      ts <- hydraTypeSchemeToStlc $ Graph.primitiveType prim
+      ts <- hydraTypeSchemeToStlc $ Graph.primitiveTypeScheme prim
       return $ Const $ PrimTyped $ TypedPrimitive name ts
     Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where

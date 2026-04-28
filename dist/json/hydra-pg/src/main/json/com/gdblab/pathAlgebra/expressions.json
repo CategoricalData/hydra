@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.QueryExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -24,7 +24,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -120,7 +120,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.BaseExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -163,7 +163,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.GraphReference",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -175,7 +175,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SelectionExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -194,7 +194,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SelectionCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -219,7 +219,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SimpleCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -245,7 +245,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.LabelCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -263,7 +263,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -284,7 +284,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -308,7 +308,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ComparisonOperator",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -328,7 +328,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.LiteralValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -345,7 +345,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.LengthCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -358,7 +358,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathElement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -375,7 +375,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.AndCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -388,7 +388,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.OrCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -401,7 +401,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.NotCondition",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -411,7 +411,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.JoinExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -430,7 +430,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.UnionExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -449,7 +449,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.RecursiveExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -468,7 +468,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathSemantics",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -486,7 +486,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -505,7 +505,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.GroupByExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -524,7 +524,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.GroupByCriterion",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -546,7 +546,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.OrderByExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -567,7 +567,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.OrderByCriterion",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -588,7 +588,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ProjectionExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -615,7 +615,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ProjectionSpec",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -631,7 +631,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ResultProjection",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -649,7 +649,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyExtraction",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -666,7 +666,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertySource",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -688,7 +688,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.NodePropertyRef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -705,7 +705,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.EdgePropertyRef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -723,7 +723,7 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathPropertyRef",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

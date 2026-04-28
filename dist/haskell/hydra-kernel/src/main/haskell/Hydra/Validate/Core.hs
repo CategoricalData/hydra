@@ -121,7 +121,7 @@ checkTerm typed path cx term =
           (firstError (Lists.map (\bname -> Logic.ifElse (isValidName bname) Nothing (Just (ErrorCore.InvalidTermErrorInvalidLetBindingName (ErrorCore.InvalidLetBindingNameError {
             ErrorCore.invalidLetBindingNameErrorLocation = path,
             ErrorCore.invalidLetBindingNameErrorName = bname})))) names)),
-          (Logic.ifElse typed (firstError (Lists.map (\b -> Maybes.cases (Core.bindingType b) Nothing (\ts -> checkUndefinedTypeVariablesInTypeScheme path cx ts (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInBindingType (ErrorCore.UndefinedTypeVariableInBindingTypeError {
+          (Logic.ifElse typed (firstError (Lists.map (\b -> Maybes.cases (Core.bindingTypeScheme b) Nothing (\ts -> checkUndefinedTypeVariablesInTypeScheme path cx ts (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInBindingType (ErrorCore.UndefinedTypeVariableInBindingTypeError {
             ErrorCore.undefinedTypeVariableInBindingTypeErrorLocation = path,
             ErrorCore.undefinedTypeVariableInBindingTypeErrorName = uvName}))))) bindings)) Nothing)])
       Core.TermInject v0 ->

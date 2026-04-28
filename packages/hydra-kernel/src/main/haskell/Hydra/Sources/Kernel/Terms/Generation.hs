@@ -129,7 +129,7 @@ moduleTypeBindings :: TTerm Module -> TTerm [Binding]
 moduleTypeBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
-      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td"))])
+      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
   (Packaging.moduleDefinitions m)
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
@@ -140,7 +140,7 @@ moduleTermBindings m = Maybes.cat $ Lists.map
       just (Core.binding
         (Packaging.termDefinitionName $ var "td")
         (Packaging.termDefinitionTerm $ var "td")
-        (Packaging.termDefinitionType $ var "td"))])
+        (Packaging.termDefinitionTypeScheme $ var "td"))])
   (Packaging.moduleDefinitions m)
 
 -- | Extract all definitions from a module as Bindings.
@@ -255,7 +255,7 @@ modulesToGraph = define "modulesToGraph" $
       ("m" ~> moduleTermBindings (var "m")) (var "universeModules")) $
   "universeBoundTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
     Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "universeDataElements"))) $
+      (Core.bindingTypeScheme (var "b"))) (var "universeDataElements"))) $
   Graph.graphWithBoundTypes (var "baseGraph") (var "universeBoundTypes")
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
@@ -340,7 +340,7 @@ generateSourceFiles = define "generateSourceFiles" $
                 ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                   (Core.bindingName $ var "b")
                   (Core.bindingTerm $ var "b")
-                  (Core.bindingType $ var "b")))
+                  (Core.bindingTypeScheme $ var "b")))
                 (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els"))])
             (Packaging.moduleDefinitions $ var "m"))) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
@@ -365,7 +365,7 @@ formatTermBinding = define "formatTermBinding" $
   doc "Format a term binding for the lexicon" $
   "binding" ~>
   "name" <~ Core.unName (Core.bindingName $ var "binding") $
-  "typeStr" <~ optCases (Core.bindingType $ var "binding")
+  "typeStr" <~ optCases (Core.bindingTypeScheme $ var "binding")
     (string "?")
     ("scheme" ~> ShowCore.typeScheme @@ var "scheme") $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
@@ -376,7 +376,7 @@ formatPrimitive = define "formatPrimitive" $
   doc "Format a primitive for the lexicon" $
   "prim" ~>
   "name" <~ Core.unName (Graph.primitiveName $ var "prim") $
-  "typeStr" <~ ShowCore.typeScheme @@ (Graph.primitiveType $ var "prim") $
+  "typeStr" <~ ShowCore.typeScheme @@ (Graph.primitiveTypeScheme $ var "prim") $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
 -- | Format a type binding for the lexicon: "  name = type"
@@ -478,7 +478,7 @@ refreshModule = define "refreshModule" $
             ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
               (Core.bindingName $ var "b")
               (Core.bindingTerm $ var "b")
-              (Core.bindingType $ var "b")))
+              (Core.bindingTypeScheme $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
               (var "inferredElements"))])
         (Packaging.moduleDefinitions $ var "m")))
@@ -544,7 +544,7 @@ inferModulesGiven = define "inferModulesGiven" $
       "bs" <~ moduleTermBindings (var "m") $
       Logic.ifElse (var "isTarget")
         (var "bs")
-        (Lists.filter ("b" ~> Maybes.isNothing (Core.bindingType (var "b"))) (var "bs")))
+        (Lists.filter ("b" ~> Maybes.isNothing (Core.bindingTypeScheme (var "b"))) (var "bs")))
     (var "closureMods")) $
   "untouchedTypedBindings" <~ Lists.concat (Lists.map
     ("m" ~>
@@ -552,7 +552,7 @@ inferModulesGiven = define "inferModulesGiven" $
       "bs" <~ moduleTermBindings (var "m") $
       Logic.ifElse (var "isTarget")
         (TTerm (Terms.list []) :: TTerm [Binding])
-        (Lists.filter ("b" ~> Maybes.isJust (Core.bindingType (var "b"))) (var "bs")))
+        (Lists.filter ("b" ~> Maybes.isJust (Core.bindingTypeScheme (var "b"))) (var "bs")))
     (var "closureMods")) $
   "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "bindingsToInfer" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $

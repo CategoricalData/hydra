@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.parsing.ParseError",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -34,7 +34,7 @@
     {
       "type": {
         "name": "hydra.parsing.ParseResult",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -75,7 +75,7 @@
     {
       "type": {
         "name": "hydra.parsing.ParseSuccess",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -109,7 +109,7 @@
     {
       "type": {
         "name": "hydra.parsing.Parser",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

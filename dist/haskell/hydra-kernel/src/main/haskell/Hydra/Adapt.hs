@@ -51,7 +51,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
                   \g -> \el -> Core.Binding {
                     Core.bindingName = (Core.bindingName el),
                     Core.bindingTerm = (transformTerm g (Core.bindingTerm el)),
-                    Core.bindingType = (Core.bindingType el)}
+                    Core.bindingTypeScheme = (Core.bindingTypeScheme el)}
           litmap = adaptLiteralTypesMap constraints
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
@@ -69,10 +69,10 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
         in (Eithers.bind (Eithers.mapList adaptBinding els0) (\adaptedTerms ->
           let els1Raw = Lists.concat (Lists.map Environment.termAsBindings adaptedTerms)
               processBinding =
-                      \el -> Eithers.bind (Rewriting.rewriteTermM (adaptNestedTypes constraints litmap) (Core.bindingTerm el)) (\newTerm -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingType el)) (\adaptedType -> Right (Core.Binding {
+                      \el -> Eithers.bind (Rewriting.rewriteTermM (adaptNestedTypes constraints litmap) (Core.bindingTerm el)) (\newTerm -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingTypeScheme el)) (\adaptedType -> Right (Core.Binding {
                         Core.bindingName = (Core.bindingName el),
                         Core.bindingTerm = newTerm,
-                        Core.bindingType = adaptedType})))
+                        Core.bindingTypeScheme = adaptedType})))
           in (Eithers.bind (Eithers.mapList processBinding els1Raw) (\els1 -> Eithers.bind (Eithers.mapList (\kv -> Eithers.bind (adaptPrimitive constraints litmap (Pairs.second kv)) (\prim1 -> Right (Pairs.first kv, prim1))) (Maps.toList prims0)) (\primPairs ->
             let prims1 = Maps.fromList primPairs
                 adaptedGraphRaw = Lexical.buildGraph els1 Maps.empty prims1
@@ -180,10 +180,10 @@ adaptNestedTypes constraints litmap recurse term =
     Eithers.bind (recurse term) (\rewritten -> case rewritten of
       Core.TermLet v0 ->
         let adaptB =
-                \b -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingType b)) (\adaptedBType -> Right (Core.Binding {
+                \b -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingTypeScheme b)) (\adaptedBType -> Right (Core.Binding {
                   Core.bindingName = (Core.bindingName b),
                   Core.bindingTerm = (Core.bindingTerm b),
-                  Core.bindingType = adaptedBType}))
+                  Core.bindingTypeScheme = adaptedBType}))
         in (Eithers.bind (Eithers.mapList adaptB (Core.letBindings v0)) (\adaptedBindings -> Right (Core.TermLet (Core.Let {
           Core.letBindings = adaptedBindings,
           Core.letBody = (Core.letBody v0)}))))
@@ -192,10 +192,10 @@ adaptNestedTypes constraints litmap recurse term =
 adaptPrimitive :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Either Errors.Error Graph.Primitive
 adaptPrimitive constraints litmap prim0 =
 
-      let ts0 = Graph.primitiveType prim0
+      let ts0 = Graph.primitiveTypeScheme prim0
       in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Right (Graph.Primitive {
         Graph.primitiveName = (Graph.primitiveName prim0),
-        Graph.primitiveType = ts1,
+        Graph.primitiveTypeScheme = ts1,
         Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
 -- | Adapt a term using the given language constraints
 adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
@@ -289,7 +289,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                             Lists.map (\b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
                               Core.bindingTerm = (Strip.stripTypeLambdas (Core.bindingTerm b)),
-                              Core.bindingType = (Core.bindingType b)}) bindings
+                              Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) bindings
                         term0 =
                                 Core.TermLet (Core.Let {
                                   Core.letBindings = stripped,
@@ -312,7 +312,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
           checkBindingsTyped =
                   \debugLabel -> \bindings ->
                     let untypedBindings =
-                            Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingType b))) bindings)
+                            Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingTypeScheme b))) bindings)
                     in (Logic.ifElse (Lists.null untypedBindings) (Right bindings) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "Found untyped bindings (",
                       debugLabel,
@@ -322,7 +322,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                   \bindings -> Lists.map (\b -> Core.Binding {
                     Core.bindingName = (Core.bindingName b),
                     Core.bindingTerm = (pushTypeAppsInward (Core.bindingTerm b)),
-                    Core.bindingType = (Core.bindingType b)}) bindings
+                    Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) bindings
           rebuildGraph =
                   \bindings ->
                     let g = Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0)
@@ -346,7 +346,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
                         Packaging.termDefinitionTerm = (Core.bindingTerm el),
-                        Packaging.termDefinitionType = (Just ts)}) (Core.bindingType el)
+                        Packaging.termDefinitionTypeScheme = (Just ts)}) (Core.bindingTypeScheme el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) bins5
               elementsByNamespace =
@@ -490,7 +490,7 @@ pushTypeAppsInward term =
                                           \b -> Core.Binding {
                                             Core.bindingName = (Core.bindingName b),
                                             Core.bindingTerm = (go (Core.bindingTerm b)),
-                                            Core.bindingType = (Core.bindingType b)}
+                                            Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                                   in Core.Let {
                                     Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
                                     Core.letBody = (go (Core.letBody lt))}
@@ -550,7 +550,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
         let toDef =
                 \pair -> Packaging.TypeDefinition {
                   Packaging.typeDefinitionName = (Pairs.first pair),
-                  Packaging.typeDefinitionType = Core.TypeScheme {
+                  Packaging.typeDefinitionTypeScheme = Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Pairs.second pair),
                     Core.typeSchemeConstraints = Nothing}}

@@ -115,8 +115,8 @@ binding = define "Binding" $
     "term">:
       doc "The term to which the variable is bound"
       term,
-    "type">:
-      doc "The optional type of the bound term" $
+    "typeScheme">:
+      doc "The optional type scheme of the bound term" $
       T.maybe typeScheme]
 
 caseStatement :: Binding

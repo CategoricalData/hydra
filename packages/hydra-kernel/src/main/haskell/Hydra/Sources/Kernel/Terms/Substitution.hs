@@ -209,7 +209,7 @@ substituteInTerm = define "substituteInTerm" $
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (substituteInTerm @@ var "subst2" @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b")] $
+          (Core.bindingTypeScheme $ var "b")] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (var "bindings"))
           (substituteInTerm @@ var "subst2" @@ (Core.letBody $ var "lt"))] $
@@ -288,7 +288,7 @@ substTypesInTerm = define "substTypesInTerm" $
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (substTypesInTerm @@ var "subst" @@ (Core.bindingTerm $ var "b"))
-          (Maybes.map (substInTypeScheme @@ var "subst") (Core.bindingType $ var "b"))] $
+          (Maybes.map (substInTypeScheme @@ var "subst") (Core.bindingTypeScheme $ var "b"))] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
           (substTypesInTerm @@ var "subst" @@ (Core.letBody $ var "l")),

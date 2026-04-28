@@ -30,7 +30,7 @@
                     "parameter": "args"}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -66,7 +66,7 @@
                                     "body": {
                                       "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                     "type": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {
                                 "pair": {
                                   "first": {"variable": "hydra.packaging.Namespace"},
@@ -84,7 +84,7 @@
                                         "body": {"variable": "hydra.lib.pairs.first"},
                                         "type": {"variable": "hydra.packaging.Namespace"}}},
                                     "type": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
-                            "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                            "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                           {
                             "name": "gmod",
                             "term": {
@@ -100,7 +100,7 @@
                                             "type": {"variable": "hydra.packaging.Namespace"}}},
                                         "type": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
                                 "function": {"unwrap": "hydra.haskell.syntax.ModuleName"}}},
-                            "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                           {
                             "name": "namespacesMap",
                             "term": {
@@ -111,7 +111,7 @@
                                     "body": {
                                       "project": {"field": "mapping", "typeName": "hydra.packaging.Namespaces"}},
                                     "type": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {
                                 "map": {
                                   "keys": {"variable": "hydra.packaging.Namespace"},
@@ -123,7 +123,7 @@
                               "application": {
                                 "argument": {"variable": "name"},
                                 "function": {"variable": "hydra.names.qualifyName"}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {"variable": "hydra.packaging.QualifiedName"},
                               "variables": []}},
                           {
@@ -133,14 +133,14 @@
                                 "argument": {"variable": "qname"},
                                 "function": {
                                   "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                           {
                             "name": "escLocal",
                             "term": {
                               "application": {
                                 "argument": {"variable": "local"},
                                 "function": {"variable": "hydra.haskell.utils.sanitizeHaskellName"}}},
-                            "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                           {
                             "name": "mns",
                             "term": {
@@ -148,7 +148,7 @@
                                 "argument": {"variable": "qname"},
                                 "function": {
                                   "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "type": {
+                            "typeScheme": {
                               "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                               "variables": []}}],
                         "body": {
@@ -168,7 +168,7 @@
                                                   "application": {
                                                     "argument": {"variable": "mn"},
                                                     "function": {"unwrap": "hydra.haskell.syntax.ModuleName"}}},
-                                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {
@@ -266,7 +266,7 @@
                     "argument": {"variable": "hydra.haskell.syntax.ModuleName"},
                     "function": {"variable": "hydra.packaging.Namespaces"}}},
                 "parameter": "namespaces"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -307,7 +307,7 @@
                     "parameter": "r"}},
                 "domain": {"variable": "hydra.haskell.syntax.Expression"},
                 "parameter": "l"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -351,7 +351,7 @@
                     "parameter": "rhs"}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -377,7 +377,7 @@
                     "typeName": "hydra.haskell.syntax.Expression"}},
                 "domain": {"variable": "hydra.haskell.syntax.Literal"},
                 "parameter": "lit"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.haskell.syntax.Expression"},
@@ -406,7 +406,7 @@
                     "typeName": "hydra.haskell.syntax.Expression"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.haskell.syntax.Expression"},
@@ -444,7 +444,7 @@
                                                 "argument": {"variable": "mod"},
                                                 "function": {
                                                   "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                            "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                                            "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -464,7 +464,7 @@
                                                             "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                                     "domain": {"variable": "hydra.packaging.Namespace"},
                                                     "parameter": "namespace"}},
-                                                "type": {
+                                                "typeScheme": {
                                                   "body": {
                                                     "function": {
                                                       "codomain": {"list": {"literal": {"string": {}}}},
@@ -497,7 +497,7 @@
                                                                                     "body": {"variable": "hydra.lib.lists.length"},
                                                                                     "type": {"literal": {"string": {}}}}}}},
                                                                             "function": {"variable": "hydra.lib.math.sub"}}}}},
-                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                   {
                                                                     "name": "suffix",
                                                                     "term": {
@@ -510,7 +510,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.lists.drop"},
                                                                                 "type": {"literal": {"string": {}}}}}}}}},
-                                                                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                                                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                                                   {
                                                                     "name": "capitalizedSuffix",
                                                                     "term": {
@@ -526,7 +526,7 @@
                                                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                                                     "type": {"literal": {"string": {}}}}},
                                                                                 "type": {"literal": {"string": {}}}}}}}}},
-                                                                    "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                                                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                                                 "body": {
                                                                   "wrap": {
                                                                     "body": {
@@ -538,7 +538,7 @@
                                                             "parameter": "n"}},
                                                         "domain": {"list": {"literal": {"string": {}}}},
                                                         "parameter": "segs"}},
-                                                    "type": {
+                                                    "typeScheme": {
                                                       "body": {
                                                         "function": {
                                                           "codomain": {
@@ -566,7 +566,7 @@
                                                                     "function": {"variable": "aliasFromSuffix"}}}}},
                                                             "domain": {"variable": "hydra.packaging.Namespace"},
                                                             "parameter": "namespace"}},
-                                                        "type": {
+                                                        "typeScheme": {
                                                           "body": {
                                                             "function": {
                                                               "codomain": {"variable": "hydra.haskell.syntax.ModuleName"},
@@ -590,7 +590,7 @@
                                                                             "function": {"variable": "toModuleName"}}}}},
                                                                     "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                 "type": {"variable": "hydra.haskell.syntax.ModuleName"}}},
-                                                            "type": {
+                                                            "typeScheme": {
                                                               "body": {
                                                                 "pair": {
                                                                   "first": {"variable": "hydra.packaging.Namespace"},
@@ -608,7 +608,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.sets.toList"},
                                                                         "type": {"variable": "hydra.packaging.Namespace"}}}}},
-                                                                "type": {
+                                                                "typeScheme": {
                                                                   "body": {"list": {"variable": "hydra.packaging.Namespace"}},
                                                                   "variables": []}}],
                                                             "body": {
@@ -657,7 +657,7 @@
                                                                                 "body": {"variable": "hydra.lib.maps.fromList"},
                                                                                 "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                             "type": {"list": {"literal": {"string": {}}}}}}}},
-                                                                    "type": {
+                                                                    "typeScheme": {
                                                                       "body": {
                                                                         "map": {
                                                                           "keys": {"variable": "hydra.packaging.Namespace"},
@@ -738,7 +738,7 @@
                                                                                             "body": {"variable": "hydra.lib.lists.foldl"},
                                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                                                        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
@@ -782,7 +782,7 @@
                                                                                         "body": {"variable": "hydra.lib.maps.fromList"},
                                                                                         "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                            "type": {
+                                                                            "typeScheme": {
                                                                               "body": {
                                                                                 "map": {
                                                                                   "keys": {"variable": "hydra.packaging.Namespace"},
@@ -820,7 +820,7 @@
                                                                                                 "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                                                                     "domain": {"variable": "hydra.packaging.Namespace"},
                                                                                     "parameter": "nm"}},
-                                                                                "type": {
+                                                                                "typeScheme": {
                                                                                   "body": {
                                                                                     "function": {
                                                                                       "codomain": {"list": {"literal": {"string": {}}}},
@@ -867,7 +867,7 @@
                                                                                                 "values": {"literal": {"integer": {"int32": {}}}}}},
                                                                                             "parameter": "state"}},
                                                                                         "parameter": "t1"}},
-                                                                                    "type": {
+                                                                                    "typeScheme": {
                                                                                       "body": {
                                                                                         "function": {
                                                                                           "codomain": {
@@ -910,7 +910,7 @@
                                                                                                                                 "name": "segs",
                                                                                                                                 "term": {
                                                                                                                                   "application": {"argument": {"variable": "nm"}, "function": {"variable": "segsFor"}}},
-                                                                                                                                "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                                                                                                                "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                                                                                                               {
                                                                                                                                 "name": "n",
                                                                                                                                 "term": {
@@ -923,7 +923,7 @@
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {"variable": "takenFor"},
                                                                                                                                             "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
-                                                                                                                                "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                               {
                                                                                                                                 "name": "segCount",
                                                                                                                                 "term": {
@@ -933,7 +933,7 @@
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {"variable": "hydra.lib.lists.length"},
                                                                                                                                         "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                               {
                                                                                                                                 "name": "aliasStr",
                                                                                                                                 "term": {
@@ -946,7 +946,7 @@
                                                                                                                                             "argument": {"variable": "segs"},
                                                                                                                                             "function": {"variable": "aliasFromSuffix"}}}}},
                                                                                                                                     "function": {"unwrap": "hydra.haskell.syntax.ModuleName"}}},
-                                                                                                                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
@@ -1002,7 +1002,7 @@
                                                                                                                                   "pair": {
                                                                                                                                     "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                     "second": {"literal": {"string": {}}}}}}}}}}}}}}},
-                                                                                                            "type": {
+                                                                                                            "typeScheme": {
                                                                                                               "body": {
                                                                                                                 "list": {
                                                                                                                   "pair": {
@@ -1077,7 +1077,7 @@
                                                                                                                                                     "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                 "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                                                                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                                                                                                     "body": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "m"},
@@ -1156,7 +1156,7 @@
                                                                                                                                       "pair": {
                                                                                                                                         "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                         "second": {"literal": {"string": {}}}}}}}}}}}}}}}}},
-                                                                                                            "type": {
+                                                                                                            "typeScheme": {
                                                                                                               "body": {
                                                                                                                 "map": {
                                                                                                                   "keys": {"literal": {"string": {}}},
@@ -1224,7 +1224,7 @@
                                                                                                                                                     "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                 "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                       {
                                                                                                                                         "name": "k",
                                                                                                                                         "term": {
@@ -1264,7 +1264,7 @@
                                                                                                                                                     "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                 "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                                                                                                                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                                                                                                       {
                                                                                                                                         "name": "existing",
                                                                                                                                         "term": {
@@ -1280,7 +1280,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                                                                                         "type": {"literal": {"string": {}}}}},
                                                                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                                                        "type": {
+                                                                                                                                        "typeScheme": {
                                                                                                                                           "body": {"maybe": {"literal": {"integer": {"int32": {}}}}},
                                                                                                                                           "variables": []}}],
                                                                                                                                     "body": {
@@ -1374,7 +1374,7 @@
                                                                                                                                       "pair": {
                                                                                                                                         "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                         "second": {"literal": {"string": {}}}}}}}}}}}}}}}}},
-                                                                                                            "type": {
+                                                                                                            "typeScheme": {
                                                                                                               "body": {
                                                                                                                 "map": {
                                                                                                                   "keys": {"literal": {"string": {}}},
@@ -1445,7 +1445,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                     "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                            "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                            "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                           {
                                                                                                                                             "name": "k",
                                                                                                                                             "term": {
@@ -1485,7 +1485,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                     "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                            "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                                                                                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                                                                                                           {
                                                                                                                                             "name": "minSegs",
                                                                                                                                             "term": {
@@ -1510,7 +1510,7 @@
                                                                                                                                                       "typeApplication": {
                                                                                                                                                         "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                                                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                                                            "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                                                                                                                            "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                                                                         "body": {
                                                                                                                                           "application": {
                                                                                                                                             "argument": {"variable": "m"},
@@ -1613,7 +1613,7 @@
                                                                                                                                           "pair": {
                                                                                                                                             "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                             "second": {"literal": {"string": {}}}}}}}}}}}}}}}}},
-                                                                                                                "type": {
+                                                                                                                "typeScheme": {
                                                                                                                   "body": {
                                                                                                                     "map": {
                                                                                                                       "keys": {"literal": {"string": {}}},
@@ -1649,7 +1649,7 @@
                                                                                                                                                   "pair": {
                                                                                                                                                     "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                                     "second": {"literal": {"string": {}}}}}}}}}}},
-                                                                                                                                    "type": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "n",
                                                                                                                                     "term": {
@@ -1680,7 +1680,7 @@
                                                                                                                                               "pair": {
                                                                                                                                                 "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                                 "second": {"literal": {"string": {}}}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "segCount",
                                                                                                                                     "term": {
@@ -1720,7 +1720,7 @@
                                                                                                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                             "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "aliasStr",
                                                                                                                                     "term": {
@@ -1760,7 +1760,7 @@
                                                                                                                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                             "type": {"literal": {"string": {}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "count",
                                                                                                                                     "term": {
@@ -1785,7 +1785,7 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "minSegs",
                                                                                                                                     "term": {
@@ -1810,7 +1810,7 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "minSegsCount",
                                                                                                                                     "term": {
@@ -1835,7 +1835,7 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "canGrow",
                                                                                                                                     "term": {
@@ -1893,7 +1893,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.equality.gt"},
                                                                                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                                                                             "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
+                                                                                                                                    "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                                                                                                                   {
                                                                                                                                     "name": "newN",
                                                                                                                                     "term": {
@@ -1915,7 +1915,7 @@
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                                                                                                    "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                                                                                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                                                                 "body": {
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
@@ -1969,7 +1969,7 @@
                                                                                                     "values": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                 "parameter": "state"}},
                                                                                             "parameter": "t1"}},
-                                                                                        "type": {
+                                                                                        "typeScheme": {
                                                                                           "body": {
                                                                                             "function": {
                                                                                               "codomain": {
@@ -2018,7 +2018,7 @@
                                                                                                                     "keys": {"variable": "hydra.packaging.Namespace"},
                                                                                                                     "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                                             "type": {"unit": {}}}}}}}}}},
-                                                                                            "type": {
+                                                                                            "typeScheme": {
                                                                                               "body": {
                                                                                                 "map": {
                                                                                                   "keys": {"variable": "hydra.packaging.Namespace"},
@@ -2083,7 +2083,7 @@
                                                                                                             "body": {"variable": "hydra.lib.maps.fromList"},
                                                                                                             "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                                         "type": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
-                                                                                                "type": {
+                                                                                                "typeScheme": {
                                                                                                   "body": {
                                                                                                     "map": {
                                                                                                       "keys": {"variable": "hydra.packaging.Namespace"},
@@ -2158,7 +2158,7 @@
                     "domain": {"variable": "hydra.packaging.Module"},
                     "parameter": "mod"}}}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2201,7 +2201,7 @@
                         "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -2243,7 +2243,7 @@
                     "typeName": "hydra.haskell.syntax.Name"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "n"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.haskell.syntax.Name"},
@@ -2274,14 +2274,14 @@
                                   "application": {
                                     "argument": {"variable": "fname"},
                                     "function": {"unwrap": "hydra.core.Name"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "qname",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "sname"},
                                     "function": {"variable": "hydra.names.qualifyName"}}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {"variable": "hydra.packaging.QualifiedName"},
                                   "variables": []}},
                               {
@@ -2291,7 +2291,7 @@
                                     "argument": {"variable": "qname"},
                                     "function": {
                                       "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                   "variables": []}},
                               {
@@ -2300,21 +2300,21 @@
                                   "application": {
                                     "argument": {"variable": "sname"},
                                     "function": {"variable": "hydra.haskell.utils.typeNameForRecord"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "decapitalized",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "typeNameStr"},
                                     "function": {"variable": "hydra.formatting.decapitalize"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "capitalized",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "fnameStr"},
                                     "function": {"variable": "hydra.formatting.capitalize"}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "nm",
                                 "term": {
@@ -2324,7 +2324,7 @@
                                       "application": {
                                         "argument": {"variable": "decapitalized"},
                                         "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "qualName",
                                 "term": {
@@ -2333,7 +2333,7 @@
                                       {"name": "namespace", "term": {"variable": "ns"}},
                                       {"name": "local", "term": {"variable": "nm"}}],
                                     "typeName": "hydra.packaging.QualifiedName"}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {"variable": "hydra.packaging.QualifiedName"},
                                   "variables": []}},
                               {
@@ -2342,7 +2342,7 @@
                                   "application": {
                                     "argument": {"variable": "qualName"},
                                     "function": {"variable": "hydra.names.unqualifyName"}}},
-                                "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "unqualName"},
@@ -2359,7 +2359,7 @@
                     "argument": {"variable": "hydra.haskell.syntax.ModuleName"},
                     "function": {"variable": "hydra.packaging.Namespaces"}}},
                 "parameter": "namespaces"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2389,7 +2389,7 @@
               "application": {
                 "argument": {"variable": "hydra.haskell.language.reservedWords"},
                 "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -2416,7 +2416,7 @@
                     "function": {"variable": "hydra.haskell.utils.rawName"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "arg_"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.haskell.syntax.Name"},
@@ -2460,7 +2460,7 @@
                                                   "type": {"variable": "hydra.haskell.syntax.Pattern"}}}}],
                                           "typeName": "hydra.haskell.syntax.ApplicationPattern"}}},
                                     "typeName": "hydra.haskell.syntax.Pattern"}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {"variable": "hydra.haskell.syntax.Pattern"},
                                   "variables": []}},
                               {
@@ -2469,7 +2469,7 @@
                                   "wrap": {
                                     "body": {"variable": "rhs"},
                                     "typeName": "hydra.haskell.syntax.RightHandSide"}},
-                                "type": {
+                                "typeScheme": {
                                   "body": {"variable": "hydra.haskell.syntax.RightHandSide"},
                                   "variables": []}}],
                             "body": {
@@ -2490,7 +2490,7 @@
                     "parameter": "rhs"}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
                 "parameter": "hname"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2545,7 +2545,7 @@
                                         "typeName": "hydra.haskell.syntax.QualifiedName"}}},
                                   "typeName": "hydra.haskell.syntax.Name"}}},
                             "typeName": "hydra.haskell.syntax.Type"}},
-                        "type": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
                       {
                         "name": "app",
                         "term": {
@@ -2661,7 +2661,7 @@
                                         "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}},
                             "domain": {"list": {"variable": "hydra.haskell.syntax.Type"}},
                             "parameter": "l"}},
-                        "type": {
+                        "typeScheme": {
                           "body": {
                             "function": {
                               "codomain": {"variable": "hydra.haskell.syntax.Type"},
@@ -2679,7 +2679,7 @@
                         "function": {"variable": "app"}}}}},
                 "domain": {"list": {"variable": "hydra.haskell.syntax.Type"}},
                 "parameter": "types"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.haskell.syntax.Type"},
@@ -2707,7 +2707,7 @@
                           "application": {
                             "argument": {"variable": "sname"},
                             "function": {"unwrap": "hydra.core.Name"}}},
-                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "parts",
                         "term": {
@@ -2717,7 +2717,7 @@
                               "application": {
                                 "argument": {"literal": {"string": "."}},
                                 "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
-                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -2736,7 +2736,7 @@
                                 "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "sname"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
@@ -2770,14 +2770,14 @@
                                       "application": {
                                         "argument": {"variable": "fname"},
                                         "function": {"unwrap": "hydra.core.Name"}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "qname",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "sname"},
                                         "function": {"variable": "hydra.names.qualifyName"}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"variable": "hydra.packaging.QualifiedName"},
                                       "variables": []}},
                                   {
@@ -2787,7 +2787,7 @@
                                         "argument": {"variable": "qname"},
                                         "function": {
                                           "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                       "variables": []}},
                                   {
@@ -2796,21 +2796,21 @@
                                       "application": {
                                         "argument": {"variable": "sname"},
                                         "function": {"variable": "hydra.haskell.utils.typeNameForRecord"}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "capitalizedTypeName",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "typeNameStr"},
                                         "function": {"variable": "hydra.formatting.capitalize"}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "capitalizedFieldName",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "fnameStr"},
                                         "function": {"variable": "hydra.formatting.capitalize"}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "deconflict",
                                     "term": {
@@ -2829,7 +2829,7 @@
                                                           {"name": "local", "term": {"variable": "name"}}],
                                                         "typeName": "hydra.packaging.QualifiedName"}},
                                                     "function": {"variable": "hydra.names.unqualifyName"}}},
-                                                "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                                "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {"variable": "name"},
@@ -2863,7 +2863,7 @@
                                                             "type": {"literal": {"string": {}}}}}}}}}}}}},
                                         "domain": {"literal": {"string": {}}},
                                         "parameter": "name"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "function": {
                                           "codomain": {"literal": {"string": {}}},
@@ -2881,7 +2881,7 @@
                                                 "argument": {"variable": "capitalizedTypeName"},
                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                         "function": {"variable": "deconflict"}}},
-                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "qualName",
                                     "term": {
@@ -2890,7 +2890,7 @@
                                           {"name": "namespace", "term": {"variable": "ns"}},
                                           {"name": "local", "term": {"variable": "nm"}}],
                                         "typeName": "hydra.packaging.QualifiedName"}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {"variable": "hydra.packaging.QualifiedName"},
                                       "variables": []}},
                                   {
@@ -2899,7 +2899,7 @@
                                       "application": {
                                         "argument": {"variable": "qualName"},
                                         "function": {"variable": "hydra.names.unqualifyName"}}},
-                                    "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                    "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "unqualName"},
@@ -2918,7 +2918,7 @@
                     "parameter": "namespaces"}},
                 "domain": {"set": {"variable": "hydra.core.Name"}},
                 "parameter": "boundNames"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2972,21 +2972,21 @@
                                             "argument": {"variable": "fat"},
                                             "function": {
                                               "project": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}},
-                                        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
+                                        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                       {
                                         "name": "tbody",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "fat"},
                                             "function": {"project": {"field": "body", "typeName": "hydra.core.ForallType"}}}},
-                                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
+                                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                                       {
                                         "name": "recursiveResult",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "tbody"},
                                             "function": {"variable": "hydra.haskell.utils.unpackForallType"}}},
-                                        "type": {
+                                        "typeScheme": {
                                           "body": {
                                             "pair": {
                                               "first": {"list": {"variable": "hydra.core.Name"}},
@@ -3004,7 +3004,7 @@
                                                     "body": {"variable": "hydra.lib.pairs.first"},
                                                     "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                 "type": {"variable": "hydra.core.Type"}}}}},
-                                        "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                                        "typeScheme": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                                       {
                                         "name": "finalType",
                                         "term": {
@@ -3017,7 +3017,7 @@
                                                     "body": {"variable": "hydra.lib.pairs.second"},
                                                     "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                 "type": {"variable": "hydra.core.Type"}}}}},
-                                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                     "body": {
                                       "typeApplication": {
                                         "body": {
@@ -3053,7 +3053,7 @@
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "t"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

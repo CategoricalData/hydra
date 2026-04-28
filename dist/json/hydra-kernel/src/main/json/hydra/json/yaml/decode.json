@@ -45,7 +45,7 @@
                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                 "type": {"variable": "hydra.yaml.model.Node"}}},
                                                             "type": {"variable": "hydra.yaml.model.Node"}}}}},
-                                                    "type": {"body": {"variable": "hydra.yaml.model.Node"}, "variables": []}}],
+                                                    "typeScheme": {"body": {"variable": "hydra.yaml.model.Node"}, "variables": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -61,7 +61,7 @@
                                                                     "body": {"variable": "hydra.lib.pairs.second"},
                                                                     "type": {"variable": "hydra.yaml.model.Node"}}},
                                                                 "type": {"variable": "hydra.yaml.model.Node"}}}}},
-                                                        "type": {"body": {"variable": "hydra.yaml.model.Node"}, "variables": []}}],
+                                                        "typeScheme": {"body": {"variable": "hydra.yaml.model.Node"}, "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -116,7 +116,7 @@
                                                                             "type": {"literal": {"string": {}}}}},
                                                                         "type": {"literal": {"string": {}}}}},
                                                                     "typeName": "hydra.yaml.model.Node"}}}},
-                                                            "type": {
+                                                            "typeScheme": {
                                                               "body": {
                                                                 "either": {
                                                                   "left": {"literal": {"string": {}}},
@@ -138,7 +138,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "valNode"},
                                                                                 "function": {"variable": "hydra.json.yaml.decode.yamlToJson"}}},
-                                                                            "type": {
+                                                                            "typeScheme": {
                                                                               "body": {
                                                                                 "either": {
                                                                                   "left": {"literal": {"string": {}}},
@@ -212,7 +212,7 @@
                                                 "first": {"variable": "hydra.yaml.model.Node"},
                                                 "second": {"variable": "hydra.yaml.model.Node"}}},
                                             "parameter": "kv"}},
-                                        "type": {
+                                        "typeScheme": {
                                           "body": {
                                             "function": {
                                               "codomain": {
@@ -263,7 +263,7 @@
                                                                 "first": {"literal": {"string": {}}},
                                                                 "second": {"variable": "hydra.json.model.Value"}}}}},
                                                         "type": {"literal": {"string": {}}}}}}}}},
-                                            "type": {
+                                            "typeScheme": {
                                               "body": {
                                                 "either": {
                                                   "left": {"literal": {"string": {}}},
@@ -486,7 +486,7 @@
                                                             "type": {"variable": "hydra.yaml.model.Node"}}},
                                                         "type": {"variable": "hydra.json.model.Value"}}},
                                                     "type": {"literal": {"string": {}}}}}}}}},
-                                        "type": {
+                                        "typeScheme": {
                                           "body": {
                                             "either": {
                                               "left": {"literal": {"string": {}}},
@@ -520,7 +520,7 @@
                         "typeName": "hydra.yaml.model.Node"}}}},
                 "domain": {"variable": "hydra.yaml.model.Node"},
                 "parameter": "node"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -556,7 +556,7 @@
                                       "application": {
                                         "argument": {"variable": "node"},
                                         "function": {"variable": "hydra.json.yaml.decode.yamlToJson"}}},
-                                    "type": {
+                                    "typeScheme": {
                                       "body": {
                                         "either": {
                                           "left": {"literal": {"string": {}}},
@@ -621,7 +621,7 @@
                     "keys": {"variable": "hydra.core.Name"},
                     "values": {"variable": "hydra.core.Type"}}},
                 "parameter": "types"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

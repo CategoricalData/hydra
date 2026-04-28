@@ -91,7 +91,7 @@
                         "domain": {"list": {"variable": "a"}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "encode"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -186,7 +186,7 @@
                     "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -265,7 +265,7 @@
                     "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -408,7 +408,7 @@
                     "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -560,7 +560,7 @@
                     "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -808,7 +808,7 @@
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "counter"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -952,7 +952,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1022,7 +1022,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1096,7 +1096,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1170,7 +1170,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1240,7 +1240,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1310,7 +1310,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1642,7 +1642,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1983,7 +1983,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2328,7 +2328,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -2669,7 +2669,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3006,7 +3006,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -3344,7 +3344,7 @@
                 "argument": {"variable": "hydra.topology.TarjanState"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

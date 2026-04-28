@@ -183,7 +183,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.context.Context"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -274,7 +274,7 @@
                     "domain": {"variable": "t0"}}},
                 "parameter": "e"}},
             "parameter": "t0"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {

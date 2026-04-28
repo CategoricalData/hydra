@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Command",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -143,7 +143,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.CommandPayload",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -254,7 +254,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.CommandType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -271,7 +271,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Component",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -391,7 +391,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Dtmi",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -403,7 +403,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.EnumValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -515,7 +515,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Field",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -624,7 +624,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.IntegerOrString",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -633,7 +633,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Interface",
-        "type": {
+        "typeScheme": {
           "body": {
             "record": [
               {
@@ -778,7 +778,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Interface_Contents",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "command", "type": {"variable": "hydra.azure.dtld.Command"}},
@@ -798,11 +798,11 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Iri",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.MapKey",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -913,7 +913,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.MapValue",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1022,7 +1022,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Property",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1166,7 +1166,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Relationship",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1342,7 +1342,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1363,7 +1363,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Array",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1470,7 +1470,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Complex",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1493,7 +1493,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Enum",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1608,7 +1608,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Interface",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1703,7 +1703,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Interface_Type",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -1718,7 +1718,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Map",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1831,7 +1831,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Object",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1939,7 +1939,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Schema_Primitive",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2046,7 +2046,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Telemetry",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2179,7 +2179,7 @@
     {
       "type": {
         "name": "hydra.azure.dtld.Unit",
-        "type": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
+        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
   "description": "An Azure Digital Twin Definition Language (DTLD) model. Based on:\n  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\nDTLD features which are not currently included in this model:\n  * geospatial schemas (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#geospatial-schemas)\n  * semantic types and units (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#semantic-types)\n  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)",
   "namespace": "hydra.azure.dtld",
   "termDependencies": ["hydra.core"],

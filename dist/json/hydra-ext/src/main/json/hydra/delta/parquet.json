@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.ArrayType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -20,7 +20,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.BasePrimitiveType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -144,7 +144,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.DataType",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {
@@ -198,7 +198,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.DecimalType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -215,7 +215,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.MapType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -235,7 +235,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.StructField",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -255,7 +255,7 @@
     {
       "type": {
         "name": "hydra.delta.parquet.StructType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

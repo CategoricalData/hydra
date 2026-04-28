@@ -208,7 +208,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Packaging.typeDefinitionName $ var "type",
-        "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "type"] $
+        "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
@@ -771,9 +771,9 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
             ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
-            (Packaging.termDefinitionType $ var "termDef"),
+            (Packaging.termDefinitionTypeScheme $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
@@ -882,7 +882,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Packaging.termDefinitionName $ var "def",
     "term">: Packaging.termDefinitionTerm $ var "def",
-    "typ">: Packaging.termDefinitionType $ var "def",
+    "typ">: Packaging.termDefinitionTypeScheme $ var "def",
     "hname">: HaskellUtils.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
       cases H._ValueBinding (var "vb") Nothing [

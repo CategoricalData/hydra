@@ -187,7 +187,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         (Core.binding
           (Core.bindingName $ var "binding")
           (Pairs.second $ var "r")
-          (Core.bindingType $ var "binding"))) $
+          (Core.bindingTypeScheme $ var "binding"))) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
@@ -347,7 +347,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         (Core.binding
           (Core.bindingName $ var "binding")
           (Pairs.second $ var "r")
-          (Core.bindingType $ var "binding"))) $
+          (Core.bindingTypeScheme $ var "binding"))) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
@@ -565,7 +565,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
         (var "recurse" @@ (Core.bindingTerm $ var "b"))
-        (Core.bindingType $ var "b")) $
+        (Core.bindingTypeScheme $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
@@ -637,7 +637,7 @@ rewriteTermM = define "rewriteTermM" $
       right $ pair (var "k") (var "v")) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
-      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
+      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingTypeScheme $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
         "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
@@ -736,7 +736,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
         (var "recurse" @@ (Core.bindingTerm $ var "b"))
-        (Core.bindingType $ var "b")) $
+        (Core.bindingTypeScheme $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
@@ -809,7 +809,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
       right $ pair (var "k") (var "v")) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
-      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
+      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingTypeScheme $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
         "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $

@@ -100,7 +100,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
         record _Binding [
           _Binding_name>>: wrap _Name (string "_test_"),
           _Binding_term>>: var "term",
-          _Binding_type>>: nothing])
+          _Binding_typeScheme>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
       _Module_description>>: project _Module _Module_description @@ var "mod",
@@ -109,7 +109,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-        (Core.bindingType $ var "b")))
+        (Core.bindingTypeScheme $ var "b")))
         (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap

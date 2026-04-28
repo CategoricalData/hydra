@@ -36,7 +36,7 @@ testElementArthur =
     Core.Binding {
       Core.bindingName = (Core.Name "firstName"),
       Core.bindingTerm = testDataArthur,
-      Core.bindingType = (Just (Core.TypeScheme {
+      Core.bindingTypeScheme = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeVariable TestTypes.testTypePersonName),
         Core.typeSchemeConstraints = Nothing}))}
@@ -47,7 +47,7 @@ testElementFirstName =
       Core.bindingTerm = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = TestTypes.testTypePersonName,
         Core.projectionField = (Core.Name "firstName")})),
-      Core.bindingType = (Just (Core.TypeScheme {
+      Core.bindingTypeScheme = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),

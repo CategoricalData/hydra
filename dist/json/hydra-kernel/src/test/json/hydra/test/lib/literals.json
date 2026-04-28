@@ -24686,7 +24686,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for hydra.lib.literals primitives",
   "namespace": "hydra.test.lib.literals",
   "termDependencies": ["hydra.reduction", "hydra.show.core"],

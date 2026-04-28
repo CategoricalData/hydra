@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Identifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -17,7 +17,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.QualifiedName",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -30,7 +30,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Literal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -106,7 +106,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.StringLiteral",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -139,7 +139,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.TemplateLiteral",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -171,7 +171,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.TemplateElement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -202,7 +202,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.NumericLiteral",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -234,7 +234,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.TypeAnnotation",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -247,7 +247,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.TypeExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -361,7 +361,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionTypeExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -401,7 +401,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayTypeExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -413,7 +413,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.UnionTypeExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -425,7 +425,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ParameterizedTypeExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -445,7 +445,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ObjectTypeExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -457,7 +457,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.PropertySignature",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -506,7 +506,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.TypeParameter",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -546,7 +546,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Expression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -731,7 +731,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -743,7 +743,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ObjectExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -755,7 +755,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -813,7 +813,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrowFunctionExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -853,7 +853,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrowFunctionBody",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -873,7 +873,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.CallExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -913,7 +913,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.MemberExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -960,7 +960,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ConditionalExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -984,7 +984,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.BinaryExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1006,7 +1006,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.UnaryExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1035,7 +1035,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.AssignmentExpression",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1057,7 +1057,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.SpreadElement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1069,7 +1069,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Property",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1129,7 +1129,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.PropertyKind",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1163,7 +1163,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayElement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1203,7 +1203,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Pattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1261,7 +1261,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ObjectPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1284,7 +1284,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ObjectPatternProperty",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1303,7 +1303,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ArrayPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1315,7 +1315,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.AssignmentPattern",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1335,7 +1335,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.RestElement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1347,7 +1347,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Statement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1540,7 +1540,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.LabeledStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1559,7 +1559,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.BlockStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1571,7 +1571,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.VariableDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1590,7 +1590,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.VariableDeclarator",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1609,7 +1609,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.VariableKind",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1625,7 +1625,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.IfStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1647,7 +1647,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.SwitchStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1666,7 +1666,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.SwitchCase",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1697,7 +1697,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ForStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1740,7 +1740,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ForInit",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1759,7 +1759,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ForInStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1781,7 +1781,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ForInLeft",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1801,7 +1801,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ForOfStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1832,7 +1832,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.WhileStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1851,7 +1851,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.DoWhileStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1870,7 +1870,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.TryStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1892,7 +1892,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.CatchClause",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1918,7 +1918,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ThrowStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1930,7 +1930,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ReturnStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1942,7 +1942,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.BreakStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1954,7 +1954,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ContinueStatement",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1966,7 +1966,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2024,7 +2024,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ClassDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2060,7 +2060,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ClassBody",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2072,7 +2072,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.MethodDefinition",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2130,7 +2130,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.MethodKind",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2147,7 +2147,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Program",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2178,7 +2178,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.SourceType",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2193,7 +2193,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ModuleItem",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2215,7 +2215,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ImportDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2246,7 +2246,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ImportClause",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2269,7 +2269,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ImportSpecifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2289,7 +2289,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ImportDefaultSpecifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2302,7 +2302,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ImportNamespaceSpecifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2315,7 +2315,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ExportDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2364,7 +2364,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.NamedExport",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2383,7 +2383,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ExportAllDeclaration",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2402,7 +2402,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ExportSpecifier",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2421,7 +2421,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.BinaryOperator",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2585,7 +2585,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.UnaryOperator",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2652,7 +2652,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.AssignmentOperator",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2761,7 +2761,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.Comment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2802,7 +2802,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.DocumentationComment",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2834,7 +2834,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.DocumentationTag",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2884,7 +2884,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ModuleItemWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2916,7 +2916,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.StatementWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2948,7 +2948,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.FunctionDeclarationWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2980,7 +2980,7 @@
     {
       "type": {
         "name": "hydra.javaScript.syntax.ClassDeclarationWithComments",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

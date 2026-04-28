@@ -85,7 +85,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtermEdge"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -199,7 +199,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtermGraph"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -310,7 +310,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtermNode"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -368,7 +368,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtermPath"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1330,7 +1330,7 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.paths.SubtermStep"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1421,7 +1421,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtypeEdge"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1535,7 +1535,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtypeGraph"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1646,7 +1646,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtypeNode"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -1704,7 +1704,7 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.paths.SubtypePath"},
             "parameter": "x"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
@@ -2531,7 +2531,7 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.paths.SubtypeStep"}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},

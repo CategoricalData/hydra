@@ -74,7 +74,7 @@ constructModule namespaces mod defs cx g =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->
                       let name = Packaging.typeDefinitionName v0
-                          typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
+                          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
                       in (toTypeDeclarationsFrom namespaces name typ cx g)
                     Packaging.DefinitionTerm v0 -> Eithers.bind (toDataDeclaration namespaces v0 cx g) (\d -> Right [
                       d])
@@ -510,9 +510,9 @@ gatherMetadata defs =
                 Packaging.DefinitionTerm v0 ->
                   let term = Packaging.termDefinitionTerm v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Packaging.termDefinitionType v0))
+                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Packaging.termDefinitionTypeScheme v0))
                 Packaging.DefinitionType v0 ->
-                  let typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
+                  let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
       in (Lists.foldl addDef emptyMetadata defs)
 -- | Get implicit typeclass constraints for type variables that need Ord
@@ -600,7 +600,7 @@ toDataDeclaration namespaces def cx g =
 
       let name = Packaging.termDefinitionName def
           term = Packaging.termDefinitionTerm def
-          typ = Packaging.termDefinitionType def
+          typ = Packaging.termDefinitionTypeScheme def
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
                   \vb -> case vb of

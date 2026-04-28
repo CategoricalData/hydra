@@ -36107,7 +36107,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for hydra.lib.lists primitives",
   "namespace": "hydra.test.lib.lists",
   "termDependencies": ["hydra.test.testGraph", "hydra.reduction", "hydra.show.core"],

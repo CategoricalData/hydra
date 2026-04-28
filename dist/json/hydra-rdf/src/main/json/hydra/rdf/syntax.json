@@ -3,11 +3,11 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.BlankNode",
-        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.RdfsClass",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -19,13 +19,13 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Dataset",
-        "type": {
+        "typeScheme": {
           "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Quad"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Description",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -42,13 +42,13 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Graph",
-        "type": {
+        "typeScheme": {
           "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Triple"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Iri",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -60,7 +60,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.IriOrLiteral",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -77,7 +77,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.LangStrings",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -95,7 +95,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.LanguageTag",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -107,7 +107,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Literal",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -152,7 +152,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Node",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
@@ -162,7 +162,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Property",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -202,7 +202,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Quad",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -222,7 +222,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Resource",
-        "type": {
+        "typeScheme": {
           "body": {
             "union": [
               {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
@@ -231,7 +231,7 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Triple",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

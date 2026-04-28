@@ -131,7 +131,7 @@
                     "parameter": "ae"}},
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "out"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -199,7 +199,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.pg.graphson.syntax.DoubleValue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -351,7 +351,7 @@
                     "parameter": "m"}},
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "out"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -488,7 +488,7 @@
                     "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                     "values": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                 "parameter": "m"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.json.model.Value"}},
@@ -556,7 +556,7 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.pg.graphson.syntax.FloatValue"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -625,7 +625,7 @@
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.pg.graphson.syntax.Map"},
                 "parameter": "m"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -746,7 +746,7 @@
                       "first": {"literal": {"string": {}}},
                       "second": {"maybe": {"variable": "hydra.json.model.Value"}}}}},
                 "parameter": "pairs"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -803,7 +803,7 @@
                     "parameter": "valueJson"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "typeName"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {
@@ -1268,7 +1268,7 @@
                         "domain": {"variable": "hydra.pg.graphson.syntax.Uuid"},
                         "parameter": "u"}}}],
                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1413,7 +1413,7 @@
                     "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                     "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                 "parameter": "m"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.json.model.Value"}},
@@ -1489,7 +1489,7 @@
                     "function": {"variable": "hydra.pg.graphson.coder.toJsonObject"}}},
                 "domain": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"},
                 "parameter": "vpv"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},
@@ -1626,7 +1626,7 @@
                     "function": {"variable": "hydra.pg.graphson.coder.toJsonObject"}}},
                 "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"},
                 "parameter": "v"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"variable": "hydra.json.model.Value"},

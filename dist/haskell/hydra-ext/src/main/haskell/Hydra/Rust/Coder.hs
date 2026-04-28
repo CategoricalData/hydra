@@ -224,7 +224,7 @@ encodeTermDefinition cx g tdef =
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionType tdef)
+          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
@@ -281,7 +281,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Er
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionType tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
                   Lists.filter (\v -> Equality.equal (Lists.length (Strings.splitOn "." (Core.unName v))) 1) (Sets.toList (Variables.freeVariablesInType typ))

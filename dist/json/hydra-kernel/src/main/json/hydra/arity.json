@@ -18,7 +18,8 @@
                     "argument": {
                       "application": {
                         "argument": {"variable": "arg_"},
-                        "function": {"project": {"field": "type", "typeName": "hydra.graph.Primitive"}}}},
+                        "function": {
+                          "project": {"field": "typeScheme", "typeName": "hydra.graph.Primitive"}}}},
                     "function": {
                       "lambda": {
                         "body": {
@@ -32,7 +33,7 @@
                         "parameter": "arg_"}}}},
                 "domain": {"variable": "hydra.graph.Primitive"},
                 "parameter": "arg_"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
@@ -141,7 +142,7 @@
                         "parameter": "_"}}}],
                 "default": {"literal": {"integer": {"int32": 0}}},
                 "typeName": "hydra.core.Term"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
@@ -229,7 +230,7 @@
                         "parameter": "f"}}}],
                 "default": {"literal": {"integer": {"int32": 0}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
@@ -257,7 +258,7 @@
                     "function": {"variable": "hydra.arity.typeArity"}}},
                 "domain": {"variable": "hydra.core.TypeScheme"},
                 "parameter": "arg_"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
@@ -360,7 +361,7 @@
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "t"}}}},
-        "type": {
+        "typeScheme": {
           "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.core.Type"}},

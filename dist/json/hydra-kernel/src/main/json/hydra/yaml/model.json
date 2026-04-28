@@ -3,7 +3,7 @@
     {
       "type": {
         "name": "hydra.yaml.model.Node",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
@@ -46,7 +46,7 @@
     {
       "type": {
         "name": "hydra.yaml.model.Scalar",
-        "type": {
+        "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [

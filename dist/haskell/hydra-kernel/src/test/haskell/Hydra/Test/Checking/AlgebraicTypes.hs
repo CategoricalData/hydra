@@ -85,7 +85,7 @@ eithersInComplexContextsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "result"),
                   Core.bindingTerm = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "result"))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
@@ -424,7 +424,7 @@ optionalsInComplexContextsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "maybeValue"),
                   Core.bindingTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "maybeValue"))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -484,7 +484,7 @@ pairsInComplexContextsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "result"),
                   Core.bindingTerm = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "answer")))),
-                  Core.bindingType = Nothing}],
+                  Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "result"))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),

@@ -417,7 +417,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
     "rewriteBinding" <~ ("rewrite" ~> "bnd" ~>
       Core.binding (Core.bindingName $ var "bnd")
                    (var "rewrite" @@ Core.bindingTerm (var "bnd"))
-                   (Core.bindingType $ var "bnd")) $
+                   (Core.bindingTypeScheme $ var "bnd")) $
     -- Main rewrite function as Y combinator style
     "rewrite" <~ ("recurse" ~> "term" ~>
       cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
@@ -630,7 +630,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                     (right $ pair
                       (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
                       (var "remainingArgs")))
-                (Core.bindingType $ var "el"))
+                (Core.bindingTypeScheme $ var "el"))
             (Lexical.lookupBinding @@ var "g" @@ var "name"))
           -- Is a primitive: wrap lazy arguments and encode
           (lambda "_prim" $
@@ -688,7 +688,7 @@ encodeBindingAs = def "encodeBindingAs" $
   "cx" ~> "env" ~> "binding" ~>
     "name1" <~ Core.bindingName (var "binding") $
     "term1" <~ Core.bindingTerm (var "binding") $
-    "mts" <~ Core.bindingType (var "binding") $
+    "mts" <~ Core.bindingTypeScheme (var "binding") $
     "fname" <~ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name1") $
     -- Check if binding has a type scheme - if so, use encodeTermAssignment
     Maybes.maybe
@@ -864,7 +864,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
   "cx" ~> "allowThunking" ~> "env" ~> "binding" ~>
     "name" <~ Core.bindingName (var "binding") $
     "term" <~ Core.bindingTerm (var "binding") $
-    "mts" <~ Core.bindingType (var "binding") $
+    "mts" <~ Core.bindingTypeScheme (var "binding") $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
     "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
@@ -980,14 +980,14 @@ encodeDefinition = def "encodeDefinition" $
         "typ" <~ Maybes.maybe
           (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
           ("x" ~> var "x")
-          (project _TermDefinition _TermDefinition_type @@ var "td") $
+          (project _TermDefinition _TermDefinition_typeScheme @@ var "td") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
-        "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
+        "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td") $
         "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
@@ -2109,7 +2109,7 @@ encodeVariable = def "encodeVariable" $
                           (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                           (var "asVariable")) $
                         right $ var "asFunctionRef"))
-                  (Core.bindingType $ var "el"))
+                  (Core.bindingTypeScheme $ var "el"))
               (Lexical.lookupBinding @@ var "g" @@ var "name"))
             -- Is a primitive with no args: check if nullary
             ("prim" ~>
@@ -2118,7 +2118,7 @@ encodeVariable = def "encodeVariable" $
                 -- Nullary primitive: call with ()
                 (right $ var "asFunctionCall")
                 -- Non-nullary primitive: function reference
-                ("ts" <~ (Phantoms.project _Primitive _Primitive_type @@ var "prim") $
+                ("ts" <~ (Phantoms.project _Primitive _Primitive_typeScheme @@ var "prim") $
                   "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
@@ -2165,7 +2165,7 @@ encodeVariable = def "encodeVariable" $
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                               (var "asVariable")) $
                             right $ var "asFunctionRef"))
-                      (Core.bindingType $ var "el"))
+                      (Core.bindingTypeScheme $ var "el"))
                   (Lexical.lookupBinding @@ var "g" @@ var "name"))
                 -- Is in metadata: regular let binding
                 (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
@@ -2291,7 +2291,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
                 Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
                   (var "m")
                   (extendMetaForType @@ true @@ true @@ (Core.typeSchemeBody $ var "ts") @@ var "m"))
-              (Core.bindingType $ var "b")) $
+              (Core.bindingTypeScheme $ var "b")) $
             var "forBinding") (var "meta") (var "bindings"),
         _Term_literal>>: "l" ~>
           cases _Literal (var "l") (Just $ var "meta") [
@@ -2465,13 +2465,13 @@ gatherMetadata = def "gatherMetadata" $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
             (unaryFunction Core.typeSchemeBody)
-            (Packaging.termDefinitionType (var "termDef")) $
+            (Packaging.termDefinitionTypeScheme (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
           extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
           -- Set usesName=True for type definitions
           "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
           -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)
@@ -3960,7 +3960,7 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
       _Term_variable>>: "name" ~>
         optCases (Lexical.lookupBinding @@ var "graph" @@ var "name")
           (Phantoms.int 0)
-          ("el" ~> optCases (Core.bindingType $ var "el")
+          ("el" ~> optCases (Core.bindingTypeScheme $ var "el")
             -- No type scheme: compute arity from the binding's term structure.
             -- Use Arity.termArity to avoid infinite recursion on self-referencing bindings.
             (Arity.termArity @@ (Core.bindingTerm $ var "el"))
@@ -4082,7 +4082,7 @@ withDefinitions = def "withDefinitions" $
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
               (project _TermDefinition _TermDefinition_term @@ var "td")
-              (project _TermDefinition _TermDefinition_type @@ var "td"),
+              (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
           _Definition_type>>: constant nothing])
       (var "defs")) $
     "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $

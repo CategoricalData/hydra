@@ -176,7 +176,7 @@ adaptDataGraph = define "adaptDataGraph" $
     Core.binding
       (Core.bindingName $ var "el")
       (var "transformTerm" @@ var "g" @@ (Core.bindingTerm $ var "el"))
-      (Core.bindingType $ var "el")) $
+      (Core.bindingTypeScheme $ var "el")) $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "prims0" <~ Graph.graphPrimitives (var "graph0") $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
@@ -208,7 +208,7 @@ adaptDataGraph = define "adaptDataGraph" $
   -- while preserving type-class constraints like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
     "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
-    "adaptedType" <<~ optCases (Core.bindingType $ var "el")
+    "adaptedType" <<~ optCases (Core.bindingTypeScheme $ var "el")
       (right nothing)
       ("ts" ~>
         "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
@@ -261,7 +261,7 @@ adaptNestedTypes = define "adaptNestedTypes" $
     (Just $ right $ var "rewritten") [
     _Term_let>>: "lt" ~>
       "adaptB" <~ ("b" ~>
-        "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
+        "adaptedBType" <<~ optCases (Core.bindingTypeScheme $ var "b")
           (right nothing)
           ("ts" ~>
             "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
@@ -373,9 +373,9 @@ adaptPrimitive :: TTermDefinition (LanguageConstraints -> M.Map LiteralType Lite
 adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
-  "ts0" <~ Graph.primitiveType (var "prim0") $
+  "ts0" <~ Graph.primitiveTypeScheme (var "prim0") $
   "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
-  right $ Graph.primitiveWithType (var "prim0") (var "ts1")
+  right $ Graph.primitiveWithTypeScheme (var "prim0") (var "ts1")
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
@@ -510,7 +510,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
         (var "go" @@ (Core.bindingTerm $ var "b"))
-        (Core.bindingType $ var "b")) $
+        (Core.bindingTypeScheme $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "go" @@ (Core.letBody $ var "lt"))) $
@@ -600,7 +600,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     "stripped" <~ Lists.map ("b" ~>
         Core.binding (Core.bindingName $ var "b")
           (Strip.stripTypeLambdas @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b"))
+          (Core.bindingTypeScheme $ var "b"))
         (var "bindings") $
     -- 0b: Unshadow variables
     "term0" <~ Core.termLet (Core.let_ (var "stripped") Core.termUnit) $
@@ -619,7 +619,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Note: this is a rough test of typedness, as it only checks that the top-level bindings are typed.
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
     "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
-      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (var "bindings")) $
+      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat [
@@ -632,7 +632,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Lists.map ("b" ~> Core.binding
       (Core.bindingName $ var "b")
       (pushTypeAppsInward @@ (Core.bindingTerm $ var "b"))
-      (Core.bindingType $ var "b"))
+      (Core.bindingTypeScheme $ var "b"))
     (var "bindings")) $
 
   -- Helper to rebuild a Graph from bindings, reusing graph0's context
@@ -680,7 +680,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
         (Core.bindingName $ var "el")
         (Core.bindingTerm $ var "el")
         (just $ var "ts"))
-      (Core.bindingType $ var "el")) $
+      (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter
     ("el" ~> optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))

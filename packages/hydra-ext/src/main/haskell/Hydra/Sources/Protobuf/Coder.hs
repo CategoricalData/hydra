@@ -168,7 +168,7 @@ constructModule = def "constructModule" $
     "desc">: Packaging.moduleDescription (var "mod"),
     "toDef">: "td" ~> lets [
       "name">: Packaging.typeDefinitionName (var "td"),
-      "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionType (var "td"),
+      "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td"),
       "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t",
       "flatTyp">: asTerm flattenType @@ var "typ",
       "enc">: var "encodeDefEither" @@ var "name"] $
@@ -176,7 +176,7 @@ constructModule = def "constructModule" $
           (Just ("adaptedType" <<~ Adapt.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
             var "enc" @@ var "adaptedType")) [
           _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
-    "types">: Lists.map ("td" ~> Core.typeSchemeBody (Packaging.typeDefinitionType (var "td"))) (var "typeDefs"),
+    "types">: Lists.map ("td" ~> Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme (var "td"))) (var "typeDefs"),
     "structRefs">: asTerm collectStructuralTypes @@ var "types",
     "javaOptions">: list [
       record P3._Option [

@@ -112,7 +112,7 @@ flattenLetTerms = define "flattenLetTerms" $
   "rewriteBinding" <~ ("binding" ~>
     "key0" <~ Core.bindingName (var "binding") $
     "val0" <~ Core.bindingTerm (var "binding") $
-    "t" <~ Core.bindingType (var "binding") $
+    "t" <~ Core.bindingTypeScheme (var "binding") $
     cases _Term (var "val0")
       (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list ([] :: [TTerm Binding]))) [
       _Term_annotated>>: "at" ~>
@@ -137,7 +137,7 @@ flattenLetTerms = define "flattenLetTerms" $
         "newBinding" <~ ("b" ~> Core.binding
           (var "qualify" @@ (Core.bindingName $ var "b"))
           (var "replaceVars" @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b")) $
+          (Core.bindingTypeScheme $ var "b")) $
         pair
           (Core.binding (var "key0") (var "newBody") (var "t"))
           (Lists.map (var "newBinding") (var "bindings1"))]) $
@@ -416,7 +416,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Packaging.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "def"))))) $
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $
