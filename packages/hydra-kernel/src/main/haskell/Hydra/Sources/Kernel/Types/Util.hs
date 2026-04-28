@@ -16,8 +16,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "General-purpose utility types used across Hydra."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "General-purpose utility types used across Hydra."}
   where
     -- Note: either_ and pair are NOT included here because they correspond to built-in
     -- type constructors (TypeEither, TypePair) which are handled natively by all target languages.

@@ -9,7 +9,7 @@
           (hydra lib sets))
   (export collect-type-vars-ordered build-type-scheme
           wrap-other-error
-          tc-bigfloat tc-bigint tc-boolean
+          tc-bigfloat tc-bigint tc-decimal tc-boolean
           tc-float32 tc-float64
           tc-int8 tc-int16 tc-int32 tc-int64
           tc-uint8 tc-uint16 tc-uint32 tc-uint64
@@ -123,6 +123,12 @@
        (list 'literal (list 'boolean '()))
         (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_boolean g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'boolean v)))))))
+
+    (define (tc-decimal)
+      (make-hydra_graph_term_coder
+       (list 'literal (list 'decimal '()))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_decimal g) t))))
+        (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'decimal (inexact v))))))))
 
     (define (tc-float32)
       (make-hydra_graph_term_coder
@@ -362,7 +368,7 @@
                                   ((eq? c 'gt) "greaterThan")
                                   ((and (number? c) (> c 0)) "greaterThan")
                                   (else (error "not a comparison" c)))))
-              (list 'right (list 'union (make-hydra_core_injection "hydra.util.Comparison"
+              (list 'right (list 'inject (make-hydra_core_injection "hydra.util.Comparison"
                                           (make-hydra_core_field variant-name (list 'unit '()))))))))))
 
     ;; Function coders

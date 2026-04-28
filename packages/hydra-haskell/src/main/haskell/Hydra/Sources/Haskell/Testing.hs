@@ -50,11 +50,13 @@ ns :: Namespace
 ns = Namespace "hydra.haskell.testing"
 
 module_ :: Module
-module_ = Module ns definitions
-    [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns]
-    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Haskell test code generation for HSpec-based generation tests"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
+     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns],
+            moduleTypeDependencies = (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
   where
     definitions = [
       toDefinition addNamespacesToNamespaces,
@@ -79,7 +81,7 @@ addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   lambda "ns0" $ lambda "names" $ lets [
     "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
-      wrap H._ModuleName (Formatting.capitalize @@ Lists.last (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))),
+      wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _Namespace @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))))),
     "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
     record _Namespaces [
       _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
@@ -98,17 +100,17 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
         record _Binding [
           _Binding_name>>: wrap _Name (string "_test_"),
           _Binding_term>>: var "term",
-          _Binding_type>>: nothing])
+          _Binding_typeScheme>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
+      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_namespace>>: Packaging.moduleNamespace (var "mod"),
-      _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-        (Core.bindingType $ var "b")))
-        (var "testBindings"),
       _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
       _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
-      _Module_description>>: project _Module _Module_description @@ var "mod"]] $
+      _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+        (Core.bindingTypeScheme $ var "b")))
+        (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap
         (lambda "e" $ ShowError.error_ @@ var "e")
@@ -205,7 +207,7 @@ findHaskellImports = define "findHaskellImports" $
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
-          (Lists.head (Strings.splitOn (string "hydra.test.") (unwrap _Namespace @@ var "ns_")))
+          (Maybes.fromMaybe (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _Namespace @@ var "ns_"))))
           (string "")))
       (var "mapping_")] $
     Lists.map

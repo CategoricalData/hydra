@@ -76,6 +76,7 @@ import           Prelude hiding ((++), decodeFloat)
 import qualified Data.Int                                  as I
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
+import qualified Data.Scientific                           as Sci
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
@@ -90,10 +91,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_]
-    KernelTypes.kernelTypesNamespaces $
-    Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."}
   where
     definitions = [
       toDefinition fromJson,
@@ -101,6 +104,7 @@ module_ = Module ns definitions
       toDefinition decodeFloat,
       toDefinition decodeInteger,
       toDefinition parseSpecialFloat,
+      toDefinition parseSpecialFloat32,
       toDefinition expectString,
       toDefinition expectArray,
       toDefinition expectObject,
@@ -153,8 +157,12 @@ fromJson = define "fromJson" $
       Logic.ifElse (var "isNestedMaybe")
         -- Nested Maybe: use array-wrapped encoding (null -> Nothing, [v] -> Just v)
         ("decodeJust" <~ ("arr" ~>
-          Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
-            (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
+          Maybes.maybe
+            (left $ string "expected single-element array for Just")
+            ("firstVal" ~>
+              Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+                (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "firstVal"))
+            (Lists.maybeHead $ var "arr")) $
         "decodeMaybeArray" <~ ("arr" ~>
           "len" <~ (Lists.length $ var "arr") $
           Logic.ifElse (Equality.equal (var "len") (int32 0))
@@ -201,29 +209,28 @@ fromJson = define "fromJson" $
         "jsonVal" <~ (Maybes.fromMaybe Json.valueNull (var "val")) $
         "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
         Eithers.map
-          ("v" ~> Core.termUnion $ Core.injection
+          ("v" ~> Core.termInject $ Core.injection
             (var "tname")
             (Core.field (Core.name $ var "key") (var "v")))
           (var "decoded")) $
-      -- Helper to check if a field matches and decode it
-      "tryField" <~ ("key" ~> "val" ~> "ft" ~>
-        Logic.ifElse (Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
-          (just $ var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))
-          nothing) $
-      -- Find matching field and decode (uses tryField which returns Maybe, then either unwraps or recurses)
+      -- Find matching field and decode (finds the field whose name matches `key`,
+      -- then decodes its value; returns an error if no matching variant is present).
       "findAndDecode" <~ ("key" ~> "val" ~> "fts" ~>
-        Logic.ifElse (Lists.null $ var "fts")
+        Maybes.maybe
           (left $ Strings.cat $ list [string "unknown variant: ", var "key"])
-          (Maybes.maybe
-            (var "findAndDecode" @@ var "key" @@ var "val" @@ (Lists.tail $ var "fts"))
-            ("r" ~> var "r")
-            (var "tryField" @@ var "key" @@ var "val" @@ (Lists.head $ var "fts")))) $
+          ("ft" ~> var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))
+          (Lists.find
+            ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
+            (var "fts"))) $
       -- Helper to decode a single-key object
       "decodeSingleKey" <~ ("obj" ~>
-        var "findAndDecode"
-          @@ (Lists.head $ Maps.keys $ var "obj")
-          @@ (Maps.lookup (Lists.head $ Maps.keys $ var "obj") (var "obj"))
-          @@ var "rt") $
+        Maybes.maybe
+          (left $ string "expected single-key object for union")
+          ("k" ~> var "findAndDecode"
+            @@ var "k"
+            @@ (Maps.lookup (var "k") (var "obj"))
+            @@ var "rt")
+          (Lists.maybeHead $ Maps.keys $ var "obj")) $
       -- Process the union object
       "processUnion" <~ ("obj" ~>
         Logic.ifElse (Equality.equal (Lists.length $ Maps.keys $ var "obj") (int32 1))
@@ -248,7 +255,7 @@ fromJson = define "fromJson" $
         ("v" ~> Core.termWrap $ Core.wrappedTerm (var "tname") (var "v"))
         (var "decoded"),
 
-    -- Map -> array of {@key, @value}
+    -- Map -> array of {key, value}
     _Type_map>>: "mt" ~>
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
@@ -261,12 +268,12 @@ fromJson = define "fromJson" $
             Eithers.either_
               ("err" ~> left $ var "err")
               ("entryObj" ~>
-                "keyJson" <~ (Maps.lookup (string "@key") (var "entryObj")) $
-                "valJson" <~ (Maps.lookup (string "@value") (var "entryObj")) $
+                "keyJson" <~ (Maps.lookup (string "key") (var "entryObj")) $
+                "valJson" <~ (Maps.lookup (string "value") (var "entryObj")) $
                 Maybes.maybe
-                  (left $ string "missing @key in map entry")
+                  (left $ string "missing key in map entry")
                   ("kj" ~> Maybes.maybe
-                    (left $ string "missing @value in map entry")
+                    (left $ string "missing value in map entry")
                     ("vj" ~>
                       "decodedKey" <~ (fromJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "kj") $
                       "decodedVal" <~ (fromJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "vj") $
@@ -281,7 +288,7 @@ fromJson = define "fromJson" $
           Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries"))
         (var "arrResult"),
 
-    -- Pair -> {@first, @second}
+    -- Pair -> {first, second}
     _Type_pair>>: "pt" ~>
       "firstType" <~ (Core.pairTypeFirst $ var "pt") $
       "secondType" <~ (Core.pairTypeSecond $ var "pt") $
@@ -289,12 +296,12 @@ fromJson = define "fromJson" $
       Eithers.either_
         ("err" ~> left $ var "err")
         ("obj" ~>
-          "firstJson" <~ (Maps.lookup (string "@first") (var "obj")) $
-          "secondJson" <~ (Maps.lookup (string "@second") (var "obj")) $
+          "firstJson" <~ (Maps.lookup (string "first") (var "obj")) $
+          "secondJson" <~ (Maps.lookup (string "second") (var "obj")) $
           Maybes.maybe
-            (left $ string "missing @first in pair")
+            (left $ string "missing first in pair")
             ("fj" ~> Maybes.maybe
-              (left $ string "missing @second in pair")
+              (left $ string "missing second in pair")
               ("sj" ~>
                 "decodedFirst" <~ (fromJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "fj") $
                 "decodedSecond" <~ (fromJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "sj") $
@@ -306,7 +313,7 @@ fromJson = define "fromJson" $
             (var "firstJson"))
         (var "objResult"),
 
-    -- Either -> {@left} or {@right}
+    -- Either -> {left} or {right}
     _Type_either>>: "et" ~>
       "leftType" <~ (Core.eitherTypeLeft $ var "et") $
       "rightType" <~ (Core.eitherTypeRight $ var "et") $
@@ -314,11 +321,11 @@ fromJson = define "fromJson" $
       Eithers.either_
         ("err" ~> left $ var "err")
         ("obj" ~>
-          "leftJson" <~ (Maps.lookup (string "@left") (var "obj")) $
-          "rightJson" <~ (Maps.lookup (string "@right") (var "obj")) $
+          "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
+          "rightJson" <~ (Maps.lookup (string "right") (var "obj")) $
           Maybes.maybe
             (Maybes.maybe
-              (left $ string "expected @left or @right in Either")
+              (left $ string "expected left or right in Either")
               ("rj" ~>
                 "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "rj") $
                 Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))
@@ -354,6 +361,11 @@ decodeLiteral = define "decodeLiteral" $
         (Just $ left $ string "expected boolean") [
         _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
 
+    _LiteralType_decimal>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number for decimal") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalDecimal $ var "n"],
+
     _LiteralType_float>>: "ft" ~> decodeFloat @@ var "ft" @@ var "value",
 
     _LiteralType_integer>>: "it" ~> decodeInteger @@ var "it" @@ var "value",
@@ -363,50 +375,54 @@ decodeLiteral = define "decodeLiteral" $
       Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
 
 -- | Decode a JSON value to a float term
--- Float64 and Bigfloat are decoded from JSON numbers or special sentinel strings; Float32 from string
--- Special values (NaN, Infinity, -Infinity) are accepted as JSON strings for all float types
+-- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
+-- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
 decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
-  doc "Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels." $
+  doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
   "ft" ~> "value" ~>
   cases _FloatType (var "ft") Nothing [
-    -- Bigfloat: JSON number (Double) -> bigfloat. NaN/Inf sentinels not supported since
-    -- some host languages (Java BigDecimal, Python Decimal) cannot represent them.
+    -- Bigfloat: JSON number (Scientific) -> decimal -> float64 -> bigfloat. NaN/Inf are not
+    -- representable in JSON's grammar, so they can only arrive via the string sentinel path below.
     _FloatType_bigfloat>>: constant $
       cases _Value (var "value")
-        (Just $ left $ string "expected number for bigfloat") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "n"],
-    -- Float32: JSON string -> parse as float32 (preserves exact precision; readFloat32
-    -- also handles NaN/Infinity/-Infinity sentinels natively).
-    _FloatType_float32>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readFloat32 $ var "s") $
+        (Just $ left $ string "expected number or special float string for bigfloat") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
+          Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "n",
+        _Value_string>>: "s" ~>
           Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid float32: ", var "s"])
+            (left $ Strings.cat $ list [string "invalid bigfloat sentinel: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
+              Literals.float64ToBigfloat $ var "v")
+            (parseSpecialFloat @@ var "s")],
+    -- Float32: JSON number (Scientific) -> float32, or special sentinel string
+    _FloatType_float32>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or special float string for float32") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ Literals.decimalToFloat32 $ var "n",
+        _Value_string>>: "s" ~>
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid float32 sentinel: ", var "s"])
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    -- Float64: JSON number (Double) -> float64, or special sentinel string
+            (parseSpecialFloat32 @@ var "s")],
+    -- Float64: JSON number (Scientific) -> float64, or special sentinel string
     _FloatType_float64>>: constant $
       cases _Value (var "value")
         (Just $ left $ string "expected number or special float string for float64") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "n",
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "n",
         _Value_string>>: "s" ~>
           Maybes.maybe
             (left $ Strings.cat $ list [string "invalid float64 sentinel: ", var "s"])
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")
             (parseSpecialFloat @@ var "s")]]
 
--- | Parse a string as a special float sentinel ("NaN", "Infinity", "-Infinity", "-0.0") to a float64.
--- Returns Nothing if the string is not a recognized sentinel.
--- Negative zero is treated as a special value because JSON arbitrary-precision decimal
--- representations (Scientific, BigDecimal, Decimal) cannot distinguish it from +0.0.
+-- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
+-- "NaN", "Infinity", "-Infinity", or "-0.0". Returns Nothing for unrecognized strings.
+-- The -0.0 case is here so that IEEE negative zero survives a round trip through JSON via
+-- the encoder's string-escape path; Scientific-backed number decoding would normalize it to 0.
 parseSpecialFloat :: TTermDefinition (String -> Maybe Double)
 parseSpecialFloat = define "parseSpecialFloat" $
-  doc "Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings." $
+  doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings." $
   "s" ~>
     Logic.ifElse
       (Logic.or (Equality.equal (var "s") (string "NaN")) $
@@ -414,6 +430,20 @@ parseSpecialFloat = define "parseSpecialFloat" $
        Logic.or (Equality.equal (var "s") (string "-Infinity"))
                 (Equality.equal (var "s") (string "-0.0")))
       (Literals.readFloat64 $ var "s")
+      Phantoms.nothing
+
+-- | Parse a string as an IEEE sentinel float32. Same accepted strings as 'parseSpecialFloat',
+-- but returns a float32 value.
+parseSpecialFloat32 :: TTermDefinition (String -> Maybe Float)
+parseSpecialFloat32 = define "parseSpecialFloat32" $
+  doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings." $
+  "s" ~>
+    Logic.ifElse
+      (Logic.or (Equality.equal (var "s") (string "NaN")) $
+       Logic.or (Equality.equal (var "s") (string "Infinity")) $
+       Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                (Equality.equal (var "s") (string "-0.0")))
+      (Literals.readFloat32 $ var "s")
       Phantoms.nothing
 
 -- | Decode a JSON value to an integer term
@@ -474,31 +504,31 @@ decodeInteger = define "decodeInteger" $
       "numResult" <~ (expectNumber @@ var "value") $
       Eithers.map
         ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt8 $
-          Literals.bigintToInt8 $ Literals.bigfloatToBigint $ var "n")
+          Literals.bigintToInt8 $ Literals.decimalToBigint $ var "n")
         (var "numResult"),
     _IntegerType_int16>>: constant $
       "numResult" <~ (expectNumber @@ var "value") $
       Eithers.map
         ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt16 $
-          Literals.bigintToInt16 $ Literals.bigfloatToBigint $ var "n")
+          Literals.bigintToInt16 $ Literals.decimalToBigint $ var "n")
         (var "numResult"),
     _IntegerType_int32>>: constant $
       "numResult" <~ (expectNumber @@ var "value") $
       Eithers.map
         ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $
-          Literals.bigintToInt32 $ Literals.bigfloatToBigint $ var "n")
+          Literals.bigintToInt32 $ Literals.decimalToBigint $ var "n")
         (var "numResult"),
     _IntegerType_uint8>>: constant $
       "numResult" <~ (expectNumber @@ var "value") $
       Eithers.map
         ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint8 $
-          Literals.bigintToUint8 $ Literals.bigfloatToBigint $ var "n")
+          Literals.bigintToUint8 $ Literals.decimalToBigint $ var "n")
         (var "numResult"),
     _IntegerType_uint16>>: constant $
       "numResult" <~ (expectNumber @@ var "value") $
       Eithers.map
         ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint16 $
-          Literals.bigintToUint16 $ Literals.bigfloatToBigint $ var "n")
+          Literals.bigintToUint16 $ Literals.decimalToBigint $ var "n")
         (var "numResult")]
 
 -- | Extract a string from a JSON value
@@ -526,7 +556,7 @@ expectObject = define "expectObject" $
     _Value_object>>: "obj" ~> right $ var "obj"]
 
 -- | Extract a number from a JSON value
-expectNumber :: TTermDefinition (Value -> Either String Double)
+expectNumber :: TTermDefinition (Value -> Either String Sci.Scientific)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value" $
   "value" ~> cases _Value (var "value")

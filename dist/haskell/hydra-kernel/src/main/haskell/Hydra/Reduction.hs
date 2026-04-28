@@ -1,16 +1,14 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for reducing terms and types, i.e. performing computations.
 
 module Hydra.Reduction where
-
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -27,15 +25,14 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
-import qualified Hydra.Show.Errors as Errors_
+import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 -- | Alpha convert a variable in a term
 alphaConvert :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 alphaConvert vold vnew term = Variables.replaceFreeTermVariable vold (Core.TermVariable vnew) term
-
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
 betaReduceType :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error Core.Type
 betaReduceType cx graph typ =
@@ -62,7 +59,6 @@ betaReduceType cx graph typ =
                               _ -> Right r
                     in (Eithers.bind (recurse t) (\r -> findApp r))
       in (Rewriting.rewriteTypeM mapExpr typ)
-
 -- | Apply the special rules:
 -- |     ((\x.e1) e2) == e1, where x does not appear free in e1
 -- |   and
@@ -86,16 +82,14 @@ contractTerm term =
                       _ -> rec
                   _ -> rec
       in (Rewriting.rewriteTerm rewrite term)
-
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
-
 -- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
 etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTerm tx0 term0 =
 
       let primTypes =
-              Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
+              Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveTypeScheme _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
           termArityWithContext =
                   \tx -> \term -> case term of
                     Core.TermAnnotated v0 -> termArityWithContext tx (Core.annotatedTermBody v0)
@@ -145,7 +139,7 @@ etaExpandTerm tx0 term0 =
                           fullyApplied =
                                   Maybes.maybe fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = fullyAppliedRaw,
-                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (Core_.type_ ct))})) codomainType
+                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct))})) codomainType
                           indexedDomains = Lists.zip indices domains
                       in (Lists.foldl (\body -> \idPair ->
                         let i = Pairs.first idPair
@@ -231,7 +225,7 @@ etaExpandTerm tx0 term0 =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
                                       Core.bindingTerm = (rewriteWithArgs [] tx1 (Core.bindingTerm b)),
-                                      Core.bindingType = (Core.bindingType b)}
+                                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                             result =
                                     Core.TermLet (Core.Let {
                                       Core.letBindings = (Lists.map mapBinding (Core.letBindings v0)),
@@ -256,7 +250,7 @@ etaExpandTerm tx0 term0 =
                                       Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                                       Core.typeLambdaBody = (rewriteWithArgs [] tx1 (Core.typeLambdaBody v0))})
                         in (afterRecursion result)
-                      Core.TermUnion v0 -> afterRecursion (Core.TermUnion (Core.Injection {
+                      Core.TermInject v0 -> afterRecursion (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = (Core.injectionTypeName v0),
                         Core.injectionField = (forField (Core.injectionField v0))}))
                       Core.TermUnit -> Core.TermUnit
@@ -268,7 +262,6 @@ etaExpandTerm tx0 term0 =
                         Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
                         Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v0))}))
       in (contractTerm (rewriteWithArgs [] tx0 term0))
-
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
 etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 etaExpandTypedTerm cx tx0 term0 =
@@ -316,12 +309,15 @@ etaExpandTypedTerm cx tx0 term0 =
                                 _ -> dflt
                     extraVariables = \n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n)
                     pad =
-                            \vars -> \body -> Logic.ifElse (Lists.null vars) body (Core.TermLambda (Core.Lambda {
-                              Core.lambdaParameter = (Lists.head vars),
-                              Core.lambdaDomain = Nothing,
-                              Core.lambdaBody = (pad (Lists.tail vars) (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = body,
-                                Core.applicationArgument = (Core.TermVariable (Lists.head vars))})))}))
+                            \vars -> \body -> Maybes.maybe body (\uc ->
+                              let v0 = Pairs.first uc
+                                  vrest = Pairs.second uc
+                              in (Core.TermLambda (Core.Lambda {
+                                Core.lambdaParameter = v0,
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (pad vrest (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = body,
+                                  Core.applicationArgument = (Core.TermVariable v0)})))}))) (Lists.uncons vars)
                     padn = \n -> \body -> pad (extraVariables n) body
                     unwind =
                             \term2 -> Lists.foldl (\e -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -376,7 +372,6 @@ etaExpandTypedTerm cx tx0 term0 =
                     in (recurse txt term)
                   _ -> recurseOrForce term
       in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
-
 -- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpansionArity :: Graph.Graph -> Core.Term -> Int
 etaExpansionArity graph term =
@@ -389,9 +384,8 @@ etaExpansionArity graph term =
       Core.TermUnwrap _ -> 1
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
+      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingTypeScheme b))
       _ -> 0
-
 -- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: Core.Term -> Core.Term
 etaReduceTerm term =
@@ -426,7 +420,6 @@ etaReduceTerm term =
           Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
         Core.TermLambda v0 -> reduceLambda v0
         _ -> noChange
-
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
 reduceTerm cx graph eager term =
@@ -442,47 +435,48 @@ reduceTerm cx graph eager term =
                     in (Logic.and eager2 isNonLambdaTerm)
           reduceArg = \eager2 -> \arg -> Logic.ifElse eager2 (Right arg) (reduce False arg)
           applyToArguments =
-                  \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
+                  \fun -> \args -> Maybes.maybe fun (\uc -> applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
-                    Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
-          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (Errors_.error e))
+                    Core.applicationArgument = (Pairs.first uc)})) (Pairs.second uc)) (Lists.uncons args)
+          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (ShowErrors.error e))
           applyProjection =
-                  \proj -> \reducedArg -> Eithers.bind (Core__.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
-                    let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField proj)) fields
-                    in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.projectionField proj)})))) (Right (Core.fieldTerm (Lists.head matchingFields)))))
+                  \proj -> \reducedArg -> Eithers.bind (ExtractCore.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
+                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.projectionField proj)) fields
+                    in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = (Core.projectionField proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
           applyCases =
-                  \cs -> \reducedArg -> Eithers.bind (Core__.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
-                    let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)
-                    in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (Right (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
-                      Core.applicationArgument = (Core.fieldTerm field)})))))
+                  \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
+                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)
+                    in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (\mf -> Right (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.fieldTerm mf),
+                      Core.applicationArgument = (Core.fieldTerm field)}))) matching))
           applyIfNullary =
                   \eager2 -> \original -> \args ->
                     let stripped = Strip.deannotateTerm original
                         forProjection =
-                                \proj -> \args2 ->
-                                  let arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyProjection proj reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                \proj -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                  let arg = Pairs.first uc
+                                      remainingArgs = Pairs.second uc
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyProjection proj reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
                         forCases =
-                                \cs -> \args2 ->
-                                  let arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyCases cs reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                \cs -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                  let arg = Pairs.first uc
+                                      remainingArgs = Pairs.second uc
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyCases cs reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
                         forUnwrap =
-                                \name -> \args2 ->
-                                  let arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (Core__.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                \name -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                  let arg = Pairs.first uc
+                                      remainingArgs = Pairs.second uc
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (ExtractCore.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
                         forLambda =
                                 \l -> \args2 ->
                                   let param = Core.lambdaParameter l
                                       body = Core.lambdaBody l
-                                      arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduce eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Variables.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                  in (Maybes.maybe (Right original) (\uc ->
+                                    let arg = Pairs.first uc
+                                        remainingArgs = Pairs.second uc
+                                    in (Eithers.bind (reduce eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Variables.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2))
                         forPrimitive =
                                 \prim -> \arity -> \args2 ->
                                   let argList = Lists.take arity args2
@@ -515,7 +509,7 @@ reduceTerm cx graph eager term =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
                                       Core.bindingTerm = (Variables.replaceFreeTermVariable (Core.bindingName b) (letExpr b) (Core.bindingTerm b)),
-                                      Core.bindingType = (Core.bindingType b)}
+                                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                             expandedBindings = Lists.map expandBinding bindings
                             substituteBinding = \term2 -> \b -> Variables.replaceFreeTermVariable (Core.bindingName b) (Core.bindingTerm b) term2
                             substituteAll = \bs -> \term2 -> Lists.foldl substituteBinding term2 bs
@@ -525,11 +519,9 @@ reduceTerm cx graph eager term =
           mapping =
                   \recurse -> \mid -> Eithers.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Right mid)) (\inner -> applyIfNullary eager inner [])
       in (Rewriting.rewriteTermM mapping term)
-
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Core.Term -> Bool
 termIsClosed term = Sets.null (Variables.freeVariablesInTerm term)
-
 -- | Whether a term has been fully reduced to a value
 termIsValue :: Core.Term -> Bool
 termIsValue term =
@@ -550,7 +542,7 @@ termIsValue term =
         Core.TermMaybe v0 -> Maybes.maybe True termIsValue v0
         Core.TermRecord v0 -> checkFields (Core.recordFields v0)
         Core.TermSet v0 -> forList (Sets.toList v0)
-        Core.TermUnion v0 -> checkField (Core.injectionField v0)
+        Core.TermInject v0 -> checkField (Core.injectionField v0)
         Core.TermUnit -> True
         Core.TermVariable _ -> False
         _ -> False

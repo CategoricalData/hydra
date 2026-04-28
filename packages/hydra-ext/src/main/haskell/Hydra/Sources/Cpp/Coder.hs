@@ -62,14 +62,16 @@ ns :: Namespace
 ns = Namespace "hydra.cpp.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [moduleNamespace CppLanguageSource.module_,
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_]
-    (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "C++ code generator: converts Hydra modules to C++ header files"
+      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_],
+            moduleTypeDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "C++ code generator: converts Hydra modules to C++ header files"}
   where
     definitions = [
       -- Cpp AST helper functions
@@ -1135,7 +1137,7 @@ findTypeDependencies = def "findTypeDependencies" $
           (just (Packaging.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
-          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "d"))))
+          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "d"))))
         (Sets.empty)
         (var "defs")))
 
@@ -1190,7 +1192,7 @@ generateTypeFile :: TTermDefinition (Namespace -> TypeDefinition -> Context -> G
 generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Packaging.typeDefinitionName (var "def_") $
-    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "def_")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def_")) $
     "decls" <<~ (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ var "typ") $
     "includes" <~ (findIncludes @@ boolean True @@ var "ns" @@ list [var "def_"]) $
       right (serializeHeaderFile @@ var "name" @@ var "includes"

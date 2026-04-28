@@ -1,17 +1,24 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source module for hydra.decode.classes
 
 module Hydra.Sources.Decode.Classes where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term decoders for hydra.classes"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.classes"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.classes",
+        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.classes.typeClass"),
@@ -40,7 +47,7 @@ module_ =
                           Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                         Core.caseStatementCases = [
                           Core.Field {
-                            Core.fieldName = (Core.Name "union"),
+                            Core.fieldName = (Core.Name "inject"),
                             Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "inj"),
                               Core.lambdaDomain = Nothing,
@@ -53,7 +60,7 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
                                         Core.projectionField = (Core.Name "field")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                    Core.bindingType = Nothing},
+                                    Core.bindingTypeScheme = Nothing},
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "fname"),
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -61,7 +68,7 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.core.Field"),
                                         Core.projectionField = (Core.Name "name")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
-                                    Core.bindingType = Nothing},
+                                    Core.bindingTypeScheme = Nothing},
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "fterm"),
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -69,7 +76,7 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.core.Field"),
                                         Core.projectionField = (Core.Name "term")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
-                                    Core.bindingType = Nothing},
+                                    Core.bindingTypeScheme = Nothing},
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "variantMap"),
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -86,7 +93,7 @@ module_ =
                                               Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                                                 Core.lambdaParameter = (Core.Name "t"),
                                                 Core.lambdaDomain = Nothing,
-                                                Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                                Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                   Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
                                                   Core.injectionField = Core.Field {
                                                     Core.fieldName = (Core.Name "equality"),
@@ -117,7 +124,7 @@ module_ =
                                               Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                                                 Core.lambdaParameter = (Core.Name "t"),
                                                 Core.lambdaDomain = Nothing,
-                                                Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                                Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                   Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
                                                   Core.injectionField = Core.Field {
                                                     Core.fieldName = (Core.Name "ordering"),
@@ -137,7 +144,7 @@ module_ =
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))}))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))])})),
-                                    Core.bindingType = Nothing}],
+                                    Core.bindingTypeScheme = Nothing}],
                                 Core.letBody = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -169,22 +176,13 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.classes.TypeClass"))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))})],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.classes",
-        (Packaging.Namespace "hydra.util")],
-      Packaging.moduleDescription = (Just "Term decoders for hydra.classes")}
+            Core.typeSchemeConstraints = Nothing}))})]}

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a term variant as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a term variant as a string"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -125,10 +125,10 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}},
                   {
-                    "name": "union",
+                    "name": "inject",
                     "term": {
                       "lambda": {
-                        "body": {"literal": {"string": "union"}},
+                        "body": {"literal": {"string": "inject"}},
                         "domain": {"unit": {}},
                         "parameter": "_"}}},
                   {
@@ -160,8 +160,8 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.variants.TermVariant"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.variants.TermVariant"}}},
@@ -173,8 +173,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a type variant as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a type variant as a string"}}}],
             "body": {
               "cases": {
                 "cases": [
@@ -298,8 +298,8 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}}],
                 "typeName": "hydra.variants.TypeVariant"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.variants.TypeVariant"}}},

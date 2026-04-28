@@ -86,6 +86,23 @@ case "$TARGETS" in
     all) TARGETS="haskell,java,scala,python,clojure,scheme,common-lisp,emacs-lisp" ;;
 esac
 
+# Expand "lisp" alias to the four lisp dialects (matches bin/sync.sh).
+expand_lisp() {
+    local in="$1"
+    local out=""
+    IFS=',' read -ra parts <<< "$in"
+    for p in "${parts[@]}"; do
+        if [ "$p" = "lisp" ]; then
+            out="$out,clojure,common-lisp,emacs-lisp,scheme"
+        else
+            out="$out,$p"
+        fi
+    done
+    echo "${out#,}"
+}
+HOSTS=$(expand_lisp "$HOSTS")
+TARGETS=$(expand_lisp "$TARGETS")
+
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 
@@ -145,13 +162,13 @@ if $NEED_STACK; then
     fi
 fi
 
-# --- Java 17+ (for Java host or target) ---
+# --- Java 11+ (for Java host or target) ---
 if $NEED_JAVA; then
-    # Try to locate a Java 17+ JDK and set JAVA_HOME.
-    if [ -n "${JAVA_HOME:-}" ] && "$JAVA_HOME/bin/java" -version 2>&1 | grep -qE '"(17|18|19|2[0-9])\.' ; then
+    # Try to locate a Java 11+ JDK and set JAVA_HOME.
+    if [ -n "${JAVA_HOME:-}" ] && "$JAVA_HOME/bin/java" -version 2>&1 | grep -qE '"(1[1-9]|2[0-9])\.' ; then
         export JAVA_HOME
     elif command -v /usr/libexec/java_home > /dev/null 2>&1; then
-        JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || true)
+        JAVA_HOME=$(/usr/libexec/java_home -v 11 2>/dev/null || true)
         if [ -n "${JAVA_HOME:-}" ]; then
             export JAVA_HOME
         fi
@@ -168,10 +185,16 @@ if $NEED_JAVA; then
         fi
     fi
 
-    # Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
+    # Block Rosetta-2 x86_64 JDKs on Apple Silicon (causes ~20x slowdown and bogus
+    # benchmark timings). Set HYDRA_ALLOW_ROSETTA_JDK=1 to proceed anyway.
     if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
         if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
-            ENV_WARNINGS+=("x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2 and will be ~20x slower than a native arm64 JDK. Current: $("$JAVA_CMD" -version 2>&1 | head -1)")
+            ROSETTA_MSG="x86_64 JDK detected on Apple Silicon (runs under Rosetta 2, ~20x slower than a native arm64 JDK). Current: $("$JAVA_CMD" -version 2>&1 | head -1)"
+            if [ "${HYDRA_ALLOW_ROSETTA_JDK:-}" = "1" ]; then
+                ENV_WARNINGS+=("$ROSETTA_MSG")
+            else
+                ENV_ERRORS+=("$ROSETTA_MSG. Point JAVA_HOME at a native arm64 JDK, or set HYDRA_ALLOW_ROSETTA_JDK=1 to proceed anyway.")
+            fi
         fi
     fi
 fi
@@ -197,7 +220,7 @@ if $NEED_PYTHON; then
     done
 
     if [ -z "$PYTHON_CMD" ]; then
-        ENV_ERRORS+=("Python 3.12 or later is required but not found. Create a venv: cd hydra-python && python3.12 -m venv .venv")
+        ENV_ERRORS+=("Python 3.12 or later is required but not found. Create a venv: cd heads/python && python3.12 -m venv .venv")
     fi
 
     # Check for pytest (needed for Python target testing).
@@ -453,17 +476,23 @@ compare_output() {
 parse_bootstrap_log() {
     local logfile=$1
 
+    # The bootstrap log can contain multiple "Done: N main + M test files"
+    # lines: setup-{java,python}-target.sh now invokes the per-package
+    # assembler for missing coder packages, and each invocation prints its
+    # own "Done:" line. The host's actual bootstrap output is the LAST one.
+    # Take only that to avoid concatenating fileCounts across runs.
     local done_line
-    done_line=$(grep "Done:" "$logfile" 2>/dev/null || true)
+    done_line=$(grep "Done:" "$logfile" 2>/dev/null | tail -1 || true)
     local main_files test_files
     main_files=$(echo "$done_line" | sed -n 's/.*Done: *\([0-9]*\) main.*/\1/p')
     test_files=$(echo "$done_line" | sed -n 's/.*+ *\([0-9]*\) test.*/\1/p')
     main_files="${main_files:-0}"
     test_files="${test_files:-0}"
 
-    # Main gen time: "Generated N files." followed by "Time: Xs" on next line
+    # Main gen time: "Generated N files." followed by "Time: Xs" on next line.
+    # tail -1 mirrors the done_line fix: take the last (host's own) timing.
     local main_time_raw
-    main_time_raw=$(grep -A1 "Generated.*files" "$logfile" | grep -v "test" | grep -v "generation" | grep "Time:" | head -1 | sed 's/.*Time: *//')
+    main_time_raw=$(grep -A1 "Generated.*files" "$logfile" | grep -v "test" | grep -v "generation" | grep "Time:" | tail -1 | sed 's/.*Time: *//')
     local main_time_secs=""
     if [ -n "$main_time_raw" ]; then
         main_time_secs=$(parse_time_to_secs "$main_time_raw")
@@ -471,7 +500,7 @@ parse_bootstrap_log() {
 
     # Test gen time: "Generated N test files." followed by "Time: Xs" on next line
     local test_time_raw
-    test_time_raw=$(grep -A1 "Generated.*test files" "$logfile" | grep "Time:" | head -1 | sed 's/.*Time: *//')
+    test_time_raw=$(grep -A1 "Generated.*test files" "$logfile" | grep "Time:" | tail -1 | sed 's/.*Time: *//')
     local test_time_secs=""
     if [ -n "$test_time_raw" ]; then
         test_time_secs=$(parse_time_to_secs "$test_time_raw")

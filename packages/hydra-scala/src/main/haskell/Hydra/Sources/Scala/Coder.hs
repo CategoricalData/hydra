@@ -73,11 +73,13 @@ ns :: Namespace
 ns = Namespace "hydra.scala.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
-    (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces) $
-    Just "Scala code generator: converts Hydra modules to Scala source code"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+      Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns],
+            moduleTypeDependencies = (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Scala code generator: converts Hydra modules to Scala source code"}
   where
     definitions = [
       toDefinition applyVar,
@@ -195,7 +197,7 @@ encodeCase = def "encodeCase" $
     -- Use type name + field name + lambda param name for unique variable names.
     -- The lambda param suffix prevents shadowing in nested matches on the same union type
     -- (e.g., outer "sf" -> "v_ParseResult_success_sf", inner "sa" -> "v_ParseResult_success_sa").
-    "shortTypeName">: Lists.last (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn"))),
+    "shortTypeName">: Maybes.fromMaybe (string "x") (Lists.maybeLast (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn")))),
     -- Sanitize lambda param name for use as suffix: replace apostrophes with underscores
     "lamParamSuffix">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ string "") [
       _Term_lambda>>: ("lam" ~> lets [
@@ -431,12 +433,12 @@ encodeLetBinding = def "encodeLetBinding" $
     "bname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (Core.bindingName $ var "b")),
     "bterm">: Core.bindingTerm $ var "b",
     -- Effective type scheme: binding's own type, or fall back to graph's bound types
-    "mts">: optCases (Core.bindingType $ var "b")
+    "mts">: optCases (Core.bindingTypeScheme $ var "b")
       (Maps.lookup (Core.bindingName $ var "b") (Graph.graphBoundTypes $ var "g"))
       ("ts" ~> just (var "ts")),
     -- Check if the binding has a function type
     "isFn">: Maybes.maybe false
-      ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+      ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
         (Just false)
         [_Type_function>>: constant true,
          _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
@@ -454,10 +456,10 @@ encodeLetBinding = def "encodeLetBinding" $
         "useDef">: Logic.or (var "isFn") (Logic.not (Lists.null (var "newVars")))] $
         Logic.ifElse (var "useDef")
           -- Generate local def with type params and/or typed params
-          (asTerm encodeLocalDef @@ var "cx" @@ var "g" @@ var "outerTypeVars" @@ var "bname" @@ var "bterm" @@ (Core.typeSchemeType $ var "ts"))
+          (asTerm encodeLocalDef @@ var "cx" @@ var "g" @@ var "outerTypeVars" @@ var "bname" @@ var "bterm" @@ (Core.typeSchemeBody $ var "ts"))
           -- Monomorphic non-function: val with type annotation
           (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
-            ("srhs" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeSchemeType $ var "ts"))
+            ("srhs" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeSchemeBody $ var "ts"))
               ("styp" ~> right (mkLazyVal (var "bname") (just (var "styp")) (var "srhs"))))))
       (var "mts")
 
@@ -468,6 +470,7 @@ encodeLiteral = def "encodeLiteral" $
     (cases _Literal (var "av") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected literal"))) [
       _Literal_binary>>: ("b" ~> right (inject _Lit (Name "bytes") (Literals.binaryToBytes (var "b")))),
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
+      _Literal_decimal>>: ("d" ~> right (inject _Lit _Lit_string (Literals.showDecimal (var "d")))),
       _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected float value"))) [
         _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),
         _FloatValue_float32>>: ("f" ~> right (inject _Lit _Lit_float (var "f"))),
@@ -679,6 +682,7 @@ encodeTerm = def "encodeTerm" $
             "litData">: inject _Data _Data_lit (var "slit")] $
             -- Wrap BigInt and BigDecimal literals in constructor calls
             cases _Literal (var "v") (Just $ right (var "litData")) [
+              _Literal_decimal>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"])),
               _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ right (var "litData")) [
                 _IntegerValue_bigint>>: ("bi" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (var "bi")))])),
                 _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))]),
@@ -720,7 +724,7 @@ encodeTerm = def "encodeTerm" $
           (Eithers.mapList ("e" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "e") (Sets.toList (var "s")))
           ("sels" ~>
             right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "scala.collection.immutable.Set") @@ var "sels"))),
-      _Term_union>>: ("inj" ~> lets [
+      _Term_inject>>: ("inj" ~> lets [
         "sn">: project _Injection _Injection_typeName @@ var "inj",
         "fn">: project _Field _Field_name @@ (project _Injection _Injection_field @@ var "inj"),
         "ft">: project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj"),
@@ -757,7 +761,7 @@ encodeTerm = def "encodeTerm" $
           (ScalaUtilsSource.scalaEscapeName @@ var "fullName")
           (Logic.ifElse (Equality.equal (var "numParts") (int32 2))
             -- 2 parts: always qualify (e.g. lists.map)
-            (Strings.cat2 (Lists.head (var "parts")) (Strings.cat2 (string ".") (ScalaUtilsSource.scalaEscapeName @@ var "localName")))
+            (Strings.cat2 (Maybes.fromMaybe (var "fullName") (Lists.maybeHead (var "parts"))) (Strings.cat2 (string ".") (ScalaUtilsSource.scalaEscapeName @@ var "localName")))
             -- 3+ parts: fully qualify (module-level functions)
             (Strings.intercalate (string ".") (Lists.concat2
               (Lists.take (Math.sub (var "numParts") (int32 1)) (var "parts"))
@@ -809,8 +813,8 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeType)
-      (project _TermDefinition _TermDefinition_type @@ var "td"),
+      (unaryFunction Core.typeSchemeBody)
+      (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
       (Just false)
@@ -881,6 +885,7 @@ encodeType = def "encodeType" $
       _Type_literal>>: ("lt" ~> cases _LiteralType (var "lt") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type"))) [
         _LiteralType_binary>>: (constant $ right (ScalaUtilsSource.stapply @@ stref (string "Array") @@ list [stref (string "Byte")])),
         _LiteralType_boolean>>: (constant $ right (stref (string "Boolean"))),
+        _LiteralType_decimal>>: (constant $ right (stref (string "BigDecimal"))),
         _LiteralType_float>>: ("ft" ~> cases _FloatType (var "ft") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
           _FloatType_bigfloat>>: (constant $ right (stref (string "BigDecimal"))),
           _FloatType_float32>>: (constant $ right (stref (string "Float"))),
@@ -957,7 +962,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TypeDefinition _TypeDefinition_name @@ var "td",
-    "typ">: Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td",
+    "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td",
     "lname">: Names.localNameOf @@ var "name",
     "tname">: record _Type_Name [_Type_Name_value>>: var "lname"],
     "dname">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],

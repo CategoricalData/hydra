@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)"}}}],
             "body": {
@@ -97,8 +97,8 @@
                             "body": {"variable": "hydra.parsers.map"},
                             "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                         "type": {"unit": {}}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"unit": {}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -112,8 +112,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Parse a token followed by optional whitespace"}}}],
                 "body": {
                   "lambda": {
@@ -160,8 +160,8 @@
                         "function": {"variable": "hydra.parsing.Parser"}}},
                     "parameter": "p"}}}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -179,8 +179,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse JSON null value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse JSON null value"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -198,7 +198,7 @@
                     "argument": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "null", "term": {"unit": {}}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"string": {}}},
@@ -210,8 +210,8 @@
                             "body": {"variable": "hydra.parsers.map"},
                             "type": {"literal": {"string": {}}}}},
                         "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -223,8 +223,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse JSON boolean (true or false)"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse JSON boolean (true or false)"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -244,7 +244,7 @@
                         "argument": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "domain": {"literal": {"string": {}}},
@@ -275,7 +275,7 @@
                             "argument": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"literal": {"string": {}}},
@@ -291,8 +291,8 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.parsers.alt"},
                         "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -304,8 +304,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a single digit (0-9)"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a single digit (0-9)"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -338,8 +338,8 @@
                     "domain": {"literal": {"integer": {"int32": {}}}},
                     "parameter": "c"}},
                 "function": {"variable": "hydra.parsers.satisfy"}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"literal": {"integer": {"int32": {}}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -351,8 +351,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse one or more digits as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse one or more digits as a string"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -372,8 +372,8 @@
                             "body": {"variable": "hydra.parsers.map"},
                             "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"literal": {"string": {}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -385,8 +385,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Parse the integer part of a JSON number (optional minus, then digits)"}}}],
             "body": {
@@ -462,8 +462,8 @@
                             "body": {"variable": "hydra.parsers.bind"},
                             "type": {"maybe": {"literal": {"integer": {"int32": {}}}}}}},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"literal": {"string": {}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -475,8 +475,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Parse the optional fractional part of a JSON number"}}}],
             "body": {
               "application": {
@@ -526,8 +526,8 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.parsers.optional"},
                     "type": {"literal": {"string": {}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"maybe": {"literal": {"string": {}}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -539,8 +539,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Parse the optional exponent part of a JSON number"}}}],
             "body": {
               "application": {
@@ -705,8 +705,8 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.parsers.optional"},
                     "type": {"literal": {"string": {}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"maybe": {"literal": {"string": {}}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -718,8 +718,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Parse a JSON number (integer, decimal, or scientific notation)"}}}],
             "body": {
@@ -790,11 +790,11 @@
                                                                 "argument": {"variable": "intPart"},
                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                         "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "number",
                                                       "term": {
@@ -802,23 +802,23 @@
                                                           "argument": {
                                                             "application": {
                                                               "argument": {"variable": "numStr"},
-                                                              "function": {"variable": "hydra.lib.literals.readBigfloat"}}},
+                                                              "function": {"variable": "hydra.lib.literals.readDecimal"}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.equality.identity"},
-                                                                  "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                                                                  "type": {"literal": {"decimal": {}}}}},
                                                               "function": {
                                                                 "application": {
-                                                                  "argument": {"literal": {"float": {"bigfloat": 0}}},
+                                                                  "argument": {"literal": {"decimal": 0}},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
                                                                           "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                          "type": {"literal": {"float": {"bigfloat": {}}}}}},
-                                                                      "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}}}}},
+                                                                          "type": {"literal": {"decimal": {}}}}},
+                                                                      "type": {"literal": {"decimal": {}}}}}}}}}}}},
                                                     "typeName": "hydra.json.model.Value"}},
                                                 "function": {
                                                   "typeApplication": {
@@ -864,8 +864,8 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.json.parser.token"},
                     "type": {"variable": "hydra.json.model.Value"}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -877,8 +877,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Parse a JSON escape sequence after the backslash"}}}],
             "body": {
               "application": {
@@ -1048,8 +1048,8 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.parsers.choice"},
                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"literal": {"integer": {"int32": {}}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -1061,8 +1061,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Parse a single character in a JSON string (handling escapes)"}}}],
             "body": {
@@ -1131,8 +1131,8 @@
                       "typeApplication": {
                         "body": {"variable": "hydra.parsers.alt"},
                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"literal": {"integer": {"int32": {}}}},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -1144,8 +1144,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a JSON string value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a JSON string value"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1163,7 +1163,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "string",
                                                   "term": {
@@ -1227,8 +1227,8 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.json.parser.token"},
                     "type": {"variable": "hydra.json.model.Value"}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -1240,8 +1240,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a JSON array"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a JSON array"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1317,7 +1317,7 @@
                     "argument": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "array", "term": {"variable": "x"}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"list": {"variable": "hydra.json.model.Value"}},
@@ -1329,8 +1329,8 @@
                             "body": {"variable": "hydra.parsers.map"},
                             "type": {"list": {"variable": "hydra.json.model.Value"}}}},
                         "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -1342,8 +1342,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a JSON object key-value pair"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a JSON object key-value pair"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1373,8 +1373,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {
-                                                  "pair": {"@first": {"variable": "key"}, "@second": {"variable": "v"}}},
+                                                "body": {"pair": {"first": {"variable": "key"}, "second": {"variable": "v"}}},
                                                 "type": {"literal": {"string": {}}}}},
                                             "type": {"variable": "hydra.json.model.Value"}}},
                                         "domain": {"variable": "hydra.json.model.Value"},
@@ -1503,8 +1502,8 @@
                           "pair": {
                             "first": {"literal": {"string": {}}},
                             "second": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {
                 "pair": {
@@ -1519,8 +1518,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a JSON object"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a JSON object"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1607,7 +1606,7 @@
                             "function": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "object", "term": {"variable": "x"}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {
@@ -1632,8 +1631,8 @@
                                   "first": {"literal": {"string": {}}},
                                   "second": {"variable": "hydra.json.model.Value"}}}}}},
                         "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -1645,8 +1644,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse any JSON value"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse any JSON value"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1661,8 +1660,8 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.parsers.choice"},
                     "type": {"variable": "hydra.json.model.Value"}}}}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.parsing.Parser"}}},
@@ -1674,8 +1673,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Parse a JSON document from a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Parse a JSON document from a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1754,8 +1753,8 @@
                             "type": {"variable": "hydra.json.model.Value"}}}}}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "input"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {

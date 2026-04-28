@@ -189,7 +189,7 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 - [Python coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Python/Coder.hs) - Dynamic typing
 
 Note that there are also many coders for [other
-languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext)
+languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)
 in which we do not have full Hydra implementations (Avro, Protobuf, GraphQL, etc.).
 
 ### Purpose
@@ -387,7 +387,6 @@ The following primitives require thunking in eager languages:
 | `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
 | `hydra.lib.maybes.maybe` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.maybes.fromMaybe` | the default value | Only evaluated when the Maybe is Nothing |
-| `hydra.lib.maybes.fromJustOr` | the default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
 | `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
 
@@ -599,10 +598,12 @@ exists, your implementation can participate in Hydra's bootstrapping demo as bot
 | Haskell | [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Generation.hs) |
 
 **2. Wire the implementation into the sync workflow.**
-Add a `sync-<lang>.sh` script under `heads/haskell/bin/` that regenerates your implementation's
-content under `dist/<lang>/` from the DSL sources, and hook it into `bin/sync-all.sh` so a
-repo-wide sync keeps your implementation in step with the kernel. See
-[code-generation.md](code-generation.md) for the end-to-end shape these scripts follow.
+Add `<lang>` to the `ALL_LANGS` list in `bin/sync.sh` and to the per-target switch
+in `heads/haskell/bin/transform-json-to-target.sh` (and add a per-target wrapper
+`bin/sync-<lang>.sh` if you want a single-language convenience entry point). Once
+the language is in the matrix, `bin/sync.sh --hosts <lang> --targets <lang>`
+will regenerate it. See [code-generation.md](code-generation.md) for the
+end-to-end shape these scripts follow.
 
 **3. Demonstrate bootstrapping end-to-end.**
 Use `bin/run-bootstrapping-demo.sh` to confirm that your implementation can generate Hydra code

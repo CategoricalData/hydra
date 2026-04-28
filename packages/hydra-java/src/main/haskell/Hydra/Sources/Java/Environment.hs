@@ -42,8 +42,12 @@ typing :: String -> Type
 typing = typeref Typing.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
-    Just "Environment types for Java code generation"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
+            moduleDescription = Just "Environment types for Java code generation"}
   where
     definitions = [
       javaSymbolClass,

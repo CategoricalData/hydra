@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.
 
 module Hydra.Json.Encode where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,23 +14,26 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
--- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings.
-encodeFloat :: Core.FloatValue -> Either t0 Model.Value
+-- | Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold.
+encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
     case fv of
       Core.FloatValueBigfloat v0 ->
         let s = Literals.showBigfloat v0
-        in (Logic.ifElse (isSpecialFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber v0)))
-      Core.FloatValueFloat32 v0 -> Right (Model.ValueString (Literals.showFloat32 v0))
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Left (Strings.cat [
+          "JSON cannot represent bigfloat value: ",
+          s])) (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
+      Core.FloatValueFloat32 v0 ->
+        let s = Literals.showFloat32 v0
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float32ToDecimal v0))))
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
-        in (Logic.ifElse (isSpecialFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToBigfloat v0))))
-
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
 encodeInteger iv =
@@ -41,27 +42,25 @@ encodeInteger iv =
       Core.IntegerValueInt64 v0 -> Right (Model.ValueString (Literals.showInt64 v0))
       Core.IntegerValueUint32 v0 -> Right (Model.ValueString (Literals.showUint32 v0))
       Core.IntegerValueUint64 v0 -> Right (Model.ValueString (Literals.showUint64 v0))
-      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int8ToBigint v0)))
-      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int16ToBigint v0)))
-      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0)))
-      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint8ToBigint v0)))
-      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint16ToBigint v0)))
-
+      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int8ToBigint v0)))
+      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int16ToBigint v0)))
+      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0)))
+      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
+      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint16ToBigint v0)))
 -- | Encode a Hydra literal to a JSON value
-encodeLiteral :: Core.Literal -> Either t0 Model.Value
+encodeLiteral :: Core.Literal -> Either String Model.Value
 encodeLiteral lit =
     case lit of
       Core.LiteralBinary v0 -> Right (Model.ValueString (Literals.binaryToString v0))
       Core.LiteralBoolean v0 -> Right (Model.ValueBoolean v0)
+      Core.LiteralDecimal v0 -> Right (Model.ValueNumber v0)
       Core.LiteralFloat v0 -> encodeFloat v0
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
-
--- | Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0.
-isSpecialFloatString :: String -> Bool
-isSpecialFloatString s =
+-- | True for IEEE sentinel strings that JSON must escape as a string to preserve.
+requiresJsonStringSentinel :: String -> Bool
+requiresJsonStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
-
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
 toJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Value
 toJson types tname typ term =
@@ -126,15 +125,14 @@ toJson types tname typ term =
             in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList (Maybes.cat pairs))) encodedPairs)
           _ -> Left "expected record term"
         Core.TypeUnion v0 -> case strippedTerm of
-          Core.TermUnion v1 ->
+          Core.TermInject v1 ->
             let field = Core.injectionField v1
                 fname = Core.unName (Core.fieldName field)
                 fterm = Core.fieldTerm field
-                findFieldType =
-                        \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                ftypeResult =
+                        Maybes.maybe (Left (Strings.cat [
                           "unknown variant: ",
-                          fname])) (Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName (Lists.head fts))) fname) (Right (Core.fieldTypeType (Lists.head fts))) (findFieldType (Lists.tail fts)))
-                ftypeResult = findFieldType v0
+                          fname])) (\ft -> Right (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0)
             in (Eithers.either (\err -> Left err) (\ftype ->
               let encodedUnion = toJson types tname ftype fterm
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
@@ -156,8 +154,8 @@ toJson types tname typ term =
                             encodedK = toJson types tname keyType k
                             encodedV = toJson types tname valType v
                         in (Eithers.either (\err -> Left err) (\ek -> Eithers.map (\ev -> Model.ValueObject (Maps.fromList [
-                          ("@key", ek),
-                          ("@value", ev)])) encodedV) encodedK)
+                          ("key", ek),
+                          ("value", ev)])) encodedV) encodedK)
                   entries = Eithers.mapList encodeEntry (Maps.toList v1)
               in (Eithers.map (\es -> Model.ValueArray es) entries)
             _ -> Left "expected map term"
@@ -171,8 +169,8 @@ toJson types tname typ term =
                   encodedFirst = toJson types tname firstType first
                   encodedSecond = toJson types tname secondType second
               in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
-                ("@first", ef),
-                ("@second", es)])) encodedSecond) encodedFirst)
+                ("first", ef),
+                ("second", es)])) encodedSecond) encodedFirst)
             _ -> Left "expected pair term"
         Core.TypeEither v0 ->
           let leftType = Core.eitherTypeLeft v0
@@ -181,18 +179,17 @@ toJson types tname typ term =
             Core.TermEither v1 -> Eithers.either (\l ->
               let encodedL = toJson types tname leftType l
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-                ("@left", v)])) encodedL)) (\r ->
+                ("left", v)])) encodedL)) (\r ->
               let encodedR = toJson types tname rightType r
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-                ("@right", v)])) encodedR)) v1
+                ("right", v)])) encodedR)) v1
             _ -> Left "expected either term"
         Core.TypeVariable v0 ->
           let lookedUp = Maps.lookup v0 types
           in (Maybes.maybe (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term) lookedUp)
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
-          (Core_.type_ typ)])
-
+          (ShowCore.type_ typ)])
 -- | Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding.
 toJsonUntyped :: Core.Term -> Either String Model.Value
 toJsonUntyped term =
@@ -221,7 +218,7 @@ toJsonUntyped term =
               fields = Core.recordFields v0
               encodedFields = Eithers.mapList encodeField fields
           in (Eithers.map (\fs -> Model.ValueObject (Maps.fromList fs)) encodedFields)
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let field = Core.injectionField v0
               fname = Core.unName (Core.fieldName field)
               fterm = Core.fieldTerm field
@@ -238,8 +235,8 @@ toJsonUntyped term =
                         encodedK = toJsonUntyped k
                         encodedV = toJsonUntyped v
                     in (Eithers.either (\err -> Left err) (\ek -> Eithers.map (\ev -> Model.ValueObject (Maps.fromList [
-                      ("@key", ek),
-                      ("@value", ev)])) encodedV) encodedK)
+                      ("key", ek),
+                      ("value", ev)])) encodedV) encodedK)
               entries = Eithers.mapList encodeEntry (Maps.toList v0)
           in (Eithers.map (\es -> Model.ValueArray es) entries)
         Core.TermPair v0 ->
@@ -248,15 +245,15 @@ toJsonUntyped term =
               encodedFirst = toJsonUntyped first
               encodedSecond = toJsonUntyped second
           in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
-            ("@first", ef),
-            ("@second", es)])) encodedSecond) encodedFirst)
+            ("first", ef),
+            ("second", es)])) encodedSecond) encodedFirst)
         Core.TermEither v0 -> Eithers.either (\l ->
           let encodedL = toJsonUntyped l
           in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-            ("@left", v)])) encodedL)) (\r ->
+            ("left", v)])) encodedL)) (\r ->
           let encodedR = toJsonUntyped r
           in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-            ("@right", v)])) encodedR)) v0
+            ("right", v)])) encodedR)) v0
         _ -> Left (Strings.cat [
           "unsupported term variant for JSON encoding: ",
-          (Core_.term term)])
+          (ShowCore.term term)])

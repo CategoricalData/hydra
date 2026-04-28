@@ -85,10 +85,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns]
-    kernelTypesNamespaces $
-    Just ("Type and term classification predicates")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Type and term classification predicates")}
   where
     definitions = [
       toDefinition isComplexBinding,
@@ -113,7 +115,7 @@ isComplexBinding = define "isComplexBinding" $
   doc "Check if a binding needs to be treated as a function" $
   "tc" ~> "b" ~>
   "term" <~ Core.bindingTerm (var "b") $
-  "mts" <~ Core.bindingType (var "b") $
+  "mts" <~ Core.bindingTypeScheme (var "b") $
   -- Bindings without type schemes are complex (e.g., lifted case expressions)
   Maybes.cases (var "mts")
     (isComplexTerm @@ var "tc" @@ var "term") $
@@ -121,7 +123,7 @@ isComplexBinding = define "isComplexBinding" $
       -- Check if polymorphic
       "isPolymorphic" <~ Logic.not (Lists.null (Core.typeSchemeVariables $ var "ts")) $
       -- Check if non-nullary
-      "isNonNullary" <~ Equality.gt (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) (int32 0) $
+      "isNonNullary" <~ Equality.gt (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) (int32 0) $
       -- Check if complex term
       "isComplex" <~ isComplexTerm @@ var "tc" @@ var "term" $
       Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex")
@@ -164,7 +166,7 @@ isComplexVariable = define "isComplexVariable" $
             -- If not in graph at all, assume mutual recursion (complex)
             (boolean True)
             -- If a primitive, non-nullary iff type arity > 0
-            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ Graph.primitiveType (var "prim")) (int32 0))
+            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ Graph.primitiveTypeScheme (var "prim")) (int32 0))
             (var "primLookup"))
          -- If in graph, check if the binding itself is non-nullary (a function).
          -- Non-nullary bindings are always complex (they take parameters).
@@ -180,7 +182,7 @@ isEncodedTerm = define "isEncodedTerm" $
   "t" ~> cases _Term (Strip.deannotateTerm @@ var "t") (Just false) [
     _Term_application>>: "a" ~>
       isEncodedTerm @@ (Core.applicationFunction (var "a")),
-    _Term_union>>: "i" ~>
+    _Term_inject>>: "i" ~>
       Equality.equal (string (unName _Term)) (Core.unName (Core.injectionTypeName (var "i")))]
 
 isEncodedType :: TTermDefinition (Term -> Bool)
@@ -189,7 +191,7 @@ isEncodedType = define "isEncodedType" $
   "t" ~> cases _Term (Strip.deannotateTerm @@ var "t") (Just false) [
     _Term_application>>: "a" ~>
       isEncodedType @@ (Core.applicationFunction (var "a")),
-    _Term_union>>: "i" ~>
+    _Term_inject>>: "i" ~>
       Equality.equal (string (unName _Type)) (Core.unName (Core.injectionTypeName (var "i")))]
 
 isEnumRowType :: TTermDefinition ([FieldType] -> Bool)

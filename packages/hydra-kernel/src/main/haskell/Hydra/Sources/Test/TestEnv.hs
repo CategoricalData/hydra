@@ -20,28 +20,35 @@ import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import Hydra.Sources.Kernel.Types.All
+import qualified Data.Map as M
 
 
 ns :: Namespace
 ns = Namespace "hydra.test.testEnv"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns]
-    kernelTypesNamespaces $
-    Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")}
   where
    definitions = [
-     Phantoms.toDefinition testGraph,
-     Phantoms.toDefinition testContext]
+     Phantoms.toDefinition testContext,
+     Phantoms.toDefinition testGraph]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv
-testGraph :: TTermDefinition Graph
-testGraph = define "testGraph" $ asTerm Lexical.emptyGraph
-
 -- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
 testContext :: TTermDefinition Context
 testContext = define "testContext" $ asTerm Lexical.emptyContext
+
+-- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
+-- The hand-written runtime takes a test-types map; the DSL stub has the
+-- matching signature so the generator emits calls of the form
+-- `TestEnv.testGraph testTypes` rather than a bare value reference.
+testGraph :: TTermDefinition (M.Map Name Type -> Graph)
+testGraph = define "testGraph" $
+  "tys" ~> asTerm Lexical.emptyGraph

@@ -95,10 +95,12 @@ scalaLanguageNs :: Namespace
 scalaLanguageNs = moduleNamespace ScalaLanguageSource.module_
 
 module_ :: Module
-module_ = Module ns definitions
-    [scalaLanguageNs, Names.ns, Formatting.ns]
-    (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Utility functions for constructing Scala AST nodes"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [scalaLanguageNs, Names.ns, Formatting.ns],
+            moduleTypeDependencies = (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Utility functions for constructing Scala AST nodes"}
   where
     definitions = [
       toDefinition nameOfType,
@@ -197,7 +199,7 @@ scalaEscapeName = def "scalaEscapeName" $
       -- Names ending in _ cause lexer ambiguity with _: type ascription
       (Logic.and
         (Equality.gt (Strings.length (var "sanitized3")) (int32 0))
-        (Equality.equal (Strings.charAt (Math.sub (Strings.length (var "sanitized3")) (int32 1)) (var "sanitized3")) (int32 95)))] $
+        (Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (Math.sub (Strings.length (var "sanitized3")) (int32 1)) (var "sanitized3"))) (int32 95)))] $
     Logic.ifElse (var "needsBackticks")
       (Strings.cat (list [string "`", var "sanitized3", string "`"]))
       (var "sanitized3")
@@ -245,7 +247,7 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Packaging.unNamespace (Maybes.fromJust (Packaging.qualifiedNameNamespace $ var "qname")),
+    "prefix">: Packaging.unNamespace (Maybes.fromMaybe (wrap _Namespace (string "")) (Packaging.qualifiedNameNamespace $ var "qname")),
     "local">: scalaEscapeName @@ (Packaging.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 

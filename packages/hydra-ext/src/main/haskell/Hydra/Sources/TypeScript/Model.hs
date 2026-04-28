@@ -23,8 +23,12 @@ ts :: String -> Type
 ts = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation"}
   where
     definitions = [
       functionType,

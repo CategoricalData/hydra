@@ -16,8 +16,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "Variant types which describe the structure of Hydra core types and terms."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "Variant types which describe the structure of Hydra core types and terms."}
   where
     definitions = [
       eliminationVariant,
@@ -50,6 +54,7 @@ literalVariant = define "LiteralVariant" $
   T.enum [
     "binary",
     "boolean",
+    "decimal",
     "float",
     "integer",
     "string"]
@@ -62,6 +67,7 @@ termVariant = define "TermVariant" $
     "application",
     "cases",
     "either",
+    "inject",
     "lambda",
     "let",
     "list",
@@ -74,7 +80,6 @@ termVariant = define "TermVariant" $
     "set",
     "typeApplication",
     "typeLambda",
-    "union",
     "unit",
     "unwrap",
     "variable",

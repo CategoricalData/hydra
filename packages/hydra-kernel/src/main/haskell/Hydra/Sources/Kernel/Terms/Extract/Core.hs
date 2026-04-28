@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms hiding (
-  bigfloat, bigint, binary, boolean, cases, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
+  bigfloat, bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -52,6 +52,7 @@ import           Prelude hiding ((++), map)
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
+import qualified Data.Scientific             as Sci
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
@@ -79,10 +80,12 @@ ns :: Namespace
 ns = Namespace "hydra.extract.core"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns]
-    kernelTypesNamespaces $
-    Just ("Extraction and validation for hydra.core types")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Extraction and validation for hydra.core types")}
   where
    definitions = [
      toDefinition bigfloat,
@@ -95,6 +98,8 @@ module_ = Module ns definitions
      toDefinition booleanLiteral,
      toDefinition caseField,
      toDefinition cases,
+     toDefinition decimal,
+     toDefinition decimalLiteral,
      toDefinition decodeEither,
      toDefinition decodeList,
      toDefinition decodeMap,
@@ -225,6 +230,20 @@ booleanLiteral = define "booleanLiteral" $
     (Just (unexpected(Phantoms.string "boolean") (ShowCore.literal @@ var "v"))) [
     _Literal_boolean>>: "b" ~> right (var "b")]
 
+decimal :: TTermDefinition (Graph -> Term -> Prelude.Either Error Sci.Scientific)
+decimal = define "decimal" $
+  doc "Extract an arbitrary-precision decimal value from a term" $
+  "graph" ~> "t" ~>
+  "l" <<~ literal @@ var "graph" @@ var "t" $
+  decimalLiteral @@ var "l"
+
+decimalLiteral :: TTermDefinition (Literal -> Prelude.Either Error Sci.Scientific)
+decimalLiteral = define "decimalLiteral" $
+  doc "Extract a decimal literal from a Literal value" $
+  "v" ~> Phantoms.cases _Literal (var "v")
+    (Just (unexpected(Phantoms.string "decimal") (ShowCore.literal @@ var "v"))) [
+    _Literal_decimal>>: "d" ~> right (var "d")]
+
 -- TODO: nonstandard; move me
 caseField :: TTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error Field)
 caseField = define "caseField" $
@@ -232,12 +251,13 @@ caseField = define "caseField" $
   "name" ~> "n" ~> "graph" ~> "term" ~>
   "fieldName" <~ Core.name (var "n") $
   "cs" <<~ cases @@ var "name" @@ var "graph" @@ var "term" $
-  "matching" <~ Lists.filter
+  "matching" <~ (Lists.find
     ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fieldName"))
-    (Core.caseStatementCases (var "cs")) $
-  Logic.ifElse (Lists.null (var "matching"))
+    (Core.caseStatementCases (var "cs"))) $
+  Maybes.maybe
     (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case")))
-    (right (Lists.head (var "matching")))
+    ("mf" ~> right $ var "mf")
+    (var "matching")
 
 -- TODO: nonstandard; move me
 cases :: TTermDefinition (Name -> Graph -> Term -> Prelude.Either Error CaseStatement)
@@ -262,11 +282,16 @@ field = define "field" $
   "matchingFields" <~ Lists.filter
     ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fname"))
     (var "fields") $
+  "noMatchErr" <~ (unexpected(Phantoms.string "field " ++ (Core.unName (var "fname"))) (Phantoms.string "no matching field")) $
   Logic.ifElse (Lists.null (var "matchingFields"))
-    (unexpected(Phantoms.string "field " ++ (Core.unName (var "fname"))) (Phantoms.string "no matching field"))
+    (var "noMatchErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
-      ("stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ (Core.fieldTerm (Lists.head (var "matchingFields"))) $
-       var "mapping" @@ var "stripped")
+      (Maybes.maybe
+        (var "noMatchErr")
+        ("mf" ~>
+          "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ (Core.fieldTerm $ var "mf") $
+          var "mapping" @@ var "stripped")
+        (Lists.maybeHead $ var "matchingFields"))
       (unexpected(Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
 
 float32 :: TTermDefinition (Graph -> Term -> Prelude.Either Error Float)
@@ -353,7 +378,7 @@ injection = define "injection" $
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected(Phantoms.string "injection") (ShowCore.term @@ var "term"))) [
-    _Term_union>>: "injection" ~>
+    _Term_inject>>: "injection" ~>
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "expected"))
         (right (Core.injectionField (var "injection")))
         (unexpected
@@ -458,10 +483,14 @@ letBinding = define "letBinding" $
   "matchingBindings" <~ Lists.filter
     ("b" ~> Core.equalName_ (Core.bindingName (var "b")) (var "name"))
     (Core.letBindings (var "letExpr")) $
+  "noBindingErr" <~ (left (Error.errorExtraction $ Error.extractionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) $
   Logic.ifElse (Lists.null (var "matchingBindings"))
-    (left (Error.errorExtraction $ Error.extractionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")))
+    (var "noBindingErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
-      (right (Core.bindingTerm (Lists.head (var "matchingBindings"))))
+      (Maybes.maybe
+        (var "noBindingErr")
+        ("b" ~> right (Core.bindingTerm $ var "b"))
+        (Lists.maybeHead $ var "matchingBindings"))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleBindings $ Error.multipleBindingsError (var "name"))))
 
 let_ :: TTermDefinition (Graph -> Term -> Prelude.Either Error Let)
@@ -487,9 +516,10 @@ listHead = define "listHead" $
   doc "Extract the first element of a list term" $
   "graph" ~> "term" ~>
   "l" <<~ list @@ var "graph" @@ var "term" $
-  Logic.ifElse (Lists.null (var "l"))
+  Maybes.maybe
     (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "non-empty list") (Phantoms.string "empty list")))
-    (right (Lists.head (var "l")))
+    ("h" ~> right $ var "h")
+    (Lists.maybeHead $ var "l")
 
 listOf :: TTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error [x])
 listOf = define "listOf" $

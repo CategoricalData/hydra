@@ -281,7 +281,7 @@ shrinkers typ = trivialShrinker ++ case typ of
         promoteType = (st, \(TermSet els) -> S.toList els)
         shrinkType = (\(t, m) -> (Types.set t, \(TermSet els) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
     TypeUnion sfields -> dropFields
-        ++ shrinkFieldNames TypeUnion (\fs -> let Field (Name fn) ft = L.head fs in inject (Name "placeholder") (Name fn) ft) (\(TermUnion (Injection _ f)) -> [f]) sfields
+        ++ shrinkFieldNames TypeUnion (\fs -> let Field (Name fn) ft = L.head fs in inject (Name "placeholder") (Name fn) ft) (\(TermInject (Injection _ f)) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = [] -- TODO

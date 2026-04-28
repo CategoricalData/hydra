@@ -61,10 +61,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.error.core"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ShowCore.ns, ShowVariants.ns]
-    kernelTypesNamespaces $
-    Just "String representations of hydra.error.core types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ShowCore.ns, ShowVariants.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "String representations of hydra.error.core types"}
   where
    definitions = [
      toDefinition constantConditionError,

@@ -1,37 +1,29 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | A module defining the graph used in the test suite.
 
 module Hydra.Test.TestGraph where
-
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Test.TestEnv as TestEnv
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Test.TestEnv as TestEnv
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 testContext :: Context.Context
 testContext = TestEnv.testContext
-
 testGraph :: Graph.Graph
 testGraph = TestEnv.testGraph testTypes
-
 testNamespace :: Packaging.Namespace
 testNamespace = Packaging.Namespace "testGraph"
-
 testSchemaNamespace :: Packaging.Namespace
 testSchemaNamespace = Packaging.Namespace "testSchemaGraph"
-
 testTerms :: M.Map Core.Name Core.Term
 testTerms = Maps.fromList [
   (Core.Name "testDataArthur", TestTerms.testDataArthur)]
-
 testTypes :: M.Map Core.Name Core.Type
 testTypes =
     Maps.fromList [

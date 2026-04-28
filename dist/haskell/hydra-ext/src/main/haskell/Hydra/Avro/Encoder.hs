@@ -10,7 +10,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -19,13 +19,13 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Build an Avro field from a name-adapter pair
@@ -106,7 +106,7 @@ encodeTypeInner cx mName typ env =
                                 \entry ->
                                   let k = Pairs.first entry
                                       v = Pairs.second entry
-                                  in (Eithers.bind (Core_.string (Graph.Graph {
+                                  in (Eithers.bind (ExtractCore.string (Graph.Graph {
                                     Graph.graphBoundTerms = Maps.empty,
                                     Graph.graphBoundTypes = Maps.empty,
                                     Graph.graphClassConstraints = Maps.empty,
@@ -186,12 +186,12 @@ enumAdapter cx typ mName annotations fieldTypes env0 =
                     Coders.adapterTarget = avroSchema,
                     Coders.adapterCoder = Coders.Coder {
                       Coders.coderEncode = (\cx1 -> \t -> case t of
-                        Core.TermUnion v0 ->
+                        Core.TermInject v0 ->
                           let fname = Core.injectionField v0
                           in (Right (Model.ValueString (localName (Core.fieldName fname))))
                         _ -> err cx1 "expected union term for enum"),
                       Coders.coderDecode = (\_cx -> \j -> case j of
-                        Model.ValueString v0 -> Right (Core.TermUnion (Core.Injection {
+                        Model.ValueString v0 -> Right (Core.TermInject (Core.Injection {
                           Core.injectionTypeName = typeName,
                           Core.injectionField = Core.Field {
                             Core.fieldName = (Core.Name v0),
@@ -232,7 +232,7 @@ floatAdapter cx typ ft =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case ft of
-        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 (Graph.Graph {
+        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToDecimal f)) (ExtractCore.float32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -241,8 +241,8 @@ floatAdapter cx typ ft =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v1)))))
-        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 (Graph.Graph {
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v1)))))
+        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToDecimal d)) (ExtractCore.float64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -251,19 +251,19 @@ floatAdapter cx typ ft =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1)))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v1)))))
         _ -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) True (\_cx -> \t -> case t of
           Core.TermLiteral v0 -> case v0 of
             Core.LiteralFloat v1 -> Right (Model.ValueNumber (floatValueToDouble v1))) (\_cx -> \j -> case j of
-          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v0)))))
+          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v0)))))
 
--- | Convert any float value to a double (bigfloat)
-floatValueToDouble :: Core.FloatValue -> Double
+-- | Convert any float value to a JSON decimal number
+floatValueToDouble :: Core.FloatValue -> Sci.Scientific
 floatValueToDouble fv =
     case fv of
-      Core.FloatValueBigfloat v0 -> v0
-      Core.FloatValueFloat32 v0 -> Literals.float32ToBigfloat v0
-      Core.FloatValueFloat64 v0 -> Literals.float64ToBigfloat v0
+      Core.FloatValueBigfloat v0 -> Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)
+      Core.FloatValueFloat32 v0 -> Literals.float32ToDecimal v0
+      Core.FloatValueFloat64 v0 -> Literals.float64ToDecimal v0
 
 -- | Fold over field types, building adapters and threading the environment
 foldFieldAdapters :: t0 -> [Core.FieldType] -> Environment.EncodeEnvironment -> Either Errors.Error ([(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))], Environment.EncodeEnvironment)
@@ -309,7 +309,7 @@ integerAdapter cx typ it =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case it of
-        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 (Graph.Graph {
+        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -318,8 +318,8 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
-        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 (Graph.Graph {
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint v1))))))
+        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToDecimal (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -328,25 +328,25 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint v1))))))
         _ -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) True (\_cx -> \t -> case t of
           Core.TermLiteral v0 -> case v0 of
             Core.LiteralInteger v1 -> Right (Model.ValueNumber (integerValueToDouble v1))) (\_cx -> \j -> case j of
-          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v0)))))))))
+          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint v0))))))
 
--- | Convert any integer value to a double (bigfloat)
-integerValueToDouble :: Core.IntegerValue -> Double
+-- | Convert any integer value to a JSON decimal number
+integerValueToDouble :: Core.IntegerValue -> Sci.Scientific
 integerValueToDouble iv =
     case iv of
-      Core.IntegerValueBigint v0 -> Literals.bigintToBigfloat v0
-      Core.IntegerValueInt8 v0 -> Literals.bigintToBigfloat (Literals.int8ToBigint v0)
-      Core.IntegerValueInt16 v0 -> Literals.bigintToBigfloat (Literals.int16ToBigint v0)
-      Core.IntegerValueInt32 v0 -> Literals.bigintToBigfloat (Literals.int32ToBigint v0)
-      Core.IntegerValueInt64 v0 -> Literals.bigintToBigfloat (Literals.int64ToBigint v0)
-      Core.IntegerValueUint8 v0 -> Literals.bigintToBigfloat (Literals.uint8ToBigint v0)
-      Core.IntegerValueUint16 v0 -> Literals.bigintToBigfloat (Literals.uint16ToBigint v0)
-      Core.IntegerValueUint32 v0 -> Literals.bigintToBigfloat (Literals.uint32ToBigint v0)
-      Core.IntegerValueUint64 v0 -> Literals.bigintToBigfloat (Literals.uint64ToBigint v0)
+      Core.IntegerValueBigint v0 -> Literals.bigintToDecimal v0
+      Core.IntegerValueInt8 v0 -> Literals.bigintToDecimal (Literals.int8ToBigint v0)
+      Core.IntegerValueInt16 v0 -> Literals.bigintToDecimal (Literals.int16ToBigint v0)
+      Core.IntegerValueInt32 v0 -> Literals.bigintToDecimal (Literals.int32ToBigint v0)
+      Core.IntegerValueInt64 v0 -> Literals.bigintToDecimal (Literals.int64ToBigint v0)
+      Core.IntegerValueUint8 v0 -> Literals.bigintToDecimal (Literals.uint8ToBigint v0)
+      Core.IntegerValueUint16 v0 -> Literals.bigintToDecimal (Literals.uint16ToBigint v0)
+      Core.IntegerValueUint32 v0 -> Literals.bigintToDecimal (Literals.uint32ToBigint v0)
+      Core.IntegerValueUint64 v0 -> Literals.bigintToDecimal (Literals.uint64ToBigint v0)
 
 -- | Create an adapter for literal types
 literalAdapter :: t0 -> t1 -> Core.LiteralType -> Either t2 (Coders.Adapter t1 Schema.Schema Core.Term Model.Value)
@@ -382,7 +382,7 @@ localName name_ =
 
       let s = Core.unName name_
           parts = Strings.splitOn "." s
-      in (Lists.last parts)
+      in (Maybes.fromMaybe s (Lists.maybeLast parts))
 
 -- | Extract the namespace from a qualified name, if any
 nameNamespace :: Core.Name -> Maybe String
@@ -390,7 +390,7 @@ nameNamespace name_ =
 
       let s = Core.unName name_
           parts = Strings.splitOn "." s
-      in (Logic.ifElse (Equality.equal (Lists.length parts) 1) Nothing (Just (Strings.intercalate "." (Lists.init parts))))
+      in (Logic.ifElse (Equality.equal (Lists.length parts) 1) Nothing (Maybes.map (\ps -> Strings.intercalate "." ps) (Lists.maybeInit parts)))
 
 -- | Build a named type adapter (shared between record and union-as-record)
 namedTypeAdapter :: t0 -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> ([Schema.Field] -> Schema.NamedType) -> (t0 -> Core.Name -> [(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))] -> ((Context.Context -> Core.Term -> Either Errors.Error Model.Value), (Context.Context -> Model.Value -> Either Errors.Error Core.Term))) -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
@@ -530,7 +530,7 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                     Coders.adapterTarget = avroSchema,
                     Coders.adapterCoder = Coders.Coder {
                       Coders.coderEncode = (\cx1 -> \t -> case t of
-                        Core.TermUnion v0 ->
+                        Core.TermInject v0 ->
                           let activeName = Core.fieldName (Core.injectionField v0)
                               activeValue = Core.fieldTerm (Core.injectionField v0)
                               encodePair =
@@ -543,19 +543,19 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                       Coders.coderDecode = (\cx1 -> \j -> case j of
                         Model.ValueObject v0 ->
                           let findActive =
-                                  \remaining -> Logic.ifElse (Lists.null remaining) (err cx1 "no non-null field in union record") (
-                                    let head_ = Lists.head remaining
-                                        rest_ = Lists.tail remaining
+                                  \remaining -> Maybes.maybe (err cx1 "no non-null field in union record") (\p ->
+                                    let head_ = Pairs.first p
+                                        rest_ = Pairs.second p
                                         fname = Pairs.first head_
                                         ad = Pairs.second head_
                                         mjv = Maps.lookup (localName fname) v0
                                     in (Maybes.maybe (findActive rest_) (\jv -> case jv of
                                       Model.ValueNull -> findActive rest_
-                                      _ -> Eithers.map (\t -> Core.TermUnion (Core.Injection {
+                                      _ -> Eithers.map (\t -> Core.TermInject (Core.Injection {
                                         Core.injectionTypeName = typeName,
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = fname,
-                                          Core.fieldTerm = t}})) (Coders.coderDecode (Coders.adapterCoder ad) cx1 jv)) mjv))
+                                          Core.fieldTerm = t}})) (Coders.coderDecode (Coders.adapterCoder ad) cx1 jv)) mjv)) (Lists.uncons remaining)
                           in (findActive fieldAdapters)
                         _ -> err cx1 "expected JSON object for union-as-record")}}
           env2 =

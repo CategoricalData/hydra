@@ -106,6 +106,13 @@ extraPaths = [
 pythonpath = [
     "src/main/python",
     "../../dist/python/hydra-kernel/src/main/python",
+    "../../dist/python/hydra-haskell/src/main/python",
+    "../../dist/python/hydra-java/src/main/python",
+    "../../dist/python/hydra-python/src/main/python",
+    "../../dist/python/hydra-scala/src/main/python",
+    "../../dist/python/hydra-lisp/src/main/python",
+    "../../dist/python/hydra-pg/src/main/python",
+    "../../dist/python/hydra-rdf/src/main/python",
     "../../dist/python/hydra-kernel/src/test/python",
     "src/test/python"
 ]

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "The group of all common tests"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "The group of all common tests"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -40,10 +40,12 @@
                         {"variable": "hydra.test.differentiation.allTests"},
                         {"variable": "hydra.test.etaExpansion.allTests"},
                         {"variable": "hydra.test.formatting.allTests"},
+                        {"variable": "hydra.test.generation.allTests"},
                         {"variable": "hydra.test.hoisting.all.allTests"},
                         {"variable": "hydra.test.inference.all.allTests"},
                         {"variable": "hydra.test.json.roundtrip.allTests"},
                         {"variable": "hydra.test.json.writer.allTests"},
+                        {"variable": "hydra.test.json.yaml.allTests"},
                         {"variable": "hydra.test.reduction.allTests"},
                         {"variable": "hydra.test.rewriting.allTests"},
                         {"variable": "hydra.test.serialization.allTests"},
@@ -60,7 +62,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
   "namespace": "hydra.test.testSuite",
   "termDependencies": [
@@ -83,10 +85,12 @@
     "hydra.test.differentiation",
     "hydra.test.etaExpansion",
     "hydra.test.formatting",
+    "hydra.test.generation",
     "hydra.test.hoisting.all",
     "hydra.test.inference.all",
     "hydra.test.json.roundtrip",
     "hydra.test.json.writer",
+    "hydra.test.json.yaml",
     "hydra.test.reduction",
     "hydra.test.rewriting",
     "hydra.test.serialization",

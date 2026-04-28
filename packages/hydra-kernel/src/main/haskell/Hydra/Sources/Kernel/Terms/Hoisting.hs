@@ -75,10 +75,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."}
   where
    definitions = [
      toDefinition augmentBindingsWithNewFreeVars,
@@ -107,7 +109,7 @@ bindingIsPolymorphic :: TTermDefinition (Binding -> Bool)
 bindingIsPolymorphic = define "bindingIsPolymorphic" $
   doc "Check if a binding has a polymorphic type (non-empty list of type scheme variables)" $
   "binding" ~>
-  optCases (Core.bindingType $ var "binding")
+  optCases (Core.bindingTypeScheme $ var "binding")
     false  -- No type scheme means monomorphic (or untyped)
     ("ts" ~> Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts")
 
@@ -120,10 +122,10 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
     <> " Returns True if the free type variables in the binding's type intersect with"
     <> " the type variables in scope (graphTypeVariables).") $
   "cx" ~> "binding" ~>
-  optCases (Core.bindingType $ var "binding")
+  optCases (Core.bindingTypeScheme $ var "binding")
     false  -- No type scheme means no type variables used
     ("ts" ~>
-      "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
+      "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts") $
       "contextTypeVars" <~ Graph.graphTypeVariables (var "cx") $
       Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
 
@@ -175,9 +177,9 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
             (Core.typeSchemeVariables $ var "ts")
             (Lists.foldl
               ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
-              (Core.typeSchemeType $ var "ts")
+              (Core.typeSchemeBody $ var "ts")
               (Lists.reverse $ var "varTypes"))
-            (Core.typeSchemeConstraints $ var "ts")) (Core.bindingType $ var "b")))
+            (Core.typeSchemeConstraints $ var "ts")) (Core.bindingTypeScheme $ var "b")))
         (just $ pair
           (Core.bindingName $ var "b")
           (Lists.foldl
@@ -237,9 +239,9 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- Captured type vars include those free in the binding's type AND those free in captured term var types.
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
-    "freeInBindingType" <~ optCases (Core.bindingType $ var "b")
+    "freeInBindingType" <~ optCases (Core.bindingTypeScheme $ var "b")
       Sets.empty
-      ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")) $
+      ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeBody $ var "ts")) $
     "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Variables.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
     "capturedTypeVars" <~ Sets.toList (Sets.intersection
       (Graph.graphTypeVariables $ var "cx")
@@ -255,10 +257,10 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (Lists.nub $ Lists.concat2 (var "capturedTypeVars") (Core.typeSchemeVariables $ var "ts"))
           (Lists.foldl
             ("t" ~> "a" ~> Core.typeFunction $ Core.functionType (var "a") (var "t"))
-            (Core.typeSchemeType $ var "ts")
+            (Core.typeSchemeBody $ var "ts")
             (Lists.reverse $ var "capturedTermVarTypes"))
           (Core.typeSchemeConstraints $ var "ts"))
-       (Core.bindingType $ var "b"))
+       (Core.bindingTypeScheme $ var "b"))
       nothing $
 
     -- Strip only outer type lambda wrappers from the original term (preserving type application wrappers).
@@ -416,7 +418,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           ("p" ~>
             "origType" <~ optCases (Maps.lookup (Pairs.first $ var "p") (var "hoistBindingMap"))
               nothing
-              ("b" ~> Core.bindingType $ var "b") $
+              ("b" ~> Core.bindingTypeScheme $ var "b") $
             Core.binding (Pairs.first $ var "p") (Pairs.second $ var "p") (var "origType"))
           (var "multiRefPairs") $
 
@@ -633,21 +635,26 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
   "path" ~>
   -- Helper: process pairs of adjacent accessors
   "go" <~ ("remaining" ~>
-    -- If less than 2 elements, return as-is
-    Logic.ifElse (Logic.or (Lists.null $ var "remaining")
-                           (Lists.null $ Lists.tail $ var "remaining"))
+    Maybes.maybe
       (var "remaining")
-      -- Check if first two elements are applicationFunction followed by lambdaBody
-      ("first" <~ Lists.head (var "remaining") $
-       "second" <~ Lists.head (Lists.tail $ var "remaining") $
-       "rest" <~ Lists.tail (Lists.tail $ var "remaining") $
-       Logic.ifElse (Logic.and (isApplicationFunction @@ var "first")
-                               (isLambdaBody @@ var "second"))
-         -- Replace with letBody and continue
-         (Lists.cons (inject _SubtermStep _SubtermStep_letBody unit)
-                     (var "go" @@ var "rest"))
-         -- Keep first element and continue
-         (Lists.cons (var "first") (var "go" @@ Lists.tail (var "remaining"))))) $
+      ("uc1" ~>
+        "first" <~ Pairs.first (var "uc1") $
+        "afterFirst" <~ Pairs.second (var "uc1") $
+        Maybes.maybe
+          -- Only one element: return as-is (no pair to inspect)
+          (var "remaining")
+          ("uc2" ~>
+            "second" <~ Pairs.first (var "uc2") $
+            "rest" <~ Pairs.second (var "uc2") $
+            Logic.ifElse (Logic.and (isApplicationFunction @@ var "first")
+                                    (isLambdaBody @@ var "second"))
+              -- Replace with letBody and continue
+              (Lists.cons (inject _SubtermStep _SubtermStep_letBody unit)
+                          (var "go" @@ var "rest"))
+              -- Keep first element and continue
+              (Lists.cons (var "first") (var "go" @@ var "afterFirst")))
+          (Lists.uncons $ var "afterFirst"))
+      (Lists.uncons $ var "remaining")) $
   var "go" @@ var "path"
 
 -- | Check if an accessor is applicationFunction
@@ -838,7 +845,7 @@ hoistSubterms = define "hoistSubterms" $
       -- Each sibling starts fresh with counter 1 - prefix makes names unique
       "result" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "namePrefix" @@ var "bindingPathPrefix" @@ (Core.bindingTerm (var "binding")) $
       "newValue" <~ Pairs.second (var "result") $
-      "newBinding" <~ Core.binding (Core.bindingName (var "binding")) (var "newValue") (Core.bindingType (var "binding")) $
+      "newBinding" <~ Core.binding (Core.bindingName (var "binding")) (var "newValue") (Core.bindingTypeScheme (var "binding")) $
       Lists.cons (var "newBinding") (var "acc")) $
     -- Fold over bindings, starting with empty list
     "newBindingsReversed" <~ Lists.foldl (var "processBinding") (list ([] :: [TTerm Binding])) (var "bindings") $
@@ -847,7 +854,7 @@ hoistSubterms = define "hoistSubterms" $
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
-    "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.safeHead (var "bindings")) $
+    "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.maybeHead (var "bindings")) $
     "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $
     "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $

@@ -7,6 +7,7 @@ module Hydra.Rust.Operators where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Add-assign operator (+=)
 addAssignOp :: Ast.Op

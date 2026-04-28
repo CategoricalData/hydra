@@ -24,9 +24,13 @@ parquet = typeref ns
 
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
-      "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
+      "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")}
   where
     definitions = [
       type_,

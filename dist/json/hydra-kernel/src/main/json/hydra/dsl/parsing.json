@@ -10,7 +10,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -67,8 +67,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "remainder"}},
@@ -78,13 +78,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "An error message"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "An error message"}}}],
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "message"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -98,8 +98,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -108,8 +108,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "An error message"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "An error message"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -121,7 +121,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -130,7 +130,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -164,8 +164,8 @@
                 "argument": {"variable": "hydra.parsing.ParseError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -173,8 +173,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "An error message"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "An error message"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -190,7 +190,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -199,7 +199,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -233,8 +233,8 @@
                 "argument": {"variable": "hydra.parsing.ParseError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -242,8 +242,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -261,7 +261,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -305,7 +305,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -314,7 +314,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -352,8 +352,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An error message"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An error message"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -362,8 +362,8 @@
                 "argument": {"variable": "hydra.parsing.ParseError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -377,8 +377,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "An error message"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "An error message"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -396,7 +396,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -424,7 +424,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -433,7 +433,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -487,8 +487,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -497,8 +497,8 @@
                 "argument": {"variable": "hydra.parsing.ParseError"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -512,8 +512,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -529,9 +529,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -568,8 +568,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A successful parse, with a value and the remaining unparsed input"}}}],
                     "body": {
@@ -578,8 +578,8 @@
                         "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -594,8 +594,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A successful parse, with a value and the remaining unparsed input"}}}],
                       "body": {
@@ -612,9 +612,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -651,15 +651,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "A failed parse, with an error message and the remaining input"}}}],
                     "body": {"variable": "hydra.parsing.ParseError"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -674,8 +674,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "A failed parse, with an error message and the remaining input"}}}],
                       "body": {"variable": "hydra.parsing.ParseError"}}},
@@ -691,7 +691,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -748,8 +748,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The remaining unparsed input"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "remainder"}},
@@ -759,13 +759,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The parsed value"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The parsed value"}}}],
                     "body": {"variable": "a"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "value"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -782,8 +782,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The remaining unparsed input"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -792,8 +792,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The parsed value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The parsed value"}}}],
                       "body": {"variable": "a"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["a"]}}},
@@ -805,7 +805,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -814,7 +814,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -851,8 +851,8 @@
                     "function": {"variable": "hydra.parsing.ParseSuccess"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -860,8 +860,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The parsed value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The parsed value"}}}],
                       "body": {"variable": "a"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -880,7 +880,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -889,7 +889,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -926,8 +926,8 @@
                     "function": {"variable": "hydra.parsing.ParseSuccess"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -935,8 +935,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The remaining unparsed input"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -957,7 +957,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1001,7 +1001,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1010,7 +1010,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1048,8 +1048,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parsed value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The parsed value"}}}],
                         "body": {"variable": "a"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1061,8 +1061,8 @@
                     "function": {"variable": "hydra.parsing.ParseSuccess"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1079,8 +1079,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The parsed value"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The parsed value"}}}],
                           "body": {"variable": "a"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1101,7 +1101,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1129,7 +1129,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1138,7 +1138,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1192,8 +1192,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The remaining unparsed input"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1205,8 +1205,8 @@
                     "function": {"variable": "hydra.parsing.ParseSuccess"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1223,8 +1223,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The remaining unparsed input"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1243,7 +1243,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -1275,8 +1275,8 @@
                     "domain": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1304,7 +1304,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1313,7 +1313,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -1338,8 +1338,8 @@
                     "function": {"variable": "hydra.parsing.Parser"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {

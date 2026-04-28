@@ -18,8 +18,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Context.ns, Core.ns, Error.ns] [Context.ns, Core.ns, Error.ns] $
-    Just "The extension to graphs of Hydra's core type system (hydra.core)"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Context.ns, Core.ns, Error.ns],
+            moduleTypeDependencies = [Context.ns, Core.ns, Error.ns],
+            moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
   where
     definitions = [
       graph,
@@ -63,8 +67,8 @@ primitive = define "Primitive" $
     "name">:
       doc "The unique name of the primitive function"
       Core.name,
-    "type">:
-      doc "The type signature of the primitive function"
+    "typeScheme">:
+      doc "The type scheme of the primitive function"
       Core.typeScheme,
     "implementation">:
       doc ("A concrete implementation of the primitive function."

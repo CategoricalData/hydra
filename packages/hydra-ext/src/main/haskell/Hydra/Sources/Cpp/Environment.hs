@@ -24,8 +24,12 @@ modulType :: String -> Type
 modulType = typeref ModuleTypes.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [CoreTypes.ns, ModuleTypes.ns] $
-    Just "Type definitions for C++ code generation environment"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [CoreTypes.ns, ModuleTypes.ns],
+            moduleDescription = Just "Type definitions for C++ code generation environment"}
   where
     definitions = [
       cppEnvironmentType]

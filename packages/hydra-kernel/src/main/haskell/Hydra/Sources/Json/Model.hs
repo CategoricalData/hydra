@@ -18,8 +18,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
-    Just "A JSON syntax model. See the BNF at https://www.json.org"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A JSON syntax model. See the BNF at https://www.json.org"}
   where
     definitions = [
       value]
@@ -39,7 +43,7 @@ value = define "Value" $
       T.unit,
     "number">:
       doc "A numeric value" $
-      T.bigfloat, -- TODO: JSON numbers are decimal-encoded
+      T.decimal,
     "object">:
       doc "A JSON object as a set of key/value pairs" $
       T.map T.string value,

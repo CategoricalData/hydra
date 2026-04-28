@@ -72,6 +72,11 @@ def bigint_to_bigfloat(x: int) -> Decimal:
     return Decimal(x)
 
 
+def bigint_to_decimal(x: int) -> Decimal:
+    """Convert a bigint (Integer) to a decimal (arbitrary-precision exact decimal)."""
+    return Decimal(x)
+
+
 def bigint_to_int8(x: int) -> int:
     """Convert a bigint (Integer) to an int8."""
     return x
@@ -123,13 +128,43 @@ def binary_to_string(s: bytes) -> str:
     return base64.b64encode(s).decode('ascii')
 
 
+def decimal_to_bigint(x: Decimal) -> int:
+    """Convert a decimal to a bigint using banker's rounding (round half to even)."""
+    import decimal as _d
+    return int(x.to_integral_value(rounding=_d.ROUND_HALF_EVEN))
+
+
+def decimal_to_float32(x: Decimal) -> float:
+    """Convert a decimal to a float32 (Float), with possible loss of precision."""
+    import struct
+    f64 = float(x)
+    f32_bytes = struct.pack('f', f64)
+    f32 = struct.unpack('f', f32_bytes)[0]
+    return f32
+
+
+def decimal_to_float64(x: Decimal) -> float:
+    """Convert a decimal to a float64 (Double), with possible loss of precision."""
+    return float(x)
+
+
 def float32_to_bigfloat(x: float) -> Decimal:
     """Convert a float32 (Float) to a bigfloat (Double)."""
     return Decimal(str(x))
 
 
+def float32_to_decimal(x: float) -> Decimal:
+    """Convert a float32 (Float) to a decimal."""
+    return Decimal(str(x))
+
+
 def float64_to_bigfloat(x: float) -> Decimal:
     """Convert a float64 (Double) to a bigfloat (Double)."""
+    return Decimal(str(x))
+
+
+def float64_to_decimal(x: float) -> Decimal:
+    """Convert a float64 (Double) to a decimal."""
     return Decimal(str(x))
 
 
@@ -179,11 +214,32 @@ def read_boolean(s: str) -> Maybe[bool]:
         return NOTHING
 
 
+def read_decimal(s: str) -> Maybe[Decimal]:
+    """Parse a string to a decimal (arbitrary-precision exact decimal)."""
+    try:
+        return Just(Decimal(s))
+    except:
+        return NOTHING
+
+
+def _parse_float_token(s: str) -> float:
+    """Parse a float string accepting Hydra special tokens
+    (Infinity, -Infinity, NaN) as well as regular floats. Python's
+    float() accepts 'inf'/'nan' but not Hydra's canonical 'Infinity'/'NaN'."""
+    if s == "Infinity":
+        return float("inf")
+    if s == "-Infinity":
+        return float("-inf")
+    if s == "NaN":
+        return float("nan")
+    return float(s)
+
+
 def read_float32(s: str) -> Maybe[float]:
     """Parse a string to a float32 (Float)."""
     import struct
     try:
-        f64 = float(s)
+        f64 = _parse_float_token(s)
         # Convert to float32 precision
         f32_bytes = struct.pack('f', f64)
         f32 = struct.unpack('f', f32_bytes)[0]
@@ -195,7 +251,7 @@ def read_float32(s: str) -> Maybe[float]:
 def read_float64(s: str) -> Maybe[float]:
     """Parse a string to a float64 (Double)."""
     try:
-        return Just(float(s))
+        return Just(_parse_float_token(s))
     except:
         return NOTHING
 
@@ -313,6 +369,40 @@ def show_boolean(b: bool) -> str:
     return "true" if b else "false"
 
 
+def show_decimal(x: Decimal) -> str:
+    """Convert a decimal to its string, matching Haskell's Data.Scientific show."""
+    # Normalize: strip trailing zeros, then format as decimal or scientific.
+    normalized = x.normalize() if x != 0 else Decimal(0)
+    # decimal.Decimal.as_tuple() gives (sign, digits, exponent)
+    sign, digits, exp = normalized.as_tuple()
+    if not isinstance(exp, int):
+        return str(x)
+    coefficient = ''.join(str(d) for d in digits) or '0'
+    # Haskell Scientific e = precision - scale - 1 where precision = len(digits),
+    # scale = -exp. So e = len(digits) + exp - 1.
+    if x == 0:
+        return "0.0"
+    e = len(digits) + exp - 1
+    sign_str = "-" if sign else ""
+    # Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
+    if e >= 7 or e < -1:
+        if len(coefficient) == 1:
+            mantissa = coefficient + ".0"
+        else:
+            mantissa = coefficient[0] + "." + coefficient[1:]
+        return f"{sign_str}{mantissa}e{e}"
+    else:
+        # Decimal notation with at least one digit after the dot
+        if exp >= 0:
+            plain = coefficient + "0" * exp + ".0"
+        elif -exp < len(coefficient):
+            idx = len(coefficient) + exp
+            plain = coefficient[:idx] + "." + coefficient[idx:]
+        else:
+            plain = "0." + "0" * (-exp - len(coefficient)) + coefficient
+        return f"{sign_str}{plain}"
+
+
 def show_float32(x: float) -> str:
     """Convert a float32 (Float) to string."""
     import struct, math
@@ -339,8 +429,16 @@ def show_float32(x: float) -> str:
     else:
         # Use float32's natural precision (about 6-7 digits)
         # Round to 6 significant figures
-        from math import log10, floor
-        magnitude = floor(log10(abs_f32))
+        from math import log10, floor, isfinite
+        log_val = log10(abs_f32)
+        if not isfinite(log_val):
+            # abs_f32 is too small for log10 to produce a finite result
+            # (subnormal underflow). Fall back to repr.
+            result = repr(f32)
+            if '.' not in result and 'e' not in result:
+                result += '.0'
+            return result
+        magnitude = floor(log_val)
         rounded = round(f32, -int(magnitude) + 5)  # 6 significant figures
         result = repr(rounded)
         if '.' not in result and 'e' not in result:

@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.python.language")
-  [toDefinition pythonLanguage, toDefinition pythonReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for Python 3"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.python.language"),
+            moduleDefinitions = [toDefinition pythonLanguage, toDefinition pythonReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for Python 3"}
 pythonLanguage :: TTermDefinition Language
 pythonLanguage = define "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [
@@ -98,6 +98,7 @@ pythonLanguage = define "pythonLanguage" $
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- bytes
       Variants.literalVariantBoolean, -- bool
+      Variants.literalVariantDecimal, -- decimal.Decimal
       Variants.literalVariantFloat, -- (see float types)
       Variants.literalVariantInteger, -- (see integer types)
       Variants.literalVariantString], -- str
@@ -131,7 +132,7 @@ pythonLanguage = define "pythonLanguage" $
       Variants.termVariantSet,
       Variants.termVariantTypeApplication,
       Variants.termVariantTypeLambda,
-      Variants.termVariantUnion,
+      Variants.termVariantInject,
       Variants.termVariantUnit,
       Variants.termVariantVariable,
       Variants.termVariantWrap],

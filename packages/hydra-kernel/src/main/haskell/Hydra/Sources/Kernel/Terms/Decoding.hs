@@ -75,10 +75,12 @@ ns :: Namespace
 ns = Namespace "hydra.decoding"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns]
-    kernelTypesNamespaces $
-    Just "Functions for generating term decoders from type modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for generating term decoders from type modules"}
   where
     definitions = [
       toDefinition collectForallVariables,
@@ -524,19 +526,23 @@ decodeBindingName :: TTermDefinition (Name -> Name)
 decodeBindingName = define "decodeBindingName" $
   doc "Generate a binding name for a decoder function from a type name" $
   "n" ~>
-    -- Check if name has a namespace (contains ".")
-    Logic.ifElse (Logic.not (Lists.null
-      (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "n"))))))
-      -- Qualified type: e.g., "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
-      (Core.name (
-        Strings.intercalate (string ".") (
-          Lists.concat2
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        (var "localResult")
+        ("nsUc" ~>
+          "tail" <~ Pairs.second (var "nsUc") $
+          Core.name (Strings.intercalate (string ".") (Lists.concat2
             (list [string "hydra", string "decode"])
             (Lists.concat2
-              (Lists.tail (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))))
-              (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- Local type: just decapitalize
-      (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+              (var "tail")
+              (list [var "localPart"])))))
+        (Lists.uncons $ var "nsParts"))
+    (Lists.maybeInit $ var "parts")
 
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
@@ -548,6 +554,7 @@ decodeLiteralType = define "decodeLiteralType" $
   cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant decodeBinary,
     _LiteralType_boolean>>: constant decodeBoolean,
+    _LiteralType_decimal>>: constant decodeDecimal,
     _LiteralType_float>>: "ft" ~> decodeFloat (var "ft"),
     _LiteralType_integer>>: "it" ~> decodeInteger (var "it"),
     _LiteralType_string>>: constant decodeString]
@@ -566,6 +573,11 @@ decodeLiteralType = define "decodeLiteralType" $
     decodeBoolean = decodeLiteral $ DC.match _Literal
       (just $ leftError (string "expected boolean literal")) [
       DC.field _Literal_boolean $ DC.lambda "b" $ DC.right $ DC.var "b"]
+
+    -- Decode decimal: Term -> Either DecodingError Scientific
+    decodeDecimal = decodeLiteral $ DC.match _Literal
+      (just $ leftError (string "expected decimal literal")) [
+      DC.field _Literal_decimal $ DC.lambda "d" $ DC.right $ DC.var "d"]
 
     -- Decode float: Term -> Either DecodingError <specific float type>
     decodeFloat ft = cases _FloatType ft Nothing [
@@ -614,7 +626,7 @@ decodeModule = define "decodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -635,11 +647,10 @@ decodeModule = define "decodeModule" $
         -- Use nub to remove duplicates (a module may appear in both type and term dependencies)
         "allDecodedDeps" <~ (primitive _lists_nub @@ Lists.concat2 (var "decodedTypeDeps") (var "decodedTermDeps")) $
         right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "Term decoders for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (decodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
-            (var "decodedBindings"))
           (Lists.concat2
             (list [
               (Packaging.namespace $ string "hydra.extract.core"),
@@ -649,21 +660,27 @@ decodeModule = define "decodeModule" $
           (list [
             Packaging.moduleNamespace (var "mod"),
             Packaging.namespace $ string "hydra.util"])
-          (just (Strings.cat $ list [
-            string "Term decoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingTypeScheme $ var "b")))
+            (var "decodedBindings")))))
 
 -- | Generate a decoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.decode.util"
 decodeNamespace :: TTermDefinition (Namespace -> Namespace)
 decodeNamespace = define "decodeNamespace" $
   doc "Generate a decoder module namespace from a source module namespace" $
-  "ns" ~> (
-    Packaging.namespace (
-      Strings.cat $ list [
-        string "hydra.decode.",
-        Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]))
+  "ns" ~>
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
+  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  Maybes.maybe
+    (var "fallback")
+    ("uc" ~>
+      Packaging.namespace (
+        Strings.cat $ list [
+          string "hydra.decode.",
+          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+    (Lists.uncons $ var "parts")
 
 -- | Generate a decoder for a record type with element name
 decodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
@@ -849,11 +866,11 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
     DC.pair
       (DC.wrap _Name $ DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
       (DC.lambda "input" $ DC.primitive _eithers_map
-        @@@ (DC.lambda "t" $ Core.termUnion $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
+        @@@ (DC.lambda "t" $ Core.termInject $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
         @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "cx" @@@ DC.var "input"))) $
   deannotateAndMatch
     (just $ leftError $ string "expected union") [
-    DC.field _Term_union $ DC.lambda "inj" $ DC.lets [
+    DC.field _Term_inject $ DC.lambda "inj" $ DC.lets [
       ("field", DC.project _Injection _Injection_field @@@ DC.var "inj"),
       ("fname", DC.project _Field _Field_name @@@ DC.var "field"),
       ("fterm", DC.project _Field _Field_term @@@ DC.var "field"),

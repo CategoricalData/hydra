@@ -95,10 +95,12 @@ ns :: Namespace
 ns = Namespace "hydra.demos.genpg.transform"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns]  -- term dependencies
-    (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns]) $  -- type dependencies
-    Just "Functions for transforming property graph mappings into property graph elements."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns],
+            moduleTypeDependencies = (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns]),
+            moduleDescription = Just "Functions for transforming property graph mappings into property graph elements."}
   where
     definitions = [
       toDefinition concatPairs,
@@ -283,7 +285,10 @@ tableForEdge = define "tableForEdge" $
       (list [var "id", var "outId", var "inId"])
       (Maps.elems $ var "props")) $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
-      (right $ Lists.head $ Sets.toList $ var "tables")
+      (Maybes.maybe
+        (left $ string "unreachable: empty tables set")
+        (unaryFunction right)
+        (Lists.maybeHead $ Sets.toList $ var "tables"))
       (left $ Strings.cat $ list [
         string "Specification for ",
         unwrap PG._EdgeLabel @@ var "label",
@@ -299,7 +304,10 @@ tableForVertex = define "tableForVertex" $
     "props" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertex") $
     "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ var "props")) $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
-      (right $ Lists.head $ Sets.toList $ var "tables")
+      (Maybes.maybe
+        (left $ string "unreachable: empty tables set")
+        (unaryFunction right)
+        (Lists.maybeHead $ Sets.toList $ var "tables"))
       (left $ Strings.cat $ list [
         string "Specification for ",
         unwrap PG._VertexLabel @@ var "label",
@@ -499,14 +507,18 @@ parseTableLines = define "parseTableLines" $
         -- Build the table based on hasHeader flag
         Logic.ifElse (var "hasHeader")
           (-- With header: first row is header, rest are data
-            "headerRow" <~ Lists.head (var "rows") $
-            "dataRows" <~ Lists.tail (var "rows") $
-            -- Check for null headers
-            Logic.ifElse (listAny @@ ("m" ~> Maybes.isNothing (var "m")) @@ var "headerRow")
-              (left $ string "null header column(s)")
-              (right $ record Tab._Table [
-                Tab._Table_header>>: just (wrap Tab._HeaderRow $ Maybes.cat $ var "headerRow"),
-                Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")]))
+            Maybes.maybe
+              (left $ string "empty rows: cannot parse header")
+              (lambda "p" $ lets [
+                "headerRow">: Pairs.first (var "p"),
+                "dataRows">: Pairs.second (var "p")] $
+                -- Check for null headers
+                Logic.ifElse (listAny @@ ("m" ~> Maybes.isNothing (var "m")) @@ var "headerRow")
+                  (left $ string "null header column(s)")
+                  (right $ record Tab._Table [
+                    Tab._Table_header>>: just (wrap Tab._HeaderRow $ Maybes.cat $ var "headerRow"),
+                    Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")]))
+              (Lists.uncons (var "rows")))
           (-- No header: all rows are data
             right $ record Tab._Table [
               Tab._Table_header>>: nothing,

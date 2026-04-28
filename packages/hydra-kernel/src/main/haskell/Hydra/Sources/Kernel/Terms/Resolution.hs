@@ -87,10 +87,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just ("Type dereference, lookup, requirements, and instantiation")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Type dereference, lookup, requirements, and instantiation")}
   where
     definitions = [
       toDefinition dereferenceType,
@@ -156,7 +158,7 @@ fieldTypes = define "fieldTypes" $
           Eithers.bind (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
               (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
             "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType")))
-        ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeType (var "ts"))
+        ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeBody (var "ts"))
         (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
   @@ (Strip.deannotateType @@ var "t")
 
@@ -167,10 +169,11 @@ findFieldType = define "findFieldType" $
   "matchingFields" <~ Lists.filter
     ("ft" ~> Equality.equal (Core.unName (Core.fieldTypeName (var "ft"))) (Core.unName (var "fname")))
     (var "fields") $
+  "noMatch" <~ (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx")) $
   Logic.ifElse (Lists.null (var "matchingFields"))
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
+    (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
-      (right (Core.fieldTypeType (Lists.head (var "matchingFields"))))
+      (Maybes.maybe (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")) (Lists.maybeHead $ var "matchingFields"))
       (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname")) (var "cx")))
 
 fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
@@ -237,7 +240,7 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
     (Core.typeSchemeConstraints (var "scheme")) $
   pair
     (Core.typeScheme (var "newVars")
-      (Substitution.substInType @@ var "subst" @@ Core.typeSchemeType (var "scheme"))
+      (Substitution.substInType @@ var "subst" @@ Core.typeSchemeBody (var "scheme"))
       (var "renamedConstraints"))
     (var "cx2")
 
@@ -302,12 +305,13 @@ requireUnionField_ = define "requireUnionField" $
   doc "Require a field type from a union type" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
   "withRowType" <~ ("rt" ~>
-    "matches" <~ (Lists.filter
-      ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
-      (var "rt")) $
-    Logic.ifElse (Lists.null $ var "matches")
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
-      (right $ Core.fieldTypeType $ Lists.head $ var "matches")) $
+    "noMatchErr" <~ (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx")) $
+    Maybes.maybe
+      (var "noMatchErr")
+      ("ft" ~> right $ Core.fieldTypeType $ var "ft")
+      (Lists.find
+        ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
+        (var "rt"))) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
 requireUnionType :: TTermDefinition (Context -> Graph -> Name -> Either Error [FieldType])

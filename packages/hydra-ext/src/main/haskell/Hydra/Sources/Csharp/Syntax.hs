@@ -24,9 +24,13 @@ csharp = typeref ns
 
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
-      ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
+      ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar")}
   where
     definitions = lexicalElements ++ syntacticElements ++ unsafeElements
 

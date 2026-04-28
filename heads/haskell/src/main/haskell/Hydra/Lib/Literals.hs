@@ -3,9 +3,11 @@
 module Hydra.Lib.Literals where
 
 import Data.Int
+import Data.Scientific (Scientific, toRealFloat, fromFloatDigits)
 import Text.Read (readMaybe)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Base64 as B64
+import qualified Data.Scientific as Sci
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 
@@ -19,8 +21,16 @@ bigfloatToBigint :: Double -> Integer
 bigfloatToBigint = round
 
 -- | Convert a bigfloat (Double) to a float32 (Float).
+-- IEEE special values are preserved; for finite values, realToFrac
+-- (which converts via Rational) is used. Note: realToFrac on Double
+-- Inf does work in this direction (Float has same special-value
+-- representation), but we mirror float32ToBigfloat's pattern for
+-- symmetry and to be defensive against future Rational changes.
 bigfloatToFloat32 :: Double -> Float
-bigfloatToFloat32 = realToFrac
+bigfloatToFloat32 x
+  | isNaN x      = 0/0
+  | isInfinite x = if x < 0 then -1/0 else 1/0
+  | otherwise    = realToFrac x
 
 -- | Convert a bigfloat (Double) to a float64 (Double).
 bigfloatToFloat64 :: Double -> Double
@@ -29,6 +39,10 @@ bigfloatToFloat64 = id
 -- | Convert a bigint (Integer) to a bigfloat (Double).
 bigintToBigfloat :: Integer -> Double
 bigintToBigfloat = fromIntegral
+
+-- | Convert a bigint (Integer) to a decimal (Scientific).
+bigintToDecimal :: Integer -> Scientific
+bigintToDecimal n = Sci.scientific n 0
 
 -- | Convert a bigint (Integer) to an int8.
 bigintToInt8 :: Integer -> Int8
@@ -66,6 +80,20 @@ bigintToUint64 = id
 binaryToBytes :: B.ByteString -> [Int]
 binaryToBytes = fmap fromIntegral . B.unpack
 
+-- | Convert a decimal (Scientific) to a bigint (Integer) using banker's rounding
+-- (round half to even), matching Haskell's 'round' and the BigDecimal/BigInt behavior
+-- in the other Hydra hosts.
+decimalToBigint :: Scientific -> Integer
+decimalToBigint = round
+
+-- | Convert a decimal (Scientific) to a float32 (Float). May lose precision.
+decimalToFloat32 :: Scientific -> Float
+decimalToFloat32 = toRealFloat
+
+-- | Convert a decimal (Scientific) to a float64 (Double). May lose precision.
+decimalToFloat64 :: Scientific -> Double
+decimalToFloat64 = toRealFloat
+
 -- | Convert binary to string by base64 encoding.
 binaryToString :: B.ByteString -> String
 binaryToString = T.unpack . TE.decodeUtf8 . B64.encode
@@ -75,12 +103,25 @@ binaryToStringBS :: B.ByteString -> String
 binaryToStringBS = binaryToString
 
 -- | Convert a float32 (Float) to a bigfloat (Double).
+-- Preserves IEEE special values (NaN, +/-Infinity); plain realToFrac
+-- routes through Rational and collapses Inf to maxFinite (~3.4028e38).
 float32ToBigfloat :: Float -> Double
-float32ToBigfloat = realToFrac
+float32ToBigfloat x
+  | isNaN x      = 0/0
+  | isInfinite x = if x < 0 then -1/0 else 1/0
+  | otherwise    = realToFrac x
+
+-- | Convert a float32 (Float) to a decimal (Scientific).
+float32ToDecimal :: Float -> Scientific
+float32ToDecimal = fromFloatDigits
 
 -- | Convert a float64 (Double) to a bigfloat (Double).
 float64ToBigfloat :: Double -> Double
 float64ToBigfloat = id
+
+-- | Convert a float64 (Double) to a decimal (Scientific).
+float64ToDecimal :: Double -> Scientific
+float64ToDecimal = fromFloatDigits
 
 -- | Convert an int8 to a bigint (Integer).
 int8ToBigint :: Int8 -> Integer
@@ -111,6 +152,10 @@ readBoolean :: String -> Maybe Bool
 readBoolean s = if s == "true" then Just True
   else if s == "false" then Just False
   else Nothing
+
+-- | Parse a string to a decimal (Scientific).
+readDecimal :: String -> Maybe Scientific
+readDecimal s = readMaybe s :: Maybe Scientific
 
 -- | Parse a string to a float32 (Float).
 readFloat32 :: String -> Maybe Float
@@ -186,6 +231,12 @@ showBoolean b = case b of
   True -> "true"
   False -> "false"
 
+-- | Convert a decimal (Scientific) to string. Uses Scientific's default format
+--   (regular notation for small-magnitude values; scientific notation for very
+--   large or very small).
+showDecimal :: Scientific -> String
+showDecimal = show
+
 -- | Convert a float32 (Float) to string.
 showFloat32 :: Float -> String
 showFloat32 = show
@@ -236,6 +287,10 @@ stringToBinary :: String -> B.ByteString
 stringToBinary s = case B64.decode (TE.encodeUtf8 $ T.pack s) of
   Left _ -> B.empty
   Right bs -> bs
+
+-- | Parse a string as a Scientific decimal. Errors on malformed input.
+stringToDecimal :: String -> Scientific
+stringToDecimal = read
 
 -- | Convert a uint8 to a bigint (Integer).
 uint8ToBigint :: Int16 -> Integer

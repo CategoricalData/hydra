@@ -23,8 +23,9 @@ Each bootstrapping path proceeds as follows:
 4. Build and test the generated project
 
 By default, the bootstrapping system runs the 3×3 matrix of Haskell, Java, and Python
-as both hosts and targets. Additional hosts and targets (Scala, Clojure, Common Lisp,
-Emacs Lisp, Scheme) can be included with `--hosts` and `--targets` flags.
+as both hosts and targets. Additional hosts (Scala) and targets (Scala, Clojure,
+Common Lisp, Emacs Lisp, Scheme) can be included with `--hosts` and `--targets`
+flags; passing `--hosts all --targets all` exercises every supported combination.
 All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 
 ```
@@ -35,10 +36,8 @@ All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 ├── java-to-haskell/             # Java loads JSON, generates Haskell
 ├── java-to-java/                # Java loads JSON, generates Java
 ├── java-to-python/              # Java loads JSON, generates Python
-├── scala-to-python/             # Scala loads JSON, generates Python
 ├── python-to-haskell/           # Python loads JSON, generates Haskell
 ├── python-to-java/              # Python loads JSON, generates Java
-├── python-to-scala/             # Python loads JSON, generates Scala
 └── python-to-python/            # Python loads JSON, generates Python
 ```
 
@@ -144,8 +143,9 @@ for more details.
 - If you have made local changes to Sources or other DSL code, run the
   top-level sync script before running the bootstrapping verification:
   ```bash
-  ./bin/sync-all.sh    # from repo root; or --quick to skip tests
+  ./bin/sync-default.sh    # from repo root; or --no-tests to skip tests
   ```
+  (or `./bin/sync.sh --hosts H,... --targets T,...` for a chosen matrix.)
 
 ## Usage
 
@@ -161,16 +161,22 @@ file counts.
 
 ### Run a single path
 
+Each path is a `<host>-to-<target>.sh` script under `demos/bootstrapping/bin/`:
+
 ```bash
-# Haskell host
+# Haskell host generating Java
 ./demos/bootstrapping/bin/haskell-to-java.sh
 
-# Java host
-./demos/bootstrapping/bin/java-bootstrap.sh --target java
+# Java host generating Haskell
+./demos/bootstrapping/bin/java-to-haskell.sh
 
-# Python host
-./demos/bootstrapping/bin/python-bootstrap.sh --target python
+# Python host generating Java
+./demos/bootstrapping/bin/python-to-java.sh
 ```
+
+The matrix scripts internally call host-invoker scripts (`invoke-<host>-host.sh`)
+and target-setup/-test scripts (`setup-<target>-target.sh`,
+`test-<target>-target.sh`).
 
 ### Run the bootstrap executable directly
 
@@ -179,10 +185,11 @@ file counts.
 cd heads/haskell
 stack exec bootstrap-from-json -- --target java +RTS -K256M -A32M -RTS
 
-# Java
-./demos/bootstrapping/bin/java-bootstrap.sh --target haskell
+# Java (the Bootstrap CLI lives in hydra-java; run via the matrix scripts —
+# `invoke-java-host.sh` builds and dispatches the right invocation):
+./demos/bootstrapping/bin/invoke-java-host.sh --target haskell
 
-# Python
+# Python (uses the bootstrap CLI built into the Python head)
 cd heads/python
 PYTHONPATH=src/main/python:../../dist/python/hydra-kernel/src/main/python \
   python3 -m hydra.bootstrap \
@@ -214,9 +221,9 @@ generated `hydra.codeGeneration` module:
 
 | Language | I/O Wrapper | Bootstrap CLI |
 |----------|-------------|---------------|
-| Haskell  | `Hydra.Generation` (hydra-haskell) | `bootstrap-from-json` (heads/haskell) |
-| Java     | `hydra.Generation` (hydra-java) | `hydra.Bootstrap` (hydra-java) |
-| Python   | `hydra.generation` (hydra-python) | `hydra.bootstrap` (hydra-python) |
+| Haskell  | `Hydra.Generation` (heads/haskell) | `bootstrap-from-json` (heads/haskell) |
+| Java     | `hydra.Generation` (heads/java) | `hydra.Bootstrap` (heads/java) |
+| Python   | `hydra.generation` (heads/python) | `hydra.bootstrap` (heads/python) |
 
 Each I/O wrapper provides:
 - `bootstrapGraph()` — create an empty graph with standard primitives
@@ -241,9 +248,10 @@ map for type-directed decoding. Each language provides this differently:
 The JSON modules are generated during synchronization and checked into the
 repository. Three executables produce the JSON exports (run by the sync scripts):
 
-- `hydra-haskell:update-json-main` — exports main + eval lib modules
-- `hydra-haskell:update-json-test` — exports test modules
-- `hydra-haskell:update-json-ext` — exports extension modules
+- `hydra:exe:update-json-main` — exports main + eval lib modules
+- `hydra:exe:update-json-test` — exports test modules
+- `update-json-main` also exports per-package extension modules
+  (coders, PG, RDF) to `dist/json/hydra-<pkg>/`
 
 The JSON includes System F type annotations.
 

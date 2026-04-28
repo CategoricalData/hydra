@@ -51,13 +51,24 @@ Set `HYDRA_BENCHMARK_OUTPUT` to a file path to produce benchmark JSON output.
 Lisp code is generated from the Haskell head. To regenerate all four dialects:
 
 ```bash
-heads/haskell/bin/sync-lisp.sh
+bin/sync.sh --hosts lisp --targets lisp
+```
+
+(`lisp` is an alias for `clojure,common-lisp,emacs-lisp,scheme`.)
+
+To regenerate a single dialect:
+
+```bash
+bin/sync-clojure.sh
+bin/sync-common-lisp.sh
+bin/sync-emacs-lisp.sh
+bin/sync-scheme.sh
 ```
 
 To regenerate only some dialects:
 
 ```bash
-heads/haskell/bin/sync-lisp.sh --dialects clojure,scheme
+bin/sync.sh --hosts clojure,scheme --targets clojure,scheme
 ```
 
 ## Architecture
@@ -65,3 +76,17 @@ heads/haskell/bin/sync-lisp.sh --dialects clojure,scheme
 The Lisp coder generates code for all four dialects from a shared representation.
 Dialect-specific differences (Lisp-1 vs Lisp-2 semantics, module systems,
 naming conventions) are handled by dialect-specific backends within the coder.
+
+## Numeric types
+
+Hydra's `decimal` type is an arbitrary-precision exact decimal.
+Of the four Lisp dialects, only Clojure has a native arbitrary-precision
+decimal (`java.math.BigDecimal` via JVM interop);
+Common Lisp, Scheme, and Emacs Lisp have no native decimal type.
+Because the Lisp coder shares one language-constraints definition across
+all dialects, Hydra modules that use `decimal` are currently adapted to
+`float64` before code generation for all four Lisp targets, with
+potential precision loss.
+This matches the existing treatment of `bigfloat` in these hosts.
+A future change may split the Lisp language constraints to let Clojure
+emit native `BigDecimal` while the others continue to adapt.

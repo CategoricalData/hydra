@@ -103,10 +103,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module ns definitions
-    [RdfUtils.ns]  -- term dependencies
-    (kernelTypesNamespaces L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns]) $  -- type dependencies
-    Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [RdfUtils.ns],
+            moduleTypeDependencies = (kernelTypesNamespaces L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns]),
+            moduleDescription = Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"}
   where
     definitions = [
       toDefinition edgeTypesToPropertyShapes,

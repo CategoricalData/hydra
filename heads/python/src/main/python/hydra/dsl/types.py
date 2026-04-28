@@ -215,6 +215,11 @@ def boolean() -> Type:
     return literal(lt.boolean())
 
 
+def decimal() -> Type:
+    """Arbitrary-precision exact decimal type."""
+    return literal(lt.decimal())
+
+
 def float32() -> Type:
     """32-bit floating point type."""
     return literal(lt.float32())

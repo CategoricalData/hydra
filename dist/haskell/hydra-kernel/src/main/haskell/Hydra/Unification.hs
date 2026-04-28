@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Utilities for type unification.
 
 module Hydra.Unification where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -13,15 +11,16 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
 joinTypes :: t0 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError [Typing.TypeConstraint]
 joinTypes cx left right comment =
@@ -37,7 +36,7 @@ joinTypes cx left right comment =
                   Left (Errors.UnificationError {
                     Errors.unificationErrorLeftType = sleft,
                     Errors.unificationErrorRightType = sright,
-                    Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright))})
+                    Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (ShowCore.type_ sleft)) " with ") (ShowCore.type_ sright))})
           assertEqual = Logic.ifElse (Equality.equal sleft sright) (Right []) cannotUnify
           joinList =
                   \lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify
@@ -99,7 +98,6 @@ joinTypes cx left right comment =
             joinOne v0 v1]
           _ -> cannotUnify
         _ -> cannotUnify
-
 -- | Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
 -- | Specifically this is an implementation of the following rules:
 -- |   * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)
@@ -123,7 +121,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                             \v -> \t -> Logic.ifElse (variableOccursInType v t) (Left (Errors.UnificationError {
                               Errors.unificationErrorLeftType = sleft,
                               Errors.unificationErrorRightType = sright,
-                              Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")})) (bind v t)
+                              Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (ShowCore.type_ t)) " (") comment) ")")})) (bind v t)
                     noVars =
 
                               let withConstraints = \constraints2 -> unifyTypeConstraints cx schemaTypes (Lists.concat2 constraints2 rest)
@@ -140,8 +138,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                       Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")})) (bind v1 sleft)) (bind v0 sright))
                     _ -> tryBinding v0 sright
                   _ -> dflt
-      in (Logic.ifElse (Lists.null constraints) (Right Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
-
+      in (Maybes.maybe (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)) (Lists.uncons constraints))
 unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =
 
@@ -151,7 +148,6 @@ unifyTypeLists cx schemaTypes l r comment =
                 Typing.typeConstraintRight = r2,
                 Typing.typeConstraintComment = comment}
       in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
-
 unifyTypes :: t0 -> M.Map Core.Name t1 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypes cx schemaTypes l r comment =
     unifyTypeConstraints cx schemaTypes [
@@ -159,7 +155,6 @@ unifyTypes cx schemaTypes l r comment =
         Typing.typeConstraintLeft = l,
         Typing.typeConstraintRight = r,
         Typing.typeConstraintComment = comment}]
-
 -- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 variableOccursInType :: Core.Name -> Core.Type -> Bool
 variableOccursInType var typ0 =

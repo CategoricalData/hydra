@@ -33,10 +33,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.maps"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Namespace "hydra.reduction", ShowCore.ns]
-    kernelTypesNamespaces $
-    Just "Test cases for hydra.lib.maps primitives"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Namespace "hydra.reduction", ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Test cases for hydra.lib.maps primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -236,7 +238,13 @@ mapsFilter = subgroup "filter" [
   test "empty map" [] []]
   where
     test name m result = evalPair name showIntStringMap
-      (Maps.filter (Phantoms.lambda "v" $ Equality.equal (Chars.toLower (Strings.charAt (Phantoms.int32 0) (Phantoms.var "v"))) (Phantoms.int32 97)) (pMap m))
+      (Maps.filter
+        (Phantoms.lambda "v" $ Equality.equal
+          (Maybes.fromMaybe (Phantoms.int32 0)
+            (Maybes.map (Phantoms.lambda "c" $ Chars.toLower (Phantoms.var "c"))
+              (Strings.maybeCharAt (Phantoms.int32 0) (Phantoms.var "v"))))
+          (Phantoms.int32 97))
+        (pMap m))
       (pMap result)
 
 mapsFilterWithKey :: TTerm TestGroup

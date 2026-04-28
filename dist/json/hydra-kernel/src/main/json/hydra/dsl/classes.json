@@ -6,9 +6,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -32,15 +32,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.classes.TypeClass"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -51,9 +51,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -77,15 +77,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.classes.TypeClass"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},

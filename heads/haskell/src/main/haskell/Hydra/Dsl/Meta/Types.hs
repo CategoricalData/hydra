@@ -80,6 +80,11 @@ float64 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat64
 bigfloat :: TTerm Type
 bigfloat = typeLiteral $ literalTypeFloat $ float FloatTypeBigfloat
 
+-- | Create a term-encoded arbitrary-precision decimal type
+-- Example: decimal
+decimal :: TTerm Type
+decimal = typeLiteral literalTypeDecimal
+
 -- | Create a term-encoded either type
 -- Example: either_ string int32
 either_ :: TTerm Type -> TTerm Type -> TTerm Type
@@ -164,7 +169,7 @@ map k v = typeMap $ mapType k v
 mono :: TTerm Type -> TTerm TypeScheme
 mono t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables $ Phantoms.list ([] :: [TTerm Name]),
-  Phantoms.field _TypeScheme_type t,
+  Phantoms.field _TypeScheme_body t,
   Phantoms.field _TypeScheme_constraints Phantoms.nothing]
 
 -- | Create a term-encoded maybe (optional/nullable) type
@@ -187,7 +192,7 @@ pair first second = Core.typePair $ Core.pairType first second
 poly :: [String] -> TTerm Type -> TTerm TypeScheme
 poly params t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
-  Phantoms.field _TypeScheme_type t,
+  Phantoms.field _TypeScheme_body t,
   Phantoms.field _TypeScheme_constraints Phantoms.nothing]
 
 -- | Create a term-encoded polymorphic type scheme with class constraints
@@ -195,7 +200,7 @@ poly params t = Phantoms.record _TypeScheme [
 polyConstrained :: [String] -> [(String, [String])] -> TTerm Type -> TTerm TypeScheme
 polyConstrained params constraints t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
-  Phantoms.field _TypeScheme_type t,
+  Phantoms.field _TypeScheme_body t,
   Phantoms.field _TypeScheme_constraints constraintsTerm]
   where
     constraintsTerm = Phantoms.just $ Phantoms.map $ M.fromList

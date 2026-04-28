@@ -3,13 +3,13 @@
     {
       "type": {
         "name": "hydra.variants.EliminationVariant",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The identifier of an elimination constructor (legacy)"}}}],
               "body": {
                 "union": [
@@ -20,13 +20,13 @@
     {
       "type": {
         "name": "hydra.variants.FunctionVariant",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The identifier of a function constructor (legacy)"}}}],
               "body": {
                 "union": [
@@ -36,17 +36,18 @@
     {
       "type": {
         "name": "hydra.variants.LiteralVariant",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The identifier of a literal constructor"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The identifier of a literal constructor"}}}],
               "body": {
                 "union": [
                   {"name": "binary", "type": {"unit": {}}},
                   {"name": "boolean", "type": {"unit": {}}},
+                  {"name": "decimal", "type": {"unit": {}}},
                   {"name": "float", "type": {"unit": {}}},
                   {"name": "integer", "type": {"unit": {}}},
                   {"name": "string", "type": {"unit": {}}}]}}},
@@ -54,13 +55,13 @@
     {
       "type": {
         "name": "hydra.variants.TermVariant",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The identifier of a term expression constructor"}}}],
               "body": {
                 "union": [
@@ -68,6 +69,7 @@
                   {"name": "application", "type": {"unit": {}}},
                   {"name": "cases", "type": {"unit": {}}},
                   {"name": "either", "type": {"unit": {}}},
+                  {"name": "inject", "type": {"unit": {}}},
                   {"name": "lambda", "type": {"unit": {}}},
                   {"name": "let", "type": {"unit": {}}},
                   {"name": "list", "type": {"unit": {}}},
@@ -80,7 +82,6 @@
                   {"name": "set", "type": {"unit": {}}},
                   {"name": "typeApplication", "type": {"unit": {}}},
                   {"name": "typeLambda", "type": {"unit": {}}},
-                  {"name": "union", "type": {"unit": {}}},
                   {"name": "unit", "type": {"unit": {}}},
                   {"name": "unwrap", "type": {"unit": {}}},
                   {"name": "variable", "type": {"unit": {}}},
@@ -89,13 +90,13 @@
     {
       "type": {
         "name": "hydra.variants.TypeVariant",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The identifier of a type constructor"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The identifier of a type constructor"}}}],
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},

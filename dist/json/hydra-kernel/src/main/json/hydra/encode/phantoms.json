@@ -12,7 +12,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -92,8 +92,8 @@
                     "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -116,7 +116,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "wrap",
                               "term": {
@@ -151,8 +151,8 @@
                     "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -175,7 +175,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -257,8 +257,8 @@
                     "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

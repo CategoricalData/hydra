@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Language constraints for C++
@@ -72,7 +73,7 @@ cppLanguage =
           Variants.TermVariantPair,
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]
     typeVariants =

@@ -23,8 +23,12 @@ rdf :: String -> Type
 rdf = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "An RDF 1.1 syntax model"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "An RDF 1.1 syntax model"}
   where
     definitions = [
       blankNode,

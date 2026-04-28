@@ -3,26 +3,26 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Constant",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Relation",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Variable",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program",
-        "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}},
+        "typeScheme": {
+          "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program_Elmt",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "Fact", "type": {"variable": "hydra.datalog.syntax.Fact"}},
               {"name": "Rule", "type": {"variable": "hydra.datalog.syntax.Rule"}}]},
@@ -30,8 +30,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Fact",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "Relation",
@@ -43,8 +43,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Rule",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
               {
@@ -54,8 +54,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Atom",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "Relation",
@@ -67,8 +67,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomList",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
               {
@@ -78,8 +78,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomList_Multiple",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
               {
@@ -89,8 +89,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Term",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "Constant",
@@ -102,8 +102,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.TermList",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
               {
@@ -113,8 +113,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.TermList_Multiple",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "Term", "type": {"variable": "hydra.datalog.syntax.Term"}},
               {
@@ -124,8 +124,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantList",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "single",
@@ -137,8 +137,8 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantList_Multiple",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "Constant",

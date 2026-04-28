@@ -89,10 +89,12 @@ jsonParserDefinition :: String -> TTerm a -> TTermDefinition a
 jsonParserDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module ns definitions
-    [Parsers.ns]
-    KernelTypes.kernelTypesNamespaces $
-    Just "JSON parser using Hydra parser combinators"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Parsers.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "JSON parser using Hydra parser combinators"}
   where
     ns = Namespace "hydra.json.parser"
     definitions = [
@@ -276,7 +278,7 @@ jsonNumber = define "jsonNumber" $
              Maybes.maybe (string "") (unaryFunction Equality.identity) (var "fracPart") ++
              Maybes.maybe (string "") (unaryFunction Equality.identity) (var "expPart")) $
           Parsers.pure @@
-            (Json.valueNumber (Maybes.maybe (bigfloat 0.0) (unaryFunction Equality.identity) (Literals.readBigfloat (var "numStr"))))))))
+            (Json.valueNumber (Maybes.maybe (decimal 0) (unaryFunction Equality.identity) (Literals.readDecimal (var "numStr"))))))))
 
 -- | Parse a JSON escape character
 jsonEscapeChar :: TTermDefinition (Parser Int)

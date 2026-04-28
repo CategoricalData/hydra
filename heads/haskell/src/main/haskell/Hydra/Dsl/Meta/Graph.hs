@@ -5,7 +5,7 @@ module Hydra.Dsl.Meta.Graph (
   module Hydra.Dsl.Graph,
   module Hydra.Dsl.Meta.Graph,
   DslGraph.primitiveName,
-  DslGraph.primitiveType,
+  DslGraph.primitiveTypeScheme,
   DslGraph.graphPrimitives,
 ) where
 
@@ -52,5 +52,5 @@ emptyGraph = graph
 
 graphPrimitiveTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
 graphPrimitiveTypes g = Maps.fromList (Lists.map
-    ("_gpt_p" ~> pair (DslGraph.primitiveName $ var "_gpt_p") (DslGraph.primitiveType $ var "_gpt_p"))
+    ("_gpt_p" ~> pair (DslGraph.primitiveName $ var "_gpt_p") (DslGraph.primitiveTypeScheme $ var "_gpt_p"))
     (Maps.elems $ DslGraph.graphPrimitives g))

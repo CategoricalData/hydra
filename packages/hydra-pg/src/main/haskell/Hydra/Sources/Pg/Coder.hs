@@ -105,10 +105,12 @@ ns :: Namespace
 ns = Namespace "hydra.pg.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns]
-    (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Property graph element coders for mapping Hydra terms to property graph elements"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, ExtractCore.ns, Resolution.ns, TermsToElements.ns],
+            moduleTypeDependencies = (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Property graph element coders for mapping Hydra terms to property graph elements"}
   where
     definitions = [
       toDefinition check,
@@ -507,11 +509,15 @@ findProjectionSpec = define "findProjectionSpec" $
       ("mfield" ~> Maybes.maybe
         (right nothing)
         ("field" ~>
-          Eithers.bind (TermsToElements.decodeValueSpec @@ var "cx" @@ var "g" @@ (Maybes.fromJust (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "field"))))
-            ("spec" ~>
-              Eithers.bind (Maybes.maybe (right nothing) ("t" ~> Eithers.map (lambda "x" $ just (var "x")) (extractString @@ var "cx" @@ var "g" @@ var "t"))
-                (Annotations.getTypeAnnotation @@ var "aliasKey" @@ (Core.fieldTypeType $ var "field")))
-                ("alias" ~> right (just (pair (var "field") (pair (var "spec") (var "alias")))))))
+          Maybes.maybe
+            (left $ Error.errorOther $ Error.otherError $ string "findProjectionSpec: missing type annotation for key")
+            ("annot" ~>
+              Eithers.bind (TermsToElements.decodeValueSpec @@ var "cx" @@ var "g" @@ var "annot")
+                ("spec" ~>
+                  Eithers.bind (Maybes.maybe (right nothing) ("t" ~> Eithers.map (lambda "x" $ just (var "x")) (extractString @@ var "cx" @@ var "g" @@ var "t"))
+                    (Annotations.getTypeAnnotation @@ var "aliasKey" @@ (Core.fieldTypeType $ var "field")))
+                    ("alias" ~> right (just (pair (var "field") (pair (var "spec") (var "alias")))))))
+            (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "field")))
         (var "mfield"))
 
 -- | Find property specs for element fields
@@ -566,7 +572,7 @@ findSingleFieldWithAnnotationKey = define "findSingleFieldWithAnnotationKey" $
       (var "fields")] $
     Logic.ifElse (Equality.gt (Lists.length $ var "matches") (int32 1))
       (err (var "cx") (string "Multiple fields marked as '" ++ (Core.unName $ var "key") ++ string "' in record type " ++ (Core.unName $ var "tname")))
-      (right (Lists.safeHead $ var "matches"))
+      (right (Lists.maybeHead $ var "matches"))
 
 -- | Determine whether the spec has vertex adapters based on direction and out/in specs
 hasVertexAdapters :: TTermDefinition (PG.Direction -> Y.Maybe a -> Y.Maybe b -> Bool)
@@ -670,7 +676,10 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
         Logic.ifElse (Lists.null $ var "terms")
           (err (var "cx") (var "desc" ++ string " did not resolve to a term"))
           (Logic.ifElse (Equality.equal (Lists.length $ var "terms") (int32 1))
-            (right $ Lists.head $ var "terms")
+            (Maybes.maybe
+              (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))
+              (unaryFunction right)
+              (Lists.maybeHead $ var "terms"))
             (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))))
 
 -- | Create a vertex coder given all components
@@ -778,5 +787,7 @@ vertexIdAdapter = define "vertexIdAdapter" $
   doc "Create a vertex id adapter" $
   "cx" ~> "g" ~> "schema" ~> "vidType" ~> "name" ~> "idKey" ~> "fields" ~>
     Eithers.bind (findIdProjectionSpec @@ var "cx" @@ true @@ var "name" @@ var "idKey" @@ var "fields")
-      ("mIdSpec" ~> Eithers.bind (right $ Maybes.fromJust (var "mIdSpec"))
-        ("idSpec" ~> projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "idSpec" @@ string "id"))
+      ("mIdSpec" ~> Maybes.maybe
+        (left $ Error.errorOther $ Error.otherError $ string "vertexIdAdapter: no id projection spec")
+        ("idSpec" ~> projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "idSpec" @@ string "id")
+        (var "mIdSpec"))

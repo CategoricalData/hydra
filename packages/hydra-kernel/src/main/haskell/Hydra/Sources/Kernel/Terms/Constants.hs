@@ -59,10 +59,12 @@ ns :: Namespace
 ns = Namespace "hydra.constants"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just ("A module for tier-0 constants.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("A module for tier-0 constants.")}
   where
    definitions = [
      toDefinition debugInference,

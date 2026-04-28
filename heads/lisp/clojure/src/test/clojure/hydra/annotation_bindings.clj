@@ -17,7 +17,7 @@
                (list (->hydra_core_binding name val nil))
                body)))
 (defn- t-inject [type-name field-name term]
-  (list :union (->hydra_core_injection type-name
+  (list :inject (->hydra_core_injection type-name
                  (->hydra_core_field field-name term))))
 (defn- t-record [type-name fields]
   (list :record (->hydra_core_record type-name fields)))

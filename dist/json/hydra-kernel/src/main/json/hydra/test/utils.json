@@ -11,8 +11,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Run type inference on all terms in a TestGroup to ensure lambdas have domain types"}}}],
                     "body": {
@@ -28,7 +28,7 @@
                                       "application": {
                                         "argument": {"variable": "tg"},
                                         "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "desc",
                                     "term": {
@@ -36,7 +36,7 @@
                                         "argument": {"variable": "tg"},
                                         "function": {
                                           "project": {"field": "description", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                    "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                   {
                                     "name": "subgroups",
                                     "term": {
@@ -44,8 +44,8 @@
                                         "argument": {"variable": "tg"},
                                         "function": {
                                           "project": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {
-                                      "type": {"list": {"variable": "hydra.testing.TestGroup"}},
+                                    "typeScheme": {
+                                      "body": {"list": {"variable": "hydra.testing.TestGroup"}},
                                       "variables": []}},
                                   {
                                     "name": "cases_",
@@ -53,8 +53,8 @@
                                       "application": {
                                         "argument": {"variable": "tg"},
                                         "function": {"project": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "type": {
-                                      "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
+                                    "typeScheme": {
+                                      "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
                                       "variables": []}}],
                                 "body": {
                                   "application": {
@@ -170,8 +170,8 @@
                         "parameter": "g"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -193,8 +193,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Run type inference on the terms in a test case"}}}],
                     "body": {
                       "lambda": {
@@ -210,7 +210,7 @@
                                         "argument": {"variable": "tcm"},
                                         "function": {
                                           "project": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "tcase",
                                     "term": {
@@ -218,7 +218,7 @@
                                         "argument": {"variable": "tcm"},
                                         "function": {
                                           "project": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"type": {"variable": "hydra.testing.TestCase"}, "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.testing.TestCase"}, "variables": []}},
                                   {
                                     "name": "desc",
                                     "term": {
@@ -228,7 +228,7 @@
                                           "project": {
                                             "field": "description",
                                             "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                    "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                   {
                                     "name": "tags_",
                                     "term": {
@@ -236,14 +236,14 @@
                                         "argument": {"variable": "tcm"},
                                         "function": {
                                           "project": {"field": "tags", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "type": {"type": {"list": {"variable": "hydra.testing.Tag"}}, "variables": []}}],
+                                    "typeScheme": {"body": {"list": {"variable": "hydra.testing.Tag"}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"either": {"@right": {"variable": "tcase"}}},
+                                            "body": {"either": {"right": {"variable": "tcase"}}},
                                             "type": {"variable": "t1"}}},
                                         "type": {"variable": "hydra.testing.TestCase"}}},
                                     "function": {
@@ -276,8 +276,8 @@
                         "parameter": "g"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -295,8 +295,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Run type inference on a single term"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Run type inference on a single term"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -351,8 +351,8 @@
                     "parameter": "term"}},
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "g"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

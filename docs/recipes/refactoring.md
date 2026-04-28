@@ -115,11 +115,13 @@ kernelPrimaryTermsModules = [
 
 ### Step 4: Build and Regenerate
 
-The simplest approach is to run `bin/sync-all.sh` from the repo root,
-which handles all regeneration steps in the correct order. For incremental work, you can run the steps individually:
+The simplest approach is to run `bin/sync.sh` from the repo root
+(or `bin/sync-default.sh` for the haskell/java/python triad).
+The matrix tool handles all regeneration in dependency order. For
+incremental work, you can run the steps individually:
 
 ```bash
-cd packages/hydra-haskell
+cd heads/haskell
 
 # Build to verify the source compiles
 stack build
@@ -146,8 +148,8 @@ stack test
 ```bash
 # From heads/haskell
 cd ../heads/haskell
-./bin/sync-python.sh --quick
-./bin/sync-java.sh --quick
+./bin/sync-python.sh --no-tests
+./bin/sync-java.sh --no-tests
 ```
 
 ---
@@ -411,8 +413,8 @@ stack test
 
 # Regenerate Python and Java (from heads/haskell)
 cd ../heads/haskell
-./bin/sync-python.sh --quick
-./bin/sync-java.sh --quick
+./bin/sync-python.sh --no-tests
+./bin/sync-java.sh --no-tests
 
 # Clean up orphan Python files
 rm -f ../dist/python/hydra-kernel/src/main/python/hydra/foo.py
@@ -457,7 +459,7 @@ you need to rewrite every consumer of the old types to use the new one, often wi
 
 ### Updating Non-Generated Code
 
-Type consolidation affects not only Sources and gen-main, but also hand-written code that references the old types:
+Type consolidation affects not only Sources and the generated `dist/haskell/<pkg>/` trees, but also hand-written code that references the old types:
 
 - **Test infrastructure**: Test runners in Java (`TestSuiteRunner.java`), Python, and Haskell (`TestUtils.hs`,
   `TestSuiteSpec.hs`) construct kernel types directly.
@@ -501,9 +503,9 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 
 **Adding a field to a kernel type** (e.g., adding `transitionalGraf` to `Graph`):
 1. Add the field to the type definition in Sources (e.g., `Sources/Kernel/Types/Graph.hs`)
-2. Regenerate just the types module into gen-main (e.g., via `writeHaskell` in ghci)
-3. Manually patch **all** record construction sites in gen-main to supply the new field —
-   search for `TypeName {` across gen-main
+2. Regenerate just the types module into the generated tree (e.g., via `writeHaskell` in ghci into `dist/haskell/hydra-kernel/src/main/haskell/`)
+3. Manually patch **all** record construction sites in the generated tree to supply the new field —
+   search for `TypeName {` across `dist/haskell/`
 4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
 5. Update the DSL helpers (e.g., `Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
 6. Update all Source-level constructor calls to supply the new field
@@ -511,7 +513,7 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 8. Regenerate cleanly — the generated files will now replace your manual patches
 9. `stack build` again and run tests to confirm
 
-The key insight: gen-main patches in step 3 are temporary scaffolding.
+The key insight: the patches in step 3 are temporary scaffolding.
 They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
 
 ### Silent State Pipeline Bugs
@@ -552,29 +554,34 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 ## The Sync Pipeline
 
 After making changes to Sources and rebuilding Haskell, regeneration must propagate through several stages.
-The `bin/sync-all.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage).
+The `bin/sync.sh` script runs all of these in the correct order (use `--no-tests` to skip tests at each stage).
+For the haskell/java/python bootstrapping triad, `bin/sync-default.sh` is a shorthand wrapper.
 However, it's useful to understand the individual stages, especially when debugging failures.
 
 ### Pipeline Order
 
-`bin/sync-all.sh` executes four phases:
+`bin/sync.sh` (with `--hosts`/`--targets` resolved from CLI flags) executes four phases:
 
 ```
-Phase 1: stack build + update-haskell-kernel + update-kernel-tests + ... (packages/hydra-haskell)
-    → Export and verify JSON
-    → stack test (unless --quick)
-Phase 2: sync-ext.sh (extension Haskell generation)
-Phase 3: sync-java.sh (Java from JSON)
-    → gradle test (unless --quick)
-Phase 4: sync-python.sh (Python from JSON)
-    → pytest (unless --quick)
+Phase 1: heads/haskell/bin/sync-haskell.sh
+    → DSL → JSON via update-json-{main,test,manifest}
+    → verify-json-kernel (round-trip check)
+    → JSON → Haskell for hydra-kernel + hydra-haskell via bootstrap-from-json
+    → stack test (unless --no-tests)
+    (Lexicon regen was retired from sync; run bin/regenerate-lexicon.sh on demand.)
+Phase 2: assemble-distribution.sh per coder package (Haskell from JSON)
+    → one call per language in (hosts ∪ targets) \ {haskell}
+Phase 3: hydra-kernel into each language in (hosts ∪ targets) \ {haskell}
+    → via transform-json-to-target.sh, both main and test
+Phase 4: cross-host coders for each (host, target) with host ≠ haskell
+    → hydra-<target> coder generated in host's language
 ```
 
 ### Diagnosing Failures at Each Stage
 
 | Stage | Typical Failures | What To Check |
 |-------|-----------------|---------------|
-| `stack build` (packages/hydra-haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, gen-main bootstrap |
+| `stack build` (heads/haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, generated bootstrap under `dist/haskell/hydra-kernel/` |
 | `sync-haskell.sh` | Haskell test failures | Generated code correctness, `verify-json-kernel` |
 | `stack build` (extension packages) | Coders using old type names/fields | Extension package source files referencing old types |
 | `sync-java.sh` | Java compilation errors | Hand-written Java code (test runners, utilities) |
@@ -713,7 +720,7 @@ This change is particularly complex because:
 3. Changing a fundamental type like `Graph` affects both sides
 
 The solution is to update files in the correct order:
-1. First update generated files (`gen-main`) to make them compile with the new type
+1. First update generated files under `dist/haskell/<pkg>/src/main/haskell/` to make them compile with the new type
 2. Then update source files (`Sources`) to generate the correct definitions
 3. Regenerate to verify consistency
 
@@ -772,7 +779,7 @@ Adding a primitive requires updates to **six files**:
    graphElements :: T.list Core.binding
    ```
 
-2. **Updated generated type** in `Hydra/Graph.hs` (gen-main):
+2. **Updated generated type** in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs`:
    ```haskell
    -- From:
    graphElements :: (M.Map Core.Name Core.Binding)
@@ -816,7 +823,7 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 
 **Types (Sources + Generated):**
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Type definition source
-- `Hydra/Graph.hs` (gen-main) - Generated type
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs` - Generated type
 
 **DSL Helpers:**
 - `Hydra/Dsl/Meta/Graph.hs` - Graph construction helpers
@@ -851,8 +858,8 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 
 ### Key Lessons
 
-1. **Update gen-main first**: When changing fundamental types, update generated files first so the project compiles,
-   then update source files.
+1. **Update generated files first**: When changing fundamental types, update files under `dist/haskell/<pkg>/`
+   first so the project compiles, then update source files.
 
 2. **Adding primitives is multi-file**: Plan for updating 6 files when adding a new primitive function.
 

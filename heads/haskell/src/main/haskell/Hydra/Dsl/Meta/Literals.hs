@@ -7,6 +7,7 @@ import qualified Hydra.Dsl.Terms as Terms
 
 import Data.Int
 import qualified Data.ByteString as B
+import qualified Data.Scientific as Sci
 
 
 -- Note: does not yet properly capture arbitrary-precision floating-point numbers,
@@ -33,6 +34,9 @@ boolean = bool
 
 char :: Char -> TTerm Int
 char = TTerm . Terms.char
+
+decimal :: Sci.Scientific -> TTerm Sci.Scientific
+decimal = TTerm . Terms.decimal
 
 double :: Double -> TTerm Double
 double = float64

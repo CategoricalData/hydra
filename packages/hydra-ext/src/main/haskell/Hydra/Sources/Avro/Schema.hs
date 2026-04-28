@@ -29,9 +29,13 @@ json :: String -> Type
 json = typeref $ JsonModel.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [JsonModel.ns] [Core.ns] $
-    Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
-      "  https://avro.apache.org/docs/1.11.1/specification")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [JsonModel.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
+      "  https://avro.apache.org/docs/1.11.1/specification")}
   where
     definitions = [
       array_,

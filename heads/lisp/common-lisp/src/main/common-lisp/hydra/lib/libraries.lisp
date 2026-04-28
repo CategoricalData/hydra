@@ -117,9 +117,6 @@
       (cons (qname ns_ "apply")      (prim2 (qname ns_ "apply")
                                               hydra_lib_lists_apply
                                               nil (tc-list (fun a b)) (tc-list a) (tc-list b)))
-      (cons (qname ns_ "at")         (prim2 (qname ns_ "at")
-                                              hydra_lib_lists_at
-                                              nil (tc-int32) (tc-list a) a))
       (cons (qname ns_ "bind")       (prim2 (qname ns_ "bind")
                                               hydra_lib_lists_bind
                                               nil (tc-list a) (fun a (tc-list b)) (tc-list b)))
@@ -162,15 +159,12 @@
                                                                       init) xs))))
                                               nil (fun a (fun b b)) b (tc-list a) b))
       (cons (qname ns_ "group")      (prim1 (qname ns_ "group")      hydra_lib_lists_group      nil (tc-list a) (tc-list (tc-list a)) '(("a" . ("equality")))))
-      (cons (qname ns_ "head")       (prim1 (qname ns_ "head")       hydra_lib_lists_head       nil (tc-list a) a))
-      (cons (qname ns_ "init")       (prim1 (qname ns_ "init")       hydra_lib_lists_init       nil (tc-list a) (tc-list a)))
       (cons (qname ns_ "intercalate") (prim2 (qname ns_ "intercalate")
                                                hydra_lib_lists_intercalate
                                                nil (tc-list a) (tc-list (tc-list a)) (tc-list a)))
       (cons (qname ns_ "intersperse") (prim2 (qname ns_ "intersperse")
                                                hydra_lib_lists_intersperse
                                                nil a (tc-list a) (tc-list a)))
-      (cons (qname ns_ "last")       (prim1 (qname ns_ "last")       hydra_lib_lists_last       nil (tc-list a) a))
       (cons (qname ns_ "length")     (prim1 (qname ns_ "length")     hydra_lib_lists_length     nil (tc-list a) (tc-int32)))
       (cons (qname ns_ "map")        (prim2 (qname ns_ "map")
                                               hydra_lib_lists_map
@@ -190,7 +184,6 @@
                                               hydra_lib_lists_replicate
                                               nil (tc-int32) a (tc-list a)))
       (cons (qname ns_ "reverse")    (prim1 (qname ns_ "reverse")    hydra_lib_lists_reverse    nil (tc-list a) (tc-list a)))
-      (cons (qname ns_ "safeHead")   (prim1 (qname ns_ "safeHead")   hydra_lib_lists_safe_head  nil (tc-list a) (tc-optional a)))
       (cons (qname ns_ "singleton")  (prim1 (qname ns_ "singleton")  hydra_lib_lists_singleton  nil a (tc-list a)))
       (cons (qname ns_ "sort")       (prim1 (qname ns_ "sort")       hydra_lib_lists_sort       nil (tc-list a) (tc-list a) '(("a" . ("ordering")))))
       (cons (qname ns_ "sortOn")     (prim2 (qname ns_ "sortOn")
@@ -199,11 +192,11 @@
       (cons (qname ns_ "span")       (prim2 (qname ns_ "span")
                                               hydra_lib_lists_span
                                               nil (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
-      (cons (qname ns_ "tail")       (prim1 (qname ns_ "tail")       hydra_lib_lists_tail       nil (tc-list a) (tc-list a)))
       (cons (qname ns_ "take")       (prim2 (qname ns_ "take")
                                               hydra_lib_lists_take
                                               nil (tc-int32) (tc-list a) (tc-list a)))
       (cons (qname ns_ "transpose")  (prim1 (qname ns_ "transpose")  hydra_lib_lists_transpose  nil (tc-list (tc-list a)) (tc-list (tc-list a))))
+      (cons (qname ns_ "uncons")     (prim1 (qname ns_ "uncons")     hydra_lib_lists_uncons     nil (tc-list a) (tc-optional (tc-pair a (tc-list a)))))
       (cons (qname ns_ "zip")        (prim2 (qname ns_ "zip")
                                               hydra_lib_lists_zip
                                               nil (tc-list a) (tc-list b) (tc-list (tc-pair a b))))
@@ -315,18 +308,13 @@
       (list
         (cons (qname ns_ "abs")    (prim1 (qname ns_ "abs")    hydra_lib_math_abs    nil i32 i32))
         (cons (qname ns_ "add")    (prim2 (qname ns_ "add")    hydra_lib_math_add    nil i32 i32 i32))
-        (cons (qname ns_ "div")    (prim2 (qname ns_ "div")    hydra_lib_math_div    nil i32 i32 i32))
         (cons (qname ns_ "even")   (prim1 (qname ns_ "even")   hydra_lib_math_even   nil i32 b))
-        (cons (qname ns_ "mod")    (prim2 (qname ns_ "mod")    hydra_lib_math_mod    nil i32 i32 i32))
         (cons (qname ns_ "mul")    (prim2 (qname ns_ "mul")    hydra_lib_math_mul    nil i32 i32 i32))
         (cons (qname ns_ "negate") (prim1 (qname ns_ "negate") hydra_lib_math_negate nil i32 i32))
         (cons (qname ns_ "odd")    (prim1 (qname ns_ "odd")    hydra_lib_math_odd    nil i32 b))
-        (cons (qname ns_ "pred")   (prim1 (qname ns_ "pred")   hydra_lib_math_pred   nil i32 i32))
         (cons (qname ns_ "range")  (prim2 (qname ns_ "range")  hydra_lib_math_range  nil i32 i32 (tc-list i32)))
-        (cons (qname ns_ "rem")    (prim2 (qname ns_ "rem")    hydra_lib_math_rem    nil i32 i32 i32))
         (cons (qname ns_ "signum") (prim1 (qname ns_ "signum") hydra_lib_math_signum nil i32 i32))
         (cons (qname ns_ "sub")    (prim2 (qname ns_ "sub")    hydra_lib_math_sub    nil i32 i32 i32))
-        (cons (qname ns_ "succ")   (prim1 (qname ns_ "succ")   hydra_lib_math_succ   nil i32 i32))
         (cons (qname ns_ "max")    (prim2 (qname ns_ "max")    hydra_lib_math_max    nil i32 i32 i32))
         (cons (qname ns_ "maybeDiv")  (prim2 (qname ns_ "maybeDiv")  hydra_lib_math_maybe_div  nil i32 i32 (tc-optional i32)))
         (cons (qname ns_ "maybeMod")  (prim2 (qname ns_ "maybeMod")  hydra_lib_math_maybe_mod  nil i32 i32 (tc-optional i32)))
@@ -391,7 +379,6 @@
       (cons (qname ns_ "compose")  (prim3 (qname ns_ "compose")
                                            hydra_lib_maybes_compose
                                            nil (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-      (cons (qname ns_ "fromJust") (prim1 (qname ns_ "fromJust") hydra_lib_maybes_from_just nil (tc-optional a) a))
       (cons (qname ns_ "fromMaybe") (prim2 (qname ns_ "fromMaybe")
                                             hydra_lib_maybes_from_maybe
                                             nil a (tc-optional a) a))
@@ -480,9 +467,6 @@
       (cons (qname ns_ "cat2")        (prim2 (qname ns_ "cat2")
                                                hydra_lib_strings_cat2
                                                nil s s s))
-      (cons (qname ns_ "charAt")      (prim2 (qname ns_ "charAt")
-                                               hydra_lib_strings_char_at
-                                               nil i s i))
       (cons (qname ns_ "fromList")    (prim1 (qname ns_ "fromList")    hydra_lib_strings_from_list    nil (tc-list i) s))
       (cons (qname ns_ "intercalate") (prim2 (qname ns_ "intercalate")
                                                hydra_lib_strings_intercalate
@@ -507,6 +491,7 @@
   (let ((ns_ "hydra.lib.literals")
         (bf  (tc-bigfloat))
         (bi  (tc-bigint))
+        (dec (tc-decimal))
         (f32 (tc-float32))
         (f64 (tc-float64))
         (i8  (tc-int8))
@@ -527,6 +512,7 @@
         (cons (qname ns_ "bigfloatToFloat32")  (prim1 (qname ns_ "bigfloatToFloat32")  hydra_lib_literals_bigfloat_to_float32  nil bf f32))
         (cons (qname ns_ "bigfloatToFloat64")  (prim1 (qname ns_ "bigfloatToFloat64")  hydra_lib_literals_bigfloat_to_float64  nil bf f64))
         (cons (qname ns_ "bigintToBigfloat")   (prim1 (qname ns_ "bigintToBigfloat")   hydra_lib_literals_bigint_to_bigfloat   nil bi bf))
+        (cons (qname ns_ "bigintToDecimal")    (prim1 (qname ns_ "bigintToDecimal")    hydra_lib_literals_bigint_to_decimal    nil bi dec))
         (cons (qname ns_ "bigintToInt8")       (prim1 (qname ns_ "bigintToInt8")       hydra_lib_literals_bigint_to_int8       nil bi i8))
         (cons (qname ns_ "bigintToInt16")      (prim1 (qname ns_ "bigintToInt16")      hydra_lib_literals_bigint_to_int16      nil bi i16))
         (cons (qname ns_ "bigintToInt32")      (prim1 (qname ns_ "bigintToInt32")      hydra_lib_literals_bigint_to_int32      nil bi i32))
@@ -537,8 +523,13 @@
         (cons (qname ns_ "bigintToUint64")     (prim1 (qname ns_ "bigintToUint64")     hydra_lib_literals_bigint_to_uint64     nil bi u64))
         (cons (qname ns_ "binaryToBytes")      (prim1 (qname ns_ "binaryToBytes")      hydra_lib_literals_binary_to_bytes      nil bin (tc-list i32)))
         (cons (qname ns_ "binaryToString")     (prim1 (qname ns_ "binaryToString")     hydra_lib_literals_binary_to_string     nil bin s))
+        (cons (qname ns_ "decimalToBigint")    (prim1 (qname ns_ "decimalToBigint")    hydra_lib_literals_decimal_to_bigint    nil dec bi))
+        (cons (qname ns_ "decimalToFloat32")   (prim1 (qname ns_ "decimalToFloat32")   hydra_lib_literals_decimal_to_float32   nil dec f32))
+        (cons (qname ns_ "decimalToFloat64")   (prim1 (qname ns_ "decimalToFloat64")   hydra_lib_literals_decimal_to_float64   nil dec f64))
         (cons (qname ns_ "float32ToBigfloat")  (prim1 (qname ns_ "float32ToBigfloat")  hydra_lib_literals_float32_to_bigfloat  nil f32 bf))
+        (cons (qname ns_ "float32ToDecimal")   (prim1 (qname ns_ "float32ToDecimal")   hydra_lib_literals_float32_to_decimal   nil f32 dec))
         (cons (qname ns_ "float64ToBigfloat")  (prim1 (qname ns_ "float64ToBigfloat")  hydra_lib_literals_float64_to_bigfloat  nil f64 bf))
+        (cons (qname ns_ "float64ToDecimal")   (prim1 (qname ns_ "float64ToDecimal")   hydra_lib_literals_float64_to_decimal   nil f64 dec))
         (cons (qname ns_ "int8ToBigint")       (prim1 (qname ns_ "int8ToBigint")       hydra_lib_literals_int8_to_bigint       nil i8 bi))
         (cons (qname ns_ "int16ToBigint")      (prim1 (qname ns_ "int16ToBigint")      hydra_lib_literals_int16_to_bigint      nil i16 bi))
         (cons (qname ns_ "int32ToBigint")      (prim1 (qname ns_ "int32ToBigint")      hydra_lib_literals_int32_to_bigint      nil i32 bi))
@@ -553,6 +544,7 @@
         (cons (qname ns_ "readBigfloat") (prim1 (qname ns_ "readBigfloat") hydra_lib_literals_read_bigfloat nil s (tc-optional bf)))
         (cons (qname ns_ "readBigint")   (prim1 (qname ns_ "readBigint")   hydra_lib_literals_read_bigint   nil s (tc-optional bi)))
         (cons (qname ns_ "readBoolean")  (prim1 (qname ns_ "readBoolean")  hydra_lib_literals_read_boolean  nil s (tc-optional b)))
+        (cons (qname ns_ "readDecimal")  (prim1 (qname ns_ "readDecimal")  hydra_lib_literals_read_decimal  nil s (tc-optional dec)))
         (cons (qname ns_ "readFloat32")  (prim1 (qname ns_ "readFloat32")  hydra_lib_literals_read_float32  nil s (tc-optional f32)))
         (cons (qname ns_ "readFloat64")  (prim1 (qname ns_ "readFloat64")  hydra_lib_literals_read_float64  nil s (tc-optional f64)))
         (cons (qname ns_ "readInt8")     (prim1 (qname ns_ "readInt8")     hydra_lib_literals_read_int8     nil s (tc-optional i8)))
@@ -569,6 +561,7 @@
         (cons (qname ns_ "showBigfloat") (prim1 (qname ns_ "showBigfloat") hydra_lib_literals_show_bigfloat nil bf s))
         (cons (qname ns_ "showBigint")   (prim1 (qname ns_ "showBigint")   hydra_lib_literals_show_bigint   nil bi s))
         (cons (qname ns_ "showBoolean")  (prim1 (qname ns_ "showBoolean")  hydra_lib_literals_show_boolean  nil b s))
+        (cons (qname ns_ "showDecimal")  (prim1 (qname ns_ "showDecimal")  hydra_lib_literals_show_decimal  nil dec s))
         (cons (qname ns_ "showFloat32")  (prim1 (qname ns_ "showFloat32")  hydra_lib_literals_show_float32  nil f32 s))
         (cons (qname ns_ "showFloat64")  (prim1 (qname ns_ "showFloat64")  hydra_lib_literals_show_float64  nil f64 s))
         (cons (qname ns_ "showInt8")     (prim1 (qname ns_ "showInt8")     hydra_lib_literals_show_int8     nil i8 s))

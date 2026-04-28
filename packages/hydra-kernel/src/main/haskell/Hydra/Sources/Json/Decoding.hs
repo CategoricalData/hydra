@@ -76,6 +76,7 @@ import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
+import qualified Data.Scientific                           as Sci
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
@@ -88,10 +89,12 @@ ns :: Namespace
 ns = Namespace "hydra.json.decoding"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    KernelTypes.kernelTypesNamespaces $
-    Just "Decoding functions for JSON data"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Decoding functions for JSON data"}
   where
    definitions = [
      Phantoms.toDefinition decodeArray,
@@ -127,7 +130,7 @@ decodeField  = define "Field" $
         @@ (left $ Strings.cat2 (string "missing field: ") (var "name"))
         @@ (lambda "f" $ right $ var "f"))
 
-decodeNumber :: TTermDefinition (Value -> Either String Double)
+decodeNumber :: TTermDefinition (Value -> Either String Sci.Scientific)
 decodeNumber  = define "Number" $
   doc "Decode a JSON number value" $
   match _Value (Just $ left (string "expected a number")) [

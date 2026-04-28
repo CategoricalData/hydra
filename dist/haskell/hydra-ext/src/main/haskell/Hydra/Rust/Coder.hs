@@ -9,6 +9,7 @@ import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -27,6 +28,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 encodeEnumVariant :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.EnumVariant
@@ -195,7 +197,7 @@ encodeTerm cx g term =
           Syntax.structExprRest = Nothing}))))
       Core.TermSet v0 -> Eithers.bind (Eithers.mapList (encodeTerm cx g) (Sets.toList v0)) (\sels -> Right (rustCall (rustExprPath "BTreeSet::from") [
         Syntax.ExpressionArray (Syntax.ArrayExprElements sels)]))
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let tname = Formatting.capitalize (Names.localNameOf (Core.injectionTypeName v0))
             field = Core.injectionField v0
             fname = Formatting.capitalize (Core.unName (Core.fieldName field))
@@ -222,7 +224,7 @@ encodeTermDefinition cx g tdef =
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Packaging.termDefinitionType tdef)
+          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
@@ -279,10 +281,10 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Er
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeType (Packaging.typeDefinitionType tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
-                  Lists.filter (\v -> Lists.null (Lists.tail (Strings.splitOn "." (Core.unName v)))) (Sets.toList (Variables.freeVariablesInType typ))
+                  Lists.filter (\v -> Equality.equal (Lists.length (Strings.splitOn "." (Core.unName v))) 1) (Sets.toList (Variables.freeVariablesInType typ))
           generics =
                   Lists.map (\v -> Syntax.GenericParam {
                     Syntax.genericParamName = (Formatting.capitalize (Core.unName v)),

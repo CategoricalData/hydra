@@ -82,12 +82,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.go.language")
-  [toDefinition goLanguage, toDefinition goReservedWords]
-  [Lexical.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for Go 1.22+"
-
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.go.language"),
+            moduleDefinitions = [toDefinition goLanguage, toDefinition goReservedWords],
+            moduleTermDependencies = [Lexical.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints and reserved words for Go 1.22+"}
 goLanguage :: TTermDefinition Language
 goLanguage = define "goLanguage" $
     doc "Language constraints for Go 1.22+" $ lets [
@@ -145,7 +145,7 @@ goLanguage = define "goLanguage" $
       Variants.termVariantSet, -- map[T]struct{} or custom Set type
       Variants.termVariantTypeApplication, -- generics T[U]
       Variants.termVariantTypeLambda, -- generic functions func[T any](...)
-      Variants.termVariantUnion, -- interface with sealed marker method
+      Variants.termVariantInject, -- interface with sealed marker method
       Variants.termVariantUnit, -- struct{}
       Variants.termVariantVariable,
       Variants.termVariantWrap], -- type aliases / named types

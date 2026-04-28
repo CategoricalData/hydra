@@ -21,10 +21,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.collections"
 
 module_ :: Module
-module_ = Module ns definitions
-    [TestGraph.ns, Namespace "hydra.rewriting"]
-    kernelTypesNamespaces
-    (Just "Collection type checking test cases: lists, sets, maps")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [TestGraph.ns, Namespace "hydra.rewriting"],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Collection type checking test cases: lists, sets, maps")}
   where
     definitions = [
       Phantoms.toDefinition allTests,

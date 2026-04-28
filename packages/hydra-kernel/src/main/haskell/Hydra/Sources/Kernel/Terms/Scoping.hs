@@ -67,10 +67,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just ("Graph context extension and type scheme conversion")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Graph context extension and type scheme conversion")}
   where
    definitions = [
      toDefinition extendGraphForLambda,
@@ -99,7 +101,7 @@ typeSchemeToFType = define "typeSchemeToFType" $
   doc "Convert a type scheme to a forall type" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
+  "body" <~ Core.typeSchemeBody (var "ts") $
   Lists.foldl
     ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
     (var "body")
@@ -138,7 +140,7 @@ extendGraphForLet = define "extendGraphForLet" $
     (Maps.union
       (Maps.fromList $ Maybes.cat $ Lists.map
         ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
-          (Core.bindingType $ var "b"))
+          (Core.bindingTypeScheme $ var "b"))
         (var "bindings"))
       (Graph.graphBoundTypes $ var "g"))
     (Graph.graphClassConstraints $ var "g")
@@ -192,7 +194,7 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
   "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
     Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "bindings"))) $
+      (Core.bindingTypeScheme (var "b"))) (var "bindings"))) $
   Graph.graph
     (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
     (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))

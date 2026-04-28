@@ -102,10 +102,12 @@ ns :: Namespace
 ns = Namespace "hydra.java.testing"
 
 module_ :: Module
-module_ = Module ns definitions
-    [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns]
-    (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Java test code generation codec for JUnit-based generation tests"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns],
+            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Java test code generation codec for JUnit-based generation tests"}
   where
     definitions = [
       toDefinition buildJavaTestModule,
@@ -125,8 +127,8 @@ buildJavaTestModule = define "buildJavaTestModule" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
     "ns_">: Packaging.moduleNamespace (var "testModule"),
     "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
-    "packageName">: Strings.intercalate (string ".") (Lists.init (var "parts")),
-    "className_">: Strings.cat2 (Formatting.capitalize @@ (Lists.last (var "parts"))) (string "Test"),
+    "packageName">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
+    "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
     "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
     "standardImports">: list [
       string "import org.junit.jupiter.api.Test;",
@@ -252,8 +254,8 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
         "testModuleContent">: buildJavaTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleNamespace (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
-        "dirParts">: Lists.drop (int32 1) (Lists.init (var "parts")),
-        "className_">: Strings.cat2 (Formatting.capitalize @@ (Lists.last (var "parts"))) (string "Test"),
+        "dirParts">: Lists.drop (int32 1) (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
+        "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
         "fileName">: Strings.cat2 (var "className_") (string ".java"),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))

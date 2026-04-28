@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Parquet.Format as Format
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 
@@ -229,7 +230,7 @@ aesGcmV1WithSupplyAadPrefix original newVal =
 
 bloomFilterAlgorithmBlock :: Phantoms.TTerm Format.BloomFilterAlgorithm
 bloomFilterAlgorithmBlock =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.BloomFilterAlgorithm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
@@ -237,7 +238,7 @@ bloomFilterAlgorithmBlock =
 
 bloomFilterCompressionUncompressed :: Phantoms.TTerm Format.BloomFilterCompression
 bloomFilterCompressionUncompressed =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.BloomFilterCompression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uncompressed"),
@@ -245,7 +246,7 @@ bloomFilterCompressionUncompressed =
 
 bloomFilterHashXxhash :: Phantoms.TTerm Format.BloomFilterHash
 bloomFilterHashXxhash =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.BloomFilterHash"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xxhash"),
@@ -423,7 +424,7 @@ bloomFilterHeaderWithNumBytes original newVal =
 
 boundaryOrderAscending :: Phantoms.TTerm Format.BoundaryOrder
 boundaryOrderAscending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.BoundaryOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ascending"),
@@ -431,7 +432,7 @@ boundaryOrderAscending =
 
 boundaryOrderDescending :: Phantoms.TTerm Format.BoundaryOrder
 boundaryOrderDescending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.BoundaryOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "descending"),
@@ -439,7 +440,7 @@ boundaryOrderDescending =
 
 boundaryOrderUnordered :: Phantoms.TTerm Format.BoundaryOrder
 boundaryOrderUnordered =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.BoundaryOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unordered"),
@@ -1137,7 +1138,7 @@ columnChunkWithOffsetIndexOffset original newVal =
 
 columnCryptoMetaDataEncryptionWithColumnKey :: Phantoms.TTerm Format.EncryptionWithColumnKey -> Phantoms.TTerm Format.ColumnCryptoMetaData
 columnCryptoMetaDataEncryptionWithColumnKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.ColumnCryptoMetaData"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "encryptionWithColumnKey"),
@@ -1145,7 +1146,7 @@ columnCryptoMetaDataEncryptionWithColumnKey x =
 
 columnCryptoMetaDataEncryptionWithFooterKey :: Phantoms.TTerm Format.EncryptionWithFooterKey -> Phantoms.TTerm Format.ColumnCryptoMetaData
 columnCryptoMetaDataEncryptionWithFooterKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.ColumnCryptoMetaData"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "encryptionWithFooterKey"),
@@ -2959,7 +2960,7 @@ columnMetaDataWithType original newVal =
 
 columnOrderTypeOrder :: Phantoms.TTerm Format.ColumnOrder
 columnOrderTypeOrder =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.ColumnOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeOrder"),
@@ -2967,7 +2968,7 @@ columnOrderTypeOrder =
 
 compressionCodecBrotli :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecBrotli =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "brotli"),
@@ -2975,7 +2976,7 @@ compressionCodecBrotli =
 
 compressionCodecGzip :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecGzip =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gzip"),
@@ -2983,7 +2984,7 @@ compressionCodecGzip =
 
 compressionCodecLz4Raw :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecLz4Raw =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lz4Raw"),
@@ -2991,7 +2992,7 @@ compressionCodecLz4Raw =
 
 compressionCodecLzo :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecLzo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lzo"),
@@ -2999,7 +3000,7 @@ compressionCodecLzo =
 
 compressionCodecSnappy :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecSnappy =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "snappy"),
@@ -3007,7 +3008,7 @@ compressionCodecSnappy =
 
 compressionCodecUncompressed :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecUncompressed =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uncompressed"),
@@ -3015,7 +3016,7 @@ compressionCodecUncompressed =
 
 compressionCodecZstd :: Phantoms.TTerm Format.CompressionCodec
 compressionCodecZstd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.CompressionCodec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zstd"),
@@ -3995,7 +3996,7 @@ dictionaryPageHeaderWithNumValues original newVal =
 
 encodingBitPacked :: Phantoms.TTerm Format.Encoding
 encodingBitPacked =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bitPacked"),
@@ -4003,7 +4004,7 @@ encodingBitPacked =
 
 encodingByteStreamSplit :: Phantoms.TTerm Format.Encoding
 encodingByteStreamSplit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byteStreamSplit"),
@@ -4011,7 +4012,7 @@ encodingByteStreamSplit =
 
 encodingDeltaBinaryPacked :: Phantoms.TTerm Format.Encoding
 encodingDeltaBinaryPacked =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "deltaBinaryPacked"),
@@ -4019,7 +4020,7 @@ encodingDeltaBinaryPacked =
 
 encodingDeltaByteArray :: Phantoms.TTerm Format.Encoding
 encodingDeltaByteArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "deltaByteArray"),
@@ -4027,7 +4028,7 @@ encodingDeltaByteArray =
 
 encodingDeltaLengthByteArray :: Phantoms.TTerm Format.Encoding
 encodingDeltaLengthByteArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "deltaLengthByteArray"),
@@ -4035,7 +4036,7 @@ encodingDeltaLengthByteArray =
 
 encodingPlain :: Phantoms.TTerm Format.Encoding
 encodingPlain =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plain"),
@@ -4043,7 +4044,7 @@ encodingPlain =
 
 encodingRle :: Phantoms.TTerm Format.Encoding
 encodingRle =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rle"),
@@ -4051,7 +4052,7 @@ encodingRle =
 
 encodingRleDictionary :: Phantoms.TTerm Format.Encoding
 encodingRleDictionary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Encoding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rleDictionary"),
@@ -4059,7 +4060,7 @@ encodingRleDictionary =
 
 encryptionAlgorithmAesGcmCtrV1 :: Phantoms.TTerm Format.AesGcmCtrV1 -> Phantoms.TTerm Format.EncryptionAlgorithm
 encryptionAlgorithmAesGcmCtrV1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.EncryptionAlgorithm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aesGcmCtrV1"),
@@ -4067,7 +4068,7 @@ encryptionAlgorithmAesGcmCtrV1 x =
 
 encryptionAlgorithmAesGcmV1 :: Phantoms.TTerm Format.AesGcmV1 -> Phantoms.TTerm Format.EncryptionAlgorithm
 encryptionAlgorithmAesGcmV1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.EncryptionAlgorithm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aesGcmV1"),
@@ -4141,7 +4142,7 @@ encryptionWithFooterKey =
 
 fieldRepetitionTypeOptional :: Phantoms.TTerm Format.FieldRepetitionType
 fieldRepetitionTypeOptional =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.FieldRepetitionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "optional"),
@@ -4149,7 +4150,7 @@ fieldRepetitionTypeOptional =
 
 fieldRepetitionTypeRepeated :: Phantoms.TTerm Format.FieldRepetitionType
 fieldRepetitionTypeRepeated =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.FieldRepetitionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeated"),
@@ -4157,7 +4158,7 @@ fieldRepetitionTypeRepeated =
 
 fieldRepetitionTypeRequired :: Phantoms.TTerm Format.FieldRepetitionType
 fieldRepetitionTypeRequired =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.FieldRepetitionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "required"),
@@ -5041,7 +5042,7 @@ keyValueWithValue original newVal =
 
 logicalTypeBson :: Phantoms.TTerm Format.LogicalType
 logicalTypeBson =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bson"),
@@ -5049,7 +5050,7 @@ logicalTypeBson =
 
 logicalTypeDate :: Phantoms.TTerm Format.LogicalType
 logicalTypeDate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -5057,7 +5058,7 @@ logicalTypeDate =
 
 logicalTypeDecimal :: Phantoms.TTerm Format.DecimalType -> Phantoms.TTerm Format.LogicalType
 logicalTypeDecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decimal"),
@@ -5065,7 +5066,7 @@ logicalTypeDecimal x =
 
 logicalTypeEnum :: Phantoms.TTerm Format.LogicalType
 logicalTypeEnum =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -5073,7 +5074,7 @@ logicalTypeEnum =
 
 logicalTypeInteger :: Phantoms.TTerm Format.IntType -> Phantoms.TTerm Format.LogicalType
 logicalTypeInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -5081,7 +5082,7 @@ logicalTypeInteger x =
 
 logicalTypeJson :: Phantoms.TTerm Format.LogicalType
 logicalTypeJson =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "json"),
@@ -5089,7 +5090,7 @@ logicalTypeJson =
 
 logicalTypeList :: Phantoms.TTerm Format.LogicalType
 logicalTypeList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -5097,7 +5098,7 @@ logicalTypeList =
 
 logicalTypeMap :: Phantoms.TTerm Format.LogicalType
 logicalTypeMap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -5105,7 +5106,7 @@ logicalTypeMap =
 
 logicalTypeString :: Phantoms.TTerm Format.LogicalType
 logicalTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -5113,7 +5114,7 @@ logicalTypeString =
 
 logicalTypeTime :: Phantoms.TTerm Format.TimeType -> Phantoms.TTerm Format.LogicalType
 logicalTypeTime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "time"),
@@ -5121,7 +5122,7 @@ logicalTypeTime x =
 
 logicalTypeTimestamp :: Phantoms.TTerm Format.TimestampType -> Phantoms.TTerm Format.LogicalType
 logicalTypeTimestamp x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timestamp"),
@@ -5129,7 +5130,7 @@ logicalTypeTimestamp x =
 
 logicalTypeUnknown :: Phantoms.TTerm Format.LogicalType
 logicalTypeUnknown =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unknown"),
@@ -5137,7 +5138,7 @@ logicalTypeUnknown =
 
 logicalTypeUuid :: Phantoms.TTerm Format.LogicalType
 logicalTypeUuid =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.LogicalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uuid"),
@@ -5945,7 +5946,7 @@ pageLocationWithOffset original newVal =
 
 pageTypeDataPage :: Phantoms.TTerm Format.PageType
 pageTypeDataPage =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.PageType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataPage"),
@@ -5953,7 +5954,7 @@ pageTypeDataPage =
 
 pageTypeDataPageV2 :: Phantoms.TTerm Format.PageType
 pageTypeDataPageV2 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.PageType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataPageV2"),
@@ -5961,7 +5962,7 @@ pageTypeDataPageV2 =
 
 pageTypeDictionaryPage :: Phantoms.TTerm Format.PageType
 pageTypeDictionaryPage =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.PageType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dictionaryPage"),
@@ -5969,7 +5970,7 @@ pageTypeDictionaryPage =
 
 pageTypeIndexPage :: Phantoms.TTerm Format.PageType
 pageTypeIndexPage =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.PageType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "indexPage"),
@@ -7195,7 +7196,7 @@ timeTypeWithUnit original newVal =
 
 timeUnitMicros :: Phantoms.TTerm Format.TimeUnit
 timeUnitMicros =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.TimeUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "micros"),
@@ -7203,7 +7204,7 @@ timeUnitMicros =
 
 timeUnitMillis :: Phantoms.TTerm Format.TimeUnit
 timeUnitMillis =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.TimeUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "millis"),
@@ -7211,7 +7212,7 @@ timeUnitMillis =
 
 timeUnitNanos :: Phantoms.TTerm Format.TimeUnit
 timeUnitNanos =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.TimeUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nanos"),
@@ -7279,7 +7280,7 @@ timestampTypeWithUnit original newVal =
 
 typeBoolean :: Phantoms.TTerm Format.Type
 typeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -7287,7 +7288,7 @@ typeBoolean =
 
 typeByteArray :: Phantoms.TTerm Format.Type
 typeByteArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byteArray"),
@@ -7295,7 +7296,7 @@ typeByteArray =
 
 typeDouble :: Phantoms.TTerm Format.Type
 typeDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -7303,7 +7304,7 @@ typeDouble =
 
 typeFixedLenByteArray :: Phantoms.TTerm Format.Type
 typeFixedLenByteArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fixedLenByteArray"),
@@ -7311,7 +7312,7 @@ typeFixedLenByteArray =
 
 typeFloat :: Phantoms.TTerm Format.Type
 typeFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -7319,7 +7320,7 @@ typeFloat =
 
 typeInt32 :: Phantoms.TTerm Format.Type
 typeInt32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int32"),
@@ -7327,7 +7328,7 @@ typeInt32 =
 
 typeInt64 :: Phantoms.TTerm Format.Type
 typeInt64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parquet.format.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int64"),

@@ -10,7 +10,7 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_CL_DIR="$HYDRA_ROOT/heads/lisp/hydra-common-lisp"
+HYDRA_CL_DIR="$HYDRA_ROOT/heads/lisp/common-lisp"
 
 # Parse arguments (pass through to CL bootstrap)
 TARGET=""
@@ -33,6 +33,8 @@ if [ -z "$TARGET" ]; then
 fi
 
 if [ -z "$JSON_DIR" ]; then
+    # The Common Lisp bootstrap still takes a single kernel JSON directory.
+    # Full per-package walking (see issue #290 Phase 1c) is not yet implemented.
     JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
     EXTRA_ARGS="$EXTRA_ARGS --json-dir $JSON_DIR"
 fi
@@ -51,16 +53,14 @@ case "$TARGET" in
 esac
 
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
-    echo "  Coder modules not found. Generating from ext JSON..."
+    echo "  Coder modules not found. Generating from per-package JSON..."
     cd "$HYDRA_ROOT/heads/haskell"
-    stack build bootstrap-from-json 2>&1 | grep -v "^$"
-    EXT_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-ext/src/main/json"
+    stack build hydra:exe:bootstrap-from-json
     stack exec bootstrap-from-json -- \
         --target common-lisp \
-        --output "$HYDRA_CL_DIR" \
+        --output "$HYDRA_ROOT/dist/common-lisp/hydra-kernel" \
         --include-coders \
-        --ext-json-dir "$EXT_JSON_DIR" \
-        --json-dir "$JSON_DIR" 2>&1
+        --dist-json-root "$HYDRA_ROOT/dist/json" 2>&1
     echo "  Coder modules generated."
     echo ""
 fi

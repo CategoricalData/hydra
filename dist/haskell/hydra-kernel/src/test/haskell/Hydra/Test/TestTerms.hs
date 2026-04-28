@@ -1,13 +1,11 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term definitions for the test suite
 
 module Hydra.Test.TestTerms where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Test.TestTypes as TestTypes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 latlonRecord :: Float -> Float -> Core.Term
 latlonRecord lat lon =
     Core.TermRecord (Core.Record {
@@ -19,7 +17,6 @@ latlonRecord lat lon =
         Core.Field {
           Core.fieldName = (Core.Name "lon"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 lon)))}]})
-
 testDataArthur :: Core.Term
 testDataArthur =
     Core.TermRecord (Core.Record {
@@ -34,17 +31,15 @@ testDataArthur =
         Core.Field {
           Core.fieldName = (Core.Name "age"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}]})
-
 testElementArthur :: Core.Binding
 testElementArthur =
     Core.Binding {
       Core.bindingName = (Core.Name "firstName"),
       Core.bindingTerm = testDataArthur,
-      Core.bindingType = (Just (Core.TypeScheme {
+      Core.bindingTypeScheme = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName),
+        Core.typeSchemeBody = (Core.TypeVariable TestTypes.testTypePersonName),
         Core.typeSchemeConstraints = Nothing}))}
-
 testElementFirstName :: Core.Binding
 testElementFirstName =
     Core.Binding {
@@ -52,9 +47,9 @@ testElementFirstName =
       Core.bindingTerm = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = TestTypes.testTypePersonName,
         Core.projectionField = (Core.Name "firstName")})),
-      Core.bindingType = (Just (Core.TypeScheme {
+      Core.bindingTypeScheme = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+        Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),
           Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
         Core.typeSchemeConstraints = Nothing}))}

@@ -2,104 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.json.schema.coder.moduleToJsonSchema",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "typeLambda": {
-                "body": {
-                  "typeLambda": {
-                    "body": {
-                      "typeLambda": {
-                        "body": {
-                          "typeLambda": {
-                            "body": {
-                              "typeLambda": {
-                                "body": {
-                                  "annotated": {
-                                    "annotation": [
-                                      {
-                                        "@key": "description",
-                                        "@value": {
-                                          "literal": {"string": "Convert a Hydra module to a map of JSON Schema documents"}}}],
-                                    "body": {
-                                      "lambda": {
-                                        "body": {
-                                          "lambda": {
-                                            "body": {
-                                              "lambda": {
-                                                "body": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "g"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "cx"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "defs"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "mod"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "opts"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.json.schema.coder.moduleToJsonSchema"},
-                                                                                                    "type": {"variable": "t0"}}},
-                                                                                                "type": {"variable": "t1"}}},
-                                                                                            "type": {"variable": "t2"}}},
-                                                                                        "type": {"variable": "t3"}}},
-                                                                                    "type": {"variable": "t4"}}},
-                                                                                "type": {"variable": "t5"}}}}}}}}}}}}},
-                                                        "domain": {"variable": "t4"},
-                                                        "parameter": "g"}},
-                                                    "domain": {"variable": "t3"},
-                                                    "parameter": "cx"}},
-                                                "domain": {"variable": "t2"},
-                                                "parameter": "defs"}},
-                                            "domain": {"variable": "t1"},
-                                            "parameter": "mod"}},
-                                        "domain": {"variable": "t0"},
-                                        "parameter": "opts"}}}},
-                                "parameter": "t5"}},
-                            "parameter": "t4"}},
-                        "parameter": "t3"}},
-                    "parameter": "t2"}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {"codomain": {"variable": "t5"}, "domain": {"variable": "t4"}}},
-                          "domain": {"variable": "t3"}}},
-                      "domain": {"variable": "t2"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1", "t2", "t3", "t4", "t5"]}}},
-    {
-      "term": {
         "name": "hydra.json.schema.coder.constructModule",
         "term": {
           "typeLambda": {
@@ -117,8 +19,8 @@
                                   "annotated": {
                                     "annotation": [
                                       {
-                                        "@key": "description",
-                                        "@value": {
+                                        "key": "description",
+                                        "value": {
                                           "literal": {"string": "Construct JSON Schema documents from type definitions"}}}],
                                     "body": {
                                       "lambda": {
@@ -180,8 +82,8 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -209,8 +111,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Encode a field type as a JSON Schema keyword-schema pair"}}}],
                         "body": {
                           "lambda": {
@@ -227,14 +129,14 @@
                                               "application": {
                                                 "argument": {"variable": "ft"},
                                                 "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
-                                            "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}},
+                                            "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                           {
                                             "name": "typ",
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "ft"},
                                                 "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                            "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                         "body": {
                                           "application": {
                                             "argument": {
@@ -278,14 +180,14 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "pair": {
-                                                                "@first": {
+                                                                "first": {
                                                                   "wrap": {
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {"variable": "name"},
                                                                         "function": {"unwrap": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.json.schema.Keyword"}},
-                                                                "@second": {
+                                                                "second": {
                                                                   "wrap": {"body": {"variable": "res"}, "typeName": "hydra.json.schema.Schema"}}}},
                                                             "type": {"variable": "hydra.json.schema.Keyword"}}},
                                                         "type": {"variable": "hydra.json.schema.Schema"}}},
@@ -313,8 +215,8 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -338,8 +240,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Encode a Hydra name as a safe identifier string, replacing non-alphanumeric characters with underscores"}}}],
             "body": {
@@ -353,8 +255,8 @@
                     "function": {"variable": "hydra.formatting.nonAlnumToUnderscores"}}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -372,8 +274,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Encode a named type as a list of JSON Schema restrictions with a title"}}}],
                         "body": {
@@ -431,7 +333,7 @@
                                                             {
                                                               "list": [
                                                                 {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "title",
                                                                       "term": {
@@ -467,8 +369,8 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -502,8 +404,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "Encode a Hydra type as a list of JSON Schema restrictions"}}}],
                                 "body": {
@@ -555,8 +457,8 @@
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -575,8 +477,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Determine whether a field is required (i.e., not optional/Maybe)"}}}],
             "body": {
@@ -590,7 +492,7 @@
                           "application": {
                             "argument": {"variable": "ft"},
                             "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -611,12 +513,110 @@
                             "typeName": "hydra.core.Type"}}}}}},
                 "domain": {"variable": "hydra.core.FieldType"},
                 "parameter": "ft"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"literal": {"boolean": {}}},
               "domain": {"variable": "hydra.core.FieldType"}}},
           "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.coder.moduleToJsonSchema",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "typeLambda": {
+                        "body": {
+                          "typeLambda": {
+                            "body": {
+                              "typeLambda": {
+                                "body": {
+                                  "annotated": {
+                                    "annotation": [
+                                      {
+                                        "key": "description",
+                                        "value": {
+                                          "literal": {"string": "Convert a Hydra module to a map of JSON Schema documents"}}}],
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "lambda": {
+                                            "body": {
+                                              "lambda": {
+                                                "body": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"variable": "g"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "cx"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "defs"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "mod"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "opts"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.json.schema.coder.moduleToJsonSchema"},
+                                                                                                    "type": {"variable": "t0"}}},
+                                                                                                "type": {"variable": "t1"}}},
+                                                                                            "type": {"variable": "t2"}}},
+                                                                                        "type": {"variable": "t3"}}},
+                                                                                    "type": {"variable": "t4"}}},
+                                                                                "type": {"variable": "t5"}}}}}}}}}}}}},
+                                                        "domain": {"variable": "t4"},
+                                                        "parameter": "g"}},
+                                                    "domain": {"variable": "t3"},
+                                                    "parameter": "cx"}},
+                                                "domain": {"variable": "t2"},
+                                                "parameter": "defs"}},
+                                            "domain": {"variable": "t1"},
+                                            "parameter": "mod"}},
+                                        "domain": {"variable": "t0"},
+                                        "parameter": "opts"}}}},
+                                "parameter": "t5"}},
+                            "parameter": "t4"}},
+                        "parameter": "t3"}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "function": {"codomain": {"variable": "t5"}, "domain": {"variable": "t4"}}},
+                          "domain": {"variable": "t3"}}},
+                      "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3", "t4", "t5"]}}},
     {
       "term": {
         "name": "hydra.json.schema.coder.referenceRestriction",
@@ -624,14 +624,14 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Create a JSON Schema reference restriction for a named type"}}}],
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "reference",
                       "term": {
@@ -650,8 +650,8 @@
                     "typeName": "hydra.json.schema.Restriction"}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.json.schema.Restriction"},
               "domain": {"variable": "hydra.core.Name"}}},

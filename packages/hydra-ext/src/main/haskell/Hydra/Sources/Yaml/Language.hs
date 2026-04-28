@@ -25,12 +25,12 @@ ns :: Namespace
 ns = Namespace "hydra.yaml.language"
 
 module_ :: Module
-module_ = Module ns
-  [toDefinition yamlLanguage]
-  [Strip.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for YAML"
-
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = [toDefinition yamlLanguage],
+            moduleTermDependencies = [Strip.ns],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "Language constraints for YAML"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 

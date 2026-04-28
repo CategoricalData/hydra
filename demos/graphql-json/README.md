@@ -50,11 +50,11 @@ pip install graphql-core
 From the `heads/haskell/` directory, start GHCi and run the demo:
 
 ```bash
-stack ghci hydra-haskell:lib --ghci-options='+RTS -K256M -A32M -RTS'
+stack ghci hydra:lib --ghci-options='+RTS -K256M -A32M -RTS'
 ```
 
 ```haskell
-import Hydra.Sources.Demos.GraphqlJson
+import Hydra.Demos.GraphqlJson
 demoGraphqlJson
 ```
 

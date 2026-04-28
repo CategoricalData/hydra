@@ -27,19 +27,19 @@ salesModule = Module {
     Binding {
       bindingName = Name "hydra.demos.genpg.sales.salesDatabaseSchema",
       bindingTerm = TermList $ fmap EncodeTabular.tableType Sales.salesTableSchemas,
-      bindingType = Just listTableTypeScheme
+      bindingTypeScheme = Just listTableTypeScheme
     },
     -- salesGraphSchema: GraphSchema[Type]
     Binding {
       bindingName = Name "hydra.demos.genpg.sales.salesGraphSchema",
       bindingTerm = EncodePg.graphSchema EncodeCore.type_ Sales.salesGraphSchema,
-      bindingType = Just graphSchemaTypeScheme
+      bindingTypeScheme = Just graphSchemaTypeScheme
     },
     -- salesMapping: LazyGraph[Term]
     Binding {
       bindingName = Name "hydra.demos.genpg.sales.salesMapping",
       bindingTerm = EncodePg.lazyGraph EncodeCore.term Sales.salesGraph,
-      bindingType = Just lazyGraphTermScheme
+      bindingTypeScheme = Just lazyGraphTermScheme
     }
   ],
   moduleTermDependencies = [
@@ -72,19 +72,19 @@ healthModule = Module {
     Binding {
       bindingName = Name "hydra.demos.genpg.health.healthDatabaseSchema",
       bindingTerm = TermList $ fmap EncodeTabular.tableType Health.healthTableSchemas,
-      bindingType = Just listTableTypeScheme
+      bindingTypeScheme = Just listTableTypeScheme
     },
     -- healthGraphSchema: GraphSchema[Type]
     Binding {
       bindingName = Name "hydra.demos.genpg.health.healthGraphSchema",
       bindingTerm = EncodePg.graphSchema EncodeCore.type_ Health.healthGraphSchema,
-      bindingType = Just graphSchemaTypeScheme
+      bindingTypeScheme = Just graphSchemaTypeScheme
     },
     -- healthMapping: LazyGraph[Term]
     Binding {
       bindingName = Name "hydra.demos.genpg.health.healthMapping",
       bindingTerm = EncodePg.lazyGraph EncodeCore.term Health.healthGraph,
-      bindingType = Just lazyGraphTermScheme
+      bindingTypeScheme = Just lazyGraphTermScheme
     }
   ],
   moduleTermDependencies = [
@@ -112,7 +112,7 @@ healthNamespace = Namespace "hydra.demos.genpg.health"
 listTableTypeScheme :: TypeScheme
 listTableTypeScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeType = TypeList (TypeVariable (Name "hydra.tabular.TableType")),
+  typeSchemeBody = TypeList (TypeVariable (Name "hydra.tabular.TableType")),
   typeSchemeConstraints = Nothing
 }
 
@@ -121,7 +121,7 @@ listTableTypeScheme = TypeScheme {
 graphSchemaTypeScheme :: TypeScheme
 graphSchemaTypeScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeType = TypeApplication (ApplicationType
+  typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.GraphSchema"))
     (TypeVariable (Name "hydra.core.Type"))),
   typeSchemeConstraints = Nothing
@@ -132,7 +132,7 @@ graphSchemaTypeScheme = TypeScheme {
 lazyGraphTermScheme :: TypeScheme
 lazyGraphTermScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeType = TypeApplication (ApplicationType
+  typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.LazyGraph"))
     (TypeVariable (Name "hydra.core.Term"))),
   typeSchemeConstraints = Nothing

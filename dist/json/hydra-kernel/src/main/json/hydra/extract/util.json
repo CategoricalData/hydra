@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Extract a comparison from a term"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Extract a comparison from a term"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -33,12 +33,12 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
-                                                              "union": {
+                                                            "left": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "unexpectedShape",
                                                                         "term": {
@@ -64,8 +64,8 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
-                                                                  "union": {
+                                                                "right": {
+                                                                  "inject": {
                                                                     "field": {"name": "greaterThan", "term": {"unit": {}}},
                                                                     "typeName": "hydra.util.Comparison"}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -100,8 +100,8 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
-                                                              "union": {
+                                                            "right": {
+                                                              "inject": {
                                                                 "field": {"name": "lessThan", "term": {"unit": {}}},
                                                                 "typeName": "hydra.util.Comparison"}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -136,8 +136,8 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@right": {
-                                                          "union": {
+                                                        "right": {
+                                                          "inject": {
                                                             "field": {"name": "equalTo", "term": {"unit": {}}},
                                                             "typeName": "hydra.util.Comparison"}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -198,8 +198,8 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

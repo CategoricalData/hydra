@@ -28,6 +28,12 @@
   (lambda (x)
     (float x)))
 
+;; bigint_to_decimal :: BigInteger -> Decimal
+;; Emacs Lisp has no native decimal; adapter fallback uses float.
+(defvar hydra_lib_literals_bigint_to_decimal
+  (lambda (x)
+    (float x)))
+
 ;; bigint_to_int :: BigInteger -> Int  (identity)
 (defvar hydra_lib_literals_bigint_to_int
   (lambda (x) x))
@@ -92,6 +98,22 @@
             (setq i (+ i 3))))
         (apply #'string (nreverse result))))))
 
+;; decimal_to_bigint :: Decimal -> BigInteger
+;; Emacs Lisp has no native decimal; input is a float.
+(defvar hydra_lib_literals_decimal_to_bigint
+  (lambda (x)
+    (round x)))
+
+;; decimal_to_float32 :: Decimal -> Float
+(defvar hydra_lib_literals_decimal_to_float32
+  (lambda (x)
+    (round-to-float32 (float x))))
+
+;; decimal_to_float64 :: Decimal -> Double
+(defvar hydra_lib_literals_decimal_to_float64
+  (lambda (x)
+    (float x)))
+
 ;; float :: FloatPrecision -> Double -> Double
 (defvar hydra_lib_literals_float
   (lambda (_precision)
@@ -103,8 +125,18 @@
   (lambda (x)
     (float x)))
 
+;; float32_to_decimal :: Float -> Decimal
+(defvar hydra_lib_literals_float32_to_decimal
+  (lambda (x)
+    (float x)))
+
 ;; float64_to_bigfloat :: Double -> Double
 (defvar hydra_lib_literals_float64_to_bigfloat
+  (lambda (x)
+    (float x)))
+
+;; float64_to_decimal :: Double -> Decimal
+(defvar hydra_lib_literals_float64_to_decimal
   (lambda (x)
     (float x)))
 
@@ -131,6 +163,19 @@
 
 ;; read_bigfloat :: String -> Maybe Double
 (defvar hydra_lib_literals_read_bigfloat
+  (lambda (s)
+    (condition-case nil
+        (let ((n (string-to-number s)))
+          (if (and (numberp n) (not (= n 0)) (not (string= s "0")))
+              (list :just (float n))
+              (if (string= s "0")
+                  (list :just 0.0)
+                  (list :nothing))))
+      (error (list :nothing)))))
+
+;; read_decimal :: String -> Maybe Decimal
+;; Emacs Lisp has no native decimal; fallback uses float.
+(defvar hydra_lib_literals_read_decimal
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -265,6 +310,12 @@
 
 ;; show_bigfloat :: Double -> String
 (defvar hydra_lib_literals_show_bigfloat
+  (lambda (x)
+    (haskell-show-float (float x))))
+
+;; show_decimal :: Decimal -> String
+;; Emacs Lisp has no native decimal; formatted as float.
+(defvar hydra_lib_literals_show_decimal
   (lambda (x)
     (haskell-show-float (float x))))
 

@@ -1,22 +1,20 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.classes
 
 module Hydra.Encode.Classes where
-
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 typeClass :: Classes.TypeClass -> Core.Term
 typeClass x =
     case x of
-      Classes.TypeClassEquality -> Core.TermUnion (Core.Injection {
+      Classes.TypeClassEquality -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "equality"),
           Core.fieldTerm = Core.TermUnit}})
-      Classes.TypeClassOrdering -> Core.TermUnion (Core.Injection {
+      Classes.TypeClassOrdering -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "ordering"),

@@ -31,10 +31,6 @@ cat = primitive1 _maybes_cat
 compose :: TTerm (a -> Maybe b) -> TTerm (b -> Maybe c) -> TTerm (a -> Maybe c)
 compose = primitive2 _maybes_compose
 
--- | Extract value from a Just, or error on Nothing (partial function).
-fromJust :: TTerm (Maybe a) -> TTerm a
-fromJust = primitive1 _maybes_fromJust
-
 -- | Get a value from an optional value, or return a default value.
 fromMaybe :: TTerm a -> TTerm (Maybe a) -> TTerm a
 fromMaybe = primitive2 _maybes_fromMaybe

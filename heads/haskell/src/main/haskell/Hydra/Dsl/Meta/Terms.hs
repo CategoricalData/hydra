@@ -17,6 +17,7 @@ import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
@@ -73,6 +74,15 @@ bigint = bigintLift . TTerm . Terms.bigint
 -- Example: bigintLift (varPhantom "x" :: TTerm Integer)
 bigintLift :: TTerm Integer -> TTerm Term
 bigintLift = Core.termLiteral . Core.literalInteger . Core.integerValueBigint
+
+-- | Create a term-encoded arbitrary-precision exact decimal literal
+-- Example: decimal 42
+decimal :: Sci.Scientific -> TTerm Term
+decimal = decimalLift . TTerm . Terms.decimal
+
+-- | Lift a TTerm Scientific to a term-encoded decimal literal
+decimalLift :: TTerm Sci.Scientific -> TTerm Term
+decimalLift = Core.termLiteral . Core.literalDecimal
 
 -- | Create a term-encoded boolean literal
 -- Example: boolean True
@@ -135,7 +145,7 @@ float = Core.termLiteral . Core.literalFloat
 -- | Create a term-encoded union injection
 -- Example: inject (name "Result") "success" (int32 42)
 inject :: AsTerm t Name => t -> String -> TTerm Term -> TTerm Term
-inject tname fname = Core.termUnion . Core.injection (asTerm tname) . Core.field (name fname)
+inject tname fname = Core.termInject . Core.injection (asTerm tname) . Core.field (name fname)
 
 injectUnit :: AsTerm t Name => t -> String -> TTerm Term
 injectUnit tname fname = inject tname fname unit
@@ -419,7 +429,7 @@ varPhantom :: String -> TTerm a
 varPhantom = TTerm . TermVariable . Name
 
 injectPhantom :: Name -> Name -> TTerm Term -> TTerm Term
-injectPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift tname) $ Core.field (Core.nameLift fname) term
+injectPhantom tname fname term = Core.termInject $ Core.injection (Core.nameLift tname) $ Core.field (Core.nameLift fname) term
 
 -- | Create a term-encoded wrapped term (newtype)
 -- Example: wrap (name "Email") (string "user@example.com")

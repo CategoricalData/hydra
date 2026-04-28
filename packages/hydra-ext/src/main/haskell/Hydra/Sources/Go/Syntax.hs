@@ -23,11 +23,15 @@ go :: String -> Type
 go = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
-    Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
-      ++ " from https://go.dev/ref/spec")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
+      ++ " from https://go.dev/ref/spec")}
   where
-    elements = constructs ++ terminals ++ sourceFile ++ declarations ++ types
+    definitions = constructs ++ terminals ++ sourceFile ++ declarations ++ types
       ++ expressions ++ statements ++ miscellaneous
 
     -- These definitions are not based on the grammar, but are convenient for working with Go sources in Hydra.

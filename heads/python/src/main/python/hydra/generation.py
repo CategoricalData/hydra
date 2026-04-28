@@ -7,6 +7,7 @@ This is the Python equivalent of Haskell's Hydra.Generation module.
 import json
 import os
 import sys
+from decimal import Decimal
 from functools import lru_cache
 
 # The generated JSON decoder uses recursive variant matching which can
@@ -47,7 +48,7 @@ def bootstrap_schema_map():
     result = {}
     for name, typ in types_by_name.items():
         ts = f_type_to_type_scheme(typ)
-        result[name] = deannotate_type_recursive(ts.type)
+        result[name] = deannotate_type_recursive(ts.body)
     return FrozenDict(result)
 
 
@@ -93,7 +94,7 @@ def _python_to_hydra_json(obj):
     elif isinstance(obj, bool):
         return JsonModel.ValueBoolean(obj)
     elif isinstance(obj, (int, float)):
-        return JsonModel.ValueNumber(float(obj))
+        return JsonModel.ValueNumber(Decimal(str(obj)))
     elif isinstance(obj, str):
         return JsonModel.ValueString(obj)
     elif isinstance(obj, list):
@@ -216,7 +217,7 @@ def strip_term_types(m):
             stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.namespace, tuple(stripped), m.type_dependencies, m.term_dependencies, m.description)
+    return Module(m.description, m.namespace, m.term_dependencies, m.type_dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):

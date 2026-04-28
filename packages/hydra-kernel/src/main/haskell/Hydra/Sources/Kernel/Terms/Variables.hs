@@ -15,7 +15,6 @@ import Hydra.Kernel hiding (
   replaceFreeTermVariable,
   replaceFreeTypeVariable,
   substituteTypeVariables,
-  substituteTypeVariablesInTerm,
   substituteVariable,
   substituteVariables,
   unshadowVariables)
@@ -79,10 +78,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Names.ns, Rewriting.ns]
-    kernelTypesNamespaces $
-    Just ("Free variable analysis, term-level substitution, and unshadowing")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Names.ns, Rewriting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
   where
    definitions = [
      toDefinition freeTypeVariablesInTerm,
@@ -97,7 +98,6 @@ module_ = Module ns definitions
      toDefinition replaceFreeTermVariable,
      toDefinition replaceFreeTypeVariable,
      toDefinition substituteTypeVariables,
-     toDefinition substituteTypeVariablesInTerm,
      toDefinition substituteVariable,
      toDefinition substituteVariables,
      toDefinition unshadowVariables]
@@ -119,14 +119,14 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
         Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
-          "newVars" <~ optCases (Core.bindingType $ var "b")
+          "newVars" <~ optCases (Core.bindingTypeScheme $ var "b")
              (var "vars")
              ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
           Sets.union
             (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
-            (optCases (Core.bindingType $ var "b")
+            (optCases (Core.bindingTypeScheme $ var "b")
               Sets.empty
-              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeType $ var "ts")))) $
+              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeBody $ var "ts")))) $
         Sets.union
           (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
           (var "recurse" @@ (Core.letBody $ var "l")),
@@ -211,7 +211,7 @@ freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
   doc "Find free variables in a type scheme" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeType (var "ts") $
+  "t" <~ Core.typeSchemeBody (var "ts") $
   Sets.difference (freeVariablesInType @@ var "t") (Sets.fromList $ var "vars")
 
 freeVariablesInTypeSchemeSimple :: TTermDefinition (TypeScheme -> S.Set Name)
@@ -219,7 +219,7 @@ freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
   doc "Find free variables in a type scheme (simple version)" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeType (var "ts") $
+  "t" <~ Core.typeSchemeBody (var "ts") $
   Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
 
 isFreeVariableInTerm :: TTermDefinition (Name -> Term -> Bool)
@@ -259,17 +259,18 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
         "body0"     <~ Core.letBody (var "lt") $
         -- Sequentially rewrite bindings without advancing 'next' across siblings
         "step" <~ ("acc" ~> "bs" ~>
-          Logic.ifElse (Lists.null (var "bs"))
+          Maybes.maybe
             (Lists.reverse (var "acc"))
-            ("b"  <~ Lists.head (var "bs") $
-          "tl" <~ Lists.tail (var "bs") $
+            ("uc" ~>
+          "b"  <~ Pairs.first (var "uc") $
+          "tl" <~ Pairs.second (var "uc") $
           "noType" <~ (
             "newVal" <~ var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
             "b1"     <~ Core.binding (Core.bindingName $ var "b") (var "newVal") nothing $
             var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
           "withType" <~ ("ts" ~>
             "vars" <~ Core.typeSchemeVariables (var "ts") $
-            "typ"  <~ Core.typeSchemeType (var "ts") $
+            "typ"  <~ Core.typeSchemeBody (var "ts") $
             "k"    <~ Lists.length (var "vars") $
             -- Build exactly k fresh names t{next}, t{next+1}, ...
             "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>
@@ -302,11 +303,12 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
               (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ") (var "newConstraints")) $
             -- Note: do not advance 'next' for the next sibling; keep current 'next'
             var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
-          optCases (Core.bindingType $ var "b")
+          optCases (Core.bindingTypeScheme $ var "b")
                -- Untyped binding: rewrite its term with current state; 'next' unchanged for siblings
                (var "noType")
                -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM
-               ("ts" ~> var "withType" @@ var "ts"))) $
+               ("ts" ~> var "withType" @@ var "ts"))
+          (Lists.uncons $ var "bs")) $
         "bindings1" <~ var "step" @@ (list ([] :: [TTerm Binding])) @@ (var "bindings0") $
         Core.termLet $ Core.let_
           (var "bindings1")
@@ -371,40 +373,6 @@ substituteTypeVariables = define "substituteTypeVariables" $
     _Type_variable>>: "n" ~>
       Core.typeVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
   Rewriting.rewriteType @@ var "replace" @@ var "typ"
-
-substituteTypeVariablesInTerm :: TTermDefinition (M.Map Name Name -> Term -> Term)
-substituteTypeVariablesInTerm = define "substituteTypeVariablesInTerm" $
-  doc "Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes" $
-  "subst" ~> "term" ~>
-  "st" <~ substituteTypeVariables @@ var "subst" $
-  "stOpt" <~ ("mt" ~> Maybes.map (var "st") (var "mt")) $
-  "stScheme" <~ ("ts" ~> Core.typeScheme (Core.typeSchemeVariables $ var "ts") (var "st" @@ (Core.typeSchemeType $ var "ts")) (Core.typeSchemeConstraints $ var "ts")) $
-  "stSchemeOpt" <~ ("mts" ~> Maybes.map (var "stScheme") (var "mts")) $
-  "replace" <~ ("recurse" ~> "t" ~>
-    cases _Term (var "t")
-      (Just $ var "recurse" @@ var "t") [
-      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
-        (Core.lambdaParameter $ var "l")
-        (var "stOpt" @@ (Core.lambdaDomain $ var "l"))
-        (var "recurse" @@ (Core.lambdaBody $ var "l")),
-      _Term_let>>: "lt" ~>
-        "mapBinding" <~ ("b" ~> Core.binding
-          (Core.bindingName $ var "b")
-          (var "recurse" @@ (Core.bindingTerm $ var "b"))
-          (var "stSchemeOpt" @@ (Core.bindingType $ var "b"))) $
-        Core.termLet $ Core.let_
-          (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
-          (var "recurse" @@ (Core.letBody $ var "lt")),
-      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
-        (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
-        (var "st" @@ (Core.typeApplicationTermType $ var "tt")),
-      _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambda
-        (Maybes.fromMaybe (Core.typeLambdaParameter $ var "tl") (Maps.lookup (Core.typeLambdaParameter $ var "tl") (var "subst")))
-        (var "recurse" @@ (Core.typeLambdaBody $ var "tl")),
-      _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
-        (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
-        (Core.annotatedTermAnnotation $ var "at")]) $
-  Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
 substituteVariable :: TTermDefinition (Name -> Name -> Term -> Term)
 substituteVariable = define "substituteVariable" $

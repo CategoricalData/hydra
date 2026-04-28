@@ -39,8 +39,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.annotations"
 
 module_ :: Module
-module_ = Module ns definitions [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
-    Just "Test cases for hydra.annotations functions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleTypeDependencies = [],
+            moduleDescription = Just "Test cases for hydra.annotations functions"}
   where
     definitions = [Phantoms.toDefinition allTests]
 
