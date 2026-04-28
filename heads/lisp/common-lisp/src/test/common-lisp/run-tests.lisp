@@ -137,10 +137,16 @@
 (load-test-file "test_types.lisp")
 (load-test-file "test_terms.lisp")
 (load (hydra-head-path "src/test/common-lisp/hydra/annotation_bindings.lisp"))
+;; Load the hand-written test_env.lisp BEFORE test_graph.lisp.
+;; The kernel filters hydra.test.testEnv from generated output (per the
+;; testSkipEmit set in each host bootstrap), so we provide
+;; hydra_test_test_env_test_context and hydra_test_test_env_test_graph
+;; here. test_graph.lisp's defpackage references :hydra.test.testEnv.
+(load (hydra-head-path "src/test/common-lisp/hydra/test/test_env.lisp"))
+;; Ensure the lambda value bound to hydra_test_test_env_test_graph
+;; gets a symbol-function cell so it's callable in function position.
+(hydra-set-function-bindings)
 (load-test-file "test_graph.lisp")
-
-;; Note: test_graph.lisp is patched by sync-lisp.sh to build a full graph
-;; with primitives, annotation bindings, and schema types at load time.
 
 ;; Library tests
 (dolist (f '("lib/chars.lisp"

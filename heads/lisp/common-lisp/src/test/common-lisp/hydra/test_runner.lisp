@@ -226,8 +226,55 @@
   (sort (copy-list entries) (lambda (a b) (< (generic-compare (car a) (car b)) 0))))
 
 (defun make-meta-annotated (body anns-alist)
-  "Build an annotated term in struct-compat format."
-  (list :annotated (make-annotated_term body (list :map (sort-map-entries anns-alist)))))
+  "Build an annotated term in Inject form, which is the canonical
+   in-memory shape used by the kernel for all Term variants. The
+   short :annotated form is also a valid variant tag, but the kernel's
+   reducer/show pipeline emits and matches against the Inject form."
+  (list :inject (make-injection "hydra.core.Term"
+                  (make-field "annotated"
+                    (list :record (make-record "hydra.core.AnnotatedTerm"
+                                    (list (make-field "body" body)
+                                          (make-field "annotation"
+                                            (list :map (sort-map-entries anns-alist))))))))))
+
+(defun term-as-inject (term)
+  "Convert a Term in short variant form (e.g., (:literal ...) or (:application ...))
+   to the kernel's canonical Inject form. Idempotent — already-Inject terms pass
+   through. Wraps the variant in (:inject (Injection \"hydra.core.Term\" (Field name term))).
+   Variants whose payload is already a Term subvariant are nested."
+  (cond
+    ;; Already in Inject form — pass through.
+    ((and (consp term) (eq (first term) :inject)) term)
+    ;; Short Term variants — wrap in Inject.
+    ((and (consp term)
+          (member (first term) '(:annotated :application :cases :either :inject
+                                 :lambda :let :list :literal :map :maybe :pair
+                                 :project :record :set :type_application
+                                 :type_lambda :unit :unwrap :variable :wrap)))
+     (let* ((variant-name (string-downcase (string (first term))))
+            (payload (second term)))
+       (list :inject (make-injection "hydra.core.Term"
+                       (make-field variant-name
+                         ;; For variants with sub-types (Literal, Application, etc.),
+                         ;; the payload is a record/value already shaped correctly.
+                         ;; For :literal specifically, the payload is itself a Literal
+                         ;; variant (e.g., (:string "x")), which needs wrapping.
+                         (if (eq (first term) :literal)
+                             (literal-as-inject payload)
+                             payload))))))
+    (t term)))
+
+(defun literal-as-inject (lit)
+  "Wrap a Literal value (e.g., (:string \"x\")) in Inject form against
+   hydra.core.Literal. Used by term-as-inject for the literal variant."
+  (cond
+    ((and (consp lit) (eq (first lit) :inject)) lit)
+    ((and (consp lit)
+          (member (first lit) '(:binary :boolean :decimal :float :integer :string)))
+     (let ((variant-name (string-downcase (string (first lit)))))
+       (list :inject (make-injection "hydra.core.Literal"
+                       (make-field variant-name (list :literal lit))))))
+    (t lit)))
 
 (defun make-ann-type-scheme (arity)
   (labels ((make-type (n)
@@ -350,12 +397,7 @@
          (term (second args))
          (term-val
            (when (not (maybe-nothing-p d))
-             (let* ((inner (ann-maybe-value d))
-                    (s (if (and (consp inner) (eq (first inner) :literal)
-                                (consp (second inner)) (eq (first (second inner)) :string))
-                           (second (second inner))
-                           (princ-to-string inner))))
-               (list :literal (list :string s)))))
+             (term-as-inject (ann-maybe-value d))))
          (desc-key (list :wrap (make-wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
          (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))
@@ -394,10 +436,18 @@
          (desc-term (when desc-entry (cdr desc-entry))))
     (if desc-term
         (labels ((extract-str (t_)
-                   ;; In struct-compat format: (:literal (:string "value"))
-                   (when (and (consp t_) (eq (first t_) :literal)
-                              (consp (second t_)) (eq (first (second t_)) :string))
-                     (second (second t_)))))
+                   "Pull a string value out of either short or Inject Term encoding."
+                   (cond
+                     ;; Short form: (:literal (:string "value"))
+                     ((and (consp t_) (eq (first t_) :literal)
+                           (consp (second t_)) (eq (first (second t_)) :string))
+                      (second (second t_)))
+                     ;; Inject form against hydra.core.Term -> recurse into the field's term.
+                     ((and (consp t_) (eq (first t_) :inject))
+                      (let* ((inj (second t_))
+                             (field (hydra_core_injection-field inj)))
+                        (extract-str (hydra_core_field-term field))))
+                     (t nil))))
           (let ((s (extract-str desc-term)))
             (if s
                 (list :right (list :either (list :right (list :maybe (list :literal (list :string s))))))
@@ -414,18 +464,22 @@
 (defvar *annotation-cache* (make-hash-table :test #'equal))
 
 (defun install-annotation-cache ()
-  "Wrap hydra_strip_deannotate_term to cache annotations before stripping."
-  (let ((original hydra_strip_deannotate_term))
-    (setf hydra_strip_deannotate_term
-          (lambda (t_)
-            (when (and (consp t_) (eq (first t_) :annotated))
-              ;; Cache the full annotated term's annotations keyed by the stripped body
-              (let ((body (funcall original t_))
-                    (anns (term-annotation-internal t_)))
-                (when anns
-                  ;; Replace any existing cached annotations (latest snapshot wins)
-                  (setf (gethash body *annotation-cache*) anns))))
-            (funcall original t_)))))
+  "Wrap hydra_strip_deannotate_term to cache annotations before stripping.
+   Updates BOTH symbol-value and symbol-function so that generated kernel
+   code (which calls in function position via the symbol-function cell, set
+   up by hydra-set-function-bindings) routes through the wrapper."
+  (let* ((original hydra_strip_deannotate_term)
+         (wrapper (lambda (t_)
+                    (when (and (consp t_) (eq (first t_) :annotated))
+                      ;; Cache the full annotated term's annotations keyed by the stripped body
+                      (let ((body (funcall original t_))
+                            (anns (term-annotation-internal t_)))
+                        (when anns
+                          ;; Replace any existing cached annotations (latest snapshot wins)
+                          (setf (gethash body *annotation-cache*) anns))))
+                    (funcall original t_))))
+    (setf hydra_strip_deannotate_term wrapper)
+    (setf (symbol-function 'hydra_strip_deannotate_term) wrapper)))
 
 (defun lookup-cached-annotations (term)
   "Look up cached annotations for a term (by eq identity)."
