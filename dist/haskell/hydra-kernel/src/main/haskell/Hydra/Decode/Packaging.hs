@@ -115,17 +115,17 @@ termDefinition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "typeScheme" (ExtractCore.decodeMaybe DecodeCore.typeScheme) fieldMap cx) (\field_type -> Right (Packaging.TermDefinition {
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "typeScheme" (ExtractCore.decodeMaybe DecodeCore.typeScheme) fieldMap cx) (\field_typeScheme -> Right (Packaging.TermDefinition {
           Packaging.termDefinitionName = field_name,
           Packaging.termDefinitionTerm = field_term,
-          Packaging.termDefinitionTypeScheme = field_type})))))
+          Packaging.termDefinitionTypeScheme = field_typeScheme})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 typeDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.TypeDefinition
 typeDefinition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "typeScheme" DecodeCore.typeScheme fieldMap cx) (\field_type -> Right (Packaging.TypeDefinition {
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "typeScheme" DecodeCore.typeScheme fieldMap cx) (\field_typeScheme -> Right (Packaging.TypeDefinition {
           Packaging.typeDefinitionName = field_name,
-          Packaging.typeDefinitionTypeScheme = field_type}))))
+          Packaging.typeDefinitionTypeScheme = field_typeScheme}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
