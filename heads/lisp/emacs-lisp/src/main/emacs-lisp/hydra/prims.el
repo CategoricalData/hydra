@@ -99,6 +99,11 @@
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_boolean g) t_))))
     (lambda (cx) (ignore cx) (lambda (v) (list :right (list :literal (list :boolean v)))))))
 
+(defun tc-decimal ()
+  (make-hydra_graph_term_coder (list :literal (list :decimal nil))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_decimal g) t_))))
+    (lambda (cx) (ignore cx) (lambda (v) (list :right (list :literal (list :decimal (float v))))))))
+
 (defun tc-float32 ()
   (make-hydra_graph_term_coder (list :literal (list :float (list :float32 nil)))
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_float32 g) t_))))
@@ -288,7 +293,7 @@
               ((or (eq c :eq) (and (numberp c) (zerop c))) "equalTo")
               ((or (eq c :gt) (and (numberp c) (> c 0))) "greaterThan")
               (t (error "not a comparison: %S" c)))))
-        (list :right (list :union (make-hydra_core_injection "hydra.util.Comparison"
+        (list :right (list :inject (make-hydra_core_injection "hydra.util.Comparison"
                                     (make-hydra_core_field variant-name (list :unit))))))))))
 
 ;; Function coders

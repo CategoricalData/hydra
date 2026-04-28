@@ -10,7 +10,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -71,8 +71,8 @@
                 "argument": {"variable": "hydra.relational.ColumnName"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -97,7 +97,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -106,7 +106,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -140,8 +140,8 @@
                 "argument": {"variable": "hydra.tabular.ColumnType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -160,7 +160,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -169,7 +169,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -203,8 +203,8 @@
                 "argument": {"variable": "hydra.tabular.ColumnType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -225,7 +225,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -269,7 +269,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -278,7 +278,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -320,8 +320,8 @@
                 "argument": {"variable": "hydra.tabular.ColumnType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -348,7 +348,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -376,7 +376,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -385,7 +385,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -443,8 +443,8 @@
                 "argument": {"variable": "hydra.tabular.ColumnType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -469,7 +469,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -495,8 +495,8 @@
                 "argument": {"list": {"maybe": {"variable": "v"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -518,7 +518,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -527,7 +527,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -552,8 +552,8 @@
                     "function": {"variable": "hydra.tabular.DataRow"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -575,7 +575,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -601,8 +601,8 @@
                 "argument": {"list": {"literal": {"string": {}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -621,7 +621,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -630,7 +630,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -652,8 +652,8 @@
                 "argument": {"variable": "hydra.tabular.HeaderRow"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -674,7 +674,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -731,8 +731,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The data rows of the table. Each row must have the same number of cells."}}}],
                         "body": {
@@ -748,15 +748,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                     "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "header"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -773,8 +773,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The data rows of the table. Each row must have the same number of cells."}}}],
                           "body": {
@@ -789,8 +789,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                       "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
@@ -804,7 +804,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -813,7 +813,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -850,8 +850,8 @@
                     "function": {"variable": "hydra.tabular.Table"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -859,8 +859,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                       "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
@@ -881,7 +881,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -890,7 +890,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -927,8 +927,8 @@
                     "function": {"variable": "hydra.tabular.Table"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -936,8 +936,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The data rows of the table. Each row must have the same number of cells."}}}],
                       "body": {
@@ -964,7 +964,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1008,7 +1008,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1017,7 +1017,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1055,8 +1055,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                         "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
@@ -1070,8 +1070,8 @@
                     "function": {"variable": "hydra.tabular.Table"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1088,8 +1088,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                           "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
@@ -1112,7 +1112,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1140,7 +1140,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1149,7 +1149,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1203,8 +1203,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The data rows of the table. Each row must have the same number of cells."}}}],
                         "body": {
@@ -1222,8 +1222,8 @@
                     "function": {"variable": "hydra.tabular.Table"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1240,8 +1240,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The data rows of the table. Each row must have the same number of cells."}}}],
                           "body": {
@@ -1268,7 +1268,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1329,8 +1329,8 @@
                 "argument": {"variable": "hydra.relational.RelationName"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1355,7 +1355,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1364,7 +1364,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1398,8 +1398,8 @@
                 "argument": {"variable": "hydra.tabular.TableType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1418,7 +1418,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1427,7 +1427,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1461,8 +1461,8 @@
                 "argument": {"variable": "hydra.tabular.TableType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1483,7 +1483,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1527,7 +1527,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1536,7 +1536,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1578,8 +1578,8 @@
                 "argument": {"variable": "hydra.tabular.TableType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1606,7 +1606,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1634,7 +1634,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1643,7 +1643,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1701,8 +1701,8 @@
                 "argument": {"variable": "hydra.tabular.TableType"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

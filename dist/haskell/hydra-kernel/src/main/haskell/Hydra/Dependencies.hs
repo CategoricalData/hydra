@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Dependency extraction, binding sort, and let normalization
 
 module Hydra.Dependencies where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -27,9 +25,9 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Get definitions with their dependencies
 definitionsWithDependencies :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 definitionsWithDependencies cx graph original =
@@ -37,7 +35,6 @@ definitionsWithDependencies cx graph original =
       let depNames = \el -> Sets.toList (termDependencyNames True False False (Core.bindingTerm el))
           allDepNames = Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original)))
       in (Eithers.mapList (\name -> Lexical.requireBinding graph name) allDepNames)
-
 -- | Flatten nested let expressions
 flattenLetTerms :: Core.Term -> Core.Term
 flattenLetTerms term =
@@ -46,7 +43,7 @@ flattenLetTerms term =
               \binding ->
                 let key0 = Core.bindingName binding
                     val0 = Core.bindingTerm binding
-                    t = Core.bindingType binding
+                    t = Core.bindingTypeScheme binding
                 in case val0 of
                   Core.TermAnnotated v0 ->
                     let val1 = Core.annotatedTermBody v0
@@ -55,7 +52,7 @@ flattenLetTerms term =
                                 rewriteBinding (Core.Binding {
                                   Core.bindingName = key0,
                                   Core.bindingTerm = val1,
-                                  Core.bindingType = t})
+                                  Core.bindingTypeScheme = t})
                         innerBinding = Pairs.first recursive
                         deps = Pairs.second recursive
                         val2 = Core.bindingTerm innerBinding
@@ -64,7 +61,7 @@ flattenLetTerms term =
                       Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                         Core.annotatedTermBody = val2,
                         Core.annotatedTermAnnotation = ann})),
-                      Core.bindingType = t}, deps)
+                      Core.bindingTypeScheme = t}, deps)
                   Core.TermLet v0 ->
                     let bindings1 = Core.letBindings v0
                         body1 = Core.letBody v0
@@ -78,15 +75,15 @@ flattenLetTerms term =
                                 \b -> Core.Binding {
                                   Core.bindingName = (qualify (Core.bindingName b)),
                                   Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
-                                  Core.bindingType = (Core.bindingType b)}
+                                  Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                     in (Core.Binding {
                       Core.bindingName = key0,
                       Core.bindingTerm = newBody,
-                      Core.bindingType = t}, (Lists.map newBinding bindings1))
+                      Core.bindingTypeScheme = t}, (Lists.map newBinding bindings1))
                   _ -> (Core.Binding {
                     Core.bindingName = key0,
                     Core.bindingTerm = val0,
-                    Core.bindingType = t}, [])
+                    Core.bindingTypeScheme = t}, [])
           flattenBodyLet =
                   \bindings -> \body -> case body of
                     Core.TermLet v0 ->
@@ -111,7 +108,6 @@ flattenLetTerms term =
                           Core.letBody = newBody}))
                       _ -> rewritten
       in (Rewriting.rewriteTerm flatten term)
-
 -- | Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions
 inlineType :: M.Map Core.Name Core.Type -> Core.Type -> Either Errors.Error Core.Type
 inlineType schema typ =
@@ -124,7 +120,6 @@ inlineType schema typ =
                           _ -> Right tr
                 in (Eithers.bind (recurse typ2) (\tr -> afterRecurse tr))
       in (Rewriting.rewriteTypeM f typ)
-
 -- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
 isLambda :: Core.Term -> Bool
 isLambda term =
@@ -132,7 +127,6 @@ isLambda term =
       Core.TermLambda _ -> True
       Core.TermLet v0 -> isLambda (Core.letBody v0)
       _ -> False
-
 -- | Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python.
 liftLambdaAboveLet :: Core.Term -> Core.Term
 liftLambdaAboveLet term0 =
@@ -143,7 +137,7 @@ liftLambdaAboveLet term0 =
                         \b -> Core.Binding {
                           Core.bindingName = (Core.bindingName b),
                           Core.bindingTerm = (rewrite recurse (Core.bindingTerm b)),
-                          Core.bindingType = (Core.bindingType b)}
+                          Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
                     rewriteBindings = \bs -> Lists.map rewriteBinding bs
                     digForLambdas =
                             \original -> \cons -> \term2 -> case term2 of
@@ -164,7 +158,6 @@ liftLambdaAboveLet term0 =
                     Core.letBody = t})) (Core.letBody v0)
                   _ -> recurse term
       in (Rewriting.rewriteTerm rewrite term0)
-
 -- | Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings
 pruneLet :: Core.Let -> Core.Let
 pruneLet l =
@@ -172,13 +165,12 @@ pruneLet l =
       let bindingMap = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) (Core.letBindings l))
           rootName = Core.Name "[[[root]]]"
           adj =
-                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (Variables.freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Maybes.fromJust (Maps.lookup n bindingMap))))
+                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (Variables.freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Maybes.fromMaybe Core.TermUnit (Maps.lookup n bindingMap))))
           reachable = Sorting.findReachableNodes adj rootName
           prunedBindings = Lists.filter (\b -> Sets.member (Core.bindingName b) reachable) (Core.letBindings l)
       in Core.Let {
         Core.letBindings = prunedBindings,
         Core.letBody = (Core.letBody l)}
-
 -- | Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
 replaceTypedefs :: M.Map Core.Name Core.TypeScheme -> Core.Type -> Core.Type
 replaceTypedefs types typ0 =
@@ -199,13 +191,12 @@ replaceTypedefs types typ0 =
                             _ -> rewrite recurse t
                       forTypeScheme =
                               \ts ->
-                                let t = Core.typeSchemeType ts
+                                let t = Core.typeSchemeBody ts
                                 in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ)
                   in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v0 types))
                 Core.TypeWrap _ -> typ
                 _ -> recurse typ
       in (Rewriting.rewriteType rewrite typ0)
-
 -- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: Core.Term -> Core.Term
 simplifyTerm term =
@@ -233,7 +224,6 @@ simplifyTerm term =
                     stripped = Strip.deannotateTerm term2
                 in (recurse (forTerm stripped))
       in (Rewriting.rewriteTerm simplify term)
-
 -- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name
 termDependencyNames binds withPrims withNoms term0 =
@@ -248,12 +238,11 @@ termDependencyNames binds withPrims withNoms term0 =
                   Core.TermProject v0 -> nominal (Core.projectionTypeName v0)
                   Core.TermUnwrap v0 -> nominal v0
                   Core.TermRecord v0 -> nominal (Core.recordTypeName v0)
-                  Core.TermUnion v0 -> nominal (Core.injectionTypeName v0)
+                  Core.TermInject v0 -> nominal (Core.injectionTypeName v0)
                   Core.TermVariable v0 -> var v0
                   Core.TermWrap v0 -> nominal (Core.wrappedTermTypeName v0)
                   _ -> names
       in (Rewriting.foldOverTerm Coders.TraversalOrderPre addNames Sets.empty term0)
-
 -- | Generate short names from a list of fully qualified names
 toShortNames :: [Core.Name] -> M.Map Core.Name Core.Name
 toShortNames original =
@@ -274,7 +263,6 @@ toShortNames original =
                                 \name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gt i 1) (Strings.cat2 local (Literals.showInt32 i)) local)))
                     in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1))
       in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
-
 -- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs
 topologicalSortBindingMap :: M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]]
 topologicalSortBindingMap bindingMap =
@@ -293,28 +281,24 @@ topologicalSortBindingMap bindingMap =
           toPair =
                   \name -> (name, (Maybes.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap)))
       in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
-
 -- | Topological sort of elements based on their dependencies
 topologicalSortBindings :: [Core.Binding] -> Either [[Core.Name]] [Core.Name]
 topologicalSortBindings els =
 
       let adjlist = \e -> (Core.bindingName e, (Sets.toList (termDependencyNames False True True (Core.bindingTerm e))))
       in (Sorting.topologicalSort (Lists.map adjlist els))
-
 -- | Topologically sort type definitions by dependencies
 topologicalSortTypeDefinitions :: [Packaging.TypeDefinition] -> [[Packaging.TypeDefinition]]
 topologicalSortTypeDefinitions defs =
 
       let toPair =
-              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeType (Packaging.typeDefinitionType def)))))
+              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def)))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
-
 typeDependencyNames :: Bool -> Core.Type -> S.Set Core.Name
 typeDependencyNames withSchema typ =
     Logic.ifElse withSchema (Sets.union (Variables.freeVariablesInType typ) (typeNamesInType typ)) (Variables.freeVariablesInType typ)
-
 typeNamesInType :: Ord t0 => (Core.Type -> S.Set t0)
 typeNamesInType typ0 =
 

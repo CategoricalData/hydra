@@ -18,9 +18,13 @@ gql :: String -> Type
 gql = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [] $
-    Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
-      "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [],
+            moduleDescription = Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
+      "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")}
   where
     definitions = [
       name_,

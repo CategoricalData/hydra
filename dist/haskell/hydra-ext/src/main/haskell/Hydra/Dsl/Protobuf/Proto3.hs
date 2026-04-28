@@ -8,10 +8,11 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Protobuf.Proto3 as Proto3
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 definitionEnum :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm Proto3.Definition
 definitionEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.Definition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -19,7 +20,7 @@ definitionEnum x =
 
 definitionMessage :: Phantoms.TTerm Proto3.MessageDefinition -> Phantoms.TTerm Proto3.Definition
 definitionMessage x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.Definition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "message"),
@@ -316,7 +317,7 @@ fieldType x =
 
 fieldTypeMap :: Phantoms.TTerm Proto3.MapType -> Phantoms.TTerm Proto3.FieldType
 fieldTypeMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.FieldType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -324,7 +325,7 @@ fieldTypeMap x =
 
 fieldTypeOneof :: Phantoms.TTerm [Proto3.Field] -> Phantoms.TTerm Proto3.FieldType
 fieldTypeOneof x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.FieldType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "oneof"),
@@ -332,7 +333,7 @@ fieldTypeOneof x =
 
 fieldTypeRepeated :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.FieldType
 fieldTypeRepeated x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.FieldType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeated"),
@@ -340,7 +341,7 @@ fieldTypeRepeated x =
 
 fieldTypeSimple :: Phantoms.TTerm Proto3.SimpleType -> Phantoms.TTerm Proto3.FieldType
 fieldTypeSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.FieldType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -943,7 +944,7 @@ protoFileWithTypes original newVal =
 
 scalarTypeBool :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeBool =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bool"),
@@ -951,7 +952,7 @@ scalarTypeBool =
 
 scalarTypeBytes :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeBytes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bytes"),
@@ -959,7 +960,7 @@ scalarTypeBytes =
 
 scalarTypeDouble :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -967,7 +968,7 @@ scalarTypeDouble =
 
 scalarTypeFixed32 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeFixed32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fixed32"),
@@ -975,7 +976,7 @@ scalarTypeFixed32 =
 
 scalarTypeFixed64 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeFixed64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fixed64"),
@@ -983,7 +984,7 @@ scalarTypeFixed64 =
 
 scalarTypeFloat :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -991,7 +992,7 @@ scalarTypeFloat =
 
 scalarTypeInt32 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeInt32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int32"),
@@ -999,7 +1000,7 @@ scalarTypeInt32 =
 
 scalarTypeInt64 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeInt64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int64"),
@@ -1007,7 +1008,7 @@ scalarTypeInt64 =
 
 scalarTypeSfixed32 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeSfixed32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sfixed32"),
@@ -1015,7 +1016,7 @@ scalarTypeSfixed32 =
 
 scalarTypeSfixed64 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeSfixed64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sfixed64"),
@@ -1023,7 +1024,7 @@ scalarTypeSfixed64 =
 
 scalarTypeSint32 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeSint32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sint32"),
@@ -1031,7 +1032,7 @@ scalarTypeSint32 =
 
 scalarTypeSint64 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeSint64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sint64"),
@@ -1039,7 +1040,7 @@ scalarTypeSint64 =
 
 scalarTypeString :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1047,7 +1048,7 @@ scalarTypeString =
 
 scalarTypeUint32 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeUint32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint32"),
@@ -1055,7 +1056,7 @@ scalarTypeUint32 =
 
 scalarTypeUint64 :: Phantoms.TTerm Proto3.ScalarType
 scalarTypeUint64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.ScalarType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint64"),
@@ -1063,7 +1064,7 @@ scalarTypeUint64 =
 
 simpleTypeReference :: Phantoms.TTerm Proto3.TypeName -> Phantoms.TTerm Proto3.SimpleType
 simpleTypeReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.SimpleType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
@@ -1071,7 +1072,7 @@ simpleTypeReference x =
 
 simpleTypeScalar :: Phantoms.TTerm Proto3.ScalarType -> Phantoms.TTerm Proto3.SimpleType
 simpleTypeScalar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.SimpleType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scalar"),
@@ -1127,7 +1128,7 @@ unTypeReference x =
 
 valueBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Proto3.Value
 valueBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -1135,7 +1136,7 @@ valueBoolean x =
 
 valueString :: Phantoms.TTerm String -> Phantoms.TTerm Proto3.Value
 valueString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.protobuf.proto3.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),

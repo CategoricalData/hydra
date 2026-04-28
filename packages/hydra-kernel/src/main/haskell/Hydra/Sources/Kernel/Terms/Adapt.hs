@@ -86,11 +86,13 @@ ns :: Namespace
 ns = Namespace "hydra.adapt"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Simple, one-way adapters for types and terms"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Simple, one-way adapters for types and terms"}
   where
     definitions = [
       toDefinition adaptFloatType,
@@ -174,7 +176,7 @@ adaptDataGraph = define "adaptDataGraph" $
     Core.binding
       (Core.bindingName $ var "el")
       (var "transformTerm" @@ var "g" @@ (Core.bindingTerm $ var "el"))
-      (Core.bindingType $ var "el")) $
+      (Core.bindingTypeScheme $ var "el")) $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "prims0" <~ Graph.graphPrimitives (var "graph0") $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
@@ -206,7 +208,7 @@ adaptDataGraph = define "adaptDataGraph" $
   -- while preserving type-class constraints like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
     "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
-    "adaptedType" <<~ optCases (Core.bindingType $ var "el")
+    "adaptedType" <<~ optCases (Core.bindingTypeScheme $ var "el")
       (right nothing)
       ("ts" ~>
         "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
@@ -259,7 +261,7 @@ adaptNestedTypes = define "adaptNestedTypes" $
     (Just $ right $ var "rewritten") [
     _Term_let>>: "lt" ~>
       "adaptB" <~ ("b" ~>
-        "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
+        "adaptedBType" <<~ optCases (Core.bindingTypeScheme $ var "b")
           (right nothing)
           ("ts" ~>
             "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
@@ -319,6 +321,11 @@ adaptLiteral = define "adaptLiteral" $
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
         Literals.bigintToIntegerValue @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
+    _Literal_decimal>>: "d" ~> cases _LiteralType (var "lt")
+      Nothing [
+      _LiteralType_float>>: constant $ Core.literalFloat $
+        inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d")),
+      _LiteralType_string>>: constant $ Core.literalString $ Literals.showDecimal (var "d")],
     _Literal_float>>: "f" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_float>>: "ft" ~> Core.literalFloat $
@@ -337,6 +344,7 @@ adaptLiteralType = define "adaptLiteralType" $
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
     _LiteralType_boolean>>: constant $ Maybes.map (unaryFunction Core.literalTypeInteger) $
       adaptIntegerType @@ var "constraints" @@ Core.integerTypeInt8,
+    _LiteralType_decimal>>: constant $ just $ Core.literalTypeFloat Core.floatTypeFloat64,
     _LiteralType_float>>: "ft" ~> Maybes.map (unaryFunction Core.literalTypeFloat) $
       adaptFloatType @@ var "constraints" @@ var "ft",
     _LiteralType_integer>>: "it" ~> Maybes.map (unaryFunction Core.literalTypeInteger) $
@@ -365,9 +373,9 @@ adaptPrimitive :: TTermDefinition (LanguageConstraints -> M.Map LiteralType Lite
 adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
-  "ts0" <~ Graph.primitiveType (var "prim0") $
+  "ts0" <~ Graph.primitiveTypeScheme (var "prim0") $
   "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
-  right $ Graph.primitiveWithType (var "prim0") (var "ts1")
+  right $ Graph.primitiveWithTypeScheme (var "prim0") (var "ts1")
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
@@ -384,14 +392,15 @@ adaptTerm = define "adaptTerm" $
           (var "term")
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
-      "forNonNull">: ("alts" ~>
-        "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
-        optCases (var "mterm")
-          (var "tryAlts" @@ Lists.tail (var "alts"))
-          ("t" ~> right $ just $ var "t")),
-      "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-        (right nothing)
-        (var "forNonNull" @@ var "alts"))] $
+      "tryAlts">: ("alts" ~>
+        Maybes.maybe
+          (right nothing)
+          ("uc" ~>
+            "mterm" <<~ var "tryTerm" @@ (Pairs.first $ var "uc") $
+            optCases (var "mterm")
+              (var "tryAlts" @@ (Pairs.second $ var "uc"))
+              ("t" ~> right $ just $ var "t"))
+          (Lists.uncons $ var "alts"))] $
       "alts0" <<~ termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
       var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
@@ -432,11 +441,11 @@ adaptType = define "adaptType" $
         (just $ Core.typeLiteral Core.literalTypeString)
         ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]),
   "forUnsupported">: ("typ" ~>
-    "tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-      nothing
-      (optCases (var "tryType" @@ Lists.head (var "alts"))
-        (var "tryAlts" @@ Lists.tail (var "alts"))
-        ("t" ~> just $ var "t"))) $
+    "tryAlts" <~ ("alts" ~>
+      Maybes.bind (Lists.uncons $ var "alts") $
+        "uc" ~> optCases (var "tryType" @@ (Pairs.first $ var "uc"))
+          (var "tryAlts" @@ (Pairs.second $ var "uc"))
+          ("t" ~> just $ var "t")) $
     "alts0" <~ typeAlternatives @@ var "typ" $
     var "tryAlts" @@ var "alts0"),
   "tryType">: ("typ" ~>
@@ -458,7 +467,7 @@ adaptTypeScheme = define "adaptTypeScheme" $
   doc "Adapt a type scheme to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "ts0" ~>
   "vars0" <~ Core.typeSchemeVariables (var "ts0") $
-  "t0" <~ Core.typeSchemeType (var "ts0") $
+  "t0" <~ Core.typeSchemeBody (var "ts0") $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   right $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
@@ -501,7 +510,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
         (var "go" @@ (Core.bindingTerm $ var "b"))
-        (Core.bindingType $ var "b")) $
+        (Core.bindingTypeScheme $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "go" @@ (Core.letBody $ var "lt"))) $
@@ -546,7 +555,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (Core.typeLambdaParameter $ var "ta")
         (var "go" @@ (Core.typeLambdaBody $ var "ta")),
-      _Term_union>>: "i" ~> Core.termUnion $ Core.injection
+      _Term_inject>>: "i" ~> Core.termInject $ Core.injection
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
@@ -591,7 +600,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     "stripped" <~ Lists.map ("b" ~>
         Core.binding (Core.bindingName $ var "b")
           (Strip.stripTypeLambdas @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b"))
+          (Core.bindingTypeScheme $ var "b"))
         (var "bindings") $
     -- 0b: Unshadow variables
     "term0" <~ Core.termLet (Core.let_ (var "stripped") Core.termUnit) $
@@ -610,7 +619,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Note: this is a rough test of typedness, as it only checks that the top-level bindings are typed.
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
     "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
-      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (var "bindings")) $
+      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat [
@@ -623,7 +632,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Lists.map ("b" ~> Core.binding
       (Core.bindingName $ var "b")
       (pushTypeAppsInward @@ (Core.bindingTerm $ var "b"))
-      (Core.bindingType $ var "b"))
+      (Core.bindingTypeScheme $ var "b"))
     (var "bindings")) $
 
   -- Helper to rebuild a Graph from bindings, reusing graph0's context
@@ -671,7 +680,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
         (Core.bindingName $ var "el")
         (Core.bindingTerm $ var "el")
         (just $ var "ts"))
-      (Core.bindingType $ var "el")) $
+      (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter
     ("el" ~> optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))
@@ -729,7 +738,12 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
     (var "tmap1")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
-        Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
+        -- Drop names that aren't present in tmap1. The caller is expected to
+        -- pass only names that exist in the schema graph, so the filter is
+        -- a no-op in practice.
+        Maybes.mapMaybe
+          ("n" ~> Maybes.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n") (var "tmap1")))
+          (var "names"))
       (var "nameLists"))
 
 termAlternatives :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error [Term])
@@ -751,7 +765,7 @@ termAlternatives = define "termAlternatives" $
     _Term_typeApplication>>: "ta" ~>
       "term2" <~ Core.typeApplicationTermBody (var "ta") $
       right $ list [var "term2"],
-    _Term_union>>: "inj" ~>
+    _Term_inject>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
       "field" <~ Core.injectionField (var "inj") $
       "fname" <~ Core.fieldName (var "field") $
@@ -857,6 +871,12 @@ prepareLiteralType = define "prepareLiteralType" $
           ("v" ~> cases _Literal (var "v") (Just (var "v")) [
             _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToString (var "b")))])
           (Sets.fromList $ list [string "replace binary strings with character strings"])),
+      _LiteralType_decimal>>: (constant $
+        triple
+          (Core.literalTypeFloat Core.floatTypeFloat64)
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_decimal>>: ("d" ~> inject _Literal _Literal_float (inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d"))))])
+          (Sets.fromList $ list [string "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])),
       _LiteralType_float>>: ("ft" ~> lets [
         "result">: prepareFloatType @@ var "ft",
         "rtyp">: Pairs.first (var "result"),

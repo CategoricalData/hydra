@@ -1,11 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | A utility which instantiates a nonrecursive type with default values
 
 module Hydra.Templates where
-
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -15,8 +13,9 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
+import qualified Hydra.Lib.Literals as Literals
 -- | Decode a list of type-encoding bindings into a map of named types
 graphToSchema :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
 graphToSchema cx graph els =
@@ -24,9 +23,8 @@ graphToSchema cx graph els =
       let toPair =
               \el ->
                 let name = Core.bindingName el
-                in (Eithers.bind (Core_.type_ graph (Core.bindingTerm el)) (\t -> Right (name, t)))
+                in (Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm el)) (\t -> Right (name, t)))
       in (Eithers.bind (Eithers.mapList toPair els) (\pairs -> Right (Maps.fromList pairs)))
-
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals. The name parameter provides the element name for nominal type construction.
 instantiateTemplate :: t0 -> Bool -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either Errors.Error Core.Term
 instantiateTemplate cx minimal schema tname t =
@@ -56,6 +54,7 @@ instantiateTemplate cx minimal schema tname t =
                   \lt -> case lt of
                     Core.LiteralTypeBinary -> Core.LiteralString ""
                     Core.LiteralTypeBoolean -> Core.LiteralBoolean False
+                    Core.LiteralTypeDecimal -> Core.LiteralDecimal (Literals.stringToDecimal "0.0")
                     Core.LiteralTypeInteger v0 -> Core.LiteralInteger (forInteger v0)
                     Core.LiteralTypeFloat v0 -> Core.LiteralFloat (forFloat v0)
                     Core.LiteralTypeString -> Core.LiteralString ""

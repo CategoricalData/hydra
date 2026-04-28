@@ -114,11 +114,13 @@ ns :: Namespace
 ns = Namespace "hydra.checking"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"}
   where
     definitions = [
       toDefinition allEqual,
@@ -174,41 +176,48 @@ formatError = "e" ~> ShowError.error_ @@ var "e"
 allEqual :: TTermDefinition ([a] -> Bool)
 allEqual = define "allEqual" $
   "els" ~>
-  Logic.ifElse (Lists.null $ var "els")
+  Maybes.maybe
     true
-    (Lists.foldl
-       ("b" ~> "t" ~> Logic.and (var "b") (Equality.equal (var "t") (Lists.head (var "els"))))
-       true
-       (Lists.tail $ var "els"))
+    ("uc" ~>
+      "h" <~ Pairs.first (var "uc") $
+      "t" <~ Pairs.second (var "uc") $
+      Lists.foldl
+        ("b" ~> "x" ~> Logic.and (var "b") (Equality.equal (var "x") (var "h")))
+        true
+        (var "t"))
+    (Lists.uncons $ var "els")
 
 applyTypeArgumentsToType :: TTermDefinition (Context -> Graph -> [Type] -> Type -> Prelude.Either Error Type)
 applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   doc "Apply type arguments to a type, substituting forall-bound variables" $
   "cx" ~> "tx" ~> "typeArgs" ~> "t" ~>
-  -- Check null typeArgs FIRST to avoid eager evaluation of head/tail on empty list
-  Logic.ifElse (Lists.null $ var "typeArgs")
+  -- uncons typeArgs: Nothing means no args to apply (base case).
+  Maybes.maybe
     (right $ var "t")
-    ("nonnull" <~ (cases _Type (var "t")
-      (Just $ Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
-        ShowCore.type_ @@ var "t",
-        string ". Trying to apply ",
-        Literals.showInt32 (Lists.length $ var "typeArgs"),
-        string " type args: ",
-        Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
-        string ". Context has vars: {",
-        Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
-        string "}"])) (var "cx")) [
-      _Type_forall>>: "ft" ~>
-        "v" <~ Core.forallTypeParameter (var "ft") $
-        "tbody" <~ Core.forallTypeBody (var "ft") $
-        applyTypeArgumentsToType
-          @@ var "cx"
-          @@ var "tx"
-          @@ (Lists.tail $ var "typeArgs")
-          @@ (Substitution.substInType
-            @@ (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "typeArgs"))
-            @@ (var "tbody"))]) $
-    var "nonnull")
+    ("uc" ~>
+      "ah" <~ Pairs.first (var "uc") $
+      "at" <~ Pairs.second (var "uc") $
+      cases _Type (var "t")
+        (Just $ Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
+          ShowCore.type_ @@ var "t",
+          string ". Trying to apply ",
+          Literals.showInt32 (Lists.length $ var "typeArgs"),
+          string " type args: ",
+          Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
+          string ". Context has vars: {",
+          Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
+          string "}"])) (var "cx")) [
+        _Type_forall>>: "ft" ~>
+          "v" <~ Core.forallTypeParameter (var "ft") $
+          "tbody" <~ Core.forallTypeBody (var "ft") $
+          applyTypeArgumentsToType
+            @@ var "cx"
+            @@ var "tx"
+            @@ (var "at")
+            @@ (Substitution.substInType
+              @@ (Typing.typeSubst $ Maps.singleton (var "v") (var "ah"))
+              @@ (var "tbody"))])
+    (Lists.uncons $ var "typeArgs")
 
 checkForUnboundTypeVariables :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error ())
 checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
@@ -237,7 +246,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
           "bterm" <~ Core.bindingTerm (var "b") $
-          "newVars" <~ optCases (Core.bindingType $ var "b")
+          "newVars" <~ optCases (Core.bindingTypeScheme $ var "b")
              (var "vars")
              ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
           "newTrace" <~ Lists.cons (Core.unName $ Core.bindingName $ var "b") (var "trace") $
@@ -270,9 +279,10 @@ checkSameType :: TTermDefinition (Context -> Graph -> String -> [Type] -> Prelud
 checkSameType = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
   "cx" ~> "tx" ~> "desc" ~> "types" ~>
+  "unequalErr" <~ (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUnequalTypes $ ErrorsChecking.unequalTypesError (var "types") (var "desc")) (var "cx")) $
   Logic.ifElse (typesAllEffectivelyEqual @@ var "tx" @@ var "types")
-    (right $ Lists.head $ var "types")
-    (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUnequalTypes $ ErrorsChecking.unequalTypesError (var "types") (var "desc")) (var "cx"))
+    (Maybes.maybe (var "unequalErr") ("t" ~> right $ var "t") (Lists.maybeHead $ var "types"))
+    (var "unequalErr")
 
 -- TODO: unused
 checkType :: TTermDefinition (Context -> Graph -> Term -> Type -> Prelude.Either Error ())
@@ -295,7 +305,7 @@ checkTypeSubst = define "checkTypeSubst" $
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys $ var "s") $
   "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "tx") $
-  "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+  "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
     (Just false) [
     _Type_record>>: constant true,
     _Type_union>>: constant true,
@@ -417,7 +427,7 @@ typeOf = define "typeOf" $
     _Term_set>>: typeOfSet @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_typeApplication>>: typeOfTypeApplication @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_typeLambda>>: typeOfTypeLambda @@ var "cx1" @@ var "tx" @@ var "typeArgs",
-    _Term_union>>: typeOfInjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
+    _Term_inject>>: typeOfInjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_unit>>: constant $ typeOfUnit @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_unwrap>>: typeOfUnwrap @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_variable>>: typeOfVariable @@ var "cx1" @@ var "tx" @@ var "typeArgs",
@@ -512,20 +522,29 @@ typeOfEither = define "typeOfEither" $
   doc "Reconstruct the type of an either value (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "et" ~>
   "n" <~ Lists.length (var "typeArgs") $
-  Logic.ifElse (Equality.equal (var "n") (int32 2))
-    (Eithers.either_
-      ("leftTerm" ~>
-        "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "leftTerm" $
-        "leftType" <~ Pairs.first (var "result") $
-        "cx2" <~ Pairs.second (var "result") $
-        right $ pair (Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs")) (var "cx2"))
-      ("rightTerm" ~>
-        "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "rightTerm" $
-        "rightType" <~ Pairs.first (var "result") $
-        "cx2" <~ Pairs.second (var "result") $
-        right $ pair (Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType")) (var "cx2"))
-      (var "et"))
-    (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeEither $ Core.eitherType Core.typeUnit Core.typeUnit) (int32 2) (var "n") (var "typeArgs")) (var "cx"))
+  "arityErr" <~ (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeEither $ Core.eitherType Core.typeUnit Core.typeUnit) (int32 2) (var "n") (var "typeArgs")) (var "cx")) $
+  Maybes.maybe (var "arityErr")
+    ("uc0" ~>
+      "ta0" <~ Pairs.first (var "uc0") $
+      Maybes.maybe (var "arityErr")
+        ("uc1" ~>
+          "ta1" <~ Pairs.first (var "uc1") $
+          Logic.ifElse (Equality.equal (var "n") (int32 2))
+            (Eithers.either_
+              ("leftTerm" ~>
+                "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "leftTerm" $
+                "leftType" <~ Pairs.first (var "result") $
+                "cx2" <~ Pairs.second (var "result") $
+                right $ pair (Core.typeEither $ Core.eitherType (var "leftType") (var "ta1")) (var "cx2"))
+              ("rightTerm" ~>
+                "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "rightTerm" $
+                "rightType" <~ Pairs.first (var "result") $
+                "cx2" <~ Pairs.second (var "result") $
+                right $ pair (Core.typeEither $ Core.eitherType (var "ta0") (var "rightType")) (var "cx2"))
+              (var "et"))
+            (var "arityErr"))
+        (Lists.uncons (Pairs.second (var "uc0"))))
+    (Lists.uncons $ var "typeArgs")
 
 typeOfInjection :: TTermDefinition (Context -> Graph -> [Type] -> Injection -> Prelude.Either Error (Type, Context))
 typeOfInjection = define "typeOfInjection" $
@@ -539,7 +558,7 @@ typeOfInjection = define "typeOfInjection" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "sbody" <~ Core.typeSchemeType (var "schemaType") $
+  "sbody" <~ Core.typeSchemeBody (var "schemaType") $
   "sfields" <<~ ExtractCore.unionType @@ var "tname" @@ var "sbody" $
   "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
@@ -575,7 +594,7 @@ typeOfLet = define "typeOfLet" $
     Maybes.maybe
       (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUntypedLetBinding $ ErrorsChecking.untypedLetBindingError (var "b")) (var "cx"))
       ("ts" ~> right $ Scoping.typeSchemeToFType @@ var "ts")
-      (Core.bindingType $ var "b")) $
+      (Core.bindingTypeScheme $ var "b")) $
   -- Get binding types, threading errors through the fold
   "btypesResult" <~ Lists.foldl
     ("acc" ~> "b" ~>
@@ -602,10 +621,13 @@ typeOfList :: TTermDefinition (Context -> Graph -> [Type] -> [Term] -> Prelude.E
 typeOfList = define "typeOfList" $
   doc "Reconstruct the type of a list (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
+  "listArityErr" <~ (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeList Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs")) (var "cx")) $
   Logic.ifElse (Lists.null $ var "els")
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
-      (right $ pair (Core.typeList $ Lists.head $ var "typeArgs") (var "cx"))
-      (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeList Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs")) (var "cx")))
+      (Maybes.maybe (var "listArityErr")
+        ("ta0" ~> right $ pair (Core.typeList $ var "ta0") (var "cx"))
+        (Lists.maybeHead $ var "typeArgs"))
+      (var "listArityErr"))
     -- Nonempty list: type all elements, threading context
     ("foldResult" <~ Lists.foldl
       ("acc" ~> "term" ~>
@@ -636,12 +658,19 @@ typeOfMap :: TTermDefinition (Context -> Graph -> [Type] -> M.Map Term Term -> P
 typeOfMap = define "typeOfMap" $
   doc "Reconstruct the type of a map (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "m" ~>
+  "mapArityErr" <~ (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMap $ Core.mapType Core.typeUnit Core.typeUnit) (int32 2) (Lists.length $ var "typeArgs") (var "typeArgs")) (var "cx")) $
   Logic.ifElse (Maps.null $ var "m")
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 2))
-      (right $ pair (Core.typeMap $ Core.mapType
-        (Lists.at (int32 0) $ var "typeArgs")
-        (Lists.at (int32 1) $ var "typeArgs")) (var "cx"))
-      (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMap $ Core.mapType Core.typeUnit Core.typeUnit) (int32 2) (Lists.length $ var "typeArgs") (var "typeArgs")) (var "cx")))
+      (Maybes.maybe (var "mapArityErr")
+        ("uc0" ~>
+          "ta0" <~ Pairs.first (var "uc0") $
+          Maybes.maybe (var "mapArityErr")
+            ("uc1" ~>
+              "ta1" <~ Pairs.first (var "uc1") $
+              right $ pair (Core.typeMap $ Core.mapType (var "ta0") (var "ta1")) (var "cx"))
+            (Lists.uncons (Pairs.second (var "uc0"))))
+        (Lists.uncons $ var "typeArgs"))
+      (var "mapArityErr"))
     -- Nonempty map: type keys and values
     ("pairs" <~ Maps.toList (var "m") $
     -- Fold over keys
@@ -686,9 +715,12 @@ typeOfMaybe = define "typeOfMaybe" $
   "cx" ~> "tx" ~> "typeArgs" ~> "mt" ~>
   "forNothing" <~ (
     "n" <~ Lists.length (var "typeArgs") $
+    "maybeArityErr" <~ (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMaybe Core.typeUnit) (int32 1) (var "n") (var "typeArgs")) (var "cx")) $
     Logic.ifElse (Equality.equal (var "n") (int32 1))
-      (right $ pair (Core.typeMaybe $ Lists.head $ var "typeArgs") (var "cx"))
-      (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMaybe Core.typeUnit) (int32 1) (var "n") (var "typeArgs")) (var "cx"))) $
+      (Maybes.maybe (var "maybeArityErr")
+        ("ta0" ~> right $ pair (Core.typeMaybe $ var "ta0") (var "cx"))
+        (Lists.maybeHead $ var "typeArgs"))
+      (var "maybeArityErr")) $
   "forJust" <~ ("term" ~>
     "tResult" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term" $
     "termType" <~ Pairs.first (var "tResult") $
@@ -721,7 +753,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   -- Look up the primitive directly in the graph's primitives map and extract its type.
   -- This avoids reconstructing a Map Name TypeScheme on every call (O(p) per call).
-  "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+  "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Maybes.maybe
     (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
@@ -744,7 +776,7 @@ typeOfProjection = define "typeOfProjection" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "sbody" <~ Core.typeSchemeType (var "schemaType") $
+  "sbody" <~ Core.typeSchemeBody (var "schemaType") $
   "sfields" <<~ ExtractCore.recordType @@ var "tname" @@ var "sbody" $
   "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
@@ -779,10 +811,13 @@ typeOfSet :: TTermDefinition (Context -> Graph -> [Type] -> S.Set Term -> Prelud
 typeOfSet = define "typeOfSet" $
   doc "Reconstruct the type of a set (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
+  "setArityErr" <~ (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeSet Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs")) (var "cx")) $
   Logic.ifElse (Sets.null $ var "els")
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
-      (right $ pair (Core.typeSet $ Lists.head $ var "typeArgs") (var "cx"))
-      (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeSet Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs")) (var "cx")))
+      (Maybes.maybe (var "setArityErr")
+        ("ta0" ~> right $ pair (Core.typeSet $ var "ta0") (var "cx"))
+        (Lists.maybeHead $ var "typeArgs"))
+      (var "setArityErr"))
     -- Nonempty set: type all elements, threading context
     ("foldResult" <~ Lists.foldl
       ("acc" ~> "term" ~>
@@ -846,7 +881,7 @@ typeOfUnwrap = define "typeOfUnwrap" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "sbody" <~ Core.typeSchemeType (var "schemaType") $
+  "sbody" <~ Core.typeSchemeBody (var "schemaType") $
   "wrapped" <<~ ExtractCore.wrappedType @@ var "tname" @@ var "sbody" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "swrapped" <~ Substitution.substInType @@ var "subst" @@ var "wrapped" $
@@ -872,7 +907,7 @@ typeOfVariable = define "typeOfVariable" $
     (Maybes.maybe
       (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
       (var "forScheme")
-      (Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+      (Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
         (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx"))))
     (var "forScheme")
     (var "rawTypeScheme")

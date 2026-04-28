@@ -74,10 +74,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Rewriting.ns]
-    kernelTypesNamespaces $
-    Just ("Annotation and type stripping and normalization")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Rewriting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Annotation and type stripping and normalization")}
   where
    definitions = [
      toDefinition deannotateAndDetypeTerm,
@@ -139,7 +141,7 @@ deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   doc "Recursively strip all annotations from a type scheme" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "typ" <~ Core.typeSchemeType (var "ts") $
+  "typ" <~ Core.typeSchemeBody (var "ts") $
   "constraints" <~ Core.typeSchemeConstraints (var "ts") $
   Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ") (var "constraints")
 

@@ -151,8 +151,10 @@ for more information on how code generation works.
 The recommended way to regenerate all Java code is the sync script (from the repo root):
 
 ```bash
-heads/haskell/bin/sync-java.sh
+bin/sync-java.sh
 ```
+
+(equivalent to `bin/sync.sh --hosts java --targets java`)
 
 This will:
 1. Generate the kernel modules into `dist/java/hydra-kernel/src/main/java`

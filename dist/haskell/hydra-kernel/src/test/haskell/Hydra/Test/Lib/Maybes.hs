@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for hydra.lib.maybes primitives
 
 module Hydra.Test.Lib.Maybes where
-
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -12,7 +10,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Show.Core as Core
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 -- | Test cases for hydra.lib.maybes primitives
 allTests :: Testing.TestGroup
 allTests =
@@ -152,18 +150,6 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = ((\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) (Maybes.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 3)),
                 Testing.universalTestCaseExpected = ((\mx -> Core.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "fromJust",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "extract from just",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Maybes.fromJust (Just 42))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 42)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

@@ -152,7 +152,7 @@ Cross-reference against the module registries (Step 1) before deleting.
 **Java** — check for orphaned type files within valid packages:
 ```bash
 # For a specific package (e.g., hydra/testing/), compare Java files
-# against the types defined in the corresponding Haskell gen-main module
+# against the types defined in the corresponding generated Haskell module
 diff <(ls dist/java/hydra-kernel/src/main/java/hydra/testing/ | sed 's/.java//' | sort) \
      <(grep '^data ' dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs | awk '{print $2}' | sort)
 ```
@@ -211,6 +211,214 @@ The [refactoring recipe](refactoring.md) and [namespace refactoring recipe](refa
 include "delete orphan files" as a step in their workflows.
 This recipe covers the broader audit — finding orphans that were missed during those workflows
 or that accumulated across multiple changes.
+
+### Stale generated content from cached Haskell binaries
+
+A particularly insidious class of staleness has nothing to do with orphan files —
+the generated content itself is wrong because the executables that produced it were
+linked against an out-of-date kernel.
+
+The Haskell sync executables (`update-json-main`, `update-json-test`, `update-json-manifest`,
+`bootstrap-from-json`, `verify-json-kernel`, etc.) are compiled by Stack and cached under
+`heads/haskell/.stack-work/install/`.
+Each binary has constants, type names, namespace strings, and serialized term fragments
+**baked in at link time** from whatever the kernel looked like when the binary was built.
+If you rename a kernel namespace, regenerate `dist/haskell/hydra-kernel/`, then run a generation
+exec without rebuilding it first, the exec emits the **old** namespace string into the JSON
+output — even though the kernel sources on disk are correct.
+
+`sync-haskell.sh` does call `stack build` between phases, so in principle Stack should
+recompile any exec whose dependencies have changed. In practice this is unreliable:
+
+- Stack tracks dependencies by file mtime within `package.yaml`'s `source-dirs`.
+- After a regeneration, the `dist/haskell/hydra-kernel/...` files are rewritten with
+  new mtimes — but if the **content** is unchanged, Stack may consider the dependent
+  exec still up-to-date and skip recompilation.
+- Conversely, if a regeneration changes content but the exec wasn't recompiled because
+  Stack misjudged the dependency graph, the next exec invocation runs against the
+  old in-memory kernel.
+
+The result: **`sync-all` can run successfully and still leave stale string literals
+in `dist/json/`** (or, transitively, in any language target that copies content via
+`bootstrap-from-json`).
+
+#### Detecting the problem
+
+Stale binary cache shows up as:
+
+- A specific text pattern (an old namespace, an old type name, a removed function name)
+  appearing in `dist/json/` or in language-target outputs **after** sync-all completes.
+- The same pattern absent from all hand-written sources (`packages/`, `heads/`, `dist/haskell/`).
+- Mtimes on the offending dist files showing they were rewritten by the recent sync,
+  even though the content is wrong.
+
+A useful audit:
+
+```bash
+# Find string patterns that should no longer exist after a recent rename.
+grep -rln "hydra.module" dist/ packages/hydra-ext/src/main/haskell/
+```
+
+If the only matches are under `dist/`, the cache is stale.
+
+#### Fixing it
+
+The reliable cure is a clean rebuild:
+
+```bash
+# Remove leftover .stack-work directories from before #290 (one-time)
+rm -rf packages/hydra-*/.stack-work
+
+# Wipe the active install snapshot to force a fresh build
+rm -rf heads/haskell/.stack-work/install
+
+# Re-sync everything
+bin/sync.sh --hosts all --targets all
+```
+
+The first `rm -rf` only matters if you have leftover per-package `.stack-work` dirs
+from before the #290 packaging restructure. The second is the important one: removing
+`heads/haskell/.stack-work/install` drops all cached binaries so Stack must recompile
+from source. A full rebuild from cold cache takes 30–60 minutes.
+
+#### When to suspect this hazard
+
+After any of:
+- A namespace rename across the kernel (e.g., #290's `hydra.module` → `hydra.packaging`).
+- An ext-prefix removal (#331).
+- A type rename in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/`.
+- A move of a primitive between libraries.
+- Any structural change to the bootstrap graph.
+
+If in doubt after such a change, do the clean rebuild before trusting `sync-all` output.
+A few unnecessary recompilations are cheaper than a silent JSON kernel that propagates
+stale strings into every downstream language.
+
+---
+
+## Checking for design violations
+
+Hydra's design principles keep hand-written and generated code strictly separated
+and keep host-specific workarounds out of generated code.
+These principles drift under pressure: a bug in a generator is easy to paper over
+with a `sed` patch, and a one-off utility is easy to drop into `packages/` or `dist/`
+rather than fixing the right abstraction.
+Periodically scan the repository for violations and fix them at the source.
+
+The core principles (see CLAUDE.md and the
+[Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) wiki page):
+
+1. **No post-generation patches.** Generated code (anything under `dist/`) must
+   match what the generator produces. If the output is wrong, fix the generator.
+   The only exception is a deliberate bootstrap patch that will be overwritten by
+   the next regeneration — document it as such.
+2. **No hand-written files under `dist/`.** If a file needs to live alongside
+   generated artifacts (because tests import it from that location), write it
+   under `heads/` and copy it in from a sync script.
+3. **No host-specific code under `packages/`.** Packages hold DSL-based module
+   definitions plus source-language helpers for writing them. Host-specific
+   runtimes and utilities belong in `heads/`, except for `bindings/` which is
+   explicitly for host-specific third-party integrations.
+4. **Generated files have the "do not edit" header.** If you see a file under
+   `dist/` without the header, it is either hand-written (violation) or the
+   generator is missing the header (bug in the generator).
+
+### Procedure
+
+**Check 1: post-generation patches in sync scripts.**
+Sync scripts are the most common place violations hide.
+Grep for the patterns that indicate patches:
+
+```bash
+grep -rn "sed_inplace\|sed -i\|Post-process\|Patch\|patching\|post-process" \
+  bin/ heads/haskell/bin/ demos/bootstrapping/bin/ 2>/dev/null \
+  | grep -v "test\|grep" \
+  | grep -vE ":\s*#"
+```
+
+Every match is a potential violation.
+For each, ask:
+- **Is this fixing the generator, or working around it?**
+  A patch that renames `case macro(` to `` case `macro`( `` is working around
+  a missing keyword-escape in the Scala code generator.
+  The generator should emit the backticks in the first place.
+- **Is this copying a hand-written file into `dist/`?**
+  That is principle 2; the canonical copy must live in `heads/`.
+  Copying *into* `dist/` is acceptable; hand-writing *in* `dist/` is not.
+- **Is this a deliberate bootstrap patch?**
+  Bootstrap patches are explicitly allowed but must be overwritten by the next
+  regeneration.
+  A `sed` patch that runs on every sync is not a bootstrap patch — it means
+  the generator is broken.
+
+Track the list of accepted post-generation patches.
+Each one is tech debt against the corresponding generator.
+Record new ones in the relevant issue, not silently.
+
+**Check 2: hand-written files under `dist/`.**
+Every file in `dist/` should have the generated-file header.
+Scan for files that don't:
+
+```bash
+for f in $(find dist -type f \
+  \( -name '*.hs' -o -name '*.java' -o -name '*.py' -o -name '*.scala' \
+     -o -name '*.clj' -o -name '*.lisp' -o -name '*.el' -o -name '*.scm' \) 2>/dev/null); do
+  if ! head -5 "$f" | grep -q 'automatically generated'; then
+    echo "$f"
+  fi
+done
+```
+
+Any output is a file that should either be generated (fix the generator to emit
+the header) or be moved to `heads/` and copied in by a sync script (principle 2).
+
+**Check 3: host-specific code under `packages/`.**
+Every file in `packages/` should either be a Hydra DSL module or a
+source-language helper used to write one.
+Spot-check by sampling `find packages -name '*.hs'`;
+any `.hs` file that doesn't import `Hydra.Kernel` or `Hydra.Sources.*`
+and doesn't serve as a DSL helper is suspicious.
+Also check non-Haskell files under `packages/` (e.g., `.java`, `.py`, `.scala`),
+which are even more likely to be violations.
+
+**Check 4: rule-of-three for inline patches.**
+If the same type of patch appears in multiple sync scripts (e.g., "escape the
+`macro` keyword" and "escape the `type` keyword"), that is a signal the
+generator is missing a whole class of handling, not just one edge case.
+Fix it at the generator level.
+
+### Known accepted patches
+
+No post-generation patches are currently applied in the active sync path.
+The former `TestGraph.hs` patch (which replaced `emptyGraph` / `emptyContext`
+with `TestEnv.testGraph testTypes` / `TestEnv.testContext`) was eliminated
+when the DSL was updated to emit the `TestEnv` references directly; see
+`heads/haskell/bin/sync-haskell.sh` step 5 for the current no-op note.
+
+`Hydra.Test.TestEnv` remains hand-written and checked in under
+`dist/haskell/hydra-kernel/src/test/haskell/`; it is exempted from
+regeneration because `bootstrap-from-json` does not target it. This is
+tolerated under principle 2 (hand-written file under `dist/`) rather than
+moved to `heads/` because the Haskell test harness imports it from that
+location and the bridge is small. Treat it as tech debt, not precedent.
+
+Two patches that were previously applied by retired per-language sync
+scripts are NOT currently re-applied anywhere:
+
+- Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
+  coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.
+- Python `test_graph.py`: empty `test_graph` / `test_context` assignments
+  needing a `__getattr__` shim to a hand-written `test_env.py`. Surfaces
+  when running Python kernel tests.
+
+These patches need to be re-added (probably to per-target assemblers or a
+post-processing step) before the affected combinations work again. The
+current bootstrapping-triad sync (haskell/java/python kernel + self-hosting)
+does not exercise either combination, so the patches are queued, not blocking.
+
+When adding a new accepted patch, document it here and open an issue against
+the generator.
+When removing a patch (because the generator was fixed), update this list too.
 
 ---
 
@@ -534,24 +742,154 @@ For each document, perform three passes:
 
 ---
 
+## Logical code review
+
+Code written or extended by an LLM tends to accumulate cruft over time
+if not aggressively pruned:
+unused features, one-call-site abstractions, duplicated helpers, obsolete flags,
+comments justifying workarounds that should have been fixed at the source,
+and defensive error handling for scenarios that cannot happen.
+This review looks critically at source files and scripts and surfaces candidates for pruning or simplification.
+
+The review is **report-first**: write findings to a dated file under `docs/reviews/`,
+then discuss with the user before acting.
+Do not edit code as part of the review pass itself.
+
+### Scope and sampling
+
+A full-repo pass is impractical for a single session.
+Pick a slice of roughly 40–60 files / ~5,000–7,000 lines per run.
+
+- **When the user specifies a slice, use it.**
+  Examples: "review `bin/` scripts," "review the Python coder."
+- **When the slice is up to you**, sample evenly across the repo
+  (`packages/`, `heads/`, `bin/`, `demos/`), with modest bias toward high-traffic code
+  (kernel DSL sources, essential scripts like `bin/sync.sh`, registration files like
+  `Libraries.hs` / `Libraries.java` / `libraries.py`).
+  Check `docs/reviews/` for what's been covered recently and prefer unseen files.
+
+Exclude from every pass:
+- Generated files (anything under `dist/`, and any file whose header is
+  "Note: this is an automatically generated file. Do not edit.").
+  Review findings against generated files are really generator findings —
+  route them to the generator source.
+- Files the user has explicitly excluded.
+
+### What to flag
+
+Review against these patterns explicitly.
+If you're uncertain whether something is drift, flag it with a note — the user decides.
+
+| Pattern | What to look for |
+|---------|------------------|
+| Dead CLI flags / options | Parsed and stored but never consulted; aliases whose callers no longer exist |
+| Unused top-level definitions | Functions, types, or constants with no call sites (cross-check `packages/` and `heads/haskell/src/main/`; a Haskell function called only from those trees is not dead) |
+| One-call-site abstractions | Helpers with a single caller where inlining would be clearer |
+| Duplicate helpers | Near-identical functions in different files with cosmetic renames; shared ANSI constants, regexes, sort keys |
+| Error swallowing | `|| warn`, `|| true`, `|| echo` in sync scripts (violates "Never proceed with failures"); try/except that logs and continues |
+| Post-generation patches | `sed_inplace` or other edits against files under `dist/` (violates "No post-generation patches") |
+| Defensive code for impossible scenarios | `case _ of` branches that can't be reached; null checks for internal invariants |
+| Stale comments | Comments describing code that no longer exists; obsolete TODOs; "workaround for X" comments where X is fixed |
+| Baroque control flow | Nested conditionals that flatten; sentinel values (`""` as "unset") where `Maybe`/`Optional` exists |
+
+**Cross-reference [CLAUDE.md](../../CLAUDE.md) "Critical pitfalls" as review criteria.**
+Any violation of a pitfall is a finding regardless of how plausible the surrounding comment sounds.
+
+### Be adversarial toward justifying comments
+
+A comment like "note: this is a workaround for the Java generator" is a finding, not a dismissal.
+The workaround may be real, but it's a symptom of drift in either the generator or the review scope.
+Flag it with the justification quoted verbatim so the user can decide whether to address the root cause.
+
+### Detect cross-file duplication
+
+Single-file review misses duplication.
+For each slice, also:
+
+- Grep for identical identifiers across the slice (regexes, constants, helper names).
+- Compare scripts with parallel purposes (e.g., `sync-java.sh` vs `sync-python.sh`;
+  `benchmark-dashboard.py` vs `bootstrapping-dashboard.py`).
+- Look for copy-pasted blocks that differ only by cosmetic renames.
+
+### Output format
+
+Write findings to `docs/reviews/YYYY-MM-DD-<slice-name>.md`.
+The `docs/reviews/` tree is gitignored; reports are a local working record, not a checked-in artifact.
+Structure:
+
+```
+# Logical code review: <slice>
+
+**Date:** YYYY-MM-DD
+**Scope:** <file list or description, line count>
+
+## Summary
+
+<2–4 bullets highlighting the most important findings>
+
+## Safe to remove
+
+<Each finding: file:line(s), one-line description, one-line reason>
+
+## Worth discussing
+
+<Each finding: file:line(s), description, trade-off, why it's worth surfacing>
+
+## False-positive candidates
+
+<Things that look like drift but are load-bearing; document so future passes don't re-flag>
+
+## What this slice says about the codebase
+
+<Optional: patterns that suggest follow-up work beyond the slice>
+```
+
+Keep entries terse — one or two lines per finding.
+The user will read the file, so don't re-explain context that's obvious from a click-through.
+
+### What to avoid
+
+- Do not edit code during the review pass.
+- Do not flag code as drift just because it's complex;
+  complexity is fine when it reflects the problem.
+- Do not mark findings "intentional" on the basis of a nearby comment alone;
+  verify against the rule the comment is justifying.
+- Do not try to cover the whole repo in one pass;
+  sampling across sessions over time is the point.
+
+### Delegation
+
+Do not delegate the full review to an Explore agent.
+In practice, single-pass agents tend to mark too many findings "intentional" and miss
+cross-file duplication.
+An agent can help read files in parallel if the reviewer reads the reports critically,
+but the reviewer (main session) owns the triage.
+
+---
+
 ## Full maintenance pass
 
 To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 
 1. Scan for non-source files; remove or untrack as appropriate; update `.gitignore`.
 2. Find stale generated files across all implementations; delete confirmed orphans.
-3. Check coding style (definition ordering) across all Source modules; fix violations.
-4. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
-5. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
-6. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
-7. Check Python `__init__.py` freshness.
-8. Review user documentation for accuracy, broken links, and small improvements.
+3. Check for design violations (post-generation patches, hand-written files under
+   `dist/`, host-specific code under `packages/`); fix at the generator or move
+   to `heads/`.
+4. Check coding style (definition ordering) across all Source modules; fix violations.
+5. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
+6. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
+7. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
+8. Check Python `__init__.py` freshness.
+9. Review user documentation for accuracy, broken links, and small improvements.
+10. Do a logical code review pass on a sampled slice (report-first, no edits);
+    discuss findings with the user before acting.
 
 After all checks, present a summary of findings and changes to the user.
 If any changes affect Source modules (e.g., definition reordering),
 generated files (e.g., stale file deletion, `.cabal` fixes),
 or could affect test outcomes (e.g., primitive fixes),
-run `bin/sync-all.sh --targets all` and verify all tests pass.
+run `bin/sync.sh --hosts all --targets all` and verify all tests pass.
 If no changes affect generated files or tests, skip the sync.
 
 ---
@@ -562,6 +900,7 @@ If no changes affect generated files or tests, skip the sync.
 |-------|------------|
 | Non-source file scan | After branch merges, periodically |
 | Stale generated files | After refactoring (renames, deletes, splits) |
+| Design violations | Periodically, before release, after adding sync-script patches |
 | Coding style | After large changes, before release |
 | Primitive consistency | After adding/changing primitives, after adding a new implementation |
 | Test parity | After sync-all, after benchmarking runs |
@@ -569,3 +908,4 @@ If no changes affect generated files or tests, skip the sync.
 | JSON kernel freshness | After kernel changes |
 | Python `__init__.py` | After sync-python |
 | User documentation review | Periodically, before releases, after major refactoring |
+| Logical code review | Periodically; one slice per session; after extended LLM-driven edits to a region |

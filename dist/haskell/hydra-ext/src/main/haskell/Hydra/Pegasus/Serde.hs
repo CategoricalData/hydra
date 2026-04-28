@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pegasus.Pdl as Pdl
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Convert PDL annotations to an optional expression (doc comment)
 exprAnnotations :: Pdl.Annotations -> Maybe Ast.Expr

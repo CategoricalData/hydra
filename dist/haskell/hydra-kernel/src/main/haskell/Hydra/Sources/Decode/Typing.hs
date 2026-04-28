@@ -1,17 +1,25 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source module for hydra.decode.typing
 
 module Hydra.Sources.Decode.Typing where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term decoders for hydra.typing"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.typing"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.extract.core",
+        (Packaging.Namespace "hydra.lexical"),
+        (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.decode.core"),
+        (Packaging.Namespace "hydra.decode.context")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.typing",
+        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.functionStructure"),
@@ -54,7 +62,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
-                                      Core.bindingType = Nothing}],
+                                      Core.bindingTypeScheme = Nothing}],
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
@@ -200,10 +208,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "env"],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
@@ -259,7 +267,7 @@ module_ =
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
-                                    Core.bindingType = Nothing}],
+                                    Core.bindingTypeScheme = Nothing}],
                                 Core.letBody = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
@@ -363,9 +371,9 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
@@ -432,9 +440,9 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
@@ -480,7 +488,7 @@ module_ =
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
-                                    Core.bindingType = Nothing}],
+                                    Core.bindingTypeScheme = Nothing}],
                                 Core.letBody = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
@@ -592,9 +600,9 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
@@ -661,23 +669,13 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.typing.TypeSubst"))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core"),
-        (Packaging.Namespace "hydra.decode.context")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.typing",
-        (Packaging.Namespace "hydra.util")],
-      Packaging.moduleDescription = (Just "Term decoders for hydra.typing")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

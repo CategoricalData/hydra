@@ -99,10 +99,12 @@ ns :: Namespace
 ns = Namespace "hydra.pg.utils"
 
 module_ :: Module
-module_ = Module ns definitions
-    [ExtractCore.ns, PgCoder.ns]
-    (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Utility functions for property graph operations"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [ExtractCore.ns, PgCoder.ns],
+            moduleTypeDependencies = (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Utility functions for property graph operations"}
   where
     definitions = [
       toDefinition defaultTinkerpopAnnotations,

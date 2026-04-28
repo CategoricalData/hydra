@@ -192,6 +192,15 @@ public interface Terms {
     }
 
     /**
+     * Create a decimal literal (Java BigDecimal → Hydra decimal).
+     * @param value the BigDecimal value
+     * @return the decimal literal term
+     */
+    static Term decimal(BigDecimal value) {
+        return literal(Literals.decimal(value));
+    }
+
+    /**
      * Boolean false literal.
      * @return the false literal term
      */
@@ -974,7 +983,7 @@ public interface Terms {
      * @return the injection term
      */
     static Term inject(Name typeName, Field field) {
-        return new Term.Union(new Injection(typeName, field));
+        return new Term.Inject(new Injection(typeName, field));
     }
 
     /**

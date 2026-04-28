@@ -27,10 +27,12 @@ validationDefinition :: String -> TTerm a -> TTermDefinition a
 validationDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.validate.pg") definitions
-    []
-    [PgModel.ns, ErrorPg.ns] $
-    Just "Validation functions for property graphs"
+module_ = Module {
+            moduleNamespace = (Namespace "hydra.validate.pg"),
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [PgModel.ns, ErrorPg.ns],
+            moduleDescription = Just "Validation functions for property graphs"}
   where
    definitions = [
      toDefinition checkAll,
@@ -43,7 +45,7 @@ checkAll :: TTermDefinition ([Y.Maybe a] -> Y.Maybe a)
 checkAll = validationDefinition "checkAll" $
   "checks" ~> lets [
     "errors">: Maybes.cat $ var "checks"]
-    $ Lists.safeHead $ var "errors"
+    $ Lists.maybeHead $ var "errors"
 
 validateVertex :: TTermDefinition (
      (t -> v -> Maybe InvalidValueError)

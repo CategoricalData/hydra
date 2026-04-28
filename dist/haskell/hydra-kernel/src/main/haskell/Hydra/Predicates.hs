@@ -1,14 +1,12 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Type and term classification predicates
 
 module Hydra.Predicates where
-
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
@@ -27,20 +25,19 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Check if a binding needs to be treated as a function
 isComplexBinding :: Graph.Graph -> Core.Binding -> Bool
 isComplexBinding tc b =
 
       let term = Core.bindingTerm b
-          mts = Core.bindingType b
+          mts = Core.bindingTypeScheme b
       in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
         let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
-            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeType ts)) 0
+            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeBody ts)) 0
             isComplex = isComplexTerm tc term
         in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
-
 -- | Check if a term needs to be treated as a function rather than a simple value
 isComplexTerm :: Graph.Graph -> Core.Term -> Bool
 isComplexTerm tc t =
@@ -50,7 +47,6 @@ isComplexTerm tc t =
       Core.TermTypeLambda _ -> True
       Core.TermVariable v0 -> isComplexVariable tc v0
       _ -> Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t)
-
 -- | Check if a variable is bound to a complex term
 isComplexVariable :: Graph.Graph -> Core.Name -> Bool
 isComplexVariable tc name =
@@ -60,36 +56,31 @@ isComplexVariable tc name =
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
         in (Maybes.maybe (
           let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
-          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveType prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
-
+          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveTypeScheme prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =
     case (Strip.deannotateTerm t) of
       Core.TermApplication v0 -> isEncodedTerm (Core.applicationFunction v0)
-      Core.TermUnion v0 -> Equality.equal "hydra.core.Term" (Core.unName (Core.injectionTypeName v0))
+      Core.TermInject v0 -> Equality.equal "hydra.core.Term" (Core.unName (Core.injectionTypeName v0))
       _ -> False
-
 -- | Determines whether a given term is an encoded type
 isEncodedType :: Core.Term -> Bool
 isEncodedType t =
     case (Strip.deannotateTerm t) of
       Core.TermApplication v0 -> isEncodedType (Core.applicationFunction v0)
-      Core.TermUnion v0 -> Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v0))
+      Core.TermInject v0 -> Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v0))
       _ -> False
-
 -- | Check if a row type represents an enum (all fields are unit-typed)
 isEnumRowType :: [Core.FieldType] -> Bool
 isEnumRowType rt =
     Lists.foldl Logic.and True (Lists.map (\f -> isUnitType (Strip.deannotateType (Core.fieldTypeType f))) rt)
-
 -- | Check if a type is an enum type
 isEnumType :: Core.Type -> Bool
 isEnumType typ =
     case (Strip.deannotateType typ) of
       Core.TypeUnion v0 -> isEnumRowType v0
       _ -> False
-
 isNominalType :: Core.Type -> Bool
 isNominalType typ =
     case (Strip.deannotateType typ) of
@@ -98,7 +89,6 @@ isNominalType typ =
       Core.TypeWrap _ -> True
       Core.TypeForall v0 -> isNominalType (Core.forallTypeBody v0)
       _ -> False
-
 -- | Check if an element is serializable (no function types in dependencies) (Either version)
 isSerializable :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error Bool
 isSerializable cx graph el =
@@ -108,7 +98,6 @@ isSerializable cx graph el =
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
-
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
 isSerializableByName :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Bool
 isSerializableByName cx graph name =
@@ -118,7 +107,6 @@ isSerializableByName cx graph name =
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity name))
-
 -- | Check if a type is serializable (no function types in the type itself)
 isSerializableType :: Core.Type -> Bool
 isSerializableType typ =
@@ -126,7 +114,6 @@ isSerializableType typ =
       let allVariants =
               Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
       in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
-
 -- | Check if a term is trivially cheap (no thunking needed)
 isTrivialTerm :: Core.Term -> Bool
 isTrivialTerm t =
@@ -147,7 +134,6 @@ isTrivialTerm t =
       Core.TermTypeApplication v0 -> isTrivialTerm (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> isTrivialTerm (Core.typeLambdaBody v0)
       _ -> False
-
 -- | Check whether a type is a type (always true for non-encoded types)
 isType :: Core.Type -> Bool
 isType t =
@@ -157,21 +143,18 @@ isType t =
       Core.TypeUnion _ -> False
       Core.TypeVariable v0 -> Equality.equal v0 (Core.Name "hydra.core.Type")
       _ -> False
-
 -- | Check whether a term is the unit term
 isUnitTerm :: Core.Term -> Bool
 isUnitTerm x =
     case x of
       Core.TermUnit -> True
       _ -> False
-
 -- | Check whether a type is the unit type
 isUnitType :: Core.Type -> Bool
 isUnitType x =
     case x of
       Core.TypeUnit -> True
       _ -> False
-
 -- | Get all type dependencies for a given type name (Either version)
 typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core.Type) -> Core.Name -> Either Errors.Error (M.Map Core.Name Core.Type)
 typeDependencies cx graph withSchema transform name =
@@ -183,7 +166,7 @@ typeDependencies cx graph withSchema transform name =
                           Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
                           Context.contextMessages = (Context.contextMessages cx),
                           Context.contextOther = (Context.contextOther cx)}
-                in (Eithers.bind (Lexical.requireBinding graph name2) (\el -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))))
+                in (Eithers.bind (Lexical.requireBinding graph name2) (\el -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))))
           toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)
           deps =
                   \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->

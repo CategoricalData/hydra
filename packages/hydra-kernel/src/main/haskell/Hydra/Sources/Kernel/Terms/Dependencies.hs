@@ -81,10 +81,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just ("Dependency extraction, binding sort, and let normalization")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Dependency extraction, binding sort, and let normalization")}
   where
    definitions = [
      toDefinition definitionsWithDependencies,
@@ -110,7 +112,7 @@ flattenLetTerms = define "flattenLetTerms" $
   "rewriteBinding" <~ ("binding" ~>
     "key0" <~ Core.bindingName (var "binding") $
     "val0" <~ Core.bindingTerm (var "binding") $
-    "t" <~ Core.bindingType (var "binding") $
+    "t" <~ Core.bindingTypeScheme (var "binding") $
     cases _Term (var "val0")
       (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list ([] :: [TTerm Binding]))) [
       _Term_annotated>>: "at" ~>
@@ -135,7 +137,7 @@ flattenLetTerms = define "flattenLetTerms" $
         "newBinding" <~ ("b" ~> Core.binding
           (var "qualify" @@ (Core.bindingName $ var "b"))
           (var "replaceVars" @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b")) $
+          (Core.bindingTypeScheme $ var "b")) $
         pair
           (Core.binding (var "key0") (var "newBody") (var "t"))
           (Lists.map (var "newBinding") (var "bindings1"))]) $
@@ -232,10 +234,12 @@ pruneLet = define "pruneLet" $
   "bindingMap" <~ Maps.fromList (Lists.map
     ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) $ Core.letBindings $ var "l") $
   "rootName" <~ Core.name (string "[[[root]]]") $
+  -- Look up n in bindingMap; a missing name is unreachable here since the
+  -- caller only calls adj on names present in the map. Fall back to Unit.
   "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
       (Variables.freeVariablesInTerm @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
         (Core.letBody $ var "l")
-        (Maybes.fromJust $ Maps.lookup (var "n") (var "bindingMap"))))) $
+        (Maybes.fromMaybe Core.termUnit (Maps.lookup (var "n") (var "bindingMap")))))) $
   "reachable" <~ Sorting.findReachableNodes @@ var "adj" @@ var "rootName" $
   "prunedBindings" <~ Lists.filter
     ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))
@@ -267,7 +271,7 @@ replaceTypedefs = define "replaceTypedefs" $
           _Type_union>>: constant $ var "typ",
           _Type_wrap>>: constant $ var "typ"]) $
         "forTypeScheme" <~ ("ts" ~>
-          "t" <~ Core.typeSchemeType (var "ts") $
+          "t" <~ Core.typeSchemeBody (var "ts") $
           Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
             (var "forMono" @@ var "t")
             (var "typ")) $ -- TODO: this may be too simple
@@ -325,7 +329,7 @@ termDependencyNames = define "termDependencyNames" $
       _Term_project>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),
       _Term_unwrap>>: "name" ~> var "nominal" @@ var "name",
       _Term_record>>: "record" ~> var "nominal" @@ (Core.recordTypeName $ var "record"),
-      _Term_union>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
+      _Term_inject>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
       _Term_variable>>: "name" ~> var "var" @@ var "name",
       _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
   Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"
@@ -412,7 +416,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Packaging.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "def"))))) $
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $

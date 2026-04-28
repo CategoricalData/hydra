@@ -37,10 +37,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.sorting"
 
 module_ :: Module
-module_ = Module ns definitions
-    [SortingModule.ns, ShowCore.ns]
-    kernelTypesNamespaces
-    (Just "Test cases for topological sorting algorithms")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [SortingModule.ns, ShowCore.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for topological sorting algorithms")}
   where
     definitions = [Phantoms.toDefinition allTests]
 

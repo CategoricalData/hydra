@@ -96,10 +96,12 @@ ns :: Namespace
 ns = Namespace "hydra.javaScript.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns, JavaScriptOperators.ns]
-    (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Serialization functions for converting JavaScript AST to abstract expressions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns, JavaScriptOperators.ns],
+            moduleTypeDependencies = (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Serialization functions for converting JavaScript AST to abstract expressions"}
   where
     definitions = [
       -- Core conversions
@@ -373,7 +375,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       (list [Serialization.cst @@ string "async"])
       (list ([] :: [TTerm Expr])),
     "paramsExpr">: Logic.ifElse (Equality.equal (Lists.length $ var "params") (int32 1))
-      (patternToExpr @@ (Lists.head $ var "params"))
+      (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map patternToExpr (Lists.maybeHead $ var "params")))
       (Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "params"))),
     "bodyExpr">: cases JS._ArrowFunctionBody (var "body") Nothing [
       JS._ArrowFunctionBody_expression>>: lambda "e" $ expressionToExpr @@ var "e",
@@ -1110,11 +1112,15 @@ documentationCommentToExpr = define "documentationCommentToExpr" $
 
 toJavaScriptComments :: TTermDefinition (String -> [JS.DocumentationTag] -> String)
 toJavaScriptComments = define "toJavaScriptComments" $
-  doc "Format a description and tags as a JSDoc comment" $
+  doc ("Format a description and tags as a JSDoc comment. Empty doc lines"
+    <> " emit ` *` (no trailing space) so blank lines don't carry trailing whitespace.") $
   lambda "desc" $ lambda "tags" $ lets [
     "descLines">: Logic.ifElse (Equality.equal (var "desc") (string ""))
       (list ([] :: [TTerm String]))
-      (Lists.map (lambda "line" $ Strings.cat2 (string " * ") (var "line")) (Strings.lines $ var "desc")),
+      (Lists.map (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
+          (string " *")
+          (Strings.cat2 (string " * ") (var "line")))
+        (Strings.lines $ var "desc")),
     "tagLines">: Lists.map (documentationTagToLine) (var "tags"),
     "allLines">: Lists.concat $ list [var "descLines", var "tagLines"]] $
     Logic.ifElse (Lists.null $ var "allLines")
@@ -1127,15 +1133,23 @@ toJavaScriptComments = define "toJavaScriptComments" $
 
 documentationTagToLine :: TTermDefinition (JS.DocumentationTag -> String)
 documentationTagToLine = define "documentationTagToLine" $
-  doc "Convert a documentation tag to a JSDoc line" $
+  doc ("Convert a documentation tag to a JSDoc line. Built by joining"
+    <> " non-empty parts with spaces so that absent type/param/description"
+    <> " components don't introduce trailing whitespace.") $
   lambda "tag" $ lets [
     "name">: project JS._DocumentationTag JS._DocumentationTag_name @@ var "tag",
     "mtype">: project JS._DocumentationTag JS._DocumentationTag_type @@ var "tag",
     "mparamName">: project JS._DocumentationTag JS._DocumentationTag_paramName @@ var "tag",
     "description">: project JS._DocumentationTag JS._DocumentationTag_description @@ var "tag",
-    "typePart">: Maybes.maybe (string "") (lambda "t" $ Strings.cat $ list [string "{", typeExpressionToString @@ var "t", string "} "]) (var "mtype"),
-    "paramPart">: Maybes.maybe (string "") (lambda "p" $ Strings.cat2 (unwrap JS._Identifier @@ var "p") (string " ")) (var "mparamName")] $
-    Strings.cat $ list [string " * @", var "name", string " ", var "typePart", var "paramPart", var "description"]
+    "typePart">: Maybes.maybe (string "") (lambda "t" $ Strings.cat $ list [string "{", typeExpressionToString @@ var "t", string "}"]) (var "mtype"),
+    "paramPart">: Maybes.maybe (string "") (lambda "p" $ unwrap JS._Identifier @@ var "p") (var "mparamName"),
+    "parts">: list [
+      Strings.cat2 (string "@") (var "name"),
+      var "typePart",
+      var "paramPart",
+      var "description"],
+    "nonEmpty">: Lists.filter (lambda "p" $ Logic.not $ Equality.equal (var "p") (string "")) (var "parts")] $
+    Strings.cat2 (string " * ") (Strings.intercalate (string " ") (var "nonEmpty"))
 
 typeExpressionToString :: TTermDefinition (JS.TypeExpression -> String)
 typeExpressionToString = define "typeExpressionToString" $
@@ -1164,8 +1178,13 @@ typeExpressionToString = define "typeExpressionToString" $
 
 toLineComment :: TTermDefinition (String -> String)
 toLineComment = define "toLineComment" $
-  doc "Convert a string to a JavaScript line comment" $
-  lambda "s" $ Strings.intercalate (string "\n") $ Lists.map (lambda "line" $ Strings.cat2 (string "// ") (var "line")) (Strings.lines $ var "s")
+  doc ("Convert a string to a JavaScript line comment. Empty source lines"
+    <> " emit `//` (no trailing space).") $
+  lambda "s" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
+      (string "//")
+      (Strings.cat2 (string "// ") (var "line")))
+    (Strings.lines $ var "s")
 
 
 -- ============================================================================

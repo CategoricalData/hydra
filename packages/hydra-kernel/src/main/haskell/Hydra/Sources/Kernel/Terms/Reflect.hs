@@ -61,10 +61,12 @@ ns :: Namespace
 ns = Namespace "hydra.reflect"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")}
   where
     definitions = [
       toDefinition eliminationVariants,
@@ -193,6 +195,7 @@ literalType = define "literalType" $
   match _Literal Nothing [
     _Literal_binary>>: constant $ inject _LiteralType _LiteralType_binary unit,
     _Literal_boolean>>: constant $ inject _LiteralType _LiteralType_boolean unit,
+    _Literal_decimal>>: constant $ inject _LiteralType _LiteralType_decimal unit,
     _Literal_float>>: injectLambda _LiteralType _LiteralType_float <.> floatValueType,
     _Literal_integer>>: injectLambda _LiteralType _LiteralType_integer <.> integerValueType,
     _Literal_string>>: constant $ inject _LiteralType _LiteralType_string unit]
@@ -203,6 +206,7 @@ literalTypeVariant = define "literalTypeVariant" $
   match _LiteralType Nothing [
     _LiteralType_binary>>:  constant $ Variants.literalVariantBinary,
     _LiteralType_boolean>>: constant $ Variants.literalVariantBoolean,
+    _LiteralType_decimal>>: constant $ Variants.literalVariantDecimal,
     _LiteralType_float>>:   constant $ Variants.literalVariantFloat,
     _LiteralType_integer>>: constant $ Variants.literalVariantInteger,
     _LiteralType_string>>:  constant $ Variants.literalVariantString]
@@ -213,7 +217,8 @@ literalTypes = define "literalTypes" $
   Lists.concat $ list [
     list [
       Core.literalTypeBinary,
-      Core.literalTypeBoolean],
+      Core.literalTypeBoolean,
+      Core.literalTypeDecimal],
     Lists.map (unaryFunction Core.literalTypeFloat) (floatTypes),
     Lists.map (unaryFunction Core.literalTypeInteger) (integerTypes),
     list [
@@ -230,6 +235,7 @@ literalVariants = define "literalVariants" $
   list $ injectUnit _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
+    _LiteralVariant_decimal,
     _LiteralVariant_float,
     _LiteralVariant_integer,
     _LiteralVariant_string]
@@ -254,7 +260,7 @@ termVariant = define "termVariant" $
     _Term_set>>: constant Variants.termVariantSet,
     _Term_typeApplication>>: constant Variants.termVariantTypeApplication,
     _Term_typeLambda>>: constant Variants.termVariantTypeLambda,
-    _Term_union>>: constant Variants.termVariantUnion,
+    _Term_inject>>: constant Variants.termVariantInject,
     _Term_unit>>: constant Variants.termVariantUnit,
     _Term_unwrap>>: constant Variants.termVariantUnwrap,
     _Term_variable>>: constant Variants.termVariantVariable,
@@ -280,7 +286,7 @@ termVariants = define "termVariants" $
     _TermVariant_set,
     _TermVariant_typeLambda,
     _TermVariant_typeApplication,
-    _TermVariant_union,
+    _TermVariant_inject,
     _TermVariant_unit,
     _TermVariant_unwrap,
     _TermVariant_variable,

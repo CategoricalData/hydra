@@ -66,10 +66,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-   [Strip.ns, ShowCore.ns, ShowError.ns]
-    kernelTypesNamespaces $
-    Just ("A module for lexical operations over graphs.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns, ShowCore.ns, ShowError.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("A module for lexical operations over graphs.")}
   where
     definitions = [
       toDefinition buildGraph,
@@ -111,8 +113,10 @@ buildGraph = define "buildGraph" $
   -- boundTerms: element bindings (name -> term) merged with let-bound vars from environment (Just term)
   "elementTerms" <~ Maps.fromList (Lists.map ("b" ~>
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "elements")) $
-  "letTerms" <~ Maps.map ("mt" ~> Maybes.fromJust (var "mt"))
-    (Maps.filter ("mt" ~> Maybes.isJust (var "mt")) (var "environment")) $
+  -- Keep only entries whose value is Just, and strip the Just wrapper.
+  "letTerms" <~ Maps.fromList (Maybes.mapMaybe
+    ("kv" ~> Maybes.map ("t" ~> pair (Pairs.first $ var "kv") (var "t")) (Pairs.second $ var "kv"))
+    (Maps.toList $ var "environment")) $
   "mergedTerms" <~ Maps.union (var "elementTerms") (var "letTerms") $
   -- Construction-time shadowing: remove any binding whose name matches a primitive
   "filteredTerms" <~ Maps.filterWithKey ("k" ~> "_v" ~>
@@ -120,7 +124,7 @@ buildGraph = define "buildGraph" $
   -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)
   "elementTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
     Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "elements"))) $
+      (Core.bindingTypeScheme (var "b"))) (var "elements"))) $
   "filteredTypes" <~ Maps.filterWithKey ("k" ~> "_v" ~>
     Logic.not (Maps.member (var "k") (var "primitives"))) (var "elementTypes") $
   Graph.graph
@@ -156,7 +160,7 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
       ("ts" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.cons (Core.forallTypeParameter (var "ft")) (Core.typeSchemeVariables (var "ts")))
-        (Core.typeSchemeType (var "ts"))
+        (Core.typeSchemeBody (var "ts"))
         (Core.typeSchemeConstraints (var "ts")))
       (var "forType" @@ (Core.forallTypeBody (var "ft"))),
     _Type_variable>>: "v" ~> dereferenceSchemaType @@ var "v" @@ var "types"]) $
@@ -166,9 +170,9 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
       ("ts2" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.concat2 (Core.typeSchemeVariables (var "ts")) (Core.typeSchemeVariables (var "ts2")))
-        (Core.typeSchemeType (var "ts2"))
+        (Core.typeSchemeBody (var "ts2"))
         (Core.typeSchemeConstraints (var "ts2")))
-      (var "forType" @@ (Core.typeSchemeType (var "ts"))))
+      (var "forType" @@ (Core.typeSchemeBody (var "ts"))))
 
 dereferenceVariable :: TTermDefinition (Graph -> Name -> Either Error Binding)
 dereferenceVariable = define "dereferenceVariable" $
@@ -287,7 +291,7 @@ matchUnion = define "matchUnion" $
     _Term_variable>>: "name" ~>
       "el" <<~ requireBinding @@ var "graph" @@ var "name" $
       matchUnion @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
-    _Term_union>>: "injection" ~>
+    _Term_inject>>: "injection" ~>
       "exp" <~ (
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
@@ -333,7 +337,7 @@ requirePrimitiveType :: TTermDefinition (Graph -> Name -> Either Error TypeSchem
 requirePrimitiveType = define "requirePrimitiveType" $
   "tx" ~> "name" ~>
   -- Look up the primitive directly and extract its type, avoiding O(p) map reconstruction.
-  "mts" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+  "mts" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   optCases (var "mts")
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))

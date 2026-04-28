@@ -5,6 +5,17 @@
   "url": "https://github.com/CategoricalData/hydra",
   "license": "Apache-2.0",
   "packages": [
-    "hydra-kernel"
+    "hydra-kernel",
+    "hydra-haskell",
+    "hydra-java",
+    "hydra-python",
+    "hydra-scala",
+    "hydra-lisp",
+    "hydra-coq",
+    "hydra-javascript",
+    "hydra-wasm",
+    "hydra-pg",
+    "hydra-rdf",
+    "hydra-ext"
   ]
 }

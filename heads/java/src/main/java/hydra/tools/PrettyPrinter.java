@@ -160,6 +160,11 @@ public class PrettyPrinter {
             }
 
             @Override
+            public Consumer<StringBuilder> visit(Literal.Decimal instance) {
+                return sb -> sb.append(instance.value.toPlainString());
+            }
+
+            @Override
             public Consumer<StringBuilder> visit(Literal.Float_ instance) {
                 return floatValue(instance.value);
             }
@@ -344,8 +349,8 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Union instance) {
-                    return notImplemented("union");
+                public Consumer<StringBuilder> visit(Term.Inject instance) {
+                    return notImplemented("inject");
                 }
 
                 @Override

@@ -142,8 +142,10 @@ for background on code generation.
 The recommended way to regenerate all Python code is the sync script (from the repo root):
 
 ```bash
-heads/haskell/bin/sync-python.sh
+bin/sync-python.sh
 ```
+
+(equivalent to `bin/sync.sh --hosts python --targets python`)
 
 This will:
 1. Generate the kernel modules into `dist/python/hydra-kernel/src/main/python`
@@ -220,3 +222,14 @@ Run the type checker:
 ```bash
 pyright
 ```
+
+## Numeric types
+
+Hydra's `decimal` type is implemented as Python `decimal.Decimal` with the
+default 28-digit context precision.
+Operations exceeding this precision round per the active context;
+users requiring higher precision should adjust `decimal.getcontext().prec`
+before performing arithmetic.
+This differs from Haskell `Scientific` and Java `BigDecimal`
+(which are effectively unbounded for exact operations)
+but matches Python's standard decimal behavior.

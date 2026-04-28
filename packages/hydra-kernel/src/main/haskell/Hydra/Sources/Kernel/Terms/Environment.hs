@@ -81,10 +81,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just ("Graph to type environment conversions")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Graph to type environment conversions")}
   where
     definitions = [
       toDefinition definitionAsTypeApplicationTerm,
@@ -105,8 +107,8 @@ definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   doc "Convert a definition to a typed term" $
   "el" ~>
   Maybes.maybe (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")) (var "cx"))
-    ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
-    (Core.bindingType (var "el"))
+    ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
+    (Core.bindingTypeScheme (var "el"))
 
 graphAsLet :: TTermDefinition ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $
@@ -200,13 +202,13 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
           (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
           (Eithers.map (unaryFunction just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
           (right nothing),
-      _Term_union>>: "i" ~>
+      _Term_inject>>: "i" ~>
         Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
           (Eithers.map
             ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded"))
             (var "decodeType" @@ Core.bindingTerm (var "el")))
           (right nothing)]) $
-    "mts" <<~  optCases (Core.bindingType (var "el"))
+    "mts" <<~  optCases (Core.bindingTypeScheme (var "el"))
       (Eithers.map ("typ" ~> just $ Scoping.fTypeToTypeScheme @@ var "typ") $ var "decodeType" @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))

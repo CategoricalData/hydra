@@ -111,11 +111,13 @@ haskellCoderDefinition :: String -> TTerm a -> TTermDefinition a
 haskellCoderDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module ns definitions
-    [HaskellSerde.ns, HaskellUtils.ns,
-      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns]
-    (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Functions for encoding Hydra modules as Haskell modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [HaskellSerde.ns, HaskellUtils.ns,
+      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns],
+            moduleTypeDependencies = (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Functions for encoding Hydra modules as Haskell modules"}
   where
     ns = Namespace "hydra.haskell.coder"
     definitions = [
@@ -206,7 +208,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Packaging.typeDefinitionName $ var "type",
-        "typ">: Core.typeSchemeType $ Packaging.typeDefinitionType $ var "type"] $
+        "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
@@ -251,6 +253,9 @@ constructModule = haskellCoderDefinition "constructModule" $
         list [
           pair (pair (string "Prelude") nothing) (list $ string <$> [
             "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"])],
+        -- Data.Scientific is always imported (modules that don't use it produce an unused-import warning)
+        list [
+          pair (pair (string "Data.Scientific") (just $ string "Sci")) (list ([] :: [TTerm String]))],
         -- Conditional standard imports based on metadata
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "meta")
@@ -264,8 +269,10 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String])),
-        -- Conditionally add Hydra.Lib.Literals import if binary literals are present
-        Logic.ifElse (Analysis.moduleContainsBinaryLiterals @@ var "mod")
+        -- Conditionally add Hydra.Lib.Literals import if binary or decimal literals are present
+        Logic.ifElse (Logic.or
+            (Analysis.moduleContainsBinaryLiterals @@ var "mod")
+            (Analysis.moduleContainsDecimalLiterals @@ var "mod"))
           (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
           (list ([] :: [TTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
@@ -344,7 +351,7 @@ encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
   doc "Encode an unwrap term as a Haskell expression" $
   "namespaces" ~> "name" ~>
   right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@
-    (Names.qname @@ (Maybes.fromJust $ Names.namespaceOf @@ var "name") @@ (HaskellUtils.newtypeAccessorName @@ var "name"))
+    (Names.qname @@ (Maybes.fromMaybe (wrap _Namespace $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtils.newtypeAccessorName @@ var "name"))
 
 encodeProjection :: TTermDefinition (HaskellNamespaces -> Projection -> Either Error H.Expression)
 encodeProjection = haskellCoderDefinition "encodeProjection" $
@@ -384,6 +391,11 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
               $ Literals.binaryToString $ var "bs")),
       _Literal_boolean>>: "b" ~>
         right $ HaskellUtils.hsvar @@ Logic.ifElse (var "b") (string "True") (string "False"),
+      _Literal_decimal>>: "d" ~>
+        right $ HaskellUtils.hsapp
+          @@ (HaskellUtils.hsvar @@ string "Literals.stringToDecimal")
+          @@ (HaskellUtils.hslit @@ (inject H._Literal H._Literal_string
+              $ Literals.showDecimal $ var "d")),
       _Literal_float>>: "fv" ~>
         cases _FloatValue (var "fv") Nothing [
           _FloatValue_float32>>: "f" ~>
@@ -534,7 +546,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       _Term_typeApplication>>: "typed" ~> lets [
         "term1">: Core.typeApplicationTermBody $ var "typed"] $
         var "encode" @@ var "term1",
-      _Term_union>>: "injection" ~> lets [
+      _Term_inject>>: "injection" ~> lets [
         "sname">: Core.injectionTypeName $ var "injection",
         "field">: Core.injectionField $ var "injection",
         "fn">: Core.fieldName $ var "field",
@@ -603,6 +615,8 @@ encodeType = haskellCoderDefinition "encodeType" $
           right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "B.ByteString",
         _LiteralType_boolean>>: constant $
           right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Bool",
+        _LiteralType_decimal>>: constant $
+          right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Sci.Scientific",
         _LiteralType_float>>: "ft" ~>
           cases _FloatType (var "ft") Nothing [
             _FloatType_float32>>: constant $
@@ -685,7 +699,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
-            (Lists.head $ var "encoded")
+            (Maybes.fromMaybe (inject H._Assertion H._Assertion_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
             (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
           right $ inject H._Type H._Type_ctx $ record H._ContextType [
             H._ContextType_ctx>>: var "hassert",
@@ -756,10 +770,10 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
           Maybes.maybe (var "metaWithTerm")
             ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
-                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeType $ var "ts"))
-            (Packaging.termDefinitionType $ var "termDef"),
+                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
+            (Packaging.termDefinitionTypeScheme $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
@@ -868,7 +882,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Packaging.termDefinitionName $ var "def",
     "term">: Packaging.termDefinitionTerm $ var "def",
-    "typ">: Packaging.termDefinitionType $ var "def",
+    "typ">: Packaging.termDefinitionTypeScheme $ var "def",
     "hname">: HaskellUtils.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
       cases H._ValueBinding (var "vb") Nothing [
@@ -904,7 +918,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Strip.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
          "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
-         "schemeType" <~ optCases (var "typ") Core.typeUnit ("ts" ~> Core.typeSchemeType (var "ts")) $
+         "schemeType" <~ optCases (var "typ") Core.typeUnit ("ts" ~> Core.typeSchemeBody (var "ts")) $
          "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ var "schemeType" @@ var "cx" @@ var "g" $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
            H._TypedBinding_typeSignature>>: record H._TypeSignature [
@@ -939,15 +953,18 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
   "namespaces" ~> "elementName" ~> "typ" ~> "cx" ~> "g" ~> lets [
     "lname">: Names.localNameOf @@ var "elementName",
     "hname">: HaskellUtils.simpleName @@ var "lname",
-    "declHead">: "name" ~> "vars'" ~> Logic.ifElse (Lists.null $ var "vars'")
-      (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
-      (lets [
-        "h">: Lists.head $ var "vars'",
-        "rest">: Lists.tail $ var "vars'",
-        "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
-        inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
-          H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
-          H._ApplicationDeclarationHead_operand>>: var "hvar"]),
+    "declHead">: "name" ~> "vars'" ~>
+      Maybes.fromMaybe
+        (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
+        (Maybes.map
+          ("p" ~> lets [
+            "h">: Pairs.first $ var "p",
+            "rest">: Pairs.second $ var "p",
+            "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
+            inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
+              H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
+              H._ApplicationDeclarationHead_operand>>: var "hvar"])
+          (Lists.uncons $ var "vars'")),
     "newtypeCons">: "tname" ~> "typ'" ~> lets [
       "hname0">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ var "tname")] $
       "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" @@ var "cx" @@ var "g" $ lets [
@@ -1063,7 +1080,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     "rewrite">: "recurse" ~> "term" ~> lets [
       "variantResult">: cases _Term (Strip.deannotateTerm @@ var "term")
         (Just nothing) [
-        _Term_union>>: "inj" ~> Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type))
+        _Term_inject>>: "inj" ~> Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type))
           (just $ Core.injectionField $ var "inj")
           nothing],
       "decodeString">: "term" ~> (cases _Term (Strip.deannotateTerm @@ var "term")

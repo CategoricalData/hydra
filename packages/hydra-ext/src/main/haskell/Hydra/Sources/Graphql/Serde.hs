@@ -90,10 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.graphql.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Serialization.ns]
-    (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces) $
-    Just "Serialization functions for converting GraphQL AST to abstract expressions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Serialization.ns],
+            moduleTypeDependencies = (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Serialization functions for converting GraphQL AST to abstract expressions"}
   where
     definitions = [
       toDefinition exprDefinition,

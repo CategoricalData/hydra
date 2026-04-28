@@ -94,10 +94,12 @@ ns :: Namespace
 ns = Namespace "hydra.rust.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns, RustOperators.ns]
-    (RustSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Rust serializer: converts Rust AST to concrete syntax"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns, RustOperators.ns],
+            moduleTypeDependencies = (RustSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Rust serializer: converts Rust AST to concrete syntax"}
   where
     definitions = [
       -- Top-level serialization
@@ -1576,10 +1578,20 @@ derivesToExpr = define "derivesToExpr" $
 
 toRustDocComment :: TTermDefinition (String -> String)
 toRustDocComment = define "toRustDocComment" $
-  doc "Convert a string to Rust doc comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "/// ") (var "s")) (Strings.lines $ var "c")
+  doc ("Convert a string to Rust doc comments. Empty source lines emit `///`"
+    <> " (no trailing space) so blank doc lines don't carry trailing whitespace.") $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
+      (string "///")
+      (Strings.cat2 (string "/// ") (var "s")))
+    (Strings.lines $ var "c")
 
 toRustComment :: TTermDefinition (String -> String)
 toRustComment = define "toRustComment" $
-  doc "Convert a string to Rust line comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "// ") (var "s")) (Strings.lines $ var "c")
+  doc ("Convert a string to Rust line comments. Empty source lines emit `//`"
+    <> " (no trailing space).") $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
+      (string "//")
+      (Strings.cat2 (string "// ") (var "s")))
+    (Strings.lines $ var "c")

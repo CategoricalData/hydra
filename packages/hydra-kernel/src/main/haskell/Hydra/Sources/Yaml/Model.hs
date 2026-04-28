@@ -18,12 +18,16 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just ("A basic YAML representation model. Based on:\n" ++
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++
       "The Serialization and Presentation properties of YAML,\n" ++
       "including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\n" ++
-      "In addition, tags are omitted from this model, and non-standard scalars are unsupported.")
+      "In addition, tags are omitted from this model, and non-standard scalars are unsupported.")}
   where
     definitions = [
       node,
@@ -53,6 +57,15 @@ scalar = define "Scalar" $
     "bool">:
       doc "Represents a true/false value"
       T.boolean,
+    -- An arbitrary-precision decimal number, encoded as a plain scalar whose lexical form is a
+    -- valid JSON number. Under the YAML 1.2.2 core schema this resolves as !!float, but Hydra
+    -- preserves full source precision on its side of the wire (the YAML spec leaves the value
+    -- space of !!float implementation-defined). Used by the JSON<->YAML bridge so JSON numbers,
+    -- which are decimal-encoded by spec, survive the trip losslessly. Like "float", the
+    -- decimal scalar has no NaN or infinity value in Hydra YAML.
+    "decimal">:
+      doc "An arbitrary-precision decimal number (lexically a valid JSON number)"
+      T.decimal,
     -- Represents an approximation to real numbers
     -- JSON schema: tag:yaml.org,2002:float
     -- In addition to arbitrary-precision floating-point numbers in scientific notation,

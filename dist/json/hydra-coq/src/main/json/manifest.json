@@ -1,0 +1,13 @@
+{
+  "dslModules": [],
+  "evalLibModules": [],
+  "mainModules": [
+    "hydra.coq.coder",
+    "hydra.coq.environment",
+    "hydra.coq.generate",
+    "hydra.coq.language",
+    "hydra.coq.serde",
+    "hydra.coq.syntax",
+    "hydra.coq.utils"],
+  "package": "hydra-coq",
+  "testModules": []}

@@ -29,8 +29,12 @@ rdf :: String -> Type
 rdf = typeref $ RdfSyntax.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [RdfSyntax.ns] [Core.ns] $
-    Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [RdfSyntax.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"}
   where
     definitions = [
       closed,

@@ -14,16 +14,28 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_JAVA_DIR="$HYDRA_ROOT/heads/java"
 
-# Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
-if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
-    JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
-    if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
-        echo "WARNING: x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2"
-        echo "  and will be ~20x slower than a native arm64 JDK."
-        echo "  Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
-        echo ""
+source "$HYDRA_ROOT/bin/lib/common.sh"
+check_native_jdk
+
+# Ensure every coder/ext package that packages/hydra-java's source set
+# depends on has a Java distribution. The hydra-java gradle build pulls
+# sources from dist/java/hydra-{kernel,haskell,java,python,scala,lisp,
+# pg,rdf,ext}; missing dirs cause "package hydra.X does not exist"
+# compile errors (e.g. EdgeBuilder.java importing hydra.pg.model).
+# sync-default() doesn't generate non-language packages, so on a fresh
+# checkout pg/rdf/lisp/scala may be missing. Assemble them on demand —
+# warm-cache short-circuits in seconds. Redirect output to a log file so
+# the assembler's per-package "Done: N main..." lines don't confuse the
+# bootstrap-all log parser.
+ASSEMBLE_LOG="${ASSEMBLE_LOG:-/tmp/hydra-java-host-coder-assembly.log}"
+: > "$ASSEMBLE_LOG"
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf; do
+    coder_base="$HYDRA_ROOT/dist/java/$coder_pkg/src/main/java"
+    if [ ! -d "$coder_base/hydra" ]; then
+        echo "Java host needs $coder_pkg; generating (see $ASSEMBLE_LOG)..."
+        (cd "$HYDRA_ROOT" && heads/java/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
     fi
-fi
+done
 
 # Build hydra-java
 echo "Building hydra-java..."
@@ -48,4 +60,4 @@ JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'commons-lang3-3.12.0.jar' | head -
 # Run the Java bootstrap (its output includes detailed timing and file counts)
 # Large stack needed for deeply-nested polymorphic type traversals in eta expansion.
 # Increase heap to accommodate the large stack + code generation data structures.
-java -Xss256m -Xmx2g -cp "$JAVA_CP" hydra.Bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+java -Xss256m -Xmx2g -cp "$JAVA_CP" hydra.Bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json"

@@ -436,7 +436,7 @@ stack test
 
 ### Python
 ```bash
-cd packages/hydra-python
+cd heads/python
 pytest
 ```
 
@@ -466,12 +466,12 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 
 4. **Regenerate the test suite for all implementations** (this step is required!):
 ```bash
-# From hydra-haskell - regenerate test files (universal test cases)
-stack exec update-kernel-tests
+# Refresh the Haskell kernel (DSL → JSON → Haskell, including test modules)
+heads/haskell/bin/sync-haskell.sh
 
-# From heads/haskell - regenerate Java and Python (including tests)
-./bin/sync-java.sh --quick
-./bin/sync-python.sh --quick
+# Regenerate Java and Python test distributions (from the worktree root)
+bin/sync-java.sh --no-tests
+bin/sync-python.sh --no-tests
 ```
 
 5. Run tests in each language to verify the new test cases pass
@@ -490,14 +490,14 @@ stack test 2>&1 | grep -i '<your-primitive-name>'
 ./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -i '<your-primitive-name>'
 
 # Python: run tests and confirm your cases are included
-cd packages/hydra-python
+cd heads/python
 pytest -v 2>&1 | grep -i '<your_primitive_name>'
 ```
 
 If your test cases do not appear in the output of any implementation,
 the tests were not properly registered or regenerated. Go back and check:
 - The test group is listed in `allTests` in the Haskell test source
-- Tests were regenerated (`stack exec update-kernel-tests`)
+- Tests were regenerated (`bin/sync-haskell.sh`)
 - Java and Python test artifacts were regenerated via sync scripts
 
 **Test coverage guidelines:**
@@ -528,7 +528,7 @@ When adding a new primitive function:
 - [ ] **Common Test Suite** (required!)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
   - [ ] Test group registered in `allTests`
-  - [ ] Tests regenerated (`stack exec update-kernel-tests`)
+  - [ ] Tests regenerated (`bin/sync-haskell.sh`)
 - [ ] **Tests pass** in all three languages
 - [ ] **Documentation** updated if needed
 

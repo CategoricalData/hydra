@@ -34,14 +34,15 @@ To regenerate the Scala code from the Haskell source of truth:
 
 ```bash
 # From the repo root
-heads/haskell/bin/sync-scala.sh          # Full sync (build, generate, post-process, compile)
-heads/haskell/bin/sync-scala.sh --quick  # Skip Scala compilation
+bin/sync-scala.sh             # Full sync (--hosts scala --targets scala)
+bin/sync-scala.sh --no-tests  # Skip target-language tests
 ```
 
-Or include Scala in the full sync:
+Or include Scala in a wider sync:
 
 ```bash
-./bin/sync-all.sh --targets all
+bin/sync.sh --hosts haskell,scala --targets haskell,scala
+bin/sync.sh --hosts all --targets all                       # full matrix
 ```
 
 ## Code organization
@@ -52,7 +53,6 @@ In 0.15, Hydra's Scala code is split across three locations
 - **This package** (`packages/hydra-scala/`) — Scala coder DSL sources and the sbt build
   - `src/main/haskell/Hydra/Sources/Scala/` — Scala coder DSL sources (written in Haskell)
   - `build.sbt` — sbt build configuration (points at the head and the generated kernel)
-  - `bin/break-long-lines.py` — post-processor for generated code
 
 - **Scala head** ([`heads/scala/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/heads/scala/src/main/scala))
   — hand-written Scala runtime

@@ -59,7 +59,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         for d in mod.definitions:
             if isinstance(d, DefinitionTerm):
                 td = d.value
-                bindings[td.name] = Binding(td.name, td.term, td.type)
+                bindings[td.name] = Binding(td.name, td.term, td.type_scheme)
 
     return bindings
 
@@ -94,7 +94,7 @@ def build_test_graph() -> hydra.graph.Graph:
     kernel_term_bindings = list(kernel_terms.values())
 
     test_terms_dict = test_graph.test_terms()
-    data_bindings = [hydra.core.Binding(name=name, term=term, type=Nothing())
+    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=Nothing())
                      for name, term in test_terms_dict.items()]
 
     return hydra.lexical.elements_to_graph(

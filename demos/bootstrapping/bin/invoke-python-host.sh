@@ -32,9 +32,33 @@ fi
 echo "Python: $($PYTHON --version 2>&1)"
 echo ""
 
-PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python:$HYDRA_ROOT/dist/python/hydra-ext/src/main/python"
-export PYTHONPATH
-export HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+# Ensure every coder/ext package referenced by the Python host has a
+# Python distribution. The PYTHONPATH below lists each dist/python/hydra-*
+# tree, but missing dirs result in ImportError when the bootstrap loads
+# coders for non-language packages (pg, rdf, etc.). sync-default()
+# doesn't generate non-language packages, so on a fresh checkout some of
+# these may be missing. Assemble them on demand — warm-cache short-
+# circuits in seconds. Redirect output to a log file so the assembler's
+# per-package "Done: N main..." lines don't confuse the bootstrap-all
+# log parser.
+ASSEMBLE_LOG="${ASSEMBLE_LOG:-/tmp/hydra-python-host-coder-assembly.log}"
+: > "$ASSEMBLE_LOG"
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf; do
+    coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
+    if [ ! -d "$coder_base/hydra" ]; then
+        echo "Python host needs $coder_pkg; generating (see $ASSEMBLE_LOG)..."
+        (cd "$HYDRA_ROOT" && heads/python/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
+    fi
+done
 
-# Run the Python bootstrap (its output includes detailed timing and file counts)
-"$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python"
+for pkg in hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf hydra-ext; do
+    PYTHONPATH="$PYTHONPATH:$HYDRA_ROOT/dist/python/$pkg/src/main/python"
+done
+export PYTHONPATH
+export HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json"
+
+# Run the Python bootstrap (its output includes detailed timing and file counts).
+# --json-dir now points at the dist/json root; the bootstrap walks per-package
+# subdirectories in dependency order.
+"$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json"

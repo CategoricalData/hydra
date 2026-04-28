@@ -62,10 +62,12 @@ ns :: Namespace
 ns = Namespace "hydra.substitution"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Rewriting.ns, Variables.ns]
-    kernelTypesNamespaces $
-    Just ("Variable substitution in type and term expressions.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Rewriting.ns, Variables.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Variable substitution in type and term expressions.")}
   where
    definitions = [
      toDefinition composeTypeSubst,
@@ -207,7 +209,7 @@ substituteInTerm = define "substituteInTerm" $
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (substituteInTerm @@ var "subst2" @@ (Core.bindingTerm $ var "b"))
-          (Core.bindingType $ var "b")] $
+          (Core.bindingTypeScheme $ var "b")] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (var "bindings"))
           (substituteInTerm @@ var "subst2" @@ (Core.letBody $ var "lt"))] $
@@ -256,12 +258,21 @@ substInTypeNonEmpty = define "substInTypeNonEmpty" $
 
 substInTypeScheme :: TTermDefinition (TypeSubst -> TypeScheme -> TypeScheme)
 substInTypeScheme = define "substInTypeScheme" $
-  doc "Apply a type substitution to a type scheme" $
-  lambdas ["subst", "ts"] $ Core.typeScheme
-    (Core.typeSchemeVariables $ var "ts")
-    (substInType @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
-    -- Also apply the substitution to the constraints
-    (Maybes.map (substInClassConstraints @@ var "subst") (Core.typeSchemeConstraints $ var "ts"))
+  doc ("Apply a type substitution to a type scheme. The scheme's quantifier"
+    <> " variables shadow the substitution: any name in typeSchemeVariables is"
+    <> " removed from subst before substituting into the body and constraints."
+    <> " Without this, a substitution like {t0 -> Foo} applied to"
+    <> " `forall [t0]. t0 -> t0` would incorrectly replace the bound t0.") $
+  lambdas ["subst", "ts"] $ lets [
+    "scopedSubst">: Typing.typeSubst $ Lists.foldl
+      (lambdas ["m", "v"] $ Maps.delete (var "v") (var "m"))
+      (Typing.unTypeSubst $ var "subst")
+      (Core.typeSchemeVariables $ var "ts")] $
+    Core.typeScheme
+      (Core.typeSchemeVariables $ var "ts")
+      (substInType @@ var "scopedSubst" @@ (Core.typeSchemeBody $ var "ts"))
+      -- Also apply the substitution to the constraints
+      (Maybes.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
 
 substTypesInTerm :: TTermDefinition (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $
@@ -277,7 +288,7 @@ substTypesInTerm = define "substTypesInTerm" $
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (substTypesInTerm @@ var "subst" @@ (Core.bindingTerm $ var "b"))
-          (Maybes.map (substInTypeScheme @@ var "subst") (Core.bindingType $ var "b"))] $
+          (Maybes.map (substInTypeScheme @@ var "subst") (Core.bindingTypeScheme $ var "b"))] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
           (substTypesInTerm @@ var "subst" @@ (Core.letBody $ var "l")),

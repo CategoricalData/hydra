@@ -62,6 +62,10 @@ bigfloat = float FloatTypeBigfloat
 bigint :: Type
 bigint = integer IntegerTypeBigint
 
+-- | Arbitrary-precision decimal type
+decimal :: Type
+decimal = literal LiteralTypeDecimal
+
 -- | Binary data type
 binary :: Type
 binary = literal LiteralTypeBinary

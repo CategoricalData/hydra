@@ -90,10 +90,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_]
-    KernelTypes.kernelTypesNamespaces $
-    Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_],
+            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDescription = Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."}
   where
     definitions = [
       toDefinition toJson,
@@ -101,7 +103,7 @@ module_ = Module ns definitions
       toDefinition encodeLiteral,
       toDefinition encodeFloat,
       toDefinition encodeInteger,
-      toDefinition isSpecialFloatString]
+      toDefinition requiresJsonStringSentinel]
 
 -- | Encode a Term to a JSON Value, given a type and type lookup table.
 -- Returns Left with an error message for unsupported term constructs.
@@ -205,18 +207,18 @@ toJson = define "toJson" $
     _Type_union>>: "rt" ~>
       cases _Term (var "strippedTerm")
         (Just $ left $ string "expected union term") [
-        _Term_union>>: "inj" ~>
+        _Term_inject>>: "inj" ~>
           "field" <~ (Core.injectionField $ var "inj") $
           "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
           "fterm" <~ (Core.fieldTerm $ var "field") $
           -- Find the field type that matches this variant
-          "findFieldType" <~ ("fts" ~>
-            Logic.ifElse (Lists.null $ var "fts")
+          "ftypeResult" <~ (
+            Maybes.maybe
               (left $ Strings.cat $ list [string "unknown variant: ", var "fname"])
-              (Logic.ifElse (Equality.equal (Core.unName $ Core.fieldTypeName $ Lists.head $ var "fts") (var "fname"))
-                (right $ Core.fieldTypeType $ Lists.head $ var "fts")
-                (var "findFieldType" @@ (Lists.tail $ var "fts")))) $
-          "ftypeResult" <~ (var "findFieldType" @@ var "rt") $
+              ("ft" ~> right $ Core.fieldTypeType $ var "ft")
+              (Lists.find
+                ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
+                (var "rt"))) $
           Eithers.either_
             ("err" ~> left $ var "err")
             ("ftype" ~>
@@ -237,7 +239,7 @@ toJson = define "toJson" $
         _Term_wrap>>: "wt" ~>
           toJson @@ var "types" @@ var "tname" @@ var "wn" @@ (Core.wrappedTermBody $ var "wt")],
 
-    -- Maps -> array of {\"@key\": k, \"@value\": v}
+    -- Maps -> array of {\"key\": k, \"value\": v}
     _Type_map>>: "mt" ~>
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
@@ -253,14 +255,14 @@ toJson = define "toJson" $
               ("err" ~> left $ var "err")
               ("ek" ~> Eithers.map
                 ("ev" ~> Json.valueObject $ Maps.fromList $ list [
-                  pair (string "@key") (var "ek"),
-                  pair (string "@value") (var "ev")])
+                  pair (string "key") (var "ek"),
+                  pair (string "value") (var "ev")])
                 (var "encodedV"))
               (var "encodedK")) $
           "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList $ var "m")) $
           Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries")],
 
-    -- Pairs -> {\"@first\": ..., \"@second\": ...}
+    -- Pairs -> {\"first\": ..., \"second\": ...}
     _Type_pair>>: "pt" ~>
       "firstType" <~ (Core.pairTypeFirst $ var "pt") $
       "secondType" <~ (Core.pairTypeSecond $ var "pt") $
@@ -275,12 +277,12 @@ toJson = define "toJson" $
             ("err" ~> left $ var "err")
             ("ef" ~> Eithers.map
               ("es" ~> Json.valueObject $ Maps.fromList $ list [
-                pair (string "@first") (var "ef"),
-                pair (string "@second") (var "es")])
+                pair (string "first") (var "ef"),
+                pair (string "second") (var "es")])
               (var "encodedSecond"))
             (var "encodedFirst")],
 
-    -- Either -> {\"@left\": ...} or {\"@right\": ...}
+    -- Either -> {\"left\": ...} or {\"right\": ...}
     _Type_either>>: "et" ~>
       "leftType" <~ (Core.eitherTypeLeft $ var "et") $
       "rightType" <~ (Core.eitherTypeRight $ var "et") $
@@ -291,12 +293,12 @@ toJson = define "toJson" $
             ("l" ~>
               "encodedL" <~ (toJson @@ var "types" @@ var "tname" @@ var "leftType" @@ var "l") $
               Eithers.map
-                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@left") (var "v")])
+                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "left") (var "v")])
                 (var "encodedL"))
             ("r" ~>
               "encodedR" <~ (toJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "r") $
               Eithers.map
-                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@right") (var "v")])
+                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "right") (var "v")])
                 (var "encodedR"))
             (var "e")],
 
@@ -355,7 +357,7 @@ toJsonUntyped = define "toJsonUntyped" $
       Eithers.map ("fs" ~> Json.valueObject $ Maps.fromList $ var "fs") (var "encodedFields"),
 
     -- Unions (single-key object)
-    _Term_union>>: "inj" ~>
+    _Term_inject>>: "inj" ~>
       "field" <~ (Core.injectionField $ var "inj") $
       "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
       "fterm" <~ (Core.fieldTerm $ var "field") $
@@ -370,7 +372,7 @@ toJsonUntyped = define "toJsonUntyped" $
     -- Wrapped terms (transparent)
     _Term_wrap>>: "wt" ~> toJsonUntyped @@ (Core.wrappedTermBody $ var "wt"),
 
-    -- Maps -> array of {\"@key\": k, \"@value\": v}
+    -- Maps -> array of {\"key\": k, \"value\": v}
     _Term_map>>: "m" ~>
       "encodeEntry" <~ ("kv" ~>
         "k" <~ (Pairs.first $ var "kv") $
@@ -381,14 +383,14 @@ toJsonUntyped = define "toJsonUntyped" $
           ("err" ~> left $ var "err")
           ("ek" ~> Eithers.map
             ("ev" ~> Json.valueObject $ Maps.fromList $ list [
-              pair (string "@key") (var "ek"),
-              pair (string "@value") (var "ev")])
+              pair (string "key") (var "ek"),
+              pair (string "value") (var "ev")])
             (var "encodedV"))
           (var "encodedK")) $
       "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList $ var "m")) $
       Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries"),
 
-    -- Pairs -> {\"@first\": ..., \"@second\": ...}
+    -- Pairs -> {\"first\": ..., \"second\": ...}
     _Term_pair>>: "p" ~>
       "first" <~ (Pairs.first $ var "p") $
       "second" <~ (Pairs.second $ var "p") $
@@ -398,23 +400,23 @@ toJsonUntyped = define "toJsonUntyped" $
         ("err" ~> left $ var "err")
         ("ef" ~> Eithers.map
           ("es" ~> Json.valueObject $ Maps.fromList $ list [
-            pair (string "@first") (var "ef"),
-            pair (string "@second") (var "es")])
+            pair (string "first") (var "ef"),
+            pair (string "second") (var "es")])
           (var "encodedSecond"))
         (var "encodedFirst"),
 
-    -- Either -> {\"@left\": ...} or {\"@right\": ...}
+    -- Either -> {\"left\": ...} or {\"right\": ...}
     _Term_either>>: "e" ~>
       Eithers.either_
         ("l" ~>
           "encodedL" <~ (toJsonUntyped @@ var "l") $
           Eithers.map
-            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@left") (var "v")])
+            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "left") (var "v")])
             (var "encodedL"))
         ("r" ~>
           "encodedR" <~ (toJsonUntyped @@ var "r") $
           Eithers.map
-            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@right") (var "v")])
+            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "right") (var "v")])
             (var "encodedR"))
         (var "e")]
 
@@ -425,35 +427,44 @@ encodeLiteral = define "encodeLiteral" $
   "lit" ~> cases _Literal (var "lit") Nothing [
     _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
     _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
+    _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
     _Literal_float>>: "f" ~> encodeFloat @@ var "f",
     _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
     _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
 
--- | Encode a float value to JSON
--- Float64 and Bigfloat use native JSON numbers; Float32 uses string to preserve exact precision
--- Special values (NaN, Infinity, -Infinity) are encoded as JSON strings for all float types
+-- | Encode a float value to JSON.
+-- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
+-- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
+-- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
+-- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
+-- a JSON number for finite, non-negative-zero values and via a JSON string for the values
+-- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
+-- round-trippable through JSON.
 encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings." $
+  doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_bigfloat>>: "bf" ~>
       "s" <~ (Literals.showBigfloat $ var "bf") $
-      Logic.ifElse (isSpecialFloatString @@ var "s")
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
+        (left $ Strings.cat $ list [string "JSON cannot represent bigfloat value: ", var "s"])
+        (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
+    _FloatValue_float32>>: "f" ~>
+      "s" <~ (Literals.showFloat32 $ var "f") $
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
         (right $ Json.valueString $ var "s")
-        (right $ Json.valueNumber $ var "bf"),
-    _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
+        (right $ Json.valueNumber $ Literals.float32ToDecimal $ var "f"),
     _FloatValue_float64>>: "f" ~>
       "s" <~ (Literals.showFloat64 $ var "f") $
-      Logic.ifElse (isSpecialFloatString @@ var "s")
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
         (right $ Json.valueString $ var "s")
-        (right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f")]
+        (right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f")]
 
--- | Check whether a string is one of the special float sentinels: "NaN", "Infinity", "-Infinity", "-0.0"
--- Negative zero is treated as a special value because JSON arbitrary-precision decimal
--- representations (Scientific, BigDecimal, Decimal) cannot distinguish it from +0.0.
-isSpecialFloatString :: TTermDefinition (String -> Bool)
-isSpecialFloatString = define "isSpecialFloatString" $
-  doc "Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0." $
+-- | Check whether a float's string form is an IEEE value that the JSON number grammar or
+-- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
+requiresJsonStringSentinel :: TTermDefinition (String -> Bool)
+requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
+  doc "True for IEEE sentinel strings that JSON must escape as a string to preserve." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
          Logic.or (Equality.equal (var "s") (string "Infinity")) $
          Logic.or (Equality.equal (var "s") (string "-Infinity"))
@@ -471,9 +482,9 @@ encodeInteger = define "encodeInteger" $
     _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
     _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
     _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
-    -- Small integers: use native JSON numbers (convert to bigfloat for JSON)
-    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int8ToBigint $ var "i",
-    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int16ToBigint $ var "i",
-    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i",
-    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint8ToBigint $ var "i",
-    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint16ToBigint $ var "i"]
+    -- Small integers: use native JSON numbers (convert to decimal for JSON)
+    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int8ToBigint $ var "i",
+    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i",
+    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i",
+    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "i",
+    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i"]

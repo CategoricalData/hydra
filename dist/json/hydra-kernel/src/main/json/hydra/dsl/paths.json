@@ -12,7 +12,7 @@
                     "body": {
                       "wrap": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -85,8 +85,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "The target node of the edge"}}}],
                             "body": {"variable": "hydra.paths.SubtermNode"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "target"}},
@@ -96,8 +96,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -108,13 +108,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The source node of the edge"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The source node of the edge"}}}],
                     "body": {"variable": "hydra.paths.SubtermNode"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "source"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -130,8 +130,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "The target node of the edge"}}}],
                               "body": {"variable": "hydra.paths.SubtermNode"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -140,8 +140,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -151,8 +151,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -164,7 +164,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -173,7 +173,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -207,8 +207,8 @@
                 "argument": {"variable": "hydra.paths.SubtermEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -216,8 +216,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -233,7 +233,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -242,7 +242,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -276,8 +276,8 @@
                 "argument": {"variable": "hydra.paths.SubtermEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -285,8 +285,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path connecting source to target"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -303,7 +303,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -312,7 +312,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -346,8 +346,8 @@
                 "argument": {"variable": "hydra.paths.SubtermEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -355,8 +355,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The target node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The target node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -374,7 +374,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -418,7 +418,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -427,7 +427,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -468,7 +468,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -477,7 +477,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -515,8 +515,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The source node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The source node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtermNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -525,8 +525,8 @@
                 "argument": {"variable": "hydra.paths.SubtermEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -540,8 +540,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The source node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The source node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtermNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -559,7 +559,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -587,7 +587,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -596,7 +596,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -653,7 +653,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -662,7 +662,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -700,8 +700,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -711,8 +711,8 @@
                 "argument": {"variable": "hydra.paths.SubtermEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -726,8 +726,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -746,7 +746,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -774,7 +774,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -783,7 +783,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -824,7 +824,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -833,7 +833,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -887,8 +887,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The target node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The target node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtermNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -897,8 +897,8 @@
                 "argument": {"variable": "hydra.paths.SubtermEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -912,8 +912,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The target node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The target node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtermNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -931,7 +931,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -988,8 +988,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "edges"}},
@@ -999,13 +999,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "All nodes in the graph"}}}],
                     "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "nodes"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1019,8 +1019,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1029,8 +1029,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1042,7 +1042,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1051,7 +1051,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1085,8 +1085,8 @@
                 "argument": {"variable": "hydra.paths.SubtermGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1094,8 +1094,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1111,7 +1111,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1120,7 +1120,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1154,8 +1154,8 @@
                 "argument": {"variable": "hydra.paths.SubtermGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1163,8 +1163,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All edges in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All edges in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1182,7 +1182,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1226,7 +1226,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1235,7 +1235,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1273,8 +1273,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All nodes in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1283,8 +1283,8 @@
                 "argument": {"variable": "hydra.paths.SubtermGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1298,8 +1298,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All nodes in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1317,7 +1317,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1345,7 +1345,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1354,7 +1354,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1408,8 +1408,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1418,8 +1418,8 @@
                 "argument": {"variable": "hydra.paths.SubtermGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1433,8 +1433,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1454,7 +1454,7 @@
                     "body": {
                       "wrap": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -1525,8 +1525,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "A unique identifier for the node"}}}],
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "id"}},
@@ -1536,8 +1536,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "label"}},
@@ -1547,13 +1547,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The qualified name of the term"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1569,8 +1569,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "A unique identifier for the node"}}}],
                               "body": {"literal": {"string": {}}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -1579,8 +1579,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1589,8 +1589,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the term"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1602,7 +1602,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1611,7 +1611,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1645,8 +1645,8 @@
                 "argument": {"variable": "hydra.paths.SubtermNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1654,8 +1654,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the term"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1671,7 +1671,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1680,7 +1680,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1714,8 +1714,8 @@
                 "argument": {"variable": "hydra.paths.SubtermNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1723,8 +1723,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A human-readable label for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1740,7 +1740,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1749,7 +1749,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1781,8 +1781,8 @@
                 "argument": {"variable": "hydra.paths.SubtermNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1790,8 +1790,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique identifier for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1809,7 +1809,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1853,7 +1853,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1862,7 +1862,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1901,7 +1901,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1910,7 +1910,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1946,8 +1946,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The qualified name of the term"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1956,8 +1956,8 @@
                 "argument": {"variable": "hydra.paths.SubtermNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1971,8 +1971,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The qualified name of the term"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1990,7 +1990,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -2018,7 +2018,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2027,7 +2027,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2082,7 +2082,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2091,7 +2091,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2127,8 +2127,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2137,8 +2137,8 @@
                 "argument": {"variable": "hydra.paths.SubtermNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2152,8 +2152,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2171,7 +2171,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -2199,7 +2199,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2208,7 +2208,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2249,7 +2249,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2258,7 +2258,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2310,8 +2310,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unique identifier for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2320,8 +2320,8 @@
                 "argument": {"variable": "hydra.paths.SubtermNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2335,8 +2335,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A unique identifier for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2352,7 +2352,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -2378,8 +2378,8 @@
                 "argument": {"list": {"variable": "hydra.paths.SubtermStep"}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2398,7 +2398,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -2407,7 +2407,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -2429,8 +2429,8 @@
                 "argument": {"variable": "hydra.paths.SubtermPath"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2447,9 +2447,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -2473,15 +2473,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2492,9 +2492,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -2518,15 +2518,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2537,9 +2537,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -2563,15 +2563,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2582,9 +2582,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -2608,15 +2608,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2627,9 +2627,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -2653,15 +2653,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2674,9 +2674,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -2713,15 +2713,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Access a specific branch of a union elimination by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2733,8 +2733,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Access a specific branch of a union elimination by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
@@ -2746,9 +2746,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -2772,15 +2772,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2793,9 +2793,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -2832,14 +2832,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access a specific binding in a let term by variable name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2851,8 +2851,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access a specific binding in a let term by variable name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2865,9 +2865,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -2904,13 +2904,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access an element of a list by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access an element of a list by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2922,8 +2922,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access an element of a list by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access an element of a list by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2935,9 +2935,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -2974,13 +2974,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access a key in a map by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access a key in a map by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2992,8 +2992,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access a key in a map by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access a key in a map by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3005,9 +3005,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -3044,13 +3044,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access a value in a map by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access a value in a map by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3062,8 +3062,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access a value in a map by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access a value in a map by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3073,9 +3073,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -3099,15 +3099,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3120,9 +3120,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -3159,14 +3159,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access an element of a product (tuple) by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3178,8 +3178,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access an element of a product (tuple) by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3192,9 +3192,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -3231,13 +3231,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access a field of a record by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3249,8 +3249,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access a field of a record by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3262,9 +3262,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -3301,13 +3301,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access an element of a set by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access an element of a set by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3319,8 +3319,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access an element of a set by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access an element of a set by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3330,9 +3330,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -3356,15 +3356,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3375,9 +3375,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -3401,15 +3401,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3420,9 +3420,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -3446,15 +3446,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3465,9 +3465,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -3491,15 +3491,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3510,9 +3510,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -3536,15 +3536,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3561,7 +3561,7 @@
                     "body": {
                       "wrap": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -3634,8 +3634,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "The target node of the edge"}}}],
                             "body": {"variable": "hydra.paths.SubtypeNode"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "target"}},
@@ -3645,8 +3645,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subtype path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtypePath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3657,13 +3657,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The source node of the edge"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The source node of the edge"}}}],
                     "body": {"variable": "hydra.paths.SubtypeNode"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "source"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3679,8 +3679,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "The target node of the edge"}}}],
                               "body": {"variable": "hydra.paths.SubtypeNode"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -3689,8 +3689,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subtype path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtypePath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3700,8 +3700,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3713,7 +3713,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -3722,7 +3722,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -3756,8 +3756,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3765,8 +3765,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -3782,7 +3782,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -3791,7 +3791,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -3825,8 +3825,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3834,8 +3834,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subtype path connecting source to target"}}}],
                       "body": {"variable": "hydra.paths.SubtypePath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3852,7 +3852,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -3861,7 +3861,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -3895,8 +3895,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3904,8 +3904,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The target node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The target node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -3923,7 +3923,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -3967,7 +3967,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -3976,7 +3976,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4017,7 +4017,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4026,7 +4026,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4064,8 +4064,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The source node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The source node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtypeNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4074,8 +4074,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4089,8 +4089,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The source node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The source node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtypeNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4108,7 +4108,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -4136,7 +4136,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4145,7 +4145,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4202,7 +4202,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4211,7 +4211,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4249,8 +4249,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subtype path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtypePath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4260,8 +4260,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4275,8 +4275,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subtype path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtypePath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -4295,7 +4295,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -4323,7 +4323,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4332,7 +4332,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4373,7 +4373,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4382,7 +4382,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4436,8 +4436,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The target node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The target node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtypeNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4446,8 +4446,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeEdge"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4461,8 +4461,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The target node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The target node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtypeNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4480,7 +4480,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -4537,8 +4537,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "edges"}},
@@ -4548,13 +4548,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "All nodes in the graph"}}}],
                     "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "nodes"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4568,8 +4568,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4578,8 +4578,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4591,7 +4591,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -4600,7 +4600,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -4634,8 +4634,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4643,8 +4643,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4660,7 +4660,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -4669,7 +4669,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -4703,8 +4703,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4712,8 +4712,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All edges in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All edges in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4731,7 +4731,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -4775,7 +4775,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4784,7 +4784,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4822,8 +4822,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All nodes in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4832,8 +4832,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4847,8 +4847,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All nodes in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4866,7 +4866,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -4894,7 +4894,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -4903,7 +4903,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -4957,8 +4957,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4967,8 +4967,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeGraph"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4982,8 +4982,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5003,7 +5003,7 @@
                     "body": {
                       "wrap": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -5074,8 +5074,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "A unique identifier for the node"}}}],
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "id"}},
@@ -5085,8 +5085,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "label"}},
@@ -5096,13 +5096,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The qualified name of the type"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5118,8 +5118,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "A unique identifier for the node"}}}],
                               "body": {"literal": {"string": {}}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -5128,8 +5128,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5138,8 +5138,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the type"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5151,7 +5151,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -5160,7 +5160,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -5194,8 +5194,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5203,8 +5203,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the type"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5220,7 +5220,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -5229,7 +5229,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -5263,8 +5263,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5272,8 +5272,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A human-readable label for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5289,7 +5289,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -5298,7 +5298,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -5330,8 +5330,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5339,8 +5339,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique identifier for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5358,7 +5358,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -5402,7 +5402,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -5411,7 +5411,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -5450,7 +5450,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -5459,7 +5459,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -5495,8 +5495,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The qualified name of the type"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5505,8 +5505,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5520,8 +5520,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The qualified name of the type"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5539,7 +5539,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -5567,7 +5567,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -5576,7 +5576,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -5631,7 +5631,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -5640,7 +5640,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -5676,8 +5676,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5686,8 +5686,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5701,8 +5701,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5720,7 +5720,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -5748,7 +5748,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -5757,7 +5757,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -5798,7 +5798,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -5807,7 +5807,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -5859,8 +5859,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unique identifier for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5869,8 +5869,8 @@
                 "argument": {"variable": "hydra.paths.SubtypeNode"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5884,8 +5884,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A unique identifier for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5901,7 +5901,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -5927,8 +5927,8 @@
                 "argument": {"list": {"variable": "hydra.paths.SubtypeStep"}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5947,7 +5947,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -5956,7 +5956,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -5978,8 +5978,8 @@
                 "argument": {"variable": "hydra.paths.SubtypePath"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5996,9 +5996,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6022,15 +6022,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6041,9 +6041,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6067,15 +6067,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6086,9 +6086,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6112,15 +6112,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6131,9 +6131,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6157,15 +6157,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6176,9 +6176,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6202,15 +6202,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6221,9 +6221,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6247,15 +6247,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6266,9 +6266,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6292,15 +6292,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6311,9 +6311,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6337,15 +6337,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6356,9 +6356,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6382,15 +6382,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6401,9 +6401,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6427,15 +6427,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6446,9 +6446,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6472,15 +6472,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6491,9 +6491,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6517,15 +6517,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6536,9 +6536,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6562,15 +6562,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6581,9 +6581,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6607,15 +6607,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6628,9 +6628,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -6667,14 +6667,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access a field type of a record type by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6686,8 +6686,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access a field type of a record type by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -6698,9 +6698,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6724,15 +6724,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6745,9 +6745,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -6784,14 +6784,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access a field type of a union type by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6803,8 +6803,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access a field type of a union type by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -6815,9 +6815,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -6841,15 +6841,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},

@@ -5,7 +5,7 @@ effectively for generating Hydra schemas and programs.
 
 ## The Hydra lexicon
 
-The Hydra lexicon ([`docs/hydra-lexicon.txt`](../../hydra-lexicon.txt))
+The Hydra lexicon ([`docs/hydra-lexicon.txt`](../hydra-lexicon.txt))
 is a comprehensive reference file that provides LLMs with the complete API surface of Hydra's kernel and primitive
 functions.
 It contains:
@@ -52,15 +52,18 @@ while terms and primitives use `:` to show their type signatures with inferred t
 
 ### Generating the lexicon
 
-The lexicon is automatically generated from Hydra's kernel graph.
+The lexicon is generated from Hydra's kernel graph on demand.
 To regenerate it (for example, after adding new kernel functions):
 
 ```bash
-cd heads/haskell
-echo -e "import Hydra.Generation\nwriteLexiconToStandardPath" | stack ghci
+bin/regenerate-lexicon.sh
 ```
 
 This will update `docs/hydra-lexicon.txt` with the current kernel API.
+The `/lexicon()` shorthand also runs this script. Lexicon regeneration is
+deliberately decoupled from the regular sync flow (it takes ~4 minutes and
+is not consumed by any build step); run it on demand or as part of the
+pre-release verification flow (`bin/verify-release.sh`).
 
 ### Using the lexicon with LLMs
 

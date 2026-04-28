@@ -90,6 +90,10 @@ object Libraries:
     case Term.literal(Literal.float(FloatValue.bigfloat(n))) => n
     case _ => throw new RuntimeException(s"expected bigfloat, got $t")
 
+  private def exDecimal(t: Term): BigDecimal = t match
+    case Term.literal(Literal.decimal(n)) => n
+    case _ => throw new RuntimeException(s"expected decimal, got $t")
+
   private def exString(t: Term): String = t match
     case Term.literal(Literal.string(s)) => s
     case _ => throw new RuntimeException(s"expected string, got $t")
@@ -146,6 +150,7 @@ object Libraries:
   private def mkFloat32(n: Float): Term = Term.literal(Literal.float(FloatValue.float32(n)))
   private def mkFloat64(n: Double): Term = Term.literal(Literal.float(FloatValue.float64(n)))
   private def mkBigfloat(n: BigDecimal): Term = Term.literal(Literal.float(FloatValue.bigfloat(n)))
+  private def mkDecimal(n: BigDecimal): Term = Term.literal(Literal.decimal(n))
   private def mkString(s: String): Term = Term.literal(Literal.string(s))
   private def mkBool(b: Boolean): Term = Term.literal(Literal.boolean(b))
   private def mkBinary(b: String): Term = Term.literal(Literal.binary(b))
@@ -193,7 +198,7 @@ object Libraries:
       case hydra.util.Comparison.lessThan => "lessThan"
       case hydra.util.Comparison.equalTo => "equalTo"
       case hydra.util.Comparison.greaterThan => "greaterThan"
-    Term.union(Injection("hydra.util.Comparison", Field(fieldName, mkUnit)))
+    Term.inject(Injection("hydra.util.Comparison", Field(fieldName, mkUnit)))
 
   // --- Primitive constructors ---
 
@@ -227,6 +232,7 @@ object Libraries:
   private val tFloat32: Type = Type.literal(LiteralType.float(FloatType.float32))
   private val tFloat64: Type = Type.literal(LiteralType.float(FloatType.float64))
   private val tBigfloat: Type = Type.literal(LiteralType.float(FloatType.bigfloat))
+  private val tDecimal: Type = Type.literal(LiteralType.decimal)
   private val tUnit: Type = Type.unit
   private val tComparison: Type = Type.variable("hydra.util.Comparison")
 
@@ -542,9 +548,6 @@ object Libraries:
           mkList(exList(xs).zip(exList(ys)).map((x, y) => app2(f, x, y)))
         }),
       // First-order
-      s"$ns.at" -> mkPrimImpl(s"$ns.at", tScheme(Seq("a"),
-        tFun(tInt32, tFun(tList(a), a))),
-        impl2((i, xs) => exList(xs)(exInt32(i)))),
       s"$ns.concat" -> mkPrimImpl(s"$ns.concat", tScheme(Seq("a"),
         tFun(tList(tList(a)), tList(a))),
         impl1(xss => mkList(exList(xss).flatMap(exList)))),
@@ -571,12 +574,6 @@ object Libraries:
               same +: doGroup(rest)
           mkList(doGroup(items).map(mkList))
         }),
-      s"$ns.head" -> mkPrimImpl(s"$ns.head", tScheme(Seq("a"),
-        tFun(tList(a), a)),
-        impl1(xs => exList(xs).head)),
-      s"$ns.init" -> mkPrimImpl(s"$ns.init", tScheme(Seq("a"),
-        tFun(tList(a), tList(a))),
-        impl1(xs => { val items = exList(xs); mkList(if items.isEmpty then Seq.empty else items.init) })),
       s"$ns.intercalate" -> mkPrimImpl(s"$ns.intercalate", tScheme(Seq("a"),
         tFun(tList(a), tFun(tList(tList(a)), tList(a)))),
         impl2 { (sep, xss) =>
@@ -590,9 +587,6 @@ object Libraries:
           val items = exList(xs)
           mkList(if items.isEmpty then Seq.empty else items.flatMap(x => Seq(sep, x)).tail)
         }),
-      s"$ns.last" -> mkPrimImpl(s"$ns.last", tScheme(Seq("a"),
-        tFun(tList(a), a)),
-        impl1(xs => exList(xs).last)),
       s"$ns.length" -> mkPrimImpl(s"$ns.length", tScheme(Seq("a"),
         tFun(tList(a), tInt32)),
         impl1(xs => mkInt32(exList(xs).length))),
@@ -626,18 +620,12 @@ object Libraries:
       s"$ns.reverse" -> mkPrimImpl(s"$ns.reverse", tScheme(Seq("a"),
         tFun(tList(a), tList(a))),
         impl1(xs => mkList(exList(xs).reverse))),
-      s"$ns.safeHead" -> mkPrimImpl(s"$ns.safeHead", tScheme(Seq("a"),
-        tFun(tList(a), tOpt(a))),
-        impl1(xs => mkMaybe(exList(xs).headOption))),
       s"$ns.singleton" -> mkPrimImpl(s"$ns.singleton", tScheme(Seq("a"),
         tFun(a, tList(a))),
         impl1(x => mkList(Seq(x)))),
       s"$ns.sort" -> mkPrimImpl(s"$ns.sort", tSchemeConstrained(aOrd,
         tFun(tList(a), tList(a))),
         impl1(xs => mkList(exList(xs).sortWith((a, b) => equality.lt(a)(b))))),
-      s"$ns.tail" -> mkPrimImpl(s"$ns.tail", tScheme(Seq("a"),
-        tFun(tList(a), tList(a))),
-        impl1(xs => { val items = exList(xs); mkList(if items.isEmpty then Seq.empty else items.tail) })),
       s"$ns.take" -> mkPrimImpl(s"$ns.take", tScheme(Seq("a"),
         tFun(tInt32, tFun(tList(a), tList(a)))),
         impl2((n, xs) => mkList(exList(xs).take(exInt32(n))))),
@@ -647,6 +635,12 @@ object Libraries:
           val innerLists = exList(xss).map(exList)
           mkList(hydra.lib.lists.transpose(innerLists).map(mkList))
         }),
+      s"$ns.uncons" -> mkPrimImpl(s"$ns.uncons", tScheme(Seq("a"),
+        tFun(tList(a), tOpt(tPair(a, tList(a))))),
+        impl1(xs => {
+          val items = exList(xs)
+          mkMaybe(lists.uncons(items).map((h, t) => mkPairTerm(h, mkList(t))))
+        })),
       s"$ns.zip" -> mkPrimImpl(s"$ns.zip", tScheme(Seq("a", "b"),
         tFun(tList(a), tFun(tList(b), tList(tPair(a, b))))),
         impl2((xs, ys) => mkList(exList(xs).zip(exList(ys)).map((a, b) => mkPairTerm(a, b))))),
@@ -788,30 +782,20 @@ object Libraries:
         impl1(a => mkInt32(math.abs(exInt32(a))))),
       s"$ns.add" -> mkPrimImpl(s"$ns.add", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
         impl2((a, b) => mkInt32(math.add(exInt32(a))(exInt32(b))))),
-      s"$ns.div" -> mkPrimImpl(s"$ns.div", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.div(exInt32(a))(exInt32(b))))),
       s"$ns.even" -> mkPrimImpl(s"$ns.even", tMono(tFun(tInt32, tBool)),
         impl1(a => mkBool(math.even(exInt32(a))))),
-      s"$ns.mod" -> mkPrimImpl(s"$ns.mod", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.mod(exInt32(a))(exInt32(b))))),
       s"$ns.mul" -> mkPrimImpl(s"$ns.mul", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
         impl2((a, b) => mkInt32(math.mul(exInt32(a))(exInt32(b))))),
       s"$ns.negate" -> mkPrimImpl(s"$ns.negate", tMono(tFun(tInt32, tInt32)),
         impl1(a => mkInt32(math.negate(exInt32(a))))),
       s"$ns.odd" -> mkPrimImpl(s"$ns.odd", tMono(tFun(tInt32, tBool)),
         impl1(a => mkBool(math.odd(exInt32(a))))),
-      s"$ns.pred" -> mkPrimImpl(s"$ns.pred", tMono(tFun(tInt32, tInt32)),
-        impl1(a => mkInt32(math.pred(exInt32(a))))),
       s"$ns.range" -> mkPrimImpl(s"$ns.range", tMono(tFun(tInt32, tFun(tInt32, tList(tInt32)))),
         impl2((a, b) => mkList(math.range(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      s"$ns.rem" -> mkPrimImpl(s"$ns.rem", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.rem(exInt32(a))(exInt32(b))))),
       s"$ns.signum" -> mkPrimImpl(s"$ns.signum", tMono(tFun(tInt32, tInt32)),
         impl1(a => mkInt32(math.signum(exInt32(a))))),
       s"$ns.sub" -> mkPrimImpl(s"$ns.sub", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
         impl2((a, b) => mkInt32(math.sub(exInt32(a))(exInt32(b))))),
-      s"$ns.succ" -> mkPrimImpl(s"$ns.succ", tMono(tFun(tInt32, tInt32)),
-        impl1(a => mkInt32(math.succ(exInt32(a))))),
       s"$ns.max" -> mkPrimImpl(s"$ns.max", tMono(tFun(tInt32, tFun(tInt32, tInt32))),
         impl2((a, b) => mkInt32(math.max(exInt32(a))(exInt32(b))))),
       s"$ns.maybeDiv" -> mkPrimImpl(s"$ns.maybeDiv", tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
@@ -963,9 +947,6 @@ object Libraries:
       s"$ns.cat" -> mkPrimImpl(s"$ns.cat", tScheme(Seq("a"),
         tFun(tList(tOpt(a)), tList(a))),
         impl1(xs => mkList(exList(xs).flatMap(exMaybe)))),
-      s"$ns.fromJust" -> mkPrimImpl(s"$ns.fromJust", tScheme(Seq("a"),
-        tFun(tOpt(a), a)),
-        impl1(ma => exMaybe(ma).get)),
       s"$ns.fromMaybe" -> mkPrimImpl(s"$ns.fromMaybe", tScheme(Seq("a"),
         tFun(a, tFun(tOpt(a), a))),
         impl2((d, ma) => exMaybe(ma).getOrElse(d))),
@@ -1067,8 +1048,6 @@ object Libraries:
         impl1(ss => mkString(strings.cat(exList(ss).map(exString))))),
       s"$ns.cat2" -> mkPrimImpl(s"$ns.cat2", tMono(tFun(tString, tFun(tString, tString))),
         impl2((a, b) => mkString(strings.cat2(exString(a))(exString(b))))),
-      s"$ns.charAt" -> mkPrimImpl(s"$ns.charAt", tMono(tFun(tInt32, tFun(tString, tInt32))),
-        impl2((i, s) => mkInt32(strings.charAt(exInt32(i))(exString(s))))),
       s"$ns.fromList" -> mkPrimImpl(s"$ns.fromList", tMono(tFun(tList(tInt32), tString)),
         impl1(cs => mkString(strings.fromList(exList(cs).map(exInt32))))),
       s"$ns.intercalate" -> mkPrimImpl(s"$ns.intercalate", tMono(tFun(tString, tFun(tList(tString), tString))),
@@ -1107,6 +1086,8 @@ object Libraries:
         impl1(a => mkFloat64(literals.bigfloatToFloat64(exBigfloat(a))))),
       s"$ns.bigintToBigfloat" -> mkPrimImpl(s"$ns.bigintToBigfloat", tMono(tFun(tBigint, tBigfloat)),
         impl1(a => mkBigfloat(literals.bigintToBigfloat(exBigint(a))))),
+      s"$ns.bigintToDecimal" -> mkPrimImpl(s"$ns.bigintToDecimal", tMono(tFun(tBigint, tDecimal)),
+        impl1(a => mkDecimal(literals.bigintToDecimal(exBigint(a))))),
       s"$ns.bigintToInt8" -> mkPrimImpl(s"$ns.bigintToInt8", tMono(tFun(tBigint, tInt8)),
         impl1(a => mkInt8(literals.bigintToInt8(exBigint(a))))),
       s"$ns.bigintToInt16" -> mkPrimImpl(s"$ns.bigintToInt16", tMono(tFun(tBigint, tInt16)),
@@ -1127,10 +1108,20 @@ object Libraries:
         impl1(a => mkList(literals.binaryToBytes(exBinary(a)).map(mkInt32)))),
       s"$ns.binaryToString" -> mkPrimImpl(s"$ns.binaryToString", tMono(tFun(tBinary, tString)),
         impl1(a => mkString(literals.binaryToString(exBinary(a))))),
+      s"$ns.decimalToBigint" -> mkPrimImpl(s"$ns.decimalToBigint", tMono(tFun(tDecimal, tBigint)),
+        impl1(a => mkBigint(literals.decimalToBigint(exDecimal(a))))),
+      s"$ns.decimalToFloat32" -> mkPrimImpl(s"$ns.decimalToFloat32", tMono(tFun(tDecimal, tFloat32)),
+        impl1(a => mkFloat32(literals.decimalToFloat32(exDecimal(a))))),
+      s"$ns.decimalToFloat64" -> mkPrimImpl(s"$ns.decimalToFloat64", tMono(tFun(tDecimal, tFloat64)),
+        impl1(a => mkFloat64(literals.decimalToFloat64(exDecimal(a))))),
       s"$ns.float32ToBigfloat" -> mkPrimImpl(s"$ns.float32ToBigfloat", tMono(tFun(tFloat32, tBigfloat)),
         impl1(a => mkBigfloat(literals.float32ToBigfloat(exFloat32(a))))),
+      s"$ns.float32ToDecimal" -> mkPrimImpl(s"$ns.float32ToDecimal", tMono(tFun(tFloat32, tDecimal)),
+        impl1(a => mkDecimal(literals.float32ToDecimal(exFloat32(a))))),
       s"$ns.float64ToBigfloat" -> mkPrimImpl(s"$ns.float64ToBigfloat", tMono(tFun(tFloat64, tBigfloat)),
         impl1(a => mkBigfloat(literals.float64ToBigfloat(exFloat64(a))))),
+      s"$ns.float64ToDecimal" -> mkPrimImpl(s"$ns.float64ToDecimal", tMono(tFun(tFloat64, tDecimal)),
+        impl1(a => mkDecimal(literals.float64ToDecimal(exFloat64(a))))),
       s"$ns.int8ToBigint" -> mkPrimImpl(s"$ns.int8ToBigint", tMono(tFun(tInt8, tBigint)),
         impl1(a => mkBigint(literals.int8ToBigint(exInt8(a))))),
       s"$ns.int16ToBigint" -> mkPrimImpl(s"$ns.int16ToBigint", tMono(tFun(tInt16, tBigint)),
@@ -1146,6 +1137,8 @@ object Libraries:
         impl1(s => mkMaybe(literals.readBigint(exString(s)).map(mkBigint)))),
       s"$ns.readBoolean" -> mkPrimImpl(s"$ns.readBoolean", tMono(tFun(tString, tOpt(tBool))),
         impl1(s => mkMaybe(literals.readBoolean(exString(s)).map(mkBool)))),
+      s"$ns.readDecimal" -> mkPrimImpl(s"$ns.readDecimal", tMono(tFun(tString, tOpt(tDecimal))),
+        impl1(s => mkMaybe(literals.readDecimal(exString(s)).map(mkDecimal)))),
       s"$ns.readFloat32" -> mkPrimImpl(s"$ns.readFloat32", tMono(tFun(tString, tOpt(tFloat32))),
         impl1(s => mkMaybe(literals.readFloat32(exString(s)).map(mkFloat32)))),
       s"$ns.readFloat64" -> mkPrimImpl(s"$ns.readFloat64", tMono(tFun(tString, tOpt(tFloat64))),
@@ -1175,6 +1168,8 @@ object Libraries:
         impl1(a => mkString(literals.showBigint(exBigint(a))))),
       s"$ns.showBoolean" -> mkPrimImpl(s"$ns.showBoolean", tMono(tFun(tBool, tString)),
         impl1(a => mkString(literals.showBoolean(exBool(a))))),
+      s"$ns.showDecimal" -> mkPrimImpl(s"$ns.showDecimal", tMono(tFun(tDecimal, tString)),
+        impl1(a => mkString(literals.showDecimal(exDecimal(a))))),
       s"$ns.showFloat32" -> mkPrimImpl(s"$ns.showFloat32", tMono(tFun(tFloat32, tString)),
         impl1(a => mkString(literals.showFloat32(exFloat32(a))))),
       s"$ns.showFloat64" -> mkPrimImpl(s"$ns.showFloat64", tMono(tFun(tFloat64, tString)),

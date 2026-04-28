@@ -103,6 +103,12 @@
    (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_bigint) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :bigint v)))))))
 
+(defn tc-decimal []
+  (->hydra_graph_term_coder
+   (list :literal (list :decimal nil))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_decimal) g) t))
+   (fn [cx v] (list :right (list :literal (list :decimal (bigdec v)))))))
+
 (defn tc-boolean []
   (->hydra_graph_term_coder
    (list :literal (list :boolean nil))
@@ -328,7 +334,7 @@
                           (or (= c :eq) (and (number? c) (zero? c))) "equalTo"
                           (or (= c :gt) (and (number? c) (pos? c))) "greaterThan"
                           :else (throw (IllegalArgumentException. (str "not a comparison: " c))))]
-       (list :right (list :union (->hydra_core_injection "hydra.util.Comparison"
+       (list :right (list :inject (->hydra_core_injection "hydra.util.Comparison"
                                    (->hydra_core_field variant-name (list :unit)))))))))
 
 ;; Function coders

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a case convention as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a case convention as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -48,8 +48,8 @@
                         "typeName": "hydra.util.CaseConvention"}}}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
                 "parameter": "c"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.util.CaseConvention"}}},
@@ -61,8 +61,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a comparison result as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a comparison result as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -95,8 +95,8 @@
                         "typeName": "hydra.util.Comparison"}}}},
                 "domain": {"variable": "hydra.util.Comparison"},
                 "parameter": "c"}}}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.util.Comparison"}}},

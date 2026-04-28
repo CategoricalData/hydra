@@ -207,7 +207,7 @@ encodedString :: TTerm String -> TTerm Term
 encodedString = encodedLiteral . inject _Literal _Literal_string
 
 encodedUnion :: TTerm Term -> TTerm Term
-encodedUnion = inject _Term _Term_union
+encodedUnion = inject _Term _Term_inject
 
 encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
@@ -412,7 +412,7 @@ unaryFunction f = case (unTTerm $ f $ var "x") of
   TermEither (Prelude.Left _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Left $ Terms.var "x"
   TermEither (Prelude.Right _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Right $ Terms.var "x"
   TermMaybe (Just _) -> primitive _maybes_pure
-  TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
+  TermInject (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
 
 -- | Unsafe phantom type cast. Used during bootstrap when changing Module field types.

@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Geojson.Model as Model
 import qualified Hydra.Iana.Linkrelations as Linkrelations
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | An Asset is an object that contains a URI to data associated with the Item that can be downloaded or streamed. It is allowed to add additional fields.

@@ -9,11 +9,12 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Schema as Schema
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 additionalItemsAny :: Phantoms.TTerm Bool -> Phantoms.TTerm Schema.AdditionalItems
 additionalItemsAny x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.AdditionalItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
@@ -21,7 +22,7 @@ additionalItemsAny x =
 
 additionalItemsSchema :: Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.AdditionalItems
 additionalItemsSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.AdditionalItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schema"),
@@ -29,7 +30,7 @@ additionalItemsSchema x =
 
 arrayRestrictionAdditionalItems :: Phantoms.TTerm Schema.AdditionalItems -> Phantoms.TTerm Schema.ArrayRestriction
 arrayRestrictionAdditionalItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ArrayRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "additionalItems"),
@@ -37,7 +38,7 @@ arrayRestrictionAdditionalItems x =
 
 arrayRestrictionItems :: Phantoms.TTerm Schema.Items -> Phantoms.TTerm Schema.ArrayRestriction
 arrayRestrictionItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ArrayRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "items"),
@@ -45,7 +46,7 @@ arrayRestrictionItems x =
 
 arrayRestrictionMaxItems :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.ArrayRestriction
 arrayRestrictionMaxItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ArrayRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxItems"),
@@ -53,7 +54,7 @@ arrayRestrictionMaxItems x =
 
 arrayRestrictionMinItems :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.ArrayRestriction
 arrayRestrictionMinItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ArrayRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minItems"),
@@ -61,7 +62,7 @@ arrayRestrictionMinItems x =
 
 arrayRestrictionUniqueItems :: Phantoms.TTerm Bool -> Phantoms.TTerm Schema.ArrayRestriction
 arrayRestrictionUniqueItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ArrayRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uniqueItems"),
@@ -177,7 +178,7 @@ documentWithRoot original newVal =
 
 itemsSameItems :: Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.Items
 itemsSameItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Items"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sameItems"),
@@ -185,7 +186,7 @@ itemsSameItems x =
 
 itemsVarItems :: Phantoms.TTerm [Schema.Schema] -> Phantoms.TTerm Schema.Items
 itemsVarItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Items"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "varItems"),
@@ -259,7 +260,7 @@ limitWithValue original newVal =
 
 multipleRestrictionAllOf :: Phantoms.TTerm [Schema.Schema] -> Phantoms.TTerm Schema.MultipleRestriction
 multipleRestrictionAllOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.MultipleRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "allOf"),
@@ -267,7 +268,7 @@ multipleRestrictionAllOf x =
 
 multipleRestrictionAnyOf :: Phantoms.TTerm [Schema.Schema] -> Phantoms.TTerm Schema.MultipleRestriction
 multipleRestrictionAnyOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.MultipleRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyOf"),
@@ -275,7 +276,7 @@ multipleRestrictionAnyOf x =
 
 multipleRestrictionEnum :: Phantoms.TTerm [Model.Value] -> Phantoms.TTerm Schema.MultipleRestriction
 multipleRestrictionEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.MultipleRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -283,7 +284,7 @@ multipleRestrictionEnum x =
 
 multipleRestrictionNot :: Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.MultipleRestriction
 multipleRestrictionNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.MultipleRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -291,7 +292,7 @@ multipleRestrictionNot x =
 
 multipleRestrictionOneOf :: Phantoms.TTerm [Schema.Schema] -> Phantoms.TTerm Schema.MultipleRestriction
 multipleRestrictionOneOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.MultipleRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "oneOf"),
@@ -299,7 +300,7 @@ multipleRestrictionOneOf x =
 
 numericRestrictionMaximum :: Phantoms.TTerm Schema.Limit -> Phantoms.TTerm Schema.NumericRestriction
 numericRestrictionMaximum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.NumericRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maximum"),
@@ -307,7 +308,7 @@ numericRestrictionMaximum x =
 
 numericRestrictionMinimum :: Phantoms.TTerm Schema.Limit -> Phantoms.TTerm Schema.NumericRestriction
 numericRestrictionMinimum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.NumericRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minimum"),
@@ -315,7 +316,7 @@ numericRestrictionMinimum x =
 
 numericRestrictionMultipleOf :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.NumericRestriction
 numericRestrictionMultipleOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.NumericRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multipleOf"),
@@ -323,7 +324,7 @@ numericRestrictionMultipleOf x =
 
 objectRestrictionAdditionalProperties :: Phantoms.TTerm Schema.AdditionalItems -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionAdditionalProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "additionalProperties"),
@@ -331,7 +332,7 @@ objectRestrictionAdditionalProperties x =
 
 objectRestrictionDependencies :: Phantoms.TTerm (M.Map Schema.Keyword Schema.SchemaOrArray) -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionDependencies x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dependencies"),
@@ -339,7 +340,7 @@ objectRestrictionDependencies x =
 
 objectRestrictionMaxProperties :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionMaxProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxProperties"),
@@ -347,7 +348,7 @@ objectRestrictionMaxProperties x =
 
 objectRestrictionMinProperties :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionMinProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minProperties"),
@@ -355,7 +356,7 @@ objectRestrictionMinProperties x =
 
 objectRestrictionPatternProperties :: Phantoms.TTerm (M.Map Schema.RegularExpression Schema.Schema) -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionPatternProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "patternProperties"),
@@ -363,7 +364,7 @@ objectRestrictionPatternProperties x =
 
 objectRestrictionProperties :: Phantoms.TTerm (M.Map Schema.Keyword Schema.Schema) -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "properties"),
@@ -371,7 +372,7 @@ objectRestrictionProperties x =
 
 objectRestrictionRequired :: Phantoms.TTerm [Schema.Keyword] -> Phantoms.TTerm Schema.ObjectRestriction
 objectRestrictionRequired x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.ObjectRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "required"),
@@ -385,7 +386,7 @@ regularExpression x =
 
 restrictionArray :: Phantoms.TTerm Schema.ArrayRestriction -> Phantoms.TTerm Schema.Restriction
 restrictionArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -393,7 +394,7 @@ restrictionArray x =
 
 restrictionDescription :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Restriction
 restrictionDescription x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "description"),
@@ -401,7 +402,7 @@ restrictionDescription x =
 
 restrictionMultiple :: Phantoms.TTerm Schema.MultipleRestriction -> Phantoms.TTerm Schema.Restriction
 restrictionMultiple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiple"),
@@ -409,7 +410,7 @@ restrictionMultiple x =
 
 restrictionNumber :: Phantoms.TTerm Schema.NumericRestriction -> Phantoms.TTerm Schema.Restriction
 restrictionNumber x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
@@ -417,7 +418,7 @@ restrictionNumber x =
 
 restrictionObject :: Phantoms.TTerm Schema.ObjectRestriction -> Phantoms.TTerm Schema.Restriction
 restrictionObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -425,7 +426,7 @@ restrictionObject x =
 
 restrictionReference :: Phantoms.TTerm Schema.SchemaReference -> Phantoms.TTerm Schema.Restriction
 restrictionReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
@@ -433,7 +434,7 @@ restrictionReference x =
 
 restrictionString :: Phantoms.TTerm Schema.StringRestriction -> Phantoms.TTerm Schema.Restriction
 restrictionString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -441,7 +442,7 @@ restrictionString x =
 
 restrictionTitle :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Restriction
 restrictionTitle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "title"),
@@ -449,7 +450,7 @@ restrictionTitle x =
 
 restrictionType :: Phantoms.TTerm Schema.Type -> Phantoms.TTerm Schema.Restriction
 restrictionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Restriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -463,7 +464,7 @@ schema x =
 
 schemaOrArrayArray :: Phantoms.TTerm [Schema.Keyword] -> Phantoms.TTerm Schema.SchemaOrArray
 schemaOrArrayArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.SchemaOrArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -471,7 +472,7 @@ schemaOrArrayArray x =
 
 schemaOrArraySchema :: Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.SchemaOrArray
 schemaOrArraySchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.SchemaOrArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schema"),
@@ -485,7 +486,7 @@ schemaReference x =
 
 stringRestrictionMaxLength :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.StringRestriction
 stringRestrictionMaxLength x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.StringRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxLength"),
@@ -493,7 +494,7 @@ stringRestrictionMaxLength x =
 
 stringRestrictionMinLength :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.StringRestriction
 stringRestrictionMinLength x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.StringRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minLength"),
@@ -501,7 +502,7 @@ stringRestrictionMinLength x =
 
 stringRestrictionPattern :: Phantoms.TTerm Schema.RegularExpression -> Phantoms.TTerm Schema.StringRestriction
 stringRestrictionPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.StringRestriction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
@@ -509,7 +510,7 @@ stringRestrictionPattern x =
 
 typeMultiple :: Phantoms.TTerm [Schema.TypeName] -> Phantoms.TTerm Schema.Type
 typeMultiple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiple"),
@@ -517,7 +518,7 @@ typeMultiple x =
 
 typeNameArray :: Phantoms.TTerm Schema.TypeName
 typeNameArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -525,7 +526,7 @@ typeNameArray =
 
 typeNameBoolean :: Phantoms.TTerm Schema.TypeName
 typeNameBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -533,7 +534,7 @@ typeNameBoolean =
 
 typeNameInteger :: Phantoms.TTerm Schema.TypeName
 typeNameInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -541,7 +542,7 @@ typeNameInteger =
 
 typeNameNull :: Phantoms.TTerm Schema.TypeName
 typeNameNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -549,7 +550,7 @@ typeNameNull =
 
 typeNameNumber :: Phantoms.TTerm Schema.TypeName
 typeNameNumber =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
@@ -557,7 +558,7 @@ typeNameNumber =
 
 typeNameObject :: Phantoms.TTerm Schema.TypeName
 typeNameObject =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -565,7 +566,7 @@ typeNameObject =
 
 typeNameString :: Phantoms.TTerm Schema.TypeName
 typeNameString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.TypeName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -573,7 +574,7 @@ typeNameString =
 
 typeSingle :: Phantoms.TTerm Schema.TypeName -> Phantoms.TTerm Schema.Type
 typeSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.schema.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),

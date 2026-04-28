@@ -20,8 +20,12 @@ hydraCoreGraph :: Graph
 hydraCoreGraph = elementsToGraph bootstrapGraph M.empty (moduleBindings module_)
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [] [ns] $ -- Note: hydra.core uniquely takes itself as a type-level dependency
-    Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [],
+            moduleTypeDependencies = [ns],
+            moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}
   where
     definitions = [
       annotatedTerm,
@@ -111,8 +115,8 @@ binding = define "Binding" $
     "term">:
       doc "The term to which the variable is bound"
       term,
-    "type">:
-      doc "The optional type of the bound term" $
+    "typeScheme">:
+      doc "The optional type scheme of the bound term" $
       T.maybe typeScheme]
 
 caseStatement :: Binding
@@ -319,6 +323,8 @@ literal = define "Literal" $
       doc "A binary literal" T.binary,
     "boolean">:
       doc "A boolean literal" T.boolean,
+    "decimal">:
+      doc "An arbitrary-precision decimal literal" T.decimal,
     "float">:
       doc "A floating-point literal"
       floatValue,
@@ -336,6 +342,8 @@ literalType = define "LiteralType" $
        doc "The type of a binary (byte string) value" T.unit,
     "boolean">:
       doc "The type of a boolean (true/false) value" T.unit,
+    "decimal">:
+      doc "The type of an arbitrary-precision decimal value" T.unit,
     "float">:
       doc "The type of a floating-point value"
       floatType,
@@ -399,6 +407,9 @@ term = define "Term" $
     "either">:
       doc "An either value" $
       T.either_ term term,
+    "inject">:
+      doc "An injection; an instance of a union type"
+      injection,
     "lambda">:
       doc "A function abstraction (lambda)"
       lambda,
@@ -435,9 +446,6 @@ term = define "Term" $
     "typeLambda">:
       doc "A System F type abstraction term"
       typeLambda,
-    "union">:
-      doc "An injection; an instance of a union type"
-      injection,
     "unit">:
       doc "A unit value; a term with no value" $
       T.unit,
@@ -536,7 +544,7 @@ typeScheme = define "TypeScheme" $
     "variables">:
       doc "The free type variables" $
       T.list name,
-    "type">:
+    "body">:
       doc "The type expression"
       type_,
     "constraints">:

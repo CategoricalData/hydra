@@ -70,10 +70,12 @@ ns :: Namespace
 ns = Namespace "hydra.encoding"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns]
-    kernelTypesNamespaces $
-    Just "Functions for generating term encoders from type modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
       toDefinition encodeBinding,
@@ -423,19 +425,25 @@ encodeBindingName :: TTermDefinition (Name -> Name)
 encodeBindingName = define "encodeBindingName" $
   doc "Generate a binding name for an encoder function from a type name" $
   "n" ~>
-    -- Check if name has a namespace (contains ".")
-    Logic.ifElse (Logic.not (Lists.null
-      (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "n"))))))
-      -- Qualified type: e.g., "hydra.core.Name" -> "hydra.encode.core.name"
-      (Core.name (
-        Strings.intercalate (string ".") (
-          Lists.concat2
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  -- Extract namespace parts (all but the last); if the name has no namespace,
+  -- fall back to the bare decapitalized local name.
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        (var "localResult")  -- unreachable: nsParts empty means no namespace
+        ("nsUc" ~>
+          "tail" <~ Pairs.second (var "nsUc") $
+          Core.name (Strings.intercalate (string ".") (Lists.concat2
             (list [string "hydra", string "encode"])
             (Lists.concat2
-              (Lists.tail (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))))
-              (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- Local type: just decapitalize
-      (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+              (var "tail")
+              (list [var "localPart"])))))
+        (Lists.uncons $ var "nsParts"))
+    (Lists.maybeInit $ var "parts")
 
 -- | Generate the encoder term for a field value
 -- Creates a lambda that encodes the field value and wraps in an encoded union/injection
@@ -447,7 +455,7 @@ encodeFieldValue = define "encodeFieldValue" $
     -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
     DC.lambda "y" $
       -- Build Term.union containing an encoded Injection with the encoded value
-      DC.injection _Term (DC.field _Term_union
+      DC.injection _Term (DC.field _Term_inject
         (encodeInjection @@ var "typeName" @@ var "fieldName"
           @@ ((encodeType @@ var "fieldType") @@@ DC.var "y")))
 
@@ -476,6 +484,8 @@ encodeLiteralType = define "encodeLiteralType" $
       DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_binary (DC.var "x")),
     _LiteralType_boolean>>: constant $
       DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_boolean (DC.var "x")),
+    _LiteralType_decimal>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_decimal (DC.var "x")),
     _LiteralType_string>>: constant $
       DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_string (DC.var "x")),
     -- For integer types, wrap in Term.literal.integer with the specific integer variant
@@ -502,7 +512,7 @@ encodeModule = define "encodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -514,20 +524,20 @@ encodeModule = define "encodeModule" $
         -- The encoder module depends on encoder modules for both the type and term dependencies
         -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
         right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "Term encoders for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
-            (var "encodedBindings"))
           -- Transform both type and term dependency namespaces to their encoder namespaces
           (Lists.nub (Lists.concat2
             (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTypeDependencies (var "mod")))
             (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTermDependencies (var "mod")))))
           -- The encoder module depends on the original type module
           (list [Packaging.moduleNamespace (var "mod")])
-          (just (Strings.cat $ list [
-            string "Term encoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingTypeScheme $ var "b")))
+            (var "encodedBindings")))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
 encodeName :: TTermDefinition (Name -> Term)
@@ -540,12 +550,18 @@ encodeName = define "encodeName" $
 encodeNamespace :: TTermDefinition (Namespace -> Namespace)
 encodeNamespace = define "encodeNamespace" $
   doc "Generate an encoder module namespace from a source module namespace" $
-  "ns" ~> (
-    Packaging.namespace (
-      Strings.cat $ list [
-        string "hydra.encode.",
-        Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]))
+  "ns" ~>
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
+  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
+  Maybes.maybe
+    (var "fallback")
+    ("uc" ~>
+      Packaging.namespace (
+        Strings.cat $ list [
+          string "hydra.encode.",
+          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+    (Lists.uncons $ var "parts")
 
 -- | Generate an encoder for a record type
 -- For records, project each field, encode it, and build an encoded record
@@ -738,7 +754,7 @@ encodeIntegerValue :: TTermDefinition (IntegerType -> Term -> Term)
 encodeIntegerValue = define "encodeIntegerValue" $
   doc "Encode an integer value based on its integer type" $
   "intType" ~> "valTerm" ~>
-    Core.termUnion $ Core.injection
+    Core.termInject $ Core.injection
       (Core.nameLift _IntegerValue)
       (Core.field (intTypeToFieldName @@ var "intType") (var "valTerm"))
   where
@@ -760,7 +776,7 @@ encodeFloatValue :: TTermDefinition (FloatType -> Term -> Term)
 encodeFloatValue = define "encodeFloatValue" $
   doc "Encode a float value based on its float type" $
   "floatType" ~> "valTerm" ~>
-    Core.termUnion $ Core.injection
+    Core.termInject $ Core.injection
       (Core.nameLift _FloatValue)
       (Core.field (floatTypeToFieldName @@ var "floatType") (var "valTerm"))
   where

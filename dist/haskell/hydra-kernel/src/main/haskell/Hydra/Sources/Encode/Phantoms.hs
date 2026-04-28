@@ -1,17 +1,20 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source module for hydra.encode.phantoms
 
 module Hydra.Sources.Encode.Phantoms where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.phantoms"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.phantoms"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core"],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.phantoms"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.phantoms.tBinding"),
@@ -21,7 +24,7 @@ module_ =
             Core.lambdaBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+              Core.lambdaBody = (Core.TermInject (Core.Injection {
                 Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                 Core.injectionField = Core.Field {
                   Core.fieldName = (Core.Name "record"),
@@ -72,10 +75,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.phantoms.TBinding"),
                                       Core.projectionField = (Core.Name "term")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
@@ -93,7 +96,7 @@ module_ =
             Core.lambdaBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+              Core.lambdaBody = (Core.TermInject (Core.Injection {
                 Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                 Core.injectionField = Core.Field {
                   Core.fieldName = (Core.Name "wrap"),
@@ -112,10 +115,10 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
@@ -133,7 +136,7 @@ module_ =
             Core.lambdaBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+              Core.lambdaBody = (Core.TermInject (Core.Injection {
                 Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                 Core.injectionField = Core.Field {
                   Core.fieldName = (Core.Name "record"),
@@ -184,10 +187,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.phantoms.TTermDefinition"),
                                       Core.projectionField = (Core.Name "term")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
@@ -196,9 +199,4 @@ module_ =
                   Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTermDefinition")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core"],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.phantoms"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.phantoms")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

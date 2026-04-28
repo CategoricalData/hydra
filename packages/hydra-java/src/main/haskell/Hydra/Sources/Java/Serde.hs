@@ -92,10 +92,12 @@ ns :: Namespace
 ns = Namespace "hydra.java.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Constants.ns, Serialization.ns]
-    (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Java serializer: converts Java AST to concrete syntax"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Constants.ns, Serialization.ns],
+            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Java serializer: converts Java AST to concrete syntax"}
   where
     definitions = [
       toDefinition escapeJavaChar,
@@ -312,12 +314,12 @@ hexDigit = def "hexDigit" $
 padHex4 :: TTermDefinition (Int -> String)
 padHex4 = def "padHex4" $
   lambda "n" $
-    "d3" <~ Math.div (var "n") (int32 4096) $     -- n / 16^3
-    "r3" <~ Math.mod (var "n") (int32 4096) $
-    "d2" <~ Math.div (var "r3") (int32 256) $      -- remainder / 16^2
-    "r2" <~ Math.mod (var "r3") (int32 256) $
-    "d1" <~ Math.div (var "r2") (int32 16) $       -- remainder / 16
-    "d0" <~ Math.mod (var "r2") (int32 16) $        -- remainder
+    "d3" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "n") (int32 4096)) $     -- n / 16^3
+    "r3" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "n") (int32 4096)) $
+    "d2" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $      -- remainder / 16^2
+    "r2" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
+    "d1" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $       -- remainder / 16
+    "d0" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r2") (int32 16)) $        -- remainder
     Strings.fromList (list [hexDigit @@ var "d3", hexDigit @@ var "d2",
                             hexDigit @@ var "d1", hexDigit @@ var "d0"])
 
@@ -329,8 +331,8 @@ javaUnicodeEscape = def "javaUnicodeEscape" $
     Logic.ifElse (Equality.gt (var "n") (int32 65535))
       -- Supplementary plane: UTF-16 surrogate pair
       ("n'" <~ Math.sub (var "n") (int32 65536) $
-       "hi" <~ Math.add (int32 55296) (Math.div (var "n'") (int32 1024)) $  -- 0xD800
-       "lo" <~ Math.add (int32 56320) (Math.mod (var "n'") (int32 1024)) $  -- 0xDC00
+       "hi" <~ Math.add (int32 55296) (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "n'") (int32 1024))) $  -- 0xD800
+       "lo" <~ Math.add (int32 56320) (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "n'") (int32 1024))) $  -- 0xDC00
        Strings.cat2 (Strings.cat2 (string "\\u") (padHex4 @@ var "hi"))
                      (Strings.cat2 (string "\\u") (padHex4 @@ var "lo")))
       -- Basic multilingual plane
@@ -347,13 +349,18 @@ sanitizeJavaComment = def "sanitizeJavaComment" $
 
 singleLineComment :: TTermDefinition (String -> Expr)
 singleLineComment = def "singleLineComment" $
-  doc "Create a single-line Java comment" $
-  lambda "c" $
-    Serialization.cst @@ (Strings.cat2 (string "// ") (sanitizeJavaComment @@ var "c"))
+  doc ("Create a single-line Java comment. Empty text emits `//` (no"
+    <> " trailing space) so blank line comments don't carry trailing whitespace.") $
+  lambda "c" $ lets [
+    "sanitized">: sanitizeJavaComment @@ var "c"] $
+    Serialization.cst @@ Logic.ifElse (Equality.equal (var "sanitized") (string ""))
+      (string "//")
+      (Strings.cat2 (string "// ") (var "sanitized"))
 
 withComments :: TTermDefinition (Maybe String -> Expr -> Expr)
 withComments = def "withComments" $
-  doc "Wrap an expression with optional Javadoc comments" $
+  doc ("Wrap an expression with optional Javadoc comments. Blank lines"
+    <> " inside the doc body emit ` *` (no trailing space) instead of ` * `.") $
   lambda "mc" $ lambda "expr" $
     Maybes.maybe
       (var "expr")
@@ -361,7 +368,9 @@ withComments = def "withComments" $
         Serialization.cst @@ (Strings.cat2 (string "/**\n")
           (Strings.cat2
             (Strings.intercalate (string "\n")
-              (Lists.map (lambda "l" $ Strings.cat2 (string " * ") (var "l"))
+              (Lists.map (lambda "l" $ Logic.ifElse (Equality.equal (var "l") (string ""))
+                  (string " *")
+                  (Strings.cat2 (string " * ") (var "l")))
                 (Strings.lines (sanitizeJavaComment @@ var "c"))))
             (string "\n */"))),
         var "expr"])
@@ -1763,9 +1772,12 @@ writeArrayInitializer :: TTermDefinition (Java.ArrayInitializer -> Expr)
 writeArrayInitializer = def "writeArrayInitializer" $
   lambda "ai" $ lets [
     "groups">: unwrap Java._ArrayInitializer @@ var "ai"] $
-    Logic.ifElse (Equality.equal (Lists.length (var "groups")) (int32 1))
-      (Serialization.noSep @@ list [
-        Serialization.cst @@ string "{",
-        Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeVariableInitializer (Lists.head (var "groups")),
-        Serialization.cst @@ string "}"])
-      (Serialization.cst @@ string "{}")
+    Maybes.fromMaybe (Serialization.cst @@ string "{}") (Maybes.map
+      (lambda "firstGroup" $
+        Logic.ifElse (Equality.equal (Lists.length (var "groups")) (int32 1))
+          (Serialization.noSep @@ list [
+            Serialization.cst @@ string "{",
+            Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map writeVariableInitializer (var "firstGroup"),
+            Serialization.cst @@ string "}"])
+          (Serialization.cst @@ string "{}"))
+      (Lists.maybeHead (var "groups")))

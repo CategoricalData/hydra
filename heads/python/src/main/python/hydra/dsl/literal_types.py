@@ -3,6 +3,7 @@
 from hydra.core import (
     FloatType,
     LiteralType,
+    LiteralTypeDecimal,
     LiteralTypeFloat,
     LiteralTypeInteger,
     IntegerType,
@@ -20,6 +21,11 @@ def binary() -> LiteralType:
 def boolean() -> LiteralType:
     """Construct a boolean literal type."""
     return LiteralTypeBoolean()
+
+
+def decimal() -> LiteralType:
+    """Construct a decimal literal type (arbitrary-precision exact decimal)."""
+    return LiteralTypeDecimal()
 
 
 def string() -> LiteralType:

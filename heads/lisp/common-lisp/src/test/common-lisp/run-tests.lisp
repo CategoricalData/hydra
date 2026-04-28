@@ -196,12 +196,14 @@
 (dolist (f '("json/coder.lisp"
              "json/parser.lisp"
              "json/roundtrip.lisp"
-             "json/writer.lisp"))
+             "json/writer.lisp"
+             "json/yaml.lisp"))
   (load-test-file f))
 
 ;; Remaining test categories
 (load-test-file "dependencies.lisp")
 (load-test-file "differentiation.lisp")
+(load-test-file "generation.lisp")
 (load-test-file "reduction.lisp")
 (load-test-file "rewriting.lisp")
 (load-test-file "serialization.lisp")

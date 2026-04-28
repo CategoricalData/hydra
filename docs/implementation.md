@@ -300,12 +300,15 @@ The DSL system provides multiple levels of abstraction for different use cases.
 ### DSL module locations
 
 ```
-heads/haskell/src/main/haskell/Hydra/Dsl/         # Hand-written base DSLs
-heads/haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrappers
-heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
-heads/haskell/src/main/haskell/Hydra/                    # Extension generation and sources
-dist/haskell/hydra-ext/src/main/haskell/Hydra/          # Generated extension modules
+heads/haskell/src/main/haskell/Hydra/Dsl/                # Hand-written base DSLs
+heads/haskell/src/main/haskell/Hydra/Dsl/Meta/           # Hand-written meta DSL wrappers
+heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/       # Library DSLs (13 files)
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/    # Generated DSLs (from hydra.dsls)
+heads/haskell/src/main/haskell/Hydra/                    # Generation drivers and sources
+dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/         # Generated per-package coder modules
+                                                          #   (hydra-haskell, hydra-java, hydra-python,
+                                                          #    hydra-scala, hydra-lisp, hydra-pg, hydra-rdf,
+                                                          #    hydra-ext for the long-tail, hydra-coq, ...)
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
@@ -843,24 +846,45 @@ to write Hydra code in their preferred language and compile it to any other supp
 
 ### Coder locations
 
+In 0.15, generated Haskell coder output is split across per-package
+directories under `dist/haskell/`. Each package corresponds to a coder
+family or domain.
+
 ```
-dist/haskell/hydra-ext/src/main/haskell/Hydra/
-├── Java/           # Full OOP with generics
-├── Python/         # Dynamic with dataclasses
-├── Cpp/            # Systems language with templates
-├── Csharp/         # Modern .NET
-├── GraphQL/        # Schema definition language
-├── Avro/           # Data serialization
-├── Protobuf/       # Protocol Buffers
-├── Pegasus/        # LinkedIn's data format
-├── JsonSchema/     # JSON schemas
-├── Graphviz/       # Visualization
-├── Pg/             # PostgreSQL with GraphSON
-├── Rdf/            # RDF and SHACL
-└── Tinkerpop/      # Graph databases
+dist/haskell/hydra-haskell/src/main/haskell/Hydra/Haskell/    # Haskell coder
+dist/haskell/hydra-java/src/main/haskell/Hydra/Java/          # Java coder
+dist/haskell/hydra-python/src/main/haskell/Hydra/Python/      # Python coder
+dist/haskell/hydra-scala/src/main/haskell/Hydra/Scala/        # Scala 3 coder
+dist/haskell/hydra-lisp/src/main/haskell/Hydra/Lisp/          # Lisp coder (4 dialects)
+dist/haskell/hydra-pg/src/main/haskell/Hydra/                 # Property graphs
+│   ├── Pg/                                                   # PG model + GraphSON
+│   ├── Cypher/                                               # Cypher
+│   ├── Graphviz/                                             # Visualization
+│   └── Tinkerpop/                                            # Gremlin / TinkerPop
+dist/haskell/hydra-rdf/src/main/haskell/Hydra/                # RDF family
+│   ├── Rdf/                                                  # RDF model + N-Triples
+│   ├── Shacl/                                                # SHACL
+│   ├── Owl/                                                  # OWL
+│   ├── Shex/                                                 # ShEx
+│   └── Xml/                                                  # XML schema
+dist/haskell/hydra-ext/src/main/haskell/Hydra/                # Long-tail coders
+│   ├── Avro/                                                 # Avro
+│   ├── Protobuf/                                             # Protocol Buffers
+│   ├── Graphql/                                              # GraphQL
+│   ├── Pegasus/                                              # LinkedIn PDL
+│   ├── Json/Schema/                                          # JSON Schema
+│   ├── Cpp/, Csharp/, Go/, Rust/, TypeScript/, Yaml/, ...    # Other languages
+│   └── Atlas/, Azure/, Datalog/, Delta/, Geojson/, Iana/, Kusto/, Osv/, Parquet/, Sql/, Stac/, Workflow/
+dist/haskell/hydra-coq/src/main/haskell/Hydra/Coq/            # Coq coder
+dist/haskell/hydra-javascript/src/main/haskell/Hydra/JavaScript/  # JavaScript (in progress)
+dist/haskell/hydra-wasm/src/main/haskell/Hydra/Wasm/          # WebAssembly (in progress)
 ```
 
-**Total: 14+ language/format targets**
+The `hydra-ext` package collects long-tail coders that don't yet have
+their own dedicated package. Domain-specific groups (`hydra-pg`,
+`hydra-rdf`) and language targets that bootstrap (`hydra-java`,
+`hydra-python`, `hydra-scala`, `hydra-lisp`) are split out so each
+maps cleanly to its own published artifact.
 
 ### Common coder structure
 
@@ -1061,12 +1085,12 @@ Key features:
 
 Recent fix for Issue #206:
 ```haskell
--- Python/Coder.hs (TermUnion case, now in DSL form)
-_Term_union>>: "inj" ~>
+-- Python/Coder.hs (Term inject case, in DSL form)
+_Term_inject>>: "inj" ~>
   "tname" <~ Core.injectionTypeName (var "inj") $
   "field" <~ Core.injectionField (var "inj") $
-  "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-  Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+  "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+  Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
     (projectFromExpression (pyNameToPyExpression (encodeNameQualified @@ var "env" @@ var "tname"))
       (encodeEnumValue @@ var "env" @@ Core.fieldName (var "field")))
     -- Omit argument for unit-valued variants (resolves #206)
@@ -1181,6 +1205,23 @@ ensures the Haskell compiler picks up the newly generated source files.
 For detailed context on encoder/decoder modules, see
 [Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
 
+### Incremental inference
+
+`inferModulesGiven` (in `Hydra.Codegen`) takes a universe and a target set
+and re-infers only the relevant subset. Bindings in the target modules or
+in the transitive term-dependency closure that lack a pre-attached
+`TypeScheme` are fed to `inferGraphTypes`; clean non-target bindings are
+left untouched, and their cached schemes are consulted during inference
+via `graphBoundTypes`. Equivalent to `inferModules` when nothing in the
+universe carries a scheme, which is today's default path.
+
+A content-hash cache (`Hydra.Digest`) sits on top: `writeModulesJson`
+computes SHA-256 hashes of kernel DSL source files and short-circuits
+inference and writes entirely if every hash matches the stored digest and
+every target JSON file exists. Digest files are checked in at
+`dist/json/<pkg>/src/<main|test>/digest.json` and
+`dist/json/digest.main.json`. See [issue #247](https://github.com/CategoricalData/hydra/issues/247).
+
 ### The bootstrap challenge
 
 ```
@@ -1249,8 +1290,9 @@ stack build
 #### Step 5: Regenerate
 
 ```bash
-stack run hydra:exe:hydra-ext-debug
-# Cleanly generates all files including new Either support
+bin/sync-haskell.sh
+# Regenerates DSL → JSON → Haskell (Phase 1 of the sync pipeline).
+# Replaces the retired hydra-ext-debug exec.
 ```
 
 #### Step 6: Final Build
@@ -1288,10 +1330,14 @@ dist/haskell/hydra-kernel/src/main/haskell/   # Generated kernel code
 │   ├── Checking.hs         # Generated type checking
 │   └── ...                 # All kernel modules
 
-dist/haskell/hydra-ext/src/main/haskell/Hydra/ # Generated ext-coder code
-├── Java/Coder.hs           # Generated Java coder
-├── Python/Coder.hs         # Generated Python coder
-└── ...                     # All other ext coders
+dist/haskell/hydra-haskell/src/main/haskell/Hydra/Haskell/Coder.hs   # Haskell coder
+dist/haskell/hydra-java/src/main/haskell/Hydra/Java/Coder.hs         # Java coder
+dist/haskell/hydra-python/src/main/haskell/Hydra/Python/Coder.hs     # Python coder
+dist/haskell/hydra-scala/src/main/haskell/Hydra/Scala/Coder.hs       # Scala coder
+dist/haskell/hydra-lisp/src/main/haskell/Hydra/Lisp/Coder.hs         # Lisp coder (4 dialects)
+dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/                     # Property graphs
+dist/haskell/hydra-rdf/src/main/haskell/Hydra/Rdf/                   # RDF / SHACL
+dist/haskell/hydra-ext/src/main/haskell/Hydra/                       # Long-tail (Avro, Protobuf, GraphQL, ...)
 ```
 
 ---
@@ -1372,9 +1418,16 @@ Per-language DSL sources live in `packages/hydra-<lang>/src/main/haskell/Hydra/S
 - [`packages/hydra-python/src/main/haskell/Hydra/Sources/Python/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python/src/main/haskell/Hydra/Sources/Python)
 - [`packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala)
 - [`packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp)
-- [`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources) — Avro, Cpp, Csharp, Go, GraphQL, Pegasus, Protobuf, Rust, TypeScript, Yaml, ...
+- [`packages/hydra-pg/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-pg/src/main/haskell/Hydra/Sources) — property graphs (Pg, Cypher, Tinkerpop, Graphviz)
+- [`packages/hydra-rdf/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-rdf/src/main/haskell/Hydra/Sources) — RDF, SHACL, OWL, ShEx, XML schema
+- [`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources) — long-tail: Avro, Cpp, Csharp, Datalog, Geojson, Go, GraphQL, JsonSchema, Pegasus, Protobuf, Rust, TypeScript, Yaml, ...
+- [`packages/hydra-coq/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-coq/src/main/haskell/Hydra/Sources) — Coq
 
-Generated coder output lands under [`dist/haskell/hydra-ext/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra).
+Generated coder output lands under `dist/haskell/<pkg>/` for each source package.
+The long-tail [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)
+tree is frozen (`targetLanguages: []` in
+[`packages/hydra-ext/package.json`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/package.json))
+and shipped as-is rather than regenerated by the sync matrix.
 
 ### Generated code
 
@@ -1416,40 +1469,85 @@ need to rerun a single phase.
 For how these fit into the release workflow,
 see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Release-process).
 
-### Top-level (`bin/`)
+The sync system is organized in three layers under per-package dist trees
+(`dist/<lang>/<pkg>/src/main/<lang>/...`):
+
+- **Layer 1 (transforms):** per-language `transform-json-to-<lang>.sh` scripts in `heads/haskell/bin/`
+  convert the JSON universe into source files for one target.
+- **Layer 2 (assemblers):** per-language `heads/<lang>/bin/assemble-all.sh` scripts produce complete
+  per-package distributions for one target in batch mode (one Haskell universe load per target).
+- **Layer 2.5 (testers):** per-language `heads/<lang>/bin/test-*.sh` scripts compile and test the
+  assembled distributions.
+- **Layer 3 (orchestrators):** top-level `bin/sync*.sh` scripts compose the above across hosts and targets.
+
+Each layer caches its work via per-package digest files; warm-cache runs short-circuit in seconds.
+See [Code generation](recipes/code-generation.md) for the full workflow.
+
+### Cache layers (warm-cache short-circuits)
+
+Warm `bin/sync.sh` runs complete in a few seconds when no inputs have changed.
+The short-circuits, from coarsest to finest:
+
+| Layer | Gate | Cache location | Skips when … |
+|-------|------|----------------|-------------|
+| Top-level Phase 1 skip | `bin/lib/check-phase1-fresh.py` | `heads/haskell/.stack-work/phase1-input-cache.txt` | DSL sources + `heads/haskell/src/**` + `heads/haskell/package.yaml` + `heads/haskell/stack.yaml` + `sync-haskell.sh` content-hash unchanged since last green sync |
+| Step 3 (verify) | `sync-haskell.sh` coarse skip | `heads/haskell/.stack-work/verify-json-kernel-cache.txt` | `dist/json/hydra-kernel/**.json` + verify-json-kernel source content-hash unchanged |
+| Step 3 (verify, per-module) | `verify-json-kernel` exec | `heads/haskell/.stack-work/verify-json-kernel-per-module-cache.json` | Each module's JSON file content-hash matches its last green-verify record |
+| Step 4 (generate Haskell) | `sync-haskell.sh` coarse skip | `heads/haskell/.stack-work/bootstrap-from-json-cache.txt` | `dist/json/**.json` + bootstrap-from-json source content-hash unchanged |
+| Step 6 (stack test) | `sync-haskell.sh` coarse skip | `heads/haskell/.stack-work/haskell-test-cache.txt` | Generated kernel + `heads/haskell/src/{main,test}/**.hs` + package.yaml + stack.yaml content-hash unchanged |
+| Layer 2/2.5 per-package | `digest-check` | `dist/<lang>/<pkg>/digest.json` | Per-package input digest matches recorded digest |
+| Layer 2.5 per-target tests | `bin/lib/test-cache.sh` | `dist/<lang>/test-cache.json` | Every source + test helper + runner content-hash unchanged since last green run |
+
+All caches are content-hash based (not mtime). Editing a file with no byte-level
+change does not invalidate any cache; changing a byte by any amount invalidates.
+Caches stamp only after a fully-green run; a failed run does not poison the
+cache.
+
+The `hydra-ext` tree has `targetLanguages: []` and is shipped as-is (not
+regenerated by the sync matrix); its presence under `dist/haskell/hydra-ext/`
+is tracked but never touched by a fresh sync.
+
+### Top-level orchestrators (`bin/`)
 
 | Script | Purpose |
 |--------|---------|
-| `sync-all.sh` | **Full sync.** Run all sync scripts in order (Haskell -> Ext -> Java -> Python). Supports `--quick`. |
-| `verify-release.sh` | Cross-implementation pre-release verification |
-| `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java` |
+| `sync-all.sh` | **Full sync.** Run the complete matrix (Phase 1 JSON build + Phase 2 per-target assemble + Phase 3 test). Supports `--no-tests`. |
+| `sync.sh` | **Scoped sync.** Run a chosen host/target subset via `--hosts <list> --targets <list>`. |
+| `sync-default.sh` | Shortcut for the haskell/java/python bootstrapping triad. |
+| `sync-packages.sh` | **Per-package sync.** Bring one or more `packages/<pkg>/` trees into sync with their `dist/` outputs across all targets. Symmetric to `sync.sh` but scoped by package rather than (host, target). |
+| `sync-java.sh`, `sync-python.sh`, `sync-scala.sh` | Per-language wrappers (host == target). |
+| `sync-clojure.sh`, `sync-common-lisp.sh`, `sync-emacs-lisp.sh`, `sync-scheme.sh` | Per-Lisp-dialect wrappers. |
+| `regenerate-lexicon.sh` | Regenerate `docs/hydra-lexicon.txt` from the Haskell kernel. On-demand / pre-release (not part of regular sync). |
+| `verify-release.sh` | Cross-implementation pre-release verification. |
+| `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java`. |
 
-### Haskell (`heads/haskell/`)
-
-Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
-
-| Script / Executable | Purpose |
-|---------------------|---------|
-| `bin/sync-haskell.sh` | **Main sync script.** Regenerate all Haskell artifacts in the correct order and optionally run tests. Supports `--quick`. |
-| `bin/update-kernel-tests.sh` | Regenerate test files (universal test cases) |
-| `bin/update-json-kernel.sh` | Export the kernel to JSON |
-| `bin/update-json-main.sh` | Export main (non-kernel) modules to JSON |
-| `bin/update-json-test.sh` | Export test modules to JSON |
-| `bin/verify-json-kernel.sh` | Verify JSON kernel round-trips correctly |
-| `update-haskell-kernel` | Regenerate Haskell kernel modules (executable only, called by `sync-haskell.sh`) |
-| `update-haskell-eval-lib` | Regenerate Haskell eval lib modules (executable only, called by `sync-haskell.sh`) |
-| `update-haskell-sources` | Regenerate Haskell encoder/decoder source modules (executable only, called by `sync-haskell.sh`) |
-
-### Ext, Java, and Python (`heads/haskell/`)
+### Haskell (`heads/haskell/bin/`)
 
 Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
 
 | Script / Executable | Purpose |
 |---------------------|---------|
-| `bin/sync-ext.sh` | **Ext sync script.** Regenerate ext Haskell modules and JSON exports. |
-| `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell test files from JSON. Supports `--quick`. |
-| `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--quick`. |
-| `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--quick`. |
-| `update-haskell-ext-main` | Regenerate ext Haskell gen-main modules (executable only, called by `sync-ext.sh`) |
-| `update-json-ext` | Export ext modules to JSON (executable only, called by `sync-ext.sh`) |
-| `bootstrap-from-json` | Bootstrap Hydra implementations from JSON module exports (executable only, called by all sync scripts) |
+| `sync-haskell.sh` | **Phase 1 sync.** Regenerate DSL → JSON, the Haskell kernel, and run `stack test`. The lexicon is no longer refreshed here; use `bin/regenerate-lexicon.sh` on demand. |
+| `assemble-all.sh` | **Layer 2 batch assembler.** Produce Haskell distributions for every package in one `bootstrap-from-json` invocation. |
+| `assemble-distribution.sh <pkg>` | Layer 2 single-package assembler for one Haskell target package. |
+| `transform-haskell-dsl-to-json.sh` | Transform Haskell DSL sources into the JSON universe under `dist/json/`. |
+| `transform-json-to-haskell.sh` | Transform JSON into Haskell source files. |
+| `transform-json-to-{java,python,scala,lisp,target}.sh` | Layer 1 per-target transforms. |
+| `test-distribution.sh` | Layer 2.5 tester for Haskell distributions. |
+| `update-json-{kernel,main,test,manifest}.sh` | Export kernel / non-kernel / test / manifest modules to JSON. |
+| `verify-json-kernel.sh` | Verify the JSON kernel round-trips correctly. |
+| `bootstrap-from-json` | Hydrate target-language distributions from the per-package JSON exports (executable; supports `--scoped`, `--all-packages`, and flat modes). |
+| `digest-check` | Inspect and refresh per-package digest files used for warm-cache short-circuits (executable). |
+
+### Target-language assemblers and testers (`heads/<lang>/bin/`)
+
+Each non-Haskell host mirrors the same shape:
+
+| Script | Purpose |
+|--------|---------|
+| `heads/<lang>/bin/assemble-all.sh` | Batch Layer 2 assembler for this target. |
+| `heads/<lang>/bin/test-*.sh` | Layer 2.5 tester: compile the assembled per-package distributions and run target-language tests. |
+
+`<lang>` ∈ {`java`, `python`, `scala`}. Lisp follows a similar shape under
+`heads/lisp/bin/` (shared) and `heads/lisp/<dialect>/bin/` for each of
+`clojure`, `common-lisp`, `emacs-lisp`, and `scheme`.

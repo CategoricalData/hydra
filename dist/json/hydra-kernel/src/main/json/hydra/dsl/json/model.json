@@ -8,9 +8,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -47,13 +47,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A JSON array"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A JSON array"}}}],
                     "body": {"list": {"variable": "hydra.json.model.Value"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -65,8 +65,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A JSON array"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A JSON array"}}}],
                       "body": {"list": {"variable": "hydra.json.model.Value"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -78,9 +78,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -117,13 +117,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A boolean value"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A boolean value"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -135,8 +135,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A boolean value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A boolean value"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -146,9 +146,9 @@
         "term": {
           "wrap": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
-                  "name": "union",
+                  "name": "inject",
                   "term": {
                     "record": {
                       "fields": [
@@ -172,15 +172,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "unit", "term": {"unit": {}}},
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.json.model.Value"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -193,9 +193,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -232,13 +232,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A numeric value"}}}],
-                    "body": {"literal": {"float": {"bigfloat": {}}}}}},
+                        "key": "description",
+                        "value": {"literal": {"string": "A numeric value"}}}],
+                    "body": {"literal": {"decimal": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -250,9 +250,9 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A numeric value"}}}],
-                      "body": {"literal": {"float": {"bigfloat": {}}}}}},
+                          "key": "description",
+                          "value": {"literal": {"string": "A numeric value"}}}],
+                      "body": {"literal": {"decimal": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -263,9 +263,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -302,16 +302,16 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
                     "body": {
                       "map": {
                         "keys": {"literal": {"string": {}}},
                         "values": {"variable": "hydra.json.model.Value"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -323,8 +323,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
                       "body": {
                         "map": {
                           "keys": {"literal": {"string": {}}},
@@ -339,9 +339,9 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -378,13 +378,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A string value"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A string value"}}}],
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -396,8 +396,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A string value"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A string value"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],

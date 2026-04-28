@@ -29,10 +29,12 @@ ns :: Namespace
 ns = Namespace "hydra.validate.packaging"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, Names.ns]
-    kernelTypesNamespaces $
-    Just "Validation functions for modules and packages"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, Names.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [
       toDefinition checkConflictingModuleNamespaces,
@@ -111,7 +113,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
           _Definition_type>>: "td" ~>
             "typeName" <~ Packaging.typeDefinitionName (var "td") $
             "localTypeName" <~ (Names.localNameOf @@ var "typeName") $
-            "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "td")) $
+            "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")) $
             cases _Type (var "typ") (Just nothing) [
               _Type_union>>: "fields" ~>
                 -- Check each field of the union

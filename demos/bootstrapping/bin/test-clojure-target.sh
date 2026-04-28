@@ -12,7 +12,7 @@ if [ -z "$OUTPUT_DIR" ]; then
 fi
 
 # Patch testGraph.clj to build a full graph with primitives and schema types
-# instead of using the empty graph. Same patching that sync-lisp.sh applies.
+# instead of using the empty graph. Same patching that the Clojure assembler applies.
 echo "Patching testGraph.clj..."
 CLJ_TESTGRAPH="$OUTPUT_DIR/src/test/clojure/hydra/test/testGraph.clj"
 if [ -f "$CLJ_TESTGRAPH" ]; then

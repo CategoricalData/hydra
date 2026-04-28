@@ -24,10 +24,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.validate.core"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"]
-    kernelTypesNamespaces
-    (Just "Test cases for core term and type validation")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = (Just "Test cases for core term and type validation")}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -303,7 +305,7 @@ emptyTypeNameTests = define "emptyTypeNameTests" $
       (record (nm "") [(nm "x", int32 1)])
       emptyTypeNameErr,
     untypedCase "injection with empty type name"
-      (TTerm $ TermUnion $ Injection (Name "") (Field (Name "x") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1)))
+      (TTerm $ TermInject $ Injection (Name "") (Field (Name "x") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1)))
       emptyTypeNameErr,
     untypedCase "projection with empty type name"
       (projTerm "" "x")

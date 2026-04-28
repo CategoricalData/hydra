@@ -5,7 +5,6 @@
           hydra_lib_maybes_cases
           hydra_lib_maybes_cat
           hydra_lib_maybes_compose
-          hydra_lib_maybes_from_just
           hydra_lib_maybes_from_maybe
           hydra_lib_maybes_is_just
           hydra_lib_maybes_is_nothing
@@ -78,13 +77,6 @@
               (if (maybe-nothing? result)
                   (list 'nothing)
                   (f (maybe-value result))))))))
-
-    ;; from_just :: Maybe a -> a
-    (define hydra_lib_maybes_from_just
-      (lambda (m)
-        (if (maybe-nothing? m)
-            (error "fromJust: Nothing")
-            (maybe-value m))))
 
     ;; from_maybe :: a -> Maybe a -> a
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing

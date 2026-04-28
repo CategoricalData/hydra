@@ -307,11 +307,13 @@ Type constructs use the `T.` prefix.
 
 ```haskell
 -- Numeric literals
-int32 42                    -- Int32
-int64 1000000               -- Int64
-float32 3.14                -- Float32
-float64 2.71828             -- Float64
-bigint 123456789            -- BigInteger
+int32 42                             -- Int32
+int64 1000000                        -- Int64
+float32 3.14                         -- Float32
+float64 2.71828                      -- Float64
+bigint 123456789                     -- BigInteger
+bigfloat 3.14                        -- Bigfloat (Double in Haskell; arbitrary precision in other hosts)
+decimal (Sci.scientific 314 (-2))    -- Decimal (arbitrary-precision Scientific/BigDecimal/Decimal)
 
 -- String and character
 string "hello"              -- String
@@ -646,17 +648,13 @@ greet = lambda "person" $
 
 ```haskell
 module_ :: Module
-module_ = Module {
-  moduleNamespace = Namespace "myapp",
-  moduleElements = [
-    el $ def "addOne" $
-      doc "Adds one to a number" $
-      lambda "x" (Math.add (var "x") (int32 1))
-  ],
-  moduleTermDependencies = [],
-  moduleTypeDependencies = [],
-  moduleDescription = Just "My application module"
-}
+module_ = Module ns definitions [] [] (Just "My application module")
+  where
+    ns = Namespace "myapp"
+    definitions = [
+      toDefinition $ def "addOne" $
+        doc "Adds one to a number" $
+        lambda "x" (Math.add (var "x") (int32 1))]
 ```
 
 ### When to use
@@ -829,7 +827,7 @@ import Hydra.Dsl.Meta.Lib.Lists as Lists
 doubleList = Lists.map (lambda "x" (Math.mul (var "x") (int32 2))) myList
 
 -- Filter a list
-evens = Lists.filter (lambda "x" (Math.mod (var "x") (int32 2) `Math.eq` int32 0)) myList
+evens = Lists.filter (lambda "x" (Math.even (var "x"))) myList
 
 -- Fold a list
 sum = Lists.foldl (lambda "acc" (lambda "x" (Math.add (var "acc") (var "x")))) (int32 0) myList
@@ -859,8 +857,11 @@ import qualified Hydra.Dsl.Types as T
 -- Primitive types
 T.int32
 T.int64
+T.bigint
 T.float32
 T.float64
+T.bigfloat
+T.decimal
 T.string
 T.boolean
 T.binary
@@ -1029,8 +1030,8 @@ import Hydra.Dsl.Meta.Lib.Math as Math
 Math.add (int32 2) (int32 3)        -- Addition
 Math.sub (int32 5) (int32 2)        -- Subtraction
 Math.mul (int32 4) (int32 3)        -- Multiplication
-Math.div (int32 10) (int32 2)       -- Division
-Math.mod (int32 10) (int32 3)       -- Modulo
+Math.maybeDiv (int32 10) (int32 2)  -- Safe division (returns Maybe; Nothing on divisor 0)
+Math.maybeMod (int32 10) (int32 3)  -- Safe modulo (returns Maybe; Nothing on divisor 0)
 Math.abs (int32 (-5))               -- Absolute value
 ```
 
@@ -1054,8 +1055,9 @@ import Hydra.Dsl.Meta.Lib.Lists as Lists
 Lists.map (lambda "x" (Math.add (var "x") (int32 1))) myList
 Lists.filter (lambda "x" (Math.gt (var "x") (int32 0))) myList
 Lists.foldl (lambda "acc" (lambda "x" (Math.add (var "acc") (var "x")))) (int32 0) myList
-Lists.head myList
-Lists.tail myList
+Lists.maybeHead myList              -- Maybe<a>: first element, Nothing if empty
+Lists.maybeTail myList              -- Maybe<[a]>: all but first, Nothing if empty
+Lists.uncons myList                 -- Maybe<(a, [a])>: head-and-tail combined
 Lists.concat list1 list2
 Lists.reverse myList
 Lists.length myList
@@ -1082,8 +1084,8 @@ import Hydra.Dsl.Meta.Lib.Maybes as Maybes
 
 Maybes.isJust maybeValue
 Maybes.isNothing maybeValue
-Maybes.fromJust maybeValue
-Maybes.fromMaybe defaultValue maybeValue
+Maybes.fromMaybe defaultValue maybeValue                        -- extract with fallback
+Maybes.maybe defaultValue (lambda "x" ...) maybeValue           -- fold over the two branches
 Maybes.map (lambda "x" (Math.add (var "x") (int32 1))) maybeValue
 ```
 
@@ -1256,16 +1258,12 @@ Create Hydra modules:
 
 ```haskell
 myModule :: Module
-myModule = Module {
-  moduleNamespace = Namespace "myapp.utils",
-  moduleElements = [
-    el $ def "addOne" $ lambda "x" (Math.add (var "x") (int32 1)),
-    el $ def "double" $ lambda "x" (Math.mul (var "x") (int32 2))
-  ],
-  moduleTermDependencies = [mathModule],
-  moduleTypeDependencies = [coreModule],
-  moduleDescription = Just "Utility functions"
-}
+myModule = Module ns definitions [mathNs] [coreNs] (Just "Utility functions")
+  where
+    ns = Namespace "myapp.utils"
+    definitions = [
+      toDefinition $ def "addOne" $ lambda "x" (Math.add (var "x") (int32 1)),
+      toDefinition $ def "double" $ lambda "x" (Math.mul (var "x") (int32 2))]
 ```
 
 ### Code generation workflow
@@ -1281,15 +1279,14 @@ Example:
 
 ```haskell
 -- In Hydra/Sources/MyApp/Types.hs
-module_ = Module {
-  moduleNamespace = Namespace "myapp.types",
-  moduleElements = [
-    el $ def "Person" $ record [
-      "name">: string,
-      "age">: int32]
-  ],
-  ...
-}
+module_ :: Module
+module_ = Module ns definitions [] [] (Just "User-defined types")
+  where
+    ns = Namespace "myapp.types"
+    definitions = [
+      toDefinition $ def "Person" $ record [
+        "name">: string,
+        "age">: int32]]
 
 -- Generate Haskell code
 -- First argument: output directory
@@ -1323,9 +1320,10 @@ import Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 safeDivide :: TTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
-  Logic.ifElse (Equality.eq (var "y") (int32 0))
+  Maybes.maybe
     (left (string "Division by zero"))
-    (right (Math.div (var "x") (var "y")))
+    ("q" ~> right (var "q"))
+    (Math.maybeDiv (var "x") (var "y"))
 ```
 
 ## Import conventions

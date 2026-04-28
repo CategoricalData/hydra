@@ -40,6 +40,7 @@ import qualified Hydra.Sources.Test.Checking.Fundamentals as CheckingFundamental
 import qualified Hydra.Sources.Test.Checking.NominalTypes as CheckingNominalTypes
 import qualified Hydra.Sources.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Sources.Test.Formatting as Formatting
+import qualified Hydra.Sources.Test.Generation as Generation
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as InferenceAlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as InferenceAlgorithmW
@@ -51,6 +52,7 @@ import qualified Hydra.Sources.Test.Inference.NominalTypes as InferenceNominalTy
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Roundtrip as JsonRoundtrip
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
+import qualified Hydra.Sources.Test.Json.Yaml as JsonYaml
 import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
@@ -72,9 +74,13 @@ ns :: Namespace
 ns = Namespace "hydra.test.testSuite"
 
 module_ :: Module
-module_ = Module ns definitions namespaces kernelTypesNamespaces $
-    Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
-      <> " the criterion for a true Hydra implementation is that all test cases pass.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = namespaces,
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
+      <> " the criterion for a true Hydra implementation is that all test cases pass.")}
   where
     definitions = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs
@@ -110,13 +116,15 @@ otherPairs = [
   (Differentiation.ns, Differentiation.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
+  (Generation.ns, Generation.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
-  -- TODO: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
+  -- TODO #336: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
   -- (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
-  -- TODO: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
+  (JsonYaml.ns, JsonYaml.allTests),
+  -- TODO #336: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
@@ -141,10 +149,11 @@ testSuiteModules =
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
-   JsonRoundtrip.module_, JsonWriter.module_,
+   Generation.module_,
+   JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    Strip.module_, Variables.module_,
-   -- TODO: Ordering.module_ temporarily removed - needs investigation
+   -- TODO #336: Ordering.module_ temporarily removed - needs investigation
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,

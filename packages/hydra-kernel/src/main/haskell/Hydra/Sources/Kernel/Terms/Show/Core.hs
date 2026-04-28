@@ -58,10 +58,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.core"
 
 module_ :: Module
-module_ = Module ns definitions
-    []
-    kernelTypesNamespaces $
-    Just "String representations of hydra.core types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "String representations of hydra.core types"}
   where
    definitions = [
      toDefinition readTerm, -- TODO: move this to hydra.read.core
@@ -107,7 +109,7 @@ binding = define "binding" $
   "typeStr" <~ Maybes.maybe
     (string "")
     ("ts" ~> Strings.concat [string ":(", typeScheme @@ var "ts", string ")"])
-    (Core.bindingType $ var "el") $
+    (Core.bindingTypeScheme $ var "el") $
   Strings.cat $ list [
     var "name",
     var "typeStr",
@@ -324,6 +326,7 @@ literal = define "literal" $
   "l" ~> cases _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
     _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
+    _Literal_decimal>>: "d" ~> Literals.showDecimal $ var "d",
     _Literal_float>>: "fv" ~> floatValue @@ var "fv",
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
     _Literal_string>>: "s" ~> Literals.showString $ var "s"]
@@ -334,6 +337,7 @@ literalType = define "literalType" $
   "lt" ~> cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $ string "binary",
     _LiteralType_boolean>>: constant $ string "boolean",
+    _LiteralType_decimal>>: constant $ string "decimal",
     _LiteralType_float>>: "ft" ~> floatType @@ var "ft",
     _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
@@ -429,7 +433,7 @@ term = define "term" $
         string "⟨",
         type_ @@ var "typ",
         string "⟩"],
-    _Term_union>>: injection,
+    _Term_inject>>: injection,
     _Term_unit>>: constant $ string "unit",
     _Term_unwrap>>: "tname" ~> Strings.cat $ list [
       string "unwrap(",
@@ -547,7 +551,7 @@ typeScheme = define "typeScheme" $
   doc "Show a type scheme as a string" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
+  "body" <~ Core.typeSchemeBody (var "ts") $
   "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
   "fa" <~ Logic.ifElse (Lists.null $ var "vars")
     (string "")

@@ -41,6 +41,10 @@ node_modules/
 
 # sbt build artifacts
 project/target/
+/target/
+# heads/scala has no build.sbt — these are orphan sbt scratch dirs
+heads/scala/target/
+heads/scala/project/
 
 # Run logs
 runs/
@@ -52,7 +56,34 @@ debug_*.hs
 debug_*.clj
 
 # Working documents (local only)
+docs/reviews/
 docs/work/
+
+# Package distributions.
+# dist/json/ is the source of truth (tracked). dist/haskell/ is tracked
+# through the 0.15 release to support bootstrapping from a fresh clone.
+# All other target-language trees are regenerated from dist/json/ and
+# not checked in.
+dist/clojure/
+dist/common-lisp/
+dist/coq/
+dist/emacs-lisp/
+dist/java/
+dist/python/
+dist/scala/
+dist/scheme/
+dist/wasm/
+
+# Test-cache artifacts written by Layer 2.5 testers. Per-target
+# digest.json files (dist/haskell/<pkg>/digest.json,
+# dist/json/<pkg>/digest.json) are tracked — they are the build's
+# source of truth for freshness checks.
+dist/haskell/test-cache.json
+
+# Per-package input-hash cache stamps written by assemble-distribution.sh
+# to short-circuit redundant work. Local caches, not part of the build.
+dist/haskell/*/.main-input-hash.txt
+dist/haskell/*/.test-input-hash.txt
 
 # Other
 *.log
@@ -60,3 +91,5 @@ docs/work/
 .claude
 # Hydra branch plan files (see CLAUDE.md)
 *-plan.md
+# Cross-worktree Claude messages (see CLAUDE.md)
+claude-hydra-messages/

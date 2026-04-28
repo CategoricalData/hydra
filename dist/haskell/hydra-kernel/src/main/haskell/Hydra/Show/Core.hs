@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | String representations of hydra.core types
 
 module Hydra.Show.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
@@ -15,9 +13,9 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Show a binding as a string
 binding :: Core.Binding -> String
 binding el =
@@ -28,13 +26,12 @@ binding el =
                   Maybes.maybe "" (\ts -> Strings.cat [
                     ":(",
                     (typeScheme ts),
-                    ")"]) (Core.bindingType el)
+                    ")"]) (Core.bindingTypeScheme el)
       in (Strings.cat [
         name,
         typeStr,
         " = ",
         (term t)])
-
 -- | Show a case statement as a string
 caseStatement :: Core.CaseStatement -> String
 caseStatement cs =
@@ -56,12 +53,10 @@ caseStatement cs =
         tname,
         ")",
         (fields allFields)])
-
 -- | Show an Either value using given functions for left and right
 either :: (t0 -> String) -> (t1 -> String) -> Either t0 t1 -> String
 either showA showB e =
     Eithers.either (\a -> Strings.cat2 "left(" (Strings.cat2 (showA a) ")")) (\b -> Strings.cat2 "right(" (Strings.cat2 (showB b) ")")) e
-
 field :: Core.Field -> String
 field field =
 
@@ -71,7 +66,6 @@ field field =
         fname,
         "=",
         (term fterm)])
-
 fieldType :: Core.FieldType -> String
 fieldType ft =
 
@@ -81,7 +75,6 @@ fieldType ft =
         fname,
         ":",
         (type_ ftyp)])
-
 -- | Show a list of fields as a string
 fields :: [Core.Field] -> String
 fields flds =
@@ -91,7 +84,6 @@ fields flds =
         "{",
         (Strings.intercalate ", " fieldStrs),
         "}"])
-
 -- | Show a float value as a string
 float :: Core.FloatValue -> String
 float fv =
@@ -99,7 +91,6 @@ float fv =
       Core.FloatValueBigfloat v0 -> Strings.cat2 (Literals.showBigfloat v0) ":bigfloat"
       Core.FloatValueFloat32 v0 -> Strings.cat2 (Literals.showFloat32 v0) ":float32"
       Core.FloatValueFloat64 v0 -> Strings.cat2 (Literals.showFloat64 v0) ":float64"
-
 -- | Show a float type as a string
 floatType :: Core.FloatType -> String
 floatType ft =
@@ -107,7 +98,6 @@ floatType ft =
       Core.FloatTypeBigfloat -> "bigfloat"
       Core.FloatTypeFloat32 -> "float32"
       Core.FloatTypeFloat64 -> "float64"
-
 -- | Show an injection as a string
 injection :: Core.Injection -> String
 injection inj =
@@ -120,7 +110,6 @@ injection inj =
         ")",
         (fields [
           f])])
-
 -- | Show an integer value as a string
 integer :: Core.IntegerValue -> String
 integer iv =
@@ -134,7 +123,6 @@ integer iv =
       Core.IntegerValueUint16 v0 -> Strings.cat2 (Literals.showUint16 v0) ":uint16"
       Core.IntegerValueUint32 v0 -> Strings.cat2 (Literals.showUint32 v0) ":uint32"
       Core.IntegerValueUint64 v0 -> Strings.cat2 (Literals.showUint64 v0) ":uint64"
-
 -- | Show an integer type as a string
 integerType :: Core.IntegerType -> String
 integerType it =
@@ -148,7 +136,6 @@ integerType it =
       Core.IntegerTypeUint16 -> "uint16"
       Core.IntegerTypeUint32 -> "uint32"
       Core.IntegerTypeUint64 -> "uint64"
-
 -- | Show a lambda as a string
 lambda :: Core.Lambda -> String
 lambda l =
@@ -163,7 +150,6 @@ lambda l =
         typeStr,
         ".",
         (term body)])
-
 -- | Show a let expression as a string
 let_ :: Core.Let -> String
 let_ l =
@@ -176,7 +162,6 @@ let_ l =
         (Strings.intercalate ", " bindingStrs),
         " in ",
         (term env)])
-
 -- | Show a list using a given function to show each element
 list :: (t0 -> String) -> [t0] -> String
 list f xs =
@@ -186,27 +171,26 @@ list f xs =
         "[",
         (Strings.intercalate ", " elementStrs),
         "]"])
-
 -- | Show a literal as a string
 literal :: Core.Literal -> String
 literal l =
     case l of
       Core.LiteralBinary _ -> "[binary]"
       Core.LiteralBoolean v0 -> Logic.ifElse v0 "true" "false"
+      Core.LiteralDecimal v0 -> Literals.showDecimal v0
       Core.LiteralFloat v0 -> float v0
       Core.LiteralInteger v0 -> integer v0
       Core.LiteralString v0 -> Literals.showString v0
-
 -- | Show a literal type as a string
 literalType :: Core.LiteralType -> String
 literalType lt =
     case lt of
       Core.LiteralTypeBinary -> "binary"
       Core.LiteralTypeBoolean -> "boolean"
+      Core.LiteralTypeDecimal -> "decimal"
       Core.LiteralTypeFloat v0 -> floatType v0
       Core.LiteralTypeInteger v0 -> integerType v0
       Core.LiteralTypeString -> "string"
-
 -- | Show a map using given functions to show keys and values
 map :: Ord t0 => ((t0 -> String) -> (t1 -> String) -> M.Map t0 t1 -> String)
 map showK showV m =
@@ -220,11 +204,9 @@ map showK showV m =
         "{",
         (Strings.intercalate ", " pairStrs),
         "}"])
-
 -- | Show a Maybe value using a given function to show the element
 maybe :: (t0 -> String) -> Maybe t0 -> String
 maybe f mx = Maybes.maybe "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")")) mx
-
 -- | Show a pair using given functions to show each element
 pair :: (t0 -> String) -> (t1 -> String) -> (t0, t1) -> String
 pair showA showB p =
@@ -234,7 +216,6 @@ pair showA showB p =
       ", ",
       (showB (Pairs.second p)),
       ")"]
-
 -- | Show a projection as a string
 projection :: Core.Projection -> String
 projection proj =
@@ -247,11 +228,9 @@ projection proj =
         "){",
         fname,
         "}"])
-
 -- | A placeholder for reading terms from their serialized form. Not implemented.
 readTerm :: String -> Maybe Core.Term
 readTerm s = Just (Core.TermLiteral (Core.LiteralString s))
-
 -- | Show a set using a given function to show each element
 set :: Ord t0 => ((t0 -> String) -> S.Set t0 -> String)
 set f xs =
@@ -261,7 +240,6 @@ set f xs =
         "{",
         (Strings.intercalate ", " elementStrs),
         "}"])
-
 -- | Show a term as a string
 term :: Core.Term -> String
 term t =
@@ -348,7 +326,7 @@ term t =
             "\10216",
             (type_ typ),
             "\10217"])
-        Core.TermUnion v0 -> injection v0
+        Core.TermInject v0 -> injection v0
         Core.TermUnit -> "unit"
         Core.TermUnwrap v0 -> Strings.cat [
           "unwrap(",
@@ -364,7 +342,6 @@ term t =
             "){",
             (term term1),
             "}"])
-
 -- | Show a type as a string
 type_ :: Core.Type -> String
 type_ typ =
@@ -464,13 +441,12 @@ type_ typ =
           "wrap(",
           (type_ v0),
           ")"]
-
 -- | Show a type scheme as a string
 typeScheme :: Core.TypeScheme -> String
 typeScheme ts =
 
       let vars = Core.typeSchemeVariables ts
-          body = Core.typeSchemeType ts
+          body = Core.typeSchemeBody ts
           varNames = Lists.map Core.unName vars
           fa =
                   Logic.ifElse (Lists.null vars) "" (Strings.cat [

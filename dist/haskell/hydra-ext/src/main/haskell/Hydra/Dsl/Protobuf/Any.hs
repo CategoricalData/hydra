@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Protobuf.Any as Any
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 
 any :: Phantoms.TTerm String -> Phantoms.TTerm B.ByteString -> Phantoms.TTerm Any.Any

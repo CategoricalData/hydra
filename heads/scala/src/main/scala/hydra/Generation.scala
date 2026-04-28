@@ -40,7 +40,7 @@ object Generation:
   def bootstrapSchemaMap(): Map[String, Type] =
     hydra.json.bootstrap.typesByName.map { (name, typ) =>
       val ts = hydra.scoping.fTypeToTypeScheme(typ)
-      name -> hydra.strip.deannotateTypeRecursive(ts.`type`)
+      name -> hydra.strip.deannotateTypeRecursive(ts.body)
     }
 
   /**
@@ -65,13 +65,13 @@ object Generation:
       case Term.lambda(lam) =>
         Term.lambda(Lambda(lam.parameter, lam.domain, decodeBinaryLiteralsDepth(lam.body, d)))
       case Term.let(lt) =>
-        Term.let(Let(lt.bindings.map(b => Binding(b.name, decodeBinaryLiteralsDepth(b.term, d), b.`type`)),
+        Term.let(Let(lt.bindings.map(b => Binding(b.name, decodeBinaryLiteralsDepth(b.term, d), b.typeScheme)),
           decodeBinaryLiteralsDepth(lt.body, d)))
       case Term.list(elems) => Term.list(elems.map(e => decodeBinaryLiteralsDepth(e, d)))
       case Term.record(rec) =>
         Term.record(Record(rec.typeName, rec.fields.map(f => Field(f.name, decodeBinaryLiteralsDepth(f.term, d)))))
-      case Term.union(inj) =>
-        Term.union(Injection(inj.typeName, Field(inj.field.name, decodeBinaryLiteralsDepth(inj.field.term, d))))
+      case Term.inject(inj) =>
+        Term.inject(Injection(inj.typeName, Field(inj.field.name, decodeBinaryLiteralsDepth(inj.field.term, d))))
       case Term.annotated(ann) =>
         Term.annotated(AnnotatedTerm(decodeBinaryLiteralsDepth(ann.body, d), ann.annotation))
       case Term.wrap(w) =>
@@ -79,11 +79,11 @@ object Generation:
       case other => other
 
   private def decodeBinaryInModule(mod: Module): Module =
-    Module(mod.namespace, mod.definitions.map {
+    Module(mod.description, mod.namespace, mod.termDependencies, mod.typeDependencies, mod.definitions.map {
       case Definition.term(td) =>
-        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.`type`))
+        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.typeScheme))
       case other => other
-    }, mod.termDependencies, mod.typeDependencies, mod.description)
+    })
 
   def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
     val modName: String = "hydra.packaging.Module"
@@ -252,7 +252,7 @@ object Generation:
       else throw new RuntimeException(s"Expected boolean at position $pos")
 
     private def parseNull(): Value =
-      if input.startsWith("null", pos) then { pos += 4; Value.array(Seq.empty) }
+      if input.startsWith("null", pos) then { pos += 4; Value.`null` }
       else throw new RuntimeException(s"Expected null at position $pos")
 
     private def parseNumber(): Value =

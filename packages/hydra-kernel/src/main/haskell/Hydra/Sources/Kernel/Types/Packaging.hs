@@ -17,8 +17,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Graph.ns] [Core.ns] $
-    Just "A model for Hydra namespaces, modules, and packages"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Graph.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
   where
     definitions = [
       definition,
@@ -67,21 +71,21 @@ module' :: Binding
 module' = define "Module" $
   doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
   T.record [
+    "description">:
+      doc "An optional human-readable description of the module" $
+      T.maybe T.string,
     "namespace">:
       doc "A common prefix for all element names in the module"
       namespace,
-    "definitions">:
-      doc "The definitions in this module" $
-      T.list definition,
     "termDependencies">:
       doc "Any modules which the term expressions of this module directly depend upon" $
       T.list namespace,
     "typeDependencies">:
       doc "Any modules which the type expressions of this module directly depend upon" $
       T.list namespace,
-    "description">:
-      doc "An optional human-readable description of the module" $
-      T.maybe T.string]
+    "definitions">:
+      doc "The definitions in this module" $
+      T.list definition]
 
 namespace :: Binding
 namespace = define "Namespace" $
@@ -142,7 +146,7 @@ termDefinition = define "TermDefinition" $
     "term">:
       doc "The term being defined"
       Core.term,
-    "type">:
+    "typeScheme">:
       doc "The type scheme of the term, including any class constraints" $
       T.maybe Core.typeScheme]
 
@@ -153,6 +157,6 @@ typeDefinition = define "TypeDefinition" $
     "name">:
       doc "The name of the type"
       Core.name,
-    "type">:
+    "typeScheme">:
       doc "The type scheme being defined"
       Core.typeScheme]

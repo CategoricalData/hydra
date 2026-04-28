@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -39,21 +39,21 @@
                                                       "application": {
                                                         "argument": {"variable": "inj"},
                                                         "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
-                                                    "type": {"type": {"variable": "hydra.core.Field"}, "variables": []}},
+                                                    "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                   {
                                                     "name": "fname",
                                                     "term": {
                                                       "application": {
                                                         "argument": {"variable": "field"},
                                                         "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
-                                                    "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}},
+                                                    "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                   {
                                                     "name": "fterm",
                                                     "term": {
                                                       "application": {
                                                         "argument": {"variable": "field"},
                                                         "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
-                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}},
+                                                    "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                   {
                                                     "name": "variantMap",
                                                     "term": {
@@ -66,11 +66,11 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "pair": {
-                                                                        "@first": {
+                                                                        "first": {
                                                                           "wrap": {
                                                                             "body": {"literal": {"string": "equality"}},
                                                                             "typeName": "hydra.core.Name"}},
-                                                                        "@second": {
+                                                                        "second": {
                                                                           "lambda": {
                                                                             "body": {
                                                                               "application": {
@@ -100,7 +100,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "equality", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.classes.TypeClass"}},
                                                                                         "domain": {"unit": {}},
@@ -129,11 +129,11 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "pair": {
-                                                                        "@first": {
+                                                                        "first": {
                                                                           "wrap": {
                                                                             "body": {"literal": {"string": "ordering"}},
                                                                             "typeName": "hydra.core.Name"}},
-                                                                        "@second": {
+                                                                        "second": {
                                                                           "lambda": {
                                                                             "body": {
                                                                               "application": {
@@ -163,7 +163,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "ordering", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.classes.TypeClass"}},
                                                                                         "domain": {"unit": {}},
@@ -199,8 +199,8 @@
                                                                     "left": {"variable": "hydra.errors.DecodingError"},
                                                                     "right": {"variable": "hydra.classes.TypeClass"}}},
                                                                 "domain": {"variable": "hydra.core.Term"}}}}}}},
-                                                    "type": {
-                                                      "type": {
+                                                    "typeScheme": {
+                                                      "body": {
                                                         "map": {
                                                           "keys": {"variable": "hydra.core.Name"},
                                                           "values": {
@@ -254,7 +254,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@left": {
+                                                                        "left": {
                                                                           "wrap": {
                                                                             "body": {
                                                                               "application": {
@@ -294,7 +294,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@left": {
+                                                "left": {
                                                   "wrap": {
                                                     "body": {"literal": {"string": "expected union"}},
                                                     "typeName": "hydra.errors.DecodingError"}}}},
@@ -311,7 +311,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"either": {"@left": {"variable": "err"}}},
+                                        "body": {"either": {"left": {"variable": "err"}}},
                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                     "type": {"variable": "hydra.classes.TypeClass"}}},
                                 "domain": {"variable": "hydra.errors.DecodingError"},
@@ -333,8 +333,8 @@
                 "parameter": "raw"}},
             "domain": {"variable": "hydra.graph.Graph"},
             "parameter": "cx"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

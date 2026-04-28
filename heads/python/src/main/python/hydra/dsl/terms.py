@@ -1,6 +1,7 @@
 """A DSL for constructing Hydra terms in Python."""
 
 from collections.abc import Mapping, Sequence
+from decimal import Decimal
 from functools import reduce
 
 import hydra.constants
@@ -37,7 +38,7 @@ from hydra.core import (
     TermSet,
     TermTypeApplication,
     TermTypeLambda,
-    TermUnion,
+    TermInject,
     TermUnit,
     TermUnwrap,
     TermVariable,
@@ -122,6 +123,14 @@ def boolean(value: bool) -> Term:
     Example: boolean(True)
     """
     return literal(lt.boolean(value))
+
+
+def decimal(value: Decimal) -> Term:
+    """Create a decimal literal (arbitrary-precision exact decimal).
+
+    Example: decimal(Decimal('1.23'))
+    """
+    return literal(lt.decimal(value))
 
 
 def char(value: str) -> Term:
@@ -229,7 +238,7 @@ def inject(tname: Name, fname: Name, term: Term) -> Term:
     This creates a "Result" union with the "success" variant containing value 42.
     Use this to construct values of union types at runtime.
     """
-    return TermUnion(Injection(tname, Field(fname, term)))
+    return TermInject(Injection(tname, Field(fname, term)))
 
 
 def int16(value: int) -> Term:

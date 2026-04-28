@@ -90,10 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.protobuf.serde"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Formatting.ns, Serialization.ns]
-    (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Formatting.ns, Serialization.ns],
+            moduleTypeDependencies = (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"}
   where
     definitions = [
       toDefinition deprecatedOptionName,
@@ -136,7 +138,7 @@ excludeInternalOptions = define "excludeInternalOptions" $
     Lists.filter
       (lambda "opt" $ Logic.not $
         Equality.equal
-          (Strings.charAt (int32 0) (project P3._Option P3._Option_name @@ var "opt"))
+          (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (project P3._Option P3._Option_name @@ var "opt")))
           (int32 95))  -- 95 = '_'
       (var "opts")
 
@@ -147,21 +149,24 @@ optDesc = define "optDesc" $
     "descs">: Lists.filter
       (lambda "opt" $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "opts")] $
-    Logic.ifElse (Lists.null (var "descs"))
+    Maybes.maybe
       (var "expr")
-      (lets [
-        "descValue">: project P3._Option P3._Option_value @@ (Lists.head (var "descs")),
+      (lambda "firstDesc" $ lets [
+        "descValue">: project P3._Option P3._Option_value @@ var "firstDesc",
         "descStr">: cases P3._Value (var "descValue") Nothing [
           P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
           P3._Value_string>>: lambda "s" $ var "s"],
         "commentLines">: Lists.map
-          (lambda "line" $ Strings.cat2 (string "// ") (var "line"))
+          (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
+            (string "//")
+            (Strings.cat2 (string "// ") (var "line")))
           (Strings.lines (var "descStr")),
         "comment">: Serialization.cst @@ (Strings.intercalate (string "\n") (var "commentLines")),
         "sep">: Logic.ifElse (var "doubleNewline")
           (Serialization.doubleNewlineSep @@ list [var "comment", var "expr"])
           (Serialization.newlineSep @@ list [var "comment", var "expr"])] $
         var "sep")
+      (Lists.maybeHead (var "descs"))
 
 protoBlock :: TTermDefinition ([Expr] -> Expr)
 protoBlock = define "protoBlock" $

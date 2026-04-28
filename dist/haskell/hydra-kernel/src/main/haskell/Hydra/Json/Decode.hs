@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.
 
 module Hydra.Json.Decode where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -15,32 +13,33 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
--- | Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels.
+-- | Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric.
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
     case ft of
       Core.FloatTypeBigfloat -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v1)))
-        _ -> Left "expected number for bigfloat"
-      Core.FloatTypeFloat32 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = Literals.readFloat32 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid float32: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) parsed)) strResult)
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat (Literals.decimalToFloat64 v1)))))
+        Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
+          "invalid bigfloat sentinel: ",
+          v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat v))))) (parseSpecialFloat v1)
+        _ -> Left "expected number or special float string for bigfloat"
+      Core.FloatTypeFloat32 -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v1))))
+        Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
+          "invalid float32 sentinel: ",
+          v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) (parseSpecialFloat32 v1)
+        _ -> Left "expected number or special float string for float32"
       Core.FloatTypeFloat64 -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1))))
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v1))))
         Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
           "invalid float64 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v)))) (parseSpecialFloat v1)
         _ -> Left "expected number or special float string for float64"
-
 -- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
 decodeInteger :: Core.IntegerType -> Model.Value -> Either String Core.Term
 decodeInteger it value =
@@ -75,20 +74,19 @@ decodeInteger it value =
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v)))) parsed)) strResult)
       Core.IntegerTypeInt8 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeInt16 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeInt32 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeUint8 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeUint16 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.bigfloatToBigint n))))) numResult)
-
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.decimalToBigint n))))) numResult)
 -- | Decode a JSON value to a literal term
 decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
 decodeLiteral lt value =
@@ -99,40 +97,38 @@ decodeLiteral lt value =
       Core.LiteralTypeBoolean -> case value of
         Model.ValueBoolean v1 -> Right (Core.TermLiteral (Core.LiteralBoolean v1))
         _ -> Left "expected boolean"
+      Core.LiteralTypeDecimal -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralDecimal v1))
+        _ -> Left "expected number for decimal"
       Core.LiteralTypeFloat v0 -> decodeFloat v0 value
       Core.LiteralTypeInteger v0 -> decodeInteger v0 value
       Core.LiteralTypeString ->
         let strResult = expectString value
         in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)
-
 -- | Extract an array from a JSON value
 expectArray :: Model.Value -> Either String [Model.Value]
 expectArray value =
     case value of
       Model.ValueArray v0 -> Right v0
       _ -> Left "expected array"
-
 -- | Extract a number from a JSON value
-expectNumber :: Model.Value -> Either String Double
+expectNumber :: Model.Value -> Either String Sci.Scientific
 expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
       _ -> Left "expected number"
-
 -- | Extract an object from a JSON value
 expectObject :: Model.Value -> Either String (M.Map String Model.Value)
 expectObject value =
     case value of
       Model.ValueObject v0 -> Right v0
       _ -> Left "expected object"
-
 -- | Extract a string from a JSON value
 expectString :: Model.Value -> Either String String
 expectString value =
     case value of
       Model.ValueString v0 -> Right v0
       _ -> Left "expected string"
-
 -- | Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches.
 fromJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Value -> Either String Core.Term
 fromJson types tname typ value =
@@ -159,7 +155,8 @@ fromJson types tname typ value =
                         Core.TypeMaybe _ -> True
                         _ -> False
           in (Logic.ifElse isNestedMaybe (
-            let decodeJust = \arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 (Lists.head arr))
+            let decodeJust =
+                    \arr -> Maybes.maybe (Left "expected single-element array for Just") (\firstVal -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 firstVal)) (Lists.maybeHead arr)
                 decodeMaybeArray =
                         \arr ->
                           let len = Lists.length arr
@@ -193,18 +190,17 @@ fromJson types tname typ value =
                   \key -> \val -> \ftype ->
                     let jsonVal = Maybes.fromMaybe Model.ValueNull val
                         decoded = fromJson types tname ftype jsonVal
-                    in (Eithers.map (\v -> Core.TermUnion (Core.Injection {
+                    in (Eithers.map (\v -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = tname,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name key),
                         Core.fieldTerm = v}})) decoded)
-              tryField =
-                      \key -> \val -> \ft -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) key) (Just (decodeVariant key val (Core.fieldTypeType ft))) Nothing
               findAndDecode =
-                      \key -> \val -> \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                      \key -> \val -> \fts -> Maybes.maybe (Left (Strings.cat [
                         "unknown variant: ",
-                        key])) (Maybes.maybe (findAndDecode key val (Lists.tail fts)) (\r -> r) (tryField key val (Lists.head fts)))
-              decodeSingleKey = \obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) v0
+                        key])) (\ft -> decodeVariant key val (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) key) fts)
+              decodeSingleKey =
+                      \obj -> Maybes.maybe (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0) (Lists.maybeHead (Maps.keys obj))
               processUnion =
                       \obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union")
               objResult = expectObject value
@@ -226,9 +222,9 @@ fromJson types tname typ value =
                     \entryJson ->
                       let objResult = expectObject entryJson
                       in (Eithers.either (\err -> Left err) (\entryObj ->
-                        let keyJson = Maps.lookup "@key" entryObj
-                            valJson = Maps.lookup "@value" entryObj
-                        in (Maybes.maybe (Left "missing @key in map entry") (\kj -> Maybes.maybe (Left "missing @value in map entry") (\vj ->
+                        let keyJson = Maps.lookup "key" entryObj
+                            valJson = Maps.lookup "value" entryObj
+                        in (Maybes.maybe (Left "missing key in map entry") (\kj -> Maybes.maybe (Left "missing value in map entry") (\vj ->
                           let decodedKey = fromJson types tname keyType kj
                               decodedVal = fromJson types tname valType vj
                           in (Eithers.either (\err -> Left err) (\k -> Eithers.map (\v -> (k, v)) decodedVal) decodedKey)) valJson) keyJson)) objResult)
@@ -239,9 +235,9 @@ fromJson types tname typ value =
               secondType = Core.pairTypeSecond v0
               objResult = expectObject value
           in (Eithers.either (\err -> Left err) (\obj ->
-            let firstJson = Maps.lookup "@first" obj
-                secondJson = Maps.lookup "@second" obj
-            in (Maybes.maybe (Left "missing @first in pair") (\fj -> Maybes.maybe (Left "missing @second in pair") (\sj ->
+            let firstJson = Maps.lookup "first" obj
+                secondJson = Maps.lookup "second" obj
+            in (Maybes.maybe (Left "missing first in pair") (\fj -> Maybes.maybe (Left "missing second in pair") (\sj ->
               let decodedFirst = fromJson types tname firstType fj
                   decodedSecond = fromJson types tname secondType sj
               in (Eithers.either (\err -> Left err) (\f -> Eithers.map (\s -> Core.TermPair (f, s)) decodedSecond) decodedFirst)) secondJson) firstJson)) objResult)
@@ -250,9 +246,9 @@ fromJson types tname typ value =
               rightType = Core.eitherTypeRight v0
               objResult = expectObject value
           in (Eithers.either (\err -> Left err) (\obj ->
-            let leftJson = Maps.lookup "@left" obj
-                rightJson = Maps.lookup "@right" obj
-            in (Maybes.maybe (Maybes.maybe (Left "expected @left or @right in Either") (\rj ->
+            let leftJson = Maps.lookup "left" obj
+                rightJson = Maps.lookup "right" obj
+            in (Maybes.maybe (Maybes.maybe (Left "expected left or right in Either") (\rj ->
               let decoded = fromJson types tname rightType rj
               in (Eithers.map (\v -> Core.TermEither (Right v)) decoded)) rightJson) (\lj ->
               let decoded = fromJson types tname leftType lj
@@ -264,9 +260,12 @@ fromJson types tname typ value =
             (Core.unName v0)])) (\resolvedType -> fromJson types v0 resolvedType value) lookedUp)
         _ -> Left (Strings.cat [
           "unsupported type for JSON decoding: ",
-          (Core_.type_ typ)])
-
--- | Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings.
+          (ShowCore.type_ typ)])
+-- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
     Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat64 s) Nothing
+-- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings.
+parseSpecialFloat32 :: String -> Maybe Float
+parseSpecialFloat32 s =
+    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat32 s) Nothing

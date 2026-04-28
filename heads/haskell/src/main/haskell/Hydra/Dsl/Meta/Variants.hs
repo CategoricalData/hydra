@@ -16,6 +16,7 @@ literalVariant :: LiteralVariant -> TTerm LiteralVariant
 literalVariant v = injectUnit _LiteralVariant $ case v of
   LiteralVariantBinary -> _LiteralVariant_binary
   LiteralVariantBoolean -> _LiteralVariant_boolean
+  LiteralVariantDecimal -> _LiteralVariant_decimal
   LiteralVariantFloat -> _LiteralVariant_float
   LiteralVariantInteger -> _LiteralVariant_integer
   LiteralVariantString -> _LiteralVariant_string
@@ -39,7 +40,7 @@ termVariant v = injectUnit _TermVariant $ case v of
   TermVariantSet -> _TermVariant_set
   TermVariantTypeLambda -> _TermVariant_typeLambda
   TermVariantTypeApplication -> _TermVariant_typeApplication
-  TermVariantUnion -> _TermVariant_union
+  TermVariantInject -> _TermVariant_inject
   TermVariantUnit -> _TermVariant_unit
   TermVariantUnwrap -> _TermVariant_unwrap
   TermVariantVariable -> _TermVariant_variable

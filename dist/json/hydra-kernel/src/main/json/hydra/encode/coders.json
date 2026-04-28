@@ -11,9 +11,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -42,7 +42,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -57,9 +57,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -88,7 +88,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -99,8 +99,8 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.coders.CoderDirection"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.coders.CoderDirection"}}},
@@ -111,7 +111,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "wrap",
                   "term": {
@@ -134,11 +134,11 @@
                               "function": {
                                 "lambda": {
                                   "body": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "literal",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "string", "term": {"variable": "x"}},
                                             "typeName": "hydra.core.Literal"}}},
                                       "typeName": "hydra.core.Term"}},
@@ -148,8 +148,8 @@
                 "typeName": "hydra.core.Term"}},
             "domain": {"variable": "hydra.coders.LanguageName"},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.coders.LanguageName"}}},
@@ -165,9 +165,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -196,7 +196,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -211,9 +211,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -242,7 +242,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -253,8 +253,8 @@
                     "domain": {"unit": {}},
                     "parameter": "y"}}}],
             "typeName": "hydra.coders.TraversalOrder"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.coders.TraversalOrder"}}},

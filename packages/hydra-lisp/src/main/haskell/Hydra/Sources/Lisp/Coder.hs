@@ -58,17 +58,21 @@ ns :: Namespace
 ns = Namespace "hydra.lisp.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns]
-    (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [moduleNamespace LispLanguageSource.module_,
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns],
+            moduleTypeDependencies = (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"}
   where
     definitions = [
+      toDefinition Environment.reorderDefs,
       toDefinition dialectCadr,
       toDefinition dialectCar,
       toDefinition dialectConstructorPrefix,
       toDefinition dialectEqual,
+      toDefinition dialectSupportsLetrec,
       toDefinition encodeApplication,
       toDefinition encodeFieldDef,
       toDefinition encodeLambdaTerm,
@@ -78,11 +82,11 @@ module_ = Module ns definitions
       toDefinition encodeProjectionElim,
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
-      toDefinition encodeUnionElim,
-      toDefinition encodeUnwrapElim,
       toDefinition encodeType,
       toDefinition encodeTypeBody,
       toDefinition encodeTypeDefinition,
+      toDefinition encodeUnionElim,
+      toDefinition encodeUnwrapElim,
       toDefinition isCasesPrimitive,
       toDefinition isLazy2ArgPrimitive,
       toDefinition isLazy3ArgPrimitive,
@@ -103,7 +107,6 @@ module_ = Module ns definitions
       toDefinition moduleToLisp,
       toDefinition qualifiedSnakeName,
       toDefinition qualifiedTypeName,
-      toDefinition Environment.reorderDefs,
       toDefinition wrapInThunk]
 
 
@@ -136,6 +139,14 @@ dialectEqual = def "dialectEqual" $
     L._Dialect_clojure>>: constant $ string "=",
     L._Dialect_commonLisp>>: constant $ string "equal",
     L._Dialect_emacsLisp>>: constant $ string "equal"]
+
+-- | Whether a dialect provides a native letrec (mutually recursive let).
+-- Clojure has only sequential let, requiring the coder to topologically sort
+-- bindings and emit letfn for cyclic groups.
+dialectSupportsLetrec :: TTermDefinition (L.Dialect -> Bool)
+dialectSupportsLetrec = def "dialectSupportsLetrec" $
+  lambda "d" $ cases L._Dialect (var "d") (Just $ boolean True) [
+    L._Dialect_clojure>>: constant $ boolean False]
 
 -- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
@@ -206,92 +217,6 @@ encodeApplication = def "encodeApplication" $
                   -- Not a special primitive — encode normally
                   (var "normal")))])]
 
--- | Encode a Hydra record projection as a Lisp expression.
--- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
-encodeProjectionElim = def "encodeProjectionElim" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
-      -- Record projection: (:field record) or (record-type-field record)
-        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
-        "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
-        Maybes.cases (var "marg")
-          -- Unapplied: (lambda (v) (record-type-field v))
-          (right (lispLambdaExpr @@ list [string "v"] @@
-            (inject L._Expression L._Expression_fieldAccess $
-              record L._FieldAccess [
-                L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
-                L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
-                L._FieldAccess_target>>: lispVar @@ string "v"])))
-          (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
-              right (inject L._Expression L._Expression_fieldAccess $
-                record L._FieldAccess [
-                  L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
-                  L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
-                  L._FieldAccess_target>>: var "sarg"]))
-
--- | Encode a Hydra case statement (union elimination) as a Lisp expression.
--- Takes an optional argument for applied case statements.
-encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
-encodeUnionElim = def "encodeUnionElim" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
-      -- Union elimination: cond dispatch on tagged values
-        "tname" <~ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs")) $
-        "caseFields" <~ Core.caseStatementCases (var "cs") $
-        "defCase" <~ Core.caseStatementDefault (var "cs") $
-        -- Build cond clauses from each case field
-        "clauses" <<~ (Eithers.mapList
-          (lambda "cf" $
-            "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
-            "cfterm" <~ Core.fieldTerm (var "cf") $
-            -- Each case applies the handler to the value: ((handler) v)
-            -- Condition: (equal? (car __m) :variantName) or (= (first __m) :variantName)
-            "condExpr" <~ (lispApp @@ (lispVar @@ (dialectEqual @@ var "dialect")) @@ list [
-              lispApp @@ (lispVar @@ (dialectCar @@ var "dialect")) @@ list [lispVar @@ string "match_target"],
-              lispKeyword @@ var "cfname"]) $
-            -- Body: apply handler to (cadr __m)
-            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
-              right (record L._CondClause [
-                L._CondClause_condition>>: var "condExpr",
-                L._CondClause_body>>: var "bodyExpr"]))
-          (var "caseFields")) $
-        -- Default clause
-        -- Default is a direct result value, NOT a handler function.
-        -- The reducer returns the default as-is without applying it to the payload.
-        "defExpr" <<~ (Maybes.cases (var "defCase")
-          (right nothing)
-          (lambda "dt" $
-            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
-              right (just (var "defBody"))))  $
-        -- Build the cond expression wrapped in a lambda taking "v"
-        "condExpr" <~ (inject L._Expression L._Expression_cond $
-          record L._CondExpression [
-            L._CondExpression_clauses>>: var "clauses",
-            L._CondExpression_default>>: var "defExpr"]) $
-        -- Wrap in ((lambda (__mv) (cond ...)) (cadr __m)) or (second __m) for Clojure
-        "innerExpr" <~ (lispApp @@
-          (lispLambdaExpr @@ list [string "match_value"] @@ var "condExpr") @@
-          list [lispApp @@ (lispVar @@ (dialectCadr @@ var "dialect")) @@ list [lispVar @@ string "match_target"]]) $
-        Maybes.cases (var "marg")
-          -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
-          (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
-          (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
-              -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
-              right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"]))
-
--- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
--- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
-encodeUnwrapElim = def "encodeUnwrapElim" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
-      -- Wrap elimination: transparent unwrap
-        Maybes.cases (var "marg")
-          -- Unapplied: identity function
-          (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
-          (lambda "arg" $
-            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
-
 -- | Encode a Hydra field type as a Lisp field definition
 encodeFieldDef :: TTermDefinition (FieldType -> L.FieldDefinition)
 encodeFieldDef = def "encodeFieldDef" $
@@ -331,32 +256,29 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
 encodeLetAsNative :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
-    "isClojureTop" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
-      [L._Dialect_clojure>>: constant $ boolean True]) $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
-    -- For Clojure: topologically sort bindings so dependencies come before dependents.
-    -- Clojure's let is sequential, so referenced bindings must be defined first.
-    -- Build adjacency list: each binding depends on other bindings it references.
-    -- Topologically sort bindings for ALL Lisp dialects (all are eager)
-    "sortedBindings" <~ (Logic.ifElse (boolean True)
-      (lets [
-        "allNames">: Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")),
-        "adjList">: Lists.map (lambda "b" $
-          pair (Core.bindingName (var "b"))
-            (Sets.toList (Sets.intersection (var "allNames")
-              (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
-          (var "bindings"),
-        "sortResult">: Sorting.topologicalSort @@ var "adjList",
-        "nameToBinding">: Maps.fromList (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings"))] $
-        -- If sort succeeds, reorder. If cyclic, keep original order.
-        Eithers.either_ (constant (var "bindings"))
-          (lambda "sorted" $
-            Lists.map (lambda "name" $
-              Maybes.fromMaybe (Lists.head (var "bindings"))
-                (Maps.lookup (var "name") (var "nameToBinding")))
-              (var "sorted"))
-          (var "sortResult"))
-      (var "bindings")) $
+    -- Topologically sort bindings into strongly-connected components. Singleton
+    -- SCCs flow through in dependency order (so non-cyclic forward references
+    -- become valid sequential bindings), and any cycle (SCC of size > 1) marks
+    -- the let as recursive: Clojure emits letfn, the other dialects emit letrec
+    -- (which the loader transforms into the dialect's native rec form).
+    "supportsLetrec" <~ (dialectSupportsLetrec @@ var "dialect") $
+    "allNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
+    "adjList" <~ Lists.map (lambda "b" $
+      pair (Core.bindingName (var "b"))
+        (Sets.toList (Sets.intersection (var "allNames")
+          (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
+      (var "bindings") $
+    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjList") $
+    "nameToBinding" <~ Maps.fromList
+      (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
+    "sortedBindings" <~ Maybes.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
+      (Lists.concat (var "sccs"))) $
+    -- A cycle is any SCC of size greater than one.
+    "hasCycle" <~ (Lists.foldl (lambda "acc" $ lambda "scc" $
+      Logic.or (var "acc") (Equality.gt (Lists.length (var "scc")) (int32 1)))
+      (boolean False)
+      (var "sccs")) $
     -- Encode each binding, eta-expanding self-referential non-lambda bindings
     -- so that letrec doesn't evaluate the self-reference during initialization.
     -- E.g., `recurse = f(fsub(recurse))` becomes `recurse = (lambda (_arg) ((f (fsub recurse)) _arg))`
@@ -372,8 +294,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
         -- Handle self-referential bindings:
         -- For Clojure: use named fn for self-reference (both lambda and eta-expanded)
         -- For others: use letrec (eta-expand non-lambda self-refs for letrec compat)
-        "isClojure" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
-          [L._Dialect_clojure>>: constant $ boolean True]) $
+        "isClojure" <~ (Logic.not (var "supportsLetrec")) $
         "wrappedVal" <~ (Logic.ifElse (var "isClojure")
           -- Clojure path: use named fn for all self-referential bindings
           (Logic.ifElse (var "isSelfRef")
@@ -398,18 +319,9 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (var "bval"))) $
           right (pair (var "bname") (var "wrappedVal")))
       (var "sortedBindings")) $
-    -- Determine let kind: check if any binding references itself or another binding in the group
-    "allBindingNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
-    "hasCrossRefs" <~ (Lists.foldl
-      (lambda "acc" $ lambda "b" $
-        Logic.or (var "acc")
-          (Logic.not (Sets.null (Sets.intersection (var "allBindingNames")
-            (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))))
-      (boolean False)
-      (var "bindings")) $
-    -- For Clojure: use recursive kind if there are any cross-binding references
-    -- (Clojure's let is sequential and can't handle forward references)
-    -- For others: only use recursive kind if there's self-reference
+    -- A self-referential singleton SCC has size 1 (with a self-loop) and is
+    -- not caught by hasCycle, so detect self-references separately. The let
+    -- is recursive whenever any binding self-references or any SCC is a cycle.
     "hasSelfRef" <~ (Lists.foldl
       (lambda "acc" $ lambda "b" $
         Logic.or (var "acc")
@@ -417,10 +329,10 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
       (boolean False)
       (var "bindings")) $
-    "isRecursive" <~ (var "hasSelfRef") $
+    "isRecursive" <~ (Logic.or (var "hasSelfRef") (var "hasCycle")) $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
-      (Logic.ifElse (Lists.null (Lists.tail (var "bindings")))
+      (Logic.ifElse (Equality.lte (Lists.length (var "bindings")) (int32 1))
         (inject L._LetKind L._LetKind_parallel unit)
         (inject L._LetKind L._LetKind_sequential unit))) $
     "lispBindings" <~ (Lists.map
@@ -443,6 +355,14 @@ encodeLiteral = def "encodeLiteral" $
     _Literal_boolean>>: lambda "b" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_boolean (var "b"),
+    _Literal_decimal>>: lambda "d" $
+      -- Lisp dialects have no native decimal; this case is only hit if adaptation
+      -- is skipped. Fall back to emitting the decimal as a float literal.
+      inject L._Expression L._Expression_literal $
+        inject L._Literal L._Literal_float $
+          record L._FloatLiteral [
+            L._FloatLiteral_value>>: Literals.float64ToBigfloat (Literals.decimalToFloat64 (var "d")),
+            L._FloatLiteral_precision>>: nothing],
     _Literal_string>>: lambda "s" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_string (var "s"),
@@ -535,6 +455,30 @@ encodeLiteral = def "encodeLiteral" $
                     L._IntegerLiteral_value>>: Literals.int32ToBigint (var "bv"),
                     L._IntegerLiteral_bigint>>: boolean False])
               (var "byteValues")]]
+
+-- | Encode a Hydra record projection as a Lisp expression.
+-- Takes an optional argument for applied projections.
+encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
+encodeProjectionElim = def "encodeProjectionElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
+      -- Record projection: (:field record) or (record-type-field record)
+        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
+        "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
+        Maybes.cases (var "marg")
+          -- Unapplied: (lambda (v) (record-type-field v))
+          (right (lispLambdaExpr @@ list [string "v"] @@
+            (inject L._Expression L._Expression_fieldAccess $
+              record L._FieldAccess [
+                L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
+                L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
+                L._FieldAccess_target>>: lispVar @@ string "v"])))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
+              right (inject L._Expression L._Expression_fieldAccess $
+                record L._FieldAccess [
+                  L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
+                  L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
+                  L._FieldAccess_target>>: var "sarg"]))
 
 -- | Encode a Hydra term as a Lisp expression
 encodeTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Either Error L.Expression)
@@ -634,7 +578,7 @@ encodeTerm = def "encodeTerm" $
            record L._SetLiteral [
              L._SetLiteral_elements>>: var "sels"]),
 
-     _Term_union>>: lambda "inj" $
+     _Term_inject>>: lambda "inj" $
        "tname" <~ (Names.localNameOf @@ Core.injectionTypeName (var "inj")) $
        "field" <~ Core.injectionField (var "inj") $
        "fname" <~ Core.unName (Core.fieldName (var "field")) $
@@ -717,6 +661,8 @@ encodeType = def "encodeType" $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "ByteArray"),
          _LiteralType_boolean>>: constant $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "Boolean"),
+         _LiteralType_decimal>>: constant $
+           inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "Decimal"),
          _LiteralType_float>>: constant $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "Float"),
          _LiteralType_integer>>: constant $
@@ -819,10 +765,72 @@ encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> E
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
+
+-- | Encode a Hydra case statement (union elimination) as a Lisp expression.
+-- Takes an optional argument for applied case statements.
+encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
+encodeUnionElim = def "encodeUnionElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
+      -- Union elimination: cond dispatch on tagged values
+        "tname" <~ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs")) $
+        "caseFields" <~ Core.caseStatementCases (var "cs") $
+        "defCase" <~ Core.caseStatementDefault (var "cs") $
+        -- Build cond clauses from each case field
+        "clauses" <<~ (Eithers.mapList
+          (lambda "cf" $
+            "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
+            "cfterm" <~ Core.fieldTerm (var "cf") $
+            -- Each case applies the handler to the value: ((handler) v)
+            -- Condition: (equal? (car __m) :variantName) or (= (first __m) :variantName)
+            "condExpr" <~ (lispApp @@ (lispVar @@ (dialectEqual @@ var "dialect")) @@ list [
+              lispApp @@ (lispVar @@ (dialectCar @@ var "dialect")) @@ list [lispVar @@ string "match_target"],
+              lispKeyword @@ var "cfname"]) $
+            -- Body: apply handler to (cadr __m)
+            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
+              right (record L._CondClause [
+                L._CondClause_condition>>: var "condExpr",
+                L._CondClause_body>>: var "bodyExpr"]))
+          (var "caseFields")) $
+        -- Default clause
+        -- Default is a direct result value, NOT a handler function.
+        -- The reducer returns the default as-is without applying it to the payload.
+        "defExpr" <<~ (Maybes.cases (var "defCase")
+          (right nothing)
+          (lambda "dt" $
+            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
+              right (just (var "defBody"))))  $
+        -- Build the cond expression wrapped in a lambda taking "v"
+        "condExpr" <~ (inject L._Expression L._Expression_cond $
+          record L._CondExpression [
+            L._CondExpression_clauses>>: var "clauses",
+            L._CondExpression_default>>: var "defExpr"]) $
+        -- Wrap in ((lambda (__mv) (cond ...)) (cadr __m)) or (second __m) for Clojure
+        "innerExpr" <~ (lispApp @@
+          (lispLambdaExpr @@ list [string "match_value"] @@ var "condExpr") @@
+          list [lispApp @@ (lispVar @@ (dialectCadr @@ var "dialect")) @@ list [lispVar @@ string "match_target"]]) $
+        Maybes.cases (var "marg")
+          -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
+          (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
+              -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
+              right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"]))
+
+-- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
+-- Takes an optional argument for applied unwraps.
+encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
+encodeUnwrapElim = def "encodeUnwrapElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
+      -- Wrap elimination: transparent unwrap
+        Maybes.cases (var "marg")
+          -- Unapplied: identity function
+          (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
+          (lambda "arg" $
+            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 
 -- | Check if a name is maybes.cases (3 args, arg 2 is lazy).
 isCasesPrimitive :: TTermDefinition (Name -> Bool)
@@ -1012,7 +1020,7 @@ moduleToLisp = def "moduleToLisp" $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out type aliases (non-nominal types)
     "typeDefs" <~ Lists.filter (lambda "td" $
-      Predicates.isNominalType @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "td")))
+      Predicates.isNominalType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $

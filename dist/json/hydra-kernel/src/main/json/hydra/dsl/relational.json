@@ -8,7 +8,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -34,8 +34,8 @@
                 "argument": {"literal": {"string": {}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -54,7 +54,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -63,7 +63,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -85,8 +85,8 @@
                 "argument": {"variable": "hydra.relational.ColumnName"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -107,7 +107,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -164,8 +164,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The domain (type) of the column"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The domain (type) of the column"}}}],
                         "body": {"variable": "t"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "domain"}},
@@ -175,13 +175,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A unique name for the column"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A unique name for the column"}}}],
                     "body": {"variable": "hydra.relational.ColumnName"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -198,8 +198,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The domain (type) of the column"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The domain (type) of the column"}}}],
                           "body": {"variable": "t"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -208,8 +208,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique name for the column"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique name for the column"}}}],
                       "body": {"variable": "hydra.relational.ColumnName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["t"]}}},
@@ -221,7 +221,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -230,7 +230,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -267,8 +267,8 @@
                     "function": {"variable": "hydra.relational.ColumnSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -276,8 +276,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique name for the column"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique name for the column"}}}],
                       "body": {"variable": "hydra.relational.ColumnName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -296,7 +296,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -305,7 +305,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -342,8 +342,8 @@
                     "function": {"variable": "hydra.relational.ColumnSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -351,8 +351,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The domain (type) of the column"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The domain (type) of the column"}}}],
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -373,7 +373,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -417,7 +417,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -426,7 +426,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -464,8 +464,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unique name for the column"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unique name for the column"}}}],
                         "body": {"variable": "hydra.relational.ColumnName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -477,8 +477,8 @@
                     "function": {"variable": "hydra.relational.ColumnSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -495,8 +495,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique name for the column"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A unique name for the column"}}}],
                           "body": {"variable": "hydra.relational.ColumnName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -517,7 +517,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -545,7 +545,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -554,7 +554,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -608,8 +608,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The domain (type) of the column"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The domain (type) of the column"}}}],
                         "body": {"variable": "t"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -621,8 +621,8 @@
                     "function": {"variable": "hydra.relational.ColumnSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -639,8 +639,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The domain (type) of the column"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The domain (type) of the column"}}}],
                           "body": {"variable": "t"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -661,7 +661,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -718,8 +718,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
                         "body": {
@@ -734,13 +734,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The name of the target relation"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The name of the target relation"}}}],
                     "body": {"variable": "hydra.relational.RelationName"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "foreignRelation"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -754,8 +754,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
                           "body": {
@@ -769,8 +769,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the target relation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of the target relation"}}}],
                       "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -782,7 +782,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -791,7 +791,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -825,8 +825,8 @@
                 "argument": {"variable": "hydra.relational.ForeignKey"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -834,8 +834,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the target relation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of the target relation"}}}],
                       "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -851,7 +851,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -860,7 +860,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -894,8 +894,8 @@
                 "argument": {"variable": "hydra.relational.ForeignKey"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -903,8 +903,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
                       "body": {
@@ -927,7 +927,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -971,7 +971,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -980,7 +980,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1018,8 +1018,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the target relation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the target relation"}}}],
                         "body": {"variable": "hydra.relational.RelationName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1028,8 +1028,8 @@
                 "argument": {"variable": "hydra.relational.ForeignKey"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1043,8 +1043,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The name of the target relation"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The name of the target relation"}}}],
                           "body": {"variable": "hydra.relational.RelationName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1062,7 +1062,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -1090,7 +1090,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1099,7 +1099,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -1153,8 +1153,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
                         "body": {
@@ -1168,8 +1168,8 @@
                 "argument": {"variable": "hydra.relational.ForeignKey"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1183,8 +1183,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
                           "body": {
@@ -1205,7 +1205,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -1231,8 +1231,8 @@
                 "argument": {"list": {"variable": "hydra.relational.ColumnName"}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1251,7 +1251,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1260,7 +1260,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -1282,8 +1282,8 @@
                 "argument": {"variable": "hydra.relational.PrimaryKey"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1302,7 +1302,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -1332,8 +1332,8 @@
                       "function": {"variable": "hydra.relational.Row"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1359,7 +1359,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1368,7 +1368,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -1393,8 +1393,8 @@
                     "function": {"variable": "hydra.relational.Relation"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1420,7 +1420,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -1446,8 +1446,8 @@
                 "argument": {"literal": {"string": {}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1466,7 +1466,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1475,7 +1475,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -1497,8 +1497,8 @@
                 "argument": {"variable": "hydra.relational.RelationName"},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1523,7 +1523,7 @@
                         "body": {
                           "wrap": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "record",
                                   "term": {
@@ -1612,8 +1612,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
                                 "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
@@ -1625,8 +1625,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {
                                     "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
                             "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
@@ -1638,8 +1638,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A list of column specifications"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A list of column specifications"}}}],
                         "body": {
                           "list": {
                             "application": {
@@ -1653,13 +1653,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "A unique name for the relation"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "A unique name for the relation"}}}],
                     "body": {"variable": "hydra.relational.RelationName"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1680,8 +1680,8 @@
                                 "annotated": {
                                   "annotation": [
                                     {
-                                      "@key": "description",
-                                      "@value": {
+                                      "key": "description",
+                                      "value": {
                                         "literal": {
                                           "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
                                   "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
@@ -1692,8 +1692,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {
+                                  "key": "description",
+                                  "value": {
                                     "literal": {
                                       "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
                               "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
@@ -1704,8 +1704,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A list of column specifications"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A list of column specifications"}}}],
                           "body": {
                             "list": {
                               "application": {
@@ -1718,8 +1718,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique name for the relation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique name for the relation"}}}],
                       "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["t"]}}},
@@ -1731,7 +1731,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1740,7 +1740,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1777,8 +1777,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1786,8 +1786,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique name for the relation"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique name for the relation"}}}],
                       "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1806,7 +1806,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1815,7 +1815,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1852,8 +1852,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1861,8 +1861,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A list of column specifications"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A list of column specifications"}}}],
                       "body": {
                         "list": {
                           "application": {
@@ -1885,7 +1885,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1894,7 +1894,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -1931,8 +1931,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1940,8 +1940,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
                       "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
@@ -1962,7 +1962,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -1971,7 +1971,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "project",
                                     "term": {
@@ -2008,8 +2008,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2017,8 +2017,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
                       "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
@@ -2041,7 +2041,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -2085,7 +2085,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2094,7 +2094,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2135,7 +2135,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2144,7 +2144,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2185,7 +2185,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2194,7 +2194,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2232,8 +2232,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unique name for the relation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unique name for the relation"}}}],
                         "body": {"variable": "hydra.relational.RelationName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2245,8 +2245,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2263,8 +2263,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique name for the relation"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A unique name for the relation"}}}],
                           "body": {"variable": "hydra.relational.RelationName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2285,7 +2285,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -2313,7 +2313,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2322,7 +2322,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2379,7 +2379,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2388,7 +2388,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2429,7 +2429,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2438,7 +2438,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2476,8 +2476,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A list of column specifications"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A list of column specifications"}}}],
                         "body": {
                           "list": {
                             "application": {
@@ -2493,8 +2493,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2511,8 +2511,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A list of column specifications"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A list of column specifications"}}}],
                           "body": {
                             "list": {
                               "application": {
@@ -2537,7 +2537,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -2565,7 +2565,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2574,7 +2574,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2615,7 +2615,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2624,7 +2624,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2681,7 +2681,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2690,7 +2690,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2728,8 +2728,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
                         "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
@@ -2743,8 +2743,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2761,8 +2761,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
                           "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
@@ -2785,7 +2785,7 @@
                 "body": {
                   "wrap": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -2813,7 +2813,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2822,7 +2822,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2863,7 +2863,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2872,7 +2872,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2913,7 +2913,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -2922,7 +2922,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "project",
                                                                   "term": {
@@ -2976,8 +2976,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
                         "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
@@ -2991,8 +2991,8 @@
                     "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3009,8 +3009,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {
                                   "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
                           "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
@@ -3031,7 +3031,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -3061,8 +3061,8 @@
                       "values": {"variable": "v"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3088,7 +3088,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -3097,7 +3097,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -3122,8 +3122,8 @@
                     "function": {"variable": "hydra.relational.Relationship"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3149,7 +3149,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "wrap",
                       "term": {
@@ -3175,8 +3175,8 @@
                 "argument": {"list": {"variable": "v"}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3198,7 +3198,7 @@
             "body": {
               "wrap": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -3207,7 +3207,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unwrap",
                                     "term": {
@@ -3232,8 +3232,8 @@
                     "function": {"variable": "hydra.relational.Row"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {

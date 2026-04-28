@@ -62,10 +62,12 @@ ns :: Namespace
 ns = Namespace "hydra.unification"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns]
-    kernelTypesNamespaces $
-    Just ("Utilities for type unification.")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just ("Utilities for type unification.")}
   where
    definitions = [
      toDefinition joinTypes,
@@ -194,10 +196,10 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
                 (var "cx"))
               (var "bind" @@ var "name2" @@ var "sleft"))
             (var "bind" @@ var "name" @@ var "sright"))]]) $
-  Logic.ifElse
-    (Lists.null (var "constraints"))
+  Maybes.maybe
     (right (asTerm Substitution.idTypeSubst))
-    (var "withConstraint" @@ (Lists.head (var "constraints")) @@ (Lists.tail (var "constraints")))
+    ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
+    (Lists.uncons $ var "constraints")
 
 unifyTypeLists :: TTermDefinition (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $

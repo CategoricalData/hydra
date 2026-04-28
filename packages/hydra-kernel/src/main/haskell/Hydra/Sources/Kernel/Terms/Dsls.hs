@@ -41,10 +41,12 @@ ns :: Namespace
 ns = Namespace "hydra.dsls"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Annotations.ns, Formatting.ns, Names.ns, Strip.ns]
-    kernelTypesNamespaces $
-    Just "Functions for generating domain-specific DSL modules from type modules"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Annotations.ns, Formatting.ns, Names.ns, Strip.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
       toDefinition dslBindingName,
@@ -111,33 +113,33 @@ nominalResultType = define "nominalResultType" $
     (var "vars")
 
 -- | Inject a Record-typed term into the Term.record variant
--- Produces TermUnion(Injection _Term (Field _Term_record innerRecord))
+-- Produces TermInject(Injection _Term (Field _Term_record innerRecord))
 injectTermRecord :: TTerm Term -> TTerm Term
-injectTermRecord t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
+injectTermRecord t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
 
 -- | Inject a term into the Term.application variant
 injectTermApplication :: TTerm Term -> TTerm Term
-injectTermApplication t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
+injectTermApplication t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
 
 -- | Inject a term into the Term.cases variant
 injectTermCases :: TTerm Term -> TTerm Term
-injectTermCases t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_cases) t)
+injectTermCases t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_cases) t)
 
 -- | Inject a term into the Term.project variant
 injectTermProject :: TTerm Term -> TTerm Term
-injectTermProject t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
+injectTermProject t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
 
 -- | Inject a term into the Term.union variant
 injectTermUnion :: TTerm Term -> TTerm Term
-injectTermUnion t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_union) t)
+injectTermUnion t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_inject) t)
 
 -- | Inject a term into the Term.unwrap variant
 injectTermUnwrap :: TTerm Term -> TTerm Term
-injectTermUnwrap t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
+injectTermUnwrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
 
 -- | Inject a term into the Term.wrap variant
 injectTermWrap :: TTerm Term -> TTerm Term
-injectTermWrap t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
+injectTermWrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
 
 -- | Build a deep Name: TermWrap(_Name, TermLiteral(LiteralString(s)))
 deepName :: TTerm String -> TTerm Term
@@ -215,15 +217,22 @@ dslNamespace = define "dslNamespace" $
   doc "Generate a DSL module namespace from a source module namespace" $
   "ns" ~>
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))) $
+  "prefixFull" <~ (Packaging.namespace (Strings.cat $ list [
+    string "hydra.dsl.",
+    Packaging.unNamespace (var "ns")])) $
   -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
   -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
-  Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
-    (Packaging.namespace (Strings.cat $ list [
-      string "hydra.dsl.",
-      Strings.intercalate (string ".") (Lists.tail (var "parts"))]))
-    (Packaging.namespace (Strings.cat $ list [
-      string "hydra.dsl.",
-      Packaging.unNamespace (var "ns")]))
+  -- An empty parts list is unreachable for a well-formed namespace; fall back
+  -- to the full-prefix form.
+  Maybes.maybe
+    (var "prefixFull")
+    ("ht" ~>
+      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
+        (Packaging.namespace (Strings.cat $ list [
+          string "hydra.dsl.",
+          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
+        (var "prefixFull"))
+    (Lists.uncons (var "parts"))
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -233,24 +242,28 @@ dslBindingName = define "dslBindingName" $
   doc "Generate a binding name for a DSL function from a type name" $
   "n" ~>
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  -- Check if name has a namespace (contains ".")
-  Logic.ifElse (Logic.not (Lists.null (Lists.tail (var "parts"))))
-    -- Qualified type: check if namespace starts with "hydra"
-    (Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
-      -- hydra.core.Foo -> hydra.dsl.core.foo
-      (Core.name (Strings.intercalate (string ".") (Lists.concat2
-        (list [string "hydra", string "dsl"])
-        (Lists.concat2
-          (Lists.tail (Lists.init (var "parts")))
-          (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- openGql.grammar.Foo -> hydra.dsl.openGql.grammar.foo
-      (Core.name (Strings.intercalate (string ".") (Lists.concat2
-        (list [string "hydra", string "dsl"])
-        (Lists.concat2
-          (Lists.init (var "parts"))
-          (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))]))))))
-    -- Local type: just decapitalize
-    (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  -- nsParts = parts minus the last element (the namespace components).
+  -- Nothing means parts was empty (unreachable for a valid name);
+  -- Just [] means the name has no namespace (local type).
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        -- single-element parts: local type, no namespace
+        (var "localResult")
+        ("nsHeadTail" ~>
+          "dslNsParts" <~ (Logic.ifElse
+            (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
+            -- hydra.core.Foo -> [hydra, dsl] ++ tail nsParts
+            (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
+            -- openGql.grammar.Foo -> [hydra, dsl] ++ nsParts
+            (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
+          Core.name (Strings.intercalate (string ".")
+            (Lists.concat2 (var "dslNsParts") (list [var "localPart"]))))
+        (Lists.uncons (var "nsParts")))
+    (Lists.maybeInit (var "parts"))
 
 -- | Generate a DSL element name from a type name and a local element name.
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
@@ -261,14 +274,24 @@ dslDefinitionName = define "dslDefinitionName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
   "typeName" ~> "localName" ~>
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "typeName"))) $
-  -- Extract namespace parts (all but last), transform to DSL namespace
-  "nsParts" <~ (Lists.init (var "parts")) $
-  "dslNsParts" <~ (Logic.ifElse (Equality.equal (Lists.head (var "nsParts")) (string "hydra"))
-    -- hydra.core -> hydra.dsl.core
-    (Lists.concat2 (list [string "hydra", string "dsl"]) (Lists.tail (var "nsParts")))
-    -- openGql.grammar -> hydra.dsl.openGql.grammar
-    (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
-  Core.name (Strings.intercalate (string ".") (Lists.concat2 (var "dslNsParts") (list [var "localName"])))
+  -- Extract namespace parts (all but last); fall back to the bare local name
+  -- when the type name has no namespace (unreachable for well-formed inputs).
+  Maybes.maybe
+    (Core.name (var "localName"))
+    ("nsParts" ~>
+      "dslNsParts" <~ (Maybes.maybe
+        -- nsParts empty: just prepend hydra.dsl
+        (list [string "hydra", string "dsl"])
+        ("nsHeadTail" ~> Logic.ifElse
+          (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
+          -- hydra.core -> hydra.dsl.core (drop the leading "hydra", keep the rest)
+          (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
+          -- openGql.grammar -> hydra.dsl.openGql.grammar
+          (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts")))
+        (Lists.uncons (var "nsParts"))) $
+      Core.name (Strings.intercalate (string ".")
+        (Lists.concat2 (var "dslNsParts") (list [var "localName"]))))
+    (Lists.maybeInit (var "parts"))
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
@@ -400,7 +423,7 @@ generateUnionInjector = define "generateUnionInjector" $
   -- Build simple injection
   -- Build deep injection: deepField for the variant, then deepInjection into the union type
   "dFieldValue" <~ (Logic.ifElse (var "isUnit")
-    (Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unit) Core.termUnit))
+    (Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unit) Core.termUnit))
     (unwrapTTerm (Core.termVariable (Core.name (string "x"))))) $
   "injectionTerm" <~ (wrapTermInTTerm (deepInjection (var "typeName") (deepField (var "fieldName") (var "dFieldValue")))) $
   -- For non-unit variants, wrap in a typed lambda; for unit, it's a constant TTerm
@@ -499,7 +522,7 @@ deduplicateBindings = define "deduplicateBindings" $
         Core.binding
           (Core.name (var "uniqueName"))
           (Core.bindingTerm (var "b"))
-          (Core.bindingType (var "b"))]))
+          (Core.bindingTypeScheme (var "b"))]))
     (list ([] :: [TTerm Binding]))
     (var "bindings")
 
@@ -542,7 +565,7 @@ dslModule = define "dslModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -552,17 +575,17 @@ dslModule = define "dslModule" $
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "DSL functions for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingType $ var "b")))
-            (deduplicateBindings @@ Lists.concat (var "dslBindings")))
           -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
           (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleTypeDependencies (var "mod"))))
           -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
           (Lists.nub (Lists.concat2
             (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
             (Packaging.moduleTypeDependencies (var "mod"))))
-          (just (Strings.cat $ list [
-            string "DSL functions for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingTypeScheme $ var "b")))
+            (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))

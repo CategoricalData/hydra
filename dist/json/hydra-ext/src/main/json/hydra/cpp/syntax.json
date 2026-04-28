@@ -3,8 +3,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.AccessSpecifier",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "public", "type": {"unit": {}}},
               {"name": "protected", "type": {"unit": {}}},
@@ -14,8 +14,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Program",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "preprocessorDirectives",
@@ -30,8 +30,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.IncludeDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {"name": "isSystem", "type": {"literal": {"boolean": {}}}}]},
@@ -39,8 +39,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Declaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "preprocessor",
@@ -67,8 +67,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.NamespaceDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -78,8 +78,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TypedefDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -90,8 +90,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "specifier",
@@ -103,8 +103,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "inline", "type": {"literal": {"boolean": {}}}},
               {"name": "parameters", "type": {"list": {"literal": {"string": {}}}}},
@@ -115,8 +115,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.PreprocessorDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "include",
@@ -159,14 +159,14 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.PragmaDirective",
-        "type": {
-          "type": {"record": [{"name": "content", "type": {"literal": {"string": {}}}}]},
+        "typeScheme": {
+          "body": {"record": [{"name": "content", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.DefineDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -179,50 +179,50 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.UndefDirective",
-        "type": {
-          "type": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]},
+        "typeScheme": {
+          "body": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IfdefDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [{"name": "identifier", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IfndefDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [{"name": "identifier", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IfDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [{"name": "condition", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ElifDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [{"name": "condition", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ElseDirective",
-        "type": {"type": {"unit": {}}, "variables": []}}},
+        "typeScheme": {"body": {"unit": {}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.EndifDirective",
-        "type": {"type": {"unit": {}}, "variables": []}}},
+        "typeScheme": {"body": {"unit": {}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LineDirective",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "lineNumber",
@@ -232,20 +232,20 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ErrorDirective",
-        "type": {
-          "type": {"record": [{"name": "message", "type": {"literal": {"string": {}}}}]},
+        "typeScheme": {
+          "body": {"record": [{"name": "message", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.WarningDirective",
-        "type": {
-          "type": {"record": [{"name": "message", "type": {"literal": {"string": {}}}}]},
+        "typeScheme": {
+          "body": {"record": [{"name": "message", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassSpecifier",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.cpp.syntax.ClassKey"}},
               {"name": "name", "type": {"literal": {"string": {}}}},
@@ -256,8 +256,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassKey",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "class", "type": {"unit": {}}},
               {"name": "enum", "type": {"unit": {}}},
@@ -267,8 +267,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.BaseSpecifier",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "access",
@@ -278,15 +278,15 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassBody",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "wrap": {"list": {"variable": "hydra.cpp.syntax.MemberSpecification"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MemberSpecification",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "accessLabel",
@@ -298,8 +298,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MemberDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "function",
@@ -323,8 +323,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ConstructorDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -340,8 +340,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MemInitializer",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -351,8 +351,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.DestructorDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "prefixSpecifiers",
@@ -368,8 +368,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "prefixSpecifiers",
@@ -391,8 +391,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionSpecifierPrefix",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "inline", "type": {"unit": {}}},
               {"name": "virtual", "type": {"unit": {}}},
@@ -402,8 +402,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionSpecifierSuffix",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "const", "type": {"unit": {}}},
               {"name": "noexcept", "type": {"unit": {}}},
@@ -413,8 +413,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Parameter",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "type",
@@ -428,8 +428,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionBody",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "compound",
@@ -441,8 +441,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.VariableDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "type",
@@ -456,8 +456,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.VariantDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "types",
@@ -467,8 +467,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ProductDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -478,8 +478,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ContainerDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "list",
@@ -497,8 +497,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ListDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "elementType",
@@ -508,8 +508,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MapDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "keyType",
@@ -522,8 +522,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.SetDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "elementType",
@@ -533,8 +533,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.OptionalDeclaration",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "valueType",
@@ -544,8 +544,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Expression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "assignment",
@@ -557,8 +557,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.CommaExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.cpp.syntax.Expression"}},
               {
@@ -568,8 +568,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.AssignmentExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "conditional",
@@ -581,8 +581,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ExplicitAssignment",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -597,8 +597,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.AssignmentOperator",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "assign", "type": {"unit": {}}},
               {"name": "plusAssign", "type": {"unit": {}}},
@@ -615,8 +615,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ConditionalExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "logicalOr",
@@ -628,8 +628,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TernaryExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "condition",
@@ -644,8 +644,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalOrExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "logicalAnd",
@@ -657,8 +657,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalOrOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -670,8 +670,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalAndExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "inclusiveOr",
@@ -683,8 +683,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalAndOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -696,8 +696,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.InclusiveOrExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "exclusiveOr",
@@ -709,8 +709,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.BitwiseOrOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -722,8 +722,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ExclusiveOrExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "and",
@@ -735,8 +735,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.BitwiseXorOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -748,8 +748,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.AndExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "equality",
@@ -761,8 +761,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.BitwiseAndOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -774,8 +774,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.EqualityExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "relational",
@@ -790,8 +790,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.EqualOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -803,8 +803,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.NotEqualOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -816,8 +816,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.RelationalExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "shift",
@@ -838,8 +838,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LessOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -851,8 +851,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.GreaterOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -864,8 +864,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LessEqualOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -877,8 +877,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.GreaterEqualOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -890,8 +890,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ShiftExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "additive",
@@ -906,8 +906,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LeftShiftOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -919,8 +919,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.RightShiftOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -932,8 +932,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.AdditiveExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "multiplicative",
@@ -946,8 +946,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.AddOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -959,8 +959,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.SubtractOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -972,8 +972,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MultiplicativeExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "unary",
@@ -991,8 +991,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MultiplyOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -1004,8 +1004,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.DivideOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -1017,8 +1017,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ModuloOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -1030,8 +1030,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.UnaryExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "postfix",
@@ -1046,8 +1046,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.UnaryOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "operator",
@@ -1059,8 +1059,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.UnaryOperator",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "plus", "type": {"unit": {}}},
               {"name": "minus", "type": {"unit": {}}},
@@ -1074,14 +1074,14 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.SizeofExpression",
-        "type": {
-          "type": {"wrap": {"variable": "hydra.cpp.syntax.TypeExpression"}},
+        "typeScheme": {
+          "body": {"wrap": {"variable": "hydra.cpp.syntax.TypeExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PostfixExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "primary",
@@ -1111,8 +1111,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.SubscriptOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "array",
@@ -1122,8 +1122,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionCallOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "function",
@@ -1135,8 +1135,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MemberAccessOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "object",
@@ -1146,8 +1146,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.PointerMemberAccessOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "pointer",
@@ -1157,8 +1157,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateFunctionCallOperation",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "function",
@@ -1173,8 +1173,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.PrimaryExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "identifier", "type": {"literal": {"string": {}}}},
               {"name": "literal", "type": {"variable": "hydra.cpp.syntax.Literal"}},
@@ -1188,8 +1188,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LambdaExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "captures",
@@ -1207,8 +1207,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.CaptureList",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "captureByValue", "type": {"unit": {}}},
               {
@@ -1218,8 +1218,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Capture",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {"name": "byReference", "type": {"literal": {"boolean": {}}}}]},
@@ -1227,8 +1227,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.PatternMatch",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "visitor", "type": {"variable": "hydra.cpp.syntax.Visitor"}},
               {
@@ -1238,8 +1238,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Visitor",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "lambda",
@@ -1251,14 +1251,14 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.OverloadedLambdas",
-        "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.cpp.syntax.LambdaExpression"}}},
+        "typeScheme": {
+          "body": {"wrap": {"list": {"variable": "hydra.cpp.syntax.LambdaExpression"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionApplication",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "function",
@@ -1270,8 +1270,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionIdentifier",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "simple", "type": {"literal": {"string": {}}}},
               {
@@ -1281,8 +1281,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.QualifiedIdentifier",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "namespace", "type": {"literal": {"string": {}}}},
               {"name": "name", "type": {"literal": {"string": {}}}}]},
@@ -1290,8 +1290,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Statement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "labeled",
@@ -1321,8 +1321,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.LabeledStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "label", "type": {"literal": {"string": {}}}},
               {
@@ -1332,14 +1332,14 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.CompoundStatement",
-        "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.cpp.syntax.Statement"}}},
+        "typeScheme": {
+          "body": {"wrap": {"list": {"variable": "hydra.cpp.syntax.Statement"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SelectionStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "condition",
@@ -1354,8 +1354,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.SwitchStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.cpp.syntax.Expression"}},
               {
@@ -1365,8 +1365,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.CaseStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "case", "type": {"variable": "hydra.cpp.syntax.CaseValue"}},
               {
@@ -1376,8 +1376,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.CaseValue",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.cpp.syntax.Expression"}},
               {
@@ -1387,8 +1387,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.IterationStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "while",
@@ -1402,8 +1402,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.WhileStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "condition",
@@ -1413,8 +1413,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.DoStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "body", "type": {"variable": "hydra.cpp.syntax.Statement"}},
               {
@@ -1424,8 +1424,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ForStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "init", "type": {"variable": "hydra.cpp.syntax.ForInit"}},
               {
@@ -1439,8 +1439,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ForInit",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "expression",
@@ -1453,8 +1453,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.RangeForStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "type",
@@ -1466,8 +1466,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.JumpStatement",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "break", "type": {"unit": {}}},
               {"name": "continue", "type": {"unit": {}}},
@@ -1480,14 +1480,14 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.ExpressionStatement",
-        "type": {
-          "type": {"wrap": {"variable": "hydra.cpp.syntax.Expression"}},
+        "typeScheme": {
+          "body": {"wrap": {"variable": "hydra.cpp.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TypeExpression",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "basic", "type": {"variable": "hydra.cpp.syntax.BasicType"}},
               {
@@ -1504,8 +1504,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.BasicType",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "void", "type": {"unit": {}}},
               {"name": "bool", "type": {"unit": {}}},
@@ -1520,8 +1520,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.QualifiedType",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "baseType",
@@ -1533,8 +1533,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TypeQualifier",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "const", "type": {"unit": {}}},
               {"name": "lvalueRef", "type": {"unit": {}}},
@@ -1544,8 +1544,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateType",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
               {
@@ -1555,8 +1555,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateArgument",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "type",
@@ -1566,8 +1566,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionType",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "returnType",
@@ -1579,8 +1579,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Literal",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {
                 "name": "integer",
@@ -1602,8 +1602,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.IntegerLiteral",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "decimal", "type": {"literal": {"integer": {"bigint": {}}}}},
               {"name": "hexadecimal", "type": {"literal": {"string": {}}}},
@@ -1613,26 +1613,26 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FloatingLiteral",
-        "type": {
-          "type": {"wrap": {"literal": {"float": {"bigfloat": {}}}}},
+        "typeScheme": {
+          "body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CharacterLiteral",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.StringLiteral",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BooleanLiteral",
-        "type": {"type": {"wrap": {"literal": {"boolean": {}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"boolean": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Vector",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "elementType",
@@ -1644,8 +1644,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Map",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "keyType",
@@ -1660,8 +1660,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.MapEntry",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.cpp.syntax.Expression"}},
               {"name": "value", "type": {"variable": "hydra.cpp.syntax.Expression"}}]},
@@ -1669,8 +1669,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Set",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "elementType",
@@ -1682,8 +1682,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Optional",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {
                 "name": "valueType",
@@ -1695,12 +1695,12 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.Identifier",
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
+        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Comment",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "record": [
               {"name": "text", "type": {"literal": {"string": {}}}},
               {"name": "isMultiline", "type": {"literal": {"boolean": {}}}}]},
@@ -1708,8 +1708,8 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.BinaryOperator",
-        "type": {
-          "type": {
+        "typeScheme": {
+          "body": {
             "union": [
               {"name": "plus", "type": {"unit": {}}},
               {"name": "minus", "type": {"unit": {}}},

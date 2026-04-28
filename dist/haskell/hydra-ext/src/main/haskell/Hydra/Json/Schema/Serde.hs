@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Encode additional items as a JSON value
@@ -35,7 +36,7 @@ encodeArrayRestriction r =
 
 -- | Encode an integer as a JSON number value
 encodeInteger :: Int -> Model.Value
-encodeInteger n = Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint n))
+encodeInteger n = Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint n))
 
 -- | Encode items as a key-value pair
 encodeItems :: Schema.Items -> (String, Model.Value)
@@ -158,8 +159,8 @@ encodeSchemaReference sr = Model.ValueString (Schema.unSchemaReference sr)
 encodeStringRestriction :: Schema.StringRestriction -> (String, Model.Value)
 encodeStringRestriction r =
     case r of
-      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
-      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
       Schema.StringRestrictionPattern v0 -> (key_pattern, (Model.ValueString (Schema.unRegularExpression v0)))
 
 -- | Encode a type as a JSON value

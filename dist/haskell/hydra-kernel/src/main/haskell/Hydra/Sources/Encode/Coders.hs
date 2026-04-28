@@ -1,17 +1,24 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source module for hydra.encode.coders
 
 module Hydra.Sources.Encode.Coders where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-
+import qualified Data.Scientific as Sci
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
+      Packaging.moduleDescription = (Just "Term encoders for hydra.coders"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.coders"),
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.encode.context"),
+        (Packaging.Namespace "hydra.encode.errors"),
+        (Packaging.Namespace "hydra.encode.graph"),
+        (Packaging.Namespace "hydra.encode.variants")],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.coders"],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.coders.coderDirection"),
@@ -24,10 +31,10 @@ module_ =
                 Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                  Core.lambdaBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                     Core.injectionField = Core.Field {
-                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldName = (Core.Name "inject"),
                       Core.fieldTerm = (Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.Name "hydra.core.Injection"),
                         Core.recordFields = [
@@ -52,7 +59,7 @@ module_ =
                                     Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "_"),
                                       Core.lambdaDomain = Nothing,
-                                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                      Core.lambdaBody = (Core.TermInject (Core.Injection {
                                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = (Core.Name "unit"),
@@ -63,10 +70,10 @@ module_ =
                 Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                  Core.lambdaBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                     Core.injectionField = Core.Field {
-                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldName = (Core.Name "inject"),
                       Core.fieldTerm = (Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.Name "hydra.core.Injection"),
                         Core.recordFields = [
@@ -91,15 +98,15 @@ module_ =
                                     Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "_"),
                                       Core.lambdaDomain = Nothing,
-                                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                      Core.lambdaBody = (Core.TermInject (Core.Injection {
                                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.coders.CoderDirection")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}),
@@ -108,7 +115,7 @@ module_ =
           Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermUnion (Core.Injection {
+            Core.lambdaBody = (Core.TermInject (Core.Injection {
               Core.injectionTypeName = (Core.Name "hydra.core.Term"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "wrap"),
@@ -126,11 +133,11 @@ module_ =
                         Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                          Core.lambdaBody = (Core.TermInject (Core.Injection {
                             Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                             Core.injectionField = Core.Field {
                               Core.fieldName = (Core.Name "literal"),
-                              Core.fieldTerm = (Core.TermUnion (Core.Injection {
+                              Core.fieldTerm = (Core.TermInject (Core.Injection {
                                 Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.injectionField = Core.Field {
                                   Core.fieldName = (Core.Name "string"),
@@ -138,9 +145,9 @@ module_ =
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coders.LanguageName")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.coders.LanguageName")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
@@ -155,10 +162,10 @@ module_ =
                 Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                  Core.lambdaBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                     Core.injectionField = Core.Field {
-                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldName = (Core.Name "inject"),
                       Core.fieldTerm = (Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.Name "hydra.core.Injection"),
                         Core.recordFields = [
@@ -183,7 +190,7 @@ module_ =
                                     Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "_"),
                                       Core.lambdaDomain = Nothing,
-                                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                      Core.lambdaBody = (Core.TermInject (Core.Injection {
                                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = (Core.Name "unit"),
@@ -194,10 +201,10 @@ module_ =
                 Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                  Core.lambdaBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                     Core.injectionField = Core.Field {
-                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldName = (Core.Name "inject"),
                       Core.fieldTerm = (Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.Name "hydra.core.Injection"),
                         Core.recordFields = [
@@ -222,24 +229,15 @@ module_ =
                                     Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "_"),
                                       Core.lambdaDomain = Nothing,
-                                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                      Core.lambdaBody = (Core.TermInject (Core.Injection {
                                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.coders.TraversalOrder")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.context"),
-        (Packaging.Namespace "hydra.encode.errors"),
-        (Packaging.Namespace "hydra.encode.graph"),
-        (Packaging.Namespace "hydra.encode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.coders"],
-      Packaging.moduleDescription = (Just "Term encoders for hydra.coders")}
+            Core.typeSchemeConstraints = Nothing}))}))]}

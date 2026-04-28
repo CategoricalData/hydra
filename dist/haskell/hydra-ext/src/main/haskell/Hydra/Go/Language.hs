@@ -10,10 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Language constraints for Go 1.22+
@@ -50,8 +47,7 @@ goLanguage =
     functionVariants =
         Sets.fromList [
           Variants.FunctionVariantElimination,
-          Variants.FunctionVariantLambda,
-          Variants.FunctionVariantPrimitive]
+          Variants.FunctionVariantLambda]
     integerTypes =
         Sets.fromList [
           Core.IntegerTypeBigint,
@@ -82,7 +78,7 @@ goLanguage =
           Variants.TermVariantSet,
           Variants.TermVariantTypeApplication,
           Variants.TermVariantTypeLambda,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantUnit,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]
@@ -103,6 +99,7 @@ goLanguage =
           Variants.TypeVariantUnion,
           Variants.TypeVariantUnit,
           Variants.TypeVariantVariable,
+          Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
 

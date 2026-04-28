@@ -17,8 +17,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Paths.ns, Core.ns, Variants.ns] [Paths.ns, Core.ns, Variants.ns] $
-    Just "Error types for core type and term validation"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Paths.ns, Core.ns, Variants.ns],
+            moduleTypeDependencies = [Paths.ns, Core.ns, Variants.ns],
+            moduleDescription = Just "Error types for core type and term validation"}
   where
     definitions = [
       -- Existing error types (pre-linter)

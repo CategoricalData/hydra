@@ -67,13 +67,43 @@ if [ -d "$PY_BASELINE/hydra" ]; then
     find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
     echo "    Copied hydra/ generated kernel modules from dist baseline"
 fi
-# Also copy ext modules from dist/python/hydra-ext
-PY_EXT_BASELINE="$HYDRA_ROOT/dist/python/hydra-ext/src/main/python"
-if [ -d "$PY_EXT_BASELINE/hydra" ]; then
-    cp -r "$PY_EXT_BASELINE/hydra/." "$PY_GEN/hydra/"
-    find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-    echo "    Overlaid hydra/ ext modules from dist baseline"
-fi
+# Ensure every coder package the Python bootstrap driver references has a
+# Python distribution. bootstrap.py / generation.py import
+# hydra.{java,python,haskell,lisp,scala}.coder to dispatch on target language;
+# sync-default() doesn't generate hydra-lisp/hydra-scala into Python, so on a
+# clean checkout they can be missing. Assemble them on demand — warm-cache
+# short-circuits in seconds. Redirect assembler output to a log file: it
+# prints its own "Done: N main..." line per package, which would otherwise
+# pollute the bootstrap-all log parser.
+ASSEMBLE_LOG="$OUTPUT_DIR/.coder-assembly.log"
+mkdir -p "$OUTPUT_DIR"
+: > "$ASSEMBLE_LOG"
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+    coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
+    if [ ! -d "$coder_base/hydra" ]; then
+        echo "    $coder_pkg not present; generating into Python (see $ASSEMBLE_LOG)..."
+        (cd "$HYDRA_ROOT" && heads/python/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
+    fi
+done
+# Overlay coder packages from per-package dist dirs. The Python bootstrap
+# driver (bootstrap.py / generation.py) imports hydra.{java,python,haskell,
+# lisp,scala}.coder to dispatch on target language.
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+    coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
+    if [ -d "$coder_base/hydra" ]; then
+        cp -r "$coder_base/hydra/." "$PY_GEN/hydra/"
+        echo "    Overlaid $coder_pkg modules"
+    fi
+done
+# Overlay ext/domain modules (pg, rdf, etc.) from per-package dist dirs.
+for ext_pkg in hydra-pg hydra-rdf hydra-ext; do
+    ext_base="$HYDRA_ROOT/dist/python/$ext_pkg/src/main/python"
+    if [ -d "$ext_base/hydra" ]; then
+        cp -r "$ext_base/hydra/." "$PY_GEN/hydra/"
+        echo "    Overlaid $ext_pkg modules"
+    fi
+done
+find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Test infrastructure
 echo "  Copying test infrastructure..."

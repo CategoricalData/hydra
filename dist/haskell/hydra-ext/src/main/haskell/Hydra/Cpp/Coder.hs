@@ -26,10 +26,11 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 bindingNameToFilePath :: Core.Name -> String
@@ -489,7 +490,7 @@ encodeTypeDefinition cx g name typ =
         Core.TypeRecord v0 -> encodeRecordType cx g name v0 Nothing
         Core.TypeUnion v0 -> encodeUnionType cx g name v0 Nothing
         Core.TypeWrap v0 -> encodeWrappedType cx g name v0 Nothing
-        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type in definition: " (Core_.type_ typ))))
+        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type in definition: " (ShowCore.type_ typ))))
 
 encodeUnionType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeUnionType cx g name rt comment =
@@ -536,7 +537,7 @@ findIncludes withFwd ns defs =
 
 findTypeDependencies :: Packaging.Namespace -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unNamespace (Names.namespaceOf n)) (Just (Packaging.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeType (Packaging.typeDefinitionType d)))) Sets.empty defs))
+    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unNamespace (Names.namespaceOf n)) (Just (Packaging.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
 
 fwdHeaderName :: Packaging.Namespace -> Core.Name
 fwdHeaderName ns =
@@ -555,7 +556,7 @@ generateTypeFile :: Packaging.Namespace -> Packaging.TypeDefinition -> t0 -> t1 
 generateTypeFile ns def_ cx g =
 
       let name = Packaging.typeDefinitionName def_
-          typ = Core.typeSchemeType (Packaging.typeDefinitionType def_)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def_)
       in (Eithers.bind (encodeTypeDefinition cx g name typ) (\decls ->
         let includes = findIncludes True ns [
               def_]

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | String formatting types and functions.
 
 module Hydra.Formatting where
-
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -16,12 +14,11 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Capitalize the first letter of a string
 capitalize :: String -> String
 capitalize = mapFirstLetter Strings.toUpper
-
 -- | Convert a string from one case convention to another
 convertCase :: Util.CaseConvention -> Util.CaseConvention -> String -> String
 convertCase from to original =
@@ -32,7 +29,7 @@ convertCase from to original =
 
                           let splitOnUppercase =
                                   \acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
-                                    []] []) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))
+                                    []] []) (Maybes.fromMaybe acc (Maybes.map (\uc -> Lists.cons (Lists.cons c (Pairs.first uc)) (Pairs.second uc)) (Lists.uncons acc)))
                           in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
                             []] (Lists.reverse (Strings.toList (decapitalize original)))))
                     byUnderscores = Strings.splitOn "_" original
@@ -46,7 +43,6 @@ convertCase from to original =
         Util.CaseConventionPascal -> Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts)
         Util.CaseConventionLowerSnake -> Strings.intercalate "_" (Lists.map Strings.toLower parts)
         Util.CaseConventionUpperSnake -> Strings.intercalate "_" (Lists.map Strings.toUpper parts)
-
 -- | Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case.
 convertCaseCamelOrUnderscoreToLowerSnake :: String -> String
 convertCaseCamelOrUnderscoreToLowerSnake s =
@@ -54,46 +50,38 @@ convertCaseCamelOrUnderscoreToLowerSnake s =
       let parts = Strings.splitOn "_" s
           snakeParts = Lists.map (\p -> convertCaseCamelToLowerSnake p) parts
       in (Strings.intercalate "_" snakeParts)
-
 -- | Convert a string from camel case to lower snake case
 convertCaseCamelToLowerSnake :: String -> String
 convertCaseCamelToLowerSnake = convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake
-
 -- | Convert a string from camel case to upper snake case
 convertCaseCamelToUpperSnake :: String -> String
 convertCaseCamelToUpperSnake = convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake
-
 -- | Convert a string from pascal case to upper snake case
 convertCasePascalToUpperSnake :: String -> String
 convertCasePascalToUpperSnake = convertCase Util.CaseConventionPascal Util.CaseConventionUpperSnake
-
 -- | Decapitalize the first letter of a string
 decapitalize :: String -> String
 decapitalize = mapFirstLetter Strings.toLower
-
 -- | Escape reserved words by appending an underscore
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = Logic.ifElse (Sets.member s reserved) (Strings.cat2 s "_") s
-
 -- | Indent each line of a string with four spaces
 indentLines :: String -> String
 indentLines s =
 
       let indent = \l -> Strings.cat2 "    " l
       in (Strings.unlines (Lists.map indent (Strings.lines s)))
-
 -- | Format a string as a Java-style block comment
 javaStyleComment :: String -> String
 javaStyleComment s = Strings.cat2 (Strings.cat2 (Strings.cat2 "/**\n" " * ") s) "\n */"
-
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: (String -> String) -> String -> String
 mapFirstLetter mapping s =
     Logic.ifElse (Strings.null s) s (
       let list = Strings.toList s
-          firstLetter = mapping (Strings.fromList (Lists.pure (Lists.head list)))
-      in (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
-
+      in (Maybes.fromMaybe s (Maybes.map (\uc ->
+        let firstLetter = mapping (Strings.fromList (Lists.pure (Pairs.first uc)))
+        in (Strings.cat2 firstLetter (Strings.fromList (Pairs.second uc)))) (Lists.uncons list))))
 -- | Replace sequences of non-alphanumeric characters with single underscores
 nonAlnumToUnderscores :: String -> String
 nonAlnumToUnderscores input =
@@ -107,7 +95,6 @@ nonAlnumToUnderscores input =
                     in (Logic.ifElse (isAlnum c) (Lists.cons c s, False) (Logic.ifElse b (s, True) (Lists.cons 95 s, True)))
           result = Lists.foldl replace ([], False) (Strings.toList input)
       in (Strings.fromList (Lists.reverse (Pairs.first result)))
-
 -- | Normalize a comment string for consistent output across coders
 normalizeComment :: String -> String
 normalizeComment s =
@@ -115,13 +102,11 @@ normalizeComment s =
       let stripped = stripLeadingAndTrailingWhitespace s
       in (Logic.ifElse (Strings.null stripped) "" (
         let lastIdx = Math.sub (Strings.length stripped) 1
-            lastChar = Strings.charAt lastIdx stripped
-        in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
-
+            appended = Strings.cat2 stripped "."
+        in (Maybes.maybe appended (\lastChar -> Logic.ifElse (Equality.equal lastChar 46) stripped appended) (Strings.maybeCharAt lastIdx stripped))))
 -- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: S.Set String -> String -> String
 sanitizeWithUnderscores reserved s = escapeWithUnderscore reserved (nonAlnumToUnderscores s)
-
 -- | Format a list of elements as a bracketed, comma-separated string
 showList :: (t0 -> String) -> [t0] -> String
 showList f els =
@@ -129,12 +114,10 @@ showList f els =
       "[",
       (Strings.intercalate ", " (Lists.map f els)),
       "]"]
-
 -- | Remove leading and trailing whitespace from a string
 stripLeadingAndTrailingWhitespace :: String -> String
 stripLeadingAndTrailingWhitespace s =
     Strings.fromList (Lists.dropWhile Chars.isSpace (Lists.reverse (Lists.dropWhile Chars.isSpace (Lists.reverse (Strings.toList s)))))
-
 -- | Replace special characters with their alphanumeric aliases
 withCharacterAliases :: String -> String
 withCharacterAliases original =
@@ -176,7 +159,6 @@ withCharacterAliases original =
                 (126, "tilde")]
           alias = \c -> Maybes.fromMaybe (Lists.pure c) (Maybes.map Strings.toList (Maps.lookup c aliases))
       in (Strings.fromList (Lists.filter Chars.isAlphaNum (Lists.concat (Lists.map alias (Strings.toList original)))))
-
 -- | A simple soft line wrap which is suitable for code comments
 wrapLine :: Int -> String -> String
 wrapLine maxlen input =
@@ -188,6 +170,6 @@ wrapLine maxlen input =
                             Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc)
                     prefix = Lists.reverse (Pairs.second spanResult)
                     suffix = Lists.reverse (Pairs.first spanResult)
-                in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem)))))
+                in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Maybes.fromMaybe (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Maybes.map (\pfxInit -> helper (Lists.cons pfxInit prev) (Lists.concat2 suffix (Lists.drop maxlen rem))) (Lists.maybeInit prefix)))))
       in (Strings.fromList (Lists.intercalate [
         10] (helper [] (Strings.toList input))))

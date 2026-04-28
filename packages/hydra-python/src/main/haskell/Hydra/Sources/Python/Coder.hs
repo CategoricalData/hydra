@@ -110,16 +110,18 @@ ns :: Namespace
 ns = Namespace "hydra.python.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns]
-    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Python code generator: converts Hydra modules to Python source code"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns],
+            moduleTypeDependencies = (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Python code generator: converts Hydra modules to Python source code"}
   where
     definitions = [
+      toDefinition Environment.reorderDefs,
       toDefinition analyzePythonFunction,
       toDefinition classVariantPatternUnit,
       toDefinition classVariantPatternWithCapture,
-      toDefinition Environment.reorderDefs,
       toDefinition collectTypeVariables,
       toDefinition condImportSymbol,
       toDefinition dataclassDecorator,
@@ -182,8 +184,8 @@ module_ = Module ns definitions
       toDefinition genericArg,
       toDefinition initialEnvironment,
       toDefinition initialMetadata,
-      toDefinition isCasesFull,
       toDefinition isCaseStatementApplication,
+      toDefinition isCasesFull,
       toDefinition isTypeModuleCheck,
       toDefinition isTypeVariableName,
       toDefinition isVariantUnitType,
@@ -415,7 +417,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
     "rewriteBinding" <~ ("rewrite" ~> "bnd" ~>
       Core.binding (Core.bindingName $ var "bnd")
                    (var "rewrite" @@ Core.bindingTerm (var "bnd"))
-                   (Core.bindingType $ var "bnd")) $
+                   (Core.bindingTypeScheme $ var "bnd")) $
     -- Main rewrite function as Y combinator style
     "rewrite" <~ ("recurse" ~> "term" ~>
       cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
@@ -464,8 +466,8 @@ eliminateUnitVar = def "eliminateUnitVar" $
             (Lists.map (var "rewriteField" @@ var "recurse") (Core.recordFields $ var "rec")),
         _Term_set>>: "s" ~>
           Core.termSet $ Sets.map (var "recurse") (var "s"),
-        _Term_union>>: "inj" ~>
-          Core.termUnion $ Core.injection
+        _Term_inject>>: "inj" ~>
+          Core.termInject $ Core.injection
             (Core.injectionTypeName $ var "inj")
             (var "rewriteField" @@ var "recurse" @@ Core.injectionField (var "inj")),
         _Term_maybe>>: "mt" ~>
@@ -569,8 +571,8 @@ encodeApplicationInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironmen
 encodeApplicationInner = def "encodeApplicationInner" $
   doc "Inner helper for encodeApplication" $
   "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
-    "firstArg" <~ (Lists.head $ var "hargs") $
-    "restArgs" <~ (Lists.tail $ var "hargs") $
+    "firstArg" <~ (Maybes.fromMaybe (PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "")) (Lists.maybeHead $ var "hargs")) $
+    "restArgs" <~ (Lists.drop (int32 1) $ var "hargs") $
     "withRest" <~ ("e" ~>
       Logic.ifElse (Lists.null $ var "restArgs")
         (var "e")
@@ -628,7 +630,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                     (right $ pair
                       (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
                       (var "remainingArgs")))
-                (Core.bindingType $ var "el"))
+                (Core.bindingTypeScheme $ var "el"))
             (Lexical.lookupBinding @@ var "g" @@ var "name"))
           -- Is a primitive: wrap lazy arguments and encode
           (lambda "_prim" $
@@ -686,7 +688,7 @@ encodeBindingAs = def "encodeBindingAs" $
   "cx" ~> "env" ~> "binding" ~>
     "name1" <~ Core.bindingName (var "binding") $
     "term1" <~ Core.bindingTerm (var "binding") $
-    "mts" <~ Core.bindingType (var "binding") $
+    "mts" <~ Core.bindingTypeScheme (var "binding") $
     "fname" <~ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name1") $
     -- Check if binding has a type scheme - if so, use encodeTermAssignment
     Maybes.maybe
@@ -702,7 +704,11 @@ encodeBindingAs = def "encodeBindingAs" $
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
             Maybes.maybe
               -- Default case: not a case elimination, encode term normally and take first statement
-              (Eithers.map ("stmts" ~> Lists.head (var "stmts")) (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1"))
+              (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
+                ("stmts" ~> Maybes.maybe
+                  (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
+                  (unaryFunction right)
+                  (Lists.maybeHead (var "stmts"))))
               -- Case elimination function - encode as function with match statement
           ("cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -744,7 +750,11 @@ encodeBindingAs = def "encodeBindingAs" $
           -- No lambda params, fall back to case elimination check
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
             Maybes.maybe
-              (Eithers.map ("stmts" ~> Lists.head (var "stmts")) (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1"))
+              (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
+                ("stmts" ~> Maybes.maybe
+                  (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
+                  (unaryFunction right)
+                  (Lists.maybeHead (var "stmts"))))
               ("cs" ~>
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                 "dflt" <~ (Core.caseStatementDefault $ var "cs") $
@@ -793,8 +803,8 @@ encodeBindingAs = def "encodeBindingAs" $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             -- Separate captured variables (all but last) from the match parameter (last).
             -- The last lambda parameter is the case expression's own parameter.
-            "capturedVarNames" <~ (Lists.init $ var "lambdaParams") $
-            "matchLambdaParam" <~ (Lists.last $ var "lambdaParams") $
+            "capturedVarNames" <~ (Maybes.fromMaybe (list ([] :: [TTerm Name])) (Lists.maybeInit $ var "lambdaParams")) $
+            "matchLambdaParam" <~ (Maybes.fromMaybe (wrap _Name $ string "") (Lists.maybeLast $ var "lambdaParams")) $
             -- Create parameters for captured variables only
             "capturedParams" <~ (Lists.map
               ("n" ~> Phantoms.record Py._ParamNoDefault [
@@ -854,7 +864,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
   "cx" ~> "allowThunking" ~> "env" ~> "binding" ~>
     "name" <~ Core.bindingName (var "binding") $
     "term" <~ Core.bindingTerm (var "binding") $
-    "mts" <~ Core.bindingType (var "binding") $
+    "mts" <~ Core.bindingTypeScheme (var "binding") $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
     "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
@@ -970,14 +980,14 @@ encodeDefinition = def "encodeDefinition" $
         "typ" <~ Maybes.maybe
           (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
           ("x" ~> var "x")
-          (project _TermDefinition _TermDefinition_type @@ var "td") $
+          (project _TermDefinition _TermDefinition_typeScheme @@ var "td") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
-        "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
+        "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td") $
         "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
@@ -1258,6 +1268,10 @@ encodeLiteral = def "encodeLiteral" $
       _Literal_boolean>>: "b" ~>
         right $ PyUtils.pyAtomToPyExpression @@
           Logic.ifElse (var "b") PyDsl.atomTrue PyDsl.atomFalse,
+      _Literal_decimal>>: "d" ~>
+        right $ PyUtils.functionCall @@
+          (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "Decimal")) @@
+          list [PyUtils.singleQuotedString @@ (Literals.showDecimal $ var "d")],
       _Literal_float>>: "f" ~> encodeFloatValue @@ var "f",
       _Literal_integer>>: "i" ~> encodeIntegerValue @@ var "i",
       _Literal_string>>: "s" ~>
@@ -1271,6 +1285,7 @@ encodeLiteralType = def "encodeLiteralType" $
     "findName" <~ (cases _LiteralType (var "lt") Nothing [
       _LiteralType_binary>>: constant $ string "bytes",
       _LiteralType_boolean>>: constant $ string "bool",
+      _LiteralType_decimal>>: constant $ string "Decimal",
       _LiteralType_float>>: "ft" ~>
         cases _FloatType (var "ft") Nothing [
           _FloatType_bigfloat>>: constant $ string "Decimal",
@@ -1596,8 +1611,8 @@ encodeTermInline = def "encodeTermInline" $
         withTypeLambda @@ var "env" @@ var "tl" @@
           ("env2" ~> encodeTermInline @@ var "cx" @@ var "env2" @@ var "noCast" @@ var "body"),
 
-      -- TermUnion (Injection)
-      _Term_union>>: "inj" ~>
+      -- TermInject (Injection)
+      _Term_inject>>: "inj" ~>
         "tname" <~ Core.injectionTypeName (var "inj") $
         "field" <~ Core.injectionField (var "inj") $
         "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
@@ -1669,7 +1684,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
     -- Check if exactly one argument for potential case statement
     Logic.ifElse (Equality.equal (Lists.length $ var "args") (int32 1))
       -- Try to handle case statement specially
-      ("arg" <~ (Lists.head $ var "args") $
+      ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args")) $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
           _Term_cases>>: "cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -1726,7 +1741,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
-          ("arg" <~ (Lists.head $ var "args2") $
+          ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args2")) $
             cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
@@ -2039,7 +2054,7 @@ encodeVariable = def "encodeVariable" $
     "tcMetadata" <~ (Graph.graphMetadata $ var "tc") $
     "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
     "mTypScheme" <~ (Maps.lookup (var "name") (var "tcTypes")) $
-    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeType (var "ts_")) (var "mTypScheme")) $
+    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeBody (var "ts_")) (var "mTypScheme")) $
     "asVariable" <~ (PyNames.termVariableReference @@ var "env" @@ var "name") $
     "asFunctionCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "args") $
     Logic.ifElse (Logic.not $ Lists.null (var "args"))
@@ -2091,10 +2106,10 @@ encodeVariable = def "encodeVariable" $
                                             (Logic.not (var "elTrivial1")))
                       (right $ var "asFunctionCall")
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
-                          (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
+                          (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                           (var "asVariable")) $
                         right $ var "asFunctionRef"))
-                  (Core.bindingType $ var "el"))
+                  (Core.bindingTypeScheme $ var "el"))
               (Lexical.lookupBinding @@ var "g" @@ var "name"))
             -- Is a primitive with no args: check if nullary
             ("prim" ~>
@@ -2103,9 +2118,9 @@ encodeVariable = def "encodeVariable" $
                 -- Nullary primitive: call with ()
                 (right $ var "asFunctionCall")
                 -- Non-nullary primitive: function reference
-                ("ts" <~ (Phantoms.project _Primitive _Primitive_type @@ var "prim") $
+                ("ts" <~ (Phantoms.project _Primitive _Primitive_typeScheme @@ var "prim") $
                   "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
-                      (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
+                      (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
                   right $ var "asFunctionRef"))
             (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
@@ -2150,7 +2165,7 @@ encodeVariable = def "encodeVariable" $
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                               (var "asVariable")) $
                             right $ var "asFunctionRef"))
-                      (Core.bindingType $ var "el"))
+                      (Core.bindingTypeScheme $ var "el"))
                   (Lexical.lookupBinding @@ var "g" @@ var "name"))
                 -- Is in metadata: regular let binding
                 (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
@@ -2275,11 +2290,13 @@ extendMetaForTerm = def "extendMetaForTerm" $
                 "term1" <~ Core.bindingTerm (var "b") $
                 Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
                   (var "m")
-                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeType $ var "ts") @@ var "m"))
-              (Core.bindingType $ var "b")) $
+                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeBody $ var "ts") @@ var "m"))
+              (Core.bindingTypeScheme $ var "b")) $
             var "forBinding") (var "meta") (var "bindings"),
         _Term_literal>>: "l" ~>
           cases _Literal (var "l") (Just $ var "meta") [
+            _Literal_decimal>>: constant $
+              setMetaUsesDecimal @@ var "meta" @@ true,
             _Literal_float>>: "fv" ~>
               cases _FloatValue (var "fv") (Just $ var "meta") [
                 _FloatValue_bigfloat>>: constant $
@@ -2292,7 +2309,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
             (constant $ setMetaUsesJust @@ var "meta" @@ true)
             (var "m"),
         -- Union injections require cast() for proper typing
-        _Term_union>>: constant $
+        _Term_inject>>: constant $
           setMetaUsesCast @@ true @@ var "meta"]) $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "step" @@ var "meta0" @@ var "term"
 
@@ -2337,9 +2354,12 @@ extendMetaForType = def "extendMetaForType" $
       -- Either type: need Either import
       _Type_either>>: constant $
         setMetaUsesEither @@ var "metaWithSubtypes" @@ true,
-      -- Literal type: check for Decimal
+      -- Literal type: check for Decimal (both the decimal literal type and bigfloat,
+      -- which is represented as Python's Decimal in the Python host).
       _Type_literal>>: "lt" ~>
         cases _LiteralType (var "lt") (Just $ var "metaWithSubtypes") [
+          _LiteralType_decimal>>: constant $
+            setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true,
           _LiteralType_float>>: "ft" ~>
             cases _FloatType (var "ft") (Just $ var "metaWithSubtypes") [
               _FloatType_bigfloat>>: constant $
@@ -2444,14 +2464,14 @@ gatherMetadata = def "gatherMetadata" $
           "term" <~ Packaging.termDefinitionTerm (var "termDef") $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-            (unaryFunction Core.typeSchemeType)
-            (Packaging.termDefinitionType (var "termDef")) $
+            (unaryFunction Core.typeSchemeBody)
+            (Packaging.termDefinitionTypeScheme (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
           extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
           -- Set usesName=True for type definitions
           "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
           -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)
@@ -2523,17 +2543,6 @@ initialMetadata = def "initialMetadata" $
       PyHelpers._PythonModuleMetadata_usesRight>>: false,
       PyHelpers._PythonModuleMetadata_usesTypeVar>>: false]
 
--- | Determine whether a union type's cases are fully covered.
---   Returns true if the number of cases >= number of fields in the row type.
-isCasesFull :: TTermDefinition ([FieldType] -> [Field] -> Bool)
-isCasesFull = def "isCasesFull" $
-  doc "Check if union cases are fully covered" $
-  "rowType" ~> "cases_" ~>
-    "numCases" <~ (Lists.length $ var "cases_") $
-    "numFields" <~ (Lists.length $ var "rowType") $
-    -- numCases >= numFields is equivalent to NOT (numCases < numFields)
-    Logic.not $ Equality.lt (var "numCases") (var "numFields")
-
 -- | Check if a term is a case statement applied to exactly one argument.
 --   Returns Just (tname, dflt, cases, arg) if so, Nothing otherwise.
 isCaseStatementApplication :: TTermDefinition (Term -> Maybe (Name, Maybe Term, [Field], Term))
@@ -2546,7 +2555,7 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
     -- Check for exactly one argument
     Logic.ifElse (Logic.not $ Equality.equal (Lists.length $ var "args") (int32 1))
       nothing
-      ("arg" <~ (Lists.head $ var "args") $
+      ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args")) $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
           _Term_cases>>: "cs" ~>
             just $ Phantoms.tuple4
@@ -2554,6 +2563,17 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
               (Core.caseStatementDefault $ var "cs")
               (Core.caseStatementCases $ var "cs")
               (var "arg")])
+
+-- | Determine whether a union type's cases are fully covered.
+--   Returns true if the number of cases >= number of fields in the row type.
+isCasesFull :: TTermDefinition ([FieldType] -> [Field] -> Bool)
+isCasesFull = def "isCasesFull" $
+  doc "Check if union cases are fully covered" $
+  "rowType" ~> "cases_" ~>
+    "numCases" <~ (Lists.length $ var "cases_") $
+    "numFields" <~ (Lists.length $ var "rowType") $
+    -- numCases >= numFields is equivalent to NOT (numCases < numFields)
+    Logic.not $ Equality.lt (var "numCases") (var "numFields")
 
 -- | Check whether a list of definitions contains any type definitions
 isTypeModuleCheck :: TTermDefinition ([Definition] -> Bool)
@@ -3940,7 +3960,7 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
       _Term_variable>>: "name" ~>
         optCases (Lexical.lookupBinding @@ var "graph" @@ var "name")
           (Phantoms.int 0)
-          ("el" ~> optCases (Core.bindingType $ var "el")
+          ("el" ~> optCases (Core.bindingTypeScheme $ var "el")
             -- No type scheme: compute arity from the binding's term structure.
             -- Use Arity.termArity to avoid infinite recursion on self-referencing bindings.
             (Arity.termArity @@ (Core.bindingTerm $ var "el"))
@@ -4062,7 +4082,7 @@ withDefinitions = def "withDefinitions" $
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
               (project _TermDefinition _TermDefinition_term @@ var "td")
-              (project _TermDefinition _TermDefinition_type @@ var "td"),
+              (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
           _Definition_type>>: constant nothing])
       (var "defs")) $
     "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $
@@ -4131,25 +4151,27 @@ wrapInNullaryLambda = def "wrapInNullaryLambda" $
 wrapLazyArguments :: TTermDefinition (Name -> [Py.Expression] -> [Py.Expression])
 wrapLazyArguments = def "wrapLazyArguments" $
   doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
-  "name" ~> "args" ~>
+  "name" ~> "args" ~> lets [
+    "dummyExpr">: PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string ""),
+    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
     Logic.ifElse
       (Logic.and
         (Equality.equal (var "name") (Core.name $ string "hydra.lib.logic.ifElse"))
         (Equality.equal (Lists.length (var "args")) (int32 3)))
       -- For if_else, wrap arguments 2 and 3 (the then/else branches)
       (list [
-        Lists.at (int32 0) (var "args"),
-        wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
-        wrapInNullaryLambda @@ (Lists.at (int32 2) (var "args"))])
+        var "argAt" @@ int32 0,
+        wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
+        wrapInNullaryLambda @@ (var "argAt" @@ int32 2)])
       (Logic.ifElse
         (Logic.and
           (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
           (Equality.equal (Lists.length (var "args")) (int32 3)))
         -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
         (list [
-          Lists.at (int32 0) (var "args"),
-          wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
-          Lists.at (int32 2) (var "args")])
+          var "argAt" @@ int32 0,
+          wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
+          var "argAt" @@ int32 2])
         (Logic.ifElse
           (Logic.and
             (Logic.or
@@ -4157,6 +4179,6 @@ wrapLazyArguments = def "wrapLazyArguments" $
               (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
             (Equality.gte (Lists.length (var "args")) (int32 1)))
           -- For maybe/fromMaybe, wrap argument 1 (the default value)
-          (Lists.cons (wrapInNullaryLambda @@ (Lists.at (int32 0) (var "args")))
-                      (Lists.tail (var "args")))
+          (Lists.cons (wrapInNullaryLambda @@ (var "argAt" @@ int32 0))
+                      (Lists.drop (int32 1) (var "args")))
           (var "args")))

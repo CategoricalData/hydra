@@ -24,9 +24,13 @@ gql = typeref ns
 
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns]
-  $ Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
-    ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = (map toTypeDef definitions),
+            moduleTermDependencies = [Core.ns],
+            moduleTypeDependencies = [Core.ns],
+            moduleDescription = Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
+    ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")}
   where
     definitions = [
       gqlProgram,
@@ -490,14 +494,14 @@ module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns]
       datetimeType,
       zonedDatetimeType,
       timestampWithTimeZoneType,
-      localdatetimeType,
+      localDatetimeTypeChoice,
       localDatetimeType,
       timestampWithoutTimeZoneType,
       dateType,
       timeType,
       zonedTimeType,
       timeWithTimeZoneType,
-      localtimeType,
+      localTimeTypeChoice,
       localTimeType,
       timeWithoutTimeZoneType,
       temporalDurationType,
@@ -3250,10 +3254,10 @@ temporalInstantType :: Binding
 temporalInstantType = def "TemporalInstantType" $
   T.union [
     "datetimeType">: gql "DatetimeType",
-    "localdatetimeType">: gql "LocaldatetimeType",
+    "localDatetimeTypeChoice">: gql "LocalDatetimeTypeChoice",
     "dateType">: gql "DateType",
     "timeType">: gql "TimeType",
-    "localtimeType">: gql "LocaltimeType"]
+    "localTimeTypeChoice">: gql "LocalTimeTypeChoice"]
 
 datetimeType :: Binding
 datetimeType = def "DatetimeType" $
@@ -3271,8 +3275,8 @@ timestampWithTimeZoneType = def "TimestampWithTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-localdatetimeType :: Binding
-localdatetimeType = def "LocaldatetimeType" $
+localDatetimeTypeChoice :: Binding
+localDatetimeTypeChoice = def "LocalDatetimeTypeChoice" $
   T.union [
     "localDatetime">: gql "LocalDatetimeType",
     "timestampWithoutTimeZone">: gql "TimestampWithoutTimeZoneType"]
@@ -3308,8 +3312,8 @@ timeWithTimeZoneType = def "TimeWithTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-localtimeType :: Binding
-localtimeType = def "LocaltimeType" $
+localTimeTypeChoice :: Binding
+localTimeTypeChoice = def "LocalTimeTypeChoice" $
   T.union [
     "localTime">: gql "LocalTimeType",
     "timeWithoutTimeZone">: gql "TimeWithoutTimeZoneType"]

@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Protobuf.Proto3 as Proto3
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The name of the deprecated option
 deprecatedOptionName :: String
@@ -26,15 +27,15 @@ descriptionOptionName = "_description"
 -- | Filter out internal options (those whose names start with underscore)
 excludeInternalOptions :: [Proto3.Option] -> [Proto3.Option]
 excludeInternalOptions opts =
-    Lists.filter (\opt -> Logic.not (Equality.equal (Strings.charAt 0 (Proto3.optionName opt)) 95)) opts
+    Lists.filter (\opt -> Logic.not (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 (Proto3.optionName opt))) 95)) opts
 
 -- | Prepend an optional description comment to an expression
 optDesc :: Bool -> [Proto3.Option] -> Ast.Expr -> Ast.Expr
 optDesc doubleNewline opts expr =
 
       let descs = Lists.filter (\opt -> Equality.equal (Proto3.optionName opt) "_description") opts
-      in (Logic.ifElse (Lists.null descs) expr (
-        let descValue = Proto3.optionValue (Lists.head descs)
+      in (Maybes.maybe expr (\firstDesc ->
+        let descValue = Proto3.optionValue firstDesc
             descStr =
                     case descValue of
                       Proto3.ValueBoolean v0 -> Logic.ifElse v0 "true" "false"
@@ -47,7 +48,7 @@ optDesc doubleNewline opts expr =
                       expr]) (Serialization.newlineSep [
                       comment,
                       expr])
-        in sep))
+        in sep) (Lists.maybeHead descs))
 
 -- | Wrap expressions in a curly-braced block with double-newline separation
 protoBlock :: [Ast.Expr] -> Ast.Expr

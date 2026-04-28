@@ -104,10 +104,12 @@ ns :: Namespace
 ns = Namespace "hydra.python.testing"
 
 module_ :: Module
-module_ = Module ns definitions
-    [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns]
-    (PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Python test code generation codec for pytest-based generation tests"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns],
+            moduleTypeDependencies = (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDescription = Just "Python test code generation codec for pytest-based generation tests"}
   where
     definitions = [
       toDefinition buildPythonTestModule,
@@ -217,8 +219,8 @@ generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
         "testModuleContent">: buildPythonTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleNamespace (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
-        "dirParts">: Lists.init (var "parts"),
-        "fileName">: Strings.cat (list [string "test_", Lists.last (var "parts"), string ".py"]),
+        "dirParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")),
+        "fileName">: Strings.cat (list [string "test_", Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")), string ".py"]),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))
       (generatePythonTestGroupHierarchy @@ list ([] :: [TTerm String]) @@ var "testGroup")

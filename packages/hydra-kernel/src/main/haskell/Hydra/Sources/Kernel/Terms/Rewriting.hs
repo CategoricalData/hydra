@@ -80,10 +80,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Scoping.ns]
-    kernelTypesNamespaces $
-    Just "Core rewrite and fold combinators for terms and types"
+module_ = Module {
+            moduleNamespace = ns,
+            moduleDefinitions = definitions,
+            moduleTermDependencies = [Scoping.ns],
+            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDescription = Just "Core rewrite and fold combinators for terms and types"}
   where
    definitions = [
      toDefinition applyInsideTypeLambdasAndAnnotations,
@@ -185,7 +187,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         (Core.binding
           (Core.bindingName $ var "binding")
           (Pairs.second $ var "r")
-          (Core.bindingType $ var "binding"))) $
+          (Core.bindingTypeScheme $ var "binding"))) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
@@ -270,9 +272,9 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         @@ ("t" ~> Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "tl") (var "t"))
         @@ var "val0"
         @@ (Core.typeLambdaBody $ var "tl"),
-      _Term_union>>: "inj" ~> var "forSingle"
+      _Term_inject>>: "inj" ~> var "forSingle"
         @@ var "recurse"
-        @@ ("t" ~> Core.termUnion $ Core.injection
+        @@ ("t" ~> Core.termInject $ Core.injection
           (Core.injectionTypeName $ var "inj")
           (Core.field (Core.fieldName $ Core.injectionField $ var "inj") (var "t")))
         @@ var "val0"
@@ -345,7 +347,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         (Core.binding
           (Core.bindingName $ var "binding")
           (Pairs.second $ var "r")
-          (Core.bindingType $ var "binding"))) $
+          (Core.bindingTypeScheme $ var "binding"))) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
@@ -537,9 +539,9 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         @@ Paths.subtermStepTypeLambdaBody
         @@ var "val0"
         @@ (Core.typeLambdaBody $ var "tl"),
-      _Term_union>>: "inj" ~> var "forSingleWithAccessor"
+      _Term_inject>>: "inj" ~> var "forSingleWithAccessor"
         @@ var "recurse"
-        @@ ("t" ~> Core.termUnion $ Core.injection
+        @@ ("t" ~> Core.termInject $ Core.injection
           (Core.injectionTypeName $ var "inj")
           (Core.field (Core.fieldName $ Core.injectionField $ var "inj") (var "t")))
         @@ Paths.subtermStepInjectionTerm
@@ -563,7 +565,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
         (var "recurse" @@ (Core.bindingTerm $ var "b"))
-        (Core.bindingType $ var "b")) $
+        (Core.bindingTypeScheme $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
@@ -608,7 +610,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (Core.typeLambdaParameter $ var "ta")
         (var "recurse" @@ (Core.typeLambdaBody $ var "ta")),
-      _Term_union>>: "i" ~> Core.termUnion $ Core.injection
+      _Term_inject>>: "i" ~> Core.termInject $ Core.injection
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
@@ -635,7 +637,7 @@ rewriteTermM = define "rewriteTermM" $
       right $ pair (var "k") (var "v")) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
-      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
+      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingTypeScheme $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
         "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
@@ -705,11 +707,11 @@ rewriteTermM = define "rewriteTermM" $
         "body" <~ Core.typeLambdaBody (var "tl") $
         "rbody" <<~ var "recurse" @@ var "body" $
         right $ Core.termTypeLambda $ Core.typeLambda (var "v") (var "rbody"),
-      _Term_union>>: "i" ~>
+      _Term_inject>>: "i" ~>
         "n" <~ Core.injectionTypeName (var "i") $
         "field" <~ Core.injectionField (var "i") $
         Eithers.map
-          ("rfield" ~> Core.termUnion $ Core.injection (var "n") (var "rfield"))
+          ("rfield" ~> Core.termInject $ Core.injection (var "n") (var "rfield"))
           (var "forField" @@ var "field"),
       _Term_unit>>: constant $ right $ Core.termUnit,
       _Term_unwrap>>: "n" ~> right $ Core.termUnwrap $ var "n",
@@ -734,7 +736,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
         (var "recurse" @@ (Core.bindingTerm $ var "b"))
-        (Core.bindingType $ var "b")) $
+        (Core.bindingTypeScheme $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
@@ -779,7 +781,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (Core.typeLambdaParameter $ var "ta")
         (var "recurse" @@ (Core.typeLambdaBody $ var "ta")),
-      _Term_union>>: "i" ~> Core.termUnion $ Core.injection
+      _Term_inject>>: "i" ~> Core.termInject $ Core.injection
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
@@ -807,7 +809,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
       right $ pair (var "k") (var "v")) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
-      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
+      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingTypeScheme $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
         "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
@@ -877,11 +879,11 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "body" <~ Core.typeLambdaBody (var "tl") $
         "rbody" <<~ var "recurse" @@ var "body" $
         right $ Core.termTypeLambda $ Core.typeLambda (var "v") (var "rbody"),
-      _Term_union>>: "i" ~>
+      _Term_inject>>: "i" ~>
         "n" <~ Core.injectionTypeName (var "i") $
         "field" <~ Core.injectionField (var "i") $
         Eithers.map
-          ("rfield" ~> Core.termUnion $ Core.injection (var "n") (var "rfield"))
+          ("rfield" ~> Core.termInject $ Core.injection (var "n") (var "rfield"))
           (var "forField" @@ var "field"),
       _Term_unit>>: constant $ right Core.termUnit,
       _Term_unwrap>>: "n" ~> right $ Core.termUnwrap $ var "n",
@@ -1031,7 +1033,7 @@ subterms = define "subterms" $
     _Term_set>>: "l" ~> Sets.toList $ var "l",
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
-    _Term_union>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
+    _Term_inject>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
     _Term_unit>>: constant $ list ([] :: [TTerm Term]),
     _Term_unwrap>>: constant $ list ([] :: [TTerm Term]),
     _Term_variable>>: constant $ list ([] :: [TTerm Term]),
@@ -1089,7 +1091,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
     _Term_typeLambda>>: "ta" ~>
       single Paths.subtermStepTypeLambdaBody $
       Core.typeLambdaBody $ var "ta",
-    _Term_union>>: "ut" ~>
+    _Term_inject>>: "ut" ~>
       single Paths.subtermStepInjectionTerm $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
     _Term_unit>>: constant none,
