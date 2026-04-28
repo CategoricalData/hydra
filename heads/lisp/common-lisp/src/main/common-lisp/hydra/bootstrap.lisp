@@ -104,7 +104,7 @@
              (typ (cdr pair))
              (ts (funcall (symbol-value 'hydra_scoping_f_type_to_type_scheme) typ))
              (stripped (funcall (symbol-value 'hydra_strip_deannotate_type_recursive)
-                               (funcall 'hydra_core_type_scheme-type ts))))
+                               (funcall 'hydra_core_type_scheme-body ts))))
         (push (cons name stripped) result)))
     (nreverse result)))
 

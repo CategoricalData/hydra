@@ -40,7 +40,7 @@ object Generation:
   def bootstrapSchemaMap(): Map[String, Type] =
     hydra.json.bootstrap.typesByName.map { (name, typ) =>
       val ts = hydra.scoping.fTypeToTypeScheme(typ)
-      name -> hydra.strip.deannotateTypeRecursive(ts.`type`)
+      name -> hydra.strip.deannotateTypeRecursive(ts.body)
     }
 
   /**
