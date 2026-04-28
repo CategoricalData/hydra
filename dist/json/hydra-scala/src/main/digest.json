@@ -1,9 +1,10 @@
 {
+  "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.scala.coder": "e8b9031272d3826e22b32dca166de42f0825d95073754d08f5e9b957c8726fab",
-    "hydra.scala.serde": "4dd0e4c5b90377fea619a342e18cec725818a324159bd857345c1b6cd0259872",
-    "hydra.scala.syntax": "7ed16ddfe5d58017e79bd214b1e4d0ca6aa6be282951daa4c3992a5f72120af8",
-    "hydra.scala.utils": "ee77df573f69fc96afa7bee1cddf93d5d2b17cd9fc7eae0704f80972847b27c6"
+    "hydra.scala.coder": "773906e7f3803030c16b5ae7ae1021916cba1c57054be06e437e93be904eb026",
+    "hydra.scala.serde": "85b062e2c48a7252988b4761079b478509366d171f24f0ee593aa5fdb7099259",
+    "hydra.scala.syntax": "6cd54889e7f736778e0f6a0e485accf12e38c02baf8dcc79a4a1941b68c3ad4a",
+    "hydra.scala.utils": "f73f3b47042ca6305f5ac87588ad74adb2d49ba3d0fd3bfce61da23b6b40edfe"
   }
 }

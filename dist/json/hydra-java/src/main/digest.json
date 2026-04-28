@@ -1,12 +1,13 @@
 {
+  "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.java.coder": "efc170446d5b45b27f000b756f11ea2b3dde52c63a05e1b7c4956ff5e2abb6e1",
-    "hydra.java.environment": "6d18d764b393559f4a0dc75af3bb628df8b146ec7803c16254ac1fe1edcf76ef",
-    "hydra.java.names": "5971089d4876a60c0026867e7850eb4f9b271e5871c45818eaffdba1fc03166e",
-    "hydra.java.serde": "33a0d3ce6c90e8512bc01a5e3a13e88110f99f7ac8f113fec5b04a09e507bb97",
-    "hydra.java.syntax": "db93b68f3186d4e565329098c8cff8852c9880167e969edc48392acd4aafb487",
-    "hydra.java.testing": "3669528ce0c5ed55ead79b05b96f6a359b8bd80b63a21001e4c341c4f67f641c",
-    "hydra.java.utils": "7f45a8151b34f7fc59526a4cdea0cf1e2e9e5b8f5214a4a584f5e49abf954ca3"
+    "hydra.java.coder": "6ea490f7634d70d8c3f67101ee49f897f5bb189f563eb2ba174e11a16b8e9a99",
+    "hydra.java.environment": "32583eab4a73db06c4104ddf5652fbf7b57fe9616ed1e4605a2bce387a9666fd",
+    "hydra.java.names": "1258bfecd82df22f428af8532d7b996fbce86c58e511ce53235db37e49322358",
+    "hydra.java.serde": "af7ea1c12e6bcd0d522f7aeb94b99eb83c9252243cbf37916e12e4927ca88fa7",
+    "hydra.java.syntax": "bbd0395afa0d85960caf6822b41dbeac40e728b5a3614aa73f7e7444b4708420",
+    "hydra.java.testing": "e499b14f6b372fb039bffca00745e1c144d5b16340df65e6f3a5cbf113febefc",
+    "hydra.java.utils": "46a00786d209580a273c11773eb1e44671733fe52cf86b205788ff7f79411a46"
   }
 }
