@@ -1048,21 +1048,21 @@ Promoting a **type definition** is a
 different workflow: you add it to a Types module under `Hydra/Sources/Kernel/Types/` (or `Hydra/Sources/` for
 extension types).
 
-### Example: promoting `TestGenerator`
+### Example: `UniversalTestCase` in `Hydra.Sources.Kernel.Types.Testing`
 
 ```haskell
 -- In Hydra.Sources.Kernel.Types.Testing
 
-testGenerator :: Binding
-testGenerator = define "TestGenerator" $
-  doc "A language-agnostic test generator abstraction" $
-  T.forAll "a" $ T.record [
-    "namespacesForModule">:
-      doc "Build namespaces for a module" $
-      Module.module' ~> Graph.graph ~> T.either_ T.string (Module.namespaces @@ "a"),
-    "createCodec">:
-      doc "Create a test codec from resolved namespaces" $
-      Module.namespaces @@ "a" ~> testCodec]
+universalTestCase :: Binding
+universalTestCase = define "UniversalTestCase" $
+  doc "A universal test case: the actual and expected values are both strings" $
+  T.record [
+    "actual">:
+      doc "The actual result (a string produced by evaluating and showing the test expression)" $
+      T.string,
+    "expected">:
+      doc "The expected result (a string produced by showing the expected value)" $
+      T.string]
 ```
 
 Key differences from promoting terms:
@@ -1070,11 +1070,12 @@ Key differences from promoting terms:
 - Use `define` (or `defineType`) instead of `definitionInModule`
 - Use `T.record`, `T.forAll`, `T.either_`, etc. from `Hydra.Dsl.Types` for type constructors
 - Use `>:` for field definitions (name `>:` type)
-- Reference other type bindings (e.g., `Module.module'` for the `Module` type) — note that `module'` is the
-  *type binding*, while `module_` is the Haskell `Module` value for the module definition
+- Reference other type bindings via their qualified module alias (e.g.,
+  `Core.name`, `Module.module_`)
 - Add the new binding to the module's `definitions` list
-- After regeneration, the type appears under `dist/haskell/<pkg>/src/main/haskell/` with field
-  names prefixed by the type name (e.g., `testGeneratorNamespacesForModule`)
+- After regeneration, the type appears under `dist/haskell/<pkg>/src/main/haskell/`
+  with field names prefixed by the type name
+  (e.g., `universalTestCaseActual`, `universalTestCaseExpected`)
 
 ## Promoting data and constants modules
 

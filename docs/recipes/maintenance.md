@@ -389,36 +389,61 @@ Fix it at the generator level.
 
 ### Known accepted patches
 
-No post-generation patches are currently applied in the active sync path.
-The former `TestGraph.hs` patch (which replaced `emptyGraph` / `emptyContext`
-with `TestEnv.testGraph testTypes` / `TestEnv.testContext`) was eliminated
-when the DSL was updated to emit the `TestEnv` references directly; see
-`heads/haskell/bin/sync-haskell.sh` step 5 for the current no-op note.
+The following post-generation `sed` patches are currently applied in
+per-language `assemble-distribution.sh` scripts.
+Each is tech debt against the corresponding generator and should be tracked
+toward removal.
 
-`Hydra.Test.TestEnv` remains hand-written and checked in under
-`dist/haskell/hydra-kernel/src/test/haskell/`; it is exempted from
-regeneration because `bootstrap-from-json` does not target it. This is
-tolerated under principle 2 (hand-written file under `dist/`) rather than
-moved to `heads/` because the Haskell test harness imports it from that
-location and the bridge is small. Treat it as tech debt, not precedent.
-
-Two patches that were previously applied by retired per-language sync
-scripts are NOT currently re-applied anywhere:
-
-- Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
-  coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.
-- Python `test_graph.py`: empty `test_graph` / `test_context` assignments
-  needing a `__getattr__` shim to a hand-written `test_env.py`. Surfaces
-  when running Python kernel tests.
-
-These patches need to be re-added (probably to per-target assemblers or a
-post-processing step) before the affected combinations work again. The
-current bootstrapping-triad sync (haskell/java/python kernel + self-hosting)
-does not exercise either combination, so the patches are queued, not blocking.
+- **Java Lisp `Coder.java` PartialVisitor type parameter**
+  (`heads/java/bin/assemble-distribution.sh` lines ~111-113;
+  `heads/java/bin/assemble-all.sh` lines ~71-73):
+  rewrites two `Either<lisp.syntax.TopLevelFormWithComments, ...>`
+  occurrences to `Either<T2, ...>`.
+  The Java coder mis-infers the `PartialVisitor` type parameter for
+  `hydra-lisp`'s `Coder` when generating Java.
+- **Scala `TestGraph` `emptyGraph` rewrite**
+  (`heads/scala/bin/assemble-all.sh` line ~61):
+  rewrites `hydra.lexical.emptyGraph` to `hydra.TestSuiteRunner.buildTestGraph()`.
+  The DSL emits `emptyGraph`, but the Scala test runner needs the populated
+  bootstrap graph at evaluation time.
+- **Clojure `TestGraph` import injection**
+  (`heads/lisp/clojure/bin/assemble-distribution.sh` line ~102):
+  appends additional `:refer :all` clauses
+  (`hydra.lib.libraries`, `hydra.rewriting`, `hydra.scoping`,
+  `hydra.json.bootstrap`, `hydra.graph`, `hydra.context`,
+  `hydra.annotation-bindings`) to the generated `test_graph.clj`.
+  The DSL doesn't emit these imports, but the Clojure runtime needs them
+  resolved when the file loads.
+- **Scheme `TestGraph` trailing-paren strip**
+  (`heads/lisp/scheme/bin/assemble-distribution.sh` line ~149):
+  removes a trailing `))` that the Scheme code generator emits
+  one too many of for `test_graph.scm`.
 
 When adding a new accepted patch, document it here and open an issue against
 the generator.
 When removing a patch (because the generator was fixed), update this list too.
+
+### Hand-written files under `dist/`
+
+These files are checked in under `dist/` despite principle 2 ("no hand-written
+files under `dist/`"). Each is tolerated because moving it to `heads/` and
+copying it in via the sync script is more work than the bridge is worth.
+Treat as tech debt, not precedent.
+
+- `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
+  the Haskell test harness imports `Hydra.Test.TestEnv` from this path
+  and `bootstrap-from-json` does not target it, so the file is left alone
+  by regeneration.
+- `dist/python/hydra-kernel/src/test/python/hydra/test/test_env.py` —
+  same role for Python tests; the kernel filters `hydra.test.testEnv` from
+  emitted output (per the `testSkipEmit` set in each host's bootstrap),
+  and the Python runtime needs the symbols this file provides.
+
+The corresponding `test_env` files for the lisp dialects live under
+`heads/`, not `dist/`:
+
+- `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
+- `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
 
 ---
 
