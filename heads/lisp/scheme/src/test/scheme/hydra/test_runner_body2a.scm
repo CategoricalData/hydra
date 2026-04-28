@@ -111,7 +111,7 @@
 (define (type-scheme-to-type ts)
   "Convert a TypeScheme back to a Type by wrapping forall binders around the body."
   (let ((vars (hydra_core_type_scheme-variables ts))
-        (body (hydra_core_type_scheme-type ts)))
+        (body (hydra_core_type_scheme-body ts)))
     (let loop ((vs (reverse vars)) (t body))
       (if (null? vs) t
           (loop (cdr vs) (list 'forall (make-hydra_core_forall_type (car vs) t)))))))

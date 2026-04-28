@@ -452,7 +452,7 @@
 (defun hydra-type-scheme-to-type (ts)
   "Convert a TypeScheme back to a Type by wrapping forall binders."
   (let ((vars (hydra_core_type_scheme-variables ts))
-        (body (hydra_core_type_scheme-type ts)))
+        (body (hydra_core_type_scheme-body ts)))
     (cl-reduce (lambda (t_ v) (list :forall (make-hydra_core_forall_type v t_)))
                (reverse vars) :initial-value body)))
 
