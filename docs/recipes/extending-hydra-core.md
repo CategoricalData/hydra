@@ -974,8 +974,13 @@ See commit history for the complete implementation of Either type support, which
 ## Adding Fields to Existing Record Types
 
 This section documents the process of adding a new field to an existing record type in Hydra Core.
-This was documented while adding the `letVariables` field to `TypeContext`
-and serves as a reference for similar changes.
+The walked-through example uses `TypeContext`, which has since been unified out of existence
+(0.14, #192) — but the procedure remains accurate for any kernel record.
+Substitute the type of interest (e.g., `Lambda`, `TestCaseWithMetadata`)
+for `TypeContext` throughout.
+
+For renaming an existing field rather than adding one,
+see [Renaming a field in an existing record type](#renaming-a-field-in-an-existing-record-type) below.
 
 ### Overview
 
