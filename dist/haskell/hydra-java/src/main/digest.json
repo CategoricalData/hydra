@@ -13,7 +13,7 @@
   "outputs": {
     "Hydra/Dsl/Java/Environment.hs": { "kind": "TargetFile", "hash": "c0684eb62e7ac7b5f5cc0de125ddd4b637787fd4782ae1da66ad1912ad811478" },
     "Hydra/Dsl/Java/Syntax.hs": { "kind": "TargetFile", "hash": "acc20e6f7ee932a09f40abef0b66ce8daf5eb69064b960904bc02f6a798b6e83" },
-    "Hydra/Java/Coder.hs": { "kind": "TargetFile", "hash": "da9f949a47535d9dd865b8ccf14a674202041c96c76d5c6b22ade35155ff4ffa" },
+    "Hydra/Java/Coder.hs": { "kind": "TargetFile", "hash": "d7756a4d7bf97ca454e548d1aca426e1bffe9ce67fac6e0341ca60c851bd86c1" },
     "Hydra/Java/Environment.hs": { "kind": "TargetFile", "hash": "6f10a4847a321f64b710e5e1f84a39b270b7f41720ee2de1d52a3b1f4612d602" },
     "Hydra/Java/Language.hs": { "kind": "TargetFile", "hash": "e9cba1049829b0ca2120e3f810005c7e4a2bdc8bdcf4a89f7e0987730d151635" },
     "Hydra/Java/Names.hs": { "kind": "TargetFile", "hash": "88599e8fafa787c04e1f20f05cdc8da775a9848dfd19911ffcc8562e93fb2512" },

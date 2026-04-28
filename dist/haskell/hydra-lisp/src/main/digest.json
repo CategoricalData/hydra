@@ -8,7 +8,7 @@
   },
   "outputs": {
     "Hydra/Dsl/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "3aa9be7f2edb9a87e73cd9f89851b54bc23df947603674cb033f1c24f131ddd8" },
-    "Hydra/Lisp/Coder.hs": { "kind": "TargetFile", "hash": "0a8cf9b0d83d423900a1be74e9ebe92731c39d60593aef30230c04beebee8f52" },
+    "Hydra/Lisp/Coder.hs": { "kind": "TargetFile", "hash": "97474ce27d34f746fbe19394b3181ee7dee34f69ee87b1430be0d98d7a2ad975" },
     "Hydra/Lisp/Language.hs": { "kind": "TargetFile", "hash": "ddb7474c5fd42993a749a3c99e5fc0bebfebd0743a2b50964d35cc7a28536c41" },
     "Hydra/Lisp/Serde.hs": { "kind": "TargetFile", "hash": "4d5af21f2716d40c539ae0b8108ca6e951b70b3ba1e640a541f2b5599ae47c6c" },
     "Hydra/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "39e6b1d906a987f1fa3a403c24f86a0788c2b02c6cb0d6e00fa69105dbb1f583" }
