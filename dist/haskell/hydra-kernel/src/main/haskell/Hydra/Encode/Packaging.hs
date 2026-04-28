@@ -110,7 +110,7 @@ termDefinition x =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionTerm x))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.typeScheme opt)) (Packaging.termDefinitionTypeScheme x))}]})
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =

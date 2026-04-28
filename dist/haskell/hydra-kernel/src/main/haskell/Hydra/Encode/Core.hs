@@ -67,7 +67,7 @@ binding x =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (term (Core.bindingTerm x))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map typeScheme opt)) (Core.bindingTypeScheme x))}]})
 caseStatement :: Core.CaseStatement -> Core.Term
 caseStatement x =
