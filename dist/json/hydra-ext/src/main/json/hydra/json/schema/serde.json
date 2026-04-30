@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeAdditionalItems",
+        "name": "hydra.json.schema.serde.additionalItemsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -34,7 +34,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "schema"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}},
+                                    "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}},
                                 "domain": {"variable": "hydra.json.schema.Schema"},
                                 "parameter": "schema"}}}],
                         "typeName": "hydra.json.schema.AdditionalItems"}}}},
@@ -48,7 +48,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeArrayRestriction",
+        "name": "hydra.json.schema.serde.arrayRestrictionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -71,7 +71,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "items"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeItems"}}},
+                                    "function": {"variable": "hydra.json.schema.serde.itemsToExpr"}}},
                                 "domain": {"variable": "hydra.json.schema.Items"},
                                 "parameter": "items"}}},
                           {
@@ -88,7 +88,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "ai"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeAdditionalItems"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.additionalItemsToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"variable": "hydra.json.schema.AdditionalItems"},
@@ -107,7 +107,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "n"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
@@ -126,7 +126,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "n"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
@@ -164,7 +164,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeInteger",
+        "name": "hydra.json.schema.serde.integerToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -195,7 +195,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeItems",
+        "name": "hydra.json.schema.serde.itemsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -224,7 +224,7 @@
                                             "body": {
                                               "application": {
                                                 "argument": {"variable": "schema"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}},
+                                                "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}},
                                             "domain": {"variable": "hydra.json.schema.Schema"},
                                             "parameter": "schema"}}},
                                       {
@@ -240,7 +240,7 @@
                                                       "argument": {"variable": "schemas"},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.json.schema.serde.encodeSchema"},
+                                                          "argument": {"variable": "hydra.json.schema.serde.schemaToExpr"},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {
@@ -267,7 +267,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeKeyword",
+        "name": "hydra.json.schema.serde.keywordToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -295,7 +295,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeKeywordSchemaOrArray",
+        "name": "hydra.json.schema.serde.keywordSchemaOrArrayToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -350,7 +350,7 @@
                                 "second": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeSchemaOrArray"}}}}},
+                                    "function": {"variable": "hydra.json.schema.serde.schemaOrArrayToExpr"}}}}},
                             "type": {"literal": {"string": {}}}}},
                         "type": {"variable": "hydra.json.model.Value"}}}}},
                 "domain": {
@@ -372,7 +372,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeMultipleRestriction",
+        "name": "hydra.json.schema.serde.multipleRestrictionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -408,7 +408,7 @@
                                                       "argument": {"variable": "schemas"},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.json.schema.serde.encodeSchema"},
+                                                          "argument": {"variable": "hydra.json.schema.serde.schemaToExpr"},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {
@@ -441,7 +441,7 @@
                                                       "argument": {"variable": "schemas"},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.json.schema.serde.encodeSchema"},
+                                                          "argument": {"variable": "hydra.json.schema.serde.schemaToExpr"},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {
@@ -474,7 +474,7 @@
                                                       "argument": {"variable": "schemas"},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.json.schema.serde.encodeSchema"},
+                                                          "argument": {"variable": "hydra.json.schema.serde.schemaToExpr"},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {
@@ -501,7 +501,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "schema"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"variable": "hydra.json.schema.Schema"},
@@ -539,7 +539,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeNumericRestriction",
+        "name": "hydra.json.schema.serde.numericRestrictionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -594,7 +594,7 @@
                                                             "second": {
                                                               "application": {
                                                                 "argument": {"variable": "value"},
-                                                                "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                                "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}}]},
                                             {
@@ -681,7 +681,7 @@
                                                             "second": {
                                                               "application": {
                                                                 "argument": {"variable": "value"},
-                                                                "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                                "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}}]},
                                             {
@@ -746,7 +746,7 @@
                                                 "second": {
                                                   "application": {
                                                     "argument": {"variable": "n"},
-                                                    "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                    "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
@@ -766,7 +766,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeObjectRestriction",
+        "name": "hydra.json.schema.serde.objectRestrictionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -813,7 +813,7 @@
                                                                   "type": {"variable": "hydra.json.schema.Schema"}}}}},
                                                           "function": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.json.schema.serde.encodeProperty"},
+                                                              "argument": {"variable": "hydra.json.schema.serde.propertyToExpr"},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
@@ -856,7 +856,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "ai"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeAdditionalItems"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.additionalItemsToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"variable": "hydra.json.schema.AdditionalItems"},
@@ -881,7 +881,7 @@
                                                       "argument": {"variable": "keys"},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.json.schema.serde.encodeKeyword"},
+                                                          "argument": {"variable": "hydra.json.schema.serde.keywordToExpr"},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {
@@ -908,7 +908,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "n"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
@@ -927,7 +927,7 @@
                                             "second": {
                                               "application": {
                                                 "argument": {"variable": "n"},
-                                                "function": {"variable": "hydra.json.schema.serde.encodeInteger"}}}}},
+                                                "function": {"variable": "hydra.json.schema.serde.integerToExpr"}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
@@ -963,7 +963,7 @@
                                                                   "type": {"variable": "hydra.json.schema.SchemaOrArray"}}}}},
                                                           "function": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.json.schema.serde.encodeKeywordSchemaOrArray"},
+                                                              "argument": {"variable": "hydra.json.schema.serde.keywordSchemaOrArrayToExpr"},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
@@ -1023,7 +1023,7 @@
                                                                   "type": {"variable": "hydra.json.schema.Schema"}}}}},
                                                           "function": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.json.schema.serde.encodePatternProperty"},
+                                                              "argument": {"variable": "hydra.json.schema.serde.patternPropertyToExpr"},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
@@ -1066,7 +1066,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodePatternProperty",
+        "name": "hydra.json.schema.serde.patternPropertyToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1120,7 +1120,7 @@
                                 "second": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}}}},
+                                    "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}}}},
                             "type": {"literal": {"string": {}}}}},
                         "type": {"variable": "hydra.json.model.Value"}}}}},
                 "domain": {
@@ -1142,7 +1142,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeProperty",
+        "name": "hydra.json.schema.serde.propertyToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1193,7 +1193,7 @@
                                 "second": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}}}},
+                                    "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}}}},
                             "type": {"literal": {"string": {}}}}},
                         "type": {"variable": "hydra.json.model.Value"}}}}},
                 "domain": {
@@ -1215,7 +1215,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeRestriction",
+        "name": "hydra.json.schema.serde.restrictionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1247,7 +1247,7 @@
                                                 "second": {
                                                   "application": {
                                                     "argument": {"variable": "t"},
-                                                    "function": {"variable": "hydra.json.schema.serde.encodeType"}}}}},
+                                                    "function": {"variable": "hydra.json.schema.serde.typeToExpr"}}}}},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]},
                                 "domain": {"variable": "hydra.json.schema.Type"},
@@ -1261,7 +1261,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "sr"},
-                                        "function": {"variable": "hydra.json.schema.serde.encodeStringRestriction"}}}]},
+                                        "function": {"variable": "hydra.json.schema.serde.stringRestrictionToExpr"}}}]},
                                 "domain": {"variable": "hydra.json.schema.StringRestriction"},
                                 "parameter": "sr"}}},
                           {
@@ -1271,7 +1271,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "nr"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeNumericRestriction"}}},
+                                    "function": {"variable": "hydra.json.schema.serde.numericRestrictionToExpr"}}},
                                 "domain": {"variable": "hydra.json.schema.NumericRestriction"},
                                 "parameter": "nr"}}},
                           {
@@ -1283,7 +1283,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "ar"},
-                                        "function": {"variable": "hydra.json.schema.serde.encodeArrayRestriction"}}}]},
+                                        "function": {"variable": "hydra.json.schema.serde.arrayRestrictionToExpr"}}}]},
                                 "domain": {"variable": "hydra.json.schema.ArrayRestriction"},
                                 "parameter": "ar"}}},
                           {
@@ -1295,7 +1295,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "or"},
-                                        "function": {"variable": "hydra.json.schema.serde.encodeObjectRestriction"}}}]},
+                                        "function": {"variable": "hydra.json.schema.serde.objectRestrictionToExpr"}}}]},
                                 "domain": {"variable": "hydra.json.schema.ObjectRestriction"},
                                 "parameter": "or"}}},
                           {
@@ -1307,7 +1307,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "mr"},
-                                        "function": {"variable": "hydra.json.schema.serde.encodeMultipleRestriction"}}}]},
+                                        "function": {"variable": "hydra.json.schema.serde.multipleRestrictionToExpr"}}}]},
                                 "domain": {"variable": "hydra.json.schema.MultipleRestriction"},
                                 "parameter": "mr"}}},
                           {
@@ -1326,7 +1326,7 @@
                                                 "second": {
                                                   "application": {
                                                     "argument": {"variable": "sr"},
-                                                    "function": {"variable": "hydra.json.schema.serde.encodeSchemaReference"}}}}},
+                                                    "function": {"variable": "hydra.json.schema.serde.schemaReferenceToExpr"}}}}},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]},
                                 "domain": {"variable": "hydra.json.schema.SchemaReference"},
@@ -1388,7 +1388,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeSchema",
+        "name": "hydra.json.schema.serde.schemaToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1413,7 +1413,7 @@
                                       "function": {"unwrap": "hydra.json.schema.Schema"}}},
                                   "function": {
                                     "application": {
-                                      "argument": {"variable": "hydra.json.schema.serde.encodeRestriction"},
+                                      "argument": {"variable": "hydra.json.schema.serde.restrictionToExpr"},
                                       "function": {
                                         "typeApplication": {
                                           "body": {
@@ -1450,7 +1450,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeSchemaOrArray",
+        "name": "hydra.json.schema.serde.schemaOrArrayToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1472,7 +1472,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}},
+                                    "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}},
                                 "domain": {"variable": "hydra.json.schema.Schema"},
                                 "parameter": "s"}}},
                           {
@@ -1488,7 +1488,7 @@
                                           "argument": {"variable": "keys"},
                                           "function": {
                                             "application": {
-                                              "argument": {"variable": "hydra.json.schema.serde.encodeKeyword"},
+                                              "argument": {"variable": "hydra.json.schema.serde.keywordToExpr"},
                                               "function": {
                                                 "typeApplication": {
                                                   "body": {
@@ -1510,7 +1510,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeSchemaReference",
+        "name": "hydra.json.schema.serde.schemaReferenceToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1539,7 +1539,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeStringRestriction",
+        "name": "hydra.json.schema.serde.stringRestrictionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1647,7 +1647,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeType",
+        "name": "hydra.json.schema.serde.typeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1669,7 +1669,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "name"},
-                                    "function": {"variable": "hydra.json.schema.serde.encodeTypeName"}}},
+                                    "function": {"variable": "hydra.json.schema.serde.typeNameToExpr"}}},
                                 "domain": {"variable": "hydra.json.schema.TypeName"},
                                 "parameter": "name"}}},
                           {
@@ -1685,7 +1685,7 @@
                                           "argument": {"variable": "names"},
                                           "function": {
                                             "application": {
-                                              "argument": {"variable": "hydra.json.schema.serde.encodeTypeName"},
+                                              "argument": {"variable": "hydra.json.schema.serde.typeNameToExpr"},
                                               "function": {
                                                 "typeApplication": {
                                                   "body": {
@@ -1707,7 +1707,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.encodeTypeName",
+        "name": "hydra.json.schema.serde.typeNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1891,7 +1891,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "root"},
-                                "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}},
+                                "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}},
                             "function": {"variable": "hydra.json.schema.serde.fromObject"}}},
                         "typeScheme": {
                           "body": {
@@ -2035,7 +2035,7 @@
                                                                                                   "second": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "schema"},
-                                                                                                      "function": {"variable": "hydra.json.schema.serde.encodeSchema"}}}}},
+                                                                                                      "function": {"variable": "hydra.json.schema.serde.schemaToExpr"}}}}},
                                                                                               "type": {"literal": {"string": {}}}}},
                                                                                           "type": {"variable": "hydra.json.model.Value"}}}}},
                                                                                   "domain": {

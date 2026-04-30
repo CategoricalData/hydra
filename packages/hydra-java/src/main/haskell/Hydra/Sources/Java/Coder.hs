@@ -4299,7 +4299,7 @@ moduleToJava = def "moduleToJava" $
           "name" <~ Pairs.first (var "entry") $
           "unit" <~ Pairs.second (var "entry") $
           pair (bindingNameToFilePath @@ var "name")
-            (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (JavaSerdeSource.writeCompilationUnit @@ var "unit"))))
+            (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (JavaSerdeSource.compilationUnitToExpr @@ var "unit"))))
         (Maps.toList (var "units")))))
 
 -- | Convert Name->Name map to Name->Type map (wrapping values as TypeVariable)

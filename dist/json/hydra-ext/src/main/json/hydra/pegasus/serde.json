@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprAnnotations",
+        "name": "hydra.pegasus.serde.annotationsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -57,7 +57,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprEnumField",
+        "name": "hydra.pegasus.serde.enumFieldToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -110,7 +110,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprImport",
+        "name": "hydra.pegasus.serde.importToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -131,7 +131,7 @@
                         {
                           "application": {
                             "argument": {"variable": "qn"},
-                            "function": {"variable": "hydra.pegasus.serde.exprQualifiedName"}}}]},
+                            "function": {"variable": "hydra.pegasus.serde.qualifiedNameToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.pegasus.pdl.QualifiedName"},
                 "parameter": "qn"}}}},
@@ -143,7 +143,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprNamedSchema",
+        "name": "hydra.pegasus.serde.namedSchemaToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -223,7 +223,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "qn"},
-                                                        "function": {"variable": "hydra.pegasus.serde.exprQualifiedName"}}},
+                                                        "function": {"variable": "hydra.pegasus.serde.qualifiedNameToExpr"}}},
                                                     {
                                                       "application": {
                                                         "argument": {
@@ -231,7 +231,7 @@
                                                             "argument": {"variable": "fields"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.pegasus.serde.exprRecordField"},
+                                                                "argument": {"variable": "hydra.pegasus.serde.recordFieldToExpr"},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -278,7 +278,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "qn"},
-                                                        "function": {"variable": "hydra.pegasus.serde.exprQualifiedName"}}},
+                                                        "function": {"variable": "hydra.pegasus.serde.qualifiedNameToExpr"}}},
                                                     {
                                                       "application": {
                                                         "argument": {
@@ -286,7 +286,7 @@
                                                             "argument": {"variable": "fields"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.pegasus.serde.exprEnumField"},
+                                                                "argument": {"variable": "hydra.pegasus.serde.enumFieldToExpr"},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -320,7 +320,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "qn"},
-                                                    "function": {"variable": "hydra.pegasus.serde.exprQualifiedName"}}},
+                                                    "function": {"variable": "hydra.pegasus.serde.qualifiedNameToExpr"}}},
                                                 {
                                                   "application": {
                                                     "argument": {"literal": {"string": "="}},
@@ -328,7 +328,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "schema"},
-                                                    "function": {"variable": "hydra.pegasus.serde.exprSchema"}}}]},
+                                                    "function": {"variable": "hydra.pegasus.serde.schemaToExpr"}}}]},
                                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                                         "domain": {"variable": "hydra.pegasus.pdl.Schema"},
                                         "parameter": "schema"}}}],
@@ -347,7 +347,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprPrimitiveType",
+        "name": "hydra.pegasus.serde.primitiveTypeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -425,7 +425,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprQualifiedName",
+        "name": "hydra.pegasus.serde.qualifiedNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -516,7 +516,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprRecordField",
+        "name": "hydra.pegasus.serde.recordFieldToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -617,7 +617,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "schema"},
-                                            "function": {"variable": "hydra.pegasus.serde.exprSchema"}}},
+                                            "function": {"variable": "hydra.pegasus.serde.schemaToExpr"}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.maybes.pure"},
@@ -641,7 +641,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprSchema",
+        "name": "hydra.pegasus.serde.schemaToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -675,7 +675,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "s"},
-                                                    "function": {"variable": "hydra.pegasus.serde.exprSchema"}}}]},
+                                                    "function": {"variable": "hydra.pegasus.serde.schemaToExpr"}}}]},
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "hydra.serialization.inlineStyle"},
@@ -706,7 +706,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "s"},
-                                                    "function": {"variable": "hydra.pegasus.serde.exprSchema"}}}]},
+                                                    "function": {"variable": "hydra.pegasus.serde.schemaToExpr"}}}]},
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "hydra.serialization.inlineStyle"},
@@ -721,7 +721,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "qn"},
-                                    "function": {"variable": "hydra.pegasus.serde.exprQualifiedName"}}},
+                                    "function": {"variable": "hydra.pegasus.serde.qualifiedNameToExpr"}}},
                                 "domain": {"variable": "hydra.pegasus.pdl.QualifiedName"},
                                 "parameter": "qn"}}},
                           {
@@ -741,7 +741,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "pt"},
-                                    "function": {"variable": "hydra.pegasus.serde.exprPrimitiveType"}}},
+                                    "function": {"variable": "hydra.pegasus.serde.primitiveTypeToExpr"}}},
                                 "domain": {"variable": "hydra.pegasus.pdl.PrimitiveType"},
                                 "parameter": "pt"}}},
                           {
@@ -766,7 +766,7 @@
                                                     "function": {"unwrap": "hydra.pegasus.pdl.UnionSchema"}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.pegasus.serde.exprUnionMember"},
+                                                    "argument": {"variable": "hydra.pegasus.serde.unionMemberToExpr"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -792,7 +792,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprSchemaFile",
+        "name": "hydra.pegasus.serde.schemaFileToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -915,7 +915,7 @@
                                         "argument": {"variable": "imports"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.pegasus.serde.exprImport"},
+                                            "argument": {"variable": "hydra.pegasus.serde.importToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -960,7 +960,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "s"},
-                                            "function": {"variable": "hydra.pegasus.serde.exprNamedSchema"}}},
+                                            "function": {"variable": "hydra.pegasus.serde.namedSchemaToExpr"}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.maybes.pure"},
@@ -1010,7 +1010,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.pegasus.serde.exprUnionMember",
+        "name": "hydra.pegasus.serde.unionMemberToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1092,7 +1092,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "schema"},
-                                            "function": {"variable": "hydra.pegasus.serde.exprSchema"}}},
+                                            "function": {"variable": "hydra.pegasus.serde.schemaToExpr"}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.maybes.pure"},
@@ -1137,7 +1137,7 @@
                                 {
                                   "application": {
                                     "argument": {"variable": "anns"},
-                                    "function": {"variable": "hydra.pegasus.serde.exprAnnotations"}}},
+                                    "function": {"variable": "hydra.pegasus.serde.annotationsToExpr"}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "expr"},

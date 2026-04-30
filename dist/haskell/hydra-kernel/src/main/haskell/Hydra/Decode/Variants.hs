@@ -39,7 +39,9 @@ functionVariant cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "elimination", (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "elimination",
+                        (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
@@ -76,7 +78,9 @@ termVariant cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "annotated", (\input -> Eithers.map (\t -> Variants.TermVariantAnnotated) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TermVariantApplication) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "application",
+                        (\input -> Eithers.map (\t -> Variants.TermVariantApplication) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "cases", (\input -> Eithers.map (\t -> Variants.TermVariantCases) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TermVariantEither) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "inject", (\input -> Eithers.map (\t -> Variants.TermVariantInject) (ExtractCore.decodeUnit cx input))),
@@ -90,7 +94,9 @@ termVariant cx raw =
                       (Core.Name "project", (\input -> Eithers.map (\t -> Variants.TermVariantProject) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TermVariantRecord) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TermVariantSet) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "typeApplication", (\input -> Eithers.map (\t -> Variants.TermVariantTypeApplication) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "typeApplication",
+                        (\input -> Eithers.map (\t -> Variants.TermVariantTypeApplication) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "typeLambda", (\input -> Eithers.map (\t -> Variants.TermVariantTypeLambda) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TermVariantUnit) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "unwrap", (\input -> Eithers.map (\t -> Variants.TermVariantUnwrap) (ExtractCore.decodeUnit cx input))),
@@ -111,7 +117,9 @@ typeVariant cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "annotated", (\input -> Eithers.map (\t -> Variants.TypeVariantAnnotated) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TypeVariantApplication) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "application",
+                        (\input -> Eithers.map (\t -> Variants.TypeVariantApplication) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TypeVariantEither) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "forall", (\input -> Eithers.map (\t -> Variants.TypeVariantForall) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "function", (\input -> Eithers.map (\t -> Variants.TypeVariantFunction) (ExtractCore.decodeUnit cx input))),

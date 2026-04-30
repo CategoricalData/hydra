@@ -9,7 +9,7 @@
     "hydra.error.pg": "67688aec530985d296b79d254a99eeac36e129b54db94428292d2cae5f28582a",
     "hydra.graphviz.coder": "b6bb0046c9bf5ac72cca47fad1e8205b66b9036d01b0fbab92b44f2726f3147e",
     "hydra.graphviz.dot": "c9f1684114d6cc17f990d70ae2bccddd7ff651c29c67777cb132127762cb66d0",
-    "hydra.graphviz.serde": "a0ab37a15451c82489e2748212e61b3a1e41793e3a48248b60f13910db6e6f8c",
+    "hydra.graphviz.serde": "7a70a81c79182ad28bf1a704eb4d18966c0d12dff03fb17878b3f6f83ba3a7d7",
     "hydra.pg.coder": "0cde6b51326610c12ccfab0277dc93541c22ebd9bb55616b147743a429300772",
     "hydra.pg.graphson.coder": "61c6fae74af1561f56861075035fb38df08608fc1ab1460f9139946c3c219b33",
     "hydra.pg.graphson.construct": "986aa90dcc1077393e3768f589692c5b002759c6b90eb25f3abe72e1e606e582",

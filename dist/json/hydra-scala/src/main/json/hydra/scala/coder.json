@@ -13031,7 +13031,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "pkg"},
-                                                            "function": {"variable": "hydra.scala.serde.writePkg"}}},
+                                                            "function": {"variable": "hydra.scala.serde.pkgToExpr"}}},
                                                         "function": {"variable": "hydra.serialization.parenthesize"}}},
                                                     "function": {"variable": "hydra.serialization.printExpr"}}},
                                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],

@@ -37,15 +37,17 @@ applicationsInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "application in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}), (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat2")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))})))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}),
+              (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat2")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))})))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -623,10 +625,12 @@ lambdasInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "lambda in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypePair (Core.PairType {
@@ -966,11 +970,13 @@ letWithComplexExpressionsTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))))})))),
+              Core.letBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -1040,7 +1046,13 @@ literalsInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "literals in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermPair (Core.TermLiteral (Core.LiteralString "test"), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14))))))))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermLiteral (Core.LiteralBoolean True),
+              (Core.TermPair (
+                Core.TermLiteral (Core.LiteralString "test"),
+                (Core.TermPair (
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                  (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14))))))))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeBoolean),
               Core.pairTypeSecond = (Core.TypePair (Core.PairType {
@@ -1549,11 +1561,13 @@ polymorphicApplicationsTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))))})))),
+              Core.letBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -1653,11 +1667,13 @@ polymorphicVariablesTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test"))}))))})))),
+              Core.letBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test"))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),

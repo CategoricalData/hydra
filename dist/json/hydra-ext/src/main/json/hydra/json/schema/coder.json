@@ -161,7 +161,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.json.schema.coder.encodeType"},
+                                                                                "body": {"variable": "hydra.json.schema.coder.typeToExpr"},
                                                                                 "type": {"variable": "t0"}}},
                                                                             "type": {"variable": "t1"}}},
                                                                         "type": {"literal": {"boolean": {}}}}},
@@ -313,7 +313,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.json.schema.coder.encodeType"},
+                                                                                "body": {"variable": "hydra.json.schema.coder.typeToExpr"},
                                                                                 "type": {"variable": "t0"}}},
                                                                             "type": {"variable": "t1"}}},
                                                                         "type": {"literal": {"boolean": {}}}}},
@@ -389,7 +389,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.json.schema.coder.encodeType",
+        "name": "hydra.json.schema.coder.typeToExpr",
         "term": {
           "typeLambda": {
             "body": {
@@ -438,7 +438,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.json.schema.coder.encodeType"},
+                                                                                    "body": {"variable": "hydra.json.schema.coder.typeToExpr"},
                                                                                     "type": {"variable": "t0"}}},
                                                                                 "type": {"variable": "t1"}}},
                                                                             "type": {"variable": "t2"}}},

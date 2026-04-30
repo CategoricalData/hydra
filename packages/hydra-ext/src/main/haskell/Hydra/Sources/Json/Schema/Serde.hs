@@ -103,24 +103,24 @@ module_ = Module {
             moduleDescription = Just "Serialization functions for converting JSON Schema documents to JSON values"}
   where
     definitions = [
-      toDefinition encodeAdditionalItems,
-      toDefinition encodeArrayRestriction,
-      toDefinition encodeInteger,
-      toDefinition encodeItems,
-      toDefinition encodeKeyword,
-      toDefinition encodeKeywordSchemaOrArray,
-      toDefinition encodeMultipleRestriction,
-      toDefinition encodeNumericRestriction,
-      toDefinition encodeObjectRestriction,
-      toDefinition encodePatternProperty,
-      toDefinition encodeProperty,
-      toDefinition encodeRestriction,
-      toDefinition encodeSchema,
-      toDefinition encodeSchemaOrArray,
-      toDefinition encodeSchemaReference,
-      toDefinition encodeStringRestriction,
-      toDefinition encodeType,
-      toDefinition encodeTypeName,
+      toDefinition additionalItemsToExpr,
+      toDefinition arrayRestrictionToExpr,
+      toDefinition integerToExpr,
+      toDefinition itemsToExpr,
+      toDefinition keywordToExpr,
+      toDefinition keywordSchemaOrArrayToExpr,
+      toDefinition multipleRestrictionToExpr,
+      toDefinition numericRestrictionToExpr,
+      toDefinition objectRestrictionToExpr,
+      toDefinition patternPropertyToExpr,
+      toDefinition propertyToExpr,
+      toDefinition restrictionToExpr,
+      toDefinition schemaToExpr,
+      toDefinition schemaOrArrayToExpr,
+      toDefinition schemaReferenceToExpr,
+      toDefinition stringRestrictionToExpr,
+      toDefinition typeToExpr,
+      toDefinition typeNameToExpr,
       toDefinition fromObject,
       toDefinition jsonSchemaDocumentToJsonValue,
       toDefinition jsonSchemaDocumentToString,
@@ -162,77 +162,77 @@ module_ = Module {
 
 -- String constant keys
 
-encodeAdditionalItems :: TTermDefinition (JS.AdditionalItems -> J.Value)
-encodeAdditionalItems = define "encodeAdditionalItems" $
+additionalItemsToExpr :: TTermDefinition (JS.AdditionalItems -> J.Value)
+additionalItemsToExpr = define "additionalItemsToExpr" $
   doc "Encode additional items as a JSON value" $
   lambda "ai" $
     cases JS._AdditionalItems (var "ai") Nothing [
       JS._AdditionalItems_any>>: lambda "b" $ Json.valueBoolean (var "b"),
-      JS._AdditionalItems_schema>>: lambda "schema" $ encodeSchema @@ var "schema"]
+      JS._AdditionalItems_schema>>: lambda "schema" $ schemaToExpr @@ var "schema"]
 
-encodeArrayRestriction :: TTermDefinition (JS.ArrayRestriction -> (String, J.Value))
-encodeArrayRestriction = define "encodeArrayRestriction" $
+arrayRestrictionToExpr :: TTermDefinition (JS.ArrayRestriction -> (String, J.Value))
+arrayRestrictionToExpr = define "arrayRestrictionToExpr" $
   doc "Encode an array restriction as a key-value pair" $
   lambda "r" $
     cases JS._ArrayRestriction (var "r") Nothing [
-      JS._ArrayRestriction_items>>: lambda "items" $ encodeItems @@ var "items",
+      JS._ArrayRestriction_items>>: lambda "items" $ itemsToExpr @@ var "items",
       JS._ArrayRestriction_additionalItems>>: lambda "ai" $
-        pair key_additionalItems (encodeAdditionalItems @@ var "ai"),
+        pair key_additionalItems (additionalItemsToExpr @@ var "ai"),
       JS._ArrayRestriction_minItems>>: lambda "n" $
-        pair key_minItems (encodeInteger @@ var "n"),
+        pair key_minItems (integerToExpr @@ var "n"),
       JS._ArrayRestriction_maxItems>>: lambda "n" $
-        pair key_maxItems (encodeInteger @@ var "n"),
+        pair key_maxItems (integerToExpr @@ var "n"),
       JS._ArrayRestriction_uniqueItems>>: lambda "b" $
         pair key_uniqueItems (Json.valueBoolean (var "b"))]
 
-encodeInteger :: TTermDefinition (Int -> J.Value)
-encodeInteger = define "encodeInteger" $
+integerToExpr :: TTermDefinition (Int -> J.Value)
+integerToExpr = define "integerToExpr" $
   doc "Encode an integer as a JSON number value" $
   lambda "n" $
     Json.valueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (var "n")))
 
-encodeItems :: TTermDefinition (JS.Items -> (String, J.Value))
-encodeItems = define "encodeItems" $
+itemsToExpr :: TTermDefinition (JS.Items -> (String, J.Value))
+itemsToExpr = define "itemsToExpr" $
   doc "Encode items as a key-value pair" $
   lambda "items" $
     pair key_items
       (cases JS._Items (var "items") Nothing [
-        JS._Items_sameItems>>: lambda "schema" $ encodeSchema @@ var "schema",
+        JS._Items_sameItems>>: lambda "schema" $ schemaToExpr @@ var "schema",
         JS._Items_varItems>>: lambda "schemas" $
-          Json.valueArray (Lists.map encodeSchema (var "schemas"))])
+          Json.valueArray (Lists.map schemaToExpr (var "schemas"))])
 
-encodeKeyword :: TTermDefinition (JS.Keyword -> J.Value)
-encodeKeyword = define "encodeKeyword" $
+keywordToExpr :: TTermDefinition (JS.Keyword -> J.Value)
+keywordToExpr = define "keywordToExpr" $
   doc "Encode a keyword as a JSON string value" $
   lambda "k" $
     Json.valueString (unwrap JS._Keyword @@ var "k")
 
-encodeKeywordSchemaOrArray :: TTermDefinition ((JS.Keyword, JS.SchemaOrArray) -> (String, J.Value))
-encodeKeywordSchemaOrArray = define "encodeKeywordSchemaOrArray" $
+keywordSchemaOrArrayToExpr :: TTermDefinition ((JS.Keyword, JS.SchemaOrArray) -> (String, J.Value))
+keywordSchemaOrArrayToExpr = define "keywordSchemaOrArrayToExpr" $
   doc "Encode a keyword-schema-or-array pair as a key-value pair" $
   lambda "p" $ lets [
     "k">: Pairs.first (var "p"),
     "s">: Pairs.second (var "p")] $
-    pair (unwrap JS._Keyword @@ var "k") (encodeSchemaOrArray @@ var "s")
+    pair (unwrap JS._Keyword @@ var "k") (schemaOrArrayToExpr @@ var "s")
 
-encodeMultipleRestriction :: TTermDefinition (JS.MultipleRestriction -> (String, J.Value))
-encodeMultipleRestriction = define "encodeMultipleRestriction" $
+multipleRestrictionToExpr :: TTermDefinition (JS.MultipleRestriction -> (String, J.Value))
+multipleRestrictionToExpr = define "multipleRestrictionToExpr" $
   doc "Encode a multiple restriction as a key-value pair" $
   lambda "r" $
     cases JS._MultipleRestriction (var "r") Nothing [
       JS._MultipleRestriction_allOf>>: lambda "schemas" $
-        pair key_allOf (Json.valueArray (Lists.map encodeSchema (var "schemas"))),
+        pair key_allOf (Json.valueArray (Lists.map schemaToExpr (var "schemas"))),
       JS._MultipleRestriction_anyOf>>: lambda "schemas" $
-        pair key_anyOf (Json.valueArray (Lists.map encodeSchema (var "schemas"))),
+        pair key_anyOf (Json.valueArray (Lists.map schemaToExpr (var "schemas"))),
       JS._MultipleRestriction_oneOf>>: lambda "schemas" $
-        pair key_oneOf (Json.valueArray (Lists.map encodeSchema (var "schemas"))),
+        pair key_oneOf (Json.valueArray (Lists.map schemaToExpr (var "schemas"))),
       JS._MultipleRestriction_not>>: lambda "schema" $
-        pair key_not (encodeSchema @@ var "schema"),
+        pair key_not (schemaToExpr @@ var "schema"),
       JS._MultipleRestriction_enum>>: lambda "values" $
         pair key_enum (Json.valueArray (var "values"))]
 
-encodeNumericRestriction :: TTermDefinition (JS.NumericRestriction -> [(String, J.Value)])
-encodeNumericRestriction = define "encodeNumericRestriction" $
+numericRestrictionToExpr :: TTermDefinition (JS.NumericRestriction -> [(String, J.Value)])
+numericRestrictionToExpr = define "numericRestrictionToExpr" $
   doc "Encode a numeric restriction as a list of key-value pairs" $
   lambda "r" $
     cases JS._NumericRestriction (var "r") Nothing [
@@ -240,7 +240,7 @@ encodeNumericRestriction = define "encodeNumericRestriction" $
         "value">: project JS._Limit JS._Limit_value @@ var "lim",
         "excl">: project JS._Limit JS._Limit_exclusive @@ var "lim"] $
         Lists.concat $ list [
-          list [pair key_minimum (encodeInteger @@ var "value")],
+          list [pair key_minimum (integerToExpr @@ var "value")],
           Logic.ifElse (var "excl")
             (list [pair key_exclusiveMinimum (Json.valueBoolean true)])
             (list ([] :: [TTerm (String, J.Value)]))],
@@ -248,99 +248,99 @@ encodeNumericRestriction = define "encodeNumericRestriction" $
         "value">: project JS._Limit JS._Limit_value @@ var "lim",
         "excl">: project JS._Limit JS._Limit_exclusive @@ var "lim"] $
         Lists.concat $ list [
-          list [pair key_maximum (encodeInteger @@ var "value")],
+          list [pair key_maximum (integerToExpr @@ var "value")],
           Logic.ifElse (var "excl")
             (list [pair key_exclusiveMaximum (Json.valueBoolean true)])
             (list ([] :: [TTerm (String, J.Value)]))],
       JS._NumericRestriction_multipleOf>>: lambda "n" $
-        list [pair key_multipleOf (encodeInteger @@ var "n")]]
+        list [pair key_multipleOf (integerToExpr @@ var "n")]]
 
-encodeObjectRestriction :: TTermDefinition (JS.ObjectRestriction -> (String, J.Value))
-encodeObjectRestriction = define "encodeObjectRestriction" $
+objectRestrictionToExpr :: TTermDefinition (JS.ObjectRestriction -> (String, J.Value))
+objectRestrictionToExpr = define "objectRestrictionToExpr" $
   doc "Encode an object restriction as a key-value pair" $
   lambda "r" $
     cases JS._ObjectRestriction (var "r") Nothing [
       JS._ObjectRestriction_properties>>: lambda "props" $
         pair key_properties
-          (Json.valueObject (Maps.fromList (Lists.map encodeProperty (Maps.toList (var "props"))))),
+          (Json.valueObject (Maps.fromList (Lists.map propertyToExpr (Maps.toList (var "props"))))),
       JS._ObjectRestriction_additionalProperties>>: lambda "ai" $
-        pair key_additionalProperties (encodeAdditionalItems @@ var "ai"),
+        pair key_additionalProperties (additionalItemsToExpr @@ var "ai"),
       JS._ObjectRestriction_required>>: lambda "keys" $
-        pair key_required (Json.valueArray (Lists.map encodeKeyword (var "keys"))),
+        pair key_required (Json.valueArray (Lists.map keywordToExpr (var "keys"))),
       JS._ObjectRestriction_minProperties>>: lambda "n" $
-        pair key_minProperties (encodeInteger @@ var "n"),
+        pair key_minProperties (integerToExpr @@ var "n"),
       JS._ObjectRestriction_maxProperties>>: lambda "n" $
-        pair key_maxProperties (encodeInteger @@ var "n"),
+        pair key_maxProperties (integerToExpr @@ var "n"),
       JS._ObjectRestriction_dependencies>>: lambda "deps" $
         pair key_dependencies
-          (Json.valueObject (Maps.fromList (Lists.map encodeKeywordSchemaOrArray (Maps.toList (var "deps"))))),
+          (Json.valueObject (Maps.fromList (Lists.map keywordSchemaOrArrayToExpr (Maps.toList (var "deps"))))),
       JS._ObjectRestriction_patternProperties>>: lambda "props" $
         pair key_patternProperties
-          (Json.valueObject (Maps.fromList (Lists.map encodePatternProperty (Maps.toList (var "props")))))]
+          (Json.valueObject (Maps.fromList (Lists.map patternPropertyToExpr (Maps.toList (var "props")))))]
 
-encodePatternProperty :: TTermDefinition ((JS.RegularExpression, JS.Schema) -> (String, J.Value))
-encodePatternProperty = define "encodePatternProperty" $
+patternPropertyToExpr :: TTermDefinition ((JS.RegularExpression, JS.Schema) -> (String, J.Value))
+patternPropertyToExpr = define "patternPropertyToExpr" $
   doc "Encode a pattern property pair as a key-value pair" $
   lambda "p" $ lets [
     "pat">: Pairs.first (var "p"),
     "s">: Pairs.second (var "p")] $
-    pair (unwrap JS._RegularExpression @@ var "pat") (encodeSchema @@ var "s")
+    pair (unwrap JS._RegularExpression @@ var "pat") (schemaToExpr @@ var "s")
 
-encodeProperty :: TTermDefinition ((JS.Keyword, JS.Schema) -> (String, J.Value))
-encodeProperty = define "encodeProperty" $
+propertyToExpr :: TTermDefinition ((JS.Keyword, JS.Schema) -> (String, J.Value))
+propertyToExpr = define "propertyToExpr" $
   doc "Encode a property pair as a key-value pair" $
   lambda "p" $ lets [
     "k">: Pairs.first (var "p"),
     "s">: Pairs.second (var "p")] $
-    pair (unwrap JS._Keyword @@ var "k") (encodeSchema @@ var "s")
+    pair (unwrap JS._Keyword @@ var "k") (schemaToExpr @@ var "s")
 
-encodeRestriction :: TTermDefinition (JS.Restriction -> [(String, J.Value)])
-encodeRestriction = define "encodeRestriction" $
+restrictionToExpr :: TTermDefinition (JS.Restriction -> [(String, J.Value)])
+restrictionToExpr = define "restrictionToExpr" $
   doc "Encode a restriction as a list of key-value pairs" $
   lambda "r" $
     cases JS._Restriction (var "r") Nothing [
       JS._Restriction_type>>: lambda "t" $
-        list [pair key_type_ (encodeType @@ var "t")],
+        list [pair key_type_ (typeToExpr @@ var "t")],
       JS._Restriction_string>>: lambda "sr" $
-        list [encodeStringRestriction @@ var "sr"],
+        list [stringRestrictionToExpr @@ var "sr"],
       JS._Restriction_number>>: lambda "nr" $
-        encodeNumericRestriction @@ var "nr",
+        numericRestrictionToExpr @@ var "nr",
       JS._Restriction_array>>: lambda "ar" $
-        list [encodeArrayRestriction @@ var "ar"],
+        list [arrayRestrictionToExpr @@ var "ar"],
       JS._Restriction_object>>: lambda "or" $
-        list [encodeObjectRestriction @@ var "or"],
+        list [objectRestrictionToExpr @@ var "or"],
       JS._Restriction_multiple>>: lambda "mr" $
-        list [encodeMultipleRestriction @@ var "mr"],
+        list [multipleRestrictionToExpr @@ var "mr"],
       JS._Restriction_reference>>: lambda "sr" $
-        list [pair key_ref (encodeSchemaReference @@ var "sr")],
+        list [pair key_ref (schemaReferenceToExpr @@ var "sr")],
       JS._Restriction_title>>: lambda "s" $
         list [pair key_title (Json.valueString (var "s"))],
       JS._Restriction_description>>: lambda "s" $
         list [pair key_description_ (Json.valueString (var "s"))]]
 
-encodeSchema :: TTermDefinition (JS.Schema -> J.Value)
-encodeSchema = define "encodeSchema" $
+schemaToExpr :: TTermDefinition (JS.Schema -> J.Value)
+schemaToExpr = define "schemaToExpr" $
   doc "Encode a schema as a JSON object value" $
   lambda "s" $
-    Json.valueObject (Maps.fromList (Lists.concat (Lists.map encodeRestriction (unwrap JS._Schema @@ var "s"))))
+    Json.valueObject (Maps.fromList (Lists.concat (Lists.map restrictionToExpr (unwrap JS._Schema @@ var "s"))))
 
-encodeSchemaOrArray :: TTermDefinition (JS.SchemaOrArray -> J.Value)
-encodeSchemaOrArray = define "encodeSchemaOrArray" $
+schemaOrArrayToExpr :: TTermDefinition (JS.SchemaOrArray -> J.Value)
+schemaOrArrayToExpr = define "schemaOrArrayToExpr" $
   doc "Encode a schema or array as a JSON value" $
   lambda "soa" $
     cases JS._SchemaOrArray (var "soa") Nothing [
-      JS._SchemaOrArray_schema>>: lambda "s" $ encodeSchema @@ var "s",
+      JS._SchemaOrArray_schema>>: lambda "s" $ schemaToExpr @@ var "s",
       JS._SchemaOrArray_array>>: lambda "keys" $
-        Json.valueArray (Lists.map encodeKeyword (var "keys"))]
+        Json.valueArray (Lists.map keywordToExpr (var "keys"))]
 
-encodeSchemaReference :: TTermDefinition (JS.SchemaReference -> J.Value)
-encodeSchemaReference = define "encodeSchemaReference" $
+schemaReferenceToExpr :: TTermDefinition (JS.SchemaReference -> J.Value)
+schemaReferenceToExpr = define "schemaReferenceToExpr" $
   doc "Encode a schema reference as a JSON string value" $
   lambda "sr" $
     Json.valueString (unwrap JS._SchemaReference @@ var "sr")
 
-encodeStringRestriction :: TTermDefinition (JS.StringRestriction -> (String, J.Value))
-encodeStringRestriction = define "encodeStringRestriction" $
+stringRestrictionToExpr :: TTermDefinition (JS.StringRestriction -> (String, J.Value))
+stringRestrictionToExpr = define "stringRestrictionToExpr" $
   doc "Encode a string restriction as a key-value pair" $
   lambda "r" $
     cases JS._StringRestriction (var "r") Nothing [
@@ -351,17 +351,17 @@ encodeStringRestriction = define "encodeStringRestriction" $
       JS._StringRestriction_pattern>>: lambda "re" $
         pair key_pattern (Json.valueString (unwrap JS._RegularExpression @@ var "re"))]
 
-encodeType :: TTermDefinition (JS.Type -> J.Value)
-encodeType = define "encodeType" $
+typeToExpr :: TTermDefinition (JS.Type -> J.Value)
+typeToExpr = define "typeToExpr" $
   doc "Encode a type as a JSON value" $
   lambda "t" $
     cases JS._Type (var "t") Nothing [
-      JS._Type_single>>: lambda "name" $ encodeTypeName @@ var "name",
+      JS._Type_single>>: lambda "name" $ typeNameToExpr @@ var "name",
       JS._Type_multiple>>: lambda "names" $
-        Json.valueArray (Lists.map encodeTypeName (var "names"))]
+        Json.valueArray (Lists.map typeNameToExpr (var "names"))]
 
-encodeTypeName :: TTermDefinition (JS.TypeName -> J.Value)
-encodeTypeName = define "encodeTypeName" $
+typeNameToExpr :: TTermDefinition (JS.TypeName -> J.Value)
+typeNameToExpr = define "typeNameToExpr" $
   doc "Encode a type name as a JSON string value" $
   lambda "t" $
     cases JS._TypeName (var "t") Nothing [
@@ -387,7 +387,7 @@ jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
     "mid">: project JS._Document JS._Document_id @@ var "doc",
     "mdefs">: project JS._Document JS._Document_definitions @@ var "doc",
     "root">: project JS._Document JS._Document_root @@ var "doc",
-    "schemaMap">: fromObject @@ (encodeSchema @@ var "root"),
+    "schemaMap">: fromObject @@ (schemaToExpr @@ var "root"),
     "restMap">: fromObject @@ (toObject @@ list [
       pair key_id (Maybes.map (lambda "i" $ Json.valueString (var "i")) (var "mid")),
       pair key_schema (Maybes.pure (Json.valueString (string "http://json-schema.org/2020-12/schema"))),
@@ -397,7 +397,7 @@ jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
             (lambda "p" $ lets [
               "k">: Pairs.first (var "p"),
               "schema">: Pairs.second (var "p")] $
-              pair (unwrap JS._Keyword @@ var "k") (encodeSchema @@ var "schema"))
+              pair (unwrap JS._Keyword @@ var "k") (schemaToExpr @@ var "schema"))
             (Maps.toList (var "mp")))))
         (var "mdefs"))])] $
     Json.valueObject (Maps.union (var "schemaMap") (var "restMap"))

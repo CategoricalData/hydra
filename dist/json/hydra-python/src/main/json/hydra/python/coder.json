@@ -5203,7 +5203,7 @@
                                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                                     "body": {
                                                                                                                                                                                                       "typeApplication": {
-                                                                                                                                                                                                        "body": {"variable": "hydra.python.coder.encodeCaseBlock"},
+                                                                                                                                                                                                        "body": {"variable": "hydra.python.coder.caseBlockToExpr"},
                                                                                                                                                                                                         "type": {"variable": "hydra.context.Context"}}},
                                                                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                                         "function": {
@@ -5663,7 +5663,7 @@
                                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                                             "body": {
                                                                                                                                                                                               "typeApplication": {
-                                                                                                                                                                                                "body": {"variable": "hydra.python.coder.encodeCaseBlock"},
+                                                                                                                                                                                                "body": {"variable": "hydra.python.coder.caseBlockToExpr"},
                                                                                                                                                                                                 "type": {"variable": "hydra.context.Context"}}},
                                                                                                                                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                                 "function": {
@@ -6243,7 +6243,7 @@
                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                     "body": {
                                                                                                                                                                                       "typeApplication": {
-                                                                                                                                                                                        "body": {"variable": "hydra.python.coder.encodeCaseBlock"},
+                                                                                                                                                                                        "body": {"variable": "hydra.python.coder.caseBlockToExpr"},
                                                                                                                                                                                         "type": {"variable": "hydra.context.Context"}}},
                                                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                         "function": {
@@ -6819,7 +6819,7 @@
           "variables": ["t0", "t1", "t2", "t3"]}}},
     {
       "term": {
-        "name": "hydra.python.coder.encodeCaseBlock",
+        "name": "hydra.python.coder.caseBlockToExpr",
         "term": {
           "typeLambda": {
             "body": {
@@ -7347,7 +7347,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "d"},
-                                                                    "function": {"variable": "encodeTerm"}}},
+                                                                    "function": {"variable": "termToExpr"}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -7431,7 +7431,7 @@
                                 "left": {"variable": "t1"},
                                 "right": {"variable": "hydra.python.syntax.Expression"}}},
                             "domain": {"variable": "t0"}}},
-                        "parameter": "encodeTerm"}}}},
+                        "parameter": "termToExpr"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "typeScheme": {
@@ -8081,7 +8081,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "fterm"},
-                                                            "function": {"variable": "encodeTerm"}}},
+                                                            "function": {"variable": "termToExpr"}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
@@ -8099,7 +8099,7 @@
                                           "function": {
                                             "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "t2"}}},
                                             "domain": {"variable": "hydra.core.Term"}}},
-                                        "parameter": "encodeTerm"}},
+                                        "parameter": "termToExpr"}},
                                     "domain": {"variable": "hydra.core.Field"},
                                     "parameter": "field"}},
                                 "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
@@ -9506,7 +9506,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.python.coder.encodeFunctionDefinition",
+        "name": "hydra.python.coder.functionDefinitionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -13065,7 +13065,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "cx"},
-                                                                                                                                                "function": {"variable": "hydra.python.coder.encodeFunctionDefinition"}}}}}}}}}}}}}}}}}}}}},
+                                                                                                                                                "function": {"variable": "hydra.python.coder.functionDefinitionToExpr"}}}}}}}}}}}}}}}}}}}}},
                                                                                                         "domain": {"list": {"variable": "hydra.python.syntax.Statement"}},
                                                                                                         "parameter": "bindingStmts"}},
                                                                                                     "function": {
@@ -16672,7 +16672,7 @@
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
                                                                                                                                                       "typeApplication": {
-                                                                                                                                                        "body": {"variable": "hydra.python.coder.encodeCaseBlock"},
+                                                                                                                                                        "body": {"variable": "hydra.python.coder.caseBlockToExpr"},
                                                                                                                                                         "type": {"variable": "hydra.context.Context"}}},
                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                         "function": {
@@ -17299,7 +17299,7 @@
                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                     "body": {
                                                                                                                                                                                       "typeApplication": {
-                                                                                                                                                                                        "body": {"variable": "hydra.python.coder.encodeCaseBlock"},
+                                                                                                                                                                                        "body": {"variable": "hydra.python.coder.caseBlockToExpr"},
                                                                                                                                                                                         "type": {"variable": "hydra.context.Context"}}},
                                                                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}}}}}}}}}}}}}},
                                                                                                                                                         "function": {
@@ -18914,7 +18914,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "pytype"},
-                                                            "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                                            "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                                         "function": {"variable": "hydra.serialization.printExpr"}}},
                                                     "function": {"variable": "hydra.python.utils.doubleQuotedString"}}},
                                                 "function": {
@@ -26995,7 +26995,7 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "file"},
-                                                        "function": {"variable": "hydra.python.serde.encodeModule"}}},
+                                                        "function": {"variable": "hydra.python.serde.moduleToExpr"}}},
                                                     "function": {"variable": "hydra.serialization.parenthesize"}}},
                                                 "function": {"variable": "hydra.serialization.printExpr"}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],

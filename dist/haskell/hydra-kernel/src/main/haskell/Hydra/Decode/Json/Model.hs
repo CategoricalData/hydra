@@ -23,27 +23,35 @@ value cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "array", (\input -> Eithers.map (\t -> Model.ValueArray t) (ExtractCore.decodeList value cx input))),
-                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralBoolean v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected boolean literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "boolean",
+                        (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralBoolean v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected boolean literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "null", (\input -> Eithers.map (\t -> Model.ValueNull) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralDecimal v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected decimal literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (ExtractCore.decodeMap (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) value cx input))),
-                      (Core.Name "string", (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "number",
+                        (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralDecimal v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected decimal literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "object",
+                        (\input -> Eithers.map (\t -> Model.ValueObject t) (ExtractCore.decodeMap (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) value cx input))),
+                      (
+                        Core.Name "string",
+                        (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

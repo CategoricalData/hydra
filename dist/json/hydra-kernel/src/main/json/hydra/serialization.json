@@ -87,11 +87,21 @@
             "body": {
               "lambda": {
                 "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "inlineList",
-                        "term": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "els"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.serialization.halfBlockStyle"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}},
+                    "function": {
+                      "application": {
+                        "argument": {
                           "application": {
                             "argument": {"variable": "els"},
                             "function": {
@@ -102,42 +112,10 @@
                                     "argument": {
                                       "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
                                     "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}},
-                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "inlineList"},
                         "function": {
                           "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "els"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.serialization.halfBlockStyle"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                        "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"literal": {"integer": {"int32": 70}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "inlineList"},
-                                            "function": {"variable": "hydra.serialization.expressionLength"}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.equality.gt"},
-                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
+                            "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                            "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}},
                 "domain": {"list": {"variable": "hydra.ast.Expr"}},
                 "parameter": "els"}}}},
         "typeScheme": {
@@ -217,49 +195,27 @@
             "body": {
               "lambda": {
                 "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "inlineList",
-                        "term": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "els"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.serialization.halfBlockStyle"},
+                            "function": {"variable": "hydra.serialization.bracketList"}}}}},
+                    "function": {
+                      "application": {
+                        "argument": {
                           "application": {
                             "argument": {"variable": "els"},
                             "function": {
                               "application": {
                                 "argument": {"variable": "hydra.serialization.inlineStyle"},
                                 "function": {"variable": "hydra.serialization.bracketList"}}}}},
-                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "inlineList"},
                         "function": {
                           "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "els"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.serialization.halfBlockStyle"},
-                                    "function": {"variable": "hydra.serialization.bracketList"}}}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"literal": {"integer": {"int32": 70}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "inlineList"},
-                                            "function": {"variable": "hydra.serialization.expressionLength"}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.equality.gt"},
-                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
+                            "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                            "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}},
                 "domain": {"list": {"variable": "hydra.ast.Expr"}},
                 "parameter": "els"}}}},
         "typeScheme": {
@@ -309,6 +265,66 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.serialization.chooseLayout",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Pick between an inline and a multi-line layout for the same logical expression. Returns the inline form if its estimated width does not exceed the threshold, otherwise the block form. Note: the threshold is measured against the inline expression in isolation; surrounding indentation may push content beyond the threshold at print time. Callers that know they are nested can pass a smaller threshold to compensate."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "inlineExpr"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "blockExpr"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "threshold"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "inlineExpr"},
+                                                "function": {"variable": "hydra.serialization.expressionLength"}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.equality.gt"},
+                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
+                        "domain": {"variable": "hydra.ast.Expr"},
+                        "parameter": "blockExpr"}},
+                    "domain": {"variable": "hydra.ast.Expr"},
+                    "parameter": "inlineExpr"}},
+                "domain": {"literal": {"integer": {"int32": {}}}},
+                "parameter": "threshold"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.ast.Expr"},
+                      "domain": {"variable": "hydra.ast.Expr"}}},
+                  "domain": {"variable": "hydra.ast.Expr"}}},
+              "domain": {"literal": {"integer": {"int32": {}}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.serialization.commaSep",
         "term": {
           "application": {
@@ -322,6 +338,71 @@
                   "codomain": {"variable": "hydra.ast.Expr"},
                   "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
               "domain": {"variable": "hydra.ast.BlockStyle"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.serialization.commaSepAdaptive",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Comma-separate elements inline if the joined width fits, otherwise break onto separate lines."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "els"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.serialization.halfBlockStyle"},
+                            "function": {"variable": "hydra.serialization.commaSep"}}}}},
+                    "function": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "els"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                "function": {"variable": "hydra.serialization.commaSep"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                            "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}},
+                "domain": {"list": {"variable": "hydra.ast.Expr"}},
+                "parameter": "els"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.serialization.cst",
+        "term": {
+          "lambda": {
+            "body": {
+              "inject": {
+                "field": {
+                  "name": "const",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "s"},
+                      "function": {"variable": "hydra.serialization.sym"}}}},
+                "typeName": "hydra.ast.Expr"}},
+            "domain": {"literal": {"string": {}}},
+            "parameter": "s"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
@@ -445,28 +526,6 @@
                       "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
                   "domain": {"variable": "hydra.ast.BlockStyle"}}},
               "domain": {"maybe": {"literal": {"string": {}}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.serialization.cst",
-        "term": {
-          "lambda": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "const",
-                  "term": {
-                    "application": {
-                      "argument": {"variable": "s"},
-                      "function": {"variable": "hydra.serialization.sym"}}}},
-                "typeName": "hydra.ast.Expr"}},
-            "domain": {"literal": {"string": {}}},
-            "parameter": "s"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
@@ -1800,6 +1859,19 @@
         "typeScheme": {"body": {"variable": "hydra.ast.BlockStyle"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.serialization.maxLineWidth",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "The canonical maximum line width used by Hydra writers. Adaptive helpers compare estimated expression widths against this threshold to decide whether to render inline or break across lines. Set to 120 to match the project-wide line-length convention."}}}],
+            "body": {"literal": {"integer": {"int32": 120}}}}},
+        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.serialization.newlineSep",
         "term": {
           "application": {
@@ -2270,6 +2342,49 @@
                   "codomain": {"variable": "hydra.ast.Expr"},
                   "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
               "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.serialization.parenListAdaptive",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Produce a parenthesized list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "els"},
+                        "function": {
+                          "application": {
+                            "argument": {"literal": {"boolean": true}},
+                            "function": {"variable": "hydra.serialization.parenList"}}}}},
+                    "function": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "els"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"boolean": false}},
+                                "function": {"variable": "hydra.serialization.parenList"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                            "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}},
+                "domain": {"list": {"variable": "hydra.ast.Expr"}},
+                "parameter": "els"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
           "variables": []}}},
     {
       "term": {
@@ -4356,6 +4471,59 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.serialization.spaceSepAdaptive",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Space-separate elements inline if the joined width fits, otherwise newline-separate them. Useful for long signatures, type chains, and other space-joined sequences."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "els"},
+                        "function": {"variable": "hydra.serialization.newlineSep"}}},
+                    "function": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "els"},
+                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                            "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}},
+                "domain": {"list": {"variable": "hydra.ast.Expr"}},
+                "parameter": "els"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.serialization.squareBrackets",
+        "term": {
+          "record": {
+            "fields": [
+              {
+                "name": "open",
+                "term": {
+                  "wrap": {"body": {"literal": {"string": "["}}, "typeName": "hydra.ast.Symbol"}}},
+              {
+                "name": "close",
+                "term": {
+                  "wrap": {"body": {"literal": {"string": "]"}}, "typeName": "hydra.ast.Symbol"}}}],
+            "typeName": "hydra.ast.Brackets"}},
+        "typeScheme": {"body": {"variable": "hydra.ast.Brackets"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.serialization.structuralSep",
         "term": {
           "annotated": {
@@ -4519,22 +4687,6 @@
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
           "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.serialization.squareBrackets",
-        "term": {
-          "record": {
-            "fields": [
-              {
-                "name": "open",
-                "term": {
-                  "wrap": {"body": {"literal": {"string": "["}}, "typeName": "hydra.ast.Symbol"}}},
-              {
-                "name": "close",
-                "term": {
-                  "wrap": {"body": {"literal": {"string": "]"}}, "typeName": "hydra.ast.Symbol"}}}],
-            "typeName": "hydra.ast.Brackets"}},
-        "typeScheme": {"body": {"variable": "hydra.ast.Brackets"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.serialization.suffix",

@@ -192,7 +192,7 @@ expressionToExpr expr =
             expressionToExpr inner])])))
       Syntax.ExpressionList v0 -> Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v0)
       Syntax.ExpressionParens v0 -> Serialization.parenthesize (expressionToExpr v0)
-      Syntax.ExpressionTuple v0 -> Serialization.parenList False (Lists.map expressionToExpr v0)
+      Syntax.ExpressionTuple v0 -> Serialization.parenListAdaptive (Lists.map expressionToExpr v0)
       Syntax.ExpressionVariable v0 -> nameToExpr v0
 -- | Convert a field declaration to an AST expression
 fieldToExpr :: Syntax.Field -> Ast.Expr
@@ -341,7 +341,7 @@ patternToExpr pat =
       Syntax.PatternLiteral v0 -> literalToExpr v0
       Syntax.PatternName v0 -> nameToExpr v0
       Syntax.PatternParens v0 -> Serialization.parenthesize (patternToExpr v0)
-      Syntax.PatternTuple v0 -> Serialization.parenList False (Lists.map patternToExpr v0)
+      Syntax.PatternTuple v0 -> Serialization.parenListAdaptive (Lists.map patternToExpr v0)
       Syntax.PatternWildcard -> Serialization.cst "_"
 -- | Convert a right-hand side to an AST expression
 rightHandSideToExpr :: Syntax.RightHandSide -> Ast.Expr
@@ -370,11 +370,11 @@ typeSignatureToExpr typeSig =
                     nameExpr,
                     (Serialization.cst "::"),
                     typeExpr]
-      in (Logic.ifElse (Equality.gt (Serialization.expressionLength inlineSig) 120) (Serialization.newlineSep [
+      in (Serialization.chooseLayout Serialization.maxLineWidth inlineSig (Serialization.newlineSep [
         Serialization.spaceSep [
           nameExpr,
           (Serialization.cst "::")],
-        (Serialization.tabIndent typeExpr)]) inlineSig)
+        (Serialization.tabIndent typeExpr)]))
 -- | Convert a Haskell type to an AST expression
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr htype =
@@ -393,7 +393,7 @@ typeToExpr htype =
         in (Serialization.ifx Operators.arrowOp (typeToExpr dom) (typeToExpr cod))
       Syntax.TypeList v0 -> Serialization.bracketList Serialization.inlineStyle [
         typeToExpr v0]
-      Syntax.TypeTuple v0 -> Serialization.parenList False (Lists.map typeToExpr v0)
+      Syntax.TypeTuple v0 -> Serialization.parenListAdaptive (Lists.map typeToExpr v0)
       Syntax.TypeVariable v0 -> nameToExpr v0
 -- | Convert a value binding to an AST expression
 valueBindingToExpr :: Syntax.ValueBinding -> Ast.Expr
@@ -411,11 +411,11 @@ valueBindingToExpr vb =
                       (Serialization.cst "="),
                       rhsExpr]
             body =
-                    Logic.ifElse (Equality.gt (Serialization.expressionLength inlineBody) 120) (Serialization.newlineSep [
+                    Serialization.chooseLayout Serialization.maxLineWidth inlineBody (Serialization.newlineSep [
                       Serialization.spaceSep [
                         lhsExpr,
                         (Serialization.cst "=")],
-                      (Serialization.tabIndent rhsExpr)]) inlineBody
+                      (Serialization.tabIndent rhsExpr)])
         in (Maybes.maybe body (\localBindings ->
           let bindings = Syntax.unLocalBindings localBindings
           in (Serialization.indentBlock (Lists.cons body [

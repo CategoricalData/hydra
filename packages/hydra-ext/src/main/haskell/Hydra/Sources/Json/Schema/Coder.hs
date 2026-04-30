@@ -113,7 +113,7 @@ module_ = Module {
       toDefinition encodeField,
       toDefinition encodeName,
       toDefinition encodeNamedType,
-      toDefinition encodeType,
+      toDefinition typeToExpr,
       toDefinition isRequiredField,
       toDefinition moduleToJsonSchema,
       toDefinition referenceRestriction]
@@ -137,7 +137,7 @@ encodeField = define "encodeField" $
     "typ">: project _FieldType _FieldType_type @@ var "ft"] $
     Eithers.map
       (lambda "res" $ pair (wrap JS._Keyword (Core.unName $ var "name")) (wrap JS._Schema (var "res")))
-      (encodeType @@ var "cx" @@ var "g" @@ false @@ var "typ")
+      (typeToExpr @@ var "cx" @@ var "g" @@ false @@ var "typ")
 
 encodeName :: TTermDefinition (Name -> String)
 encodeName = define "encodeName" $
@@ -153,13 +153,13 @@ encodeNamedType = define "encodeNamedType" $
       (lambda "res" $ Lists.concat $ list [
         list [inject JS._Restriction JS._Restriction_title (Core.unName $ var "name")],
         var "res"])
-      (encodeType @@ var "cx" @@ var "g" @@ false @@ (Strip.deannotateType @@ var "typ"))
+      (typeToExpr @@ var "cx" @@ var "g" @@ false @@ (Strip.deannotateType @@ var "typ"))
 
-encodeType :: TTermDefinition (Context -> Graph -> Bool -> Type -> Result [JS.Restriction])
-encodeType = define "encodeType" $
+typeToExpr :: TTermDefinition (Context -> Graph -> Bool -> Type -> Result [JS.Restriction])
+typeToExpr = define "typeToExpr" $
   doc "Encode a Hydra type as a list of JSON Schema restrictions" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
-    var "hydra.json.schema.coder.encodeType" @@ var "cx" @@ var "g" @@ var "optional" @@ var "typ"
+    var "hydra.json.schema.coder.typeToExpr" @@ var "cx" @@ var "g" @@ var "optional" @@ var "typ"
 
 isRequiredField :: TTermDefinition (FieldType -> Bool)
 isRequiredField = define "isRequiredField" $

@@ -1805,10 +1805,7 @@
                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"variable": "hydra.haskell.syntax.Expression"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"literal": {"boolean": false}},
-                                        "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                    "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                                 "domain": {"list": {"variable": "hydra.haskell.syntax.Expression"}},
                                 "parameter": "exprs"}}},
                           {
@@ -3355,10 +3352,7 @@
                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"variable": "hydra.haskell.syntax.Pattern"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"literal": {"boolean": false}},
-                                        "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                    "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                                 "domain": {"list": {"variable": "hydra.haskell.syntax.Pattern"}},
                                 "parameter": "pats"}}},
                           {
@@ -3642,47 +3636,32 @@
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "inlineSig"},
-                        "function": {
+                        "argument": {
                           "application": {
                             "argument": {
-                              "application": {
-                                "argument": {
-                                  "list": [
-                                    {
-                                      "application": {
-                                        "argument": {
-                                          "list": [
-                                            {"variable": "nameExpr"},
-                                            {
-                                              "application": {
-                                                "argument": {"literal": {"string": "::"}},
-                                                "function": {"variable": "hydra.serialization.cst"}}}]},
-                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                    {
-                                      "application": {
-                                        "argument": {"variable": "typeExpr"},
-                                        "function": {"variable": "hydra.serialization.tabIndent"}}}]},
-                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                              "list": [
+                                {
+                                  "application": {
+                                    "argument": {
+                                      "list": [
+                                        {"variable": "nameExpr"},
+                                        {
+                                          "application": {
+                                            "argument": {"literal": {"string": "::"}},
+                                            "function": {"variable": "hydra.serialization.cst"}}}]},
+                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                {
+                                  "application": {
+                                    "argument": {"variable": "typeExpr"},
+                                    "function": {"variable": "hydra.serialization.tabIndent"}}}]},
+                            "function": {"variable": "hydra.serialization.newlineSep"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "inlineSig"},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"literal": {"integer": {"int32": 120}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "inlineSig"},
-                                            "function": {"variable": "hydra.serialization.expressionLength"}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.equality.gt"},
-                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
+                                "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                                "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.TypeSignature"},
                 "parameter": "typeSig"}}}},
         "typeScheme": {
@@ -3874,10 +3853,7 @@
                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"variable": "hydra.haskell.syntax.Type"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"literal": {"boolean": false}},
-                                        "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                    "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                                 "domain": {"list": {"variable": "hydra.haskell.syntax.Type"}},
                                 "parameter": "types"}}},
                           {
@@ -3992,47 +3968,32 @@
                                         "name": "body",
                                         "term": {
                                           "application": {
-                                            "argument": {"variable": "inlineBody"},
-                                            "function": {
+                                            "argument": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "list": [
-                                                        {
-                                                          "application": {
-                                                            "argument": {
-                                                              "list": [
-                                                                {"variable": "lhsExpr"},
-                                                                {
-                                                                  "application": {
-                                                                    "argument": {"literal": {"string": "="}},
-                                                                    "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                                        {
-                                                          "application": {
-                                                            "argument": {"variable": "rhsExpr"},
-                                                            "function": {"variable": "hydra.serialization.tabIndent"}}}]},
-                                                    "function": {"variable": "hydra.serialization.newlineSep"}}},
+                                                  "list": [
+                                                    {
+                                                      "application": {
+                                                        "argument": {
+                                                          "list": [
+                                                            {"variable": "lhsExpr"},
+                                                            {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "="}},
+                                                                "function": {"variable": "hydra.serialization.cst"}}}]},
+                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    {
+                                                      "application": {
+                                                        "argument": {"variable": "rhsExpr"},
+                                                        "function": {"variable": "hydra.serialization.tabIndent"}}}]},
+                                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "inlineBody"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 120}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "inlineBody"},
-                                                                "function": {"variable": "hydra.serialization.expressionLength"}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.equality.gt"},
-                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
+                                                    "argument": {"variable": "hydra.serialization.maxLineWidth"},
+                                                    "function": {"variable": "hydra.serialization.chooseLayout"}}}}}}},
                                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                     "body": {
                                       "application": {

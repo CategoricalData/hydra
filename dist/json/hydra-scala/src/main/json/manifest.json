@@ -1,11 +1,6 @@
 {
   "dslModules": [],
   "evalLibModules": [],
-  "mainModules": [
-    "hydra.scala.coder",
-    "hydra.scala.language",
-    "hydra.scala.serde",
-    "hydra.scala.syntax",
-    "hydra.scala.utils"],
+  "mainModules": ["hydra.scala.coder", "hydra.scala.language", "hydra.scala.serde", "hydra.scala.syntax", "hydra.scala.utils"],
   "package": "hydra-scala",
   "testModules": []}

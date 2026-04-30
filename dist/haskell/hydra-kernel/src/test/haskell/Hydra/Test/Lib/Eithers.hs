@@ -262,11 +262,13 @@ allTests =
                   (Right "a"),
                   (Left 2),
                   (Right "b")])),
-                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([
-                  1,
-                  2], [
-                  "a",
-                  "b"]))})),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (
+                  [
+                    1,
+                    2],
+                  [
+                    "a",
+                    "b"]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -275,9 +277,11 @@ allTests =
                 Testing.universalTestCaseActual = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (Eithers.partitionEithers [
                   Left 1,
                   (Left 2)])),
-                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([
-                  1,
-                  2], []))})),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (
+                  [
+                    1,
+                    2],
+                  []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -286,9 +290,11 @@ allTests =
                 Testing.universalTestCaseActual = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (Eithers.partitionEithers [
                   Right "a",
                   (Right "b")])),
-                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) ([], [
-                  "a",
-                  "b"]))})),
+                Testing.universalTestCaseExpected = ((\p -> Core.pair (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (\xs -> Core.list (\s -> Literals.showString s) xs) p) (
+                  [],
+                  [
+                    "a",
+                    "b"]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {

@@ -117,10 +117,12 @@ instantiateTypeScheme cx scheme =
           nameSubst = Maps.fromList (Lists.zip oldVars newVars)
           renamedConstraints =
                   Maybes.map (\oldConstraints -> Maps.fromList (Lists.map (\kv -> (Maybes.fromMaybe (Pairs.first kv) (Maps.lookup (Pairs.first kv) nameSubst), (Pairs.second kv))) (Maps.toList oldConstraints))) (Core.typeSchemeConstraints scheme)
-      in (Core.TypeScheme {
-        Core.typeSchemeVariables = newVars,
-        Core.typeSchemeBody = (Substitution.substInType subst (Core.typeSchemeBody scheme)),
-        Core.typeSchemeConstraints = renamedConstraints}, cx2)
+      in (
+        Core.TypeScheme {
+          Core.typeSchemeVariables = newVars,
+          Core.typeSchemeBody = (Substitution.substInType subst (Core.typeSchemeBody scheme)),
+          Core.typeSchemeConstraints = renamedConstraints},
+        cx2)
 -- | Apply type arguments to a nominal type
 nominalApplication :: Core.Name -> [Core.Type] -> Core.Type
 nominalApplication tname args =
