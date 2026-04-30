@@ -1,5 +1,6 @@
-# Release verification logs
+# Release preparation logs and upload-ready artifacts
 verify-logs/
+release-artifacts/
 
 # Benchmarking runs
 benchmark/

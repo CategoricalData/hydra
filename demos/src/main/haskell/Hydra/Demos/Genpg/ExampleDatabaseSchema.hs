@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.ExampleDatabaseSchema where
+module Hydra.Demos.Genpg.ExampleDatabaseSchema where
 
 import Hydra.Tabular (TableType)
 import Hydra.Dsl.Meta.Tabular (tableType, columnType)

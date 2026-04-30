@@ -1111,6 +1111,24 @@ The `Serde.hs` files bridge language AST to formatted source code:
 - Indentation and block structure
 - Quote styles and escaping
 
+**Conventions shared across all Serde modules:**
+
+- **Naming.** Every per-syntax-element writer is named `*ToExpr` —
+  e.g. `expressionToExpr`, `statementToExpr`, `typeToExpr` — uniformly
+  across Java, Python, Haskell, Scala, the four Lisp dialects, Cpp,
+  JavaScript, Rust, Go, and the Pegasus / GraphQL / Protobuf /
+  JsonSchema / RDF / Graphviz extension coders.
+- **Layout.** Writers compose output through shared helpers in
+  `hydra.serialization`: `chooseLayout` selects between vertical and
+  horizontal forms by measured width, `parenListAdaptive` /
+  `commaSepAdaptive` / `spaceSepAdaptive` lay out punctuated lists, and
+  the canonical line-length budget is `maxLineWidth = 120`. Per-language
+  Serde files call into these helpers and contribute only the
+  language-specific token-emission.
+- The Yaml writer is the sole exception: it returns `String` directly
+  rather than going through the `Expr` layer. (Yaml's whitespace-
+  sensitive layout doesn't fit the adaptive framework cleanly.)
+
 ---
 
 ## The bootstrap process
@@ -1518,7 +1536,7 @@ is tracked but never touched by a fresh sync.
 | `sync-java.sh`, `sync-python.sh`, `sync-scala.sh` | Per-language wrappers (host == target). |
 | `sync-clojure.sh`, `sync-common-lisp.sh`, `sync-emacs-lisp.sh`, `sync-scheme.sh` | Per-Lisp-dialect wrappers. |
 | `regenerate-lexicon.sh` | Regenerate `docs/hydra-lexicon.txt` from the Haskell kernel. On-demand / pre-release (not part of regular sync). |
-| `verify-release.sh` | Cross-implementation pre-release verification. |
+| `prepare-release.sh` | Cross-implementation pre-release preparation: verification + upload-ready sdist/docs. |
 | `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java`. |
 
 ### Haskell (`heads/haskell/bin/`)

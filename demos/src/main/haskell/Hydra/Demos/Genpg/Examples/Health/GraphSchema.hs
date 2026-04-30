@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.Examples.Health.GraphSchema where
+module Hydra.Demos.Genpg.Examples.Health.GraphSchema where
 
 import Hydra.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
 import Hydra.Dsl.Types (string, int32, float64, boolean)

@@ -139,9 +139,16 @@ EOF
         SCHEME_TESTGRAPH="$OUT_DIR/src/test/scheme/hydra/test/test_graph.scm"
         if [ -f "$SCHEME_TESTGRAPH" ]; then
             echo "Step 3d: Patching test_graph.scm..."
-            # Replace the import block: drop the (hydra test test_env) entry
-            # the DSL now emits, and add the imports we need for the inline build.
-            sed -i.bak 's|(import (scheme base) (hydra core) (hydra lib maps) (hydra packaging) (hydra test test_env) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
+            # Replace the (hydra test test_env) import line with the imports
+            # the inline build needs. The Serde writer lays out each import on
+            # its own line, so this is a single-line substitution.
+            sed -i.bak 's|^(hydra test test_env)$|(hydra context)\
+(hydra graph)\
+(hydra lexical)\
+(hydra lib libraries)\
+(hydra rewriting)\
+(hydra scoping)\
+(hydra json bootstrap)|' "$SCHEME_TESTGRAPH"
             # Drop the generator's test_env-based defines; they'll be replaced.
             sed -i.bak '/^(define hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$SCHEME_TESTGRAPH"
             sed -i.bak '/^(define hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$SCHEME_TESTGRAPH"
