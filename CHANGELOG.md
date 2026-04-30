@@ -12,275 +12,89 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ## [0.15.0] - 2026-04-29
 
-A maintenance and structural-cleanup release. The dominant theme is a
-top-to-bottom repository reorganization (#290) into a three-tree
-`packages/` (DSL sources), `heads/` (per-host runtime), `dist/`
-(generated output) layout, accompanied by a series of kernel
-simplifications: `Function`/`Elimination` are eliminated in favor of
-direct term constructors, `FunctionPrimitive` is replaced by
-`TermVariable`-based resolution, the `Hydra.Ext.*` module prefix is
-gone, the `hydra.module` namespace is now `hydra.packaging`, and
-unsafe partial primitives have been removed in favor of `Maybe`-returning
-alternatives. A new `decimal` literal type joins the kernel, and the
-JSON coder is type-directed with idiomatic optional encoding.
-Generation gains incremental, content-hash-based caches across the
-sync stack. Three new generation-only targets are in progress as
-Claude collaborations: Coq, WebAssembly, and a `grad` differentiation
-demo.
+A structural-cleanup release. The repository is reorganized into a three-tree
+`packages/` (DSL sources) / `heads/` (per-host runtime) / `dist/` (generated output)
+layout (#290), the kernel is simplified (#251, #292, #332), and Java + Python now
+ship as per-package publishable artifacts on Maven Central / PyPI / conda-forge
+(#305). Incremental, content-hash-based caches accelerate the sync pipeline (#247),
+and three new generation-only targets — Coq (#326), WebAssembly (#325), and an
+automatic-differentiation demo (#324) — are in progress as Claude collaborations.
 
 ### Highlights
 
-- **Three-tree repository layout** (`packages/`, `heads/`, `dist/`) — every path,
-  build command, and CI workflow now operates on the new structure (#290).
-- **Kernel simplification**: removed `Function`/`Elimination` (#332) and
-  `FunctionPrimitive` (#251); promoted `lambda`/`cases`/`project`/`unwrap`
-  directly into `Term`. All named references resolve through `TermVariable`.
-- **Decimal literal type** (#338) and a type-directed JSON coder with
-  idiomatic optional encoding (#314); JSON `Value.number` migrated from
-  `bigfloat` to `decimal` (#340).
-- **Incremental, content-hash-based caches** across the sync pipeline (#247),
-  with three new generation-only targets in progress: Coq (#326),
-  WebAssembly (#325), and an automatic-differentiation demo (#324).
-- **Per-package publishable distributions** for Java and Python: each
-  `dist/<lang>/<pkg>/` is now a self-contained, publishable build —
-  four Maven Central artifacts (`hydra-kernel`, `hydra-rdf`, `hydra-pg`,
-  `hydra-java`) and five PyPI / conda-forge wheels (`hydra-kernel`,
-  `hydra-rdf`, `hydra-pg`, `hydra-ext`, `hydra-python`), each pulling
-  its inter-package dependencies transitively. Replaces the previous
-  monolithic `hydra-java` and `hydra` rollup artifacts.
-
-### Breaking Changes
-
-- **Repository layout** (#290): old top-level `hydra-haskell/`, `hydra-java/`,
-  `hydra-python/`, `hydra-scala/`, `hydra-lisp/`, `hydra-ext/` directories
-  (and their `src/main` / `src/gen-main` / `src/gen-test` subdirectories) are
-  gone. Sources live under `packages/<pkg>/`, hand-written runtimes under
-  `heads/<lang>/`, and generated output under `dist/<lang>/<pkg>/`. Build
-  commands now run from the heads (`cd heads/haskell && stack test`,
-  `cd heads/python && pytest`, `./gradlew :hydra-java:test`, etc.). Many
-  scripts, CI configs, and docs need updating.
-- **`hydra-ext` split into per-domain packages** (#290): `hydra-coq`
-  (Coq coder), `hydra-pg` (property graph model + GraphSON, Cypher,
-  Tinkerpop, Graphviz), `hydra-rdf` (RDF, SHACL, OWL, ShEx, XML schema),
-  and `hydra-ext` (long-tail: Avro, Protobuf, GraphQL, Cpp, Csharp, Go,
-  Rust, TypeScript, Yaml, ...). The `hydra-ext` name is retained for
-  Maven Central continuity.
-- **`Hydra.Ext.*` module prefix removed; domain hierarchies flattened**
-  (#331): generated Haskell modules formerly under `Hydra.Ext.Java.*`,
-  `Hydra.Ext.Python.*`, etc. now live under `Hydra.Java.*`,
-  `Hydra.Python.*`, etc. DSL sources follow the same pattern:
-  `Hydra.Sources.Foo.*` rather than `Hydra.Ext.Sources.Foo.*`. Over-deep
-  domain hierarchies like `hydra.ext.org.w3.shacl.model` are flattened to
-  `hydra.shacl.model`. Every import of `Hydra.Ext.*` must be updated.
-- **`hydra.module` renamed to `hydra.packaging`**: `Module`, `Namespace`,
-  `QualifiedName`, `Definition`, and related types live in `hydra.packaging`;
-  the `hydra.module` namespace is gone.
-- **`Function` and `Elimination` types eliminated from `hydra.core`** (#332):
-  the `lambda` constructor and the elimination forms (`project`, `cases`,
-  `unwrap`) are now direct `Term` constructors. Code that pattern-matched on
-  `Function`/`Elimination` must be updated.
-- **`FunctionPrimitive` removed** (#251): the `primitive` variant of the
-  `Function` union is gone. All named references (module definitions,
-  primitives, constants) now use `TermVariable`. At runtime, variables
-  resolve through `graphBoundTerms`, then `graphPrimitives`, then
-  lambda-bound scope. A new `graphWithPrimitives` API in `hydra.lexical`
-  assembles primitives from built-in and user-provided lists. Code that
-  pattern-matches on `Function.Primitive` (Java), `FunctionPrimitive`
-  (Python/Haskell), or `Function.primitive` (Scala) must be updated.
-- **`Term.union` renamed to `Term.inject`** (#334) for consistency with
-  the type-side terminology.
-- **JSON `Value.number` is now `decimal`** (#340), not `bigfloat`. Consumers
-  constructing or pattern-matching on `Json.ValueNumber` must use the
-  decimal type of their host (e.g. `realToFrac` to convert
-  `Double -> Scientific` in Haskell).
-- **13 unsafe (partial) primitives removed** (#201) in favor of
-  `Maybe`-returning alternatives:
-  - `hydra.lib.lists.at` → `hydra.lib.lists.maybeAt`
-  - `hydra.lib.lists.head` → `hydra.lib.lists.maybeHead`
-  - `hydra.lib.lists.init` → `hydra.lib.lists.maybeInit`
-  - `hydra.lib.lists.last` → `hydra.lib.lists.maybeLast`
-  - `hydra.lib.lists.tail` → `hydra.lib.lists.maybeTail`
-  - `hydra.lib.lists.safeHead` → `hydra.lib.lists.maybeHead` (rename)
-  - `hydra.lib.math.div` → `hydra.lib.math.maybeDiv` (Nothing on divisor 0)
-  - `hydra.lib.math.mod` → `hydra.lib.math.maybeMod` (Nothing on divisor 0)
-  - `hydra.lib.math.rem` → `hydra.lib.math.maybeRem` (Nothing on divisor 0)
-  - `hydra.lib.math.pred` → `hydra.lib.math.maybePred` (Nothing at minBound)
-  - `hydra.lib.math.succ` → `hydra.lib.math.maybeSucc` (Nothing at maxBound)
-  - `hydra.lib.strings.charAt` → `hydra.lib.strings.maybeCharAt`
-  - `hydra.lib.maybes.fromJust` → `hydra.lib.maybes.fromMaybe`,
-    `hydra.lib.maybes.maybe`, or `hydra.lib.maybes.cases`
-- **Error context type removed** (#292): the `(error) Context` type is gone;
-  errors propagate without an in-band context wrapper. Hand-written
-  Java/Python/Scala/Lisp code referring to `InContext` must be updated.
-- **Java generated code uses standard collection interfaces** (#313):
-  `java.util.List`, `java.util.Map`, `java.util.Set` in field types and
-  constructor parameters, instead of the internal `ConsList`,
-  `PersistentMap`, `PersistentSet`. The internal classes remain available
-  in `hydra.util` for primitive implementations. Generated `compareTo`
-  methods use `hydra.util.Comparing.compare()` for safe collection
-  comparison.
+- **Three-tree repository layout**: `packages/` (DSL), `heads/` (host runtime),
+  `dist/` (generated) (#290).
+- **Per-package distributions** for Java (4 Maven artifacts) and Python (5 wheels):
+  `hydra-kernel`, `hydra-pg`, `hydra-rdf`, `hydra-{java,python}`, plus `hydra-ext`
+  on PyPI (#305).
+- **Kernel simplifications**: `Function`/`Elimination` removed (#332),
+  `FunctionPrimitive` removed (#251), `Hydra.Ext.*` prefix retired (#331),
+  `Context` error wrapper gone (#292).
+- **Incremental caches** across the sync pipeline; ~70x speedup on no-op resync (#247).
+- **JSON kernel format v1** with formal wire-format spec and four-field rename (#343).
+- **Three new generation-only targets** (in progress): Coq (#326), WebAssembly (#325),
+  automatic-differentiation demo (#324).
 
 ### New Features
 
-- **Per-package publishable distributions** (#305): four Maven Central
-  artifacts (`hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-java`) and
-  five PyPI / conda-forge wheels (`hydra-kernel`, `hydra-rdf`, `hydra-pg`,
-  `hydra-ext`, `hydra-python`). Each `dist/<lang>/<pkg>/` carries its own
-  generated build manifest (`build.gradle` or `pyproject.toml`) declaring
-  inter-package `api`/`run` dependencies, so consumers who add e.g.
-  `hydra-pg` get `hydra-rdf` and `hydra-kernel` resolved transitively.
-  hydra-kernel ships with the hand-written runtime support copied in
-  (`hydra/{util,lib,dsl,json,tools}/`) so the published artifact is
-  self-contained. New generators: `bin/lib/generate-java-package-build.py`
-  and `bin/lib/generate-python-package-build.py`. New per-language
-  helper: `heads/{java,python}/bin/copy-kernel-runtime.sh`. Java publish
-  uses the `com.gradleup.nmcp` plugin's
-  `publishAggregationToCentralPortal` task. Hackage continues to ship a
-  monolithic `hydra` Haskell head (assembled via a 0.15-only
-  `heads/haskell/bin/assemble-hackage-sdist.sh` bridge); 0.16 will
-  switch Hackage to per-package as well.
-- **JSON kernel format v1** (#343): formal wire-format spec for
-  `dist/json/**`, including a `formatVersion` field, four-field
-  rename (`Binding.type`, `TermDefinition.type`, `TypeDefinition.type`,
-  `Primitive.type` → `typeScheme`), `Module` field reorder, symmetric
-  `float32` encoding, and lexicographic manifest sorting. Documented at
-  `docs/json-format.md`.
-- **`decimal` literal type** in the kernel (#338): arbitrary-precision
-  decimal values across all hosts (Haskell `Scientific`, Java
-  `BigDecimal`, Python `Decimal`, Clojure `BigDecimal`, etc.). The YAML
-  scalar union gained a matching `decimal` variant.
-- **Type-directed JSON encoder** with idiomatic optional encoding (#314):
-  `Maybe a` fields elide when `Nothing` instead of round-tripping as
-  `null`; type-directed dispatch produces clean JSON aligned with
-  conventional usage.
-- **Incremental type inference and content-hash-based caches** (#247):
-  per-namespace digests under `dist/json/<pkg>/digest.json`, per-target
-  per-package digests under `dist/<lang>/<pkg>/digest.json`, and per-target
-  test caches under `dist/<lang>/test-cache.json` short-circuit clean
-  reruns. ~70x speedup on a no-op resync.
-- **Coq generation target** (#326, in progress): `hydra-coq` package
-  with full Coq syntax model, coder, and a test runner that walks 31
-  test modules. 131/131 generated `.v` files pass `coqc`. Coq is
-  generation-only and not part of the bootstrapping matrix.
-- **WebAssembly target** (#325, in progress): `hydra-wasm` package with
-  a Wasm coder, M3 milestone (19/19 surveyed kernel functions run
-  correctly under Wasm), M4 closure mechanism via `call_indirect`, and
-  a Node-based test harness.
-- **Automatic-differentiation demo** (#324, in progress): symbolic
-  source-to-source differentiation as a `Term -> Term` transformation,
-  evaluated via `reduceTerm`. Covers chain/product/power rules and
-  transcendental derivatives; gradient-checked against finite differences.
-- **`hydra.show.error` module** (#265): consolidated error-message
-  builders for the kernel.
-- **`hydra.lib.maybes.toList`** primitive (#257): bridges `Maybe a` to
-  `[a]` for use cases that previously reached for the legacy
-  `hydra.monads.maybeToList`.
-- **Typeclass inference test group** (#274) added to the common test suite.
-- **Float64 arithmetic primitive test cases** (#324): coverage for
-  hyperbolic and inverse-trig functions added.
-- **NaN / Inf round-tripping** in math primitives, the JSON coder, and
-  per-language serdes (#312, #330): IEEE special values that `decimal`
-  cannot hold (`NaN`, `Infinity`, `-Infinity`, `-0.0`) round-trip through
-  JSON as string sentinels; `showFloat64` preserves the sign of zero in
-  Python and all four Lisp dialects.
+- **Per-package distributions** (#305): standalone Maven / PyPI / conda-forge builds,
+  generated `build.gradle` / `pyproject.toml` per package, transitive dep resolution.
+- **JSON kernel format v1** (#343): formal spec at `docs/json-format.md`,
+  four-field rename to `typeScheme`, `Module` field reorder, `formatVersion` stamp.
+- **`decimal` literal type** in the kernel (#338) across all hosts.
+- **Type-directed JSON encoder** with idiomatic optional encoding (#314).
+- **Incremental type inference + content-hash caches** (#247).
+- **Coq generation target** (#326, in progress): `hydra-coq` package, 131/131 `.v` files pass `coqc`.
+- **WebAssembly target** (#325, in progress): `hydra-wasm` package, M4 closure mechanism.
+- **Automatic-differentiation demo** (#324, in progress): symbolic source-to-source.
+- **`hydra.show.error` module** (#265): consolidated error-message builders.
+- **`hydra.lib.maybes.toList`** primitive (#257).
+- **NaN / Inf round-tripping** through JSON and per-language serdes (#312, #330).
+- **Typeclass inference test group** (#274).
 
 ### Improvements
 
-- **Sync infrastructure**: `bin/sync.sh --hosts/--targets` matrix tool,
-  `bin/sync-packages.sh` per-package orchestrator, `bin/sync-all.sh`
-  exhaustive runner with phase reporting; per-language `sync-<lang>.sh`
-  wrappers (#290).
-- **Detect stale generated sources** (#228): warm-cache short-circuits
-  added to all sync entrypoints; sync-haskell skips when DSL+runtime
-  inputs are byte-identical to the last green run.
-- **Eliminated TestGraph post-generation patches** (#25): the DSL now
-  emits `TestEnv` references directly; the `sed` patches that previously
-  rewrote `Hydra.Lexical.emptyGraph` / `emptyContext` calls are retired.
-- **Minimize standard imports in generated Haskell** (#161): bottom-up
-  metadata gathering keeps generated import lists tight.
-- **Improved auto-generated import aliases** (#322) for Haskell targets.
-- **Removed kernel term dependencies from the Hydra interpreter** (#257):
-  the interpreter no longer pulls in `hydra.monads`-style helpers; what's
-  needed is provided as primitives.
-- **Removed `Graph` and `Context` arguments from primitive
-  implementations** (#266): primitives are pure functions of their term
-  arguments; the previous threading was unused.
-- **Refactored kernel term modules** (#221): split `rewriting`/`schemas`,
-  renamed `show.meta` → `codeGeneration` → `codegen`, moved `Coder` to
-  `coders`, merged `extract.helpers`. All implementations regenerated.
-- **Removed Aeson and HsYAML dependencies** from `hydra-haskell` and
-  `hydra-ext` (#261): YAML coder moved to `hydra-ext`; native JSON
-  parser/writer (introduced in 0.13) replaces Aeson throughout.
-- **Lisp recursive let bindings** (#341): emit `letfn` for Clojure cyclic
-  let bindings via SCC topo sort; universal SCC handling across Lisp
-  dialects.
-- **Lisp parenthesis cleanup** (#84): generated Lisp output drops
-  redundant parentheses where operator precedence allows.
-- **Everything-to-everything bootstrapping demo** (#254): the
-  bootstrapping matrix supports any (host, target) combination, with
-  environment checks before running.
-- **Re-enabled skipped Python test cases** (#263): `disabledForPython`
-  testing tag removed; all common-suite tests run on Python.
-- **Promoted remaining host-specific code in `packages/`** (#337) into
-  per-head locations under `heads/<lang>/`. Coq syntax model moved from
-  `hydra-ext` to `hydra-coq`.
-- **Migrated `hydra.common` Java module** (#10): the last
-  hand-maintained common Haskell module is gone; its contents are now
-  generated DSL output or merged into other modules.
-- **Test infrastructure unification** (#246): legacy test case types
-  removed from `hydra.testing`; all test runners use the unified
-  `UniversalTestCase` format.
-- **Default property graph → RDF mapping** (#296) demonstrated end-to-end
-  with regenerated Java/Python PG modules.
-- **`hydra-ext.haskell.operators`** dependency removed from tests (#288).
-- **Inconsistencies in domain DSLs checked and removed** (#219): no-longer-needed
-  hand-written DSL code deleted.
+- Sync infrastructure: matrix tool + per-package orchestrator + per-language wrappers (#290).
+- Stale-source detection across sync entrypoints (#228).
+- TestGraph post-generation patches eliminated; DSL emits `TestEnv` refs directly (#25).
+- Minimized standard imports in generated Haskell (#161); improved auto-aliases (#322).
+- Removed kernel term dependencies from the interpreter (#257).
+- Removed `Graph` and `Context` arguments from primitive implementations (#266).
+- Refactored kernel term modules: split rewriting/schemas, renamed show.meta → codegen,
+  moved `Coder` to `coders`, merged `extract.helpers` (#221).
+- Removed Aeson and HsYAML dependencies; YAML coder moved to `hydra-ext` (#261).
+- Lisp recursive let bindings via SCC (#341); parenthesis cleanup (#84).
+- Everything-to-everything bootstrapping demo (#254).
+- Re-enabled skipped Python tests; `disabledForPython` retired (#263).
+- Promoted host-specific code in `packages/` into per-head locations (#337).
+- Migrated `hydra.common` Java module out (#10).
+- Test infrastructure unification under `UniversalTestCase` (#246).
+- Default property graph → RDF mapping (#296).
+- 13 unsafe partial primitives replaced with `Maybe`-returning alternatives (#201).
+- Java generated code uses standard `java.util` collection interfaces (#313).
+- `Term.union` renamed to `Term.inject` (#334).
+- Inconsistencies in domain DSLs cleaned up (#219).
 
 ### Bug Fixes
 
-- **`substInTypeScheme` capture-unsafe substitution** (#290): under some
-  forall-binder shapes, substitution could capture a variable bound by an
-  inner forall. Added quantifier-shadowing tests; surfaced and fixed via
-  the incremental-inference unification regression in #247.
-- **`test-distribution.sh` exited 1 after passing tests**: when invoked
-  with a relative `${BASH_SOURCE[0]}` and the script `cd`'d before
-  recording the cache, `xargs shasum` failed silently on a no-longer-
-  resolvable path; pipefail propagated the non-zero exit. Fix in
-  `bin/lib/test-cache.sh` resolves runner_script absolutely and emits
-  shasum errors instead of swallowing them. Affected all eight
-  `heads/<lang>/bin/test-distribution.sh` callers.
-- **Java `Float64` arithmetic primitives** corrected to match the current
-  `PrimitiveFunction` API (#324).
-- **Clojure decimal handling** (#340): equality compares `BigDecimal` by
-  value rather than scale-sensitive `.equals`; `decimal_to_bigint`
-  returns `BigInteger`, not `long`.
-- **Scheme runtime** R7RS imports: `sets.scm` and `maps.scm` correctly
-  use `vlist`, Guile `make-hash-table`/`sort`; `eithers.map_set` routes
-  through the public sets API.
-- **Python coder defaults** corrected from `Py.Name` to `Py.Expression`
-  (followup to #201).
+- `substInTypeScheme` capture-unsafe substitution under nested forall binders (#290, #247).
+- `test-distribution.sh` exited 1 after passing tests when invoked with relative `${BASH_SOURCE[0]}`.
+- Java `Float64` arithmetic primitives corrected for current `PrimitiveFunction` API (#324).
+- Clojure decimal handling: value-based equality, `BigInteger` return from `decimal_to_bigint` (#340).
+- Scheme runtime R7RS imports for `sets.scm` / `maps.scm` / `eithers.map_set`.
+- Python coder defaults corrected from `Py.Name` to `Py.Expression` (followup to #201).
 
 ### Documentation
 
-- **Documentation refresh for the 0.15 packaging restructure** (#290, #331):
-  CLAUDE.md, README.md, every `packages/<pkg>/README.md`,
-  `docs/implementation.md`, `docs/recipes/*.md`, `docs/tco-implementation.adoc`,
-  every demo README, and seven wiki pages (`Code-Organization`, `Concepts`,
-  `Home`, `Property-graphs`, `RDF`, `Release-process`, `Testing`)
-  updated for the new layout.
-- **Code-generation recipe rewritten** (#282) for the per-package dist
-  layout and three-layer (orchestrator → assembler → transformer) sync.
-- **`maintenance.md` recipe** consolidates non-source-file scans, stale
-  generated file detection, design-violation checks, definition-ordering
-  audit, primitive-consistency checks, JSON kernel freshness, and
-  `__init__.py` freshness; surfaces a `/maintenance()` shorthand for
-  recurring runs.
-- **Documentation style guide** added at `docs/documentation-style-guide.md`.
-- **Cross-worktree messaging protocol** documented in CLAUDE.md for
-  parallel-Claude workflows.
-- **Wiki "Updating the changelog"** section formalized.
-- **Decimal type** documented in the lexicon and per-language READMEs (#338).
-- **JSON encoding format docs** updated for idiomatic optional encoding (#314).
+- Documentation refresh for the 0.15 packaging restructure (#290, #331); CLAUDE.md,
+  READMEs, recipes, demos, and seven wiki pages updated.
+- Code-generation recipe rewritten for the per-package dist layout (#282).
+- New `maintenance.md` recipe consolidates non-source-file scans, stale generated
+  detection, design-violation checks, and freshness checks.
+- Documentation style guide added at `docs/documentation-style-guide.md`.
+- Cross-worktree messaging protocol documented in CLAUDE.md.
+- Decimal type documented in the lexicon and per-language READMEs (#338).
+- JSON encoding format docs updated for idiomatic optional encoding (#314).
 
 ---
 
