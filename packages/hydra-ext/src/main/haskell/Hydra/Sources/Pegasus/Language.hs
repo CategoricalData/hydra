@@ -131,8 +131,8 @@ pdlLanguage = define "pdlLanguage" $
     Variants.typeVariantVariable],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.pegasus.pdl")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.pegasus.pdl")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
