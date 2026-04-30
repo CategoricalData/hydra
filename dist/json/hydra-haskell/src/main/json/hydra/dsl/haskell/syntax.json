@@ -15179,7 +15179,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.haskell.syntax.moduleHead_",
+        "name": "hydra.dsl.haskell.syntax.moduleHead2",
         "term": {
           "lambda": {
             "body": {

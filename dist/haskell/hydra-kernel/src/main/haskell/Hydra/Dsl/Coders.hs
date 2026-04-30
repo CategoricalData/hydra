@@ -417,6 +417,35 @@ languageConstraints x =
         Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
         Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+languageConstraints2 :: Phantoms.TTerm (S.Set Variants.EliminationVariant) -> Phantoms.TTerm (S.Set Variants.LiteralVariant) -> Phantoms.TTerm (S.Set Core.FloatType) -> Phantoms.TTerm (S.Set Variants.FunctionVariant) -> Phantoms.TTerm (S.Set Core.IntegerType) -> Phantoms.TTerm (S.Set Variants.TermVariant) -> Phantoms.TTerm (S.Set Variants.TypeVariant) -> Phantoms.TTerm (Core.Type -> Bool) -> Phantoms.TTerm Coders.LanguageConstraints
+languageConstraints2 eliminationVariants literalVariants floatTypes functionVariants integerTypes termVariants typeVariants types =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "eliminationVariants"),
+          Core.fieldTerm = (Phantoms.unTTerm eliminationVariants)},
+        Core.Field {
+          Core.fieldName = (Core.Name "literalVariants"),
+          Core.fieldTerm = (Phantoms.unTTerm literalVariants)},
+        Core.Field {
+          Core.fieldName = (Core.Name "floatTypes"),
+          Core.fieldTerm = (Phantoms.unTTerm floatTypes)},
+        Core.Field {
+          Core.fieldName = (Core.Name "functionVariants"),
+          Core.fieldTerm = (Phantoms.unTTerm functionVariants)},
+        Core.Field {
+          Core.fieldName = (Core.Name "integerTypes"),
+          Core.fieldTerm = (Phantoms.unTTerm integerTypes)},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariants"),
+          Core.fieldTerm = (Phantoms.unTTerm termVariants)},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariants"),
+          Core.fieldTerm = (Phantoms.unTTerm typeVariants)},
+        Core.Field {
+          Core.fieldName = (Core.Name "types"),
+          Core.fieldTerm = (Phantoms.unTTerm types)}]}))
 languageConstraintsEliminationVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.EliminationVariant)
 languageConstraintsEliminationVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -929,35 +958,6 @@ languageConstraintsWithTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-languageConstraints_ :: Phantoms.TTerm (S.Set Variants.EliminationVariant) -> Phantoms.TTerm (S.Set Variants.LiteralVariant) -> Phantoms.TTerm (S.Set Core.FloatType) -> Phantoms.TTerm (S.Set Variants.FunctionVariant) -> Phantoms.TTerm (S.Set Core.IntegerType) -> Phantoms.TTerm (S.Set Variants.TermVariant) -> Phantoms.TTerm (S.Set Variants.TypeVariant) -> Phantoms.TTerm (Core.Type -> Bool) -> Phantoms.TTerm Coders.LanguageConstraints
-languageConstraints_ eliminationVariants literalVariants floatTypes functionVariants integerTypes termVariants typeVariants types =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "eliminationVariants"),
-          Core.fieldTerm = (Phantoms.unTTerm eliminationVariants)},
-        Core.Field {
-          Core.fieldName = (Core.Name "literalVariants"),
-          Core.fieldTerm = (Phantoms.unTTerm literalVariants)},
-        Core.Field {
-          Core.fieldName = (Core.Name "floatTypes"),
-          Core.fieldTerm = (Phantoms.unTTerm floatTypes)},
-        Core.Field {
-          Core.fieldName = (Core.Name "functionVariants"),
-          Core.fieldTerm = (Phantoms.unTTerm functionVariants)},
-        Core.Field {
-          Core.fieldName = (Core.Name "integerTypes"),
-          Core.fieldTerm = (Phantoms.unTTerm integerTypes)},
-        Core.Field {
-          Core.fieldName = (Core.Name "termVariants"),
-          Core.fieldTerm = (Phantoms.unTTerm termVariants)},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeVariants"),
-          Core.fieldTerm = (Phantoms.unTTerm typeVariants)},
-        Core.Field {
-          Core.fieldName = (Core.Name "types"),
-          Core.fieldTerm = (Phantoms.unTTerm types)}]}))
 languageName :: Phantoms.TTerm Coders.Language -> Phantoms.TTerm Coders.LanguageName
 languageName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -965,8 +965,8 @@ languageName x =
         Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-languageName_ :: Phantoms.TTerm String -> Phantoms.TTerm Coders.LanguageName
-languageName_ x =
+languageName2 :: Phantoms.TTerm String -> Phantoms.TTerm Coders.LanguageName
+languageName2 x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.coders.LanguageName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
