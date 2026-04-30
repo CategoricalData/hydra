@@ -384,7 +384,7 @@ moduleToPdl = def "moduleToPdl" $
       (lambda "pair" $
         pair
           (Pairs.first (var "pair"))
-          (Serialization.printExpr @@ (Serialization.parenthesize @@ (PegasusSerdeSource.exprSchemaFile @@ Pairs.second (var "pair")))))
+          (Serialization.printExpr @@ (Serialization.parenthesize @@ (PegasusSerdeSource.schemaFileToExpr @@ Pairs.second (var "pair")))))
       (Maps.toList (var "files"))))
 
 moduleToPegasusSchemas :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error (M.Map FilePath PDL.SchemaFile))
