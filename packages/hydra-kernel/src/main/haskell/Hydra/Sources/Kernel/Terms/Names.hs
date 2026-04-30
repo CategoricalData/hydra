@@ -189,10 +189,10 @@ freshName :: TTermDefinition (Context -> (Name, Context))
 freshName = define "freshName" $
   doc "Generate a fresh type variable name, threading Context" $
   "cx" ~>
-  "count" <~ Annotations.getCount @@ Constants.key_freshTypeVariableCount @@ var "cx" $
+  "count" <~ Annotations.getCount @@ Constants.keyFreshTypeVariableCount @@ var "cx" $
   pair
     (normalTypeVariable @@ var "count")
-    (Annotations.putCount @@ Constants.key_freshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
+    (Annotations.putCount @@ Constants.keyFreshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
 
 freshNames :: TTermDefinition (Int -> Context -> ([Name], Context))
 freshNames = define "freshNames" $

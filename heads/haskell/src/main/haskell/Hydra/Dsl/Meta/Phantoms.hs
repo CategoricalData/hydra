@@ -241,7 +241,7 @@ field fname (TTerm val) = Field fname val
 -- | Mark a type as first-class
 -- Example: firstClassType (record ...)
 firstClassType :: TTerm Type -> TTerm Type
-firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
+firstClassType typ = annot keyFirstClassType (Just $ Terms.boolean True) typ
 
 -- | Create a fold function to process lists
 -- Example: fold (lambda "acc" (lambda "x" (add @@ var "acc" @@ var "x")))

@@ -316,7 +316,7 @@ annotateBodyWithCod :: TTermDefinition (Type -> Term -> Term)
 annotateBodyWithCod = def "annotateBodyWithCod" $
   lambda "typ" $ lambda "term" $
     "setAnn" <~ (lambda "t" $
-      Annotations.setTermAnnotation @@ asTerm Constants.key_type
+      Annotations.setTermAnnotation @@ asTerm Constants.keyType
         @@ just (encodeTypeAsTerm @@ var "typ")
         @@ var "t") $
     cases _Term (Strip.deannotateTerm @@ var "term")
@@ -426,14 +426,14 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
       _Term_annotated>>: lambda "at" $
         "inner" <~ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
-        "ann'" <~ Maybes.cases (Maps.lookup Constants.key_type (var "ann"))
+        "ann'" <~ Maybes.cases (Maps.lookup Constants.keyType (var "ann"))
           (var "ann")
           (lambda "typeTerm" $
             Eithers.either_
               (lambda "_" $ var "ann")
               (lambda "t" $
                 "t'" <~ (substituteTypeVarsWithTypes @@ var "subst" @@ var "t") $
-                Maps.insert (asTerm Constants.key_type) (Phantoms.encoderFor _Type @@ var "t'") (var "ann"))
+                Maps.insert (asTerm Constants.keyType) (Phantoms.encoderFor _Type @@ var "t'") (var "ann"))
               (Phantoms.decoderFor _Type @@ var "cx" @@ var "typeTerm")) $
         Core.termAnnotated (Core.annotatedTerm
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "inner")
@@ -777,7 +777,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
         "body" <~ Core.annotatedTermBody (var "at") $
         "anns" <~ Core.annotatedTermAnnotation (var "at") $
         "bodySubst" <~ (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "body") $
-        "annSubst" <~ Maybes.cases (Maps.lookup Constants.key_type (var "anns"))
+        "annSubst" <~ Maybes.cases (Maps.lookup Constants.keyType (var "anns"))
           Maps.empty
           (lambda "typeTerm" $
             Eithers.either_
@@ -2705,7 +2705,7 @@ encodeTermInternal = def "encodeTermInternal" $
             _Type_either>>: lambda "et2" $
               just (pair (Core.eitherTypeLeft (var "et2")) (Core.eitherTypeRight (var "et2")))])) $
         "encodeWithType" <~ (lambda "branchType" $ lambda "t1" $
-          "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+          "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
             @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
           encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
         "eitherCall" <~ (lambda "methodName" $ lambda "expr" $
@@ -2913,7 +2913,7 @@ encodeTermInternal = def "encodeTermInternal" $
                     (var "ftyp")
                     (lambda "subst" $ applySubstFull @@ var "subst" @@ var "ftyp") $
                   -- Annotate the field term with the resolved type before encoding
-                  "annotatedFieldTerm" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                  "annotatedFieldTerm" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
                     @@ just (encodeTypeAsTerm @@ var "resolvedType") @@ Core.fieldTerm (var "fld")) $
                   encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotatedFieldTerm" @@ var "cx" @@ var "g"))) $
         "fieldExprs" <<~ (Eithers.mapList (var "encodeField") (Core.recordFields (var "rec"))) $
@@ -2975,7 +2975,7 @@ encodeTermInternal = def "encodeTermInternal" $
             (Core.typeLambdaBody (var "tl"))
             (lambda "t" $ cases _Type (var "t") (Just $ Core.typeLambdaBody (var "tl")) [
               _Type_forall>>: lambda "fa" $
-                Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                Annotations.setTermAnnotation @@ asTerm Constants.keyType
                   @@ just (encodeTypeAsTerm @@ Core.forallTypeBody (var "fa"))
                   @@ Core.typeLambdaBody (var "tl")])) $
           encodeTerm @@ var "env2" @@ var "annotatedBody" @@ var "cx" @@ var "g"),
@@ -3069,7 +3069,7 @@ encodeTermInternal = def "encodeTermInternal" $
                   JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "allTypeArgs")) $
                 "eitherTargs" <~ Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "jTypeArgs") $
                 "encodeEitherBranch" <~ (lambda "branchType" $ lambda "t1" $
-                  "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                  "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
                     @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
                   encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
                 Eithers.either_
@@ -4410,7 +4410,7 @@ propagateType :: TTermDefinition (Type -> Term -> Term)
 propagateType = def "propagateType" $
   lambda "typ" $ lambda "term" $
     "setTypeAnn" <~ (lambda "t" $
-      Annotations.setTermAnnotation @@ Constants.key_type
+      Annotations.setTermAnnotation @@ Constants.keyType
         @@ just (Phantoms.encoderFor _Type @@ var "typ")
         @@ var "t") $
     cases _Term (Strip.deannotateTerm @@ var "term")
@@ -4448,7 +4448,7 @@ propagateType = def "propagateType" $
             "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
               @@ list ([] :: [TTerm Type])) $
             "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "typ")) $
-            Annotations.setTermAnnotation @@ asTerm Constants.key_type
+            Annotations.setTermAnnotation @@ asTerm Constants.keyType
               @@ just (Phantoms.encoderFor _Type @@ var "ft") @@ var "fun"]) $
         var "setTypeAnn" @@ Core.termApplication (Core.application (var "annotatedFun") (var "arg"))]
 
@@ -4501,12 +4501,12 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
        "funType" <~ Lists.foldl (lambda "c" $ lambda "d" $
          inject _Type _Type_function (Core.functionType (var "d") (var "c")))
          (var "bodyRetType") (Lists.reverse (var "lambdaDoms")) $
-       "annotatedFun" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+       "annotatedFun" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
          @@ just (encodeTypeAsTerm @@ var "funType") @@ var "fun") $
        rebuildApps @@ var "annotatedFun" @@ var "args" @@ var "funType")
       -- Not a lambda or no args: fall back to simple annotation
       (cases _Term (Strip.deannotateTerm @@ var "t")
-        (Just $ Annotations.setTermAnnotation @@ asTerm Constants.key_type
+        (Just $ Annotations.setTermAnnotation @@ asTerm Constants.keyType
           @@ just (encodeTypeAsTerm @@ var "resultType") @@ var "t") [
         _Term_application>>: lambda "app" $
           "lhs" <~ (project _Application _Application_function @@ var "app") $
@@ -4518,9 +4518,9 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
               "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
                 @@ list ([] :: [TTerm Type])) $
               "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "fixedCod")) $
-              Annotations.setTermAnnotation @@ asTerm Constants.key_type
+              Annotations.setTermAnnotation @@ asTerm Constants.keyType
                 @@ just (encodeTypeAsTerm @@ var "ft") @@ var "lhs"]) $
-          Annotations.setTermAnnotation @@ asTerm Constants.key_type
+          Annotations.setTermAnnotation @@ asTerm Constants.keyType
             @@ just (encodeTypeAsTerm @@ var "resultType")
             @@ inject _Term _Term_application (Core.application (var "annotatedLhs") (var "rhs"))])
 
@@ -4541,7 +4541,7 @@ rebuildApps = def "rebuildApps" $
               "rest" <~ Pairs.second (var "p") $
               "remainingType" <~ Core.functionTypeCodomain (var "ft") $
               "app" <~ inject _Term _Term_application (Core.application (var "f") (var "arg")) $
-              "annotatedApp" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+              "annotatedApp" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
                 @@ just (encodeTypeAsTerm @@ var "remainingType") @@ var "app") $
               rebuildApps @@ var "annotatedApp" @@ var "rest" @@ var "remainingType")
             (Lists.uncons (var "args")))])
@@ -4972,7 +4972,7 @@ toDeclStatement = def "toDeclStatement" $
       (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
     "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
     "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
-    "annotatedValue" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+    "annotatedValue" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
       @@ just (encodeTypeAsTerm @@ var "typ")
       @@ var "value") $
     "rhs" <<~ (encodeTerm @@ var "envExt" @@ var "annotatedValue" @@ var "cx" @@ var "g") $
@@ -5011,7 +5011,7 @@ tryInferFunctionType = def "tryInferFunctionType" $
             (Just nothing) [
             _Term_annotated>>: lambda "at" $
               Maybes.bind
-                (Maps.lookup (Constants.key_type) (Core.annotatedTermAnnotation (var "at")))
+                (Maps.lookup (Constants.keyType) (Core.annotatedTermAnnotation (var "at")))
                 (lambda "typeTerm" $
                   decodeTypeFromTerm @@ var "typeTerm"),
             _Term_lambda>>: lambda "_innerLam" $
@@ -5027,7 +5027,7 @@ typeAppFallbackCast = def "typeAppFallbackCast" $
   lambda "env" $ lambda "aliases" $ lambda "anns" $ lambda "tyapps" $
     lambda "jatyp" $ lambda "body" $ lambda "typ" $
       "cx" ~> "g" ~>
-      "annotatedBody" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+      "annotatedBody" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
         @@ just (encodeTypeAsTerm @@ var "typ") @@ var "body") $
       "jbody" <<~ (encodeTermInternal @@ var "env" @@ var "anns" @@ (Lists.cons (var "jatyp") (var "tyapps")) @@ var "annotatedBody" @@ var "cx" @@ var "g") $
       "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $

@@ -123,7 +123,7 @@ encodeRestriction :: Schema.Restriction -> [(String, Model.Value)]
 encodeRestriction r =
     case r of
       Schema.RestrictionType v0 -> [
-        (key_type, (encodeType v0))]
+        (keyType, (encodeType v0))]
       Schema.RestrictionString v0 -> [
         encodeStringRestriction v0]
       Schema.RestrictionNumber v0 -> encodeNumericRestriction v0
@@ -138,7 +138,7 @@ encodeRestriction r =
       Schema.RestrictionTitle v0 -> [
         (key_title, (Model.ValueString v0))]
       Schema.RestrictionDescription v0 -> [
-        (key_description, (Model.ValueString v0))]
+        (keyDescription, (Model.ValueString v0))]
 
 -- | Encode a schema as a JSON object value
 encodeSchema :: Schema.Schema -> Model.Value
@@ -159,8 +159,8 @@ encodeSchemaReference sr = Model.ValueString (Schema.unSchemaReference sr)
 encodeStringRestriction :: Schema.StringRestriction -> (String, Model.Value)
 encodeStringRestriction r =
     case r of
-      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
-      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMaxLength v0 -> (keyMaxLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMinLength v0 -> (keyMinLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
       Schema.StringRestrictionPattern v0 -> (key_pattern, (Model.ValueString (Schema.unRegularExpression v0)))
 
 -- | Encode a type as a JSON value
@@ -228,8 +228,8 @@ key_definitions = "$defs"
 key_dependencies :: String
 key_dependencies = "dependencies"
 
-key_description :: String
-key_description = "description"
+keyDescription :: String
+keyDescription = "description"
 
 key_enum :: String
 key_enum = "enum"
@@ -252,8 +252,8 @@ key_label = "label"
 key_maxItems :: String
 key_maxItems = "maxItems"
 
-key_maxLength :: String
-key_maxLength = "maxLength"
+keyMaxLength :: String
+keyMaxLength = "maxLength"
 
 key_maxProperties :: String
 key_maxProperties = "maxProperties"
@@ -264,8 +264,8 @@ key_maximum = "maximum"
 key_minItems :: String
 key_minItems = "minItems"
 
-key_minLength :: String
-key_minLength = "minLength"
+keyMinLength :: String
+keyMinLength = "minLength"
 
 key_minProperties :: String
 key_minProperties = "minProperties"
@@ -303,8 +303,8 @@ key_schema = "$schema"
 key_title :: String
 key_title = "title"
 
-key_type :: String
-key_type = "type"
+keyType :: String
+keyType = "type"
 
 key_uniqueItems :: String
 key_uniqueItems = "uniqueItems"

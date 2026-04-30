@@ -673,6 +673,22 @@ This loads each kernel module from Haskell, decodes the corresponding JSON file,
 and compares them element by element.
 Run this after any kernel changes, or as a periodic sanity check.
 
+If verification fails with `definition differs at Name {unName = "..."}` for a
+module whose source you didn't directly edit, the cause is usually that the
+incremental dirty-detector missed a *transitive* change.
+A common trigger is renaming a kernel definition: every module that *references*
+the renamed name has a different in-memory body, but only the modules whose own
+sources changed get re-emitted to JSON, so the on-disk JSON for the dependents
+stays at the pre-rename name.
+
+Workaround: invalidate the encoder identity by editing the `encoderId` field at
+the top of `dist/json/digest.main.json` to all-zeros (or any value that won't
+match the running binary's hash). The next `update-json-main` run will treat
+every module as dirty and re-emit JSON across the kernel; the encoderId is
+restamped from the binary on the next successful run.
+This is a known limitation; see the `incremental_inference_wiring_pending`
+follow-up.
+
 ---
 
 ## Checking Python `__init__.py` freshness

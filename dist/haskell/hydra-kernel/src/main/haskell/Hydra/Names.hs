@@ -37,8 +37,8 @@ compactName namespaces name =
 freshName :: Context.Context -> (Core.Name, Context.Context)
 freshName cx =
 
-      let count = Annotations.getCount Constants.key_freshTypeVariableCount cx
-      in (normalTypeVariable count, (Annotations.putCount Constants.key_freshTypeVariableCount (Math.add count 1) cx))
+      let count = Annotations.getCount Constants.keyFreshTypeVariableCount cx
+      in (normalTypeVariable count, (Annotations.putCount Constants.keyFreshTypeVariableCount (Math.add count 1) cx))
 -- | Generate multiple fresh type variable names, threading Context
 freshNames :: Int -> Context.Context -> ([Core.Name], Context.Context)
 freshNames n cx =

@@ -3071,7 +3071,7 @@
                                                                 "argument": {"variable": "ftype"},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.constants.key_preserveFieldName"},
+                                                                    "argument": {"variable": "hydra.constants.keyPreserveFieldName"},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "g"},
@@ -4514,7 +4514,7 @@
                                                 "argument": {"variable": "typ"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.constants.key_deprecated"},
+                                                    "argument": {"variable": "hydra.constants.keyDeprecated"},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "g"},
