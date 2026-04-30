@@ -22,24 +22,24 @@ import qualified Hydra.Encode.Tabular as EncodeTabular
 salesModule :: Module
 salesModule = Module {
   moduleNamespace = salesNamespace,
-  moduleDefinitions = map bindingToDefinition [
+  moduleDefinitions = [
     -- salesDatabaseSchema: list[TableType]
-    Binding {
-      bindingName = Name "hydra.demos.genpg.sales.salesDatabaseSchema",
-      bindingTerm = TermList $ fmap EncodeTabular.tableType Sales.salesTableSchemas,
-      bindingTypeScheme = Just listTableTypeScheme
+    DefinitionTerm $ TermDefinition {
+      termDefinitionName = Name "hydra.demos.genpg.sales.salesDatabaseSchema",
+      termDefinitionTerm = TermList $ fmap EncodeTabular.tableType Sales.salesTableSchemas,
+      termDefinitionTypeScheme = Just listTableTypeScheme
     },
     -- salesGraphSchema: GraphSchema[Type]
-    Binding {
-      bindingName = Name "hydra.demos.genpg.sales.salesGraphSchema",
-      bindingTerm = EncodePg.graphSchema EncodeCore.type_ Sales.salesGraphSchema,
-      bindingTypeScheme = Just graphSchemaTypeScheme
+    DefinitionTerm $ TermDefinition {
+      termDefinitionName = Name "hydra.demos.genpg.sales.salesGraphSchema",
+      termDefinitionTerm = EncodePg.graphSchema EncodeCore.type_ Sales.salesGraphSchema,
+      termDefinitionTypeScheme = Just graphSchemaTypeScheme
     },
     -- salesMapping: LazyGraph[Term]
-    Binding {
-      bindingName = Name "hydra.demos.genpg.sales.salesMapping",
-      bindingTerm = EncodePg.lazyGraph EncodeCore.term Sales.salesGraph,
-      bindingTypeScheme = Just lazyGraphTermScheme
+    DefinitionTerm $ TermDefinition {
+      termDefinitionName = Name "hydra.demos.genpg.sales.salesMapping",
+      termDefinitionTerm = EncodePg.lazyGraph EncodeCore.term Sales.salesGraph,
+      termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
   moduleTermDependencies = [
@@ -67,24 +67,24 @@ salesNamespace = Namespace "hydra.demos.genpg.sales"
 healthModule :: Module
 healthModule = Module {
   moduleNamespace = healthNamespace,
-  moduleDefinitions = map bindingToDefinition [
+  moduleDefinitions = [
     -- healthDatabaseSchema: list[TableType]
-    Binding {
-      bindingName = Name "hydra.demos.genpg.health.healthDatabaseSchema",
-      bindingTerm = TermList $ fmap EncodeTabular.tableType Health.healthTableSchemas,
-      bindingTypeScheme = Just listTableTypeScheme
+    DefinitionTerm $ TermDefinition {
+      termDefinitionName = Name "hydra.demos.genpg.health.healthDatabaseSchema",
+      termDefinitionTerm = TermList $ fmap EncodeTabular.tableType Health.healthTableSchemas,
+      termDefinitionTypeScheme = Just listTableTypeScheme
     },
     -- healthGraphSchema: GraphSchema[Type]
-    Binding {
-      bindingName = Name "hydra.demos.genpg.health.healthGraphSchema",
-      bindingTerm = EncodePg.graphSchema EncodeCore.type_ Health.healthGraphSchema,
-      bindingTypeScheme = Just graphSchemaTypeScheme
+    DefinitionTerm $ TermDefinition {
+      termDefinitionName = Name "hydra.demos.genpg.health.healthGraphSchema",
+      termDefinitionTerm = EncodePg.graphSchema EncodeCore.type_ Health.healthGraphSchema,
+      termDefinitionTypeScheme = Just graphSchemaTypeScheme
     },
     -- healthMapping: LazyGraph[Term]
-    Binding {
-      bindingName = Name "hydra.demos.genpg.health.healthMapping",
-      bindingTerm = EncodePg.lazyGraph EncodeCore.term Health.healthGraph,
-      bindingTypeScheme = Just lazyGraphTermScheme
+    DefinitionTerm $ TermDefinition {
+      termDefinitionName = Name "hydra.demos.genpg.health.healthMapping",
+      termDefinitionTerm = EncodePg.lazyGraph EncodeCore.term Health.healthGraph,
+      termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
   moduleTermDependencies = [

@@ -39,8 +39,8 @@ testGraph testTypes = let
     kernelSchemas = M.map typeToScheme typesByName
     testSchemas = M.map typeToScheme testTypes
     allSchemas = M.union kernelSchemas testSchemas
-    -- Kernel term bindings needed for reduceTerm to evaluate kernel functions
-    kernelTermBindings = L.concat $ fmap moduleBindings
+    -- Kernel term definitions needed for reduceTerm to evaluate kernel functions
+    kernelTermDefs = L.concat $ fmap moduleDefinitions
       [ TermAnnotations.module_
       , TermConstants.module_
       , TermDependencies.module_
@@ -52,9 +52,11 @@ testGraph testTypes = let
       , TermStrip.module_
       , TermVariables.module_
       ]
-    boundTerms = M.fromList $ fmap (\b -> (bindingName b, bindingTerm b)) kernelTermBindings
+    boundTerms = M.fromList
+      [ (termDefinitionName td, termDefinitionTerm td) | DefinitionTerm td <- kernelTermDefs ]
     boundTypes = M.fromList
-      [ (bindingName b, ts) | b <- kernelTermBindings, Just ts <- [bindingTypeScheme b] ]
+      [ (termDefinitionName td, ts)
+      | DefinitionTerm td <- kernelTermDefs, Just ts <- [termDefinitionTypeScheme td] ]
     base = emptyGraph
   in base {
     graphPrimitives = primsMap,
