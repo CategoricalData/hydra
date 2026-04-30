@@ -127,6 +127,53 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.error.packaging.DefinitionsOutOfOrderError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "Two consecutive definitions in a module's definitions list that are not in alphabetical order by local name. Hydra requires definitions to appear in lexicographic ASCII order of their local names."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "namespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The namespace of the module containing the misordered definitions"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                  {
+                    "name": "precedingName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "The definition that appears first in the list"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "followingName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.error.packaging.DuplicateDefinitionNameError",
         "typeScheme": {
           "body": {
@@ -185,6 +232,52 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.error.packaging.InvalidDefinitionNameError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A definition whose local name does not match the expected naming convention. Term-level definitions must be camelCase; type-level definitions must be PascalCase."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "namespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "The namespace of the module containing the definition"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "The definition name that violates the naming convention"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "expectedConvention",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                        "body": {"variable": "hydra.util.CaseConvention"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.error.packaging.InvalidModuleError",
         "typeScheme": {
           "body": {
@@ -220,6 +313,17 @@
                         "body": {
                           "variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}},
                   {
+                    "name": "definitionsOutOfOrder",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}],
+                        "body": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}}},
+                  {
                     "name": "duplicateDefinitionName",
                     "type": {
                       "annotated": {
@@ -229,7 +333,63 @@
                             "value": {
                               "literal": {
                                 "string": "Two or more definitions in the same module share the same name"}}}],
-                        "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}}}]}}},
+                        "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}}},
+                  {
+                    "name": "invalidDefinitionName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "A definition whose local name does not match the expected naming convention"}}}],
+                        "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}}},
+                  {
+                    "name": "invalidNamespaceConvention",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "A module whose namespace does not match the namespace naming convention"}}}],
+                        "body": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"}}}},
+                  {
+                    "name": "missingDocumentation",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "A top-level definition lacking a description annotation"}}}],
+                        "body": {"variable": "hydra.error.packaging.MissingDocumentationError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.packaging.InvalidNamespaceConventionError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A module whose namespace does not match the dotted-lowercase naming convention. Namespaces must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "namespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The namespace that violates the convention"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -274,9 +434,80 @@
                           {
                             "key": "description",
                             "value": {"literal": {"string": "A module within the package is invalid"}}}],
-                        "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}]}}},
+                        "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                  {
+                    "name": "invalidPackageName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "A package whose name does not match the package-name naming convention"}}}],
+                        "body": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.packaging.InvalidPackageNameError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A package whose name does not match the hyphen-separated lowercase naming convention. Package names must be hyphen-separated lowercase segments, each starting with a letter, e.g. hydra-kernel or hydra-python."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "packageName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "The package name that violates the convention"}}}],
+                        "body": {"variable": "hydra.packaging.PackageName"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.packaging.MissingDocumentationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc \"...\" annotation at its top level."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "namespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "The namespace of the module containing the undocumented definition"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
   "description": "Error types for module and package validation",
   "namespace": "hydra.error.packaging",
-  "termDependencies": ["hydra.core", "hydra.packaging"],
-  "typeDependencies": ["hydra.core", "hydra.packaging"]}
+  "termDependencies": ["hydra.core", "hydra.packaging", "hydra.util"],
+  "typeDependencies": ["hydra.core", "hydra.packaging", "hydra.util"]}
