@@ -48,9 +48,9 @@ analyzeFunctionTerm cx getTC setTC env term =
 -- | Analyze a function term with configurable binding metadata
 analyzeFunctionTermWith :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith cx forBinding getTC setTC env term =
-    analyzeFunctionTermWith_gather cx forBinding getTC setTC True env [] [] [] [] [] term
-analyzeFunctionTermWith_finish :: Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
-analyzeFunctionTermWith_finish cx getTC fEnv tparams args bindings doms tapps body =
+    analyzeFunctionTermWithGather cx forBinding getTC setTC True env [] [] [] [] [] term
+analyzeFunctionTermWithFinish :: Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps body =
 
       let bodyWithTapps =
               Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -65,30 +65,30 @@ analyzeFunctionTermWith_finish cx getTC fEnv tparams args bindings doms tapps bo
         Typing.functionStructureDomains = (Lists.reverse doms),
         Typing.functionStructureCodomain = mcod,
         Typing.functionStructureEnvironment = fEnv}))
-analyzeFunctionTermWith_gather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
-analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
+analyzeFunctionTermWithGather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
     case (Strip.deannotateTerm t) of
       Core.TermLambda v0 -> Logic.ifElse argMode (
         let v = Core.lambdaParameter v0
             dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v0)
             body = Core.lambdaBody v0
             newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v0) gEnv
-        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t)
       Core.TermLet v0 ->
         let newBindings = Core.letBindings v0
             body = Core.letBody v0
             newEnv = setTC (Scoping.extendGraphForLet forBinding (getTC gEnv) v0) gEnv
-        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
       Core.TermTypeApplication v0 ->
         let taBody = Core.typeApplicationTermBody v0
             typ = Core.typeApplicationTermType v0
-        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
       Core.TermTypeLambda v0 ->
         let tvar = Core.typeLambdaParameter v0
             tlBody = Core.typeLambdaBody v0
             newEnv = setTC (Scoping.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
-        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
-      _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
+      _ -> analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t
 -- | Get dependency namespaces from definitions
 definitionDependencyNamespaces :: [Packaging.Definition] -> S.Set Packaging.Namespace
 definitionDependencyNamespaces defs =
@@ -263,7 +263,7 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                               Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                 Core.annotatedTermBody = (EncodeCore.type_ typ),
                                 Core.annotatedTermAnnotation = (Maps.fromList [
-                                  (Constants.key_type, schemaTerm)])}))
+                                  (Constants.keyType, schemaTerm)])}))
                   in Core.Binding {
                     Core.bindingName = name,
                     Core.bindingTerm = dataTerm,
