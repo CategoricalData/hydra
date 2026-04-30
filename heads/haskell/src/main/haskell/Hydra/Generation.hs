@@ -22,6 +22,7 @@ import qualified Hydra.Errors as Error
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Codegen as CodeGeneration
+import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Control.Exception as E
 import qualified Control.Monad as CM
@@ -105,6 +106,29 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
 -- Thin wrapper around modulesToGraphWith.
 modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
+
+-- | Convert a Definition to the Binding shape that elementsToGraph (and other
+-- Binding-based kernel APIs) expects. A DefinitionTerm carries directly across;
+-- a DefinitionType has its body re-encoded as a term and tagged with the
+-- "type -> hydra.core.Type" annotation that downstream code uses to recognise
+-- native types.
+definitionAsBinding :: Definition -> Binding
+definitionAsBinding (DefinitionTerm td) = Binding {
+    bindingName = termDefinitionName td,
+    bindingTerm = termDefinitionTerm td,
+    bindingTypeScheme = termDefinitionTypeScheme td}
+definitionAsBinding (DefinitionType td) = Binding {
+    bindingName = typeDefinitionName td,
+    bindingTerm = TermAnnotated $ AnnotatedTerm {
+      annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td)),
+      annotatedTermAnnotation = M.fromList [
+        (Name "type", TermVariable (Name "hydra.core.Type"))]},
+    bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
+
+-- | Extract a module's definitions in the legacy Binding view, suitable for
+-- feeding elementsToGraph or any other API that still operates on Bindings.
+moduleAsBindings :: Module -> [Binding]
+moduleAsBindings = map definitionAsBinding . moduleDefinitions
 
 
 -- | Generate and write the lexicon file (IO wrapper).
