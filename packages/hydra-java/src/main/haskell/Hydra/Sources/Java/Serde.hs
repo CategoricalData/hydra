@@ -180,6 +180,7 @@ module_ = Module {
       toDefinition interfaceBodyToExpr,
       toDefinition interfaceDeclarationToExpr,
       toDefinition interfaceMemberDeclarationToExpr,
+      toDefinition interfaceMemberDeclarationWithCommentsToExpr,
       toDefinition interfaceMethodDeclarationToExpr,
       toDefinition interfaceMethodModifierToExpr,
       toDefinition interfaceModifierToExpr,
@@ -1542,7 +1543,7 @@ interfaceBodyToExpr :: TTermDefinition (Java.InterfaceBody -> Expr)
 interfaceBodyToExpr = def "interfaceBodyToExpr" $
   lambda "ib" $
     Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-      (Serialization.doubleNewlineSep @@ Lists.map interfaceMemberDeclarationToExpr (unwrap Java._InterfaceBody @@ var "ib"))
+      (Serialization.doubleNewlineSep @@ Lists.map interfaceMemberDeclarationWithCommentsToExpr (unwrap Java._InterfaceBody @@ var "ib"))
 
 interfaceMemberDeclarationToExpr :: TTermDefinition (Java.InterfaceMemberDeclaration -> Expr)
 interfaceMemberDeclarationToExpr = def "interfaceMemberDeclarationToExpr" $
@@ -1552,6 +1553,13 @@ interfaceMemberDeclarationToExpr = def "interfaceMemberDeclarationToExpr" $
       Java._InterfaceMemberDeclaration_interfaceMethod>>: lambda "im" $ interfaceMethodDeclarationToExpr @@ var "im",
       Java._InterfaceMemberDeclaration_class>>: lambda "cd" $ classDeclarationToExpr @@ var "cd",
       Java._InterfaceMemberDeclaration_interface>>: lambda "id" $ interfaceDeclarationToExpr @@ var "id"]
+
+interfaceMemberDeclarationWithCommentsToExpr :: TTermDefinition (Java.InterfaceMemberDeclarationWithComments -> Expr)
+interfaceMemberDeclarationWithCommentsToExpr = def "interfaceMemberDeclarationWithCommentsToExpr" $
+  lambda "imdwc" $ lets [
+    "d">: project Java._InterfaceMemberDeclarationWithComments Java._InterfaceMemberDeclarationWithComments_value @@ var "imdwc",
+    "mc">: project Java._InterfaceMemberDeclarationWithComments Java._InterfaceMemberDeclarationWithComments_comments @@ var "imdwc"] $
+    withComments @@ var "mc" @@ (interfaceMemberDeclarationToExpr @@ var "d")
 
 interfaceMethodDeclarationToExpr :: TTermDefinition (Java.InterfaceMethodDeclaration -> Expr)
 interfaceMethodDeclarationToExpr = def "interfaceMethodDeclarationToExpr" $
