@@ -66,9 +66,9 @@ module_ = Module {
             moduleDescription = Just "String representations of hydra.core types"}
   where
    definitions = [
-     toDefinition readTerm, -- TODO: move this to hydra.read.core
      toDefinition binding,
      toDefinition caseStatement,
+     toDefinition either_,
      toDefinition field,
      toDefinition fieldType,
      toDefinition fields,
@@ -80,25 +80,20 @@ module_ = Module {
      toDefinition lambda,
      toDefinition let_,
      toDefinition list_,
-     toDefinition maybe_,
-     toDefinition pair_,
-     toDefinition either_,
-     toDefinition map_,
-     toDefinition set_,
      toDefinition literal,
      toDefinition literalType,
+     toDefinition map_,
+     toDefinition maybe_,
+     toDefinition pair_,
      toDefinition projection,
+     toDefinition readTerm,
+     toDefinition set_,
      toDefinition term,
      toDefinition type_,
      toDefinition typeScheme]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
-
-readTerm :: TTermDefinition (String -> Maybe Term)
-readTerm = define "readTerm" $
-  doc "A placeholder for reading terms from their serialized form. Not implemented." $
-  "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
 
 binding :: TTermDefinition (Binding -> String)
 binding = define "binding" $
@@ -115,7 +110,7 @@ binding = define "binding" $
     var "typeStr",
     string " = ",
     term @@ var "t"]
-      
+
 caseStatement :: TTermDefinition (CaseStatement -> String)
 caseStatement = define "caseStatement" $
   doc "Show a case statement as a string" $
@@ -133,19 +128,15 @@ caseStatement = define "caseStatement" $
     var "tname",
     string ")",
     fields @@ var "allFields"]
-
-projection :: TTermDefinition (Projection -> String)
-projection = define "projection" $
-  doc "Show a projection as a string" $
-  "proj" ~>
-  "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
-  "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
-  Strings.cat $ list [
-    string "project(",
-    var "tname",
-    string "){",
-    var "fname",
-    string "}"]
+      
+either_ :: TTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
+either_ = define "either" $
+  doc "Show an Either value using given functions for left and right" $
+  "showA" ~> "showB" ~> "e" ~>
+  Eithers.either_
+    ("a" ~> Strings.cat2 (string "left(") (Strings.cat2 (var "showA" @@ var "a") (string ")")))
+    ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
+    (var "e")
 
 field :: TTermDefinition (Field -> String)
 field = define "field" $
@@ -271,55 +262,6 @@ list_ = define "list" $
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "]"]
 
-pair_ :: TTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
-pair_ = define "pair" $
-  doc "Show a pair using given functions to show each element" $
-  "showA" ~> "showB" ~> "p" ~>
-  Strings.cat $ list [
-    string "(",
-    var "showA" @@ (Pairs.first $ var "p"),
-    string ", ",
-    var "showB" @@ (Pairs.second $ var "p"),
-    string ")"]
-
-either_ :: TTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
-either_ = define "either" $
-  doc "Show an Either value using given functions for left and right" $
-  "showA" ~> "showB" ~> "e" ~>
-  Eithers.either_
-    ("a" ~> Strings.cat2 (string "left(") (Strings.cat2 (var "showA" @@ var "a") (string ")")))
-    ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
-    (var "e")
-
-maybe_ :: TTermDefinition ((a -> String) -> Maybe a -> String)
-maybe_ = define "maybe" $
-  doc "Show a Maybe value using a given function to show the element" $
-  "f" ~> "mx" ~>
-  Maybes.maybe (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")"))) (var "mx")
-
-map_ :: TTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
-map_ = define "map" $
-  doc "Show a map using given functions to show keys and values" $
-  "showK" ~> "showV" ~> "m" ~>
-  "pairStrs" <~ Lists.map ("p" ~> Strings.cat $ list [
-    var "showK" @@ (Pairs.first $ var "p"),
-    string ": ",
-    var "showV" @@ (Pairs.second $ var "p")]) (Maps.toList $ var "m") $
-  Strings.cat $ list [
-    string "{",
-    Strings.intercalate (string ", ") (var "pairStrs"),
-    string "}"]
-
-set_ :: TTermDefinition ((a -> String) -> S.Set a -> String)
-set_ = define "set" $
-  doc "Show a set using a given function to show each element" $
-  "f" ~> "xs" ~>
-  "elementStrs" <~ Lists.map (var "f") (Sets.toList $ var "xs") $
-  Strings.cat $ list [
-    string "{",
-    Strings.intercalate (string ", ") (var "elementStrs"),
-    string "}"]
-
 literal :: TTermDefinition (Literal -> String)
 literal = define "literal" $
   doc "Show a literal as a string" $
@@ -341,6 +283,64 @@ literalType = define "literalType" $
     _LiteralType_float>>: "ft" ~> floatType @@ var "ft",
     _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
+
+map_ :: TTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
+map_ = define "map" $
+  doc "Show a map using given functions to show keys and values" $
+  "showK" ~> "showV" ~> "m" ~>
+  "pairStrs" <~ Lists.map ("p" ~> Strings.cat $ list [
+    var "showK" @@ (Pairs.first $ var "p"),
+    string ": ",
+    var "showV" @@ (Pairs.second $ var "p")]) (Maps.toList $ var "m") $
+  Strings.cat $ list [
+    string "{",
+    Strings.intercalate (string ", ") (var "pairStrs"),
+    string "}"]
+
+maybe_ :: TTermDefinition ((a -> String) -> Maybe a -> String)
+maybe_ = define "maybe" $
+  doc "Show a Maybe value using a given function to show the element" $
+  "f" ~> "mx" ~>
+  Maybes.maybe (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")"))) (var "mx")
+
+pair_ :: TTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
+pair_ = define "pair" $
+  doc "Show a pair using given functions to show each element" $
+  "showA" ~> "showB" ~> "p" ~>
+  Strings.cat $ list [
+    string "(",
+    var "showA" @@ (Pairs.first $ var "p"),
+    string ", ",
+    var "showB" @@ (Pairs.second $ var "p"),
+    string ")"]
+
+projection :: TTermDefinition (Projection -> String)
+projection = define "projection" $
+  doc "Show a projection as a string" $
+  "proj" ~>
+  "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
+  "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
+  Strings.cat $ list [
+    string "project(",
+    var "tname",
+    string "){",
+    var "fname",
+    string "}"]
+
+readTerm :: TTermDefinition (String -> Maybe Term)
+readTerm = define "readTerm" $
+  doc "A placeholder for reading terms from their serialized form. Not implemented." $
+  "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
+
+set_ :: TTermDefinition ((a -> String) -> S.Set a -> String)
+set_ = define "set" $
+  doc "Show a set using a given function to show each element" $
+  "f" ~> "xs" ~>
+  "elementStrs" <~ Lists.map (var "f") (Sets.toList $ var "xs") $
+  Strings.cat $ list [
+    string "{",
+    Strings.intercalate (string ", ") (var "elementStrs"),
+    string "}"]
 
 term :: TTermDefinition (Term -> String)
 term = define "term" $

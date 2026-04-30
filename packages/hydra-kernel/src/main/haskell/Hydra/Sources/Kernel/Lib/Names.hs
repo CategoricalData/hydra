@@ -22,33 +22,16 @@ module_ = Module {
             moduleDescription = Just "Namespaces and primitive names for the Hydra standard library"}
   where
     definitions = [
-      -- Namespace constants
       toDefinition chars,
-      toDefinition eithers,
-      toDefinition equality,
-      toDefinition lists,
-      toDefinition literals,
-      toDefinition logic,
-      toDefinition maps,
-      toDefinition math,
-      toDefinition maybes,
-      toDefinition pairs,
-      toDefinition regex,
-      toDefinition sets,
-      toDefinition strings,
-      toDefinition typeclass,
-
-      -- chars primitives
       toDefinition charsIsAlphaNum,
       toDefinition charsIsLower,
       toDefinition charsIsSpace,
       toDefinition charsIsUpper,
       toDefinition charsToLower,
       toDefinition charsToUpper,
-
-      -- eithers primitives
-      toDefinition eithersBind,
+      toDefinition eithers,
       toDefinition eithersBimap,
+      toDefinition eithersBind,
       toDefinition eithersEither,
       toDefinition eithersFoldl,
       toDefinition eithersFromLeft,
@@ -62,8 +45,7 @@ module_ = Module {
       toDefinition eithersMapSet,
       toDefinition eithersPartitionEithers,
       toDefinition eithersRights,
-
-      -- equality primitives
+      toDefinition equality,
       toDefinition equalityCompare,
       toDefinition equalityEqual,
       toDefinition equalityGt,
@@ -73,8 +55,7 @@ module_ = Module {
       toDefinition equalityLte,
       toDefinition equalityMax,
       toDefinition equalityMin,
-
-      -- lists primitives
+      toDefinition lists,
       toDefinition listsApply,
       toDefinition listsBind,
       toDefinition listsConcat,
@@ -98,7 +79,6 @@ module_ = Module {
       toDefinition listsMaybeLast,
       toDefinition listsMaybeTail,
       toDefinition listsNub,
-
       toDefinition listsNull,
       toDefinition listsPartition,
       toDefinition listsPure,
@@ -113,21 +93,20 @@ module_ = Module {
       toDefinition listsUncons,
       toDefinition listsZip,
       toDefinition listsZipWith,
-
-      -- literals primitives
+      toDefinition literals,
       toDefinition literalsBigfloatToBigint,
       toDefinition literalsBigfloatToFloat32,
       toDefinition literalsBigfloatToFloat64,
       toDefinition literalsBigintToBigfloat,
       toDefinition literalsBigintToDecimal,
-      toDefinition literalsBigintToInt8,
       toDefinition literalsBigintToInt16,
       toDefinition literalsBigintToInt32,
       toDefinition literalsBigintToInt64,
-      toDefinition literalsBigintToUint8,
+      toDefinition literalsBigintToInt8,
       toDefinition literalsBigintToUint16,
       toDefinition literalsBigintToUint32,
       toDefinition literalsBigintToUint64,
+      toDefinition literalsBigintToUint8,
       toDefinition literalsBinaryToBytes,
       toDefinition literalsBinaryToString,
       toDefinition literalsDecimalToBigint,
@@ -137,53 +116,51 @@ module_ = Module {
       toDefinition literalsFloat32ToDecimal,
       toDefinition literalsFloat64ToBigfloat,
       toDefinition literalsFloat64ToDecimal,
-      toDefinition literalsInt8ToBigint,
       toDefinition literalsInt16ToBigint,
       toDefinition literalsInt32ToBigint,
       toDefinition literalsInt64ToBigint,
+      toDefinition literalsInt8ToBigint,
       toDefinition literalsReadBigfloat,
       toDefinition literalsReadBigint,
       toDefinition literalsReadBoolean,
       toDefinition literalsReadDecimal,
       toDefinition literalsReadFloat32,
       toDefinition literalsReadFloat64,
-      toDefinition literalsReadInt8,
       toDefinition literalsReadInt16,
       toDefinition literalsReadInt32,
       toDefinition literalsReadInt64,
+      toDefinition literalsReadInt8,
       toDefinition literalsReadString,
-      toDefinition literalsReadUint8,
       toDefinition literalsReadUint16,
       toDefinition literalsReadUint32,
       toDefinition literalsReadUint64,
+      toDefinition literalsReadUint8,
       toDefinition literalsShowBigfloat,
       toDefinition literalsShowBigint,
       toDefinition literalsShowBoolean,
       toDefinition literalsShowDecimal,
       toDefinition literalsShowFloat32,
       toDefinition literalsShowFloat64,
-      toDefinition literalsShowInt8,
       toDefinition literalsShowInt16,
       toDefinition literalsShowInt32,
       toDefinition literalsShowInt64,
-      toDefinition literalsShowUint8,
+      toDefinition literalsShowInt8,
+      toDefinition literalsShowString,
       toDefinition literalsShowUint16,
       toDefinition literalsShowUint32,
       toDefinition literalsShowUint64,
-      toDefinition literalsShowString,
+      toDefinition literalsShowUint8,
       toDefinition literalsStringToBinary,
-      toDefinition literalsUint8ToBigint,
       toDefinition literalsUint16ToBigint,
       toDefinition literalsUint32ToBigint,
       toDefinition literalsUint64ToBigint,
-
-      -- logic primitives
+      toDefinition literalsUint8ToBigint,
+      toDefinition logic,
       toDefinition logicAnd,
       toDefinition logicIfElse,
       toDefinition logicNot,
       toDefinition logicOr,
-
-      -- maps primitives
+      toDefinition maps,
       toDefinition mapsAlter,
       toDefinition mapsBimap,
       toDefinition mapsDelete,
@@ -204,8 +181,7 @@ module_ = Module {
       toDefinition mapsSize,
       toDefinition mapsToList,
       toDefinition mapsUnion,
-
-      -- math primitives
+      toDefinition math,
       toDefinition mathAbs,
       toDefinition mathAcos,
       toDefinition mathAcosh,
@@ -253,8 +229,7 @@ module_ = Module {
       toDefinition mathTan,
       toDefinition mathTanh,
       toDefinition mathTruncate,
-
-      -- maybes primitives
+      toDefinition maybes,
       toDefinition maybesApply,
       toDefinition maybesBind,
       toDefinition maybesCases,
@@ -268,13 +243,18 @@ module_ = Module {
       toDefinition maybesMaybe,
       toDefinition maybesPure,
       toDefinition maybesToList,
-
-      -- pairs primitives
+      toDefinition pairs,
       toDefinition pairsBimap,
       toDefinition pairsFirst,
       toDefinition pairsSecond,
-
-      -- sets primitives
+      toDefinition regex,
+      toDefinition regexFind,
+      toDefinition regexFindAll,
+      toDefinition regexMatches,
+      toDefinition regexReplace,
+      toDefinition regexReplaceAll,
+      toDefinition regexSplit,
+      toDefinition sets,
       toDefinition setsDelete,
       toDefinition setsDifference,
       toDefinition setsEmpty,
@@ -289,31 +269,21 @@ module_ = Module {
       toDefinition setsToList,
       toDefinition setsUnion,
       toDefinition setsUnions,
-
-      -- regex primitives
-      toDefinition regexFind,
-      toDefinition regexFindAll,
-      toDefinition regexMatches,
-      toDefinition regexReplace,
-      toDefinition regexReplaceAll,
-      toDefinition regexSplit,
-
-      -- strings primitives
+      toDefinition strings,
       toDefinition stringsCat,
       toDefinition stringsCat2,
       toDefinition stringsFromList,
       toDefinition stringsIntercalate,
-      toDefinition stringsNull,
       toDefinition stringsLength,
       toDefinition stringsLines,
       toDefinition stringsMaybeCharAt,
+      toDefinition stringsNull,
       toDefinition stringsSplitOn,
       toDefinition stringsToList,
       toDefinition stringsToLower,
       toDefinition stringsToUpper,
       toDefinition stringsUnlines,
-
-      -- typeclass names
+      toDefinition typeclass,
       toDefinition typeclassEq,
       toDefinition typeclassOrd]
 
@@ -335,74 +305,49 @@ defineName name nsStr localName = define name $
 chars :: TTermDefinition Namespace
 chars = defineNs "chars" "hydra.lib.chars"
 
-eithers :: TTermDefinition Namespace
-eithers = defineNs "eithers" "hydra.lib.eithers"
-
-equality :: TTermDefinition Namespace
-equality = defineNs "equality" "hydra.lib.equality"
-
-lists :: TTermDefinition Namespace
-lists = defineNs "lists" "hydra.lib.lists"
-
-literals :: TTermDefinition Namespace
-literals = defineNs "literals" "hydra.lib.literals"
-
-logic :: TTermDefinition Namespace
-logic = defineNs "logic" "hydra.lib.logic"
-
-maps :: TTermDefinition Namespace
-maps = defineNs "maps" "hydra.lib.maps"
-
-math :: TTermDefinition Namespace
-math = defineNs "math" "hydra.lib.math"
-
-maybes :: TTermDefinition Namespace
-maybes = defineNs "maybes" "hydra.lib.maybes"
-
-pairs :: TTermDefinition Namespace
-pairs = defineNs "pairs" "hydra.lib.pairs"
-
-regex :: TTermDefinition Namespace
-regex = defineNs "regex" "hydra.lib.regex"
-
-sets :: TTermDefinition Namespace
-sets = defineNs "sets" "hydra.lib.sets"
-
-strings :: TTermDefinition Namespace
-strings = defineNs "strings" "hydra.lib.strings"
-
-typeclass :: TTermDefinition Namespace
-typeclass = defineNs "typeclass" "hydra.typeclass"
-
--- Chars primitives
-
 charsIsAlphaNum = defineName "charsIsAlphaNum" "hydra.lib.chars" "isAlphaNum"
+
 charsIsLower    = defineName "charsIsLower" "hydra.lib.chars" "isLower"
+
 charsIsSpace    = defineName "charsIsSpace" "hydra.lib.chars" "isSpace"
+
 charsIsUpper    = defineName "charsIsUpper" "hydra.lib.chars" "isUpper"
+
 charsToLower    = defineName "charsToLower" "hydra.lib.chars" "toLower"
+
 charsToUpper    = defineName "charsToUpper" "hydra.lib.chars" "toUpper"
 
 -- Eithers primitives
 
-eithersBind             = defineName "eithersBind" "hydra.lib.eithers" "bind"
+eithers :: TTermDefinition Namespace
+eithers = defineNs "eithers" "hydra.lib.eithers"
+
 eithersBimap            = defineName "eithersBimap" "hydra.lib.eithers" "bimap"
+
+eithersBind             = defineName "eithersBind" "hydra.lib.eithers" "bind"
+
 eithersEither           = defineName "eithersEither" "hydra.lib.eithers" "either"
+
 eithersFoldl            = defineName "eithersFoldl" "hydra.lib.eithers" "foldl"
+
 eithersFromLeft         = defineName "eithersFromLeft" "hydra.lib.eithers" "fromLeft"
+
 eithersFromRight        = defineName "eithersFromRight" "hydra.lib.eithers" "fromRight"
+
 eithersIsLeft           = defineName "eithersIsLeft" "hydra.lib.eithers" "isLeft"
 eithersIsRight          = defineName "eithersIsRight" "hydra.lib.eithers" "isRight"
 eithersLefts            = defineName "eithersLefts" "hydra.lib.eithers" "lefts"
 eithersMap              = defineName "eithersMap" "hydra.lib.eithers" "map"
 eithersMapList          = defineName "eithersMapList" "hydra.lib.eithers" "mapList"
 eithersMapMaybe         = defineName "eithersMapMaybe" "hydra.lib.eithers" "mapMaybe"
+
 eithersMapSet           = defineName "eithersMapSet" "hydra.lib.eithers" "mapSet"
 eithersPartitionEithers = defineName "eithersPartitionEithers" "hydra.lib.eithers" "partitionEithers"
 eithersRights           = defineName "eithersRights" "hydra.lib.eithers" "rights"
 
 -- Equality primitives
-
+equality :: TTermDefinition Namespace
+equality = defineNs "equality" "hydra.lib.equality"
 equalityCompare  = defineName "equalityCompare" "hydra.lib.equality" "compare"
 equalityEqual    = defineName "equalityEqual" "hydra.lib.equality" "equal"
 equalityGt       = defineName "equalityGt" "hydra.lib.equality" "gt"
@@ -414,8 +359,10 @@ equalityMax      = defineName "equalityMax" "hydra.lib.equality" "max"
 equalityMin      = defineName "equalityMin" "hydra.lib.equality" "min"
 
 -- Lists primitives
-
+lists :: TTermDefinition Namespace
+lists = defineNs "lists" "hydra.lib.lists"
 listsApply       = defineName "listsApply" "hydra.lib.lists" "apply"
+
 listsBind        = defineName "listsBind" "hydra.lib.lists" "bind"
 listsConcat      = defineName "listsConcat" "hydra.lib.lists" "concat"
 listsConcat2     = defineName "listsConcat2" "hydra.lib.lists" "concat2"
@@ -425,6 +372,7 @@ listsDropWhile   = defineName "listsDropWhile" "hydra.lib.lists" "dropWhile"
 listsElem        = defineName "listsElem" "hydra.lib.lists" "elem"
 listsFilter      = defineName "listsFilter" "hydra.lib.lists" "filter"
 listsFind        = defineName "listsFind" "hydra.lib.lists" "find"
+
 listsFoldl       = defineName "listsFoldl" "hydra.lib.lists" "foldl"
 listsFoldr       = defineName "listsFoldr" "hydra.lib.lists" "foldr"
 listsGroup       = defineName "listsGroup" "hydra.lib.lists" "group"
@@ -454,20 +402,22 @@ listsZip         = defineName "listsZip" "hydra.lib.lists" "zip"
 listsZipWith     = defineName "listsZipWith" "hydra.lib.lists" "zipWith"
 
 -- Literals primitives
-
+literals :: TTermDefinition Namespace
+literals = defineNs "literals" "hydra.lib.literals"
 literalsBigfloatToBigint  = defineName "literalsBigfloatToBigint" "hydra.lib.literals" "bigfloatToBigint"
 literalsBigfloatToFloat32 = defineName "literalsBigfloatToFloat32" "hydra.lib.literals" "bigfloatToFloat32"
 literalsBigfloatToFloat64 = defineName "literalsBigfloatToFloat64" "hydra.lib.literals" "bigfloatToFloat64"
 literalsBigintToBigfloat  = defineName "literalsBigintToBigfloat" "hydra.lib.literals" "bigintToBigfloat"
 literalsBigintToDecimal   = defineName "literalsBigintToDecimal" "hydra.lib.literals" "bigintToDecimal"
-literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
 literalsBigintToInt16     = defineName "literalsBigintToInt16" "hydra.lib.literals" "bigintToInt16"
 literalsBigintToInt32     = defineName "literalsBigintToInt32" "hydra.lib.literals" "bigintToInt32"
 literalsBigintToInt64     = defineName "literalsBigintToInt64" "hydra.lib.literals" "bigintToInt64"
-literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
+literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
+
 literalsBigintToUint16    = defineName "literalsBigintToUint16" "hydra.lib.literals" "bigintToUint16"
 literalsBigintToUint32    = defineName "literalsBigintToUint32" "hydra.lib.literals" "bigintToUint32"
 literalsBigintToUint64    = defineName "literalsBigintToUint64" "hydra.lib.literals" "bigintToUint64"
+literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
 literalsBinaryToBytes     = defineName "literalsBinaryToBytes" "hydra.lib.literals" "binaryToBytes"
 literalsBinaryToString    = defineName "literalsBinaryToString" "hydra.lib.literals" "binaryToString"
 literalsDecimalToBigint   = defineName "literalsDecimalToBigint" "hydra.lib.literals" "decimalToBigint"
@@ -477,62 +427,66 @@ literalsFloat32ToBigfloat = defineName "literalsFloat32ToBigfloat" "hydra.lib.li
 literalsFloat32ToDecimal  = defineName "literalsFloat32ToDecimal" "hydra.lib.literals" "float32ToDecimal"
 literalsFloat64ToBigfloat = defineName "literalsFloat64ToBigfloat" "hydra.lib.literals" "float64ToBigfloat"
 literalsFloat64ToDecimal  = defineName "literalsFloat64ToDecimal" "hydra.lib.literals" "float64ToDecimal"
-literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsInt16ToBigint     = defineName "literalsInt16ToBigint" "hydra.lib.literals" "int16ToBigint"
 literalsInt32ToBigint     = defineName "literalsInt32ToBigint" "hydra.lib.literals" "int32ToBigint"
 literalsInt64ToBigint     = defineName "literalsInt64ToBigint" "hydra.lib.literals" "int64ToBigint"
+literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsReadBigfloat      = defineName "literalsReadBigfloat" "hydra.lib.literals" "readBigfloat"
 literalsReadBigint        = defineName "literalsReadBigint" "hydra.lib.literals" "readBigint"
 literalsReadBoolean       = defineName "literalsReadBoolean" "hydra.lib.literals" "readBoolean"
 literalsReadDecimal       = defineName "literalsReadDecimal" "hydra.lib.literals" "readDecimal"
 literalsReadFloat32       = defineName "literalsReadFloat32" "hydra.lib.literals" "readFloat32"
 literalsReadFloat64       = defineName "literalsReadFloat64" "hydra.lib.literals" "readFloat64"
-literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
 literalsReadInt16         = defineName "literalsReadInt16" "hydra.lib.literals" "readInt16"
 literalsReadInt32         = defineName "literalsReadInt32" "hydra.lib.literals" "readInt32"
 literalsReadInt64         = defineName "literalsReadInt64" "hydra.lib.literals" "readInt64"
+literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
 literalsReadString        = defineName "literalsReadString" "hydra.lib.literals" "readString"
-literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
 literalsReadUint16        = defineName "literalsReadUint16" "hydra.lib.literals" "readUint16"
 literalsReadUint32        = defineName "literalsReadUint32" "hydra.lib.literals" "readUint32"
 literalsReadUint64        = defineName "literalsReadUint64" "hydra.lib.literals" "readUint64"
+literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
 literalsShowBigfloat      = defineName "literalsShowBigfloat" "hydra.lib.literals" "showBigfloat"
 literalsShowBigint        = defineName "literalsShowBigint" "hydra.lib.literals" "showBigint"
 literalsShowBoolean       = defineName "literalsShowBoolean" "hydra.lib.literals" "showBoolean"
 literalsShowDecimal       = defineName "literalsShowDecimal" "hydra.lib.literals" "showDecimal"
 literalsShowFloat32       = defineName "literalsShowFloat32" "hydra.lib.literals" "showFloat32"
 literalsShowFloat64       = defineName "literalsShowFloat64" "hydra.lib.literals" "showFloat64"
-literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
 literalsShowInt16         = defineName "literalsShowInt16" "hydra.lib.literals" "showInt16"
 literalsShowInt32         = defineName "literalsShowInt32" "hydra.lib.literals" "showInt32"
 literalsShowInt64         = defineName "literalsShowInt64" "hydra.lib.literals" "showInt64"
-literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
+literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
+literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
 literalsShowUint16        = defineName "literalsShowUint16" "hydra.lib.literals" "showUint16"
 literalsShowUint32        = defineName "literalsShowUint32" "hydra.lib.literals" "showUint32"
 literalsShowUint64        = defineName "literalsShowUint64" "hydra.lib.literals" "showUint64"
-literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
+literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
 literalsStringToBinary    = defineName "literalsStringToBinary" "hydra.lib.literals" "stringToBinary"
-literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
 literalsUint16ToBigint    = defineName "literalsUint16ToBigint" "hydra.lib.literals" "uint16ToBigint"
 literalsUint32ToBigint    = defineName "literalsUint32ToBigint" "hydra.lib.literals" "uint32ToBigint"
 literalsUint64ToBigint    = defineName "literalsUint64ToBigint" "hydra.lib.literals" "uint64ToBigint"
 
 -- Logic primitives
-
+literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
+logic :: TTermDefinition Namespace
+logic = defineNs "logic" "hydra.lib.logic"
 logicAnd    = defineName "logicAnd" "hydra.lib.logic" "and"
 logicIfElse = defineName "logicIfElse" "hydra.lib.logic" "ifElse"
 logicNot    = defineName "logicNot" "hydra.lib.logic" "not"
 logicOr     = defineName "logicOr" "hydra.lib.logic" "or"
 
 -- Maps primitives
-
+maps :: TTermDefinition Namespace
+maps = defineNs "maps" "hydra.lib.maps"
 mapsAlter           = defineName "mapsAlter" "hydra.lib.maps" "alter"
 mapsBimap           = defineName "mapsBimap" "hydra.lib.maps" "bimap"
 mapsDelete          = defineName "mapsDelete" "hydra.lib.maps" "delete"
+
 mapsElems           = defineName "mapsElems" "hydra.lib.maps" "elems"
 mapsEmpty           = defineName "mapsEmpty" "hydra.lib.maps" "empty"
 mapsFilter          = defineName "mapsFilter" "hydra.lib.maps" "filter"
 mapsFilterWithKey   = defineName "mapsFilterWithKey" "hydra.lib.maps" "filterWithKey"
+
 mapsFindWithDefault = defineName "mapsFindWithDefault" "hydra.lib.maps" "findWithDefault"
 mapsFromList        = defineName "mapsFromList" "hydra.lib.maps" "fromList"
 mapsInsert          = defineName "mapsInsert" "hydra.lib.maps" "insert"
@@ -548,13 +502,15 @@ mapsToList          = defineName "mapsToList" "hydra.lib.maps" "toList"
 mapsUnion           = defineName "mapsUnion" "hydra.lib.maps" "union"
 
 -- Math primitives
-
+math :: TTermDefinition Namespace
+math = defineNs "math" "hydra.lib.math"
 mathAbs      = defineName "mathAbs" "hydra.lib.math" "abs"
 mathAcos     = defineName "mathAcos" "hydra.lib.math" "acos"
 mathAcosh    = defineName "mathAcosh" "hydra.lib.math" "acosh"
 mathAdd      = defineName "mathAdd" "hydra.lib.math" "add"
 mathAddFloat64 = defineName "mathAddFloat64" "hydra.lib.math" "addFloat64"
 mathAsin     = defineName "mathAsin" "hydra.lib.math" "asin"
+
 mathAsinh    = defineName "mathAsinh" "hydra.lib.math" "asinh"
 mathAtan     = defineName "mathAtan" "hydra.lib.math" "atan"
 mathAtan2    = defineName "mathAtan2" "hydra.lib.math" "atan2"
@@ -570,8 +526,11 @@ mathLog      = defineName "mathLog" "hydra.lib.math" "log"
 mathLogBase  = defineName "mathLogBase" "hydra.lib.math" "logBase"
 mathMax      = defineName "mathMax" "hydra.lib.math" "max"
 mathMaybeDiv = defineName "mathMaybeDiv" "hydra.lib.math" "maybeDiv"
-mathMin      = defineName "mathMin" "hydra.lib.math" "min"
 mathMaybeMod = defineName "mathMaybeMod" "hydra.lib.math" "maybeMod"
+mathMaybePred = defineName "mathMaybePred" "hydra.lib.math" "maybePred"
+mathMaybeRem = defineName "mathMaybeRem" "hydra.lib.math" "maybeRem"
+mathMaybeSucc = defineName "mathMaybeSucc" "hydra.lib.math" "maybeSucc"
+mathMin      = defineName "mathMin" "hydra.lib.math" "min"
 mathMul      = defineName "mathMul" "hydra.lib.math" "mul"
 mathMulFloat64 = defineName "mathMulFloat64" "hydra.lib.math" "mulFloat64"
 mathNegate   = defineName "mathNegate" "hydra.lib.math" "negate"
@@ -579,9 +538,7 @@ mathNegateFloat64 = defineName "mathNegateFloat64" "hydra.lib.math" "negateFloat
 mathOdd      = defineName "mathOdd" "hydra.lib.math" "odd"
 mathPi       = defineName "mathPi" "hydra.lib.math" "pi"
 mathPow      = defineName "mathPow" "hydra.lib.math" "pow"
-mathMaybePred = defineName "mathMaybePred" "hydra.lib.math" "maybePred"
 mathRange    = defineName "mathRange" "hydra.lib.math" "range"
-mathMaybeRem = defineName "mathMaybeRem" "hydra.lib.math" "maybeRem"
 mathRound        = defineName "mathRound" "hydra.lib.math" "round"
 mathRoundBigfloat = defineName "mathRoundBigfloat" "hydra.lib.math" "roundBigfloat"
 mathRoundFloat32 = defineName "mathRoundFloat32" "hydra.lib.math" "roundFloat32"
@@ -592,18 +549,19 @@ mathSinh     = defineName "mathSinh" "hydra.lib.math" "sinh"
 mathSqrt     = defineName "mathSqrt" "hydra.lib.math" "sqrt"
 mathSub      = defineName "mathSub" "hydra.lib.math" "sub"
 mathSubFloat64 = defineName "mathSubFloat64" "hydra.lib.math" "subFloat64"
-mathMaybeSucc = defineName "mathMaybeSucc" "hydra.lib.math" "maybeSucc"
 mathTan      = defineName "mathTan" "hydra.lib.math" "tan"
 mathTanh     = defineName "mathTanh" "hydra.lib.math" "tanh"
 mathTruncate = defineName "mathTruncate" "hydra.lib.math" "truncate"
 
 -- Maybes primitives
-
+maybes :: TTermDefinition Namespace
+maybes = defineNs "maybes" "hydra.lib.maybes"
 maybesApply     = defineName "maybesApply" "hydra.lib.maybes" "apply"
 maybesBind      = defineName "maybesBind" "hydra.lib.maybes" "bind"
 maybesCases     = defineName "maybesCases" "hydra.lib.maybes" "cases"
 maybesCat       = defineName "maybesCat" "hydra.lib.maybes" "cat"
 maybesCompose   = defineName "maybesCompose" "hydra.lib.maybes" "compose"
+
 maybesFromMaybe = defineName "maybesFromMaybe" "hydra.lib.maybes" "fromMaybe"
 maybesIsJust    = defineName "maybesIsJust" "hydra.lib.maybes" "isJust"
 maybesIsNothing = defineName "maybesIsNothing" "hydra.lib.maybes" "isNothing"
@@ -614,13 +572,27 @@ maybesPure      = defineName "maybesPure" "hydra.lib.maybes" "pure"
 maybesToList    = defineName "maybesToList" "hydra.lib.maybes" "toList"
 
 -- Pairs primitives
-
+pairs :: TTermDefinition Namespace
+pairs = defineNs "pairs" "hydra.lib.pairs"
 pairsBimap  = defineName "pairsBimap" "hydra.lib.pairs" "bimap"
 pairsFirst  = defineName "pairsFirst" "hydra.lib.pairs" "first"
 pairsSecond = defineName "pairsSecond" "hydra.lib.pairs" "second"
 
 -- Sets primitives
+regex :: TTermDefinition Namespace
+regex = defineNs "regex" "hydra.lib.regex"
 
+regexFind       = defineName "regexFind" "hydra.lib.regex" "find"
+regexFindAll    = defineName "regexFindAll" "hydra.lib.regex" "findAll"
+regexMatches    = defineName "regexMatches" "hydra.lib.regex" "matches"
+
+regexReplace    = defineName "regexReplace" "hydra.lib.regex" "replace"
+regexReplaceAll = defineName "regexReplaceAll" "hydra.lib.regex" "replaceAll"
+regexSplit      = defineName "regexSplit" "hydra.lib.regex" "split"
+
+-- Strings primitives
+sets :: TTermDefinition Namespace
+sets = defineNs "sets" "hydra.lib.sets"
 setsDelete       = defineName "setsDelete" "hydra.lib.sets" "delete"
 setsDifference   = defineName "setsDifference" "hydra.lib.sets" "difference"
 setsEmpty        = defineName "setsEmpty" "hydra.lib.sets" "empty"
@@ -631,30 +603,24 @@ setsMap          = defineName "setsMap" "hydra.lib.sets" "map"
 setsMember       = defineName "setsMember" "hydra.lib.sets" "member"
 setsNull         = defineName "setsNull" "hydra.lib.sets" "null"
 setsSingleton    = defineName "setsSingleton" "hydra.lib.sets" "singleton"
+
 setsSize         = defineName "setsSize" "hydra.lib.sets" "size"
 setsToList       = defineName "setsToList" "hydra.lib.sets" "toList"
 setsUnion        = defineName "setsUnion" "hydra.lib.sets" "union"
 setsUnions       = defineName "setsUnions" "hydra.lib.sets" "unions"
 
 -- Regex primitives
-
-regexFind       = defineName "regexFind" "hydra.lib.regex" "find"
-regexFindAll    = defineName "regexFindAll" "hydra.lib.regex" "findAll"
-regexMatches    = defineName "regexMatches" "hydra.lib.regex" "matches"
-regexReplace    = defineName "regexReplace" "hydra.lib.regex" "replace"
-regexReplaceAll = defineName "regexReplaceAll" "hydra.lib.regex" "replaceAll"
-regexSplit      = defineName "regexSplit" "hydra.lib.regex" "split"
-
--- Strings primitives
-
+strings :: TTermDefinition Namespace
+strings = defineNs "strings" "hydra.lib.strings"
 stringsCat         = defineName "stringsCat" "hydra.lib.strings" "cat"
+
 stringsCat2        = defineName "stringsCat2" "hydra.lib.strings" "cat2"
 stringsFromList    = defineName "stringsFromList" "hydra.lib.strings" "fromList"
 stringsIntercalate = defineName "stringsIntercalate" "hydra.lib.strings" "intercalate"
-stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"
 stringsLength      = defineName "stringsLength" "hydra.lib.strings" "length"
 stringsLines       = defineName "stringsLines" "hydra.lib.strings" "lines"
 stringsMaybeCharAt = defineName "stringsMaybeCharAt" "hydra.lib.strings" "maybeCharAt"
+stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"
 stringsSplitOn     = defineName "stringsSplitOn" "hydra.lib.strings" "splitOn"
 stringsToList      = defineName "stringsToList" "hydra.lib.strings" "toList"
 stringsToLower     = defineName "stringsToLower" "hydra.lib.strings" "toLower"
@@ -662,6 +628,10 @@ stringsToUpper     = defineName "stringsToUpper" "hydra.lib.strings" "toUpper"
 stringsUnlines     = defineName "stringsUnlines" "hydra.lib.strings" "unlines"
 
 -- Type class names
+typeclass :: TTermDefinition Namespace
+typeclass = defineNs "typeclass" "hydra.typeclass"
+
+-- Chars primitives
 
 typeclassEq  = defineName "typeclassEq" "hydra.typeclass" "Eq"
 typeclassOrd = defineName "typeclassOrd" "hydra.typeclass" "Ord"
