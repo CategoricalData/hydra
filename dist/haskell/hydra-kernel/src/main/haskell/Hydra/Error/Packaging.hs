@@ -4,6 +4,7 @@
 module Hydra.Error.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | A module namespace which, when mapped to a target language's directory or package structure, conflicts with another module's mapped namespace. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem.
@@ -45,6 +46,20 @@ data DefinitionNotInModuleNamespaceError =
 _DefinitionNotInModuleNamespaceError = Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"
 _DefinitionNotInModuleNamespaceError_namespace = Core.Name "namespace"
 _DefinitionNotInModuleNamespaceError_name = Core.Name "name"
+-- | Two consecutive definitions in a module's definitions list that are not in alphabetical order by local name. Hydra requires definitions to appear in lexicographic ASCII order of their local names.
+data DefinitionsOutOfOrderError =
+  DefinitionsOutOfOrderError {
+    -- | The namespace of the module containing the misordered definitions
+    definitionsOutOfOrderErrorNamespace :: Packaging.Namespace,
+    -- | The definition that appears first in the list
+    definitionsOutOfOrderErrorPrecedingName :: Core.Name,
+    -- | The definition that appears next, but should sort earlier than precedingName
+    definitionsOutOfOrderErrorFollowingName :: Core.Name}
+  deriving (Eq, Ord, Read, Show)
+_DefinitionsOutOfOrderError = Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"
+_DefinitionsOutOfOrderError_namespace = Core.Name "namespace"
+_DefinitionsOutOfOrderError_precedingName = Core.Name "precedingName"
+_DefinitionsOutOfOrderError_followingName = Core.Name "followingName"
 -- | Two or more definitions in the same module share the same name
 data DuplicateDefinitionNameError =
   DuplicateDefinitionNameError {
@@ -64,19 +79,53 @@ data DuplicateModuleNamespaceError =
   deriving (Eq, Ord, Read, Show)
 _DuplicateModuleNamespaceError = Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError"
 _DuplicateModuleNamespaceError_namespace = Core.Name "namespace"
+-- | A definition whose local name does not match the expected naming convention. Term-level definitions must be camelCase; type-level definitions must be PascalCase.
+data InvalidDefinitionNameError =
+  InvalidDefinitionNameError {
+    -- | The namespace of the module containing the definition
+    invalidDefinitionNameErrorNamespace :: Packaging.Namespace,
+    -- | The definition name that violates the naming convention
+    invalidDefinitionNameErrorName :: Core.Name,
+    -- | The case convention the name should have followed (camel for term-level, pascal for type-level)
+    invalidDefinitionNameErrorExpectedConvention :: Util.CaseConvention}
+  deriving (Eq, Ord, Read, Show)
+_InvalidDefinitionNameError = Core.Name "hydra.error.packaging.InvalidDefinitionNameError"
+_InvalidDefinitionNameError_namespace = Core.Name "namespace"
+_InvalidDefinitionNameError_name = Core.Name "name"
+_InvalidDefinitionNameError_expectedConvention = Core.Name "expectedConvention"
 -- | An error indicating that a module is invalid
 data InvalidModuleError =
   -- | A union variant name that conflicts with another type definition when mapped to a target language
   InvalidModuleErrorConflictingVariantName ConflictingVariantNameError |
   -- | A definition whose name does not have the module's namespace as a prefix
   InvalidModuleErrorDefinitionNotInModuleNamespace DefinitionNotInModuleNamespaceError |
+  -- | Two consecutive definitions in the definitions list that are not in alphabetical order
+  InvalidModuleErrorDefinitionsOutOfOrder DefinitionsOutOfOrderError |
   -- | Two or more definitions in the same module share the same name
-  InvalidModuleErrorDuplicateDefinitionName DuplicateDefinitionNameError
+  InvalidModuleErrorDuplicateDefinitionName DuplicateDefinitionNameError |
+  -- | A definition whose local name does not match the expected naming convention
+  InvalidModuleErrorInvalidDefinitionName InvalidDefinitionNameError |
+  -- | A module whose namespace does not match the namespace naming convention
+  InvalidModuleErrorInvalidNamespaceConvention InvalidNamespaceConventionError |
+  -- | A top-level definition lacking a description annotation
+  InvalidModuleErrorMissingDocumentation MissingDocumentationError
   deriving (Eq, Ord, Read, Show)
 _InvalidModuleError = Core.Name "hydra.error.packaging.InvalidModuleError"
 _InvalidModuleError_conflictingVariantName = Core.Name "conflictingVariantName"
 _InvalidModuleError_definitionNotInModuleNamespace = Core.Name "definitionNotInModuleNamespace"
+_InvalidModuleError_definitionsOutOfOrder = Core.Name "definitionsOutOfOrder"
 _InvalidModuleError_duplicateDefinitionName = Core.Name "duplicateDefinitionName"
+_InvalidModuleError_invalidDefinitionName = Core.Name "invalidDefinitionName"
+_InvalidModuleError_invalidNamespaceConvention = Core.Name "invalidNamespaceConvention"
+_InvalidModuleError_missingDocumentation = Core.Name "missingDocumentation"
+-- | A module whose namespace does not match the dotted-lowercase naming convention. Namespaces must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists.
+data InvalidNamespaceConventionError =
+  InvalidNamespaceConventionError {
+    -- | The namespace that violates the convention
+    invalidNamespaceConventionErrorNamespace :: Packaging.Namespace}
+  deriving (Eq, Ord, Read, Show)
+_InvalidNamespaceConventionError = Core.Name "hydra.error.packaging.InvalidNamespaceConventionError"
+_InvalidNamespaceConventionError_namespace = Core.Name "namespace"
 -- | An error indicating that a package is invalid
 data InvalidPackageError =
   -- | Two module namespaces that conflict when mapped to a target language
@@ -84,9 +133,31 @@ data InvalidPackageError =
   -- | Two or more modules in the same package share the same namespace
   InvalidPackageErrorDuplicateModuleNamespace DuplicateModuleNamespaceError |
   -- | A module within the package is invalid
-  InvalidPackageErrorInvalidModule InvalidModuleError
+  InvalidPackageErrorInvalidModule InvalidModuleError |
+  -- | A package whose name does not match the package-name naming convention
+  InvalidPackageErrorInvalidPackageName InvalidPackageNameError
   deriving (Eq, Ord, Read, Show)
 _InvalidPackageError = Core.Name "hydra.error.packaging.InvalidPackageError"
 _InvalidPackageError_conflictingModuleNamespace = Core.Name "conflictingModuleNamespace"
 _InvalidPackageError_duplicateModuleNamespace = Core.Name "duplicateModuleNamespace"
 _InvalidPackageError_invalidModule = Core.Name "invalidModule"
+_InvalidPackageError_invalidPackageName = Core.Name "invalidPackageName"
+-- | A package whose name does not match the hyphen-separated lowercase naming convention. Package names must be hyphen-separated lowercase segments, each starting with a letter, e.g. hydra-kernel or hydra-python.
+data InvalidPackageNameError =
+  InvalidPackageNameError {
+    -- | The package name that violates the convention
+    invalidPackageNameErrorPackageName :: Packaging.PackageName}
+  deriving (Eq, Ord, Read, Show)
+_InvalidPackageNameError = Core.Name "hydra.error.packaging.InvalidPackageNameError"
+_InvalidPackageNameError_packageName = Core.Name "packageName"
+-- | A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc "..." annotation at its top level.
+data MissingDocumentationError =
+  MissingDocumentationError {
+    -- | The namespace of the module containing the undocumented definition
+    missingDocumentationErrorNamespace :: Packaging.Namespace,
+    -- | The name of the undocumented definition
+    missingDocumentationErrorName :: Core.Name}
+  deriving (Eq, Ord, Read, Show)
+_MissingDocumentationError = Core.Name "hydra.error.packaging.MissingDocumentationError"
+_MissingDocumentationError_namespace = Core.Name "namespace"
+_MissingDocumentationError_name = Core.Name "name"
