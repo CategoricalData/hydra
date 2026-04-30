@@ -1,0 +1,5 @@
+:set -fno-warn-unused-imports
+:set -fno-warn-name-shadowing
+import Hydra.Demos.PgFormats.Demo (generatePgFormats)
+generatePgFormats "../../demos/pg-formats/output"
+:quit
