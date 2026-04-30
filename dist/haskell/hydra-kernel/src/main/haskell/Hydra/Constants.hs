@@ -12,38 +12,38 @@ debugInference = True
 ignoredVariable :: String
 ignoredVariable = "_"
 -- | Annotation key for type classes
-key_classes :: Core.Name
-key_classes = Core.Name "classes"
+keyClasses :: Core.Name
+keyClasses = Core.Name "classes"
 -- | Annotation key for debug identifiers
-key_debugId :: Core.Name
-key_debugId = Core.Name "debugId"
+keyDebugId :: Core.Name
+keyDebugId = Core.Name "debugId"
 -- | Annotation key for deprecated markers
-key_deprecated :: Core.Name
-key_deprecated = Core.Name "deprecated"
+keyDeprecated :: Core.Name
+keyDeprecated = Core.Name "deprecated"
 -- | Annotation key for descriptions
-key_description :: Core.Name
-key_description = Core.Name "description"
+keyDescription :: Core.Name
+keyDescription = Core.Name "description"
 -- | Annotation key for exclusions
-key_exclude :: Core.Name
-key_exclude = Core.Name "exclude"
+keyExclude :: Core.Name
+keyExclude = Core.Name "exclude"
 -- | A flag which tells the language coders to encode a given encoded type as a term rather than a native type
-key_firstClassType :: Core.Name
-key_firstClassType = Core.Name "firstClassType"
+keyFirstClassType :: Core.Name
+keyFirstClassType = Core.Name "firstClassType"
 -- | A counter for generating fresh type variable names
-key_freshTypeVariableCount :: Core.Name
-key_freshTypeVariableCount = Core.Name "freshTypeVariableCount"
+keyFreshTypeVariableCount :: Core.Name
+keyFreshTypeVariableCount = Core.Name "freshTypeVariableCount"
 -- | Annotation key for maximum length constraints
-key_maxLength :: Core.Name
-key_maxLength = Core.Name "maxLength"
+keyMaxLength :: Core.Name
+keyMaxLength = Core.Name "maxLength"
 -- | Annotation key for minimum length constraints
-key_minLength :: Core.Name
-key_minLength = Core.Name "minLength"
+keyMinLength :: Core.Name
+keyMinLength = Core.Name "minLength"
 -- | Annotation key for preserving field names during code generation
-key_preserveFieldName :: Core.Name
-key_preserveFieldName = Core.Name "preserveFieldName"
+keyPreserveFieldName :: Core.Name
+keyPreserveFieldName = Core.Name "preserveFieldName"
 -- | Annotation key for type information
-key_type :: Core.Name
-key_type = Core.Name "type"
+keyType :: Core.Name
+keyType = Core.Name "type"
 -- | The maximum value of a 32-bit integer
 maxInt32 :: Int
 maxInt32 = 2147483647

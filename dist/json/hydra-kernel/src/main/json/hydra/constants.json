@@ -25,7 +25,7 @@
         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_classes",
+        "name": "hydra.constants.keyClasses",
         "term": {
           "annotated": {
             "annotation": [
@@ -39,7 +39,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_debugId",
+        "name": "hydra.constants.keyDebugId",
         "term": {
           "annotated": {
             "annotation": [
@@ -53,7 +53,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_deprecated",
+        "name": "hydra.constants.keyDeprecated",
         "term": {
           "annotated": {
             "annotation": [
@@ -67,7 +67,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_description",
+        "name": "hydra.constants.keyDescription",
         "term": {
           "annotated": {
             "annotation": [
@@ -81,7 +81,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_exclude",
+        "name": "hydra.constants.keyExclude",
         "term": {
           "annotated": {
             "annotation": [
@@ -95,7 +95,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_firstClassType",
+        "name": "hydra.constants.keyFirstClassType",
         "term": {
           "annotated": {
             "annotation": [
@@ -111,7 +111,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_maxLength",
+        "name": "hydra.constants.keyMaxLength",
         "term": {
           "annotated": {
             "annotation": [
@@ -126,7 +126,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_minLength",
+        "name": "hydra.constants.keyMinLength",
         "term": {
           "annotated": {
             "annotation": [
@@ -141,7 +141,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_preserveFieldName",
+        "name": "hydra.constants.keyPreserveFieldName",
         "term": {
           "annotated": {
             "annotation": [
@@ -157,7 +157,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_type",
+        "name": "hydra.constants.keyType",
         "term": {
           "annotated": {
             "annotation": [
@@ -171,7 +171,7 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.constants.key_freshTypeVariableCount",
+        "name": "hydra.constants.keyFreshTypeVariableCount",
         "term": {
           "annotated": {
             "annotation": [
