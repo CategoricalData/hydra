@@ -625,11 +625,13 @@ constructElementsInterface mod members =
                   Syntax.TypeDeclarationWithComments {
                     Syntax.typeDeclarationWithCommentsValue = itf,
                     Syntax.typeDeclarationWithCommentsComments = (Packaging.moduleDescription mod)}
-      in (elName, (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {
-        Syntax.ordinaryCompilationUnitPackage = (Just pkg),
-        Syntax.ordinaryCompilationUnitImports = [],
-        Syntax.ordinaryCompilationUnitTypes = [
-          decl]})))
+      in (
+        elName,
+        (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {
+          Syntax.ordinaryCompilationUnitPackage = (Just pkg),
+          Syntax.ordinaryCompilationUnitImports = [],
+          Syntax.ordinaryCompilationUnitTypes = [
+            decl]})))
 correctCastType :: Core.Term -> [Core.Type] -> Core.Type -> t0 -> t1 -> Either t2 Core.Type
 correctCastType innerBody typeArgs fallback cx g =
     case (Strip.deannotateTerm innerBody) of
@@ -1653,11 +1655,13 @@ encodeTypeDefinition pkg aliases tdef cx g =
                 Syntax.TypeDeclarationWithComments {
                   Syntax.typeDeclarationWithCommentsValue = (Syntax.TypeDeclarationClass decl),
                   Syntax.typeDeclarationWithCommentsComments = comment}
-        in (Right (name, (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {
-          Syntax.ordinaryCompilationUnitPackage = (Just pkg),
-          Syntax.ordinaryCompilationUnitImports = imports,
-          Syntax.ordinaryCompilationUnitTypes = [
-            tdecl]})))))))
+        in (Right (
+          name,
+          (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {
+            Syntax.ordinaryCompilationUnitPackage = (Just pkg),
+            Syntax.ordinaryCompilationUnitImports = imports,
+            Syntax.ordinaryCompilationUnitTypes = [
+              tdecl]})))))))
 encodeType_resolveIfTypedef :: t0 -> S.Set Core.Name -> S.Set Core.Name -> Core.Name -> t1 -> Graph.Graph -> Either t2 (Maybe Core.Type)
 encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g =
     Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Right Nothing) (Logic.ifElse (isLambdaBoundVariable name) (Right Nothing) (
@@ -2125,7 +2129,7 @@ moduleToJava mod defs cx g =
     Eithers.bind (encodeDefinitions mod defs cx g) (\units -> Right (Maps.fromList (Lists.map (\entry ->
       let name = Pairs.first entry
           unit = Pairs.second entry
-      in (bindingNameToFilePath name, (Serialization.printExpr (Serialization.parenthesize (Serde.writeCompilationUnit unit))))) (Maps.toList units))))
+      in (bindingNameToFilePath name, (Serialization.printExpr (Serialization.parenthesize (Serde.compilationUnitToExpr unit))))) (Maps.toList units))))
 nameMapToTypeMap :: Ord t0 => (M.Map t0 Core.Name -> M.Map t0 Core.Type)
 nameMapToTypeMap m = Maps.map (\v -> Core.TypeVariable v) m
 namespaceParent :: Packaging.Namespace -> Maybe Packaging.Namespace
@@ -2782,18 +2786,28 @@ wrapLazyArguments name args =
 
       let dummyExpr = Utils.javaIntExpression 0
           argAt = \i -> Maybes.fromMaybe dummyExpr (Lists.maybeAt i args)
-      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) ([
-        argAt 0,
-        (wrapInSupplierLambda (argAt 1)),
-        (wrapInSupplierLambda (argAt 2))], (Just "lazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal (Lists.length args) 3)) ([
-        wrapInSupplierLambda (argAt 0),
-        (argAt 1),
-        (argAt 2)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) ([
-        argAt 0,
-        (wrapInSupplierLambda (argAt 1)),
-        (argAt 2)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maps.findWithDefault")) (Equality.equal (Lists.length args) 3)) ([
-        wrapInSupplierLambda (argAt 0),
-        (argAt 1),
-        (argAt 2)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")))) (Equality.equal (Lists.length args) 2)) ([
-        wrapInSupplierLambda (argAt 0),
-        (argAt 1)], (Just "applyLazy")) (args, Nothing))))))
+      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) (
+        [
+          argAt 0,
+          (wrapInSupplierLambda (argAt 1)),
+          (wrapInSupplierLambda (argAt 2))],
+        (Just "lazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal (Lists.length args) 3)) (
+        [
+          wrapInSupplierLambda (argAt 0),
+          (argAt 1),
+          (argAt 2)],
+        (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) (
+        [
+          argAt 0,
+          (wrapInSupplierLambda (argAt 1)),
+          (argAt 2)],
+        (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maps.findWithDefault")) (Equality.equal (Lists.length args) 3)) (
+        [
+          wrapInSupplierLambda (argAt 0),
+          (argAt 1),
+          (argAt 2)],
+        (Just "applyLazy")) (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")))) (Equality.equal (Lists.length args) 2)) (
+        [
+          wrapInSupplierLambda (argAt 0),
+          (argAt 1)],
+        (Just "applyLazy")) (args, Nothing))))))

@@ -846,7 +846,7 @@ findSdom cx g meta =
 moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
-      let s = Serialization.printExpr (Serialization.parenthesize (Serde.writePkg pkg))
+      let s = Serialization.printExpr (Serialization.parenthesize (Serde.pkgToExpr pkg))
       in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleNamespace mod)) s)))
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
