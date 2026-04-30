@@ -102,15 +102,16 @@ sqBrackets :: TTerm [Expr] -> TTerm Expr
 sqBrackets exprs = Serialization.brackets @@ (asTerm Serialization.squareBrackets) @@ (asTerm Serialization.inlineStyle) @@
   (Serialization.spaceSep @@ exprs)
 
--- | Parenthesized space-separated list: (expr1 expr2 ...)
+-- | Parenthesized space-separated list: (expr1 expr2 ...). Wraps onto multiple lines if the
+--   inline form would exceed the canonical line width.
 parenList :: TTerm [Expr] -> TTerm Expr
-parenList exprs = Serialization.parens @@ (Serialization.spaceSep @@ exprs)
+parenList exprs = Serialization.parens @@ (Serialization.spaceSepAdaptive @@ exprs)
 
 -- | Serialize an and expression: (and expr1 expr2 ...)
 andExpressionToExpr :: TTermDefinition (L.Dialect -> L.AndExpression -> Expr)
 andExpressionToExpr = define "andExpressionToExpr" $
   lambda "d" $ lambda "andExpr" $
-    Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
       (list [Serialization.cst @@ string "and"])
       (Lists.map (expressionToExpr @@ var "d") (project L._AndExpression L._AndExpression_expressions @@ var "andExpr")))
 
@@ -130,7 +131,7 @@ applicationToExpr = define "applicationToExpr" $
     "allParts">: Logic.ifElse (var "needsFuncall")
       (Lists.concat2 (list [Serialization.cst @@ string "funcall", var "fun"]) (var "args"))
       (Lists.concat2 (list [var "fun"]) (var "args"))] $
-    Serialization.parens @@ (Serialization.spaceSep @@ var "allParts")
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "allParts")
 
 -- | Serialize a case expression
 caseExpressionToExpr :: TTermDefinition (L.Dialect -> L.CaseExpression -> Expr)
@@ -140,17 +141,17 @@ caseExpressionToExpr = define "caseExpressionToExpr" $
     "clauses">: project L._CaseExpression L._CaseExpression_clauses @@ var "caseExpr",
     "dflt">: project L._CaseExpression L._CaseExpression_default @@ var "caseExpr",
     "clauseExprs">: Lists.map (lambda "c" $
-      Serialization.parens @@ (Serialization.spaceSep @@ list [
-        Serialization.parens @@ (Serialization.spaceSep @@
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@
           Lists.map (expressionToExpr @@ var "d") (project L._CaseClause L._CaseClause_keys @@ var "c")),
         expressionToExpr @@ var "d" @@ (project L._CaseClause L._CaseClause_body @@ var "c")]))
       (var "clauses"),
     "defaultPart">: Maybes.maybe (list ([] :: [TTerm Expr]))
-      (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSep @@ list [
+      (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
         Serialization.cst @@ string "else",
         expressionToExpr @@ var "d" @@ var "e"])])
       (var "dflt")] $
-    Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
       list [Serialization.cst @@ string "case", var "scrutinee"],
       var "clauseExprs",
       var "defaultPart"])))
@@ -181,7 +182,7 @@ condExpressionToExpr = define "condExpressionToExpr" $
         "defaultPart">: Maybes.maybe (list ([] :: [TTerm Expr]))
           (lambda "e" $ list [Serialization.cst @@ string ":else", expressionToExpr @@ var "d" @@ var "e"])
           (var "dflt")] $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "cond"],
           var "clauseExprs",
           var "defaultPart"]))),
@@ -193,16 +194,16 @@ condExpressionToExpr = define "condExpressionToExpr" $
     condOther :: TTerm L.Dialect -> TTerm [L.CondClause] -> TTerm (Maybe L.Expression) -> TTerm String -> TTerm Expr
     condOther d clauses dflt defaultKeyword = lets [
       "clauseExprs">: Lists.map (lambda "c" $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           expressionToExpr @@ d @@ (project L._CondClause L._CondClause_condition @@ var "c"),
           expressionToExpr @@ d @@ (project L._CondClause L._CondClause_body @@ var "c")]))
         clauses,
       "defaultPart">: Maybes.maybe (list ([] :: [TTerm Expr]))
-        (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSep @@ list [
+        (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ defaultKeyword,
           expressionToExpr @@ d @@ var "e"])])
         dflt] $
-      Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
         list [Serialization.cst @@ string "cond"],
         var "clauseExprs",
         var "defaultPart"])))
@@ -213,7 +214,7 @@ constantDefinitionToExpr = define "constantDefinitionToExpr" $
   lambda "d" $ lambda "cdef" $ lets [
     "name">: symbolToExpr @@ (project L._ConstantDefinition L._ConstantDefinition_name @@ var "cdef"),
     "value">: expressionToExpr @@ var "d" @@ (project L._ConstantDefinition L._ConstantDefinition_value @@ var "cdef")] $
-    Serialization.parens @@ (Serialization.spaceSep @@ list [
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
       Serialization.cst @@ (defconstKeyword @@ var "d"),
       var "name",
       var "value"])
@@ -263,7 +264,7 @@ doExpressionToExpr = define "doExpressionToExpr" $
       L._Dialect_emacsLisp>>: constant $ string "progn",
       L._Dialect_commonLisp>>: constant $ string "progn",
       L._Dialect_scheme>>: constant $ string "begin"]] $
-    Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
       (list [Serialization.cst @@ var "kw"])
       (Lists.map (expressionToExpr @@ var "d") (project L._DoExpression L._DoExpression_expressions @@ var "doExpr")))
 
@@ -288,18 +289,18 @@ exportDeclarationToExpr = define "exportDeclarationToExpr" $
       -- (provide 'name)
       L._Dialect_emacsLisp>>: constant $
         Serialization.newlineSep @@ Lists.map (lambda "s" $
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "provide",
             Serialization.noSep @@ list [Serialization.cst @@ string "'", var "s"]]))
           (var "syms"),
       -- (:export :sym1 :sym2)
       L._Dialect_commonLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
           (list [Serialization.cst @@ string ":export"])
           (Lists.map (lambda "s" $ Serialization.noSep @@ list [Serialization.cst @@ string ":", var "s"]) (var "syms"))),
       -- (export sym1 sym2)
       L._Dialect_scheme>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
           (list [Serialization.cst @@ string "export"])
           (var "syms"))]
 
@@ -319,7 +320,7 @@ expressionToExpr = define "expressionToExpr" $
       L._Expression_not>>: lambda "n" $ notExpressionToExpr @@ var "d" @@ var "n",
       L._Expression_do>>: lambda "e" $ doExpressionToExpr @@ var "d" @@ var "e",
       L._Expression_begin>>: lambda "e" $
-        Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
           (list [Serialization.cst @@ string "begin"])
           (Lists.map (expressionToExpr @@ var "d") (project L._BeginExpression L._BeginExpression_expressions @@ var "e"))),
       L._Expression_variable>>: lambda "v" $ variableReferenceToExpr @@ var "d" @@ var "v",
@@ -329,12 +330,12 @@ expressionToExpr = define "expressionToExpr" $
       L._Expression_map>>: lambda "m" $ mapLiteralToExpr @@ var "d" @@ var "m",
       L._Expression_set>>: lambda "s" $ setLiteralToExpr @@ var "d" @@ var "s",
       L._Expression_cons>>: lambda "c" $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string "cons",
           expressionToExpr @@ var "d" @@ (project L._ConsExpression L._ConsExpression_head @@ var "c"),
           expressionToExpr @@ var "d" @@ (project L._ConsExpression L._ConsExpression_tail @@ var "c")]),
       L._Expression_dottedPair>>: lambda "p" $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           expressionToExpr @@ var "d" @@ (project L._DottedPair L._DottedPair_car @@ var "p"),
           Serialization.cst @@ string ".",
           expressionToExpr @@ var "d" @@ (project L._DottedPair L._DottedPair_cdr @@ var "p")]),
@@ -413,7 +414,7 @@ fieldAccessToExpr = define "fieldAccessToExpr" $
     cases L._Dialect (var "d") Nothing [
       -- (:field target) in Clojure
       L._Dialect_clojure>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.noSep @@ list [Serialization.cst @@ string ":", var "field"],
           var "target"]),
       -- (record-type-field target) in others
@@ -423,7 +424,7 @@ fieldAccessToExpr = define "fieldAccessToExpr" $
   where
     fieldAccessOther :: TTerm Expr -> TTerm Expr -> TTerm Expr -> TTerm Expr
     fieldAccessOther rtype field target =
-      Serialization.parens @@ (Serialization.spaceSep @@ list [
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
         Serialization.noSep @@ list [rtype, Serialization.cst @@ string "-", field],
         target])
 
@@ -440,27 +441,27 @@ functionDefinitionToExpr = define "functionDefinitionToExpr" $
     cases L._Dialect (var "d") Nothing [
       -- (defn name [params] body...)
       L._Dialect_clojure>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "defn", var "name"],
           list [sqBrackets (var "params")],
           var "body"]))),
       -- (defun name (params) body...)
       L._Dialect_emacsLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "defun", var "name"],
-          list [Serialization.parens @@ (Serialization.spaceSep @@ var "params")],
+          list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "params")],
           var "body"]))),
       -- (defun name (params) body...)
       L._Dialect_commonLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "defun", var "name"],
-          list [Serialization.parens @@ (Serialization.spaceSep @@ var "params")],
+          list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "params")],
           var "body"]))),
       -- (define (name params...) body...)
       L._Dialect_scheme>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "define"],
-          list [Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2 (list [var "name"]) (var "params"))],
+          list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2 (list [var "name"]) (var "params"))],
           var "body"])))]
 
 -- | Serialize an if expression: (if test then else)
@@ -474,7 +475,7 @@ ifExpressionToExpr = define "ifExpressionToExpr" $
       (list ([] :: [TTerm Expr]))
       (lambda "e" $ list [expressionToExpr @@ var "d" @@ var "e"])
       (var "else")] $
-    Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
       list [Serialization.cst @@ string "if", var "cond", var "then"],
       var "elsePart"]))
 
@@ -486,22 +487,22 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
     cases L._Dialect (var "d") Nothing [
       -- (:require [name])
       L._Dialect_clojure>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string ":require",
           sqBrackets (list [Serialization.cst @@ var "modName"])]),
       -- (require 'name)
       L._Dialect_emacsLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string "require",
           Serialization.noSep @@ list [Serialization.cst @@ string "'", Serialization.cst @@ var "modName"]]),
       -- (:use :name)
       L._Dialect_commonLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string ":use",
           Serialization.cst @@ Strings.cat2 (string ":") (var "modName")]),
       -- (import (name))
       L._Dialect_scheme>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string "import",
           Serialization.parens @@ (Serialization.cst @@ var "modName")])]
 
@@ -545,13 +546,13 @@ lambdaToExpr = define "lambdaToExpr" $
       L._Dialect_clojure>>: constant $
         Maybes.maybe
           -- Unnamed: (fn [params] body...)
-          (Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+          (Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
             list [Serialization.cst @@ var "kw"],
             list [sqBrackets (var "params")],
             var "body"]))))
           -- Named: (fn name [params] body...)
           (lambda "sym" $
-            Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+            Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
               list [Serialization.cst @@ var "kw", symbolToExpr @@ var "sym"],
               list [sqBrackets (var "params")],
               var "body"]))))
@@ -563,9 +564,9 @@ lambdaToExpr = define "lambdaToExpr" $
   where
     lambdaOther :: TTerm String -> TTerm [Expr] -> TTerm [Expr] -> TTerm Expr
     lambdaOther kw params body =
-      Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
         list [Serialization.cst @@ kw],
-        list [Serialization.parens @@ (Serialization.spaceSep @@ params)],
+        list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ params)],
         body])))
 
 -- | Serialize a let expression
@@ -608,7 +609,7 @@ letExpressionToExpr = define "letExpressionToExpr" $
   where
     clojureLet :: TTerm [(Expr, Expr)] -> TTerm [Expr] -> TTerm Expr
     clojureLet bindingPairs body =
-      Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
         list [Serialization.cst @@ string "let"],
         list [sqBrackets (Lists.concat (Lists.map (lambda "p" $
           list [Pairs.first (var "p"), Pairs.second (var "p")]) bindingPairs))],
@@ -625,19 +626,19 @@ letExpressionToExpr = define "letExpressionToExpr" $
             "name">: symbolToExpr @@ (project L._SimpleBinding L._SimpleBinding_name @@ var "sb"),
             "val">: project L._SimpleBinding L._SimpleBinding_value @@ var "sb"] $
             cases L._Expression (var "val") (Just $
-              Serialization.parens @@ (Serialization.spaceSep @@ list [
+              Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
                 var "name", expressionToExpr @@ d @@ var "val"])) [
               L._Expression_lambda>>: lambda "lam" $ lets [
                 "params">: Lists.map symbolToExpr (project L._Lambda L._Lambda_params @@ var "lam"),
                 "lbody">: Lists.map (expressionToExpr @@ d) (project L._Lambda L._Lambda_body @@ var "lam")] $
-                Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+                Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
                   list [var "name"],
                   list [sqBrackets (var "params")],
                   var "lbody"]))],
           L._LetBinding_destructuring>>: constant $
             Serialization.cst @@ string "<destructuring>"])
         bindings] $
-      Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
         list [Serialization.cst @@ string "letfn"],
         list [sqBrackets (var "fnSpecs")],
         body]))
@@ -648,12 +649,12 @@ letExpressionToExpr = define "letExpressionToExpr" $
         L._LetKind_sequential>>: constant $ string "let*",
         L._LetKind_recursive>>: constant $ string "letrec"],
       "bindingExprs">: Lists.map (lambda "p" $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Pairs.first (var "p"), Pairs.second (var "p")]))
         bindingPairs] $
-      Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
         list [Serialization.cst @@ var "kw"],
-        list [Serialization.parens @@ (Serialization.spaceSep @@ var "bindingExprs")],
+        list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "bindingExprs")],
         body]))
 
 -- | The keyword for list construction
@@ -675,9 +676,9 @@ listLiteralToExpr = define "listLiteralToExpr" $
       -- '(a b c)
       (Serialization.noSep @@ list [
         Serialization.cst @@ string "'",
-        Serialization.parens @@ (Serialization.spaceSep @@ var "elems")])
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "elems")])
       -- (list a b c) or (cl:list a b c)
-      (Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+      (Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
         (list [Serialization.cst @@ (listKeyword @@ var "d")])
         (var "elems")))
 
@@ -768,25 +769,25 @@ macroDefinitionToExpr = define "macroDefinitionToExpr" $
     cases L._Dialect (var "d") Nothing [
       -- (defmacro name [params] body)
       L._Dialect_clojure>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "defmacro", var "name"],
           list [sqBrackets (var "params")],
           var "body"]))),
       -- (defmacro name (params) body)
       L._Dialect_emacsLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "defmacro", var "name"],
-          list [Serialization.parens @@ (Serialization.spaceSep @@ var "params")],
+          list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "params")],
           var "body"]))),
       -- (defmacro name (params) body)
       L._Dialect_commonLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "defmacro", var "name"],
-          list [Serialization.parens @@ (Serialization.spaceSep @@ var "params")],
+          list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "params")],
           var "body"]))),
       -- (define-syntax name ...)
       L._Dialect_scheme>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "define-syntax", var "name"],
           var "body"])))]
 
@@ -814,19 +815,19 @@ mapLiteralToExpr = define "mapLiteralToExpr" $
     mapAsAlist d entries =
       Serialization.noSep @@ list [
         Serialization.cst @@ string "'",
-        Serialization.parens @@ (Serialization.spaceSep @@
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@
           Lists.map (lambda "e" $
-            Serialization.parens @@ (Serialization.spaceSep @@ list [
+            Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
               expressionToExpr @@ d @@ (project L._MapEntry L._MapEntry_key @@ var "e"),
               Serialization.cst @@ string ".",
               expressionToExpr @@ d @@ (project L._MapEntry L._MapEntry_value @@ var "e")]))
             entries)]
     mapAsConsExpressions :: TTerm L.Dialect -> TTerm [L.MapEntry] -> TTerm Expr
     mapAsConsExpressions d entries =
-      Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
         (list [Serialization.cst @@ string "list"])
         (Lists.map (lambda "e" $
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "cons",
             expressionToExpr @@ d @@ (project L._MapEntry L._MapEntry_key @@ var "e"),
             expressionToExpr @@ d @@ (project L._MapEntry L._MapEntry_value @@ var "e")]))
@@ -840,30 +841,30 @@ moduleDeclarationToExpr = define "moduleDeclarationToExpr" $
     cases L._Dialect (var "d") Nothing [
       -- (ns name)
       L._Dialect_clojure>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string "ns",
           Serialization.cst @@ var "name"]),
       -- (require 'cl-lib) (provide 'name)
       L._Dialect_emacsLisp>>: constant $
         Serialization.newlineSep @@ list [
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "require",
             Serialization.noSep @@ list [Serialization.cst @@ string "'", Serialization.cst @@ string "cl-lib"]]),
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "provide",
             Serialization.noSep @@ list [Serialization.cst @@ string "'", Serialization.cst @@ var "name"]])],
       -- (defpackage :name) (in-package :name)
       L._Dialect_commonLisp>>: constant $
         Serialization.newlineSep @@ list [
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "defpackage",
             Serialization.cst @@ Strings.cat2 (string ":") (var "name")]),
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "in-package",
             Serialization.cst @@ Strings.cat2 (string ":") (var "name")])],
       -- (define-library (name))
       L._Dialect_scheme>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string "define-library",
           Serialization.parens @@ (Serialization.cst @@ var "name")])]
 
@@ -880,7 +881,7 @@ nilExpr = define "nilExpr" $
 notExpressionToExpr :: TTermDefinition (L.Dialect -> L.NotExpression -> Expr)
 notExpressionToExpr = define "notExpressionToExpr" $
   lambda "d" $ lambda "notExpr" $
-    Serialization.parens @@ (Serialization.spaceSep @@ list [
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
       Serialization.cst @@ string "not",
       expressionToExpr @@ var "d" @@ (project L._NotExpression L._NotExpression_expression @@ var "notExpr")])
 
@@ -888,7 +889,7 @@ notExpressionToExpr = define "notExpressionToExpr" $
 orExpressionToExpr :: TTermDefinition (L.Dialect -> L.OrExpression -> Expr)
 orExpressionToExpr = define "orExpressionToExpr" $
   lambda "d" $ lambda "orExpr" $
-    Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
       (list [Serialization.cst @@ string "or"])
       (Lists.map (expressionToExpr @@ var "d") (project L._OrExpression L._OrExpression_expressions @@ var "orExpr")))
 
@@ -924,7 +925,7 @@ programToExpr = define "programToExpr" $
                 Serialization.cst @@ string ":all"]))
               (var "importNames"),
             "nsForm">: Logic.ifElse (Lists.null (var "requireClauses"))
-              (Serialization.parens @@ (Serialization.spaceSep @@ list [
+              (Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
                 Serialization.cst @@ string "ns",
                 Serialization.cst @@ var "nameStr"]))
               (Serialization.parens @@ (Serialization.newlineSep @@ list [
@@ -947,7 +948,7 @@ programToExpr = define "programToExpr" $
             -- (declare name1 name2 ...) for forward references
             "declareForm" <~ Logic.ifElse (Lists.null (var "varNames"))
               (list ([] :: [TTerm Expr]))
-              (list [Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+              (list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
                 (list [Serialization.cst @@ string "declare"])
                 (var "varNames"))]) $
             Serialization.doubleNewlineSep @@ Lists.concat (list [
@@ -961,15 +962,15 @@ programToExpr = define "programToExpr" $
           (Serialization.doubleNewlineSep @@ var "formPart")
           (lambda "m" $ lets [
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
-            "requireClLib">: Serialization.parens @@ (Serialization.spaceSep @@ list [
+            "requireClLib">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
               Serialization.cst @@ string "require",
               Serialization.noSep @@ list [Serialization.cst @@ string "'", Serialization.cst @@ string "cl-lib"]]),
             "requireImports">: Lists.map (lambda "imp" $
-              Serialization.parens @@ (Serialization.spaceSep @@ list [
+              Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
                 Serialization.cst @@ string "require",
                 Serialization.noSep @@ list [Serialization.cst @@ string "'", Serialization.cst @@ var "imp"]]))
               (var "importNames"),
-            "provideForm">: Serialization.parens @@ (Serialization.spaceSep @@ list [
+            "provideForm">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
               Serialization.cst @@ string "provide",
               Serialization.noSep @@ list [Serialization.cst @@ string "'", Serialization.cst @@ var "nameStr"]])] $
             Serialization.doubleNewlineSep @@ Lists.concat (list [
@@ -986,14 +987,14 @@ programToExpr = define "programToExpr" $
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
             "colonName">: Strings.cat2 (string ":") (var "nameStr"),
             -- (:use :cl :dep1 :dep2 ...)
-            "useClause">: Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+            "useClause">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
               (list [Serialization.cst @@ string ":use", Serialization.cst @@ string ":cl"])
               (Lists.map (lambda "imp" $ Serialization.cst @@ Strings.cat2 (string ":") (var "imp"))
                 (var "importNames"))),
             -- (:export :sym1 :sym2 ...)
             "exportClause">: Logic.ifElse (Lists.null (var "exportSyms"))
               (list ([] :: [TTerm Expr]))
-              (list [Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+              (list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
                 (list [Serialization.cst @@ string ":export"])
                 (Lists.map (lambda "s" $ Serialization.noSep @@ list [Serialization.cst @@ string ":", var "s"]) (var "exportSyms")))]),
             -- (defpackage :name (:use ...) (:export ...))
@@ -1003,7 +1004,7 @@ programToExpr = define "programToExpr" $
                 Serialization.cst @@ var "colonName"]],
               list [var "useClause"],
               var "exportClause"])),
-            "inpkgForm">: Serialization.parens @@ (Serialization.spaceSep @@ list [
+            "inpkgForm">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
               Serialization.cst @@ string "in-package",
               Serialization.cst @@ var "colonName"])] $
             Serialization.doubleNewlineSep @@ Lists.concat (list [
@@ -1018,24 +1019,24 @@ programToExpr = define "programToExpr" $
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
             "nameParts">: Lists.map (lambda "p" $ Formatting.convertCaseCamelToLowerSnake @@ var "p")
               (Strings.splitOn (string ".") (var "nameStr")),
-            "nameExpr">: Serialization.parens @@ (Serialization.spaceSep @@
+            "nameExpr">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@
               Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "nameParts")),
             -- Build import library names: split each namespace on dots for R7RS (import (hydra core) ...)
             "domainImportExprs">: Lists.map (lambda "idecl" $ lets [
               "nsName">: unwrap L._NamespaceName @@ (project L._ImportDeclaration L._ImportDeclaration_module @@ var "idecl"),
               "nsParts">: Lists.map (lambda "p" $ Formatting.convertCaseCamelToLowerSnake @@ var "p")
                 (Strings.splitOn (string ".") (var "nsName"))] $
-              Serialization.parens @@ (Serialization.spaceSep @@
+              Serialization.parens @@ (Serialization.spaceSepAdaptive @@
                 Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "nsParts")))
               (var "imports"),
             -- Combine (scheme base) + domain imports into a single (import ...) clause
-            "schemeBaseExpr">: Serialization.parens @@ (Serialization.spaceSep @@ list [
+            "schemeBaseExpr">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
               Serialization.cst @@ string "scheme",
               Serialization.cst @@ string "base"]),
             "allImportExprs">: Lists.concat2
               (list [var "schemeBaseExpr"])
               (var "domainImportExprs"),
-            "importClause">: Serialization.parens @@ (Serialization.spaceSep @@
+            "importClause">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@
               Lists.concat2 (list [Serialization.cst @@ string "import"]) (var "allImportExprs")),
             -- Export clause (only if there are exports)
             "exportClauses">: Lists.map (lambda "edecl" $ exportDeclarationToExpr @@ var "d" @@ var "edecl") (var "exports"),
@@ -1067,26 +1068,26 @@ recordTypeDefinitionToExpr = define "recordTypeDefinitionToExpr" $
         "nameStr">: unwrap L._Symbol @@ (project L._RecordTypeDefinition L._RecordTypeDefinition_name @@ var "rdef"),
         "fieldNames">: Lists.map (lambda "f" $ unwrap L._Symbol @@ (project L._FieldDefinition L._FieldDefinition_name @@ var "f"))
           (project L._RecordTypeDefinition L._RecordTypeDefinition_fields @@ var "rdef"),
-        "defrecordForm">: Serialization.parens @@ (Serialization.spaceSep @@ list [
+        "defrecordForm">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string "defrecord",
           var "name",
           sqBrackets (var "fields")]),
-        "makeAlias">: Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+        "makeAlias">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
           list [Serialization.cst @@ string "defn",
             Serialization.cst @@ Strings.cat2 (string "make-") (var "nameStr")],
           list [sqBrackets (var "fields")],
-          list [Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+          list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
             (list [Serialization.cst @@ Strings.cat2 (string "->") (var "nameStr")])
             (Lists.map (lambda "fn" $ Serialization.cst @@ var "fn") (var "fieldNames")))]]))] $
         Serialization.newlineSep @@ list [var "defrecordForm", var "makeAlias"],
       -- (cl-defstruct name field1 field2)
       L._Dialect_emacsLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "cl-defstruct", var "name"],
           var "fields"]))),
       -- (cl:defstruct name field1 field2)
       L._Dialect_commonLisp>>: constant $
-        Serialization.parens @@ (Serialization.spaceSep @@ (Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "cl:defstruct", var "name"],
           var "fields"]))),
       -- R7RS/SRFI-9: (define-record-type name (make-name f1 f2) name? (f1 name-f1) (f2 name-f2))
@@ -1095,16 +1096,16 @@ recordTypeDefinitionToExpr = define "recordTypeDefinitionToExpr" $
         "nameStr">: unwrap L._Symbol @@ (project L._RecordTypeDefinition L._RecordTypeDefinition_name @@ var "rdef"),
         "fieldNames">: Lists.map (lambda "f" $ unwrap L._Symbol @@ (project L._FieldDefinition L._FieldDefinition_name @@ var "f"))
           (project L._RecordTypeDefinition L._RecordTypeDefinition_fields @@ var "rdef"),
-        "constructor">: Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+        "constructor">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
           (list [Serialization.cst @@ Strings.cat2 (string "make-") (var "nameStr")])
           (Lists.map (lambda "fn" $ Serialization.cst @@ var "fn") (var "fieldNames"))),
         "predicate">: Serialization.cst @@ Strings.cat2 (var "nameStr") (string "?"),
         "accessors">: Lists.map (lambda "fn" $
-          Serialization.parens @@ (Serialization.spaceSep @@ list [
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ var "fn",
             Serialization.cst @@ Strings.cat (list [var "nameStr", string "-", var "fn"])]))
           (var "fieldNames")] $
-        Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
           list [Serialization.cst @@ string "define-record-type", var "name", var "constructor", var "predicate"],
           var "accessors"]))]
 
@@ -1115,7 +1116,7 @@ sExpressionToExpr = define "sExpressionToExpr" $
     cases L._SExpression (var "sexpr") Nothing [
       L._SExpression_atom>>: lambda "a" $ Serialization.cst @@ var "a",
       L._SExpression_list>>: lambda "elems" $
-        Serialization.parens @@ (Serialization.spaceSep @@ Lists.map sExpressionToExpr (var "elems"))]
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.map sExpressionToExpr (var "elems"))]
 
 -- | Serialize a set literal
 setLiteralToExpr :: TTermDefinition (L.Dialect -> L.SetLiteral -> Expr)
@@ -1136,7 +1137,7 @@ setLiteralToExpr = define "setLiteralToExpr" $
   where
     setAsList :: TTerm String -> TTerm [Expr] -> TTerm Expr
     setAsList kw elems =
-      Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2
+      Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
         (list [Serialization.cst @@ kw])
         elems)
 
@@ -1191,7 +1192,7 @@ variableDefinitionToExpr = define "variableDefinitionToExpr" $
   lambda "d" $ lambda "vdef" $ lets [
     "name">: symbolToExpr @@ (project L._VariableDefinition L._VariableDefinition_name @@ var "vdef"),
     "value">: expressionToExpr @@ var "d" @@ (project L._VariableDefinition L._VariableDefinition_value @@ var "vdef")] $
-    Serialization.parens @@ (Serialization.spaceSep @@ list [
+    Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
       Serialization.cst @@ (defKeyword @@ var "d"),
       var "name",
       var "value"])
@@ -1224,8 +1225,8 @@ vectorLiteralToExpr = define "vectorLiteralToExpr" $
       L._Dialect_commonLisp>>: constant $
         Serialization.noSep @@ list [
           Serialization.cst @@ string "#",
-          Serialization.parens @@ (Serialization.spaceSep @@ var "elems")],
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "elems")],
       L._Dialect_scheme>>: constant $
         Serialization.noSep @@ list [
           Serialization.cst @@ string "#",
-          Serialization.parens @@ (Serialization.spaceSep @@ var "elems")]]
+          Serialization.parens @@ (Serialization.spaceSepAdaptive @@ var "elems")]]

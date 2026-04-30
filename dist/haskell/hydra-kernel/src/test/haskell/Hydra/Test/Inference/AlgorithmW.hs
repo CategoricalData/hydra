@@ -141,11 +141,13 @@ testGroupForSystemF =
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x")])})),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "alice"))}))))})))),
+              Core.letBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "alice"))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeBody = (Core.TypePair (Core.PairType {

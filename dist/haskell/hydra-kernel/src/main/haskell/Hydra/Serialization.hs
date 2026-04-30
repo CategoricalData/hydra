@@ -24,25 +24,27 @@ angleBracesList style els = Logic.ifElse (Lists.null els) (cst "<>") (brackets a
 -- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracesListAdaptive :: [Ast.Expr] -> Ast.Expr
 bracesListAdaptive els =
-
-      let inlineList = curlyBracesList Nothing inlineStyle els
-      in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (curlyBracesList Nothing halfBlockStyle els) inlineList)
+    chooseLayout maxLineWidth (curlyBracesList Nothing inlineStyle els) (curlyBracesList Nothing halfBlockStyle els)
 bracketList :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 bracketList style els = Logic.ifElse (Lists.null els) (cst "[]") (brackets squareBrackets style (commaSep style els))
 -- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracketListAdaptive :: [Ast.Expr] -> Ast.Expr
-bracketListAdaptive els =
-
-      let inlineList = bracketList inlineStyle els
-      in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (bracketList halfBlockStyle els) inlineList)
+bracketListAdaptive els = chooseLayout maxLineWidth (bracketList inlineStyle els) (bracketList halfBlockStyle els)
 brackets :: Ast.Brackets -> Ast.BlockStyle -> Ast.Expr -> Ast.Expr
 brackets br style e =
     Ast.ExprBrackets (Ast.BracketExpr {
       Ast.bracketExprBrackets = br,
       Ast.bracketExprEnclosed = e,
       Ast.bracketExprStyle = style})
+-- | Pick between an inline and a multi-line layout for the same logical expression. Returns the inline form if its estimated width does not exceed the threshold, otherwise the block form. Note: the threshold is measured against the inline expression in isolation; surrounding indentation may push content beyond the threshold at print time. Callers that know they are nested can pass a smaller threshold to compensate.
+chooseLayout :: Int -> Ast.Expr -> Ast.Expr -> Ast.Expr
+chooseLayout threshold inlineExpr blockExpr =
+    Logic.ifElse (Equality.gt (expressionLength inlineExpr) threshold) blockExpr inlineExpr
 commaSep :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 commaSep = symbolSep ","
+-- | Comma-separate elements inline if the joined width fits, otherwise break onto separate lines.
+commaSepAdaptive :: [Ast.Expr] -> Ast.Expr
+commaSepAdaptive els = chooseLayout maxLineWidth (commaSep inlineStyle els) (commaSep halfBlockStyle els)
 cst :: String -> Ast.Expr
 cst s = Ast.ExprConst (sym s)
 curlyBlock :: Ast.BlockStyle -> Ast.Expr -> Ast.Expr
@@ -194,6 +196,9 @@ inlineStyle =
       Ast.blockStyleIndent = Nothing,
       Ast.blockStyleNewlineBeforeContent = False,
       Ast.blockStyleNewlineAfterContent = False}
+-- | The canonical maximum line width used by Hydra writers. Adaptive helpers compare estimated expression widths against this threshold to decide whether to render inline or break across lines. Set to 120 to match the project-wide line-length convention.
+maxLineWidth :: Int
+maxLineWidth = 120
 newlineSep :: [Ast.Expr] -> Ast.Expr
 newlineSep =
     sep (Ast.Op {
@@ -247,6 +252,9 @@ parenList newlines els =
 
       let style = Logic.ifElse (Logic.and newlines (Equality.gt (Lists.length els) 1)) halfBlockStyle inlineStyle
       in (Logic.ifElse (Lists.null els) (cst "()") (brackets parentheses style (commaSep style els)))
+-- | Produce a parenthesized list which separates elements by spaces or newlines depending on the estimated width of the expression.
+parenListAdaptive :: [Ast.Expr] -> Ast.Expr
+parenListAdaptive els = chooseLayout maxLineWidth (parenList False els) (parenList True els)
 parens :: Ast.Expr -> Ast.Expr
 parens = brackets parentheses inlineStyle
 parentheses :: Ast.Brackets
@@ -431,6 +439,9 @@ spaceSep =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
+-- | Space-separate elements inline if the joined width fits, otherwise newline-separate them. Useful for long signatures, type chains, and other space-joined sequences.
+spaceSepAdaptive :: [Ast.Expr] -> Ast.Expr
+spaceSepAdaptive els = chooseLayout maxLineWidth (spaceSep els) (newlineSep els)
 squareBrackets :: Ast.Brackets
 squareBrackets =
     Ast.Brackets {

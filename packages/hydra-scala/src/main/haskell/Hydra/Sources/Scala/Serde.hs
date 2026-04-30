@@ -103,26 +103,26 @@ module_ = Module {
       toDefinition functionArrowOp,
       toDefinition matchOp,
       toDefinition scalaFloatLiteralText,
-      toDefinition writeCase,
-      toDefinition writeData_FunctionData,
-      toDefinition writeData_Name,
-      toDefinition writeData_Param,
-      toDefinition writeData_Ref,
-      toDefinition writeData_Select,
-      toDefinition writeDefn,
-      toDefinition writeImportExportStat,
-      toDefinition writeImporter,
-      toDefinition writeInit,
-      toDefinition writeLit,
-      toDefinition writeMod,
-      toDefinition writeName,
-      toDefinition writePat,
-      toDefinition writePkg,
-      toDefinition writeStat,
-      toDefinition writeTerm,
-      toDefinition writeType,
-      toDefinition writeType_Name,
-      toDefinition writeType_Param]
+      toDefinition caseToExpr,
+      toDefinition dataFunctionDataToExpr,
+      toDefinition dataNameToExpr,
+      toDefinition dataParamToExpr,
+      toDefinition dataRefToExpr,
+      toDefinition dataSelectToExpr,
+      toDefinition defnToExpr,
+      toDefinition importExportStatToExpr,
+      toDefinition importerToExpr,
+      toDefinition initToExpr,
+      toDefinition litToExpr,
+      toDefinition modToExpr,
+      toDefinition nameToExpr,
+      toDefinition patToExpr,
+      toDefinition pkgToExpr,
+      toDefinition statToExpr,
+      toDefinition termToExpr,
+      toDefinition typeToExpr,
+      toDefinition typeNameToExpr,
+      toDefinition typeParamToExpr]
 
 
 dotOp :: TTermDefinition Op
@@ -140,76 +140,76 @@ matchOp = define "matchOp" $
   doc "The match operator" $
   Ast.op (Ast.symbol (string "match")) (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent (string "  "))) (Ast.precedence (int32 0)) Ast.associativityNone
 
-writeCase :: TTermDefinition (Scala.Case -> Expr)
-writeCase = define "writeCase" $
+caseToExpr :: TTermDefinition (Scala.Case -> Expr)
+caseToExpr = define "caseToExpr" $
   doc "Convert a case clause to an expression" $
   lambda "c" $ lets [
     "pat">: project Scala._Case Scala._Case_pat @@ var "c",
     "term">: project Scala._Case Scala._Case_body @@ var "c"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "case",
-      writePat @@ var "pat",
+      patToExpr @@ var "pat",
       Serialization.cst @@ string "=>",
-      writeTerm @@ var "term"]
+      termToExpr @@ var "term"]
 
-writeData_FunctionData :: TTermDefinition (Scala.Data_FunctionData -> Expr)
-writeData_FunctionData = define "writeData_FunctionData" $
+dataFunctionDataToExpr :: TTermDefinition (Scala.Data_FunctionData -> Expr)
+dataFunctionDataToExpr = define "dataFunctionDataToExpr" $
   doc "Convert function data to an expression" $
   lambda "ft" $
     cases Scala._Data_FunctionData (var "ft") Nothing [
       Scala._Data_FunctionData_function>>: lambda "f" $ lets [
         "params">: project Scala._Data_Function Scala._Data_Function_params @@ var "f",
         "body">: project Scala._Data_Function Scala._Data_Function_body @@ var "f",
-        "bodyExpr">: writeTerm @@ var "body",
+        "bodyExpr">: termToExpr @@ var "body",
         "bodyLen">: Serialization.expressionLength @@ var "bodyExpr"] $
         -- For long lambda bodies (>60 chars), put body on indented new line
         Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
           (Serialization.noSep @@ list [
-            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
+            Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
             Serialization.cst @@ string " =>\n  ",
             var "bodyExpr"])
           (Serialization.spaceSep @@ list [
-            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
+            Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
             Serialization.cst @@ string "=>",
             var "bodyExpr"])]
 
-writeData_Name :: TTermDefinition (Scala.Data_Name -> Expr)
-writeData_Name = define "writeData_Name" $
+dataNameToExpr :: TTermDefinition (Scala.Data_Name -> Expr)
+dataNameToExpr = define "dataNameToExpr" $
   doc "Convert a data name to an expression" $
   lambda "dn" $
     Serialization.cst @@ (unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@ var "dn"))
 
-writeData_Param :: TTermDefinition (Scala.Data_Param -> Expr)
-writeData_Param = define "writeData_Param" $
+dataParamToExpr :: TTermDefinition (Scala.Data_Param -> Expr)
+dataParamToExpr = define "dataParamToExpr" $
   doc "Convert a data parameter to an expression" $
   lambda "dp" $ lets [
     "name">: project Scala._Data_Param Scala._Data_Param_name @@ var "dp",
     "stype">: project Scala._Data_Param Scala._Data_Param_decltpe @@ var "dp"] $
     Serialization.noSep @@ (Maybes.cat $ list [
-      Maybes.pure (writeName @@ var "name"),
+      Maybes.pure (nameToExpr @@ var "name"),
       Maybes.map
-        (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", writeType @@ var "t"])
+        (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", typeToExpr @@ var "t"])
         (var "stype")])
 
-writeData_Ref :: TTermDefinition (Scala.Data_Ref -> Expr)
-writeData_Ref = define "writeData_Ref" $
+dataRefToExpr :: TTermDefinition (Scala.Data_Ref -> Expr)
+dataRefToExpr = define "dataRefToExpr" $
   doc "Convert a data reference to an expression" $
   lambda "ref" $
     cases Scala._Data_Ref (var "ref") Nothing [
-      Scala._Data_Ref_name>>: lambda "name" $ writeData_Name @@ var "name",
-      Scala._Data_Ref_select>>: lambda "sel" $ writeData_Select @@ var "sel"]
+      Scala._Data_Ref_name>>: lambda "name" $ dataNameToExpr @@ var "name",
+      Scala._Data_Ref_select>>: lambda "sel" $ dataSelectToExpr @@ var "sel"]
 
-writeData_Select :: TTermDefinition (Scala.Data_Select -> Expr)
-writeData_Select = define "writeData_Select" $
+dataSelectToExpr :: TTermDefinition (Scala.Data_Select -> Expr)
+dataSelectToExpr = define "dataSelectToExpr" $
   doc "Convert a data select to an expression" $
   lambda "sel" $ lets [
     "arg">: project Scala._Data_Select Scala._Data_Select_qual @@ var "sel",
     "name">: project Scala._Data_Select Scala._Data_Select_name @@ var "sel"] $
-    Serialization.ifx @@ dotOp @@ (writeTerm @@ var "arg") @@
-      (writeTerm @@ (inject Scala._Data Scala._Data_ref (inject Scala._Data_Ref Scala._Data_Ref_name (var "name"))))
+    Serialization.ifx @@ dotOp @@ (termToExpr @@ var "arg") @@
+      (termToExpr @@ (inject Scala._Data Scala._Data_ref (inject Scala._Data_Ref Scala._Data_Ref_name (var "name"))))
 
-writeDefn :: TTermDefinition (Scala.Defn -> Expr)
-writeDefn = define "writeDefn" $
+defnToExpr :: TTermDefinition (Scala.Defn -> Expr)
+defnToExpr = define "defnToExpr" $
   doc "Convert a definition to an expression" $
   lambda "def" $
     cases Scala._Defn (var "def") Nothing [
@@ -221,20 +221,20 @@ writeDefn = define "writeDefn" $
         "body">: project Scala._Defn_Def Scala._Defn_Def_body @@ var "dd",
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
-          (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType_Param (var "tparams")))),
+          (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
         "scodExpr">: Maybes.map
-          (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", writeType @@ var "t"])
+          (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", typeToExpr @@ var "t"])
           (var "scod"),
         -- Render each parameter list in its own parens (for curried defs)
         "paramssExprs">: Lists.map
-          ("ps" ~> Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "ps")))
+          ("ps" ~> Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "ps")))
           (var "paramss"),
         "nameAndParams">: Serialization.noSep @@ (Maybes.cat $ Lists.concat (list [
-          list [Maybes.pure (writeData_Name @@ var "name")],
+          list [Maybes.pure (dataNameToExpr @@ var "name")],
           list [var "tparamsExpr"],
           Lists.map ("pe" ~> Maybes.pure (var "pe")) (var "paramssExprs"),
           list [var "scodExpr"]]))] $
-        "bodyExpr" <~ (writeTerm @@ var "body") $
+        "bodyExpr" <~ (termToExpr @@ var "body") $
         "defSig" <~ (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "def",
           var "nameAndParams",
@@ -251,12 +251,12 @@ writeDefn = define "writeDefn" $
         "body">: project Scala._Defn_Type Scala._Defn_Type_body @@ var "dt"] $
         Serialization.spaceSep @@ (Maybes.cat $ list [
           Maybes.pure (Serialization.cst @@ string "type"),
-          Maybes.pure (writeType_Name @@ var "name"),
+          Maybes.pure (typeNameToExpr @@ var "name"),
           Logic.ifElse (Lists.null (var "tparams"))
             nothing
-            (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType_Param (var "tparams")))),
+            (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
           Maybes.pure (Serialization.cst @@ string "="),
-          Maybes.pure (writeType @@ var "body")]),
+          Maybes.pure (typeToExpr @@ var "body")]),
 
       Scala._Defn_val>>: lambda "dv" $ lets [
         "mods">: project Scala._Defn_Val Scala._Defn_Val_mods @@ var "dv",
@@ -273,14 +273,14 @@ writeDefn = define "writeDefn" $
           (Serialization.cst @@ var "nameStr")
           (lambda "t" $ Serialization.spaceSep @@ list [
             Serialization.cst @@ (Strings.cat2 (var "nameStr") (string ":")),
-            writeType @@ var "t"])
+            typeToExpr @@ var "t"])
           (var "typ"),
         "valKeyword">: Logic.ifElse (Lists.null (var "mods")) (string "val") (string "lazy val")] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ var "valKeyword",
           var "nameAndType",
           Serialization.cst @@ string "=",
-          writeTerm @@ var "rhs"],
+          termToExpr @@ var "rhs"],
 
       Scala._Defn_class>>: lambda "dc" $ lets [
         "mods">: project Scala._Defn_Class Scala._Defn_Class_mods @@ var "dc",
@@ -290,16 +290,16 @@ writeDefn = define "writeDefn" $
         "paramss">: project Scala._Ctor_Primary Scala._Ctor_Primary_paramss @@ var "ctor",
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
-          (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType_Param (var "tparams")))),
+          (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
         "paramsExpr">: Logic.ifElse (Lists.null (var "paramss"))
           nothing
-          (Maybes.pure (Serialization.parenList @@ false @@ (Lists.map writeData_Param (Lists.concat (var "paramss"))))),
+          (Maybes.pure (Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (Lists.concat (var "paramss"))))),
         "nameAndParams">: Serialization.noSep @@ (Maybes.cat $ list [
-          Maybes.pure (writeType_Name @@ var "name"),
+          Maybes.pure (typeNameToExpr @@ var "name"),
           var "tparamsExpr",
           var "paramsExpr"])] $
         Serialization.spaceSep @@ (Lists.concat $ list [
-          Lists.map writeMod (var "mods"),
+          Lists.map modToExpr (var "mods"),
           list [Serialization.cst @@ string "class", var "nameAndParams"]]),
 
       Scala._Defn_enum>>: lambda "de" $ lets [
@@ -310,13 +310,13 @@ writeDefn = define "writeDefn" $
         "enumHeader">: Serialization.spaceSep @@ list [
           Serialization.cst @@ string "enum",
           Serialization.noSep @@ (Maybes.cat $ list [
-            Maybes.pure (writeType_Name @@ var "name"),
+            Maybes.pure (typeNameToExpr @@ var "name"),
             Logic.ifElse (Lists.null (var "tparams"))
               nothing
-              (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType_Param (var "tparams"))))]),
+              (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams"))))]),
           Serialization.cst @@ string ":"],
         "enumCases">: Lists.map
-          (lambda "s" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "  ", writeStat @@ var "s"])
+          (lambda "s" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "  ", statToExpr @@ var "s"])
           (var "stats")] $
         Serialization.newlineSep @@ (Lists.concat $ list [list [var "enumHeader"], var "enumCases"]),
 
@@ -328,28 +328,28 @@ writeDefn = define "writeDefn" $
         "allParams">: Lists.concat (var "paramss"),
         "params">: Logic.ifElse (Lists.null (var "allParams"))
           (Serialization.cst @@ string "")
-          (Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "allParams"))),
+          (Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "allParams"))),
         "extendsClause">: Logic.ifElse (Lists.null (var "inits"))
           (Serialization.cst @@ string "")
           (Serialization.spaceSep @@ list [
             Serialization.cst @@ string "extends",
-            Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map writeInit (var "inits"))])] $
+            Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map initToExpr (var "inits"))])] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "case",
-          Serialization.noSep @@ list [writeData_Name @@ var "name", var "params"],
+          Serialization.noSep @@ list [dataNameToExpr @@ var "name", var "params"],
           var "extendsClause"]]
 
-writeImportExportStat :: TTermDefinition (Scala.ImportExportStat -> Expr)
-writeImportExportStat = define "writeImportExportStat" $
+importExportStatToExpr :: TTermDefinition (Scala.ImportExportStat -> Expr)
+importExportStatToExpr = define "importExportStatToExpr" $
   doc "Convert an import/export statement to an expression" $
   lambda "ie" $
     cases Scala._ImportExportStat (var "ie") Nothing [
       Scala._ImportExportStat_import>>: lambda "imp" $ lets [
         "importers">: project Scala._Import Scala._Import_importers @@ var "imp"] $
-        Serialization.newlineSep @@ (Lists.map writeImporter (var "importers"))]
+        Serialization.newlineSep @@ (Lists.map importerToExpr (var "importers"))]
 
-writeImporter :: TTermDefinition (Scala.Importer -> Expr)
-writeImporter = define "writeImporter" $
+importerToExpr :: TTermDefinition (Scala.Importer -> Expr)
+importerToExpr = define "importerToExpr" $
   doc "Convert an importer to an expression" $
   lambda "imp" $ lets [
     "ref">: project Scala._Importer Scala._Importer_ref @@ var "imp",
@@ -383,11 +383,11 @@ writeImporter = define "writeImporter" $
       Serialization.cst @@ string "import",
       Serialization.noSep @@ list [Serialization.cst @@ var "refName", var "forImportees"]]
 
-writeInit :: TTermDefinition (Scala.Init -> Expr)
-writeInit = define "writeInit" $
+initToExpr :: TTermDefinition (Scala.Init -> Expr)
+initToExpr = define "initToExpr" $
   doc "Convert an init to an expression" $
   lambda "init" $
-    writeType @@ (project Scala._Init Scala._Init_tpe @@ var "init")
+    typeToExpr @@ (project Scala._Init Scala._Init_tpe @@ var "init")
 
 -- | Convert a showFloat32/showFloat64 result into valid Scala source syntax,
 -- mapping NaN and ±Infinity to {Float,Double}.{NaN,PositiveInfinity,NegativeInfinity}.
@@ -403,8 +403,8 @@ scalaFloatLiteralText = define "scalaFloatLiteralText" $
       (Strings.cat2 (var "prefix") (string ".NegativeInfinity"))
       (Strings.cat2 (var "s") (var "suffix"))
 
-writeLit :: TTermDefinition (Scala.Lit -> Expr)
-writeLit = define "writeLit" $
+litToExpr :: TTermDefinition (Scala.Lit -> Expr)
+litToExpr = define "litToExpr" $
   doc "Convert a literal to an expression" $
   lambda "lit" $
     cases Scala._Lit (var "lit") (Just $ Serialization.cst @@ string "TODO:literal") [
@@ -425,8 +425,8 @@ writeLit = define "writeLit" $
             (Strings.intercalate (string ", ") (Lists.map (lambda "b" $ Strings.cat2 (Literals.showInt32 (var "b")) (string ".toByte")) (var "bs")))
             (string ")"))]
 
-writeMod :: TTermDefinition (Scala.Mod -> Expr)
-writeMod = define "writeMod" $
+modToExpr :: TTermDefinition (Scala.Mod -> Expr)
+modToExpr = define "modToExpr" $
   doc "Convert a modifier to an expression" $
   lambda "m" $
     cases Scala._Mod (var "m") Nothing [
@@ -440,15 +440,15 @@ writeMod = define "writeMod" $
       Scala._Mod_private>>: lambda "_" $ Serialization.cst @@ string "private",
       Scala._Mod_protected>>: lambda "_" $ Serialization.cst @@ string "protected"]
 
-writeName :: TTermDefinition (Scala.Name -> Expr)
-writeName = define "writeName" $
+nameToExpr :: TTermDefinition (Scala.Name -> Expr)
+nameToExpr = define "nameToExpr" $
   doc "Convert a name to an expression" $
   lambda "name" $
     cases Scala._Name (var "name") Nothing [
       Scala._Name_value>>: lambda "s" $ Serialization.cst @@ var "s"]
 
-writePat :: TTermDefinition (Scala.Pat -> Expr)
-writePat = define "writePat" $
+patToExpr :: TTermDefinition (Scala.Pat -> Expr)
+patToExpr = define "patToExpr" $
   doc "Convert a pattern to an expression" $
   lambda "pat" $
     cases Scala._Pat (var "pat") Nothing [
@@ -457,100 +457,100 @@ writePat = define "writePat" $
         "args">: project Scala._Pat_Extract Scala._Pat_Extract_args @@ var "pe"] $
         -- Omit parens for truly parameterless enum cases; include for parameterized
         Logic.ifElse (Lists.null (var "args"))
-          (writeTerm @@ var "fun")
+          (termToExpr @@ var "fun")
           (Serialization.noSep @@ list [
-            writeTerm @@ var "fun",
-            Serialization.parenList @@ false @@ (Lists.map writePat (var "args"))]),
+            termToExpr @@ var "fun",
+            Serialization.parenListAdaptive @@ (Lists.map patToExpr (var "args"))]),
       Scala._Pat_var>>: lambda "pv" $
-        writeData_Name @@ (project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"),
+        dataNameToExpr @@ (project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"),
       Scala._Pat_wildcard>>: constant (Serialization.cst @@ string "_")]
 
-writePkg :: TTermDefinition (Scala.Pkg -> Expr)
-writePkg = define "writePkg" $
+pkgToExpr :: TTermDefinition (Scala.Pkg -> Expr)
+pkgToExpr = define "pkgToExpr" $
   doc "Convert a package to an expression" $
   lambda "pkg" $ lets [
     "name">: project Scala._Pkg Scala._Pkg_name @@ var "pkg",
     "stats">: project Scala._Pkg Scala._Pkg_stats @@ var "pkg",
-    "package">: Serialization.spaceSep @@ list [Serialization.cst @@ string "package", writeData_Name @@ var "name"]] $
+    "package">: Serialization.spaceSep @@ list [Serialization.cst @@ string "package", dataNameToExpr @@ var "name"]] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [
       list [var "package"],
-      Lists.map writeStat (var "stats")])
+      Lists.map statToExpr (var "stats")])
 
-writeStat :: TTermDefinition (Scala.Stat -> Expr)
-writeStat = define "writeStat" $
+statToExpr :: TTermDefinition (Scala.Stat -> Expr)
+statToExpr = define "statToExpr" $
   doc "Convert a statement to an expression" $
   lambda "stat" $
     cases Scala._Stat (var "stat") Nothing [
-      Scala._Stat_term>>: lambda "t" $ writeTerm @@ var "t",
-      Scala._Stat_defn>>: lambda "def" $ writeDefn @@ var "def",
-      Scala._Stat_importExport>>: lambda "ie" $ writeImportExportStat @@ var "ie"]
+      Scala._Stat_term>>: lambda "t" $ termToExpr @@ var "t",
+      Scala._Stat_defn>>: lambda "def" $ defnToExpr @@ var "def",
+      Scala._Stat_importExport>>: lambda "ie" $ importExportStatToExpr @@ var "ie"]
 
-writeTerm :: TTermDefinition (Scala.Data -> Expr)
-writeTerm = define "writeTerm" $
+termToExpr :: TTermDefinition (Scala.Data -> Expr)
+termToExpr = define "termToExpr" $
   doc "Convert a term to an expression" $
   lambda "term" $
     cases Scala._Data (var "term") Nothing [
-      Scala._Data_lit>>: lambda "lit" $ writeLit @@ var "lit",
-      Scala._Data_ref>>: lambda "ref" $ writeData_Ref @@ var "ref",
+      Scala._Data_lit>>: lambda "lit" $ litToExpr @@ var "lit",
+      Scala._Data_ref>>: lambda "ref" $ dataRefToExpr @@ var "ref",
       Scala._Data_apply>>: lambda "app" $ lets [
         "fun">: project Scala._Data_Apply Scala._Data_Apply_fun @@ var "app",
         "args">: project Scala._Data_Apply Scala._Data_Apply_args @@ var "app"] $
         Serialization.noSep @@ list [
-          writeTerm @@ var "fun",
-          Serialization.parenList @@ false @@ (Lists.map writeTerm (var "args"))],
+          termToExpr @@ var "fun",
+          Serialization.parenListAdaptive @@ (Lists.map termToExpr (var "args"))],
       Scala._Data_assign>>: lambda "a" $ lets [
         "lhs">: project Scala._Data_Assign Scala._Data_Assign_lhs @@ var "a",
         "rhs">: project Scala._Data_Assign Scala._Data_Assign_rhs @@ var "a"] $
-        Serialization.spaceSep @@ list [writeTerm @@ var "lhs", Serialization.cst @@ string "->", writeTerm @@ var "rhs"],
+        Serialization.spaceSep @@ list [termToExpr @@ var "lhs", Serialization.cst @@ string "->", termToExpr @@ var "rhs"],
       Scala._Data_tuple>>: lambda "tup" $
-        Serialization.parenList @@ false @@ (Lists.map writeTerm (project Scala._Data_Tuple Scala._Data_Tuple_args @@ var "tup")),
+        Serialization.parenListAdaptive @@ (Lists.map termToExpr (project Scala._Data_Tuple Scala._Data_Tuple_args @@ var "tup")),
       Scala._Data_match>>: lambda "m" $ lets [
         "expr">: project Scala._Data_Match Scala._Data_Match_expr @@ var "m",
         "mCases">: project Scala._Data_Match Scala._Data_Match_cases @@ var "m"] $
-        Serialization.ifx @@ matchOp @@ (writeTerm @@ var "expr") @@
-          (Serialization.newlineSep @@ (Lists.map writeCase (var "mCases"))),
-      Scala._Data_functionData>>: lambda "ft" $ writeData_FunctionData @@ var "ft",
+        Serialization.ifx @@ matchOp @@ (termToExpr @@ var "expr") @@
+          (Serialization.newlineSep @@ (Lists.map caseToExpr (var "mCases"))),
+      Scala._Data_functionData>>: lambda "ft" $ dataFunctionDataToExpr @@ var "ft",
       Scala._Data_block>>: lambda "blk" $ lets [
         "stats">: project Scala._Data_Block Scala._Data_Block_stats @@ var "blk"] $
-        Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map writeStat (var "stats")))]
+        Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map statToExpr (var "stats")))]
 
-writeType :: TTermDefinition (Scala.Type -> Expr)
-writeType = define "writeType" $
+typeToExpr :: TTermDefinition (Scala.Type -> Expr)
+typeToExpr = define "typeToExpr" $
   doc "Convert a type to an expression" $
   lambda "typ" $
     cases Scala._Type (var "typ") Nothing [
       Scala._Type_ref>>: lambda "tr" $
         cases Scala._Type_Ref (var "tr") Nothing [
-          Scala._Type_Ref_name>>: lambda "name" $ writeType_Name @@ var "name"],
+          Scala._Type_Ref_name>>: lambda "name" $ typeNameToExpr @@ var "name"],
       Scala._Type_apply>>: lambda "ta" $ lets [
         "fun">: project Scala._Type_Apply Scala._Type_Apply_tpe @@ var "ta",
         "args">: project Scala._Type_Apply Scala._Type_Apply_args @@ var "ta"] $
         Serialization.noSep @@ list [
-          writeType @@ var "fun",
-          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType (var "args"))],
+          typeToExpr @@ var "fun",
+          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeToExpr (var "args"))],
       Scala._Type_functionType>>: lambda "ft" $
         cases Scala._Type_FunctionType (var "ft") Nothing [
           Scala._Type_FunctionType_function>>: lambda "tf" $ lets [
             "cod">: project Scala._Type_Function Scala._Type_Function_res @@ var "tf",
             "dom">: Maybes.fromMaybe (var "cod") (Lists.maybeHead (project Scala._Type_Function Scala._Type_Function_params @@ var "tf"))] $
-            Serialization.ifx @@ functionArrowOp @@ (writeType @@ var "dom") @@ (writeType @@ var "cod")],
+            Serialization.ifx @@ functionArrowOp @@ (typeToExpr @@ var "dom") @@ (typeToExpr @@ var "cod")],
       Scala._Type_lambda>>: lambda "tl" $ lets [
         "params">: project Scala._Type_Lambda Scala._Type_Lambda_tparams @@ var "tl",
         "body">: project Scala._Type_Lambda Scala._Type_Lambda_tpe @@ var "tl"] $
         Serialization.noSep @@ list [
-          writeType @@ var "body",
-          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType_Param (var "params"))],
+          typeToExpr @@ var "body",
+          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "params"))],
       Scala._Type_var>>: lambda "tv" $
-        writeType_Name @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")]
+        typeNameToExpr @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")]
 
-writeType_Name :: TTermDefinition (Scala.Type_Name -> Expr)
-writeType_Name = define "writeType_Name" $
+typeNameToExpr :: TTermDefinition (Scala.Type_Name -> Expr)
+typeNameToExpr = define "typeNameToExpr" $
   doc "Convert a type name to an expression" $
   lambda "tn" $
     Serialization.cst @@ (project Scala._Type_Name Scala._Type_Name_value @@ var "tn")
 
-writeType_Param :: TTermDefinition (Scala.Type_Param -> Expr)
-writeType_Param = define "writeType_Param" $
+typeParamToExpr :: TTermDefinition (Scala.Type_Param -> Expr)
+typeParamToExpr = define "typeParamToExpr" $
   doc "Convert a type parameter to an expression" $
   lambda "tp" $
-    writeName @@ (project Scala._Type_Param Scala._Type_Param_name @@ var "tp")
+    nameToExpr @@ (project Scala._Type_Param Scala._Type_Param_name @@ var "tp")

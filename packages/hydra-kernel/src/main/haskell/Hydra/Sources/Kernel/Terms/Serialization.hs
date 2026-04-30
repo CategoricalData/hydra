@@ -4,12 +4,12 @@ module Hydra.Sources.Kernel.Terms.Serialization where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   angleBraces, angleBracesList, braces, bracesList, brackets, bracketsList, bracesListAdaptive,
-  bracketList, bracketListAdaptive, cat, commaSep, cst, curlyBlock, curlyBraces, curlyBracesList,
+  bracketList, bracketListAdaptive, cat, chooseLayout, commaSep, commaSepAdaptive, cst, curlyBlock, curlyBraces, curlyBracesList,
   customIndent, customIndentBlock, dotSep, doubleNewlineSep, doubleQuoted, doubleSpace,
   expressionLength, fullBlockStyle, fullName, halfBlockStyle, halfIndent, ifx, indent, indentBlock,
-  indentLines, indentSubsequentLines, infixWs, infixWsList, inlineStyle, newline, newlineSep, noSep,
-  noPad, noPadding, num, op, orOp, orSep, parenList, parens, parensList, parentheses, parenthesize,
-  prefix, printExpr, printGraph, semicolonSep, sep, singleQuoted, space, spaceSep, squareBrackets,
+  indentLines, indentSubsequentLines, infixWs, infixWsList, inlineStyle, maxLineWidth, newline, newlineSep, noSep,
+  noPad, noPadding, num, op, orOp, orSep, parenList, parenListAdaptive, parens, parensList, parentheses, parenthesize,
+  prefix, printExpr, printGraph, semicolonSep, sep, singleQuoted, space, spaceSep, spaceSepAdaptive, squareBrackets,
   structuralSep, structuralSpaceSep,
   suffix, sym, symbolSep, tabIndent, tabIndentDoubleSpace, tabIndentSingleSpace, unsupportedType,
   unsupportedVariant, withComma, withSemi)
@@ -82,11 +82,13 @@ module_ = Module {
      toDefinition bracketList,
      toDefinition bracketListAdaptive,
      toDefinition brackets,
+     toDefinition chooseLayout,
      toDefinition commaSep,
+     toDefinition commaSepAdaptive,
+     toDefinition cst,
      toDefinition curlyBlock,
      toDefinition curlyBraces,
      toDefinition curlyBracesList,
-     toDefinition cst,
      toDefinition customIndent,
      toDefinition customIndentBlock,
      toDefinition dotSep,
@@ -102,6 +104,7 @@ module_ = Module {
      toDefinition infixWs,
      toDefinition infixWsList,
      toDefinition inlineStyle,
+     toDefinition maxLineWidth,
      toDefinition newlineSep,
      toDefinition noPadding,
      toDefinition noSep,
@@ -110,6 +113,7 @@ module_ = Module {
      toDefinition orOp,
      toDefinition orSep,
      toDefinition parenList,
+     toDefinition parenListAdaptive,
      toDefinition parens,
      toDefinition parentheses,
      toDefinition parenthesize,
@@ -118,9 +122,10 @@ module_ = Module {
      toDefinition semicolonSep,
      toDefinition sep,
      toDefinition spaceSep,
+     toDefinition spaceSepAdaptive,
+     toDefinition squareBrackets,
      toDefinition structuralSep,
      toDefinition structuralSpaceSep,
-     toDefinition squareBrackets,
      toDefinition suffix,
      toDefinition sym,
      toDefinition symbolSep,
@@ -150,19 +155,17 @@ bracesListAdaptive :: TTermDefinition ([Expr] -> Expr)
 bracesListAdaptive = define "bracesListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   "els" ~>
-  "inlineList" <~ curlyBracesList @@ nothing @@ inlineStyle @@ var "els" $
-  Logic.ifElse (Equality.gt (expressionLength @@ var "inlineList") (int32 70))
-    (curlyBracesList @@ nothing @@ halfBlockStyle @@ var "els")
-    (var "inlineList")
+    chooseLayout @@ maxLineWidth
+      @@ (curlyBracesList @@ nothing @@ inlineStyle @@ var "els")
+      @@ (curlyBracesList @@ nothing @@ halfBlockStyle @@ var "els")
 
 bracketListAdaptive :: TTermDefinition ([Expr] -> Expr)
 bracketListAdaptive = define "bracketListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   "els" ~>
-  "inlineList" <~ bracketList @@ inlineStyle @@ var "els" $
-  Logic.ifElse (Equality.gt (expressionLength @@ var "inlineList") (int32 70))
-    (bracketList @@ halfBlockStyle @@ var "els")
-    (var "inlineList")
+    chooseLayout @@ maxLineWidth
+      @@ (bracketList @@ inlineStyle @@ var "els")
+      @@ (bracketList @@ halfBlockStyle @@ var "els")
 
 bracketList :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 bracketList = define "bracketList" $
@@ -176,9 +179,29 @@ brackets = define "brackets" $
   "br" ~> "style" ~> "e" ~>
     Ast.exprBrackets $ Ast.bracketExpr (var "br") (var "e") (var "style")
 
+chooseLayout :: TTermDefinition (Int -> Expr -> Expr -> Expr)
+chooseLayout = define "chooseLayout" $
+  doc ("Pick between an inline and a multi-line layout for the same logical expression."
+    <> " Returns the inline form if its estimated width does not exceed the threshold, otherwise the block form."
+    <> " Note: the threshold is measured against the inline expression in isolation;"
+    <> " surrounding indentation may push content beyond the threshold at print time."
+    <> " Callers that know they are nested can pass a smaller threshold to compensate.") $
+  "threshold" ~> "inlineExpr" ~> "blockExpr" ~>
+    Logic.ifElse (Equality.gt (expressionLength @@ var "inlineExpr") (var "threshold"))
+      (var "blockExpr")
+      (var "inlineExpr")
+
 commaSep :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 commaSep = define "commaSep" $
   symbolSep @@ string ","
+
+commaSepAdaptive :: TTermDefinition ([Expr] -> Expr)
+commaSepAdaptive = define "commaSepAdaptive" $
+  doc "Comma-separate elements inline if the joined width fits, otherwise break onto separate lines." $
+  "els" ~>
+    chooseLayout @@ maxLineWidth
+      @@ (commaSep @@ inlineStyle @@ var "els")
+      @@ (commaSep @@ halfBlockStyle @@ var "els")
 
 cst :: TTermDefinition (String -> Expr)
 cst = define "cst" $
@@ -347,6 +370,14 @@ inlineStyle :: TTermDefinition BlockStyle
 inlineStyle = define "inlineStyle" $
   Ast.blockStyle nothing false false
 
+maxLineWidth :: TTermDefinition Int
+maxLineWidth = define "maxLineWidth" $
+  doc ("The canonical maximum line width used by Hydra writers."
+    <> " Adaptive helpers compare estimated expression widths against this threshold"
+    <> " to decide whether to render inline or break across lines."
+    <> " Set to 120 to match the project-wide line-length convention.") $
+  int32 120
+
 newlineSep :: TTermDefinition ([Expr] -> Expr)
 newlineSep = define "newlineSep" $
   sep @@ (Ast.op
@@ -405,6 +436,14 @@ parenList = define "parenList" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "()")
       (brackets @@ parentheses @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
+
+parenListAdaptive :: TTermDefinition ([Expr] -> Expr)
+parenListAdaptive = define "parenListAdaptive" $
+  doc "Produce a parenthesized list which separates elements by spaces or newlines depending on the estimated width of the expression." $
+  "els" ~>
+    chooseLayout @@ maxLineWidth
+      @@ (parenList @@ false @@ var "els")
+      @@ (parenList @@ true @@ var "els")
 
 parens :: TTermDefinition (Expr -> Expr)
 parens = define "parens" $
@@ -650,6 +689,14 @@ spaceSep = define "spaceSep" $
     (Ast.padding Ast.wsSpace Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
+
+spaceSepAdaptive :: TTermDefinition ([Expr] -> Expr)
+spaceSepAdaptive = define "spaceSepAdaptive" $
+  doc "Space-separate elements inline if the joined width fits, otherwise newline-separate them. Useful for long signatures, type chains, and other space-joined sequences." $
+  "els" ~>
+    chooseLayout @@ maxLineWidth
+      @@ (spaceSep @@ var "els")
+      @@ (newlineSep @@ var "els")
 
 structuralSep :: TTermDefinition (Op -> [Expr] -> Expr)
 structuralSep = define "structuralSep" $

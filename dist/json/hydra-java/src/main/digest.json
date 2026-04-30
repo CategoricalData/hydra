@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.java.coder": "dafe846d0f12bfd23129c738fc79660ffa202b9e397e7ee2c472830575e5108a",
+    "hydra.java.coder": "2677b99ea7aa4ba038925926a0595a5759c2fed0fcd62aa93c5701297a0eef90",
     "hydra.java.environment": "32583eab4a73db06c4104ddf5652fbf7b57fe9616ed1e4605a2bce387a9666fd",
     "hydra.java.names": "1258bfecd82df22f428af8532d7b996fbce86c58e511ce53235db37e49322358",
-    "hydra.java.serde": "af7ea1c12e6bcd0d522f7aeb94b99eb83c9252243cbf37916e12e4927ca88fa7",
+    "hydra.java.serde": "434e2293b2160f303e32870c44e98049bb51482c317c766737856f33c8db5ce2",
     "hydra.java.syntax": "bbd0395afa0d85960caf6822b41dbeac40e728b5a3614aa73f7e7444b4708420",
     "hydra.java.testing": "e499b14f6b372fb039bffca00745e1c144d5b16340df65e6f3a5cbf113febefc",
     "hydra.java.utils": "46a00786d209580a273c11773eb1e44671733fe52cf86b205788ff7f79411a46"

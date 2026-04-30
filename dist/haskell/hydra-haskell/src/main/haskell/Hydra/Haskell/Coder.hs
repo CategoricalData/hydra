@@ -116,15 +116,17 @@ constructModule namespaces mod defs cx g =
                                 Syntax.importSpec = spec}
                     in (Lists.map toImport (Lists.concat [
                       [
-                        (("Prelude", Nothing), [
-                          "Enum",
-                          "Ordering",
-                          "decodeFloat",
-                          "encodeFloat",
-                          "fail",
-                          "map",
-                          "pure",
-                          "sum"])],
+                        (
+                          ("Prelude", Nothing),
+                          [
+                            "Enum",
+                            "Ordering",
+                            "decodeFloat",
+                            "encodeFloat",
+                            "fail",
+                            "map",
+                            "pure",
+                            "sum"])],
                       [
                         (("Data.Scientific", (Just "Sci")), [])],
                       (condImport (Environment.haskellModuleMetadataUsesByteString meta) (("Data.ByteString", (Just "B")), [])),

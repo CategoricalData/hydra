@@ -38,17 +38,31 @@ error cx raw =
                     Maps.fromList [
                       (Core.Name "checking", (\input -> Eithers.map (\t -> Errors.ErrorChecking t) (Checking.checkingError cx input))),
                       (Core.Name "decoding", (\input -> Eithers.map (\t -> Errors.ErrorDecoding t) (decodingError cx input))),
-                      (Core.Name "duplicateBinding", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateBinding t) (ErrorCore.duplicateBindingError cx input))),
-                      (Core.Name "duplicateField", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateField t) (ErrorCore.duplicateFieldError cx input))),
+                      (
+                        Core.Name "duplicateBinding",
+                        (\input -> Eithers.map (\t -> Errors.ErrorDuplicateBinding t) (ErrorCore.duplicateBindingError cx input))),
+                      (
+                        Core.Name "duplicateField",
+                        (\input -> Eithers.map (\t -> Errors.ErrorDuplicateField t) (ErrorCore.duplicateFieldError cx input))),
                       (Core.Name "extraction", (\input -> Eithers.map (\t -> Errors.ErrorExtraction t) (extractionError cx input))),
                       (Core.Name "inference", (\input -> Eithers.map (\t -> Errors.ErrorInference t) (inferenceError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Errors.ErrorOther t) (otherError cx input))),
                       (Core.Name "resolution", (\input -> Eithers.map (\t -> Errors.ErrorResolution t) (resolutionError cx input))),
-                      (Core.Name "undefinedField", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedField t) (ErrorCore.undefinedFieldError cx input))),
-                      (Core.Name "undefinedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedTermVariable t) (ErrorCore.undefinedTermVariableError cx input))),
-                      (Core.Name "untypedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUntypedTermVariable t) (ErrorCore.untypedTermVariableError cx input))),
-                      (Core.Name "unexpectedTermVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTermVariant t) (ErrorCore.unexpectedTermVariantError cx input))),
-                      (Core.Name "unexpectedTypeVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTypeVariant t) (ErrorCore.unexpectedTypeVariantError cx input))),
+                      (
+                        Core.Name "undefinedField",
+                        (\input -> Eithers.map (\t -> Errors.ErrorUndefinedField t) (ErrorCore.undefinedFieldError cx input))),
+                      (
+                        Core.Name "undefinedTermVariable",
+                        (\input -> Eithers.map (\t -> Errors.ErrorUndefinedTermVariable t) (ErrorCore.undefinedTermVariableError cx input))),
+                      (
+                        Core.Name "untypedTermVariable",
+                        (\input -> Eithers.map (\t -> Errors.ErrorUntypedTermVariable t) (ErrorCore.untypedTermVariableError cx input))),
+                      (
+                        Core.Name "unexpectedTermVariant",
+                        (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTermVariant t) (ErrorCore.unexpectedTermVariantError cx input))),
+                      (
+                        Core.Name "unexpectedTypeVariant",
+                        (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTypeVariant t) (ErrorCore.unexpectedTypeVariantError cx input))),
                       (Core.Name "unification", (\input -> Eithers.map (\t -> Errors.ErrorUnification t) (unificationError cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
@@ -65,12 +79,24 @@ extractionError cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "emptyList", (\input -> Eithers.map (\t -> Errors.ExtractionErrorEmptyList t) (emptyListError cx input))),
-                      (Core.Name "multipleBindings", (\input -> Eithers.map (\t -> Errors.ExtractionErrorMultipleBindings t) (multipleBindingsError cx input))),
-                      (Core.Name "multipleFields", (\input -> Eithers.map (\t -> Errors.ExtractionErrorMultipleFields t) (multipleFieldsError cx input))),
-                      (Core.Name "noMatchingField", (\input -> Eithers.map (\t -> Errors.ExtractionErrorNoMatchingField t) (noMatchingFieldError cx input))),
-                      (Core.Name "noSuchBinding", (\input -> Eithers.map (\t -> Errors.ExtractionErrorNoSuchBinding t) (noSuchBindingError cx input))),
-                      (Core.Name "notEnoughCases", (\input -> Eithers.map (\t -> Errors.ExtractionErrorNotEnoughCases t) (notEnoughCasesError cx input))),
-                      (Core.Name "unexpectedShape", (\input -> Eithers.map (\t -> Errors.ExtractionErrorUnexpectedShape t) (unexpectedShapeError cx input)))]
+                      (
+                        Core.Name "multipleBindings",
+                        (\input -> Eithers.map (\t -> Errors.ExtractionErrorMultipleBindings t) (multipleBindingsError cx input))),
+                      (
+                        Core.Name "multipleFields",
+                        (\input -> Eithers.map (\t -> Errors.ExtractionErrorMultipleFields t) (multipleFieldsError cx input))),
+                      (
+                        Core.Name "noMatchingField",
+                        (\input -> Eithers.map (\t -> Errors.ExtractionErrorNoMatchingField t) (noMatchingFieldError cx input))),
+                      (
+                        Core.Name "noSuchBinding",
+                        (\input -> Eithers.map (\t -> Errors.ExtractionErrorNoSuchBinding t) (noSuchBindingError cx input))),
+                      (
+                        Core.Name "notEnoughCases",
+                        (\input -> Eithers.map (\t -> Errors.ExtractionErrorNotEnoughCases t) (notEnoughCasesError cx input))),
+                      (
+                        Core.Name "unexpectedShape",
+                        (\input -> Eithers.map (\t -> Errors.ExtractionErrorUnexpectedShape t) (unexpectedShapeError cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -87,7 +113,9 @@ inferenceError cx raw =
                     Maps.fromList [
                       (Core.Name "checking", (\input -> Eithers.map (\t -> Errors.InferenceErrorChecking t) (Checking.checkingError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Errors.InferenceErrorOther t) (otherInferenceError cx input))),
-                      (Core.Name "unification", (\input -> Eithers.map (\t -> Errors.InferenceErrorUnification t) (unificationInferenceError cx input)))]
+                      (
+                        Core.Name "unification",
+                        (\input -> Eithers.map (\t -> Errors.InferenceErrorUnification t) (unificationInferenceError cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -175,11 +203,19 @@ resolutionError cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "noSuchBinding", (\input -> Eithers.map (\t -> Errors.ResolutionErrorNoSuchBinding t) (noSuchBindingError cx input))),
-                      (Core.Name "noSuchPrimitive", (\input -> Eithers.map (\t -> Errors.ResolutionErrorNoSuchPrimitive t) (noSuchPrimitiveError cx input))),
-                      (Core.Name "noMatchingField", (\input -> Eithers.map (\t -> Errors.ResolutionErrorNoMatchingField t) (noMatchingFieldError cx input))),
+                      (
+                        Core.Name "noSuchBinding",
+                        (\input -> Eithers.map (\t -> Errors.ResolutionErrorNoSuchBinding t) (noSuchBindingError cx input))),
+                      (
+                        Core.Name "noSuchPrimitive",
+                        (\input -> Eithers.map (\t -> Errors.ResolutionErrorNoSuchPrimitive t) (noSuchPrimitiveError cx input))),
+                      (
+                        Core.Name "noMatchingField",
+                        (\input -> Eithers.map (\t -> Errors.ResolutionErrorNoMatchingField t) (noMatchingFieldError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Errors.ResolutionErrorOther t) (otherResolutionError cx input))),
-                      (Core.Name "unexpectedShape", (\input -> Eithers.map (\t -> Errors.ResolutionErrorUnexpectedShape t) (unexpectedShapeError cx input)))]
+                      (
+                        Core.Name "unexpectedShape",
+                        (\input -> Eithers.map (\t -> Errors.ResolutionErrorUnexpectedShape t) (unexpectedShapeError cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

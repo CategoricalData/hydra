@@ -47,17 +47,21 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                     let freeVars = Sets.toList (Sets.intersection boundVars (Variables.freeVariablesInTerm (Core.bindingTerm b)))
                         varTypePairs = Lists.map (\v -> (v, (Maps.lookup v types))) freeVars
                         varTypes = Maybes.cat (Lists.map Pairs.second varTypePairs)
-                    in (Logic.ifElse (Logic.or (Lists.null freeVars) (Logic.not (Equality.equal (Lists.length varTypes) (Lists.length varTypePairs)))) (b, Nothing) (Core.Binding {
-                      Core.bindingName = (Core.bindingName b),
-                      Core.bindingTerm = (wrapAfterTypeLambdas varTypePairs (Core.bindingTerm b)),
-                      Core.bindingTypeScheme = (Maybes.map (\ts -> Core.TypeScheme {
-                        Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-                        Core.typeSchemeBody = (Lists.foldl (\acc -> \t -> Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = t,
-                          Core.functionTypeCodomain = acc})) (Core.typeSchemeBody ts) (Lists.reverse varTypes)),
-                        Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingTypeScheme b))}, (Just (Core.bindingName b, (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
-                      Core.applicationFunction = t,
-                      Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable (Core.bindingName b)) freeVars)))))
+                    in (Logic.ifElse (Logic.or (Lists.null freeVars) (Logic.not (Equality.equal (Lists.length varTypes) (Lists.length varTypePairs)))) (b, Nothing) (
+                      Core.Binding {
+                        Core.bindingName = (Core.bindingName b),
+                        Core.bindingTerm = (wrapAfterTypeLambdas varTypePairs (Core.bindingTerm b)),
+                        Core.bindingTypeScheme = (Maybes.map (\ts -> Core.TypeScheme {
+                          Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
+                          Core.typeSchemeBody = (Lists.foldl (\acc -> \t -> Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = t,
+                            Core.functionTypeCodomain = acc})) (Core.typeSchemeBody ts) (Lists.reverse varTypes)),
+                          Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingTypeScheme b))},
+                      (Just (
+                        Core.bindingName b,
+                        (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
+                          Core.applicationFunction = t,
+                          Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable (Core.bindingName b)) freeVars)))))
           results = Lists.map augment bindings
       in (Lists.map Pairs.first results, (Typing.TermSubst (Maps.fromList (Maybes.cat (Lists.map Pairs.second results)))))
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
@@ -169,10 +173,12 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                               Core.applicationFunction = t,
                               Core.applicationArgument = (Core.TermVariable v)})) withTypeApps capturedTermVars
                     newBindingAndReplacement =
-                            (Core.Binding {
-                              Core.bindingName = globalBindingName,
-                              Core.bindingTerm = termWithTypeLambdas,
-                              Core.bindingTypeScheme = newTypeScheme}, replacement)
+                            (
+                              Core.Binding {
+                                Core.bindingName = globalBindingName,
+                                Core.bindingTerm = termWithTypeLambdas,
+                                Core.bindingTypeScheme = newTypeScheme},
+                              replacement)
                     newPairs = Lists.cons newBindingAndReplacement bindingAndReplacementPairs
                 in (newPairs, newUsedNames)
           rewrite =
@@ -203,7 +209,9 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             bindingImmediateCapturedVars = Lists.zip hoistedBindingNames (Lists.map Pairs.second bindingDependencies)
                             capturedVarsMap = Maps.fromList (Sorting.propagateTags bindingEdges bindingImmediateCapturedVars)
                             bindingsWithCapturedVars =
-                                    Lists.map (\b -> (b, (Maybes.maybe [] (\vars -> Sets.toList (Sets.difference vars polyLetVariables)) (Maps.lookup (Core.bindingName b) capturedVarsMap)))) hoistUs
+                                    Lists.map (\b -> (
+                                      b,
+                                      (Maybes.maybe [] (\vars -> Sets.toList (Sets.difference vars polyLetVariables)) (Maps.lookup (Core.bindingName b) capturedVarsMap)))) hoistUs
                             hoistPairsAndNames = Lists.foldl (hoistOne prefix cx) ([], alreadyUsedNames) bindingsWithCapturedVars
                             hoistPairs = Lists.reverse (Pairs.first hoistPairsAndNames)
                             hoistedBindings = Lists.map Pairs.first hoistPairs
@@ -246,10 +254,14 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                     Logic.ifElse (Lists.null keepUsFinal) bodyFinal (Core.TermLet (Core.Let {
                                       Core.letBindings = keepUsFinal,
                                       Core.letBody = bodyFinal}))
-                        in ((Lists.concat [
-                          previouslyFinishedBindings,
-                          hoistedBindingsFinal,
-                          bindingsSoFarFinal], finalUsedNames), finalTerm)
+                        in (
+                          (
+                            Lists.concat [
+                              previouslyFinishedBindings,
+                              hoistedBindingsFinal,
+                              bindingsSoFarFinal],
+                            finalUsedNames),
+                          finalTerm)
                       _ -> ((Lists.concat2 previouslyFinishedBindings bindingsSoFar, alreadyUsedNames), newTerm)
           cx1 = Scoping.extendGraphForLet (\c -> \b -> Nothing) cx0 let0
           forActiveBinding =
@@ -372,9 +384,11 @@ hoistSubterms shouldHoist cx0 term0 =
                         bodyPrefix = Strings.cat2 firstBindingName "_body"
                         bodyResult = processImmediateSubterm cx 1 bodyPrefix bodyPathPrefix body
                         newBody = Pairs.second bodyResult
-                    in (counter, (Core.TermLet (Core.Let {
-                      Core.letBindings = newBindings,
-                      Core.letBody = newBody})))
+                    in (
+                      counter,
+                      (Core.TermLet (Core.Let {
+                        Core.letBindings = newBindings,
+                        Core.letBody = newBody})))
           rewrite =
                   \recurse -> \path -> \cx -> \counter -> \term -> case term of
                     Core.TermLet _ ->

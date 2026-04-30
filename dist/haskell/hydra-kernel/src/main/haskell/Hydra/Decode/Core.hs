@@ -121,27 +121,33 @@ floatValue cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "bigfloat", (\input -> Eithers.map (\t -> Core.FloatValueBigfloat t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueBigfloat v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected bigfloat value")
-                          _ -> Left (Errors.DecodingError "expected bigfloat literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "float32", (\input -> Eithers.map (\t -> Core.FloatValueFloat32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueFloat32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected float32 value")
-                          _ -> Left (Errors.DecodingError "expected float32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "float64", (\input -> Eithers.map (\t -> Core.FloatValueFloat64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueFloat64 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected float64 value")
-                          _ -> Left (Errors.DecodingError "expected float64 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "bigfloat",
+                        (\input -> Eithers.map (\t -> Core.FloatValueBigfloat t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralFloat v2 -> case v2 of
+                              Core.FloatValueBigfloat v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected bigfloat value")
+                            _ -> Left (Errors.DecodingError "expected bigfloat literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "float32",
+                        (\input -> Eithers.map (\t -> Core.FloatValueFloat32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralFloat v2 -> case v2 of
+                              Core.FloatValueFloat32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected float32 value")
+                            _ -> Left (Errors.DecodingError "expected float32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "float64",
+                        (\input -> Eithers.map (\t -> Core.FloatValueFloat64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralFloat v2 -> case v2 of
+                              Core.FloatValueFloat64 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected float64 value")
+                            _ -> Left (Errors.DecodingError "expected float64 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -206,69 +212,87 @@ integerValue cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "bigint", (\input -> Eithers.map (\t -> Core.IntegerValueBigint t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueBigint v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected bigint value")
-                          _ -> Left (Errors.DecodingError "expected bigint literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int8", (\input -> Eithers.map (\t -> Core.IntegerValueInt8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt8 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int8 value")
-                          _ -> Left (Errors.DecodingError "expected int8 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int16", (\input -> Eithers.map (\t -> Core.IntegerValueInt16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt16 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int16 value")
-                          _ -> Left (Errors.DecodingError "expected int16 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int32", (\input -> Eithers.map (\t -> Core.IntegerValueInt32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int32 value")
-                          _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int64", (\input -> Eithers.map (\t -> Core.IntegerValueInt64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt64 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int64 value")
-                          _ -> Left (Errors.DecodingError "expected int64 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint8", (\input -> Eithers.map (\t -> Core.IntegerValueUint8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint8 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint8 value")
-                          _ -> Left (Errors.DecodingError "expected uint8 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint16", (\input -> Eithers.map (\t -> Core.IntegerValueUint16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint16 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint16 value")
-                          _ -> Left (Errors.DecodingError "expected uint16 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint32", (\input -> Eithers.map (\t -> Core.IntegerValueUint32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint32 value")
-                          _ -> Left (Errors.DecodingError "expected uint32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint64", (\input -> Eithers.map (\t -> Core.IntegerValueUint64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint64 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint64 value")
-                          _ -> Left (Errors.DecodingError "expected uint64 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "bigint",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueBigint t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueBigint v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected bigint value")
+                            _ -> Left (Errors.DecodingError "expected bigint literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int8",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt8 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int8 value")
+                            _ -> Left (Errors.DecodingError "expected int8 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int16",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt16 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int16 value")
+                            _ -> Left (Errors.DecodingError "expected int16 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int32",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int32 value")
+                            _ -> Left (Errors.DecodingError "expected int32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int64",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt64 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int64 value")
+                            _ -> Left (Errors.DecodingError "expected int64 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint8",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint8 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint8 value")
+                            _ -> Left (Errors.DecodingError "expected uint8 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint16",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint16 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint16 value")
+                            _ -> Left (Errors.DecodingError "expected uint16 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint32",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint32 value")
+                            _ -> Left (Errors.DecodingError "expected uint32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint64",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint64 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint64 value")
+                            _ -> Left (Errors.DecodingError "expected uint64 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -302,28 +326,36 @@ literal cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "binary", (\input -> Eithers.map (\t -> Core.LiteralBinary t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralBinary v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected binary literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Core.LiteralBoolean t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralBoolean v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected boolean literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "decimal", (\input -> Eithers.map (\t -> Core.LiteralDecimal t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralDecimal v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected decimal literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "binary",
+                        (\input -> Eithers.map (\t -> Core.LiteralBinary t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralBinary v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected binary literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "boolean",
+                        (\input -> Eithers.map (\t -> Core.LiteralBoolean t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralBoolean v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected boolean literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "decimal",
+                        (\input -> Eithers.map (\t -> Core.LiteralDecimal t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralDecimal v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected decimal literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "float", (\input -> Eithers.map (\t -> Core.LiteralFloat t) (floatValue cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Core.LiteralInteger t) (integerValue cx input))),
-                      (Core.Name "string", (\input -> Eithers.map (\t -> Core.LiteralString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "string",
+                        (\input -> Eithers.map (\t -> Core.LiteralString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

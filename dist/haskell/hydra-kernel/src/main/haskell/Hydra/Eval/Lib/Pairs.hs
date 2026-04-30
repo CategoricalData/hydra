@@ -15,11 +15,13 @@ bimap cx g firstFun secondFun pairTerm =
       Core.TermPair v0 ->
         let fst = Pairs.first v0
             snd = Pairs.second v0
-        in (Right (Core.TermPair (Core.TermApplication (Core.Application {
-          Core.applicationFunction = firstFun,
-          Core.applicationArgument = fst}), (Core.TermApplication (Core.Application {
-          Core.applicationFunction = secondFun,
-          Core.applicationArgument = snd})))))
+        in (Right (Core.TermPair (
+          Core.TermApplication (Core.Application {
+            Core.applicationFunction = firstFun,
+            Core.applicationArgument = fst}),
+          (Core.TermApplication (Core.Application {
+            Core.applicationFunction = secondFun,
+            Core.applicationArgument = snd})))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "pair value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term pairTerm)})))

@@ -103,14 +103,14 @@ module_ = Module {
       toDefinition escapeLiteralChar,
       toDefinition escapeLiteralString,
       toDefinition rdfGraphToNtriples,
-      toDefinition writeBlankNode,
-      toDefinition writeGraph,
-      toDefinition writeIri,
-      toDefinition writeLanguageTag,
-      toDefinition writeLiteral,
-      toDefinition writeNode,
-      toDefinition writeResource,
-      toDefinition writeTriple]
+      toDefinition blankNodeToExpr,
+      toDefinition graphToExpr,
+      toDefinition iriToExpr,
+      toDefinition languageTagToExpr,
+      toDefinition literalToExpr,
+      toDefinition nodeToExpr,
+      toDefinition resourceToExpr,
+      toDefinition tripleToExpr]
 
 
 -- | Escape a single IRI character (as char code). Characters outside printable ASCII or in the
@@ -168,24 +168,24 @@ rdfGraphToNtriples :: TTermDefinition (Rdf.Graph -> String)
 rdfGraphToNtriples = define "rdfGraphToNtriples" $
   doc "Convert an RDF graph to an N-Triples string" $
   lambda "g" $
-    Serialization.printExpr @@ (writeGraph @@ var "g")
+    Serialization.printExpr @@ (graphToExpr @@ var "g")
 
-writeBlankNode :: TTermDefinition (Rdf.BlankNode -> Expr)
-writeBlankNode = define "writeBlankNode" $
+blankNodeToExpr :: TTermDefinition (Rdf.BlankNode -> Expr)
+blankNodeToExpr = define "blankNodeToExpr" $
   doc "Convert a blank node to an expression" $
   lambda "bnode" $
     Serialization.noSep @@ list [
       Serialization.cst @@ string "_:",
       Serialization.cst @@ (unwrap Rdf._BlankNode @@ var "bnode")]
 
-writeGraph :: TTermDefinition (Rdf.Graph -> Expr)
-writeGraph = define "writeGraph" $
+graphToExpr :: TTermDefinition (Rdf.Graph -> Expr)
+graphToExpr = define "graphToExpr" $
   doc "Convert an RDF graph to an expression" $
   lambda "g" $
-    Serialization.newlineSep @@ (Lists.map writeTriple (Sets.toList (unwrap Rdf._Graph @@ var "g")))
+    Serialization.newlineSep @@ (Lists.map tripleToExpr (Sets.toList (unwrap Rdf._Graph @@ var "g")))
 
-writeIri :: TTermDefinition (Rdf.Iri -> Expr)
-writeIri = define "writeIri" $
+iriToExpr :: TTermDefinition (Rdf.Iri -> Expr)
+iriToExpr = define "iriToExpr" $
   doc "Convert an IRI to an expression" $
   lambda "iri" $
     Serialization.noSep @@ list [
@@ -193,16 +193,16 @@ writeIri = define "writeIri" $
       Serialization.cst @@ (escapeIriStr @@ (unwrap Rdf._Iri @@ var "iri")),
       Serialization.cst @@ string ">"]
 
-writeLanguageTag :: TTermDefinition (Rdf.LanguageTag -> Expr)
-writeLanguageTag = define "writeLanguageTag" $
+languageTagToExpr :: TTermDefinition (Rdf.LanguageTag -> Expr)
+languageTagToExpr = define "languageTagToExpr" $
   doc "Convert a language tag to an expression" $
   lambda "lang" $
     Serialization.noSep @@ list [
       Serialization.cst @@ string "@",
       Serialization.cst @@ (unwrap Rdf._LanguageTag @@ var "lang")]
 
-writeLiteral :: TTermDefinition (Rdf.Literal -> Expr)
-writeLiteral = define "writeLiteral" $
+literalToExpr :: TTermDefinition (Rdf.Literal -> Expr)
+literalToExpr = define "literalToExpr" $
   doc "Convert a literal to an expression" $
   lambda "lit" $ lets [
     "lex">: project Rdf._Literal Rdf._Literal_lexicalForm @@ var "lit",
@@ -211,37 +211,37 @@ writeLiteral = define "writeLiteral" $
     "lexExpr">: Serialization.cst @@
       (Strings.cat $ list [string "\"", escapeLiteralString @@ var "lex", string "\""]),
     "suffix">: Maybes.maybe
-      (Serialization.noSep @@ list [Serialization.cst @@ string "^^", writeIri @@ var "dt"])
-      writeLanguageTag
+      (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"])
+      languageTagToExpr
       (var "lang")] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
-writeNode :: TTermDefinition (Rdf.Node -> Expr)
-writeNode = define "writeNode" $
+nodeToExpr :: TTermDefinition (Rdf.Node -> Expr)
+nodeToExpr = define "nodeToExpr" $
   doc "Convert a node to an expression" $
   lambda "n" $
     cases Rdf._Node (var "n") Nothing [
-      Rdf._Node_iri>>: lambda "iri" $ writeIri @@ var "iri",
-      Rdf._Node_bnode>>: lambda "bnode" $ writeBlankNode @@ var "bnode",
-      Rdf._Node_literal>>: lambda "lit" $ writeLiteral @@ var "lit"]
+      Rdf._Node_iri>>: lambda "iri" $ iriToExpr @@ var "iri",
+      Rdf._Node_bnode>>: lambda "bnode" $ blankNodeToExpr @@ var "bnode",
+      Rdf._Node_literal>>: lambda "lit" $ literalToExpr @@ var "lit"]
 
-writeResource :: TTermDefinition (Rdf.Resource -> Expr)
-writeResource = define "writeResource" $
+resourceToExpr :: TTermDefinition (Rdf.Resource -> Expr)
+resourceToExpr = define "resourceToExpr" $
   doc "Convert a resource to an expression" $
   lambda "r" $
     cases Rdf._Resource (var "r") Nothing [
-      Rdf._Resource_iri>>: lambda "iri" $ writeIri @@ var "iri",
-      Rdf._Resource_bnode>>: lambda "bnode" $ writeBlankNode @@ var "bnode"]
+      Rdf._Resource_iri>>: lambda "iri" $ iriToExpr @@ var "iri",
+      Rdf._Resource_bnode>>: lambda "bnode" $ blankNodeToExpr @@ var "bnode"]
 
-writeTriple :: TTermDefinition (Rdf.Triple -> Expr)
-writeTriple = define "writeTriple" $
+tripleToExpr :: TTermDefinition (Rdf.Triple -> Expr)
+tripleToExpr = define "tripleToExpr" $
   doc "Convert a triple to an expression" $
   lambda "t" $ lets [
     "subj">: project Rdf._Triple Rdf._Triple_subject @@ var "t",
     "pred">: project Rdf._Triple Rdf._Triple_predicate @@ var "t",
     "obj">: project Rdf._Triple Rdf._Triple_object @@ var "t"] $
     Serialization.spaceSep @@ list [
-      writeResource @@ var "subj",
-      writeIri @@ var "pred",
-      writeNode @@ var "obj",
+      resourceToExpr @@ var "subj",
+      iriToExpr @@ var "pred",
+      nodeToExpr @@ var "obj",
       Serialization.cst @@ string "."]

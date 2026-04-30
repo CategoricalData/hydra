@@ -1294,7 +1294,7 @@ moduleToScala = def "moduleToScala" $
     Eithers.bind
       (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs")
       ("pkg" ~> lets [
-        "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.scala.serde.writePkg")) @@ var "pkg"))] $
+        "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.scala.serde.pkgToExpr")) @@ var "pkg"))] $
         right (Maps.singleton
           (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleNamespace (var "mod"))
           (var "s")))

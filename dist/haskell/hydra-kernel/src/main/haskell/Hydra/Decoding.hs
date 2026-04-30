@@ -1319,27 +1319,29 @@ decodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
 decodeUnionTypeNamed ename rt =
 
       let toVariantPair =
-              \ft -> Core.TermPair (Core.TermWrap (Core.WrappedTerm {
-                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}), (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "input"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
-                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "t"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermInject (Core.Injection {
-                        Core.injectionTypeName = ename,
-                        Core.injectionField = Core.Field {
-                          Core.fieldName = (Core.fieldTypeName ft),
-                          Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+              \ft -> Core.TermPair (
+                Core.TermWrap (Core.WrappedTerm {
+                  Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}),
+                (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "input"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (decodeType (Core.fieldTypeType ft)),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
+                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "t"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermInject (Core.Injection {
+                          Core.injectionTypeName = ename,
+                          Core.injectionField = Core.Field {
+                            Core.fieldName = (Core.fieldTypeName ft),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (decodeType (Core.fieldTypeType ft)),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))
       in (Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "cx"),
         Core.lambdaDomain = Nothing,

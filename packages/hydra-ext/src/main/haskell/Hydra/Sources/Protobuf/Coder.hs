@@ -695,7 +695,7 @@ moduleToProtobuf = def "moduleToProtobuf" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned")] $
     "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
-      "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.writeProtoFile @@ var "pfile")),
+      "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.protoFileToExpr @@ var "pfile")),
       "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
       right $ Maps.singleton (var "path") (var "content")
 

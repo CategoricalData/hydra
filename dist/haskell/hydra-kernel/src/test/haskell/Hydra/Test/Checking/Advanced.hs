@@ -133,11 +133,13 @@ nestedAnnotationsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "annotated terms in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-              Core.annotatedTermAnnotation = M.empty}), (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
-              Core.annotatedTermAnnotation = M.empty})))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                Core.annotatedTermAnnotation = M.empty}),
+              (Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
+                Core.annotatedTermAnnotation = M.empty})))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),

@@ -24,11 +24,21 @@ comparisonConstraint cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "equal", (\input -> Eithers.map (\t -> Query.ComparisonConstraintEqual) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "notEqual", (\input -> Eithers.map (\t -> Query.ComparisonConstraintNotEqual) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "lessThan", (\input -> Eithers.map (\t -> Query.ComparisonConstraintLessThan) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "greaterThan", (\input -> Eithers.map (\t -> Query.ComparisonConstraintGreaterThan) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "lessThanOrEqual", (\input -> Eithers.map (\t -> Query.ComparisonConstraintLessThanOrEqual) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "greaterThanOrEqual", (\input -> Eithers.map (\t -> Query.ComparisonConstraintGreaterThanOrEqual) (ExtractCore.decodeUnit cx input)))]
+                      (
+                        Core.Name "notEqual",
+                        (\input -> Eithers.map (\t -> Query.ComparisonConstraintNotEqual) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "lessThan",
+                        (\input -> Eithers.map (\t -> Query.ComparisonConstraintLessThan) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "greaterThan",
+                        (\input -> Eithers.map (\t -> Query.ComparisonConstraintGreaterThan) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "lessThanOrEqual",
+                        (\input -> Eithers.map (\t -> Query.ComparisonConstraintLessThanOrEqual) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "greaterThanOrEqual",
+                        (\input -> Eithers.map (\t -> Query.ComparisonConstraintGreaterThanOrEqual) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -107,8 +117,12 @@ pattern cx raw =
                     Maps.fromList [
                       (Core.Name "triple", (\input -> Eithers.map (\t -> Query.PatternTriple t) (triplePattern cx input))),
                       (Core.Name "negation", (\input -> Eithers.map (\t -> Query.PatternNegation t) (pattern cx input))),
-                      (Core.Name "conjunction", (\input -> Eithers.map (\t -> Query.PatternConjunction t) (ExtractCore.decodeList pattern cx input))),
-                      (Core.Name "disjunction", (\input -> Eithers.map (\t -> Query.PatternDisjunction t) (ExtractCore.decodeList pattern cx input))),
+                      (
+                        Core.Name "conjunction",
+                        (\input -> Eithers.map (\t -> Query.PatternConjunction t) (ExtractCore.decodeList pattern cx input))),
+                      (
+                        Core.Name "disjunction",
+                        (\input -> Eithers.map (\t -> Query.PatternDisjunction t) (ExtractCore.decodeList pattern cx input))),
                       (Core.Name "graph", (\input -> Eithers.map (\t -> Query.PatternGraph t) (graphPattern cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
@@ -165,22 +179,28 @@ regexQuantifier cx raw =
                     Maps.fromList [
                       (Core.Name "one", (\input -> Eithers.map (\t -> Query.RegexQuantifierOne) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "zeroOrOne", (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrOne) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "zeroOrMore", (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrMore) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "zeroOrMore",
+                        (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrMore) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "oneOrMore", (\input -> Eithers.map (\t -> Query.RegexQuantifierOneOrMore) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "exactly", (\input -> Eithers.map (\t -> Query.RegexQuantifierExactly t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int32 value")
-                          _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Query.RegexQuantifierAtLeast t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int32 value")
-                          _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "exactly",
+                        (\input -> Eithers.map (\t -> Query.RegexQuantifierExactly t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int32 value")
+                            _ -> Left (Errors.DecodingError "expected int32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "atLeast",
+                        (\input -> Eithers.map (\t -> Query.RegexQuantifierAtLeast t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int32 value")
+                            _ -> Left (Errors.DecodingError "expected int32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "range", (\input -> Eithers.map (\t -> Query.RegexQuantifierRange t) (range cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",

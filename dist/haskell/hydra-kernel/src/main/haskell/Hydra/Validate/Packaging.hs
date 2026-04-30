@@ -29,9 +29,11 @@ checkConflictingModuleNamespaces pkg =
                   let ns = Packaging.moduleNamespace mod
                       key = Strings.toLower (Packaging.unNamespace ns)
                       existing = Maps.lookup key seen
-                  in (Maybes.cases existing (Maps.insert key ns seen, Nothing) (\first -> (seen, (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleNamespace (ErrorPackaging.ConflictingModuleNamespaceError {
-                    ErrorPackaging.conflictingModuleNamespaceErrorFirst = first,
-                    ErrorPackaging.conflictingModuleNamespaceErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging.packageModules pkg)
+                  in (Maybes.cases existing (Maps.insert key ns seen, Nothing) (\first -> (
+                    seen,
+                    (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleNamespace (ErrorPackaging.ConflictingModuleNamespaceError {
+                      ErrorPackaging.conflictingModuleNamespaceErrorFirst = first,
+                      ErrorPackaging.conflictingModuleNamespaceErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
 -- | Check for union variant names that, when mapped to constructor names, conflict with other type definitions
 checkConflictingVariantNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
@@ -82,9 +84,11 @@ checkDuplicateDefinitionNames mod =
                         err = Pairs.second acc
                     in (Maybes.cases err (
                       let name = definitionName def
-                      in (Logic.ifElse (Sets.member name seen) (seen, (Just (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
-                        ErrorPackaging.duplicateDefinitionNameErrorNamespace = ns,
-                        ErrorPackaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.moduleDefinitions mod)
+                      in (Logic.ifElse (Sets.member name seen) (
+                        seen,
+                        (Just (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
+                          ErrorPackaging.duplicateDefinitionNameErrorNamespace = ns,
+                          ErrorPackaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.moduleDefinitions mod)
       in (Pairs.second result)
 -- | Check for duplicate module namespaces in a package
 checkDuplicateModuleNamespaces :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
@@ -96,8 +100,10 @@ checkDuplicateModuleNamespaces pkg =
                     err = Pairs.second acc
                 in (Maybes.cases err (
                   let ns = Packaging.moduleNamespace mod
-                  in (Logic.ifElse (Sets.member ns seen) (seen, (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleNamespace (ErrorPackaging.DuplicateModuleNamespaceError {
-                    ErrorPackaging.duplicateModuleNamespaceErrorNamespace = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.packageModules pkg)
+                  in (Logic.ifElse (Sets.member ns seen) (
+                    seen,
+                    (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleNamespace (ErrorPackaging.DuplicateModuleNamespaceError {
+                      ErrorPackaging.duplicateModuleNamespaceErrorNamespace = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
 -- | Extract the name from a definition
 definitionName :: Packaging.Definition -> Core.Name

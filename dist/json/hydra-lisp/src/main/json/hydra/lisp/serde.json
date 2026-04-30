@@ -47,7 +47,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                     "function": {"variable": "hydra.serialization.parens"}}},
                 "domain": {"variable": "hydra.lisp.syntax.AndExpression"},
                 "parameter": "andExpr"}},
@@ -192,7 +192,7 @@
                         "argument": {
                           "application": {
                             "argument": {"variable": "allParts"},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.lisp.syntax.Application"},
                 "parameter": "app"}},
@@ -290,7 +290,7 @@
                                                                         "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                     "function": {"variable": "hydra.serialization.parens"}}},
                                                 {
                                                   "application": {
@@ -303,7 +303,7 @@
                                                       "application": {
                                                         "argument": {"variable": "d"},
                                                         "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"variable": "hydra.lisp.syntax.CaseClause"},
                                     "parameter": "c"}},
@@ -343,7 +343,7 @@
                                                           "application": {
                                                             "argument": {"variable": "d"},
                                                             "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                     "domain": {"variable": "hydra.lisp.syntax.Expression"},
                                     "parameter": "e"}},
@@ -380,7 +380,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.concat"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.lisp.syntax.CaseExpression"},
                 "parameter": "caseExpr"}},
@@ -598,7 +598,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -646,7 +646,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "d"},
                                                                             "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {"variable": "hydra.lisp.syntax.CondClause"},
                                                         "parameter": "c"}},
@@ -686,7 +686,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "d"},
                                                                                 "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         "domain": {"variable": "hydra.lisp.syntax.Expression"},
                                                         "parameter": "e"}},
@@ -722,7 +722,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -770,7 +770,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "d"},
                                                                             "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {"variable": "hydra.lisp.syntax.CondClause"},
                                                         "parameter": "c"}},
@@ -810,7 +810,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "d"},
                                                                                 "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         "domain": {"variable": "hydra.lisp.syntax.Expression"},
                                                         "parameter": "e"}},
@@ -846,7 +846,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -894,7 +894,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "d"},
                                                                             "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {"variable": "hydra.lisp.syntax.CondClause"},
                                                         "parameter": "c"}},
@@ -934,7 +934,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "d"},
                                                                                 "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         "domain": {"variable": "hydra.lisp.syntax.Expression"},
                                                         "parameter": "e"}},
@@ -970,7 +970,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -1038,7 +1038,7 @@
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 {"variable": "name"},
                                 {"variable": "value"}]},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.lisp.syntax.ConstantDefinition"},
                 "parameter": "cdef"}},
@@ -1331,7 +1331,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.lisp.syntax.DoExpression"},
                 "parameter": "doExpr"}},
@@ -1478,7 +1478,7 @@
                                                                             "function": {"variable": "hydra.serialization.cst"}}},
                                                                         {"variable": "s"}]},
                                                                     "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "domain": {"variable": "hydra.ast.Expr"},
                                                     "parameter": "s"}},
@@ -1540,7 +1540,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -1567,7 +1567,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -1772,7 +1772,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                     "function": {"variable": "hydra.serialization.parens"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.BeginExpression"},
                                 "parameter": "e"}}},
@@ -1890,7 +1890,7 @@
                                                   "application": {
                                                     "argument": {"variable": "d"},
                                                     "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                     "function": {"variable": "hydra.serialization.parens"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.ConsExpression"},
                                 "parameter": "c"}}},
@@ -1930,7 +1930,7 @@
                                                   "application": {
                                                     "argument": {"variable": "d"},
                                                     "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                     "function": {"variable": "hydra.serialization.parens"}}},
                                 "domain": {"variable": "hydra.lisp.syntax.DottedPair"},
                                 "parameter": "p"}}},
@@ -2419,7 +2419,7 @@
                                                         {"variable": "field"}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 {"variable": "target"}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -2445,7 +2445,7 @@
                                                         {"variable": "field"}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 {"variable": "target"}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -2471,7 +2471,7 @@
                                                         {"variable": "field"}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 {"variable": "target"}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -2497,7 +2497,7 @@
                                                         {"variable": "field"}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                                 {"variable": "target"}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -2822,7 +2822,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -2852,14 +2852,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -2889,14 +2889,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -2934,14 +2934,14 @@
                                                                           "typeApplication": {
                                                                             "body": {"variable": "hydra.lib.lists.concat2"},
                                                                             "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -3060,7 +3060,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.concat"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.lisp.syntax.IfExpression"},
                 "parameter": "ifExpr"}},
@@ -3134,7 +3134,7 @@
                                                           "application": {
                                                             "argument": {"variable": "hydra.serialization.squareBrackets"},
                                                             "function": {"variable": "hydra.serialization.brackets"}}}}}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -3165,7 +3165,7 @@
                                                             "argument": {"variable": "modName"},
                                                             "function": {"variable": "hydra.serialization.cst"}}}]},
                                                     "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -3193,7 +3193,7 @@
                                                             "argument": {"literal": {"string": ":"}},
                                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                     "function": {"variable": "hydra.serialization.cst"}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -3218,7 +3218,7 @@
                                                         "argument": {"variable": "modName"},
                                                         "function": {"variable": "hydra.serialization.cst"}}},
                                                     "function": {"variable": "hydra.serialization.parens"}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -3508,7 +3508,7 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.lists.concat"},
                                                                 "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                     "function": {"variable": "hydra.serialization.parens"}}},
                                                 "domain": {"variable": "hydra.lisp.syntax.Symbol"},
                                                 "parameter": "sym"}},
@@ -3548,7 +3548,7 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.lists.concat"},
                                                                 "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                     "function": {"variable": "hydra.serialization.parens"}}},
                                                 "function": {
                                                   "typeApplication": {
@@ -3584,14 +3584,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -3620,14 +3620,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -3656,14 +3656,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -3972,7 +3972,7 @@
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {"variable": "hydra.lib.lists.concat"},
                                                                                                                                 "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                                                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                                                                     "function": {"variable": "hydra.serialization.parens"}}}}},
                                                                                                             "domain": {"variable": "hydra.lisp.syntax.Lambda"},
                                                                                                             "parameter": "lam"}}}],
@@ -3990,7 +3990,7 @@
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "d"},
                                                                                                                         "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                                                                     "typeName": "hydra.lisp.syntax.Expression"}}}}}},
                                                                                         "domain": {"variable": "hydra.lisp.syntax.SimpleBinding"},
@@ -4050,7 +4050,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                                     "domain": {"unit": {}},
                                                     "parameter": "_"}}},
@@ -4141,7 +4141,7 @@
                                                                   "typeApplication": {
                                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "domain": {"unit": {}},
                                                     "parameter": "_"}}},
@@ -4232,7 +4232,7 @@
                                                                   "typeApplication": {
                                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "domain": {"unit": {}},
                                                     "parameter": "_"}}}],
@@ -4312,7 +4312,7 @@
                                                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                                                 "type": {"variable": "hydra.ast.Expr"}}},
                                                                             "type": {"variable": "hydra.ast.Expr"}}}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {
                                                           "pair": {
@@ -4351,14 +4351,14 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "bindingExprs"},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         {"variable": "body"}]},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -4435,7 +4435,7 @@
                                                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                                                 "type": {"variable": "hydra.ast.Expr"}}},
                                                                             "type": {"variable": "hydra.ast.Expr"}}}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {
                                                           "pair": {
@@ -4474,14 +4474,14 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "bindingExprs"},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         {"variable": "body"}]},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -4558,7 +4558,7 @@
                                                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                                                 "type": {"variable": "hydra.ast.Expr"}}},
                                                                             "type": {"variable": "hydra.ast.Expr"}}}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {
                                                           "pair": {
@@ -4597,14 +4597,14 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "bindingExprs"},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         {"variable": "body"}]},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -4735,7 +4735,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.lists.concat2"},
                                             "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                             "function": {"variable": "hydra.serialization.parens"}}},
                         "function": {
                           "application": {
@@ -4752,7 +4752,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "elems"},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}}]},
                                 "function": {"variable": "hydra.serialization.noSep"}}},
                             "function": {
@@ -5477,7 +5477,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -5507,14 +5507,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -5544,14 +5544,14 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "params"},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}}]},
                                                     {"variable": "body"}]},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -5579,7 +5579,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -5742,7 +5742,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "d"},
                                                                                     "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                     "function": {"variable": "hydra.serialization.parens"}}},
                                                                 "domain": {"variable": "hydra.lisp.syntax.MapEntry"},
                                                                 "parameter": "e"}},
@@ -5753,7 +5753,7 @@
                                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                                     "type": {"variable": "hydra.lisp.syntax.MapEntry"}}},
                                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}},
                                     "domain": {"unit": {}},
@@ -5813,7 +5813,7 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "d"},
                                                                                     "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                     "function": {"variable": "hydra.serialization.parens"}}},
                                                                 "domain": {"variable": "hydra.lisp.syntax.MapEntry"},
                                                                 "parameter": "e"}},
@@ -5824,7 +5824,7 @@
                                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                                     "type": {"variable": "hydra.lisp.syntax.MapEntry"}}},
                                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}},
                                     "domain": {"unit": {}},
@@ -5878,7 +5878,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "d"},
                                                                                 "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                                             "domain": {"variable": "hydra.lisp.syntax.MapEntry"},
                                                             "parameter": "e"}},
@@ -5901,7 +5901,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -5964,7 +5964,7 @@
                                                   "application": {
                                                     "argument": {"variable": "name"},
                                                     "function": {"variable": "hydra.serialization.cst"}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -5999,7 +5999,7 @@
                                                                     "argument": {"literal": {"string": "cl-lib"}},
                                                                     "function": {"variable": "hydra.serialization.cst"}}}]},
                                                             "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                             {
                                               "application": {
@@ -6024,7 +6024,7 @@
                                                                     "argument": {"variable": "name"},
                                                                     "function": {"variable": "hydra.serialization.cst"}}}]},
                                                             "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.newlineSep"}}},
                                     "domain": {"unit": {}},
@@ -6057,7 +6057,7 @@
                                                                     "argument": {"literal": {"string": ":"}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                             "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                             {
                                               "application": {
@@ -6079,7 +6079,7 @@
                                                                     "argument": {"literal": {"string": ":"}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                             "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.newlineSep"}}},
                                     "domain": {"unit": {}},
@@ -6105,7 +6105,7 @@
                                                         "argument": {"variable": "name"},
                                                         "function": {"variable": "hydra.serialization.cst"}}},
                                                     "function": {"variable": "hydra.serialization.parens"}}}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -6211,7 +6211,7 @@
                                   "application": {
                                     "argument": {"variable": "d"},
                                     "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                     "function": {"variable": "hydra.serialization.parens"}}},
                 "domain": {"variable": "hydra.lisp.syntax.NotExpression"},
                 "parameter": "notExpr"}},
@@ -6271,7 +6271,7 @@
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                     "function": {"variable": "hydra.serialization.parens"}}},
                 "domain": {"variable": "hydra.lisp.syntax.OrExpression"},
                 "parameter": "orExpr"}},
@@ -6571,7 +6571,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "nameStr"},
                                                                             "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                                             "function": {
                                                               "application": {
@@ -6699,7 +6699,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                         "function": {"variable": "hydra.serialization.parens"}}}]},
                                                                 "function": {
                                                                   "application": {
@@ -6800,7 +6800,7 @@
                                                                             "argument": {"literal": {"string": "cl-lib"}},
                                                                             "function": {"variable": "hydra.serialization.cst"}}}]},
                                                                     "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                   {
@@ -6835,7 +6835,7 @@
                                                                                         "argument": {"variable": "imp"},
                                                                                         "function": {"variable": "hydra.serialization.cst"}}}]},
                                                                                 "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                     "function": {"variable": "hydra.serialization.parens"}}},
                                                                 "domain": {"literal": {"string": {}}},
                                                                 "parameter": "imp"}},
@@ -6872,7 +6872,7 @@
                                                                             "argument": {"variable": "nameStr"},
                                                                             "function": {"variable": "hydra.serialization.cst"}}}]},
                                                                     "function": {"variable": "hydra.serialization.noSep"}}}]},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                                 "body": {
@@ -6992,7 +6992,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                   {
@@ -7045,7 +7045,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                                         "function": {
                                                           "application": {
@@ -7115,7 +7115,7 @@
                                                                   "application": {
                                                                     "argument": {"variable": "colonName"},
                                                                     "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                                 "body": {
@@ -7228,7 +7228,7 @@
                                                                             "body": {"variable": "hydra.lib.lists.map"},
                                                                             "type": {"literal": {"string": {}}}}},
                                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                   {
@@ -7307,7 +7307,7 @@
                                                                                             "body": {"variable": "hydra.lib.lists.map"},
                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                         "function": {"variable": "hydra.serialization.parens"}}}}},
                                                                 "domain": {"variable": "hydra.lisp.syntax.ImportDeclaration"},
                                                                 "parameter": "idecl"}},
@@ -7335,7 +7335,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "base"}},
                                                                     "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                   {
@@ -7372,7 +7372,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                         "function": {"variable": "hydra.serialization.parens"}}},
                                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                   {
@@ -7621,7 +7621,7 @@
                                                                   "application": {
                                                                     "argument": {"variable": "hydra.serialization.squareBrackets"},
                                                                     "function": {"variable": "hydra.serialization.brackets"}}}}}}}]},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                             "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                           {
@@ -7711,13 +7711,13 @@
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                        "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                                     "function": {"variable": "hydra.serialization.parens"}}}]}]},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"variable": "hydra.lib.lists.concat"},
                                                             "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                             "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                         "body": {
@@ -7750,7 +7750,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -7778,7 +7778,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -7881,7 +7881,7 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.lists.concat2"},
                                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}},
                                             "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                           {
@@ -7927,7 +7927,7 @@
                                                                                 {"variable": "fn"}]},
                                                                             "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                         "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                             "function": {"variable": "hydra.serialization.parens"}}},
                                                         "domain": {"literal": {"string": {}}},
                                                         "parameter": "fn"}},
@@ -7961,7 +7961,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                             "function": {"variable": "hydra.serialization.parens"}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -8021,7 +8021,7 @@
                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"variable": "hydra.lisp.syntax.SExpression"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                 "function": {"variable": "hydra.serialization.parens"}}},
                             "domain": {"list": {"variable": "hydra.lisp.syntax.SExpression"}},
                             "parameter": "elems"}}}],
@@ -8124,7 +8124,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -8151,7 +8151,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -8178,7 +8178,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.concat2"},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                         "function": {"variable": "hydra.serialization.parens"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}}],
@@ -8572,7 +8572,7 @@
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 {"variable": "name"},
                                 {"variable": "value"}]},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                            "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.lisp.syntax.VariableDefinition"},
                 "parameter": "vdef"}},
@@ -8781,7 +8781,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "elems"},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}},
                                     "domain": {"unit": {}},
@@ -8803,7 +8803,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "elems"},
-                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                    "function": {"variable": "hydra.serialization.spaceSepAdaptive"}}},
                                                 "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}},
                                     "domain": {"unit": {}},

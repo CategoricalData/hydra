@@ -104,21 +104,21 @@ module_ = Module {
       toDefinition optDesc,
       toDefinition protoBlock,
       toDefinition semi,
-      toDefinition writeDefinition,
-      toDefinition writeEnumDefinition,
-      toDefinition writeEnumValue,
-      toDefinition writeField,
-      toDefinition writeFieldOption,
-      toDefinition writeFieldOptions,
-      toDefinition writeFieldType,
-      toDefinition writeFileOption,
-      toDefinition writeFileOptions,
-      toDefinition writeImport,
-      toDefinition writeMessageDefinition,
-      toDefinition writeProtoFile,
-      toDefinition writeScalarType,
-      toDefinition writeSimpleType,
-      toDefinition writeValue]
+      toDefinition definitionToExpr,
+      toDefinition enumDefinitionToExpr,
+      toDefinition enumValueToExpr,
+      toDefinition fieldToExpr,
+      toDefinition fieldOptionToExpr,
+      toDefinition fieldOptionsToExpr,
+      toDefinition fieldTypeToExpr,
+      toDefinition fileOptionToExpr,
+      toDefinition fileOptionsToExpr,
+      toDefinition importToExpr,
+      toDefinition messageDefinitionToExpr,
+      toDefinition protoFileToExpr,
+      toDefinition scalarTypeToExpr,
+      toDefinition simpleTypeToExpr,
+      toDefinition valueToExpr]
 
 
 deprecatedOptionName :: TTermDefinition String
@@ -180,16 +180,16 @@ semi = define "semi" $
   doc "Append a semicolon to an expression" $
   lambda "e" $ Serialization.noSep @@ list [var "e", Serialization.cst @@ string ";"]
 
-writeDefinition :: TTermDefinition (P3.Definition -> Expr)
-writeDefinition = define "writeDefinition" $
+definitionToExpr :: TTermDefinition (P3.Definition -> Expr)
+definitionToExpr = define "definitionToExpr" $
   doc "Convert a definition to an expression" $
   lambda "def" $
     cases P3._Definition (var "def") Nothing [
-      P3._Definition_enum>>: lambda "e" $ writeEnumDefinition @@ var "e",
-      P3._Definition_message>>: lambda "m" $ writeMessageDefinition @@ var "m"]
+      P3._Definition_enum>>: lambda "e" $ enumDefinitionToExpr @@ var "e",
+      P3._Definition_message>>: lambda "m" $ messageDefinitionToExpr @@ var "m"]
 
-writeEnumDefinition :: TTermDefinition (P3.EnumDefinition -> Expr)
-writeEnumDefinition = define "writeEnumDefinition" $
+enumDefinitionToExpr :: TTermDefinition (P3.EnumDefinition -> Expr)
+enumDefinitionToExpr = define "enumDefinitionToExpr" $
   doc "Convert an enum definition to an expression" $
   lambda "ed" $ lets [
     "name">: project P3._EnumDefinition P3._EnumDefinition_name @@ var "ed",
@@ -199,10 +199,10 @@ writeEnumDefinition = define "writeEnumDefinition" $
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "enum",
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
-        protoBlock @@ (Lists.map writeEnumValue (var "values"))])
+        protoBlock @@ (Lists.map enumValueToExpr (var "values"))])
 
-writeEnumValue :: TTermDefinition (P3.EnumValue -> Expr)
-writeEnumValue = define "writeEnumValue" $
+enumValueToExpr :: TTermDefinition (P3.EnumValue -> Expr)
+enumValueToExpr = define "enumValueToExpr" $
   doc "Convert an enum value to an expression" $
   lambda "ev" $ lets [
     "name">: project P3._EnumValue P3._EnumValue_name @@ var "ev",
@@ -214,8 +214,8 @@ writeEnumValue = define "writeEnumValue" $
         Serialization.cst @@ string "=",
         Serialization.cst @@ (Literals.showInt32 (var "number"))]))
 
-writeField :: TTermDefinition (P3.Field -> Expr)
-writeField = define "writeField" $
+fieldToExpr :: TTermDefinition (P3.Field -> Expr)
+fieldToExpr = define "fieldToExpr" $
   doc "Convert a field to an expression" $
   lambda "f" $ lets [
     "name">: project P3._Field P3._Field_name @@ var "f",
@@ -228,33 +228,33 @@ writeField = define "writeField" $
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "oneof",
             Serialization.cst @@ (unwrap P3._FieldName @@ var "name"),
-            protoBlock @@ (Lists.map writeField (var "fields"))],
+            protoBlock @@ (Lists.map fieldToExpr (var "fields"))],
         P3._FieldType_map>>: lambda "mt" $ lets [
           "kt">: project P3._MapType P3._MapType_keys @@ var "mt",
           "vt">: project P3._MapType P3._MapType_values @@ var "mt"] $
           semi @@ (Serialization.spaceSep @@ (Maybes.cat $ list [
-            Maybes.pure (writeFieldType @@ var "typ"),
+            Maybes.pure (fieldTypeToExpr @@ var "typ"),
             Maybes.pure (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
             Maybes.pure (Serialization.cst @@ string "="),
             Maybes.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
-            writeFieldOptions @@ var "options"])),
+            fieldOptionsToExpr @@ var "options"])),
         P3._FieldType_repeated>>: lambda "st" $
           semi @@ (Serialization.spaceSep @@ (Maybes.cat $ list [
-            Maybes.pure (writeFieldType @@ var "typ"),
+            Maybes.pure (fieldTypeToExpr @@ var "typ"),
             Maybes.pure (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
             Maybes.pure (Serialization.cst @@ string "="),
             Maybes.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
-            writeFieldOptions @@ var "options"])),
+            fieldOptionsToExpr @@ var "options"])),
         P3._FieldType_simple>>: lambda "st" $
           semi @@ (Serialization.spaceSep @@ (Maybes.cat $ list [
-            Maybes.pure (writeFieldType @@ var "typ"),
+            Maybes.pure (fieldTypeToExpr @@ var "typ"),
             Maybes.pure (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
             Maybes.pure (Serialization.cst @@ string "="),
             Maybes.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
-            writeFieldOptions @@ var "options"]))])
+            fieldOptionsToExpr @@ var "options"]))])
 
-writeFieldOption :: TTermDefinition (P3.Option -> Expr)
-writeFieldOption = define "writeFieldOption" $
+fieldOptionToExpr :: TTermDefinition (P3.Option -> Expr)
+fieldOptionToExpr = define "fieldOptionToExpr" $
   doc "Convert a field option to an expression" $
   lambda "opt" $ lets [
     "name">: project P3._Option P3._Option_name @@ var "opt",
@@ -262,20 +262,20 @@ writeFieldOption = define "writeFieldOption" $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ var "name",
       Serialization.cst @@ string "=",
-      writeValue @@ var "value"]
+      valueToExpr @@ var "value"]
 
-writeFieldOptions :: TTermDefinition ([P3.Option] -> Maybe Expr)
-writeFieldOptions = define "writeFieldOptions" $
+fieldOptionsToExpr :: TTermDefinition ([P3.Option] -> Maybe Expr)
+fieldOptionsToExpr = define "fieldOptionsToExpr" $
   doc "Convert field options to an optional bracket-enclosed expression" $
   lambda "opts0" $ lets [
     "opts">: excludeInternalOptions @@ var "opts0"] $
     Logic.ifElse (Lists.null (var "opts"))
       nothing
       (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
-        (Lists.map writeFieldOption (var "opts"))))
+        (Lists.map fieldOptionToExpr (var "opts"))))
 
-writeFieldType :: TTermDefinition (P3.FieldType -> Expr)
-writeFieldType = define "writeFieldType" $
+fieldTypeToExpr :: TTermDefinition (P3.FieldType -> Expr)
+fieldTypeToExpr = define "fieldTypeToExpr" $
   doc "Convert a field type to an expression" $
   lambda "ftyp" $
     cases P3._FieldType (var "ftyp") Nothing [
@@ -285,18 +285,18 @@ writeFieldType = define "writeFieldType" $
         Serialization.noSep @@ list [
           Serialization.cst @@ string "map",
           Serialization.angleBracesList @@ Serialization.inlineStyle @@ list [
-            writeSimpleType @@ var "kt",
-            writeSimpleType @@ var "vt"]],
+            simpleTypeToExpr @@ var "kt",
+            simpleTypeToExpr @@ var "vt"]],
       P3._FieldType_repeated>>: lambda "st" $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "repeated",
-          writeSimpleType @@ var "st"],
-      P3._FieldType_simple>>: lambda "st" $ writeSimpleType @@ var "st",
+          simpleTypeToExpr @@ var "st"],
+      P3._FieldType_simple>>: lambda "st" $ simpleTypeToExpr @@ var "st",
       P3._FieldType_oneof>>: lambda "fields" $
         Serialization.cst @@ string "oneof"]
 
-writeFileOption :: TTermDefinition (P3.Option -> Expr)
-writeFileOption = define "writeFileOption" $
+fileOptionToExpr :: TTermDefinition (P3.Option -> Expr)
+fileOptionToExpr = define "fileOptionToExpr" $
   doc "Convert a file-level option to an expression" $
   lambda "opt" $ lets [
     "name">: project P3._Option P3._Option_name @@ var "opt",
@@ -305,27 +305,27 @@ writeFileOption = define "writeFileOption" $
       Serialization.cst @@ string "option",
       Serialization.cst @@ var "name",
       Serialization.cst @@ string "=",
-      writeValue @@ var "value"])
+      valueToExpr @@ var "value"])
 
-writeFileOptions :: TTermDefinition ([P3.Option] -> Maybe Expr)
-writeFileOptions = define "writeFileOptions" $
+fileOptionsToExpr :: TTermDefinition ([P3.Option] -> Maybe Expr)
+fileOptionsToExpr = define "fileOptionsToExpr" $
   doc "Convert file-level options to an optional newline-separated expression" $
   lambda "opts0" $ lets [
     "opts">: excludeInternalOptions @@ var "opts0"] $
     Logic.ifElse (Lists.null (var "opts"))
       nothing
-      (Maybes.pure (Serialization.newlineSep @@ (Lists.map writeFileOption (var "opts"))))
+      (Maybes.pure (Serialization.newlineSep @@ (Lists.map fileOptionToExpr (var "opts"))))
 
-writeImport :: TTermDefinition (P3.FileReference -> Expr)
-writeImport = define "writeImport" $
+importToExpr :: TTermDefinition (P3.FileReference -> Expr)
+importToExpr = define "importToExpr" $
   doc "Convert a file reference to an import expression" $
   lambda "ref" $
     semi @@ (Serialization.spaceSep @@ list [
       Serialization.cst @@ string "import",
       Serialization.cst @@ (Literals.showString (unwrap P3._FileReference @@ var "ref"))])
 
-writeMessageDefinition :: TTermDefinition (P3.MessageDefinition -> Expr)
-writeMessageDefinition = define "writeMessageDefinition" $
+messageDefinitionToExpr :: TTermDefinition (P3.MessageDefinition -> Expr)
+messageDefinitionToExpr = define "messageDefinitionToExpr" $
   doc "Convert a message definition to an expression" $
   lambda "md" $ lets [
     "name">: project P3._MessageDefinition P3._MessageDefinition_name @@ var "md",
@@ -335,10 +335,10 @@ writeMessageDefinition = define "writeMessageDefinition" $
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "message",
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
-        protoBlock @@ (Lists.map writeField (var "fields"))])
+        protoBlock @@ (Lists.map fieldToExpr (var "fields"))])
 
-writeProtoFile :: TTermDefinition (P3.ProtoFile -> Expr)
-writeProtoFile = define "writeProtoFile" $
+protoFileToExpr :: TTermDefinition (P3.ProtoFile -> Expr)
+protoFileToExpr = define "protoFileToExpr" $
   doc "Convert a proto file to an expression" $
   lambda "pf" $ lets [
     "pkg">: project P3._ProtoFile P3._ProtoFile_package @@ var "pf",
@@ -352,20 +352,20 @@ writeProtoFile = define "writeProtoFile" $
         Serialization.cst @@ (unwrap P3._PackageName @@ var "pkg")])]),
     "importsSec">: Logic.ifElse (Lists.null (var "imports"))
       nothing
-      (Maybes.pure (Serialization.newlineSep @@ (Lists.map writeImport (var "imports")))),
+      (Maybes.pure (Serialization.newlineSep @@ (Lists.map importToExpr (var "imports")))),
     "options1">: Lists.filter
       (lambda "opt" $ Logic.not $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "options"),
-    "optionsSec">: writeFileOptions @@ var "options1",
+    "optionsSec">: fileOptionsToExpr @@ var "options1",
     "defsSec">: Logic.ifElse (Lists.null (var "defs"))
       nothing
-      (Maybes.pure (Serialization.doubleNewlineSep @@ (Lists.map writeDefinition (var "defs"))))] $
+      (Maybes.pure (Serialization.doubleNewlineSep @@ (Lists.map definitionToExpr (var "defs"))))] $
     optDesc @@ true @@ var "options" @@
       (Serialization.doubleNewlineSep @@ (Maybes.cat $ list [
         var "headerSec", var "importsSec", var "optionsSec", var "defsSec"]))
 
-writeScalarType :: TTermDefinition (P3.ScalarType -> Expr)
-writeScalarType = define "writeScalarType" $
+scalarTypeToExpr :: TTermDefinition (P3.ScalarType -> Expr)
+scalarTypeToExpr = define "scalarTypeToExpr" $
   doc "Convert a scalar type to an expression" $
   lambda "sct" $ Serialization.cst @@
     (cases P3._ScalarType (var "sct") Nothing [
@@ -385,17 +385,17 @@ writeScalarType = define "writeScalarType" $
       P3._ScalarType_uint32>>: constant $ string "uint32",
       P3._ScalarType_uint64>>: constant $ string "uint64"])
 
-writeSimpleType :: TTermDefinition (P3.SimpleType -> Expr)
-writeSimpleType = define "writeSimpleType" $
+simpleTypeToExpr :: TTermDefinition (P3.SimpleType -> Expr)
+simpleTypeToExpr = define "simpleTypeToExpr" $
   doc "Convert a simple type to an expression" $
   lambda "st" $
     cases P3._SimpleType (var "st") Nothing [
       P3._SimpleType_reference>>: lambda "name" $
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
-      P3._SimpleType_scalar>>: lambda "sct" $ writeScalarType @@ var "sct"]
+      P3._SimpleType_scalar>>: lambda "sct" $ scalarTypeToExpr @@ var "sct"]
 
-writeValue :: TTermDefinition (P3.Value -> Expr)
-writeValue = define "writeValue" $
+valueToExpr :: TTermDefinition (P3.Value -> Expr)
+valueToExpr = define "valueToExpr" $
   doc "Convert a value to an expression" $
   lambda "v" $ Serialization.cst @@
     (cases P3._Value (var "v") Nothing [

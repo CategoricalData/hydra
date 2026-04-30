@@ -263,11 +263,13 @@ testGroupForNestedLet =
                               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.maps.empty"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "typ"))})),
                           Core.bindingTypeScheme = Nothing}],
-                      Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "result"))}), (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "result"))}))))}))}))})))),
+                      Core.letBody = (Core.TermPair (
+                        Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "result"))}),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "result"))}))))}))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {

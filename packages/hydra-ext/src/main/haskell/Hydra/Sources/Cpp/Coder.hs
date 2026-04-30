@@ -1086,7 +1086,7 @@ serializeHeaderFile = def "serializeHeaderFile" $
       (bindingNameToFilePath @@ var "name")
       (SerializationSource.printExpr @@
         (SerializationSource.parenthesize @@
-          (TTerm (TermVariable (Name "hydra.cpp.serde.encodeProgram"))
+          (TTerm (TermVariable (Name "hydra.cpp.serde.programToExpr"))
             @@ (createHeaderFile @@ var "includes" @@ var "decls"))))
 
 -- | Convert a binding name to a file path

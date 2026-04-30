@@ -98,43 +98,43 @@ module_ = Module {
             moduleDescription = Just "Serialization functions for converting Graphviz DOT AST to abstract expressions"}
   where
     definitions = [
-      toDefinition writeAttrList,
-      toDefinition writeAttrStmt,
-      toDefinition writeAttrType,
-      toDefinition writeCompassPt,
-      toDefinition writeEdgeStmt,
-      toDefinition writeEqualityPair,
-      toDefinition writeGraph,
-      toDefinition writeId,
-      toDefinition writeNodeId,
-      toDefinition writeNodeOrSubgraph,
-      toDefinition writeNodeStmt,
-      toDefinition writePort,
-      toDefinition writeStmt,
-      toDefinition writeSubgraph,
-      toDefinition writeSubgraphId]
+      toDefinition attrListToExpr,
+      toDefinition attrStmtToExpr,
+      toDefinition attrTypeToExpr,
+      toDefinition compassPtToExpr,
+      toDefinition edgeStmtToExpr,
+      toDefinition equalityPairToExpr,
+      toDefinition graphToExpr,
+      toDefinition idToExpr,
+      toDefinition nodeIdToExpr,
+      toDefinition nodeOrSubgraphToExpr,
+      toDefinition nodeStmtToExpr,
+      toDefinition portToExpr,
+      toDefinition stmtToExpr,
+      toDefinition subgraphToExpr,
+      toDefinition subgraphIdToExpr]
 
 
-writeAttrList :: TTermDefinition (Dot.AttrList -> Expr)
-writeAttrList = define "writeAttrList" $
+attrListToExpr :: TTermDefinition (Dot.AttrList -> Expr)
+attrListToExpr = define "attrListToExpr" $
   doc "Convert an attribute list to an expression" $
   lambda "al" $
     Serialization.spaceSep @@ (Lists.map
       (lambda "alist" $
         Serialization.brackets @@ Serialization.squareBrackets @@ Serialization.inlineStyle @@
-          (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map writeEqualityPair (var "alist"))))
+          (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map equalityPairToExpr (var "alist"))))
       (unwrap Dot._AttrList @@ var "al"))
 
-writeAttrStmt :: TTermDefinition (Dot.AttrStmt -> Expr)
-writeAttrStmt = define "writeAttrStmt" $
+attrStmtToExpr :: TTermDefinition (Dot.AttrStmt -> Expr)
+attrStmtToExpr = define "attrStmtToExpr" $
   doc "Convert an attribute statement to an expression" $
   lambda "as" $ lets [
     "t">: project Dot._AttrStmt Dot._AttrStmt_type @@ var "as",
     "attr">: project Dot._AttrStmt Dot._AttrStmt_attributes @@ var "as"] $
-    Serialization.spaceSep @@ list [writeAttrType @@ var "t", writeAttrList @@ var "attr"]
+    Serialization.spaceSep @@ list [attrTypeToExpr @@ var "t", attrListToExpr @@ var "attr"]
 
-writeAttrType :: TTermDefinition (Dot.AttrType -> Expr)
-writeAttrType = define "writeAttrType" $
+attrTypeToExpr :: TTermDefinition (Dot.AttrType -> Expr)
+attrTypeToExpr = define "attrTypeToExpr" $
   doc "Convert an attribute type to an expression" $
   lambda "t" $
     cases Dot._AttrType (var "t") Nothing [
@@ -142,8 +142,8 @@ writeAttrType = define "writeAttrType" $
       Dot._AttrType_node>>: constant $ Serialization.cst @@ string "node",
       Dot._AttrType_edge>>: constant $ Serialization.cst @@ string "edge"]
 
-writeCompassPt :: TTermDefinition (Dot.CompassPt -> Expr)
-writeCompassPt = define "writeCompassPt" $
+compassPtToExpr :: TTermDefinition (Dot.CompassPt -> Expr)
+compassPtToExpr = define "compassPtToExpr" $
   doc "Convert a compass point to an expression" $
   lambda "p" $
     cases Dot._CompassPt (var "p") Nothing [
@@ -158,8 +158,8 @@ writeCompassPt = define "writeCompassPt" $
       Dot._CompassPt_c>>: constant $ Serialization.cst @@ string "c",
       Dot._CompassPt_none>>: constant $ Serialization.cst @@ string "none"]
 
-writeEdgeStmt :: TTermDefinition (Bool -> Dot.EdgeStmt -> Expr)
-writeEdgeStmt = define "writeEdgeStmt" $
+edgeStmtToExpr :: TTermDefinition (Bool -> Dot.EdgeStmt -> Expr)
+edgeStmtToExpr = define "edgeStmtToExpr" $
   doc "Convert an edge statement to an expression" $
   lambda "directed" $ lambda "es" $ lets [
     "l">: project Dot._EdgeStmt Dot._EdgeStmt_left @@ var "es",
@@ -167,27 +167,27 @@ writeEdgeStmt = define "writeEdgeStmt" $
     "attr">: project Dot._EdgeStmt Dot._EdgeStmt_attributes @@ var "es",
     "arrow">: Logic.ifElse (var "directed") (string "->") (string "--"),
     "rhsParts">: Lists.concat (Lists.map
-      (lambda "n" $ list [Serialization.cst @@ var "arrow", writeNodeOrSubgraph @@ var "directed" @@ var "n"])
+      (lambda "n" $ list [Serialization.cst @@ var "arrow", nodeOrSubgraphToExpr @@ var "directed" @@ var "n"])
       (var "r")),
     "attrParts">: Maybes.maybe
       (list ([] :: [TTerm Expr]))
-      (lambda "a" $ list [writeAttrList @@ var "a"])
+      (lambda "a" $ list [attrListToExpr @@ var "a"])
       (var "attr")] $
     Serialization.spaceSep @@ (Lists.concat $ list [
-      list [writeNodeOrSubgraph @@ var "directed" @@ var "l"],
+      list [nodeOrSubgraphToExpr @@ var "directed" @@ var "l"],
       var "rhsParts",
       var "attrParts"])
 
-writeEqualityPair :: TTermDefinition (Dot.EqualityPair -> Expr)
-writeEqualityPair = define "writeEqualityPair" $
+equalityPairToExpr :: TTermDefinition (Dot.EqualityPair -> Expr)
+equalityPairToExpr = define "equalityPairToExpr" $
   doc "Convert an equality pair to an expression" $
   lambda "eq" $ lets [
     "l">: project Dot._EqualityPair Dot._EqualityPair_left @@ var "eq",
     "r">: project Dot._EqualityPair Dot._EqualityPair_right @@ var "eq"] $
-    Serialization.spaceSep @@ list [writeId @@ var "l", Serialization.cst @@ string "=", writeId @@ var "r"]
+    Serialization.spaceSep @@ list [idToExpr @@ var "l", Serialization.cst @@ string "=", idToExpr @@ var "r"]
 
-writeGraph :: TTermDefinition (Dot.Graph -> Expr)
-writeGraph = define "writeGraph" $
+graphToExpr :: TTermDefinition (Dot.Graph -> Expr)
+graphToExpr = define "graphToExpr" $
   doc "Convert a graph to an expression" $
   lambda "g" $ lets [
     "strict">: project Dot._Graph Dot._Graph_strict @@ var "g",
@@ -199,86 +199,86 @@ writeGraph = define "writeGraph" $
       (Serialization.cst @@ var "graphKeyword"),
     "body">: Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.fullBlockStyle @@
       (Serialization.symbolSep @@ string ";" @@ Serialization.fullBlockStyle @@
-        (Lists.map (writeStmt @@ var "directed") (var "stmts")))] $
+        (Lists.map (stmtToExpr @@ var "directed") (var "stmts")))] $
     Serialization.spaceSep @@ list [var "graphExpr", var "body"]
 
-writeId :: TTermDefinition (Dot.Id -> Expr)
-writeId = define "writeId" $
+idToExpr :: TTermDefinition (Dot.Id -> Expr)
+idToExpr = define "idToExpr" $
   doc "Convert an identifier to an expression" $
   lambda "i" $ Serialization.cst @@
     (Strings.cat $ list [string "\"", unwrap Dot._Id @@ var "i", string "\""])
 
-writeNodeId :: TTermDefinition (Dot.NodeId -> Expr)
-writeNodeId = define "writeNodeId" $
+nodeIdToExpr :: TTermDefinition (Dot.NodeId -> Expr)
+nodeIdToExpr = define "nodeIdToExpr" $
   doc "Convert a node identifier to an expression" $
   lambda "nid" $ lets [
     "i">: project Dot._NodeId Dot._NodeId_id @@ var "nid",
     "mp">: project Dot._NodeId Dot._NodeId_port @@ var "nid"] $
     Serialization.noSep @@ (Maybes.cat $ list [
-      Maybes.pure (writeId @@ var "i"),
-      Maybes.map writePort (var "mp")])
+      Maybes.pure (idToExpr @@ var "i"),
+      Maybes.map portToExpr (var "mp")])
 
-writeNodeOrSubgraph :: TTermDefinition (Bool -> Dot.NodeOrSubgraph -> Expr)
-writeNodeOrSubgraph = define "writeNodeOrSubgraph" $
+nodeOrSubgraphToExpr :: TTermDefinition (Bool -> Dot.NodeOrSubgraph -> Expr)
+nodeOrSubgraphToExpr = define "nodeOrSubgraphToExpr" $
   doc "Convert a node or subgraph to an expression" $
   lambda "directed" $ lambda "ns" $
     cases Dot._NodeOrSubgraph (var "ns") Nothing [
-      Dot._NodeOrSubgraph_node>>: lambda "n" $ writeNodeId @@ var "n",
-      Dot._NodeOrSubgraph_subgraph>>: lambda "sg" $ writeSubgraph @@ var "directed" @@ var "sg"]
+      Dot._NodeOrSubgraph_node>>: lambda "n" $ nodeIdToExpr @@ var "n",
+      Dot._NodeOrSubgraph_subgraph>>: lambda "sg" $ subgraphToExpr @@ var "directed" @@ var "sg"]
 
-writeNodeStmt :: TTermDefinition (Dot.NodeStmt -> Expr)
-writeNodeStmt = define "writeNodeStmt" $
+nodeStmtToExpr :: TTermDefinition (Dot.NodeStmt -> Expr)
+nodeStmtToExpr = define "nodeStmtToExpr" $
   doc "Convert a node statement to an expression" $
   lambda "ns" $ lets [
     "i">: project Dot._NodeStmt Dot._NodeStmt_id @@ var "ns",
     "attr">: project Dot._NodeStmt Dot._NodeStmt_attributes @@ var "ns"] $
     Serialization.spaceSep @@ (Maybes.cat $ list [
-      Maybes.pure (writeNodeId @@ var "i"),
-      Maybes.map writeAttrList (var "attr")])
+      Maybes.pure (nodeIdToExpr @@ var "i"),
+      Maybes.map attrListToExpr (var "attr")])
 
-writePort :: TTermDefinition (Dot.Port -> Expr)
-writePort = define "writePort" $
+portToExpr :: TTermDefinition (Dot.Port -> Expr)
+portToExpr = define "portToExpr" $
   doc "Convert a port to an expression" $
   lambda "p" $ lets [
     "mi">: project Dot._Port Dot._Port_id @@ var "p",
     "mp">: project Dot._Port Dot._Port_position @@ var "p",
     "pre">: Maybes.maybe
       (list ([] :: [TTerm Expr]))
-      (lambda "i" $ list [Serialization.cst @@ string ":", writeId @@ var "i"])
+      (lambda "i" $ list [Serialization.cst @@ string ":", idToExpr @@ var "i"])
       (var "mi"),
     "suf">: Maybes.maybe
       (list ([] :: [TTerm Expr]))
-      (lambda "cp" $ list [Serialization.cst @@ string ":", writeCompassPt @@ var "cp"])
+      (lambda "cp" $ list [Serialization.cst @@ string ":", compassPtToExpr @@ var "cp"])
       (var "mp")] $
     Serialization.noSep @@ (Lists.concat $ list [var "pre", var "suf"])
 
-writeStmt :: TTermDefinition (Bool -> Dot.Stmt -> Expr)
-writeStmt = define "writeStmt" $
+stmtToExpr :: TTermDefinition (Bool -> Dot.Stmt -> Expr)
+stmtToExpr = define "stmtToExpr" $
   doc "Convert a statement to an expression" $
   lambda "directed" $ lambda "s" $
     cases Dot._Stmt (var "s") Nothing [
-      Dot._Stmt_node>>: lambda "n" $ writeNodeStmt @@ var "n",
-      Dot._Stmt_edge>>: lambda "e" $ writeEdgeStmt @@ var "directed" @@ var "e",
-      Dot._Stmt_attr>>: lambda "a" $ writeAttrStmt @@ var "a",
-      Dot._Stmt_equals>>: lambda "eq" $ writeEqualityPair @@ var "eq",
-      Dot._Stmt_subgraph>>: lambda "sg" $ writeSubgraph @@ var "directed" @@ var "sg"]
+      Dot._Stmt_node>>: lambda "n" $ nodeStmtToExpr @@ var "n",
+      Dot._Stmt_edge>>: lambda "e" $ edgeStmtToExpr @@ var "directed" @@ var "e",
+      Dot._Stmt_attr>>: lambda "a" $ attrStmtToExpr @@ var "a",
+      Dot._Stmt_equals>>: lambda "eq" $ equalityPairToExpr @@ var "eq",
+      Dot._Stmt_subgraph>>: lambda "sg" $ subgraphToExpr @@ var "directed" @@ var "sg"]
 
-writeSubgraph :: TTermDefinition (Bool -> Dot.Subgraph -> Expr)
-writeSubgraph = define "writeSubgraph" $
+subgraphToExpr :: TTermDefinition (Bool -> Dot.Subgraph -> Expr)
+subgraphToExpr = define "subgraphToExpr" $
   doc "Convert a subgraph to an expression" $
   lambda "directed" $ lambda "sg" $ lets [
     "mid">: project Dot._Subgraph Dot._Subgraph_subgraphId @@ var "sg",
     "stmts">: project Dot._Subgraph Dot._Subgraph_statements @@ var "sg",
     "body">: Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.inlineStyle @@
-      (Serialization.spaceSep @@ (Lists.map (writeStmt @@ var "directed") (var "stmts")))] $
+      (Serialization.spaceSep @@ (Lists.map (stmtToExpr @@ var "directed") (var "stmts")))] $
     Serialization.spaceSep @@ (Maybes.cat $ list [
-      Maybes.map writeSubgraphId (var "mid"),
+      Maybes.map subgraphIdToExpr (var "mid"),
       Maybes.pure (var "body")])
 
-writeSubgraphId :: TTermDefinition (Dot.SubgraphId -> Expr)
-writeSubgraphId = define "writeSubgraphId" $
+subgraphIdToExpr :: TTermDefinition (Dot.SubgraphId -> Expr)
+subgraphIdToExpr = define "subgraphIdToExpr" $
   doc "Convert a subgraph identifier to an expression" $
   lambda "sid" $
     Serialization.spaceSep @@ (Maybes.cat $ list [
       Maybes.pure (Serialization.cst @@ string "subgraph"),
-      Maybes.map writeId (unwrap Dot._SubgraphId @@ var "sid")])
+      Maybes.map idToExpr (unwrap Dot._SubgraphId @@ var "sid")])

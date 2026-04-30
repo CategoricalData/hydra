@@ -52,11 +52,13 @@ bimap cx g keyFun valFun mapTerm =
         in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->
           let k = Pairs.first p
               v = Pairs.second p
-          in (Core.TermApplication (Core.Application {
-            Core.applicationFunction = keyFun,
-            Core.applicationArgument = k}), (Core.TermApplication (Core.Application {
-            Core.applicationFunction = valFun,
-            Core.applicationArgument = v})))) pairs))))
+          in (
+            Core.TermApplication (Core.Application {
+              Core.applicationFunction = keyFun,
+              Core.applicationArgument = k}),
+            (Core.TermApplication (Core.Application {
+              Core.applicationFunction = valFun,
+              Core.applicationArgument = v})))) pairs))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
@@ -132,9 +134,11 @@ map cx g valFun mapTerm =
         in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->
           let k = Pairs.first p
               v = Pairs.second p
-          in (k, (Core.TermApplication (Core.Application {
-            Core.applicationFunction = valFun,
-            Core.applicationArgument = v})))) pairs))))
+          in (
+            k,
+            (Core.TermApplication (Core.Application {
+              Core.applicationFunction = valFun,
+              Core.applicationArgument = v})))) pairs))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
@@ -147,9 +151,11 @@ mapKeys cx g keyFun mapTerm =
         in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->
           let k = Pairs.first p
               v = Pairs.second p
-          in (Core.TermApplication (Core.Application {
-            Core.applicationFunction = keyFun,
-            Core.applicationArgument = k}), v)) pairs))))
+          in (
+            Core.TermApplication (Core.Application {
+              Core.applicationFunction = keyFun,
+              Core.applicationArgument = k}),
+            v)) pairs))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))

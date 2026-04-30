@@ -1,10 +1,6 @@
 {
   "dslModules": [],
   "evalLibModules": [],
-  "mainModules": [
-    "hydra.javaScript.language",
-    "hydra.javaScript.operators",
-    "hydra.javaScript.serde",
-    "hydra.javaScript.syntax"],
+  "mainModules": ["hydra.javaScript.language", "hydra.javaScript.operators", "hydra.javaScript.serde", "hydra.javaScript.syntax"],
   "package": "hydra-javascript",
   "testModules": []}
