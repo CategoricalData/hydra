@@ -43,24 +43,32 @@ bootstrapTypeModules = [
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
-            moduleDefinitions = [bindingToDefinition typesByNameBinding],
+            moduleDefinitions = [DefinitionTerm typesByNameDefinition],
             moduleTermDependencies = [],
             moduleTypeDependencies = [Namespace "hydra.core"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}
-typesByNameBinding :: Binding
-typesByNameBinding = Binding {
-    bindingName = Name "hydra.json.bootstrap.typesByName",
-    bindingTerm = typesByNameTerm,
-    bindingTypeScheme = Nothing}
+typesByNameDefinition :: TermDefinition
+typesByNameDefinition = TermDefinition {
+    termDefinitionName = Name "hydra.json.bootstrap.typesByName",
+    termDefinitionTerm = typesByNameTerm,
+    termDefinitionTypeScheme = Nothing}
 
--- | Build a Term-level map from Name to Type, by extracting all bindings
--- from the bootstrap type modules. Each binding in a kernel type module
--- is a type definition whose bindingTerm is the type encoded as a Term.
+-- | Build a Term-level map from Name to Type, by extracting all type
+-- definitions from the bootstrap type modules. Each type definition's
+-- type scheme body is encoded as a Term keyed by the definition's name,
+-- and tagged with a "type" annotation pointing at hydra.core.Type so that
+-- consumers can recognize the value as an encoded type.
 typesByNameTerm :: Term
 typesByNameTerm = TermMap $ M.fromList entries
   where
     entries = concatMap moduleEntries bootstrapTypeModules
-    moduleEntries mod = fmap bindingEntry (moduleBindings mod)
-    bindingEntry b = (EncodeCore.name (bindingName b), bindingTerm b)
+    moduleEntries mod = [defEntry td | DefinitionType td <- moduleDefinitions mod]
+    defEntry td = (
+      EncodeCore.name (typeDefinitionName td),
+      annotateAsType (EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td))))
+    annotateAsType encoded = TermAnnotated $ AnnotatedTerm {
+      annotatedTermBody = encoded,
+      annotatedTermAnnotation = M.fromList [
+        (Name "type", TermVariable (Name "hydra.core.Type"))]}

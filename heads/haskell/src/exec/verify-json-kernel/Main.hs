@@ -223,7 +223,10 @@ main = do
 
 -- | Check whether a module contains only native type definitions (no term definitions).
 isTypeModule :: Module -> Bool
-isTypeModule m = all isNativeType (moduleBindings m)
+isTypeModule m = all isType (moduleDefinitions m)
+  where
+    isType (DefinitionType _) = True
+    isType _ = False
 
 -- | Strip type annotations from a module for comparison with raw (pre-inference) modules.
 -- Removes TypeLambda, TypeApplication, binding TypeSchemes, and lambda domain types from terms,
