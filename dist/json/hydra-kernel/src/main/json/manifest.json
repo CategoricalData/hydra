@@ -144,6 +144,7 @@
     "hydra.serialization",
     "hydra.show.core",
     "hydra.show.error.core",
+    "hydra.show.error.packaging",
     "hydra.show.errors",
     "hydra.show.graph",
     "hydra.show.paths",
@@ -223,4 +224,5 @@
     "hydra.test.unification",
     "hydra.test.validate.all",
     "hydra.test.validate.core",
+    "hydra.test.validate.packaging",
     "hydra.test.variables"]}
