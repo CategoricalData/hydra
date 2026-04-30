@@ -409,16 +409,17 @@ give the user a brief status update approximately every 10 minutes.
 
 | Command | Action |
 |---------|--------|
-| `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
+| `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets (`haskell,java,python` × `haskell,java,python` — the bootstrapping triad, NOT the full matrix). Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
 | `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
+| `/bootstrap(all)` | Run `bin/run-bootstrapping-demo.sh --hosts all --targets all --tag all`. Full all-hosts × all-targets matrix; long-running (an hour or more) and typically reserved for pre-release verification or overnight runs. |
 | `/bootstrap(others)` | shorthand for `bin/run-bootstrapping-demo.sh --hosts scala,lisp --targets python`. This is a narrow bootstrapping pass which simply checks whether the "other" hosts can bootstrap Python.
 | `/lexicon()` | Run `bin/regenerate-lexicon.sh` to refresh `docs/hydra-lexicon.txt` from the current Haskell kernel. Run on demand and as part of the pre-release flow; not part of regular sync. |
 | `/maintenance()` | Run all maintenance checks per the [full maintenance pass](docs/recipes/maintenance.md#full-maintenance-pass) procedure. |
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
-| `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full matrix; mirrors the bootstrapping demo's all × all. |
+| `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full all-hosts × all-targets matrix (note: opposite of `/bootstrap()` default — `/sync()` defaults to "all", `/bootstrap()` defaults to the triad). |
 | `/sync(lang1,lang2[,...])` | Run `bin/sync.sh --hosts <list> --targets <list>` with the same languages on both sides. |
-| `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad). |
+| `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad — equivalent to `/bootstrap()`'s default scope). |
 | `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh` (Phase 1 only: DSL → JSON + Haskell kernel + stack test). The lexicon is no longer regenerated as part of sync; use `/lexicon()` to refresh it. |
 | `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
 | `/sync-python()` | Run `bin/sync-python.sh`. |
