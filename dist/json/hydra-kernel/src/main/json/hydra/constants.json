@@ -5,11 +5,7 @@
         "name": "hydra.constants.debugInference",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Disable type checking by default, for better performance"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Disable type checking by default, for better performance"}}}],
             "body": {"literal": {"boolean": true}}}},
         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
     {
@@ -17,10 +13,7 @@
         "name": "hydra.constants.ignoredVariable",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The name used for ignored variables"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "The name used for ignored variables"}}}],
             "body": {"literal": {"string": "_"}}}},
         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
@@ -28,70 +21,40 @@
         "name": "hydra.constants.keyClasses",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotation key for type classes"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "classes"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for type classes"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "classes"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyDebugId",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotation key for debug identifiers"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "debugId"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for debug identifiers"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "debugId"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyDeprecated",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotation key for deprecated markers"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "deprecated"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for deprecated markers"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "deprecated"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyDescription",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotation key for descriptions"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "description"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for descriptions"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyExclude",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotation key for exclusions"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "exclude"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for exclusions"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "exclude"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
@@ -102,42 +65,24 @@
               {
                 "key": "description",
                 "value": {
-                  "literal": {
-                    "string": "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "firstClassType"}},
-                "typeName": "hydra.core.Name"}}}},
+                  "literal": {"string": "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "firstClassType"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyMaxLength",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Annotation key for maximum length constraints"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "maxLength"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for maximum length constraints"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "maxLength"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyMinLength",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Annotation key for minimum length constraints"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "minLength"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for minimum length constraints"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "minLength"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
@@ -147,52 +92,31 @@
             "annotation": [
               {
                 "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Annotation key for preserving field names during code generation"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "preserveFieldName"}},
-                "typeName": "hydra.core.Name"}}}},
+                "value": {"literal": {"string": "Annotation key for preserving field names during code generation"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "preserveFieldName"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotation key for type information"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "type"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotation key for type information"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.keyFreshTypeVariableCount",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "A counter for generating fresh type variable names"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "freshTypeVariableCount"}},
-                "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "A counter for generating fresh type variable names"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "freshTypeVariableCount"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.maxInt32",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The maximum value of a 32-bit integer"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value of a 32-bit integer"}}}],
             "body": {"literal": {"integer": {"int32": 2147483647}}}}},
         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
     {
@@ -213,14 +137,8 @@
         "name": "hydra.constants.warningAutoGeneratedFile",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "A standard warning message for auto-generated files"}}}],
-            "body": {
-              "literal": {
-                "string": "Note: this is an automatically generated file. Do not edit."}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "A standard warning message for auto-generated files"}}}],
+            "body": {"literal": {"string": "Note: this is an automatically generated file. Do not edit."}}}},
         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}}],
   "description": "A module for tier-0 constants.",
   "namespace": "hydra.constants",
