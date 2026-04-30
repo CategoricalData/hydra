@@ -13,12 +13,16 @@ import qualified Hydra.Dsl.Meta.Lib.Logic        as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps         as Maps
 import qualified Hydra.Dsl.Meta.Lib.Maybes       as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs        as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Regex        as Regex
 import qualified Hydra.Dsl.Meta.Lib.Sets         as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings      as Strings
 import qualified Hydra.Dsl.Packaging                as Packaging
 import qualified Hydra.Dsl.Packaging             as Packaging
+import qualified Hydra.Dsl.Util                  as Util
 import           Hydra.Dsl.Meta.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
 import           Prelude hiding ((++))
@@ -32,17 +36,24 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, Names.ns],
+            moduleTermDependencies = [Annotations.ns, Constants.ns, Formatting.ns, Names.ns],
             moduleTypeDependencies = kernelTypesNamespaces,
             moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [
       toDefinition checkConflictingModuleNamespaces,
       toDefinition checkConflictingVariantNames,
+      toDefinition checkDefinitionDocumentation,
+      toDefinition checkDefinitionNameConvention,
       toDefinition checkDefinitionNamespaces,
+      toDefinition checkDefinitionOrdering,
       toDefinition checkDuplicateDefinitionNames,
       toDefinition checkDuplicateModuleNamespaces,
+      toDefinition checkModuleNamespaceConvention,
+      toDefinition checkPackageNameConvention,
       toDefinition definitionName,
+      toDefinition kernelModule,
+      toDefinition kernelPackage,
       toDefinition module',
       toDefinition package]
 
@@ -140,6 +151,67 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
     nothing
     (var "defs")
 
+-- | Check that every term-level definition's term, and every type-level definition's
+-- type-scheme body, carries a description annotation at its outermost layer.
+-- A definition whose top-level Term constructor is anything other than _Term_annotated,
+-- or whose top-level annotation map lacks the description key, is reported as missing
+-- documentation. This validator does not descend into the body of a term or type.
+-- Fails on the first undocumented definition found.
+checkDefinitionDocumentation :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
+  doc "Check that every top-level definition is wrapped in a description annotation" $
+  "mod" ~>
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  Lists.foldl
+    ("acc" ~> "def" ~>
+      Maybes.cases (var "acc")
+        ("name" <~ (definitionName @@ var "def") $
+          "documented" <~ cases _Definition (var "def") (Just false) [
+            _Definition_term>>: "td" ~>
+              "term" <~ Packaging.termDefinitionTerm (var "td") $
+              cases _Term (var "term") (Just false) [
+                _Term_annotated>>: "at" ~>
+                  Annotations.hasDescription @@ (Core.annotatedTermAnnotation $ var "at")],
+            _Definition_type>>: "td" ~>
+              "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")) $
+              cases _Type (var "typ") (Just false) [
+                _Type_annotated>>: "at" ~>
+                  Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")]] $
+          Logic.ifElse (var "documented")
+            nothing
+            (just $ ErrorPackaging.invalidModuleErrorMissingDocumentation $
+              ErrorPackaging.missingDocumentationError (var "ns") (var "name")))
+        (constant $ var "acc"))
+    nothing
+    (Packaging.moduleDefinitions $ var "mod")
+
+-- | Check that every term-level definition's local name matches the camelCase regex
+-- and every type-level definition's local name matches the PascalCase regex.
+-- Fails on the first definition whose name violates the convention.
+checkDefinitionNameConvention :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
+  doc "Check that term definitions have camelCase local names and type definitions have PascalCase local names" $
+  "mod" ~>
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  Lists.foldl
+    ("acc" ~> "def" ~>
+      Maybes.cases (var "acc")
+        ("name" <~ (definitionName @@ var "def") $
+          "local" <~ (Names.localNameOf @@ var "name") $
+          "expected" <~ cases _Definition (var "def") (Just Util.caseConventionCamel) [
+            _Definition_term>>: constant Util.caseConventionCamel,
+            _Definition_type>>: constant Util.caseConventionPascal] $
+          "pattern" <~ cases _Definition (var "def") (Just (Phantoms.asTerm Constants.regexCamelCase)) [
+            _Definition_term>>: constant (Phantoms.asTerm Constants.regexCamelCase),
+            _Definition_type>>: constant (Phantoms.asTerm Constants.regexPascalCase)] $
+          Logic.ifElse (Regex.matches (var "pattern") (var "local"))
+            nothing
+            (just $ ErrorPackaging.invalidModuleErrorInvalidDefinitionName $
+              ErrorPackaging.invalidDefinitionNameError (var "ns") (var "name") (var "expected")))
+        (constant $ var "acc"))
+    nothing
+    (Packaging.moduleDefinitions $ var "mod")
+
 -- | Check that all definition names in a module have the module's namespace as a prefix.
 -- For a module with namespace foo.bar, every definition name must have the form foo.bar.xyz.
 -- Fails on the first definition that violates this constraint.
@@ -165,6 +237,45 @@ checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
         (constant $ var "acc"))
     nothing
     (Packaging.moduleDefinitions $ var "mod")
+
+-- | Check that the module's definitions list is sorted in ascending lexicographic
+-- order by local name. The check is a pairwise walk over consecutive entries; if any
+-- entry's local name is less than or equal to its predecessor's, an error is reported
+-- naming both the preceding and following definitions. The check inspects the order
+-- of the definitions list itself, not the order of declarations in the source file.
+-- Fails on the first out-of-order pair found.
+checkDefinitionOrdering :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionOrdering = define "checkDefinitionOrdering" $
+  doc "Check that a module's definitions list is sorted in ascending lexicographic order by local name" $
+  "mod" ~>
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  -- Fold through definitions tracking the previous name and any error.
+  -- Accumulator is (Maybe Name, Maybe InvalidModuleError).
+  "result" <~ Lists.foldl
+    ("acc" ~> "def" ~>
+      "prev" <~ Pairs.first (var "acc") $
+      "err" <~ Pairs.second (var "acc") $
+      Maybes.cases (var "err")
+        ("currName" <~ (definitionName @@ var "def") $
+          "currLocal" <~ (Names.localNameOf @@ var "currName") $
+          Maybes.cases (var "prev")
+            -- First entry: no comparison needed
+            (pair (just $ var "currName") nothing)
+            -- Subsequent entries: compare local names
+            ("prevName" ~>
+              "prevLocal" <~ (Names.localNameOf @@ var "prevName") $
+              Logic.ifElse (Equality.lt (var "prevLocal") (var "currLocal"))
+                (pair (just $ var "currName") nothing)
+                (pair (just $ var "currName") (just $
+                  ErrorPackaging.invalidModuleErrorDefinitionsOutOfOrder $
+                    ErrorPackaging.definitionsOutOfOrderError
+                      (var "ns")
+                      (var "prevName")
+                      (var "currName")))))
+        (constant $ var "acc"))
+    (pair nothing nothing)
+    (Packaging.moduleDefinitions $ var "mod") $
+  Pairs.second (var "result")
 
 -- | Check for duplicate definition names in a module.
 -- Fails on the first duplicate found.
@@ -215,11 +326,95 @@ checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
     (Packaging.packageModules $ var "pkg") $
   Pairs.second (var "result")
 
+-- | Check that the module's namespace matches the dotted-lowercase namespace regex
+-- (dot-separated lowercase segments, each starting with a letter).
+checkModuleNamespaceConvention :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkModuleNamespaceConvention = define "checkModuleNamespaceConvention" $
+  doc "Check that the module's namespace matches the dotted-lowercase naming convention" $
+  "mod" ~>
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  Logic.ifElse (Regex.matches (Phantoms.asTerm Constants.regexNamespace) (Packaging.unNamespace $ var "ns"))
+    nothing
+    (just $ ErrorPackaging.invalidModuleErrorInvalidNamespaceConvention $
+      ErrorPackaging.invalidNamespaceConventionError (var "ns"))
+
+-- | Check that the package's name matches the hyphen-separated lowercase package-name regex
+-- (hyphen-separated lowercase segments, each starting with a letter).
+checkPackageNameConvention :: TTermDefinition (Package -> Maybe InvalidPackageError)
+checkPackageNameConvention = define "checkPackageNameConvention" $
+  doc "Check that the package's name matches the hyphen-separated lowercase naming convention" $
+  "pkg" ~>
+  "pname" <~ Packaging.packageName (var "pkg") $
+  Logic.ifElse (Regex.matches (Phantoms.asTerm Constants.regexPackageName) (Packaging.unPackageName $ var "pname"))
+    nothing
+    (just $ ErrorPackaging.invalidPackageErrorInvalidPackageName $
+      ErrorPackaging.invalidPackageNameError (var "pname"))
+
+-- | Validate a kernel module against the strict kernel rules.
+-- Runs every per-module check and returns the first error found, or nothing if valid.
+-- The kernel-strict checks include naming conventions, documentation completeness,
+-- alphabetical ordering, and the existing structural checks. Use this for kernel
+-- and kernel-quality modules; non-kernel modules can use 'module'' which only runs
+-- the structural checks.
+kernelModule :: TTermDefinition (Module -> Maybe InvalidModuleError)
+kernelModule = define "kernelModule" $
+  doc "Validate a kernel module against all packaging rules; returns the first error found or nothing if valid" $
+  "mod" ~>
+  Lists.foldl
+    ("acc" ~> "check" ~>
+      Maybes.cases (var "acc")
+        (var "check" @@ var "mod")
+        (constant $ var "acc"))
+    nothing
+    (list [
+      checkConflictingVariantNames,
+      checkDefinitionDocumentation,
+      checkDefinitionNameConvention,
+      checkDefinitionNamespaces,
+      checkDefinitionOrdering,
+      checkDuplicateDefinitionNames,
+      checkModuleNamespaceConvention])
+
+-- | Validate a kernel package against the strict kernel rules.
+-- Runs every package-level check, then validates each module with 'kernelModule'.
+-- Stops at the first failure. Use this for kernel and kernel-quality packages;
+-- non-kernel packages can use 'package' which only runs the structural checks.
+kernelPackage :: TTermDefinition (Package -> Maybe InvalidPackageError)
+kernelPackage = define "kernelPackage" $
+  doc "Validate a kernel package against all packaging rules; returns the first error found or nothing if valid" $
+  "pkg" ~>
+  "pkgErr" <~ Lists.foldl
+    ("acc" ~> "check" ~>
+      Maybes.cases (var "acc")
+        (var "check" @@ var "pkg")
+        (constant $ var "acc"))
+    nothing
+    (list [
+      checkConflictingModuleNamespaces,
+      checkDuplicateModuleNamespaces,
+      checkPackageNameConvention]) $
+  Maybes.cases (var "pkgErr")
+    -- No package-level error: validate each module with the strict kernel rules
+    (Lists.foldl
+      ("acc" ~> "mod" ~>
+        Maybes.cases (var "acc")
+          (Maybes.map
+            ("err" ~> ErrorPackaging.invalidPackageErrorInvalidModule (var "err"))
+            (kernelModule @@ var "mod"))
+          (constant $ var "acc"))
+      nothing
+      (Packaging.packageModules $ var "pkg"))
+    (constant $ var "pkgErr")
+
 -- | Validate a module, returning the first error found or nothing if valid.
--- Checks are run in order; stops at the first failure.
+-- Checks are run in order; stops at the first failure. This orchestrator runs
+-- only the structural checks (definition namespaces, duplicate names, conflicting
+-- variant names) suitable for non-kernel modules. Kernel modules should use
+-- 'kernelModule' instead, which adds naming convention, documentation, and
+-- ordering checks.
 module' :: TTermDefinition (Module -> Maybe InvalidModuleError)
 module' = define "module" $
-  doc "Validate a module, returning the first error found or nothing if valid" $
+  doc "Validate a module against the structural rules; returns the first error found or nothing if valid" $
   "mod" ~>
   "r1" <~ (checkDefinitionNamespaces @@ var "mod") $
   Maybes.cases (var "r1")
@@ -231,10 +426,13 @@ module' = define "module" $
 
 -- | Validate a package, returning the first error found or nothing if valid.
 -- Package-level checks run first, then each module is validated in order.
--- Stops at the first failure.
+-- Stops at the first failure. This orchestrator runs only the structural checks
+-- suitable for non-kernel packages. Kernel packages should use 'kernelPackage'
+-- instead, which adds the package-name convention check and uses 'kernelModule'
+-- for per-module validation.
 package :: TTermDefinition (Package -> Maybe InvalidPackageError)
 package = define "package" $
-  doc "Validate a package, returning the first error found or nothing if valid" $
+  doc "Validate a package against the structural rules; returns the first error found or nothing if valid" $
   "pkg" ~>
   "r1" <~ (checkDuplicateModuleNamespaces @@ var "pkg") $
   Maybes.cases (var "r1")
