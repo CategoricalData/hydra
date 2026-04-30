@@ -251,7 +251,7 @@ encodeModule cx graph mod =
                     Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                       Core.annotatedTermBody = (EncodeCore.type_ typ),
                       Core.annotatedTermAnnotation = (Maps.fromList [
-                        (Constants.key_type, schemaTerm)])}))
+                        (Constants.keyType, schemaTerm)])}))
         in Core.Binding {
           Core.bindingName = name,
           Core.bindingTerm = dataTerm,

@@ -8,14 +8,14 @@
 #   1. Calling Layer 1 transform-json-to-python.sh for main modules
 #   2. Calling Layer 1 transform-json-to-python.sh for test modules
 #   3. Applying package-specific post-processing:
-#      - hydra-kernel: copy test_env.py, patch test_graph.py
+#      - hydra-kernel: copy test_env.py, patch test_graph.py, AND copy the
+#        hand-written runtime support (lib/, dsl/, sources/, tools.py, py.typed)
+#        so the published wheel is self-contained.
+#   4. Generating a per-package pyproject.toml so each dist/python/<pkg>/
+#      is a standalone publishable wheel build.
 #
 # Assemblers do NOT run tests. Test invocation is Layer 2.5's
-# test-distribution.sh. See feature_290_packaging-plan.md.
-#
-# Note: pyproject.toml currently lives in heads/python/, not per-dist, so no
-# build-file generation happens per package. Future work: per-package
-# pyproject.toml templates.
+# test-distribution.sh.
 
 set -euo pipefail
 
@@ -92,12 +92,10 @@ else
 fi
 
 # Step 3: Package-specific post-processing.
-# (Python exception: do NOT copy heads/python/.../lib/ + dsl/ into
-# dist/python/hydra-kernel/. heads/python/pyproject.toml lists both
-# heads/python/src/main/python AND dist/python/hydra-kernel/src/main/python
-# on the package path, and ruff/pyright/pytest all see both. A copy
-# would create twin definitions; bootstrap-demo's setup-python-target.sh
-# handles the runtime layout independently.)
+# - hydra-kernel: copy test_env.py and patch test_graph.py for the test
+#   tree, then copy the hand-written runtime support (lib/, dsl/, sources/,
+#   tools.py, py.typed) into dist/python/hydra-kernel/ so the published
+#   wheel is self-contained.
 case "$PACKAGE" in
     hydra-kernel)
         # Copy test_env.py from heads/python into dist/.
@@ -141,11 +139,23 @@ def __getattr__(name):
     raise AttributeError(f"module 'hydra.test.test_graph' has no attribute {name!r}")
 PYEOF
         fi
+
+        # Step 3c: Copy hand-written Python runtime so the published kernel
+        # wheel is self-contained.
+        echo "Step 3c: Copying hand-written Python runtime into hydra-kernel dist..."
+        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
         ;;
     *)
         # No per-package post-processing for other packages today.
         ;;
 esac
+
+# Step 4: Generate per-package pyproject.toml so each dist/python/<pkg>/
+# is a standalone publishable wheel build.
+echo ""
+echo "Step 4: Generating per-package pyproject.toml..."
+HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-python-package-build.py" \
+    "$PACKAGE" --out-dir "$OUT_DIR"
 
 echo ""
 
