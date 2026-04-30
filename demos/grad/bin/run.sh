@@ -41,7 +41,7 @@ demo_header "Automatic Differentiation Demo"
 OUT_DIR="$RUN_DIR/output"
 mkdir -p "$OUT_DIR"
 
-DRIVER="$REPO_ROOT/demos/src/main/haskell/Hydra/Ext/Demos/Grad/Demo.hs"
+DRIVER="$REPO_ROOT/demos/src/main/haskell/Hydra/Demos/Grad/Demo.hs"
 
 if [ ! -f "$DRIVER" ]; then
   echo -e "  ${RED}ERROR${NC}: Driver not found at $DRIVER"
