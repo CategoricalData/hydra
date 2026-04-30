@@ -1913,6 +1913,731 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderError",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "precedingName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "followingName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                            "body": {"variable": "hydra.core.Name"}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "followingName"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "precedingName"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
+                    "body": {"variable": "hydra.packaging.Namespace"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "namespace"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "domain": {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "key": "description",
+                                  "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                              "body": {"variable": "hydra.core.Name"}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorPrecedingName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorFollowingName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorWithNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "key": "description",
+                              "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
+                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorWithPrecedingName",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorWithFollowingName",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "precedingName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "followingName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "key": "description",
+                              "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.duplicateDefinitionNameError",
         "term": {
           "lambda": {
@@ -2497,6 +3222,735 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameError",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "expectedConvention"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "key": "description",
+                                "value": {
+                                  "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                            "body": {"variable": "hydra.util.CaseConvention"}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "expectedConvention"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "name"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
+                    "body": {"variable": "hydra.packaging.Namespace"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "namespace"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "domain": {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "key": "description",
+                                  "value": {
+                                    "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                              "body": {"variable": "hydra.util.CaseConvention"}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorExpectedConvention",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                          {
+                                            "name": "field",
+                                            "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                      "body": {"variable": "hydra.util.CaseConvention"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorWithNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {
+                                                                          "name": "field",
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
+                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorWithName",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {
+                                                                          "name": "field",
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorWithExpectedConvention",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"body": {"literal": {"string": "expectedConvention"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                        "body": {"variable": "hydra.util.CaseConvention"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "key": "description",
+                              "value": {
+                                "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                          "body": {"variable": "hydra.util.CaseConvention"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.invalidModuleErrorConflictingVariantName",
         "term": {
           "lambda": {
@@ -2617,6 +4071,65 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorDefinitionsOutOfOrder",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {"wrap": {"body": {"literal": {"string": "definitionsOutOfOrder"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}],
+                    "body": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {"argument": {"variable": "hydra.error.packaging.InvalidModuleError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}],
+                      "body": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.invalidModuleErrorDuplicateDefinitionName",
         "term": {
           "lambda": {
@@ -2672,6 +4185,364 @@
                           "key": "description",
                           "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}],
                       "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorInvalidDefinitionName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {"wrap": {"body": {"literal": {"string": "invalidDefinitionName"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}],
+                    "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {"argument": {"variable": "hydra.error.packaging.InvalidModuleError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}],
+                      "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorInvalidNamespaceConvention",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {"wrap": {"body": {"literal": {"string": "invalidNamespaceConvention"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A module whose namespace does not match the namespace naming convention"}}}],
+                    "body": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {"argument": {"variable": "hydra.error.packaging.InvalidModuleError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A module whose namespace does not match the namespace naming convention"}}}],
+                      "body": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorMissingDocumentation",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {"wrap": {"body": {"literal": {"string": "missingDocumentation"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}],
+                    "body": {"variable": "hydra.error.packaging.MissingDocumentationError"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {"argument": {"variable": "hydra.error.packaging.InvalidModuleError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}],
+                      "body": {"variable": "hydra.error.packaging.MissingDocumentationError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidNamespaceConventionError",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "hydra.error.packaging.InvalidNamespaceConventionError"}},
+                                  "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}]}}],
+                          "typeName": "hydra.core.Record"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
+                    "body": {"variable": "hydra.packaging.Namespace"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "namespace"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidNamespaceConventionErrorNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {
+                                                "body": {"literal": {"string": "hydra.error.packaging.InvalidNamespaceConventionError"}},
+                                                "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidNamespaceConventionErrorWithNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.error.packaging.InvalidNamespaceConventionError"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
+                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -2848,8 +4719,668 @@
                       "annotation": [{"key": "description", "value": {"literal": {"string": "A module within the package is invalid"}}}],
                       "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidPackageErrorInvalidPackageName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {"wrap": {"body": {"literal": {"string": "invalidPackageName"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}],
+                    "body": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}],
+                      "body": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidPackageNameError",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {
+                                "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidPackageNameError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "packageName"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "packageName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}]}}],
+                          "typeName": "hydra.core.Record"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                    "body": {"variable": "hydra.packaging.PackageName"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "packageName"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                      "body": {"variable": "hydra.packaging.PackageName"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidPackageNameErrorPackageName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidPackageNameError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "packageName"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                      "body": {"variable": "hydra.packaging.PackageName"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidPackageNameErrorWithPackageName",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidPackageNameError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "packageName"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                        "body": {"variable": "hydra.packaging.PackageName"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                          "body": {"variable": "hydra.packaging.PackageName"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.missingDocumentationError",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "name"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
+                    "body": {"variable": "hydra.packaging.Namespace"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "namespace"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
+                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorName",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorWithNamespace",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "key": "description",
+                              "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
+                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorWithName",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                        "body": {"variable": "hydra.core.Name"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {
+              "application": {
+                "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                          "body": {"variable": "hydra.core.Name"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
   "description": "DSL functions for hydra.error.packaging",
   "namespace": "hydra.dsl.error.packaging",
-  "termDependencies": ["hydra.dsl.core", "hydra.dsl.packaging"],
-  "typeDependencies": ["hydra.error.packaging", "hydra.phantoms", "hydra.core", "hydra.packaging"]}
+  "termDependencies": ["hydra.dsl.core", "hydra.dsl.packaging", "hydra.dsl.util"],
+  "typeDependencies": ["hydra.error.packaging", "hydra.phantoms", "hydra.core", "hydra.packaging", "hydra.util"]}

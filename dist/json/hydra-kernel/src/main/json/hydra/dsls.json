@@ -4259,7 +4259,7 @@
                 "key": "description",
                 "value": {
                   "literal": {
-                    "string": "Deduplicate bindings by appending underscore suffixes to duplicate names"}}}],
+                    "string": "Deduplicate bindings by appending numeric suffixes to duplicate names"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4279,21 +4279,10 @@
                                       "let": {
                                         "bindings": [
                                           {
-                                            "name": "n",
+                                            "name": "usedNames",
                                             "term": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "b"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
-                                                "function": {"unwrap": "hydra.core.Name"}}},
-                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "usedNames",
-                                                "term": {
                                                   "application": {
                                                     "argument": {"variable": "acc"},
                                                     "function": {
@@ -4302,11 +4291,8 @@
                                                           "lambda": {
                                                             "body": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "a"},
-                                                                    "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
-                                                                "function": {"unwrap": "hydra.core.Name"}}},
+                                                                "argument": {"variable": "a"},
+                                                                "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
                                                             "domain": {"variable": "hydra.core.Binding"},
                                                             "parameter": "a"}},
                                                         "function": {
@@ -4315,52 +4301,56 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.lists.map"},
                                                                 "type": {"variable": "hydra.core.Binding"}}},
-                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "uniqueName",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "usedNames"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "n"},
-                                                            "function": {"variable": "hydra.dsls.findUniqueName"}}}}},
-                                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                                "body": {
+                                                            "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.sets.fromList"},
+                                                    "type": {"variable": "hydra.core.Name"}}}}},
+                                            "typeScheme": {"body": {"set": {"variable": "hydra.core.Name"}}, "variables": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "uniqueName",
+                                                "term": {
                                                   "application": {
                                                     "argument": {
-                                                      "list": [
-                                                        {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "name",
-                                                                "term": {
-                                                                  "wrap": {"body": {"variable": "uniqueName"}, "typeName": "hydra.core.Name"}}},
-                                                              {
-                                                                "name": "term",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "b"},
-                                                                    "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}},
-                                                              {
-                                                                "name": "typeScheme",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "b"},
-                                                                    "function": {"project": {"field": "typeScheme", "typeName": "hydra.core.Binding"}}}}}],
-                                                            "typeName": "hydra.core.Binding"}}]},
+                                                      "application": {
+                                                        "argument": {"variable": "b"},
+                                                        "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"variable": "acc"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.concat2"},
-                                                            "type": {"variable": "hydra.core.Binding"}}}}}}}}}}}}},
+                                                        "argument": {"variable": "usedNames"},
+                                                        "function": {"variable": "hydra.lexical.chooseUniqueName"}}}}},
+                                                "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "list": [
+                                                    {
+                                                      "record": {
+                                                        "fields": [
+                                                          {"name": "name", "term": {"variable": "uniqueName"}},
+                                                          {
+                                                            "name": "term",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "b"},
+                                                                "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}},
+                                                          {
+                                                            "name": "typeScheme",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "b"},
+                                                                "function": {"project": {"field": "typeScheme", "typeName": "hydra.core.Binding"}}}}}],
+                                                        "typeName": "hydra.core.Binding"}}]},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.concat2"},
+                                                        "type": {"variable": "hydra.core.Binding"}}}}}}}}}}},
                                     "domain": {"variable": "hydra.core.Binding"},
                                     "parameter": "b"}},
                                 "domain": {"list": {"variable": "hydra.core.Binding"}},
@@ -4379,75 +4369,6 @@
             "function": {
               "codomain": {"list": {"variable": "hydra.core.Binding"}},
               "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsls.findUniqueName",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find a unique name by appending underscores"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "usedNames"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"list": [{"variable": "candidate"}, {"literal": {"string": "_"}}]},
-                                    "function": {"variable": "hydra.lib.strings.cat"}}},
-                                "function": {"variable": "hydra.dsls.findUniqueName"}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "candidate"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "usedNames"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "candidate"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                    "type": {"literal": {"string": {}}}}}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.filter"},
-                                                "type": {"literal": {"string": {}}}}}}}}},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.null"},
-                                        "type": {"literal": {"string": {}}}}}}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"literal": {"string": {}}}}}}}}}}},
-                    "domain": {"list": {"literal": {"string": {}}}},
-                    "parameter": "usedNames"}},
-                "domain": {"literal": {"string": {}}},
-                "parameter": "candidate"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"literal": {"string": {}}},
-                  "domain": {"list": {"literal": {"string": {}}}}}},
-              "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
@@ -4867,6 +4788,7 @@
   "termDependencies": [
     "hydra.annotations",
     "hydra.formatting",
+    "hydra.lexical",
     "hydra.names",
     "hydra.strip"],
   "typeDependencies": [

@@ -3,7 +3,7 @@
   "version": 1,
   "hashes": {
     "hydra.haskell.environment": "8b02e9f9d3275005b66ade74093656e07de888580850af9990b7dd0338840a08",
-    "hydra.haskell.language": "53fb90501b3c46aad66f7283eedd6775e9ca5004dddbf7111939a3dd58503338",
+    "hydra.haskell.language": "ae98d2c3035b7d187f83cd56e627e41d1ed6d8bb7213a12999db2220d9f5c2d9",
     "hydra.haskell.operators": "3121239cb5250947373d33eda9afaf2ec664886e6d5a8791b55b4a00faa34bda",
     "hydra.haskell.serde": "6ac44d56c8c7ba85e0337796020d689be7650da0f26d51348f9db3614bbfbd7a",
     "hydra.haskell.syntax": "3e7bcdc92af7957b11c2c9d5650b138feef39d273e5b2ccc6161c077918572c1",
