@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.Examples.Health.Mapping where
+module Hydra.Demos.Genpg.Examples.Health.Mapping where
 
 import Hydra.Core (Term)
 import Hydra.Pg.Model (Vertex, Edge, LazyGraph)
@@ -9,7 +9,7 @@ import Hydra.Dsl.Pg.Mappings (column, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
-import Hydra.Demos.GenPG.Examples.Health.GraphSchema
+import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 
 labeledIntId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
 labeledIntId itype iid = lambda "r" $ Maybes.map

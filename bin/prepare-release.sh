@@ -283,11 +283,10 @@ rm -f "$LEXICON_BACKUP"
 # --- Step 9: Hackage sdist + case-sensitivity check ---
 # The Hackage build infrastructure runs on Linux (case-sensitive ext4).
 # macOS HFS+/APFS is case-insensitive by default, which masks duplicate
-# directories that differ only in case (e.g. Hydra/Demos/GenPG/ vs
-# Hydra/Demos/Genpg/). We assemble the sdist on a case-sensitive volume
-# so any such clash surfaces, then run cabal v2-build --dry-run to catch
-# GHC-28623 ("file name does not match module name") errors without the
-# full compile cost.
+# directories that differ only in case. We assemble the sdist on a
+# case-sensitive volume so any such clash surfaces, then run
+# cabal v2-build --dry-run to catch GHC-28623 ("file name does not match
+# module name") errors without the full compile cost.
 step 9 $TOTAL_STEPS "Verifying Hackage sdist on case-sensitive filesystem"
 echo ""
 
