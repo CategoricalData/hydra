@@ -638,6 +638,425 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.validate.packaging.checkDefinitionDocumentation",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Check that every top-level definition is wrapped in a description annotation"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ns",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {
+                              "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {
+                              "project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "typeApplication": {
+                                "body": {"maybe": null},
+                                "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {"variable": "acc"},
+                                                "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},
+                                                "parameter": "_"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "name",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "def"},
+                                                            "function": {"variable": "hydra.validate.packaging.definitionName"}}},
+                                                        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "documented",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "def"},
+                                                                "function": {
+                                                                  "cases": {
+                                                                    "cases": [
+                                                                      {
+                                                                        "name": "term",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "term",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "td"},
+                                                                                        "function": {
+                                                                                          "project": {"field": "term", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                    "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "term"},
+                                                                                    "function": {
+                                                                                      "cases": {
+                                                                                        "cases": [
+                                                                                          {
+                                                                                            "name": "annotated",
+                                                                                            "term": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "at"},
+                                                                                                        "function": {
+                                                                                                          "project": {"field": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.annotations.hasDescription"},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                                "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                                                                                "parameter": "at"}}}],
+                                                                                        "default": {"literal": {"boolean": false}},
+                                                                                        "typeName": "hydra.core.Term"}}}}}},
+                                                                            "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                                                            "parameter": "td"}}},
+                                                                      {
+                                                                        "name": "type",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "typ",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "td"},
+                                                                                            "function": {
+                                                                                              "project": {"field": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                                                                        "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
+                                                                                    "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "typ"},
+                                                                                    "function": {
+                                                                                      "cases": {
+                                                                                        "cases": [
+                                                                                          {
+                                                                                            "name": "annotated",
+                                                                                            "term": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "at"},
+                                                                                                        "function": {
+                                                                                                          "project": {"field": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.annotations.hasDescription"},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                                "domain": {"variable": "hydra.core.AnnotatedType"},
+                                                                                                "parameter": "at"}}}],
+                                                                                        "default": {"literal": {"boolean": false}},
+                                                                                        "typeName": "hydra.core.Type"}}}}}},
+                                                                            "domain": {"variable": "hydra.packaging.TypeDefinition"},
+                                                                            "parameter": "td"}}}],
+                                                                    "default": {"literal": {"boolean": false}},
+                                                                    "typeName": "hydra.packaging.Definition"}}}},
+                                                            "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "maybe": {
+                                                                "inject": {
+                                                                  "field": {
+                                                                    "name": "missingDocumentation",
+                                                                    "term": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {"name": "namespace", "term": {"variable": "ns"}},
+                                                                          {"name": "name", "term": {"variable": "name"}}],
+                                                                        "typeName": "hydra.error.packaging.MissingDocumentationError"}}},
+                                                                  "typeName": "hydra.error.packaging.InvalidModuleError"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "typeApplication": {
+                                                                    "body": {"maybe": null},
+                                                                    "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "documented"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                                            "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                        "domain": {"variable": "hydra.packaging.Definition"},
+                                        "parameter": "def"}},
+                                    "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                    "parameter": "acc"}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.lists.foldl"},
+                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                    "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "mod"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+              "domain": {"variable": "hydra.packaging.Module"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.validate.packaging.checkDefinitionNameConvention",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Check that term definitions have camelCase local names and type definitions have PascalCase local names"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ns",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {
+                              "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {
+                              "project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "typeApplication": {
+                                "body": {"maybe": null},
+                                "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {"variable": "acc"},
+                                                "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},
+                                                "parameter": "_"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "name",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "def"},
+                                                            "function": {"variable": "hydra.validate.packaging.definitionName"}}},
+                                                        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "local",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "name"},
+                                                                "function": {"variable": "hydra.names.localNameOf"}}},
+                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "expected",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "def"},
+                                                                    "function": {
+                                                                      "cases": {
+                                                                        "cases": [
+                                                                          {
+                                                                            "name": "term",
+                                                                            "term": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "inject": {
+                                                                                    "field": {"name": "camel", "term": {"unit": {}}},
+                                                                                    "typeName": "hydra.util.CaseConvention"}},
+                                                                                "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                                                                "parameter": "_"}}},
+                                                                          {
+                                                                            "name": "type",
+                                                                            "term": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "inject": {
+                                                                                    "field": {"name": "pascal", "term": {"unit": {}}},
+                                                                                    "typeName": "hydra.util.CaseConvention"}},
+                                                                                "domain": {"variable": "hydra.packaging.TypeDefinition"},
+                                                                                "parameter": "_"}}}],
+                                                                        "default": {
+                                                                          "inject": {
+                                                                            "field": {"name": "camel", "term": {"unit": {}}},
+                                                                            "typeName": "hydra.util.CaseConvention"}},
+                                                                        "typeName": "hydra.packaging.Definition"}}}},
+                                                                "typeScheme": {"body": {"variable": "hydra.util.CaseConvention"}, "variables": []}}],
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "pattern",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "def"},
+                                                                        "function": {
+                                                                          "cases": {
+                                                                            "cases": [
+                                                                              {
+                                                                                "name": "term",
+                                                                                "term": {
+                                                                                  "lambda": {
+                                                                                    "body": {"variable": "hydra.constants.regexCamelCase"},
+                                                                                    "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                                                                    "parameter": "_"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "lambda": {
+                                                                                    "body": {"variable": "hydra.constants.regexPascalCase"},
+                                                                                    "domain": {"variable": "hydra.packaging.TypeDefinition"},
+                                                                                    "parameter": "_"}}}],
+                                                                            "default": {"variable": "hydra.constants.regexCamelCase"},
+                                                                            "typeName": "hydra.packaging.Definition"}}}},
+                                                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "maybe": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "invalidDefinitionName",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {"name": "namespace", "term": {"variable": "ns"}},
+                                                                                  {"name": "name", "term": {"variable": "name"}},
+                                                                                  {"name": "expectedConvention", "term": {"variable": "expected"}}],
+                                                                                "typeName": "hydra.error.packaging.InvalidDefinitionNameError"}}},
+                                                                          "typeName": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {"maybe": null},
+                                                                            "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "local"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "pattern"},
+                                                                                    "function": {"variable": "hydra.lib.regex.matches"}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                                            "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                        "domain": {"variable": "hydra.packaging.Definition"},
+                                        "parameter": "def"}},
+                                    "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                    "parameter": "acc"}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.lists.foldl"},
+                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                    "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "mod"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+              "domain": {"variable": "hydra.packaging.Module"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.validate.packaging.checkDefinitionNamespaces",
         "term": {
           "annotated": {
@@ -815,6 +1234,283 @@
                                                 "body": {"variable": "hydra.lib.lists.foldl"},
                                                 "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                             "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "mod"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+              "domain": {"variable": "hydra.packaging.Module"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.validate.packaging.checkDefinitionOrdering",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Check that a module's definitions list is sorted in ascending lexicographic order by local name"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ns",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {
+                              "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "result",
+                            "term": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "mod"},
+                                    "function": {
+                                      "project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "first": {
+                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Name"}}},
+                                                "second": {
+                                                  "typeApplication": {
+                                                    "body": {"maybe": null},
+                                                    "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                            "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "lambda": {
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "prev",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "acc"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.pairs.first"},
+                                                                    "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                        "typeScheme": {"body": {"maybe": {"variable": "hydra.core.Name"}}, "variables": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "err",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "acc"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                                        "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                            "typeScheme": {
+                                                              "body": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                                              "variables": []}}],
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {"variable": "acc"},
+                                                                "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},
+                                                                "parameter": "_"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "currName",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "def"},
+                                                                            "function": {"variable": "hydra.validate.packaging.definitionName"}}},
+                                                                        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "currLocal",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "currName"},
+                                                                                "function": {"variable": "hydra.names.localNameOf"}}},
+                                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "let": {
+                                                                                    "bindings": [
+                                                                                      {
+                                                                                        "name": "prevLocal",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "prevName"},
+                                                                                            "function": {"variable": "hydra.names.localNameOf"}}},
+                                                                                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "pair": {
+                                                                                                    "first": {"maybe": {"variable": "currName"}},
+                                                                                                    "second": {
+                                                                                                      "maybe": {
+                                                                                                        "inject": {
+                                                                                                          "field": {
+                                                                                                            "name": "definitionsOutOfOrder",
+                                                                                                            "term": {
+                                                                                                              "record": {
+                                                                                                                "fields": [
+                                                                                                                  {"name": "namespace", "term": {"variable": "ns"}},
+                                                                                                                  {"name": "precedingName", "term": {"variable": "prevName"}},
+                                                                                                                  {"name": "followingName", "term": {"variable": "currName"}}],
+                                                                                                                "typeName": "hydra.error.packaging.DefinitionsOutOfOrderError"}}},
+                                                                                                          "typeName": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                                                                "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "pair": {
+                                                                                                        "first": {"maybe": {"variable": "currName"}},
+                                                                                                        "second": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"maybe": null},
+                                                                                                            "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                                                                    "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "currLocal"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "prevLocal"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"variable": "hydra.lib.equality.lt"},
+                                                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                    "type": {
+                                                                                                      "pair": {
+                                                                                                        "first": {"maybe": {"variable": "hydra.core.Name"}},
+                                                                                                        "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
+                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                "parameter": "prevName"}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "pair": {
+                                                                                            "first": {"maybe": {"variable": "currName"}},
+                                                                                            "second": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"maybe": null},
+                                                                                                "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                                                        "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "prev"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                                            "type": {"variable": "hydra.core.Name"}}},
+                                                                                        "type": {
+                                                                                          "pair": {
+                                                                                            "first": {"maybe": {"variable": "hydra.core.Name"}},
+                                                                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "err"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                            "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                        "type": {
+                                                                          "pair": {
+                                                                            "first": {"maybe": {"variable": "hydra.core.Name"}},
+                                                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                "domain": {"variable": "hydra.packaging.Definition"},
+                                                "parameter": "def"}},
+                                            "domain": {
+                                              "pair": {
+                                                "first": {"maybe": {"variable": "hydra.core.Name"}},
+                                                "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                            "parameter": "acc"}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.foldl"},
+                                                "type": {
+                                                  "pair": {
+                                                    "first": {"maybe": {"variable": "hydra.core.Name"}},
+                                                    "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                            "type": {"variable": "hydra.packaging.Definition"}}}}}}}}},
+                            "typeScheme": {
+                              "body": {
+                                "pair": {
+                                  "first": {"maybe": {"variable": "hydra.core.Name"}},
+                                  "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                              "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "result"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.pairs.second"},
+                                    "type": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "typeScheme": {
@@ -1279,6 +1975,137 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.validate.packaging.checkModuleNamespaceConvention",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Check that the module's namespace matches the dotted-lowercase naming convention"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ns",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {
+                              "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "maybe": {
+                            "inject": {
+                              "field": {
+                                "name": "invalidNamespaceConvention",
+                                "term": {
+                                  "record": {
+                                    "fields": [{"name": "namespace", "term": {"variable": "ns"}}],
+                                    "typeName": "hydra.error.packaging.InvalidNamespaceConventionError"}}},
+                              "typeName": "hydra.error.packaging.InvalidModuleError"}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "typeApplication": {
+                                "body": {"maybe": null},
+                                "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "ns"},
+                                        "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.constants.regexNamespace"},
+                                        "function": {"variable": "hydra.lib.regex.matches"}}}}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "mod"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+              "domain": {"variable": "hydra.packaging.Module"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.validate.packaging.checkPackageNameConvention",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Check that the package's name matches the hyphen-separated lowercase naming convention"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "pname",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pkg"},
+                            "function": {"project": {"field": "name", "typeName": "hydra.packaging.Package"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.packaging.PackageName"}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "maybe": {
+                            "inject": {
+                              "field": {
+                                "name": "invalidPackageName",
+                                "term": {
+                                  "record": {
+                                    "fields": [{"name": "packageName", "term": {"variable": "pname"}}],
+                                    "typeName": "hydra.error.packaging.InvalidPackageNameError"}}},
+                              "typeName": "hydra.error.packaging.InvalidPackageError"}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "typeApplication": {
+                                "body": {"maybe": null},
+                                "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "pname"},
+                                        "function": {"unwrap": "hydra.packaging.PackageName"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.constants.regexPackageName"},
+                                        "function": {"variable": "hydra.lib.regex.matches"}}}}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Package"},
+                "parameter": "pkg"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+              "domain": {"variable": "hydra.packaging.Package"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.validate.packaging.definitionName",
         "term": {
           "annotated": {
@@ -1327,6 +2154,268 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.validate.packaging.kernelModule",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Validate a kernel module against all packaging rules; returns the first error found or nothing if valid"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "list": [
+                        {"variable": "hydra.validate.packaging.checkConflictingVariantNames"},
+                        {"variable": "hydra.validate.packaging.checkDefinitionDocumentation"},
+                        {"variable": "hydra.validate.packaging.checkDefinitionNameConvention"},
+                        {"variable": "hydra.validate.packaging.checkDefinitionNamespaces"},
+                        {"variable": "hydra.validate.packaging.checkDefinitionOrdering"},
+                        {"variable": "hydra.validate.packaging.checkDuplicateDefinitionNames"},
+                        {
+                          "variable": "hydra.validate.packaging.checkModuleNamespaceConvention"}]},
+                    "function": {
+                      "application": {
+                        "argument": {
+                          "typeApplication": {
+                            "body": {"maybe": null},
+                            "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {"variable": "acc"},
+                                            "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},
+                                            "parameter": "_"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "mod"}, "function": {"variable": "check"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "acc"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                        "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                    "domain": {
+                                      "function": {
+                                        "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                        "domain": {"variable": "hydra.packaging.Module"}}},
+                                    "parameter": "check"}},
+                                "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                "parameter": "acc"}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.lists.foldl"},
+                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                "type": {
+                                  "function": {
+                                    "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                    "domain": {"variable": "hydra.packaging.Module"}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "mod"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+              "domain": {"variable": "hydra.packaging.Module"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.validate.packaging.kernelPackage",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Validate a kernel package against all packaging rules; returns the first error found or nothing if valid"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "pkgErr",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "list": [
+                                {
+                                  "variable": "hydra.validate.packaging.checkConflictingModuleNamespaces"},
+                                {
+                                  "variable": "hydra.validate.packaging.checkDuplicateModuleNamespaces"},
+                                {"variable": "hydra.validate.packaging.checkPackageNameConvention"}]},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "typeApplication": {
+                                    "body": {"maybe": null},
+                                    "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "lambda": {
+                                        "body": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {"variable": "acc"},
+                                                    "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                    "parameter": "_"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {"argument": {"variable": "pkg"}, "function": {"variable": "check"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "acc"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}},
+                                            "domain": {
+                                              "function": {
+                                                "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+                                                "domain": {"variable": "hydra.packaging.Package"}}},
+                                            "parameter": "check"}},
+                                        "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+                                        "parameter": "acc"}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.foldl"},
+                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                        "type": {
+                                          "function": {
+                                            "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+                                            "domain": {"variable": "hydra.packaging.Package"}}}}}}}}}}},
+                        "typeScheme": {
+                          "body": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+                          "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "lambda": {
+                            "body": {"variable": "pkgErr"},
+                            "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                            "parameter": "_"}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "pkg"},
+                                    "function": {
+                                      "project": {"field": "modules", "typeName": "hydra.packaging.Package"}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {"maybe": null},
+                                        "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "body": {"variable": "acc"},
+                                                        "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                        "parameter": "_"}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "mod"},
+                                                                "function": {"variable": "hydra.validate.packaging.kernelModule"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "field": {"name": "invalidModule", "term": {"variable": "err"}},
+                                                                        "typeName": "hydra.error.packaging.InvalidPackageError"}},
+                                                                    "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},
+                                                                    "parameter": "err"}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.maybes.map"},
+                                                                        "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                    "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "acc"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                    "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}},
+                                                "domain": {"variable": "hydra.packaging.Module"},
+                                                "parameter": "mod"}},
+                                            "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+                                            "parameter": "acc"}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.foldl"},
+                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                            "type": {"variable": "hydra.packaging.Module"}}}}}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "pkgErr"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                        "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Package"},
+                "parameter": "pkg"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
+              "domain": {"variable": "hydra.packaging.Package"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.validate.packaging.module",
         "term": {
           "annotated": {
@@ -1335,7 +2424,7 @@
                 "key": "description",
                 "value": {
                   "literal": {
-                    "string": "Validate a module, returning the first error found or nothing if valid"}}}],
+                    "string": "Validate a module against the structural rules; returns the first error found or nothing if valid"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1422,7 +2511,7 @@
                 "key": "description",
                 "value": {
                   "literal": {
-                    "string": "Validate a package, returning the first error found or nothing if valid"}}}],
+                    "string": "Validate a package against the structural rules; returns the first error found or nothing if valid"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1571,7 +2660,11 @@
           "variables": []}}}],
   "description": "Validation functions for modules and packages",
   "namespace": "hydra.validate.packaging",
-  "termDependencies": ["hydra.formatting", "hydra.names"],
+  "termDependencies": [
+    "hydra.annotations",
+    "hydra.constants",
+    "hydra.formatting",
+    "hydra.names"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

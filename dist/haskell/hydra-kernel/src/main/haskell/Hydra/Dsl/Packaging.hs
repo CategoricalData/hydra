@@ -469,8 +469,8 @@ packageName x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-packageName_ :: Phantoms.TTerm String -> Phantoms.TTerm Packaging.PackageName
-packageName_ x =
+packageName2 :: Phantoms.TTerm String -> Phantoms.TTerm Packaging.PackageName
+packageName2 x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
