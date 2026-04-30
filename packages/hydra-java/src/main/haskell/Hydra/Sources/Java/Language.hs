@@ -169,8 +169,8 @@ javaLanguage = define "javaLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.java")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.java")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
