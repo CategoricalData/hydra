@@ -163,10 +163,16 @@ signing {{
 // Sonatype Central Portal credentials are read from gradle.properties /
 // environment. Set sonatypeUsername + sonatypePassword (token-based) in
 // ~/.gradle/gradle.properties, or via -Psonatype{{Username,Password}}=...
+//
+// nmcp's CentralPortalOptions declares username/password as
+// Property<String>. We .set() them with the Provider rather than using
+// `=`, because Groovy's `=` on a Property field accepts a String but not
+// a Provider — the Provider would silently be coerced to its toString().
+// The .set() form is explicit and matches nmcp's lazy-evaluation model.
 nmcpAggregation {{
     centralPortal {{
-        username = providers.gradleProperty('sonatypeUsername').orElse('').get()
-        password = providers.gradleProperty('sonatypePassword').orElse('').get()
+        username.set(providers.gradleProperty('sonatypeUsername'))
+        password.set(providers.gradleProperty('sonatypePassword'))
         // USER_MANAGED leaves the deployment in the Central Portal UI for
         // manual review-and-publish before promotion. Switch to AUTOMATIC
         // once the workflow is trusted end-to-end.
