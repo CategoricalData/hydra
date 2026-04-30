@@ -6,8 +6,8 @@ import Hydra.Kernel hiding (
   addNamesToNamespaces,
   analyzeFunctionTerm,
   analyzeFunctionTermWith,
-  analyzeFunctionTermWith_finish,
-  analyzeFunctionTermWith_gather,
+  analyzeFunctionTermWithFinish,
+  analyzeFunctionTermWithGather,
   definitionDependencyNamespaces,
   dependencyNamespaces,
   gatherApplications,
@@ -102,8 +102,8 @@ module_ = Module {
       toDefinition addNamesToNamespaces,
       toDefinition analyzeFunctionTerm,
       toDefinition analyzeFunctionTermWith,
-      toDefinition analyzeFunctionTermWith_finish,
-      toDefinition analyzeFunctionTermWith_gather,
+      toDefinition analyzeFunctionTermWithFinish,
+      toDefinition analyzeFunctionTermWithGather,
       toDefinition definitionDependencyNamespaces,
       toDefinition dependencyNamespaces,
       toDefinition gatherApplications,
@@ -153,7 +153,7 @@ analyzeFunctionTermWith :: TTermDefinition (
 analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
   doc "Analyze a function term with configurable binding metadata" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+  analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
     @@ boolean True @@ var "env"
     @@ list ([] :: [TTerm Name])
     @@ list ([] :: [TTerm Name])
@@ -162,12 +162,12 @@ analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
     @@ list ([] :: [TTerm Type])
     @@ var "term"
 
-analyzeFunctionTermWith_finish :: TTermDefinition (
+analyzeFunctionTermWithFinish :: TTermDefinition (
   Context ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Either Error (FunctionStructure env))
-analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
+analyzeFunctionTermWithFinish = define "analyzeFunctionTermWithFinish" $
   "cx" ~> "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
   "bodyWithTapps" <~ Lists.foldl
     ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
@@ -185,25 +185,25 @@ analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
     _FunctionStructure_codomain>>: var "mcod",
     _FunctionStructure_environment>>: var "fEnv"]
 
-analyzeFunctionTermWith_gather :: TTermDefinition (
+analyzeFunctionTermWithGather :: TTermDefinition (
   Context ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Either Error (FunctionStructure env))
-analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
+analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
   cases _Term (Strip.deannotateTerm @@ var "t")
-    (Just $ analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+    (Just $ analyzeFunctionTermWithFinish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
     _Term_lambda>>: "lam" ~>
       Logic.ifElse (var "argMode")
         ("v" <~ Core.lambdaParameter (var "lam") $
          "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
          "body" <~ Core.lambdaBody (var "lam") $
          "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
-         analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+         analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
            @@ var "argMode" @@ var "newEnv"
            @@ var "tparams"
            @@ (Lists.cons (var "v") (var "args"))
@@ -211,12 +211,12 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
            @@ (Lists.cons (var "dom") (var "doms"))
            @@ var "tapps"
            @@ var "body")
-        (analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t"),
+        (analyzeFunctionTermWithFinish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t"),
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
       "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
-      analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+      analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
         @@ var "tparams"
         @@ var "args"
@@ -227,7 +227,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_typeApplication>>: "ta" ~>
       "taBody" <~ Core.typeApplicationTermBody (var "ta") $
       "typ" <~ Core.typeApplicationTermType (var "ta") $
-      analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+      analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "gEnv"
         @@ var "tparams"
         @@ var "args"
@@ -239,7 +239,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
       "tvar" <~ Core.typeLambdaParameter (var "tl") $
       "tlBody" <~ Core.typeLambdaBody (var "tl") $
       "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
-      analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+      analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "newEnv"
         @@ (Lists.cons (var "tvar") (var "tparams"))
         @@ var "args"
