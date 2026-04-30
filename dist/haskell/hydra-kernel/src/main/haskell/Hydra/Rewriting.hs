@@ -80,9 +80,11 @@ rewriteAndFoldTerm f term0 =
                     forField =
                             \val -> \field ->
                               let r = recurse val (Core.fieldTerm field)
-                              in (Pairs.first r, Core.Field {
-                                Core.fieldName = (Core.fieldName field),
-                                Core.fieldTerm = (Pairs.second r)})
+                              in (
+                                Pairs.first r,
+                                Core.Field {
+                                  Core.fieldName = (Core.fieldName field),
+                                  Core.fieldTerm = (Pairs.second r)})
                     forFields = forMany forField (\x -> x)
                     forPair =
                             \val -> \kv ->
@@ -92,10 +94,12 @@ rewriteAndFoldTerm f term0 =
                     forBinding =
                             \val -> \binding ->
                               let r = recurse val (Core.bindingTerm binding)
-                              in (Pairs.first r, Core.Binding {
-                                Core.bindingName = (Core.bindingName binding),
-                                Core.bindingTerm = (Pairs.second r),
-                                Core.bindingTypeScheme = (Core.bindingTypeScheme binding)})
+                              in (
+                                Pairs.first r,
+                                Core.Binding {
+                                  Core.bindingName = (Core.bindingName binding),
+                                  Core.bindingTerm = (Pairs.second r),
+                                  Core.bindingTypeScheme = (Core.bindingTypeScheme binding)})
                     dflt = (val0, term02)
                 in case term02 of
                   Core.TermAnnotated v0 -> forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
@@ -104,17 +108,21 @@ rewriteAndFoldTerm f term0 =
                   Core.TermApplication v0 ->
                     let rlhs = recurse val0 (Core.applicationFunction v0)
                         rrhs = recurse (Pairs.first rlhs) (Core.applicationArgument v0)
-                    in (Pairs.first rrhs, (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Pairs.second rlhs),
-                      Core.applicationArgument = (Pairs.second rrhs)})))
+                    in (
+                      Pairs.first rrhs,
+                      (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Pairs.second rlhs),
+                        Core.applicationArgument = (Pairs.second rrhs)})))
                   Core.TermCases v0 ->
                     let rmd = Maybes.map (recurse val0) (Core.caseStatementDefault v0)
                         val1 = Maybes.maybe val0 Pairs.first rmd
                         rcases = forFields val1 (Core.caseStatementCases v0)
-                    in (Pairs.first rcases, (Core.TermCases (Core.CaseStatement {
-                      Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                      Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
-                      Core.caseStatementCases = (Pairs.second rcases)})))
+                    in (
+                      Pairs.first rcases,
+                      (Core.TermCases (Core.CaseStatement {
+                        Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                        Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                        Core.caseStatementCases = (Pairs.second rcases)})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse val0 l
                     in (Pairs.first rl, (Core.TermEither (Left (Pairs.second rl))))) (\r ->
@@ -122,10 +130,12 @@ rewriteAndFoldTerm f term0 =
                     in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v0
                   Core.TermLambda v0 ->
                     let rl = recurse val0 (Core.lambdaBody v0)
-                    in (Pairs.first rl, (Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.lambdaParameter v0),
-                      Core.lambdaDomain = (Core.lambdaDomain v0),
-                      Core.lambdaBody = (Pairs.second rl)})))
+                    in (
+                      Pairs.first rl,
+                      (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.lambdaParameter v0),
+                        Core.lambdaDomain = (Core.lambdaDomain v0),
+                        Core.lambdaBody = (Pairs.second rl)})))
                   Core.TermLet v0 ->
                     let renv = recurse val0 (Core.letBody v0)
                     in (forMany forBinding (\bins -> Core.TermLet (Core.Let {
@@ -228,9 +238,11 @@ rewriteAndFoldTermWithPath f term0 =
                             \mkAccessor -> \val -> \field ->
                               let r = recurse (Lists.concat2 path [
                                     mkAccessor (Core.fieldName field)]) val (Core.fieldTerm field)
-                              in (Pairs.first r, Core.Field {
-                                Core.fieldName = (Core.fieldName field),
-                                Core.fieldTerm = (Pairs.second r)})
+                              in (
+                                Pairs.first r,
+                                Core.Field {
+                                  Core.fieldName = (Core.fieldName field),
+                                  Core.fieldTerm = (Pairs.second r)})
                     forFieldsWithAccessor =
                             \mkAccessor -> forManyWithAccessors (\path1 -> \val1 -> \field1 -> forFieldWithAccessor mkAccessor val1 field1) (\x -> x)
                     forPairWithAccessors =
@@ -244,10 +256,12 @@ rewriteAndFoldTermWithPath f term0 =
                             \val -> \binding ->
                               let r = recurse (Lists.concat2 path [
                                     Paths.SubtermStepLetBinding (Core.bindingName binding)]) val (Core.bindingTerm binding)
-                              in (Pairs.first r, Core.Binding {
-                                Core.bindingName = (Core.bindingName binding),
-                                Core.bindingTerm = (Pairs.second r),
-                                Core.bindingTypeScheme = (Core.bindingTypeScheme binding)})
+                              in (
+                                Pairs.first r,
+                                Core.Binding {
+                                  Core.bindingName = (Core.bindingName binding),
+                                  Core.bindingTerm = (Pairs.second r),
+                                  Core.bindingTypeScheme = (Core.bindingTypeScheme binding)})
                     dflt = (val0, term02)
                 in case term02 of
                   Core.TermAnnotated v0 -> forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
@@ -258,9 +272,11 @@ rewriteAndFoldTermWithPath f term0 =
                           Paths.SubtermStepApplicationFunction]) val0 (Core.applicationFunction v0)
                         rrhs = recurse (Lists.concat2 path [
                               Paths.SubtermStepApplicationArgument]) (Pairs.first rlhs) (Core.applicationArgument v0)
-                    in (Pairs.first rrhs, (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Pairs.second rlhs),
-                      Core.applicationArgument = (Pairs.second rrhs)})))
+                    in (
+                      Pairs.first rrhs,
+                      (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Pairs.second rlhs),
+                        Core.applicationArgument = (Pairs.second rrhs)})))
                   Core.TermCases v0 ->
                     let rmd =
                             Maybes.map (\def -> recurse (Lists.concat2 path [
@@ -268,12 +284,14 @@ rewriteAndFoldTermWithPath f term0 =
                         val1 = Maybes.maybe val0 Pairs.first rmd
                         rcases =
                                 forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f2), (Core.fieldTerm f2))) (Core.caseStatementCases v0))
-                    in (Pairs.first rcases, (Core.TermCases (Core.CaseStatement {
-                      Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                      Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
-                      Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
-                        Core.fieldName = (Pairs.first ft),
-                        Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
+                    in (
+                      Pairs.first rcases,
+                      (Core.TermCases (Core.CaseStatement {
+                        Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                        Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                        Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
+                          Core.fieldName = (Pairs.first ft),
+                          Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse (Lists.concat2 path [
                           Paths.SubtermStepSumTerm]) val0 l
@@ -284,10 +302,12 @@ rewriteAndFoldTermWithPath f term0 =
                   Core.TermLambda v0 ->
                     let rl = recurse (Lists.concat2 path [
                           Paths.SubtermStepLambdaBody]) val0 (Core.lambdaBody v0)
-                    in (Pairs.first rl, (Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.lambdaParameter v0),
-                      Core.lambdaDomain = (Core.lambdaDomain v0),
-                      Core.lambdaBody = (Pairs.second rl)})))
+                    in (
+                      Pairs.first rl,
+                      (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.lambdaParameter v0),
+                        Core.lambdaDomain = (Core.lambdaDomain v0),
+                        Core.lambdaBody = (Pairs.second rl)})))
                   Core.TermLet v0 ->
                     let renv = recurse (Lists.concat2 path [
                           Paths.SubtermStepLetBody]) val0 (Core.letBody v0)
@@ -295,9 +315,11 @@ rewriteAndFoldTermWithPath f term0 =
                                 Lists.foldl (\r -> \binding ->
                                   let rb = forBindingWithAccessor (Pairs.first r) binding
                                   in (Pairs.first rb, (Lists.cons (Pairs.second rb) (Pairs.second r)))) (Pairs.first renv, []) (Core.letBindings v0)
-                    in (Pairs.first rbindings, (Core.TermLet (Core.Let {
-                      Core.letBindings = (Lists.reverse (Pairs.second rbindings)),
-                      Core.letBody = (Pairs.second renv)})))
+                    in (
+                      Pairs.first rbindings,
+                      (Core.TermLet (Core.Let {
+                        Core.letBindings = (Lists.reverse (Pairs.second rbindings)),
+                        Core.letBody = (Pairs.second renv)})))
                   Core.TermList v0 ->
                     let idx = 0
                         rr =
@@ -327,11 +349,13 @@ rewriteAndFoldTermWithPath f term0 =
                   Core.TermRecord v0 ->
                     let rfields =
                             forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f2 -> (Paths.SubtermStepRecordField (Core.fieldName f2), (Core.fieldTerm f2))) (Core.recordFields v0))
-                    in (Pairs.first rfields, (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = (Core.recordTypeName v0),
-                      Core.recordFields = (Lists.map (\ft -> Core.Field {
-                        Core.fieldName = (Pairs.first ft),
-                        Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.recordFields v0)) (Pairs.second rfields)))})))
+                    in (
+                      Pairs.first rfields,
+                      (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.recordTypeName v0),
+                        Core.recordFields = (Lists.map (\ft -> Core.Field {
+                          Core.fieldName = (Pairs.first ft),
+                          Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.recordFields v0)) (Pairs.second rfields)))})))
                   Core.TermSet v0 ->
                     let idx = 0
                         rr =

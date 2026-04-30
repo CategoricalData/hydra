@@ -211,7 +211,11 @@ inferMany fcx cx pairs =
                 c2 = Pairs.second (Pairs.second (Pairs.second result2))
                 c1Subst = Substitution.substInClassConstraints s2 c1
                 mergedConstraints = mergeClassConstraints c1Subst c2
-            in (Right ((Lists.cons (Substitution.substTypesInTerm s2 e1) e2, (Lists.cons (Substitution.substInType s2 t1) t2, (Substitution.composeTypeSubst s1 s2, mergedConstraints))), fcx3))))))) (Lists.uncons pairs))
+            in (Right (
+              (
+                Lists.cons (Substitution.substTypesInTerm s2 e1) e2,
+                (Lists.cons (Substitution.substInType s2 t1) t2, (Substitution.composeTypeSubst s1 s2, mergedConstraints))),
+              fcx3))))))) (Lists.uncons pairs))
 -- | Map a possibly untyped term to a fully typed term and its type
 inferTypeOf :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error ((Core.Term, Core.TypeScheme), Context.Context)
 inferTypeOf fcx cx term =
@@ -322,11 +326,13 @@ inferTypeOfCaseStatement fcx cx caseStmt =
           ".<default>"])) dflt) (\dfltRp ->
           let dfltResult = dfltRp
               fcx3 = Maybes.fromMaybe fcx2 (Maybes.map Typing.inferenceResultContext dfltRp)
-          in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat [
-            "case ",
-            (Core.unName tname),
-            ".",
-            (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->
+          in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (
+            Core.fieldTerm f,
+            (Strings.cat [
+              "case ",
+              (Core.unName tname),
+              ".",
+              (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->
             let caseResults = Pairs.first caseRp
                 fcx4 = Pairs.second caseRp
                 iterms = Pairs.first caseResults
@@ -482,10 +488,12 @@ inferTypeOfLambda fcx cx lambda =
           dom = Core.TypeVariable vdom
           cx2 =
                   extendContext [
-                    (var, Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeBody = dom,
-                      Core.typeSchemeConstraints = Nothing})] cx
+                    (
+                      var,
+                      Core.TypeScheme {
+                        Core.typeSchemeVariables = [],
+                        Core.typeSchemeBody = dom,
+                        Core.typeSchemeConstraints = Nothing})] cx
       in (Eithers.bind (inferTypeOfTerm fcx2 cx2 body "lambda body") (\result ->
         let fcx3 = Typing.inferenceResultContext result
             iterm = Typing.inferenceResultTerm result
@@ -958,7 +966,11 @@ inferTypesOfTemporaryBindings fcx cx bins =
                   c2 = Pairs.second restPair
                   c1Subst = Substitution.substInClassConstraints r c1
                   mergedConstraints = mergeClassConstraints c1Subst c2
-              in (Right ((Lists.cons (Substitution.substTypesInTerm r j) h, (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r, mergedConstraints))), fcx3))))))))) (Lists.uncons bins))
+              in (Right (
+                (
+                  Lists.cons (Substitution.substTypesInTerm r j) h,
+                  (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r, mergedConstraints))),
+                fcx3))))))))) (Lists.uncons bins))
 -- | Check if a variable is unbound in context
 isUnbound :: Graph.Graph -> Core.Name -> Bool
 isUnbound cx v =

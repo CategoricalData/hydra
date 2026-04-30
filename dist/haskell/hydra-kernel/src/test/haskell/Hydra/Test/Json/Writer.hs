@@ -296,9 +296,11 @@ allTests =
               Testing.testCaseWithMetadataName = "object with array",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject (M.fromList [
-                  ("items", (Model.ValueArray [
-                    Model.ValueNumber (Literals.stringToDecimal "1.0"),
-                    (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))]))),
+                  (
+                    "items",
+                    (Model.ValueArray [
+                      Model.ValueNumber (Literals.stringToDecimal "1.0"),
+                      (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))]))),
                 Testing.universalTestCaseExpected = "{\"items\": [1, 2]}"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},

@@ -255,9 +255,11 @@ generateRecordConstructor origType typeName fieldTypes =
                               Core.fieldName = (Core.Name "fields"),
                               Core.fieldTerm = (Core.TermList dFields)}]}))}}))})
           paramPairs =
-                  Lists.map (\ft -> (Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)), (Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
-                    Core.applicationTypeArgument = (Core.fieldTypeType ft)})))) fieldTypes
+                  Lists.map (\ft -> (
+                    Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)),
+                    (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                      Core.applicationTypeArgument = (Core.fieldTypeType ft)})))) fieldTypes
           body =
                   Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name (Pairs.first pp)),

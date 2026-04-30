@@ -382,9 +382,13 @@ testGroupForLet =
                             Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                         Core.bindingTypeScheme = Nothing}],
-                    Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "foo"), (Core.TermPair (Core.TermVariable (Core.Name "bar"), (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "quux")),
-                      Core.applicationArgument = (Core.TermList [])}))))))}))})))),
+                    Core.letBody = (Core.TermPair (
+                      Core.TermVariable (Core.Name "foo"),
+                      (Core.TermPair (
+                        Core.TermVariable (Core.Name "bar"),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "quux")),
+                          Core.applicationArgument = (Core.TermList [])}))))))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -645,11 +649,13 @@ testGroupForLet =
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
-                  Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
+                  Core.letBody = (Core.TermPair (
+                    Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypePair (Core.PairType {
@@ -671,11 +677,13 @@ testGroupForLet =
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x")])})),
                       Core.bindingTypeScheme = Nothing}],
-                  Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
+                  Core.letBody = (Core.TermPair (
+                    Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypePair (Core.PairType {
@@ -708,11 +716,13 @@ testGroupForLet =
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
-                              Core.applicationArgument = (Core.TermPair (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}), (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))})),
+                              Core.applicationArgument = (Core.TermPair (
+                                Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}),
+                                (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))})),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -982,11 +992,13 @@ testGroupForLet =
                       Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "p0"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}), (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}))))})),
+                        Core.lambdaBody = (Core.TermPair (
+                          Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}),
+                          (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}))))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
@@ -1373,7 +1385,9 @@ testGroupForLet =
                             Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))})),
                       Core.bindingTypeScheme = Nothing}],
-                  Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "inst1"), (Core.TermPair (Core.TermVariable (Core.Name "inst2"), (Core.TermVariable (Core.Name "rec"))))))})))),
+                  Core.letBody = (Core.TermPair (
+                    Core.TermVariable (Core.Name "inst1"),
+                    (Core.TermPair (Core.TermVariable (Core.Name "inst2"), (Core.TermVariable (Core.Name "rec"))))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -1540,9 +1554,11 @@ testGroupForLet =
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "val"))})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                                   Core.bindingTypeScheme = Nothing}],
-                              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "r"))}), (Core.TermVariable (Core.Name "x"))))}))}))}))})),
+                              Core.letBody = (Core.TermPair (
+                                Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "r"))}),
+                                (Core.TermVariable (Core.Name "x"))))}))}))}))})),
                       Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "main"),
@@ -1669,11 +1685,13 @@ testGroupForLet =
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "val"))})),
                                 Core.bindingTypeScheme = Nothing}],
-                            Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "r"))}), (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "r"))}))))}))}))})),
+                            Core.letBody = (Core.TermPair (
+                              Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "r"))}),
+                              (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "r"))}))))}))}))})),
                       Core.bindingTypeScheme = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "main"),

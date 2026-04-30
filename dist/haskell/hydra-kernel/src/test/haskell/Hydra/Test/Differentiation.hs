@@ -269,7 +269,9 @@ allTests =
               Testing.testCaseWithMetadataName = "pair of terms",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (ShowCore.term (Differentiation.differentiateTerm (Core.Name "x") (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 5.0))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 1.0)), (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 1.0)),
+                  (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {

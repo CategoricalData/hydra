@@ -709,7 +709,11 @@ invalidApplicationTests =
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))))),
+                  Core.applicationFunction = (Core.TermPair (
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermPair (
+                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                      (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "index"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -1199,11 +1203,13 @@ polymorphismViolationTests =
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermPair (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                    Core.applicationFunction = (Core.TermPair (
+                      Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                      (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -1295,11 +1301,13 @@ polymorphismViolationTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "f"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
+                  Core.lambdaBody = (Core.TermPair (
+                    Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -2156,9 +2164,11 @@ unificationFailureTests =
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermPair (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))], (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "foo")]))),
+                  Core.applicationFunction = (Core.TermPair (
+                    Core.TermList [
+                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
+                    (Core.TermList [
+                      Core.TermLiteral (Core.LiteralString "foo")]))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -2264,11 +2274,13 @@ unificationFailureTests =
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermPair (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                    Core.applicationFunction = (Core.TermPair (
+                      Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                      (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
