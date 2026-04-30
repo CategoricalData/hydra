@@ -613,7 +613,7 @@ constructElementsInterface mod members =
                 Syntax.InterfaceModifierPublic]
           className = elementsClassName ns
           elName = elementsQualifiedName ns
-          body = Syntax.InterfaceBody members
+          body = Syntax.InterfaceBody (Lists.map (\m -> noInterfaceComment m) members)
           itf =
                   Syntax.TypeDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface (Syntax.NormalInterfaceDeclaration {
                     Syntax.normalInterfaceDeclarationModifiers = mods,
@@ -724,7 +724,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                           resultR = Utils.javaTypeToJavaResult (Syntax.TypeReference Utils.visitorTypeVariable)
                       in (Utils.interfaceMethodDeclaration [] [] JavaNames.visitMethodName [
                         param] resultR Nothing)) fields
-            visitorBody = Syntax.InterfaceBody visitorMethods
+            visitorBody = Syntax.InterfaceBody (Lists.map (\m -> noInterfaceComment m) visitorMethods)
             visitor =
                     Utils.javaInterfaceDeclarationToJavaClassBodyDeclaration (Syntax.NormalInterfaceDeclaration {
                       Syntax.normalInterfaceDeclarationModifiers = [
@@ -765,8 +765,8 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                       in (Utils.interfaceMethodDeclaration defaultMod [] JavaNames.visitMethodName [
                         param] resultR (Just [
                         returnOtherwise]))) fields
-            pvBody = Syntax.InterfaceBody (Lists.concat2 [
-                  otherwiseDecl] pvVisitMethods)
+            pvBody = Syntax.InterfaceBody (Lists.map (\m -> noInterfaceComment m) (Lists.concat2 [
+                  otherwiseDecl] pvVisitMethods))
             partialVisitor =
                     Utils.javaInterfaceDeclarationToJavaClassBodyDeclaration (Syntax.NormalInterfaceDeclaration {
                       Syntax.normalInterfaceDeclarationModifiers = [
@@ -2150,6 +2150,11 @@ noComment decl =
     Syntax.ClassBodyDeclarationWithComments {
       Syntax.classBodyDeclarationWithCommentsValue = decl,
       Syntax.classBodyDeclarationWithCommentsComments = Nothing}
+noInterfaceComment :: Syntax.InterfaceMemberDeclaration -> Syntax.InterfaceMemberDeclarationWithComments
+noInterfaceComment decl =
+    Syntax.InterfaceMemberDeclarationWithComments {
+      Syntax.interfaceMemberDeclarationWithCommentsValue = decl,
+      Syntax.interfaceMemberDeclarationWithCommentsComments = Nothing}
 otherwiseBranch :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Core.Type -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 otherwiseBranch env aliases dom cod tname jcod targs d cx g =
 
@@ -2750,6 +2755,16 @@ visitBranch env aliases dom tname jcod targs field cx g =
                 in (Right (noComment (Utils.methodDeclaration mods [] anns JavaNames.visitMethodName [
                   param] result (Just allStmts)))))))))))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (ShowCore.term (Core.fieldTerm field)))))
+withCommentString :: String -> Syntax.ClassBodyDeclaration -> Syntax.ClassBodyDeclarationWithComments
+withCommentString comment decl =
+    Syntax.ClassBodyDeclarationWithComments {
+      Syntax.classBodyDeclarationWithCommentsValue = decl,
+      Syntax.classBodyDeclarationWithCommentsComments = (Just comment)}
+withInterfaceCommentString :: String -> Syntax.InterfaceMemberDeclaration -> Syntax.InterfaceMemberDeclarationWithComments
+withInterfaceCommentString comment decl =
+    Syntax.InterfaceMemberDeclarationWithComments {
+      Syntax.interfaceMemberDeclarationWithCommentsValue = decl,
+      Syntax.interfaceMemberDeclarationWithCommentsComments = (Just comment)}
 withLambda :: JavaEnvironment.JavaEnvironment -> Core.Lambda -> (JavaEnvironment.JavaEnvironment -> t0) -> t0
 withLambda env lam k =
     Environment.withLambdaContext javaEnvGetGraph javaEnvSetGraph env lam (\env1 ->

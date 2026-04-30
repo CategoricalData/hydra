@@ -247,6 +247,7 @@ module_ = Module {
       toDefinition namespaceParent,
       toDefinition needsThunking,
       toDefinition noComment,
+      toDefinition noInterfaceComment,
       toDefinition otherwiseBranch,
       toDefinition peelDomainTypes,
       toDefinition peelDomainsAndCod,
@@ -285,6 +286,8 @@ module_ = Module {
       toDefinition unwrapReturnType,
       toDefinition variantCompareToMethod,
       toDefinition visitBranch,
+      toDefinition withCommentString,
+      toDefinition withInterfaceCommentString,
       toDefinition withLambda,
       toDefinition withTypeLambda,
       toDefinition wrapInSupplierLambda,
@@ -1332,7 +1335,7 @@ constructElementsInterface = def "constructElementsInterface" $
     "mods">: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
     "className">: elementsClassName @@ var "ns",
     "elName">: elementsQualifiedName @@ var "ns",
-    "body">: wrap Java._InterfaceBody (var "members"),
+    "body">: wrap Java._InterfaceBody (Lists.map (lambda "m" $ noInterfaceComment @@ var "m") (var "members")),
     "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
         (record Java._NormalInterfaceDeclaration [
@@ -1540,7 +1543,7 @@ declarationForUnionType = def "declarationForUnionType" $
         JavaUtilsSource.interfaceMethodDeclaration @@ list ([] :: [TTerm Java.InterfaceMethodModifier]) @@ list ([] :: [TTerm Java.TypeParameter])
           @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR" @@ nothing)
       (var "fields") $
-    "visitorBody" <~ wrap Java._InterfaceBody (var "visitorMethods") $
+    "visitorBody" <~ wrap Java._InterfaceBody (Lists.map (lambda "m" $ noInterfaceComment @@ var "m") (var "visitorMethods")) $
     "visitor" <~ (JavaUtilsSource.javaInterfaceDeclarationToJavaClassBodyDeclaration @@
       (record Java._NormalInterfaceDeclaration [
         Java._NormalInterfaceDeclaration_modifiers>>: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
@@ -1587,7 +1590,7 @@ declarationForUnionType = def "declarationForUnionType" $
           @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR"
           @@ just (list [var "returnOtherwise"]))
       (var "fields") $
-    "pvBody" <~ wrap Java._InterfaceBody (list [var "otherwiseDecl"] `Lists.concat2` var "pvVisitMethods") $
+    "pvBody" <~ wrap Java._InterfaceBody (Lists.map (lambda "m" $ noInterfaceComment @@ var "m") (list [var "otherwiseDecl"] `Lists.concat2` var "pvVisitMethods")) $
     "partialVisitor" <~ (JavaUtilsSource.javaInterfaceDeclarationToJavaClassBodyDeclaration @@
       (record Java._NormalInterfaceDeclaration [
         Java._NormalInterfaceDeclaration_modifiers>>: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
@@ -4337,6 +4340,27 @@ needsThunking = def "needsThunking" $
 noComment :: TTermDefinition (Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
 noComment = def "noComment" $
   lambda "decl" $ JavaDsl.classBodyDeclarationWithComments (var "decl") nothing
+
+-- | Wrap a class body declaration with a Javadoc comment.
+withCommentString :: TTermDefinition (String -> Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
+withCommentString = def "withCommentString" $
+  lambda "comment" $ lambda "decl" $
+    JavaDsl.classBodyDeclarationWithComments (var "decl") (just (var "comment"))
+
+-- | Wrap an interface member declaration with no comment.
+noInterfaceComment :: TTermDefinition (Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+noInterfaceComment = def "noInterfaceComment" $
+  lambda "decl" $ record Java._InterfaceMemberDeclarationWithComments [
+    Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
+    Java._InterfaceMemberDeclarationWithComments_comments>>: nothing]
+
+-- | Wrap an interface member declaration with a Javadoc comment.
+withInterfaceCommentString :: TTermDefinition (String -> Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+withInterfaceCommentString = def "withInterfaceCommentString" $
+  lambda "comment" $ lambda "decl" $
+    record Java._InterfaceMemberDeclarationWithComments [
+      Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
+      Java._InterfaceMemberDeclarationWithComments_comments>>: just (var "comment")]
 
 -- | Generate the otherwise (default) branch of a visitor.
 otherwiseBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
