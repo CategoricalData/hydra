@@ -156,8 +156,8 @@ pythonLanguage = define "pythonLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- TODO: verify whether all are supported
     Coders.language
-      (Coders.languageName_ $ string "hydra.python")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.python")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

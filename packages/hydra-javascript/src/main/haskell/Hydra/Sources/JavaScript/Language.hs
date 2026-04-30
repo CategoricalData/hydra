@@ -160,8 +160,8 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- All types supported via runtime representation
     Coders.language
-      (Coders.languageName_ $ string "hydra.javaScript")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.javaScript")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
