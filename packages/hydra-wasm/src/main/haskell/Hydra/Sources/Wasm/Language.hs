@@ -156,8 +156,8 @@ wasmLanguage = define "wasmLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.wasm")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.wasm")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

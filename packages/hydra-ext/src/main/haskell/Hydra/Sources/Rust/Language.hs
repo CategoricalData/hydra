@@ -165,8 +165,8 @@ rustLanguage = define "rustLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.rust")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.rust")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
