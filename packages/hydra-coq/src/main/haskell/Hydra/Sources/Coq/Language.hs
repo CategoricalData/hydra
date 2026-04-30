@@ -113,8 +113,8 @@ coqLanguage = define "coqLanguage" $ lets [
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.coq")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.coq")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
