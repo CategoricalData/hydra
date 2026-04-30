@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeAttrList",
+        "name": "hydra.graphviz.serde.attrListToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -32,7 +32,7 @@
                                             "argument": {"variable": "alist"},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "hydra.graphviz.serde.writeEqualityPair"},
+                                                "argument": {"variable": "hydra.graphviz.serde.equalityPairToExpr"},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
@@ -71,7 +71,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeAttrStmt",
+        "name": "hydra.graphviz.serde.attrStmtToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -107,11 +107,11 @@
                             {
                               "application": {
                                 "argument": {"variable": "t"},
-                                "function": {"variable": "hydra.graphviz.serde.writeAttrType"}}},
+                                "function": {"variable": "hydra.graphviz.serde.attrTypeToExpr"}}},
                             {
                               "application": {
                                 "argument": {"variable": "attr"},
-                                "function": {"variable": "hydra.graphviz.serde.writeAttrList"}}}]},
+                                "function": {"variable": "hydra.graphviz.serde.attrListToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
                 "parameter": "as"}}}},
@@ -123,7 +123,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeAttrType",
+        "name": "hydra.graphviz.serde.attrTypeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -179,7 +179,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeCompassPt",
+        "name": "hydra.graphviz.serde.compassPtToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -305,7 +305,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeEdgeStmt",
+        "name": "hydra.graphviz.serde.edgeStmtToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -388,7 +388,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "directed"},
-                                                        "function": {"variable": "hydra.graphviz.serde.writeNodeOrSubgraph"}}}}}]},
+                                                        "function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}}}}}]},
                                             "domain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
                                             "parameter": "n"}},
                                         "function": {
@@ -417,7 +417,7 @@
                                             {
                                               "application": {
                                                 "argument": {"variable": "a"},
-                                                "function": {"variable": "hydra.graphviz.serde.writeAttrList"}}}]},
+                                                "function": {"variable": "hydra.graphviz.serde.attrListToExpr"}}}]},
                                         "domain": {"variable": "hydra.graphviz.dot.AttrList"},
                                         "parameter": "a"}},
                                     "function": {
@@ -446,7 +446,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "directed"},
-                                                "function": {"variable": "hydra.graphviz.serde.writeNodeOrSubgraph"}}}}}]},
+                                                "function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}}}}}]},
                                     {"variable": "rhsParts"},
                                     {"variable": "attrParts"}]},
                                 "function": {
@@ -469,7 +469,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeEqualityPair",
+        "name": "hydra.graphviz.serde.equalityPairToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -504,7 +504,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "l"},
-                                "function": {"variable": "hydra.graphviz.serde.writeId"}}},
+                                "function": {"variable": "hydra.graphviz.serde.idToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "="}},
@@ -512,7 +512,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "r"},
-                                "function": {"variable": "hydra.graphviz.serde.writeId"}}}]},
+                                "function": {"variable": "hydra.graphviz.serde.idToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
                 "parameter": "eq"}}}},
@@ -524,7 +524,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeGraph",
+        "name": "hydra.graphviz.serde.graphToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -623,7 +623,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "directed"},
-                                            "function": {"variable": "hydra.graphviz.serde.writeStmt"}}},
+                                            "function": {"variable": "hydra.graphviz.serde.stmtToExpr"}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -660,7 +660,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeId",
+        "name": "hydra.graphviz.serde.idToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -693,7 +693,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeNodeId",
+        "name": "hydra.graphviz.serde.nodeIdToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -733,7 +733,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "i"},
-                                        "function": {"variable": "hydra.graphviz.serde.writeId"}}},
+                                        "function": {"variable": "hydra.graphviz.serde.idToExpr"}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.maybes.pure"},
@@ -743,7 +743,7 @@
                                     "argument": {"variable": "mp"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.graphviz.serde.writePort"},
+                                        "argument": {"variable": "hydra.graphviz.serde.portToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -766,7 +766,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeNodeOrSubgraph",
+        "name": "hydra.graphviz.serde.nodeOrSubgraphToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -790,7 +790,7 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "n"},
-                                        "function": {"variable": "hydra.graphviz.serde.writeNodeId"}}},
+                                        "function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}}},
                                     "domain": {"variable": "hydra.graphviz.dot.NodeId"},
                                     "parameter": "n"}}},
                               {
@@ -803,7 +803,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "directed"},
-                                            "function": {"variable": "hydra.graphviz.serde.writeSubgraph"}}}}},
+                                            "function": {"variable": "hydra.graphviz.serde.subgraphToExpr"}}}}},
                                     "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
                                     "parameter": "sg"}}}],
                             "typeName": "hydra.graphviz.dot.NodeOrSubgraph"}}}},
@@ -822,7 +822,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeNodeStmt",
+        "name": "hydra.graphviz.serde.nodeStmtToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -863,7 +863,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "i"},
-                                        "function": {"variable": "hydra.graphviz.serde.writeNodeId"}}},
+                                        "function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.maybes.pure"},
@@ -873,7 +873,7 @@
                                     "argument": {"variable": "attr"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.graphviz.serde.writeAttrList"},
+                                        "argument": {"variable": "hydra.graphviz.serde.attrListToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -896,7 +896,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writePort",
+        "name": "hydra.graphviz.serde.portToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -945,7 +945,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "i"},
-                                            "function": {"variable": "hydra.graphviz.serde.writeId"}}}]},
+                                            "function": {"variable": "hydra.graphviz.serde.idToExpr"}}}]},
                                     "domain": {"variable": "hydra.graphviz.dot.Id"},
                                     "parameter": "i"}},
                                 "function": {
@@ -978,7 +978,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "cp"},
-                                            "function": {"variable": "hydra.graphviz.serde.writeCompassPt"}}}]},
+                                            "function": {"variable": "hydra.graphviz.serde.compassPtToExpr"}}}]},
                                     "domain": {"variable": "hydra.graphviz.dot.CompassPt"},
                                     "parameter": "cp"}},
                                 "function": {
@@ -1013,7 +1013,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeStmt",
+        "name": "hydra.graphviz.serde.stmtToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1037,7 +1037,7 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "n"},
-                                        "function": {"variable": "hydra.graphviz.serde.writeNodeStmt"}}},
+                                        "function": {"variable": "hydra.graphviz.serde.nodeStmtToExpr"}}},
                                     "domain": {"variable": "hydra.graphviz.dot.NodeStmt"},
                                     "parameter": "n"}}},
                               {
@@ -1050,7 +1050,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "directed"},
-                                            "function": {"variable": "hydra.graphviz.serde.writeEdgeStmt"}}}}},
+                                            "function": {"variable": "hydra.graphviz.serde.edgeStmtToExpr"}}}}},
                                     "domain": {"variable": "hydra.graphviz.dot.EdgeStmt"},
                                     "parameter": "e"}}},
                               {
@@ -1060,7 +1060,7 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "a"},
-                                        "function": {"variable": "hydra.graphviz.serde.writeAttrStmt"}}},
+                                        "function": {"variable": "hydra.graphviz.serde.attrStmtToExpr"}}},
                                     "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
                                     "parameter": "a"}}},
                               {
@@ -1070,7 +1070,7 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "eq"},
-                                        "function": {"variable": "hydra.graphviz.serde.writeEqualityPair"}}},
+                                        "function": {"variable": "hydra.graphviz.serde.equalityPairToExpr"}}},
                                     "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
                                     "parameter": "eq"}}},
                               {
@@ -1083,7 +1083,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "directed"},
-                                            "function": {"variable": "hydra.graphviz.serde.writeSubgraph"}}}}},
+                                            "function": {"variable": "hydra.graphviz.serde.subgraphToExpr"}}}}},
                                     "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
                                     "parameter": "sg"}}}],
                             "typeName": "hydra.graphviz.dot.Stmt"}}}},
@@ -1102,7 +1102,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeSubgraph",
+        "name": "hydra.graphviz.serde.subgraphToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1150,7 +1150,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "directed"},
-                                                "function": {"variable": "hydra.graphviz.serde.writeStmt"}}},
+                                                "function": {"variable": "hydra.graphviz.serde.stmtToExpr"}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -1178,7 +1178,7 @@
                                         "argument": {"variable": "mid"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.graphviz.serde.writeSubgraphId"},
+                                            "argument": {"variable": "hydra.graphviz.serde.subgraphIdToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -1213,7 +1213,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.graphviz.serde.writeSubgraphId",
+        "name": "hydra.graphviz.serde.subgraphIdToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1247,7 +1247,7 @@
                                     "function": {"unwrap": "hydra.graphviz.dot.SubgraphId"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.graphviz.serde.writeId"},
+                                    "argument": {"variable": "hydra.graphviz.serde.idToExpr"},
                                     "function": {
                                       "typeApplication": {
                                         "body": {

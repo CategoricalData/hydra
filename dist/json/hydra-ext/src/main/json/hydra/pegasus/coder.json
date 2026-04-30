@@ -3881,7 +3881,7 @@
                                                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                         "type": {"literal": {"string": {}}}}},
                                                                                                     "type": {"variable": "hydra.pegasus.pdl.SchemaFile"}}}}},
-                                                                                            "function": {"variable": "hydra.pegasus.serde.exprSchemaFile"}}},
+                                                                                            "function": {"variable": "hydra.pegasus.serde.schemaFileToExpr"}}},
                                                                                         "function": {"variable": "hydra.serialization.parenthesize"}}},
                                                                                     "function": {"variable": "hydra.serialization.printExpr"}}}}},
                                                                             "type": {"literal": {"string": {}}}}},

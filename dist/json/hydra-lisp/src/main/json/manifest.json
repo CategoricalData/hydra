@@ -1,10 +1,6 @@
 {
   "dslModules": [],
   "evalLibModules": [],
-  "mainModules": [
-    "hydra.lisp.coder",
-    "hydra.lisp.language",
-    "hydra.lisp.serde",
-    "hydra.lisp.syntax"],
+  "mainModules": ["hydra.lisp.coder", "hydra.lisp.language", "hydra.lisp.serde", "hydra.lisp.syntax"],
   "package": "hydra-lisp",
   "testModules": []}

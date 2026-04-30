@@ -16,27 +16,16 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "hydra.json.model.Value"}},
-                                  "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "array"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "array"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
@@ -45,28 +34,19 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A JSON array"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
                     "body": {"list": {"variable": "hydra.json.model.Value"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "application": {
-                  "argument": {"variable": "hydra.json.model.Value"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "codomain": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A JSON array"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
                       "body": {"list": {"variable": "hydra.json.model.Value"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -86,27 +66,16 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "hydra.json.model.Value"}},
-                                  "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "boolean"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boolean"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
@@ -115,28 +84,19 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A boolean value"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "application": {
-                  "argument": {"variable": "hydra.json.model.Value"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "codomain": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A boolean value"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -154,36 +114,20 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.json.model.Value"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "null"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "null"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.json.model.Value"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "body": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -201,27 +145,16 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "hydra.json.model.Value"}},
-                                  "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "number"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "number"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
@@ -230,28 +163,19 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A numeric value"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
                     "body": {"literal": {"decimal": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "application": {
-                  "argument": {"variable": "hydra.json.model.Value"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "codomain": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A numeric value"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
                       "body": {"literal": {"decimal": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -271,27 +195,16 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "hydra.json.model.Value"}},
-                                  "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "object"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "object"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
@@ -300,35 +213,20 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
-                    "body": {
-                      "map": {
-                        "keys": {"literal": {"string": {}}},
-                        "values": {"variable": "hydra.json.model.Value"}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                    "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "application": {
-                  "argument": {"variable": "hydra.json.model.Value"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "codomain": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"literal": {"string": {}}},
-                          "values": {"variable": "hydra.json.model.Value"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                      "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -347,27 +245,16 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "hydra.json.model.Value"}},
-                                  "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "string"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
@@ -376,28 +263,19 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A string value"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "application": {
-                  "argument": {"variable": "hydra.json.model.Value"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "codomain": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A string value"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],

@@ -3,7 +3,7 @@
   "version": 1,
   "hashes": {
     "hydra.javaScript.operators": "a427098e3def37395b0daa34e570824f99510af1c6524ee3ec9f28154b052244",
-    "hydra.javaScript.serde": "372a9c5b077d2fb698f6821fb4fa52e3ed1482fbe192bba1a09dd7aecadbc228",
+    "hydra.javaScript.serde": "d27476a0d03301bbdf5639fb30bd97581068df66ae1cc6c12f6ff3efe358f655",
     "hydra.javaScript.syntax": "8d33f552f67be09422e42924cdcb5993456441ced14318e9bf792125adca7486"
   }
 }

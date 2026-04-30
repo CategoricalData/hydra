@@ -5868,7 +5868,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "pfile"},
-                                                            "function": {"variable": "hydra.protobuf.serde.writeProtoFile"}}},
+                                                            "function": {"variable": "hydra.protobuf.serde.protoFileToExpr"}}},
                                                         "function": {"variable": "hydra.serialization.parenthesize"}}},
                                                     "function": {"variable": "hydra.serialization.printExpr"}}},
                                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},

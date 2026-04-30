@@ -382,7 +382,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeDefinition",
+        "name": "hydra.protobuf.serde.definitionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -404,7 +404,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "e"},
-                                    "function": {"variable": "hydra.protobuf.serde.writeEnumDefinition"}}},
+                                    "function": {"variable": "hydra.protobuf.serde.enumDefinitionToExpr"}}},
                                 "domain": {"variable": "hydra.protobuf.proto3.EnumDefinition"},
                                 "parameter": "e"}}},
                           {
@@ -414,7 +414,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "m"},
-                                    "function": {"variable": "hydra.protobuf.serde.writeMessageDefinition"}}},
+                                    "function": {"variable": "hydra.protobuf.serde.messageDefinitionToExpr"}}},
                                 "domain": {"variable": "hydra.protobuf.proto3.MessageDefinition"},
                                 "parameter": "m"}}}],
                         "typeName": "hydra.protobuf.proto3.Definition"}}}},
@@ -428,7 +428,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeEnumDefinition",
+        "name": "hydra.protobuf.serde.enumDefinitionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -498,7 +498,7 @@
                                         "argument": {"variable": "values"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.protobuf.serde.writeEnumValue"},
+                                            "argument": {"variable": "hydra.protobuf.serde.enumValueToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -525,7 +525,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeEnumValue",
+        "name": "hydra.protobuf.serde.enumValueToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -610,7 +610,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeField",
+        "name": "hydra.protobuf.serde.fieldToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -694,7 +694,7 @@
                                                         "argument": {"variable": "fields"},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.protobuf.serde.writeField"},
+                                                            "argument": {"variable": "hydra.protobuf.serde.fieldToExpr"},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -746,7 +746,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "typ"},
-                                                                    "function": {"variable": "hydra.protobuf.serde.writeFieldType"}}},
+                                                                    "function": {"variable": "hydra.protobuf.serde.fieldTypeToExpr"}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {"variable": "hydra.lib.maybes.pure"},
@@ -790,7 +790,7 @@
                                                             {
                                                               "application": {
                                                                 "argument": {"variable": "options"},
-                                                                "function": {"variable": "hydra.protobuf.serde.writeFieldOptions"}}}]},
+                                                                "function": {"variable": "hydra.protobuf.serde.fieldOptionsToExpr"}}}]},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"variable": "hydra.lib.maybes.cat"},
@@ -816,7 +816,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "typ"},
-                                                                "function": {"variable": "hydra.protobuf.serde.writeFieldType"}}},
+                                                                "function": {"variable": "hydra.protobuf.serde.fieldTypeToExpr"}}},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.maybes.pure"},
@@ -860,7 +860,7 @@
                                                         {
                                                           "application": {
                                                             "argument": {"variable": "options"},
-                                                            "function": {"variable": "hydra.protobuf.serde.writeFieldOptions"}}}]},
+                                                            "function": {"variable": "hydra.protobuf.serde.fieldOptionsToExpr"}}}]},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.maybes.cat"},
@@ -886,7 +886,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "typ"},
-                                                                "function": {"variable": "hydra.protobuf.serde.writeFieldType"}}},
+                                                                "function": {"variable": "hydra.protobuf.serde.fieldTypeToExpr"}}},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.maybes.pure"},
@@ -930,7 +930,7 @@
                                                         {
                                                           "application": {
                                                             "argument": {"variable": "options"},
-                                                            "function": {"variable": "hydra.protobuf.serde.writeFieldOptions"}}}]},
+                                                            "function": {"variable": "hydra.protobuf.serde.fieldOptionsToExpr"}}}]},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.maybes.cat"},
@@ -957,7 +957,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeFieldOption",
+        "name": "hydra.protobuf.serde.fieldOptionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1000,7 +1000,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "value"},
-                                "function": {"variable": "hydra.protobuf.serde.writeValue"}}}]},
+                                "function": {"variable": "hydra.protobuf.serde.valueToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.protobuf.proto3.Option"},
                 "parameter": "opt"}}}},
@@ -1012,7 +1012,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeFieldOptions",
+        "name": "hydra.protobuf.serde.fieldOptionsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1046,7 +1046,7 @@
                                     "argument": {"variable": "opts"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.protobuf.serde.writeFieldOption"},
+                                        "argument": {"variable": "hydra.protobuf.serde.fieldOptionToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -1089,7 +1089,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeFieldType",
+        "name": "hydra.protobuf.serde.fieldTypeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1146,11 +1146,11 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "kt"},
-                                                        "function": {"variable": "hydra.protobuf.serde.writeSimpleType"}}},
+                                                        "function": {"variable": "hydra.protobuf.serde.simpleTypeToExpr"}}},
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "vt"},
-                                                        "function": {"variable": "hydra.protobuf.serde.writeSimpleType"}}}]},
+                                                        "function": {"variable": "hydra.protobuf.serde.simpleTypeToExpr"}}}]},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "hydra.serialization.inlineStyle"},
@@ -1173,7 +1173,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "st"},
-                                            "function": {"variable": "hydra.protobuf.serde.writeSimpleType"}}}]},
+                                            "function": {"variable": "hydra.protobuf.serde.simpleTypeToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                                 "domain": {"variable": "hydra.protobuf.proto3.SimpleType"},
                                 "parameter": "st"}}},
@@ -1184,7 +1184,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "st"},
-                                    "function": {"variable": "hydra.protobuf.serde.writeSimpleType"}}},
+                                    "function": {"variable": "hydra.protobuf.serde.simpleTypeToExpr"}}},
                                 "domain": {"variable": "hydra.protobuf.proto3.SimpleType"},
                                 "parameter": "st"}}},
                           {
@@ -1208,7 +1208,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeFileOption",
+        "name": "hydra.protobuf.serde.fileOptionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1258,7 +1258,7 @@
                                 {
                                   "application": {
                                     "argument": {"variable": "value"},
-                                    "function": {"variable": "hydra.protobuf.serde.writeValue"}}}]},
+                                    "function": {"variable": "hydra.protobuf.serde.valueToExpr"}}}]},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"variable": "hydra.protobuf.serde.semi"}}}}},
                 "domain": {"variable": "hydra.protobuf.proto3.Option"},
@@ -1271,7 +1271,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeFileOptions",
+        "name": "hydra.protobuf.serde.fileOptionsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1305,7 +1305,7 @@
                                     "argument": {"variable": "opts"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.protobuf.serde.writeFileOption"},
+                                        "argument": {"variable": "hydra.protobuf.serde.fileOptionToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -1345,7 +1345,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeImport",
+        "name": "hydra.protobuf.serde.importToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1387,7 +1387,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeMessageDefinition",
+        "name": "hydra.protobuf.serde.messageDefinitionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1460,7 +1460,7 @@
                                         "argument": {"variable": "fields"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.protobuf.serde.writeField"},
+                                            "argument": {"variable": "hydra.protobuf.serde.fieldToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -1487,7 +1487,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeProtoFile",
+        "name": "hydra.protobuf.serde.protoFileToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1592,7 +1592,7 @@
                                         "argument": {"variable": "imports"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.protobuf.serde.writeImport"},
+                                            "argument": {"variable": "hydra.protobuf.serde.importToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -1663,7 +1663,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "options1"},
-                            "function": {"variable": "hydra.protobuf.serde.writeFileOptions"}}},
+                            "function": {"variable": "hydra.protobuf.serde.fileOptionsToExpr"}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "defsSec",
@@ -1678,7 +1678,7 @@
                                         "argument": {"variable": "defs"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.protobuf.serde.writeDefinition"},
+                                            "argument": {"variable": "hydra.protobuf.serde.definitionToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -1743,7 +1743,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeScalarType",
+        "name": "hydra.protobuf.serde.scalarTypeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1877,7 +1877,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeSimpleType",
+        "name": "hydra.protobuf.serde.simpleTypeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1912,7 +1912,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "sct"},
-                                    "function": {"variable": "hydra.protobuf.serde.writeScalarType"}}},
+                                    "function": {"variable": "hydra.protobuf.serde.scalarTypeToExpr"}}},
                                 "domain": {"variable": "hydra.protobuf.proto3.ScalarType"},
                                 "parameter": "sct"}}}],
                         "typeName": "hydra.protobuf.proto3.SimpleType"}}}},
@@ -1926,7 +1926,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.serde.writeValue",
+        "name": "hydra.protobuf.serde.valueToExpr",
         "term": {
           "annotated": {
             "annotation": [

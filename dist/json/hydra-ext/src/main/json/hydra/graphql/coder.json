@@ -3509,7 +3509,7 @@
                                                                                                         "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}},
                                                                                                     "type": {"variable": "hydra.graphql.syntax.Definition"}}}}}}},
                                                                                         "typeName": "hydra.graphql.syntax.Document"}},
-                                                                                    "function": {"variable": "hydra.graphql.serde.exprDocument"}}},
+                                                                                    "function": {"variable": "hydra.graphql.serde.documentToExpr"}}},
                                                                                 "function": {"variable": "hydra.serialization.parenthesize"}}},
                                                                             "function": {"variable": "hydra.serialization.printExpr"}}}}},
                                                                     "type": {"literal": {"string": {}}}}},
