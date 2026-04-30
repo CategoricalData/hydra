@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.Examples.Health.DatabaseSchema where
+module Hydra.Demos.Genpg.Examples.Health.DatabaseSchema where
 
 import Hydra.Tabular
 import Hydra.Dsl.Meta.Tabular (tableType, columnType)
