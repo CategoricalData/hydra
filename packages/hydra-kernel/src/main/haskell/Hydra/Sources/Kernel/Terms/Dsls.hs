@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import           Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
@@ -27,6 +28,7 @@ import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Dsl.Meta.DeepCore as DC
@@ -44,7 +46,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, Formatting.ns, Names.ns, Strip.ns],
+            moduleTermDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns],
             moduleTypeDependencies = kernelTypesNamespaces,
             moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
@@ -61,7 +63,6 @@ module_ = Module {
       toDefinition generateUnionInjector,
       toDefinition generateWrappedTypeAccessors,
       toDefinition deduplicateBindings,
-      toDefinition findUniqueName,
       toDefinition isDslEligibleBinding,
       toDefinition dslTypeScheme,
       toDefinition collectForallVars,
@@ -506,34 +507,24 @@ generateBindingsForType = define "generateBindingsForType" $
       _Type_wrap>>: "innerType" ~>
         generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "innerType"]))
 
--- | Deduplicate bindings by appending "_" suffixes to duplicate names.
+-- | Deduplicate bindings by giving duplicate names a numeric suffix.
 -- Later bindings get suffixes; earlier ones keep their name.
--- Multiple duplicates get increasing suffixes: name_, name__, name___, etc.
+-- Multiple duplicates get increasing numeric suffixes: name, name2, name3, etc.
 deduplicateBindings :: TTermDefinition ([Binding] -> [Binding])
 deduplicateBindings = define "deduplicateBindings" $
-  doc "Deduplicate bindings by appending underscore suffixes to duplicate names" $
+  doc "Deduplicate bindings by appending numeric suffixes to duplicate names" $
   "bindings" ~>
   Lists.foldl
     ("acc" ~> "b" ~>
-      "n" <~ (Core.unName (Core.bindingName (var "b"))) $
-      "usedNames" <~ (Lists.map ("a" ~> Core.unName (Core.bindingName (var "a"))) (var "acc")) $
-      "uniqueName" <~ (findUniqueName @@ var "n" @@ var "usedNames") $
+      "usedNames" <~ Sets.fromList (Lists.map ("a" ~> Core.bindingName (var "a")) (var "acc")) $
+      "uniqueName" <~ (Lexical.chooseUniqueName @@ var "usedNames" @@ Core.bindingName (var "b")) $
       Lists.concat2 (var "acc") (list [
         Core.binding
-          (Core.name (var "uniqueName"))
+          (var "uniqueName")
           (Core.bindingTerm (var "b"))
           (Core.bindingTypeScheme (var "b"))]))
     (list ([] :: [TTerm Binding]))
     (var "bindings")
-
--- | Find a unique name by appending "_" suffixes until not in the used list
-findUniqueName :: TTermDefinition (String -> [String] -> String)
-findUniqueName = define "findUniqueName" $
-  doc "Find a unique name by appending underscores" $
-  "candidate" ~> "usedNames" ~>
-  Logic.ifElse (Lists.null (Lists.filter (unaryFunction (Equality.equal (var "candidate"))) (var "usedNames")))
-    (var "candidate")
-    (findUniqueName @@ (Strings.cat $ list [var "candidate", string "_"]) @@ var "usedNames")
 
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
