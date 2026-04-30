@@ -305,7 +305,10 @@ case "$(uname -s)" in
             rm -rf "$SDIST_MOUNT"
         }
         trap cleanup_sdist_dmg EXIT
-        if ! hdiutil create -size 500m -fs "Case-sensitive HFS+" \
+        # 1500m holds the assembled sdist, the extracted tree, the
+        # cabal dist-newstyle build directory, and the Haddock-for-Hackage
+        # output (the hyperlinked-source HTML alone is ~550 MB).
+        if ! hdiutil create -size 1500m -fs "Case-sensitive HFS+" \
              -volname HydraSdist "$SDIST_DMG" -quiet >"$SDIST_LOG" 2>&1; then
             echo "  FAIL: Could not create case-sensitive disk image (see verify-logs/hackage-sdist.log)"
             ERRORS=$((ERRORS + 1))
