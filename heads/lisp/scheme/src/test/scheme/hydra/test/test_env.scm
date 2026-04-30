@@ -64,19 +64,19 @@
     ;; Annotation term-level bindings (mirrors Java TestSuiteRunner.addAnnotationsBindings)
     (define (annotation-bindings)
       (list
-        (list "hydra.constants.key_classes"
+        (list "hydra.constants.keyClasses"
               (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                             (list 'literal (list 'string "classes")))))
-        (list "hydra.constants.key_description"
+        (list "hydra.constants.keyDescription"
               (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                             (list 'literal (list 'string "description")))))
-        (list "hydra.constants.key_type"
+        (list "hydra.constants.keyType"
               (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                             (list 'literal (list 'string "type")))))
-        (list "hydra.constants.key_debugId"
+        (list "hydra.constants.keyDebugId"
               (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                             (list 'literal (list 'string "debugId")))))
-        (list "hydra.constants.key_firstClassType"
+        (list "hydra.constants.keyFirstClassType"
               (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                             (list 'literal (list 'string "firstClassType")))))
 
@@ -147,7 +147,7 @@
         (list "hydra.annotations.setTermDescription"
               (t-lam "d"
                 (t-app (t-app (t-var "hydra.annotations.setTermAnnotation")
-                  (t-var "hydra.constants.key_description"))
+                  (t-var "hydra.constants.keyDescription"))
                   (t-app (t-app (t-prim "hydra.lib.maybes.map")
                     (t-lam "s"
                       (t-inject "hydra.core.Term" "literal"
@@ -182,7 +182,7 @@
                                   (t-var "lit")))))
                           (t-var "descTerm"))))
                       (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                        (t-var "hydra.constants.key_description"))
+                        (t-var "hydra.constants.keyDescription"))
                         (t-var "anns")))))))
 
         (list "hydra.annotations.getTermDescription"

@@ -91,19 +91,19 @@ public class TestSuiteRunner {
         // No need to bridge them as term bindings.
 
         // Add non-primitive kernel constants needed by annotation source module
-        boundTerms.put(new Name("hydra.constants.key_classes"),
+        boundTerms.put(new Name("hydra.constants.keyClasses"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("classes")))));
-        boundTerms.put(new Name("hydra.constants.key_description"),
+        boundTerms.put(new Name("hydra.constants.keyDescription"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("description")))));
-        boundTerms.put(new Name("hydra.constants.key_type"),
+        boundTerms.put(new Name("hydra.constants.keyType"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("type")))));
-        boundTerms.put(new Name("hydra.constants.key_debugId"),
+        boundTerms.put(new Name("hydra.constants.keyDebugId"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("debugId")))));
-        boundTerms.put(new Name("hydra.constants.key_firstClassType"),
+        boundTerms.put(new Name("hydra.constants.keyFirstClassType"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("firstClassType")))));
 
@@ -231,7 +231,7 @@ public class TestSuiteRunner {
         addConstantBinding(bindings, "hydra.annotations.setTermDescription",
             lambda("d",
                 apply(apply(var("hydra.annotations.setTermAnnotation"),
-                    var("hydra.constants.key_description")),
+                    var("hydra.constants.keyDescription")),
                     apply(apply(primitive("hydra.lib.maybes.map"),
                         lambda("s",
                             inject("hydra.core.Term", "literal",
@@ -260,7 +260,7 @@ public class TestSuiteRunner {
                                                 var("lit"))))),
                                     var("descTerm")))),
                             apply(apply(primitive("hydra.lib.maps.lookup"),
-                                var("hydra.constants.key_description")),
+                                var("hydra.constants.keyDescription")),
                                 var("anns")))))));
 
         addConstantBinding(bindings, "hydra.annotations.getTermDescription",

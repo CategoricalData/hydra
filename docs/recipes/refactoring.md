@@ -280,6 +280,10 @@ myNewName = define "myNewName" $ ...
 ```
 
 Also update the Haskell binding name if desired.
+The local name string passed to `define` is what the validation rules see —
+if you are migrating to satisfy a naming-convention check
+(e.g., the camelCase rule in `hydra.validate.packaging`),
+the *string* must change, not just the Haskell binding.
 
 ### Step 2: Update the Element Registration
 
@@ -293,12 +297,60 @@ definitions = [
 
 ### Step 3: Update All References
 
+Search the whole repo, not just `packages/hydra-haskell/`.
+Definitions in the kernel are referenced from at least:
+- DSL sources in `packages/hydra-*/src/main/haskell/Hydra/Sources/`
+- Hand-written runtimes in `heads/haskell/src/main/haskell/Hydra/Dsl/`
+- Test fixtures in `heads/haskell/src/test/`,
+  `heads/{java,scala}/src/test/`, and the per-dialect Lisp test runners
+  under `heads/lisp/*/src/test/`
+- Cross-implementation manifests like `heads/wasm/m1-manifest.json`
+
 ```bash
-grep -rn 'myOldName' packages/hydra-haskell/src/
-grep -rn 'hydra.mymodule.myOldName' packages/hydra-haskell/src/
+# Haskell-level identifier
+grep -rn 'myOldName' packages/ heads/
+# Hydra-level fully-qualified name (appears in JSON, lisp test fixtures,
+# Java/Scala TestSuiteRunners, wasm manifest, etc.)
+grep -rn 'hydra.mymodule.myOldName' packages/ heads/
 ```
 
 ### Step 4: Build and Regenerate
+
+For a kernel rename, follow the bootstrap procedure below — the kernel
+sources won't compile against the old generated `Hydra.Constants` (or other
+generated module), and regeneration depends on the kernel building.
+
+#### Bootstrap procedure for kernel renames
+
+1. Patch the generated definition site in `dist/haskell/`
+   (e.g., rename `key_classes :: Core.Name = ...` to `keyClasses :: Core.Name = ...`)
+   so the new identifier exists.
+2. Patch every dist/haskell file that references the old name —
+   `grep -rln '\boldName\b' dist/haskell/` and apply the rename across all hits.
+3. Run `/sync-haskell()`. Phase 1 (DSL → JSON) will compile and re-emit JSON
+   against the new identifier; Phase 4 (JSON → Haskell) will overwrite your
+   patches with the canonical regenerated output.
+4. If the rename changes the encoder's output for transitively-affected
+   modules but the incremental dirty-detector misses them
+   (a known limitation — see `incremental_inference_wiring_pending`),
+   `verify-json-kernel` will fail with `definition differs at <Name>` for
+   modules whose JSON wasn't re-emitted.
+   Fix: invalidate `dist/json/digest.main.json` by zeroing its `encoderId`
+   field. The next sync will then re-emit JSON for all transitively dirty
+   modules. The encoderId is restamped from the running binary on success.
+
+#### Notes on downstream targets
+
+For a *pure* rename (camelCase ↔ underscore at boundaries the case converter
+doesn't preserve), the case-converted identifiers in Python and Lisp dialects
+may be unchanged: e.g., both `key_classes` and `keyClasses` lower-snake to
+`key_classes`. In that situation no edits to host-language source files
+under `heads/python/` or `heads/lisp/*/` are needed, but the *fully-qualified
+Hydra names* embedded in test fixtures (`"hydra.constants.keyClasses"`) do
+change and must be updated.
+
+Java is the opposite: the local identifier (e.g., `keyClasses()`) reflects
+the new camelCase exactly, so dist/java is visibly affected.
 
 ---
 

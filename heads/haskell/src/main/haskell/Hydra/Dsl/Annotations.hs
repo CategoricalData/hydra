@@ -40,7 +40,7 @@ boundedString :: Maybe Int -> Maybe Int -> Type
 boundedString min max = bounded min max Types.string
 
 deprecated :: AsType a => a -> Type
-deprecated = setTypeAnnotation key_deprecated (Just $ Terms.boolean True) . asType
+deprecated = setTypeAnnotation keyDeprecated (Just $ Terms.boolean True) . asType
 
 doc :: AsType a => String -> a -> Type
 doc s = setTypeDescription (Just s) . asType
@@ -55,7 +55,7 @@ dataDoc :: String -> Term -> Term
 dataDoc s = setTermDescription (Just s)
 
 exclude :: AsType a => a -> Type
-exclude = setTypeAnnotation key_exclude (Just $ Terms.boolean True) . asType
+exclude = setTypeAnnotation keyExclude (Just $ Terms.boolean True) . asType
 
 minLengthList :: AsType a => Int -> a -> Type
 minLengthList len = boundedList (Just len) Nothing
@@ -70,16 +70,16 @@ note :: AsType a => String -> a -> Type
 note s = doc $ "Note: " ++ s
 
 preserveFieldName :: AsType a => a -> Type
-preserveFieldName = setTypeAnnotation key_preserveFieldName (Just $ Terms.boolean True) . asType
+preserveFieldName = setTypeAnnotation keyPreserveFieldName (Just $ Terms.boolean True) . asType
 
 see :: AsType a => String -> a -> Type
 see s = doc $ "See " ++ s
 
 setMaxLength :: Int -> Type -> Type
-setMaxLength m = setTypeAnnotation key_maxLength (Just $ Terms.int32 m)
+setMaxLength m = setTypeAnnotation keyMaxLength (Just $ Terms.int32 m)
 
 setMinLength :: Int -> Type -> Type
-setMinLength m = setTypeAnnotation key_minLength (Just $ Terms.int32 m)
+setMinLength m = setTypeAnnotation keyMinLength (Just $ Terms.int32 m)
 
 twoOrMoreList :: AsType a => a -> Type
 twoOrMoreList = boundedList (Just 2) Nothing
