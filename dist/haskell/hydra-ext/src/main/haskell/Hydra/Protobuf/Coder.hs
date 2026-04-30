@@ -226,7 +226,7 @@ encodeFieldType cx g localNs ft =
         let idxPair = Annotations.nextCount key_proto_field_index cx
             idx = Pairs.first idxPair
             cx1 = Pairs.second idxPair
-        in (Eithers.bind (readBooleanAnnotation cx g Constants.key_preserveFieldName ftype) (\preserve -> Right (Proto3.Field {
+        in (Eithers.bind (readBooleanAnnotation cx g Constants.keyPreserveFieldName ftype) (\preserve -> Right (Proto3.Field {
           Proto3.fieldName = (encodeFieldName preserve fname),
           Proto3.fieldJsonName = Nothing,
           Proto3.fieldType = ft_,
@@ -325,7 +325,7 @@ err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 -- | Find Protobuf options for a type (description and deprecated)
 findOptions :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error [Proto3.Option]
 findOptions cx g typ =
-    Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Eithers.bind (readBooleanAnnotation cx g Constants.key_deprecated typ) (\bdep ->
+    Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Eithers.bind (readBooleanAnnotation cx g Constants.keyDeprecated typ) (\bdep ->
       let mdescAnn =
               Maybes.map (\desc_ -> Proto3.Option {
                 Proto3.optionName = Serde.descriptionOptionName,

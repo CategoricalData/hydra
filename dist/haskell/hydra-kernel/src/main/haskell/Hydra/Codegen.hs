@@ -101,7 +101,7 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
                                   Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = (EncodeCore.type_ typ),
                                     Core.annotatedTermAnnotation = (Maps.fromList [
-                                      (Constants.key_type, schemaTerm)])}))
+                                      (Constants.keyType, schemaTerm)])}))
                       in Core.Binding {
                         Core.bindingName = name,
                         Core.bindingTerm = dataTerm,
@@ -153,7 +153,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                                   Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = (EncodeCore.type_ typ),
                                     Core.annotatedTermAnnotation = (Maps.fromList [
-                                      (Constants.key_type, schemaTerm)])}))
+                                      (Constants.keyType, schemaTerm)])}))
                       in Core.Binding {
                         Core.bindingName = name,
                         Core.bindingTerm = dataTerm,
@@ -178,7 +178,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                                   Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = (EncodeCore.type_ typ),
                                     Core.annotatedTermAnnotation = (Maps.fromList [
-                                      (Constants.key_type, schemaTerm)])}))
+                                      (Constants.keyType, schemaTerm)])}))
                       in Core.Binding {
                         Core.bindingName = name,
                         Core.bindingTerm = dataTerm,
@@ -370,7 +370,7 @@ modulesToGraph bsGraph universeModules modules =
                                   Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = (EncodeCore.type_ typ),
                                     Core.annotatedTermAnnotation = (Maps.fromList [
-                                      (Constants.key_type, schemaTerm)])}))
+                                      (Constants.keyType, schemaTerm)])}))
                       in Core.Binding {
                         Core.bindingName = name,
                         Core.bindingTerm = dataTerm,

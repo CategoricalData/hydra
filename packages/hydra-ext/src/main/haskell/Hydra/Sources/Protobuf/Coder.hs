@@ -385,7 +385,7 @@ encodeFieldType = def "encodeFieldType" $
       "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx",
       "idx">: Pairs.first (var "idxPair"),
       "cx1">: Pairs.second (var "idxPair")] $
-    "preserve" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_preserveFieldName @@ var "ftype") $
+    "preserve" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.keyPreserveFieldName @@ var "ftype") $
     right $ pair
       (record P3._Field [
         P3._Field_name>>: asTerm encodeFieldName @@ var "preserve" @@ var "fname",
@@ -522,7 +522,7 @@ findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
     "mdesc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    "bdep" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_deprecated @@ var "typ") $ lets [
+    "bdep" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.keyDeprecated @@ var "typ") $ lets [
       "mdescAnn">: Maybes.map
         ("desc_" ~> record P3._Option [
           P3._Option_name>>: ProtobufSerdeSource.descriptionOptionName,

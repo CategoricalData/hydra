@@ -398,7 +398,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_gather"},
+                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWithGather"},
                                                                                                     "type": {"variable": "t0"}}},
                                                                                                 "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                             "domain": {"variable": "hydra.core.Term"},
@@ -470,7 +470,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.analysis.analyzeFunctionTermWith_finish",
+        "name": "hydra.analysis.analyzeFunctionTermWithFinish",
         "term": {
           "typeLambda": {
             "body": {
@@ -690,7 +690,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.analysis.analyzeFunctionTermWith_gather",
+        "name": "hydra.analysis.analyzeFunctionTermWithGather",
         "term": {
           "typeLambda": {
             "body": {
@@ -765,7 +765,7 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_finish"},
+                                                                                                                                "body": {"variable": "hydra.analysis.analyzeFunctionTermWithFinish"},
                                                                                                                                 "type": {"variable": "t0"}}},
                                                                                                                             "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}},
                                                                                     "function": {
@@ -903,7 +903,7 @@
                                                                                                                                                           "typeApplication": {
                                                                                                                                                             "body": {
                                                                                                                                                               "typeApplication": {
-                                                                                                                                                                "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_gather"},
+                                                                                                                                                                "body": {"variable": "hydra.analysis.analyzeFunctionTermWithGather"},
                                                                                                                                                                 "type": {"variable": "t0"}}},
                                                                                                                                                             "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                                         "function": {
@@ -1019,7 +1019,7 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_gather"},
+                                                                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWithGather"},
                                                                                                                                                     "type": {"variable": "t0"}}},
                                                                                                                                                 "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                                 "domain": {"variable": "hydra.core.Let"},
@@ -1099,7 +1099,7 @@
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_gather"},
+                                                                                                                                                "body": {"variable": "hydra.analysis.analyzeFunctionTermWithGather"},
                                                                                                                                                 "type": {"variable": "t0"}}},
                                                                                                                                             "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                                 "domain": {"variable": "hydra.core.TypeApplicationTerm"},
@@ -1198,7 +1198,7 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_gather"},
+                                                                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWithGather"},
                                                                                                                                                     "type": {"variable": "t0"}}},
                                                                                                                                                 "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                                 "domain": {"variable": "hydra.core.TypeLambda"},
@@ -1234,7 +1234,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWith_finish"},
+                                                                                                                    "body": {"variable": "hydra.analysis.analyzeFunctionTermWithFinish"},
                                                                                                                     "type": {"variable": "t0"}}},
                                                                                                                 "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}},
                                                                         "typeName": "hydra.core.Term"}}}},
@@ -3624,7 +3624,7 @@
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
                                                                                                                                                       "pair": {
-                                                                                                                                                        "first": {"variable": "hydra.constants.key_type"},
+                                                                                                                                                        "first": {"variable": "hydra.constants.keyType"},
                                                                                                                                                         "second": {"variable": "schemaTerm"}}},
                                                                                                                                                     "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                                 "type": {"variable": "hydra.core.Term"}}}]},

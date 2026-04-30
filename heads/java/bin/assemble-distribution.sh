@@ -8,13 +8,14 @@
 #   1. Calling Layer 1 transform-json-to-java.sh for main modules
 #   2. Calling Layer 1 transform-json-to-java.sh for test modules
 #   3. Applying package-specific post-processing:
-#      - hydra-kernel: patch TestGraph.java
+#      - hydra-kernel: copy hand-written Java runtime (util, lib, dsl, json,
+#        tools) into the dist tree so the published Maven artifact is
+#        self-contained.
 #      - hydra-lisp:   patch Coder.java (PartialVisitor type inference)
+#   4. Generating a per-package build.gradle + settings.gradle so each
+#      dist/java/<pkg>/ is a standalone, publishable Gradle build.
 #
 # Assemblers do NOT run tests; see test-distribution.sh (Layer 2.5).
-#
-# Note: build.gradle files are tracked in-tree under packages/hydra-java/,
-# not per-dist. Per-package build files are future work.
 
 set -euo pipefail
 
@@ -93,15 +94,18 @@ else
 fi
 
 # Step 3: Package-specific post-processing.
-# (TestGraph.java post-generation patch eliminated: the DSL now emits
-# TestEnv refs directly. See task #25 in feature_290_packaging plan.)
-#
-# (Java exception: do NOT copy heads/java/.../lib/ into dist/java/hydra-kernel/.
-# packages/hydra-java/build.gradle declares both heads/java/src/main/java
-# AND dist/java/hydra-kernel/src/main/java as srcDirs, so a copy would
-# duplicate every class. Bootstrap-demo target setup handles the runtime
-# layout independently.)
+# - hydra-kernel: copy hand-written runtime support (heads/java/src/main/java/
+#   hydra/{util,lib,dsl,json,tools}/ + top-level kernel utility classes) into
+#   dist/java/hydra-kernel/src/main/java/ so the published Maven artifact is
+#   self-contained. Cypher/GQL/RDF native bindings are NOT copied (they belong
+#   in bindings/ once that subtree exists).
+# - hydra-lisp: patch Coder.java's PartialVisitor type inference.
 case "$PACKAGE" in
+    hydra-kernel)
+        echo ""
+        echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
+        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+        ;;
     hydra-lisp)
         # Patch Lisp Coder.java: fix PartialVisitor type inference in
         # encodeTermDefinition.
@@ -118,6 +122,13 @@ case "$PACKAGE" in
         # No per-package post-processing for other packages today.
         ;;
 esac
+
+# Step 4: Generate per-package build.gradle + settings.gradle so each
+# dist/java/<pkg>/ is a standalone publishable Gradle build.
+echo ""
+echo "Step 4: Generating per-package build.gradle..."
+HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-java-package-build.py" \
+    "$PACKAGE" --out-dir "$OUT_DIR"
 
 echo ""
 

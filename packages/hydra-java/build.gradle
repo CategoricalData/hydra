@@ -3,15 +3,21 @@ plugins {
     id 'signing'
 }
 
-// Include the Haskell head sources alongside the package sources.
-// Long-term, head content will be copied into dist/java/ during generation
-// and this source-set crossover will go away. For now, the published
-// hydra-java artifact bundles the head's primitives and runtime drivers
-// directly from heads/java/.
+// The developer rollup aggregates every dist/java/<pkg>/ tree plus demos.
+// Hand-written runtime support that the kernel assembler copies into
+// dist/java/hydra-kernel/ comes in via that srcDir; the leftover hand-written
+// files in heads/java (developer drivers like Bootstrap, Generation,
+// HydraTestBase, plus third-party-binding files) live in a separate
+// `headsExtras` source set so we can filter them with their own include
+// patterns without affecting the kernel dist's classes.
 sourceSets {
+    // The kernel-and-coders source set is the bulk of the rollup. It pulls
+    // every dist/java/<pkg>/ source tree (which includes the kernel runtime
+    // classes copied in by heads/java/bin/copy-kernel-runtime.sh) but NOT
+    // heads/java directly, to avoid duplicate-class errors with the copied
+    // kernel runtime.
     main {
         java {
-            srcDirs += file("$projectDir/../../heads/java/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-haskell/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-java/src/main/java")
@@ -21,15 +27,46 @@ sourceSets {
             srcDirs += file("$projectDir/../../dist/java/hydra-pg/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-rdf/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-ext/src/main/java")
-            srcDirs += file("$projectDir/../../demos/src/main/java")
         }
+    }
+    // Files in heads/java that are NOT copied into dist/java/hydra-kernel
+    // (developer drivers + third-party-binding stubs), plus the demos that
+    // depend on them. Compiles AFTER main so it can see the kernel + every
+    // coder package on the classpath.
+    headsExtras {
+        java {
+            srcDir file("$projectDir/../../heads/java/src/main/java")
+            srcDir file("$projectDir/../../demos/src/main/java")
+            // Only the heads/java files NOT copied by copy-kernel-runtime.sh.
+            // include applies to every srcDir; for demos every file is
+            // included by default since these patterns don't match its tree.
+            include 'hydra/Bootstrap.java'
+            include 'hydra/Generation.java'
+            include 'hydra/HydraTestBase.java'
+            include 'hydra/cypher/**'
+            include 'hydra/gql/**'
+            include 'hydra/rdf/**'
+            include 'hydra/json/JsonIoCoder.java'
+            include 'hydra/json/JsonSerde.java'
+            include 'hydra/tools/AntlrReaderBase.java'
+            include 'hydra/demos/**'
+        }
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output
     }
     test {
         java {
             srcDirs += file("$projectDir/../../heads/java/src/test/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/test/java")
         }
+        compileClasspath += sourceSets.headsExtras.output
+        runtimeClasspath += sourceSets.headsExtras.output
     }
+}
+
+// Bundle headsExtras output into the rollup jar.
+jar {
+    from sourceSets.headsExtras.output
 }
 
 dependencies {
@@ -71,6 +108,15 @@ compileJava {
     exclude '**/hydra/xml/schema/Long.java'
     exclude '**/hydra/xml/schema/Short.java'
     exclude '**/hydra/xml/schema/String.java'
+}
+
+// Same ANTLR/grammar-driven exclusions for the headsExtras source set, where
+// the cypher/gql readers actually live.
+compileHeadsExtrasJava {
+    exclude '**/hydra/gql/GQLReader.java'
+    exclude '**/hydra/cypher/CypherReader.java'
+    exclude '**/hydra/cypher/FromCypher.java'
+    exclude '**/hydra/tools/AntlrReaderBase.java'
 }
 
 // Test-side excludes: tests that depend on classes excluded from compileJava above
