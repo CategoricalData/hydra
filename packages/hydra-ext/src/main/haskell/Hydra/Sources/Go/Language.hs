@@ -171,8 +171,8 @@ goLanguage = define "goLanguage" $
     -- Go's type system is more restrictive than Haskell's, but with generics most types work
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.go")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.go")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

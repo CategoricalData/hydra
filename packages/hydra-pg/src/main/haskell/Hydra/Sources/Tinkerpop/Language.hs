@@ -213,7 +213,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
 
   Coders.language
     (var "name")
-    (Coders.languageConstraints_
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

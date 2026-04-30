@@ -81,9 +81,9 @@ module_ = Module {
       toDefinition elementsToGraph,
       toDefinition emptyContext,
       toDefinition emptyGraph,
-      toDefinition graphToBindings,
       toDefinition fieldsOf,
       toDefinition getField,
+      toDefinition graphToBindings,
       toDefinition graphWithPrimitives,
       toDefinition lookupBinding,
       toDefinition lookupPrimitive,
@@ -204,17 +204,6 @@ emptyGraph = define "emptyGraph" $
   doc "An empty graph; no elements, no primitives, no schema." $
   Graph.emptyGraph
 
-graphToBindings :: TTermDefinition (Graph -> [Binding])
-graphToBindings = define "graphToBindings" $
-  doc "Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes" $
-  "g" ~>
-  Lists.map ("p" ~>
-    "name" <~ Pairs.first (var "p") $
-    "term" <~ Pairs.second (var "p") $
-    Core.binding (var "name") (var "term")
-      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "g"))))
-    (Maps.toList (Graph.graphBoundTerms (var "g")))
-
 fieldsOf :: TTermDefinition (Type -> [FieldType])
 fieldsOf = define "fieldsOf" $
   doc "Extract the fields of a record or union type" $
@@ -233,6 +222,17 @@ getField = define "getField" $
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
+
+graphToBindings :: TTermDefinition (Graph -> [Binding])
+graphToBindings = define "graphToBindings" $
+  doc "Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes" $
+  "g" ~>
+  Lists.map ("p" ~>
+    "name" <~ Pairs.first (var "p") $
+    "term" <~ Pairs.second (var "p") $
+    Core.binding (var "name") (var "term")
+      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "g"))))
+    (Maps.toList (Graph.graphBoundTerms (var "g")))
 
 graphWithPrimitives :: TTermDefinition ([Primitive] -> [Primitive] -> Graph)
 graphWithPrimitives = define "graphWithPrimitives" $
