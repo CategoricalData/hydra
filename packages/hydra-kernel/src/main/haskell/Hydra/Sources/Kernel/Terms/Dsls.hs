@@ -51,10 +51,13 @@ module_ = Module {
             moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
+      toDefinition collectForallVars,
+      toDefinition deduplicateBindings,
       toDefinition dslBindingName,
       toDefinition dslDefinitionName,
       toDefinition dslModule,
       toDefinition dslNamespace,
+      toDefinition dslTypeScheme,
       toDefinition filterTypeBindings,
       toDefinition generateBindingsForType,
       toDefinition generateRecordAccessor,
@@ -62,10 +65,7 @@ module_ = Module {
       toDefinition generateRecordWithUpdater,
       toDefinition generateUnionInjector,
       toDefinition generateWrappedTypeAccessors,
-      toDefinition deduplicateBindings,
       toDefinition isDslEligibleBinding,
-      toDefinition dslTypeScheme,
-      toDefinition collectForallVars,
       toDefinition nominalResultType]
 
 define :: String -> TTerm x -> TTermDefinition x
@@ -74,20 +74,6 @@ define = definitionInModule module_
 -- | Wrap a type in TTerm: TypeApplication (TypeVariable "hydra.phantoms.TTerm") innerType
 wrapInTTerm :: TTerm Type -> TTerm Type
 wrapInTTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TTerm)) t
-
--- | Build a TypeScheme from a list of parameter types and a result type.
--- All types are wrapped in TTerm. Forall variables are collected from the original type.
-dslTypeScheme :: TTermDefinition (Type -> [Type] -> Type -> TypeScheme)
-dslTypeScheme = define "dslTypeScheme" $
-  doc "Build a TypeScheme with TTerm-wrapped parameter and result types" $
-  "origType" ~> "paramTypes" ~> "resultType" ~>
-  "typeVars" <~ (collectForallVars @@ var "origType") $
-  "wrappedResult" <~ (wrapInTTerm (var "resultType")) $
-  "funType" <~ (Lists.foldr
-    ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTTerm (var "paramType")) (var "acc"))
-    (var "wrappedResult")
-    (var "paramTypes")) $
-  Core.typeScheme (var "typeVars") (var "funType") nothing
 
 -- | Collect forall type variables from a type (stripping annotations)
 collectForallVars :: TTermDefinition (Type -> [Name])
@@ -103,18 +89,61 @@ collectForallVars = define "collectForallVars" $
 -- | Build the nominal result type for a type definition.
 -- For non-polymorphic types: TypeVariable typeName
 -- For polymorphic types like (forall n. Namespaces n): TypeApplication (TypeVariable typeName) (TypeVariable n)
-nominalResultType :: TTermDefinition (Name -> Type -> Type)
-nominalResultType = define "nominalResultType" $
-  doc "Build the nominal result type with type applications for forall variables" $
-  "typeName" ~> "origType" ~>
-  "vars" <~ (collectForallVars @@ var "origType") $
+-- | Deduplicate bindings by giving duplicate names a numeric suffix.
+-- Later bindings get suffixes; earlier ones keep their name.
+-- Multiple duplicates get increasing numeric suffixes: name, name2, name3, etc.
+deduplicateBindings :: TTermDefinition ([Binding] -> [Binding])
+deduplicateBindings = define "deduplicateBindings" $
+  doc "Deduplicate bindings by appending numeric suffixes to duplicate names" $
+  "bindings" ~>
   Lists.foldl
-    ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
-    (Core.typeVariable (var "typeName"))
-    (var "vars")
+    ("acc" ~> "b" ~>
+      "usedNames" <~ Sets.fromList (Lists.map ("a" ~> Core.bindingName (var "a")) (var "acc")) $
+      "uniqueName" <~ (Lexical.chooseUniqueName @@ var "usedNames" @@ Core.bindingName (var "b")) $
+      Lists.concat2 (var "acc") (list [
+        Core.binding
+          (var "uniqueName")
+          (Core.bindingTerm (var "b"))
+          (Core.bindingTypeScheme (var "b"))]))
+    (list ([] :: [TTerm Binding]))
+    (var "bindings")
 
--- | Inject a Record-typed term into the Term.record variant
--- Produces TermInject(Injection _Term (Field _Term_record innerRecord))
+-- | Filter bindings to only DSL-eligible type definitions
+-- | Generate a fully qualified binding name for a DSL function from a type name
+-- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
+-- For local types (no namespace), returns just the decapitalized local name
+dslBindingName :: TTermDefinition (Name -> Name)
+dslBindingName = define "dslBindingName" $
+  doc "Generate a binding name for a DSL function from a type name" $
+  "n" ~>
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  -- nsParts = parts minus the last element (the namespace components).
+  -- Nothing means parts was empty (unreachable for a valid name);
+  -- Just [] means the name has no namespace (local type).
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        -- single-element parts: local type, no namespace
+        (var "localResult")
+        ("nsHeadTail" ~>
+          "dslNsParts" <~ (Logic.ifElse
+            (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
+            -- hydra.core.Foo -> [hydra, dsl] ++ tail nsParts
+            (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
+            -- openGql.grammar.Foo -> [hydra, dsl] ++ nsParts
+            (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
+          Core.name (Strings.intercalate (string ".")
+            (Lists.concat2 (var "dslNsParts") (list [var "localPart"]))))
+        (Lists.uncons (var "nsParts")))
+    (Lists.maybeInit (var "parts"))
+
+-- | Generate a DSL element name from a type name and a local element name.
+-- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
+-- This extracts the namespace from the type name, transforms it to the DSL namespace,
+-- and appends the local element name.
 injectTermRecord :: TTerm Term -> TTerm Term
 injectTermRecord t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
 
@@ -211,61 +240,6 @@ wrapTermInTTerm t = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TTerm) t
 
 
 
--- | Generate a DSL module namespace from a source module namespace
--- For example, "hydra.core" -> "hydra.dsl.core"
-dslNamespace :: TTermDefinition (Namespace -> Namespace)
-dslNamespace = define "dslNamespace" $
-  doc "Generate a DSL module namespace from a source module namespace" $
-  "ns" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))) $
-  "prefixFull" <~ (Packaging.namespace (Strings.cat $ list [
-    string "hydra.dsl.",
-    Packaging.unNamespace (var "ns")])) $
-  -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
-  -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
-  -- An empty parts list is unreachable for a well-formed namespace; fall back
-  -- to the full-prefix form.
-  Maybes.maybe
-    (var "prefixFull")
-    ("ht" ~>
-      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
-        (Packaging.namespace (Strings.cat $ list [
-          string "hydra.dsl.",
-          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
-        (var "prefixFull"))
-    (Lists.uncons (var "parts"))
-
--- | Generate a fully qualified binding name for a DSL function from a type name
--- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
--- For local types (no namespace), returns just the decapitalized local name
-dslBindingName :: TTermDefinition (Name -> Name)
-dslBindingName = define "dslBindingName" $
-  doc "Generate a binding name for a DSL function from a type name" $
-  "n" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
-  "localResult" <~ (Core.name (var "localPart")) $
-  -- nsParts = parts minus the last element (the namespace components).
-  -- Nothing means parts was empty (unreachable for a valid name);
-  -- Just [] means the name has no namespace (local type).
-  Maybes.maybe
-    (var "localResult")
-    ("nsParts" ~>
-      Maybes.maybe
-        -- single-element parts: local type, no namespace
-        (var "localResult")
-        ("nsHeadTail" ~>
-          "dslNsParts" <~ (Logic.ifElse
-            (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
-            -- hydra.core.Foo -> [hydra, dsl] ++ tail nsParts
-            (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
-            -- openGql.grammar.Foo -> [hydra, dsl] ++ nsParts
-            (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
-          Core.name (Strings.intercalate (string ".")
-            (Lists.concat2 (var "dslNsParts") (list [var "localPart"]))))
-        (Lists.uncons (var "nsParts")))
-    (Lists.maybeInit (var "parts"))
-
 -- | Generate a DSL element name from a type name and a local element name.
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
 -- This extracts the namespace from the type name, transforms it to the DSL namespace,
@@ -293,6 +267,163 @@ dslDefinitionName = define "dslDefinitionName" $
       Core.name (Strings.intercalate (string ".")
         (Lists.concat2 (var "dslNsParts") (list [var "localName"]))))
     (Lists.maybeInit (var "parts"))
+
+-- | Generate a record constructor function.
+-- For a record type like {body: Term, annotation: Map(Name, Term)},
+-- produces a deep (meta) term:
+--   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
+-- When code-generated into Haskell, this becomes:
+--   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
+-- | Transform a type module into a DSL module.
+-- Returns Nothing if the module has no eligible type definitions.
+dslModule :: TTermDefinition (Context -> Graph -> Module -> Either Error (Maybe Module))
+dslModule = define "dslModule" $
+  doc "Transform a type module into a DSL module" $
+  "cx" ~> "graph" ~> "mod" ~>
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") (Just nothing) [
+          _Definition_type>>: "td" ~>
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
+        (Packaging.moduleDefinitions (var "mod")))) $
+    Logic.ifElse (Lists.null (var "typeBindings"))
+      (right nothing)
+      ("dslBindings" <<~ Eithers.mapList ("b" ~>
+        Eithers.bimap
+          ("_e" ~> Error.errorDecoding $ var "_e")
+          ("x" ~> var "x")
+          (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
+        right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "DSL functions for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
+          (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
+          -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
+          (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleTypeDependencies (var "mod"))))
+          -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
+          (Lists.nub (Lists.concat2
+            (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
+            (Packaging.moduleTypeDependencies (var "mod"))))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingTypeScheme $ var "b")))
+            (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
+-- | Generate a DSL module namespace from a source module namespace
+-- For example, "hydra.core" -> "hydra.dsl.core"
+dslNamespace :: TTermDefinition (Namespace -> Namespace)
+dslNamespace = define "dslNamespace" $
+  doc "Generate a DSL module namespace from a source module namespace" $
+  "ns" ~>
+  "parts" <~ (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))) $
+  "prefixFull" <~ (Packaging.namespace (Strings.cat $ list [
+    string "hydra.dsl.",
+    Packaging.unNamespace (var "ns")])) $
+  -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
+  -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
+  -- An empty parts list is unreachable for a well-formed namespace; fall back
+  -- to the full-prefix form.
+  Maybes.maybe
+    (var "prefixFull")
+    ("ht" ~>
+      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
+        (Packaging.namespace (Strings.cat $ list [
+          string "hydra.dsl.",
+          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
+        (var "prefixFull"))
+    (Lists.uncons (var "parts"))
+
+-- | Generate a fully qualified binding name for a DSL function from a type name
+-- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
+-- For local types (no namespace), returns just the decapitalized local name
+-- | Build a TypeScheme from a list of parameter types and a result type.
+-- All types are wrapped in TTerm. Forall variables are collected from the original type.
+dslTypeScheme :: TTermDefinition (Type -> [Type] -> Type -> TypeScheme)
+dslTypeScheme = define "dslTypeScheme" $
+  doc "Build a TypeScheme with TTerm-wrapped parameter and result types" $
+  "origType" ~> "paramTypes" ~> "resultType" ~>
+  "typeVars" <~ (collectForallVars @@ var "origType") $
+  "wrappedResult" <~ (wrapInTTerm (var "resultType")) $
+  "funType" <~ (Lists.foldr
+    ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTTerm (var "paramType")) (var "acc"))
+    (var "wrappedResult")
+    (var "paramTypes")) $
+  Core.typeScheme (var "typeVars") (var "funType") nothing
+
+-- | Collect forall type variables from a type (stripping annotations)
+-- | Filter bindings to only DSL-eligible type definitions
+filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
+filterTypeBindings = define "filterTypeBindings" $
+  doc "Filter bindings to only DSL-eligible type definitions" $
+  "cx" ~> "graph" ~> "bindings" ~>
+    Eithers.map (primitive _maybes_cat) $
+      Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
+        primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
+
+-- | Check if a binding is eligible for DSL generation.
+-- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
+-- | Generate all DSL bindings for a single type binding.
+-- Inspects the type definition and generates appropriate helpers:
+-- - Records: constructor + accessors + withXxx updaters
+-- - Unions: injection helpers
+-- - Wrapped types: wrap + unwrap
+generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError [Binding])
+generateBindingsForType = define "generateBindingsForType" $
+  doc "Generate all DSL bindings for a type binding" $
+  "cx" ~> "graph" ~> "b" ~>
+  "typeName" <~ (Core.bindingName (var "b")) $
+  Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
+    "rawType" ~>
+    "typ" <~ (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "rawType")) $
+    right (cases _Type (var "typ") (Just $ list ([] :: [TTerm Binding])) [
+      _Type_record>>: "fts" ~>
+        Lists.concat $ list [
+          generateRecordConstructor @@ var "rawType" @@ var "typeName" @@ var "fts",
+          Lists.map (generateRecordAccessor @@ var "rawType" @@ var "typeName") (var "fts"),
+          Lists.map (generateRecordWithUpdater @@ var "rawType" @@ var "typeName" @@ var "fts")
+            (var "fts")],
+      _Type_union>>: "fts" ~>
+        Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (var "fts"),
+      _Type_wrap>>: "innerType" ~>
+        generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "innerType"]))
+
+-- | Deduplicate bindings by giving duplicate names a numeric suffix.
+-- Later bindings get suffixes; earlier ones keep their name.
+-- Multiple duplicates get increasing numeric suffixes: name, name2, name3, etc.
+-- | Generate a record field accessor function.
+-- For a field "name" in record type "Binding", produces:
+--   bindingName :: Binding -> Name
+--   bindingName x = x.name
+generateRecordAccessor :: TTermDefinition (Type -> Name -> FieldType -> Binding)
+generateRecordAccessor = define "generateRecordAccessor" $
+  doc "Generate a record field accessor function" $
+  "origType" ~> "typeName" ~> "ft" ~>
+  "fieldName" <~ (Core.fieldTypeName (var "ft")) $
+  "accessorLocalName" <~ (Strings.cat $ list [
+    Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
+    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
+  "accessorName" <~ (dslDefinitionName @@ var "typeName" @@ var "accessorLocalName") $
+  -- Body: projection as a simple elimination
+  "paramDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
+  "body" <~ (Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
+      wrapTermInTTerm (deepApplication
+        (deepProjection (var "typeName") (var "fieldName"))
+        (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "ts" <~ (dslTypeScheme @@ var "origType"
+    @@ list [nominalResultType @@ var "typeName" @@ var "origType"]
+    @@ Core.fieldTypeType (var "ft")) $
+  Core.binding
+    (var "accessorName")
+    (var "body")
+    (just (var "ts"))
+
+-- | Generate a "withXxx" record field updater function.
+-- For a field "name" in record type "Binding" (with fields name, term, type), produces:
+--   bindingWithName :: Binding -> Name -> Binding
+--   bindingWithName b newName = Binding newName (bindingTerm b) (bindingType b)
+-- This constructs a new record with the specified field replaced and all others projected.
+isUnitType_ :: TTerm (Type -> Bool)
+isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
+  _Type_unit>>: constant Phantoms.true]
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
@@ -336,29 +467,6 @@ generateRecordConstructor = define "generateRecordConstructor" $
 -- For a field "name" in record type "Binding", produces:
 --   bindingName :: Binding -> Name
 --   bindingName x = x.name
-generateRecordAccessor :: TTermDefinition (Type -> Name -> FieldType -> Binding)
-generateRecordAccessor = define "generateRecordAccessor" $
-  doc "Generate a record field accessor function" $
-  "origType" ~> "typeName" ~> "ft" ~>
-  "fieldName" <~ (Core.fieldTypeName (var "ft")) $
-  "accessorLocalName" <~ (Strings.cat $ list [
-    Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
-    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
-  "accessorName" <~ (dslDefinitionName @@ var "typeName" @@ var "accessorLocalName") $
-  -- Body: projection as a simple elimination
-  "paramDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
-  "body" <~ (Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
-      wrapTermInTTerm (deepApplication
-        (deepProjection (var "typeName") (var "fieldName"))
-        (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
-  "ts" <~ (dslTypeScheme @@ var "origType"
-    @@ list [nominalResultType @@ var "typeName" @@ var "origType"]
-    @@ Core.fieldTypeType (var "ft")) $
-  Core.binding
-    (var "accessorName")
-    (var "body")
-    (just (var "ts"))
-
 -- | Generate a "withXxx" record field updater function.
 -- For a field "name" in record type "Binding" (with fields name, term, type), produces:
 --   bindingWithName :: Binding -> Name -> Binding
@@ -408,6 +516,13 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
 -- For unit variants (field type is unit), produces:
 --   comparisonLessThan :: Comparison
 --   comparisonLessThan = Comparison.lessThan ()
+-- | Generate a union injection helper.
+-- For a variant "lambda" in union type "Function", produces:
+--   functionLambda :: Lambda -> Function
+--   functionLambda x = Function.lambda x
+-- For unit variants (field type is unit), produces:
+--   comparisonLessThan :: Comparison
+--   comparisonLessThan = Comparison.lessThan ()
 generateUnionInjector :: TTermDefinition (Type -> Name -> FieldType -> Binding)
 generateUnionInjector = define "generateUnionInjector" $
   doc "Generate a union injection helper" $
@@ -444,10 +559,6 @@ generateUnionInjector = define "generateUnionInjector" $
 -- | Check if a type is the unit type (stripping annotations first)
 -- Note: uses stripAnnotations to avoid recursive Haskell-level DSL terms,
 -- which would cause infinite recursion during code generation.
-isUnitType_ :: TTerm (Type -> Bool)
-isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
-  _Type_unit>>: constant Phantoms.true]
-
 -- | Generate wrap/unwrap accessors for a wrapped type.
 -- For a wrapped type like "Name" wrapping String, produces:
 --   name :: String -> Name      (constructor/wrap)
@@ -487,54 +598,6 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
 -- - Records: constructor + accessors + withXxx updaters
 -- - Unions: injection helpers
 -- - Wrapped types: wrap + unwrap
-generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError [Binding])
-generateBindingsForType = define "generateBindingsForType" $
-  doc "Generate all DSL bindings for a type binding" $
-  "cx" ~> "graph" ~> "b" ~>
-  "typeName" <~ (Core.bindingName (var "b")) $
-  Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
-    "rawType" ~>
-    "typ" <~ (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "rawType")) $
-    right (cases _Type (var "typ") (Just $ list ([] :: [TTerm Binding])) [
-      _Type_record>>: "fts" ~>
-        Lists.concat $ list [
-          generateRecordConstructor @@ var "rawType" @@ var "typeName" @@ var "fts",
-          Lists.map (generateRecordAccessor @@ var "rawType" @@ var "typeName") (var "fts"),
-          Lists.map (generateRecordWithUpdater @@ var "rawType" @@ var "typeName" @@ var "fts")
-            (var "fts")],
-      _Type_union>>: "fts" ~>
-        Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (var "fts"),
-      _Type_wrap>>: "innerType" ~>
-        generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "innerType"]))
-
--- | Deduplicate bindings by giving duplicate names a numeric suffix.
--- Later bindings get suffixes; earlier ones keep their name.
--- Multiple duplicates get increasing numeric suffixes: name, name2, name3, etc.
-deduplicateBindings :: TTermDefinition ([Binding] -> [Binding])
-deduplicateBindings = define "deduplicateBindings" $
-  doc "Deduplicate bindings by appending numeric suffixes to duplicate names" $
-  "bindings" ~>
-  Lists.foldl
-    ("acc" ~> "b" ~>
-      "usedNames" <~ Sets.fromList (Lists.map ("a" ~> Core.bindingName (var "a")) (var "acc")) $
-      "uniqueName" <~ (Lexical.chooseUniqueName @@ var "usedNames" @@ Core.bindingName (var "b")) $
-      Lists.concat2 (var "acc") (list [
-        Core.binding
-          (var "uniqueName")
-          (Core.bindingTerm (var "b"))
-          (Core.bindingTypeScheme (var "b"))]))
-    (list ([] :: [TTerm Binding]))
-    (var "bindings")
-
--- | Filter bindings to only DSL-eligible type definitions
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
-filterTypeBindings = define "filterTypeBindings" $
-  doc "Filter bindings to only DSL-eligible type definitions" $
-  "cx" ~> "graph" ~> "bindings" ~>
-    Eithers.map (primitive _maybes_cat) $
-      Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
-        primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
-
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
 isDslEligibleBinding :: TTermDefinition (Context -> Graph -> Binding -> Either Error (Maybe Binding))
@@ -548,35 +611,18 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
 
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
-dslModule :: TTermDefinition (Context -> Graph -> Module -> Either Error (Maybe Module))
-dslModule = define "dslModule" $
-  doc "Transform a type module into a DSL module" $
-  "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Maybes.cat $ Lists.map
-        ("d" ~> cases _Definition (var "d") (Just nothing) [
-          _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
-        (Packaging.moduleDefinitions (var "mod")))) $
-    Logic.ifElse (Lists.null (var "typeBindings"))
-      (right nothing)
-      ("dslBindings" <<~ Eithers.mapList ("b" ~>
-        Eithers.bimap
-          ("_e" ~> Error.errorDecoding $ var "_e")
-          ("x" ~> var "x")
-          (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        right (just (Packaging.module_
-          (just (Strings.cat $ list [
-            string "DSL functions for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
-          (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
-          (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleTypeDependencies (var "mod"))))
-          -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
-          (Lists.nub (Lists.concat2
-            (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
-            (Packaging.moduleTypeDependencies (var "mod"))))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
-            (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
+-- | Build the nominal result type for a type definition.
+-- For non-polymorphic types: TypeVariable typeName
+-- For polymorphic types like (forall n. Namespaces n): TypeApplication (TypeVariable typeName) (TypeVariable n)
+nominalResultType :: TTermDefinition (Name -> Type -> Type)
+nominalResultType = define "nominalResultType" $
+  doc "Build the nominal result type with type applications for forall variables" $
+  "typeName" ~> "origType" ~>
+  "vars" <~ (collectForallVars @@ var "origType") $
+  Lists.foldl
+    ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
+    (Core.typeVariable (var "typeName"))
+    (var "vars")
+
+-- | Inject a Record-typed term into the Term.record variant
+-- Produces TermInject(Injection _Term (Field _Term_record innerRecord))

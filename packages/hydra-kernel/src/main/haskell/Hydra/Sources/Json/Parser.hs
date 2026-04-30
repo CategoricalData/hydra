@@ -98,24 +98,24 @@ module_ = Module {
   where
     ns = Namespace "hydra.json.parser"
     definitions = [
-      toDefinition whitespace,
-      toDefinition token,
-      toDefinition jsonNull,
-      toDefinition jsonBool,
       toDefinition digit,
       toDefinition digits,
-      toDefinition jsonIntegerPart,
-      toDefinition jsonFractionPart,
-      toDefinition jsonExponentPart,
-      toDefinition jsonNumber,
-      toDefinition jsonEscapeChar,
-      toDefinition jsonStringChar,
-      toDefinition jsonString,
       toDefinition jsonArray,
+      toDefinition jsonBool,
+      toDefinition jsonEscapeChar,
+      toDefinition jsonExponentPart,
+      toDefinition jsonFractionPart,
+      toDefinition jsonIntegerPart,
       toDefinition jsonKeyValue,
+      toDefinition jsonNull,
+      toDefinition jsonNumber,
       toDefinition jsonObject,
+      toDefinition jsonString,
+      toDefinition jsonStringChar,
       toDefinition jsonValue,
-      toDefinition parseJson]
+      toDefinition parseJson,
+      toDefinition token,
+      toDefinition whitespace]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
@@ -165,35 +165,37 @@ letterSCode = int32 115   -- 's'
 letterBCode :: TTerm Int
 letterBCode = int32 98    -- 'b'
 
--- | Parse zero or more whitespace characters
-whitespace :: TTermDefinition (Parser ())
-whitespace = define "whitespace" $
-  doc "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)" $
-  Parsers.map @@ (constant unit) @@
-    (Parsers.many @@
-      (Parsers.satisfy @@ ("c" ~>
-        Logic.ors (list [
-          Equality.equal (var "c") spaceCode,
-          Equality.equal (var "c") tabCode,
-          Equality.equal (var "c") newlineCode,
-          Equality.equal (var "c") returnCode]))))
+-- | Parse a single digit (0-9)
+digit :: TTermDefinition (Parser Int)
+digit = define "digit" $
+  doc "Parse a single digit (0-9)" $
+  Parsers.satisfy @@ ("c" ~>
+    Logic.and
+      (Equality.gte (var "c") zeroCode)
+      (Equality.lte (var "c") nineCode))
 
--- | Parse a token followed by optional whitespace
-token :: TTermDefinition (Parser a -> Parser a)
-token = define "token" $
-  doc "Parse a token followed by optional whitespace" $
-  "p" ~>
-    Parsers.bind @@ var "p" @@ ("x" ~>
-      Parsers.bind @@ whitespace @@ (constant $
-        Parsers.pure @@ var "x"))
+-- | Parse one or more digits and convert to string
+-- | Parse one or more digits and convert to string
+digits :: TTermDefinition (Parser String)
+digits = define "digits" $
+  doc "Parse one or more digits as a string" $
+  Parsers.map @@ (unaryFunction Strings.fromList) @@
+    (Parsers.some @@ digit)
 
--- | Parse JSON null
-jsonNull :: TTermDefinition (Parser J.Value)
-jsonNull = define "jsonNull" $
-  doc "Parse JSON null value" $
-  Parsers.map @@ (constant Json.valueNull) @@
-    (token @@ (Parsers.string_ @@ string "null"))
+-- | Parse the integer part of a JSON number
+-- | Parse a JSON array
+jsonArray :: TTermDefinition (Parser J.Value)
+jsonArray = define "jsonArray" $
+  doc "Parse a JSON array" $
+  Parsers.map @@ (unaryFunction Json.valueArray) @@
+    (Parsers.between
+      @@ (token @@ (Parsers.char @@ bracketOpenCode))
+      @@ (token @@ (Parsers.char @@ bracketCloseCode))
+      @@ (Parsers.sepBy
+          @@ (Parsers.lazy @@ constant jsonValue)
+          @@ (token @@ (Parsers.char @@ commaCode))))
 
+-- | Parse a JSON key-value pair
 -- | Parse JSON boolean
 jsonBool :: TTermDefinition (Parser J.Value)
 jsonBool = define "jsonBool" $
@@ -205,43 +207,22 @@ jsonBool = define "jsonBool" $
         (token @@ (Parsers.string_ @@ string "false")))
 
 -- | Parse a single digit (0-9)
-digit :: TTermDefinition (Parser Int)
-digit = define "digit" $
-  doc "Parse a single digit (0-9)" $
-  Parsers.satisfy @@ ("c" ~>
-    Logic.and
-      (Equality.gte (var "c") zeroCode)
-      (Equality.lte (var "c") nineCode))
+-- | Parse a JSON escape character
+jsonEscapeChar :: TTermDefinition (Parser Int)
+jsonEscapeChar = define "jsonEscapeChar" $
+  doc "Parse a JSON escape sequence after the backslash" $
+  Parsers.choice @@ list [
+    Parsers.map @@ (constant quoteCode) @@ (Parsers.char @@ quoteCode),
+    Parsers.map @@ (constant backslashCode) @@ (Parsers.char @@ backslashCode),
+    Parsers.map @@ (constant $ int32 47) @@ (Parsers.char @@ int32 47),  -- '/'
+    Parsers.map @@ (constant $ int32 8) @@ (Parsers.char @@ letterBCode),   -- '\b'
+    Parsers.map @@ (constant $ int32 12) @@ (Parsers.char @@ letterFCode),  -- '\f'
+    Parsers.map @@ (constant newlineCode) @@ (Parsers.char @@ letterNCode), -- '\n'
+    Parsers.map @@ (constant returnCode) @@ (Parsers.char @@ letterRCode),  -- '\r'
+    Parsers.map @@ (constant tabCode) @@ (Parsers.char @@ letterTCode)]     -- '\t'
+    -- Note: \uXXXX unicode escapes not yet implemented
 
--- | Parse one or more digits and convert to string
-digits :: TTermDefinition (Parser String)
-digits = define "digits" $
-  doc "Parse one or more digits as a string" $
-  Parsers.map @@ (unaryFunction Strings.fromList) @@
-    (Parsers.some @@ digit)
-
--- | Parse the integer part of a JSON number
-jsonIntegerPart :: TTermDefinition (Parser String)
-jsonIntegerPart = define "jsonIntegerPart" $
-  doc "Parse the integer part of a JSON number (optional minus, then digits)" $
-  Parsers.bind @@
-    (Parsers.optional @@ (Parsers.char @@ minusCode)) @@
-    ("sign" ~>
-      Parsers.bind @@ digits @@ ("digits" ~>
-        Parsers.pure @@
-          (Maybes.maybe
-            (var "digits")
-            (constant $ string "-" ++ var "digits")
-            (var "sign"))))
-
--- | Parse the fractional part of a JSON number
-jsonFractionPart :: TTermDefinition (Parser (Maybe String))
-jsonFractionPart = define "jsonFractionPart" $
-  doc "Parse the optional fractional part of a JSON number" $
-  Parsers.optional @@
-    (Parsers.bind @@ (Parsers.char @@ dotCode) @@ (constant $
-      Parsers.map @@ ("d" ~> string "." ++ var "d") @@ digits))
-
+-- | Parse a single JSON string character
 -- | Parse the exponent part of a JSON number
 jsonExponentPart :: TTermDefinition (Parser (Maybe String))
 jsonExponentPart = define "jsonExponentPart" $
@@ -266,71 +247,30 @@ jsonExponentPart = define "jsonExponentPart" $
               digits)))
 
 -- | Parse a JSON number
-jsonNumber :: TTermDefinition (Parser J.Value)
-jsonNumber = define "jsonNumber" $
-  doc "Parse a JSON number (integer, decimal, or scientific notation)" $
-  token @@
-    (Parsers.bind @@ jsonIntegerPart @@ ("intPart" ~>
-      Parsers.bind @@ jsonFractionPart @@ ("fracPart" ~>
-        Parsers.bind @@ jsonExponentPart @@ ("expPart" ~>
-          "numStr" <~
-            (var "intPart" ++
-             Maybes.maybe (string "") (unaryFunction Equality.identity) (var "fracPart") ++
-             Maybes.maybe (string "") (unaryFunction Equality.identity) (var "expPart")) $
-          Parsers.pure @@
-            (Json.valueNumber (Maybes.maybe (decimal 0) (unaryFunction Equality.identity) (Literals.readDecimal (var "numStr"))))))))
+-- | Parse the fractional part of a JSON number
+jsonFractionPart :: TTermDefinition (Parser (Maybe String))
+jsonFractionPart = define "jsonFractionPart" $
+  doc "Parse the optional fractional part of a JSON number" $
+  Parsers.optional @@
+    (Parsers.bind @@ (Parsers.char @@ dotCode) @@ (constant $
+      Parsers.map @@ ("d" ~> string "." ++ var "d") @@ digits))
 
--- | Parse a JSON escape character
-jsonEscapeChar :: TTermDefinition (Parser Int)
-jsonEscapeChar = define "jsonEscapeChar" $
-  doc "Parse a JSON escape sequence after the backslash" $
-  Parsers.choice @@ list [
-    Parsers.map @@ (constant quoteCode) @@ (Parsers.char @@ quoteCode),
-    Parsers.map @@ (constant backslashCode) @@ (Parsers.char @@ backslashCode),
-    Parsers.map @@ (constant $ int32 47) @@ (Parsers.char @@ int32 47),  -- '/'
-    Parsers.map @@ (constant $ int32 8) @@ (Parsers.char @@ letterBCode),   -- '\b'
-    Parsers.map @@ (constant $ int32 12) @@ (Parsers.char @@ letterFCode),  -- '\f'
-    Parsers.map @@ (constant newlineCode) @@ (Parsers.char @@ letterNCode), -- '\n'
-    Parsers.map @@ (constant returnCode) @@ (Parsers.char @@ letterRCode),  -- '\r'
-    Parsers.map @@ (constant tabCode) @@ (Parsers.char @@ letterTCode)]     -- '\t'
-    -- Note: \uXXXX unicode escapes not yet implemented
+-- | Parse the exponent part of a JSON number
+-- | Parse the integer part of a JSON number
+jsonIntegerPart :: TTermDefinition (Parser String)
+jsonIntegerPart = define "jsonIntegerPart" $
+  doc "Parse the integer part of a JSON number (optional minus, then digits)" $
+  Parsers.bind @@
+    (Parsers.optional @@ (Parsers.char @@ minusCode)) @@
+    ("sign" ~>
+      Parsers.bind @@ digits @@ ("digits" ~>
+        Parsers.pure @@
+          (Maybes.maybe
+            (var "digits")
+            (constant $ string "-" ++ var "digits")
+            (var "sign"))))
 
--- | Parse a single JSON string character
-jsonStringChar :: TTermDefinition (Parser Int)
-jsonStringChar = define "jsonStringChar" $
-  doc "Parse a single character in a JSON string (handling escapes)" $
-  Parsers.alt @@
-    -- Escape sequence
-    (Parsers.bind @@ (Parsers.char @@ backslashCode) @@ (constant $
-      jsonEscapeChar)) @@
-    -- Regular character (not quote or backslash)
-    (Parsers.satisfy @@ ("c" ~>
-      Logic.and
-        (Logic.not $ Equality.equal (var "c") quoteCode)
-        (Logic.not $ Equality.equal (var "c") backslashCode)))
-
--- | Parse a JSON string
-jsonString :: TTermDefinition (Parser J.Value)
-jsonString = define "jsonString" $
-  doc "Parse a JSON string value" $
-  token @@
-    (Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
-      Parsers.bind @@ (Parsers.many @@ jsonStringChar) @@ ("chars" ~>
-        Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
-          Parsers.pure @@ (Json.valueString (Strings.fromList (var "chars")))))))
-
--- | Parse a JSON array
-jsonArray :: TTermDefinition (Parser J.Value)
-jsonArray = define "jsonArray" $
-  doc "Parse a JSON array" $
-  Parsers.map @@ (unaryFunction Json.valueArray) @@
-    (Parsers.between
-      @@ (token @@ (Parsers.char @@ bracketOpenCode))
-      @@ (token @@ (Parsers.char @@ bracketCloseCode))
-      @@ (Parsers.sepBy
-          @@ (Parsers.lazy @@ constant jsonValue)
-          @@ (token @@ (Parsers.char @@ commaCode))))
-
+-- | Parse the fractional part of a JSON number
 -- | Parse a JSON key-value pair
 jsonKeyValue :: TTermDefinition (Parser (String, J.Value))
 jsonKeyValue = define "jsonKeyValue" $
@@ -346,6 +286,31 @@ jsonKeyValue = define "jsonKeyValue" $
         Parsers.map @@ ("v" ~> pair (var "key") (var "v")) @@ (Parsers.lazy @@ constant jsonValue)))
 
 -- | Parse a JSON object
+-- | Parse JSON null
+jsonNull :: TTermDefinition (Parser J.Value)
+jsonNull = define "jsonNull" $
+  doc "Parse JSON null value" $
+  Parsers.map @@ (constant Json.valueNull) @@
+    (token @@ (Parsers.string_ @@ string "null"))
+
+-- | Parse JSON boolean
+-- | Parse a JSON number
+jsonNumber :: TTermDefinition (Parser J.Value)
+jsonNumber = define "jsonNumber" $
+  doc "Parse a JSON number (integer, decimal, or scientific notation)" $
+  token @@
+    (Parsers.bind @@ jsonIntegerPart @@ ("intPart" ~>
+      Parsers.bind @@ jsonFractionPart @@ ("fracPart" ~>
+        Parsers.bind @@ jsonExponentPart @@ ("expPart" ~>
+          "numStr" <~
+            (var "intPart" ++
+             Maybes.maybe (string "") (unaryFunction Equality.identity) (var "fracPart") ++
+             Maybes.maybe (string "") (unaryFunction Equality.identity) (var "expPart")) $
+          Parsers.pure @@
+            (Json.valueNumber (Maybes.maybe (decimal 0) (unaryFunction Equality.identity) (Literals.readDecimal (var "numStr"))))))))
+
+-- | Parse a JSON escape character
+-- | Parse a JSON object
 jsonObject :: TTermDefinition (Parser J.Value)
 jsonObject = define "jsonObject" $
   doc "Parse a JSON object" $
@@ -357,6 +322,33 @@ jsonObject = define "jsonObject" $
           @@ jsonKeyValue
           @@ (token @@ (Parsers.char @@ commaCode))))
 
+-- | Parse any JSON value
+-- | Parse a JSON string
+jsonString :: TTermDefinition (Parser J.Value)
+jsonString = define "jsonString" $
+  doc "Parse a JSON string value" $
+  token @@
+    (Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
+      Parsers.bind @@ (Parsers.many @@ jsonStringChar) @@ ("chars" ~>
+        Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
+          Parsers.pure @@ (Json.valueString (Strings.fromList (var "chars")))))))
+
+-- | Parse a JSON array
+-- | Parse a single JSON string character
+jsonStringChar :: TTermDefinition (Parser Int)
+jsonStringChar = define "jsonStringChar" $
+  doc "Parse a single character in a JSON string (handling escapes)" $
+  Parsers.alt @@
+    -- Escape sequence
+    (Parsers.bind @@ (Parsers.char @@ backslashCode) @@ (constant $
+      jsonEscapeChar)) @@
+    -- Regular character (not quote or backslash)
+    (Parsers.satisfy @@ ("c" ~>
+      Logic.and
+        (Logic.not $ Equality.equal (var "c") quoteCode)
+        (Logic.not $ Equality.equal (var "c") backslashCode)))
+
+-- | Parse a JSON string
 -- | Parse any JSON value
 jsonValue :: TTermDefinition (Parser J.Value)
 jsonValue = define "jsonValue" $
@@ -370,6 +362,7 @@ jsonValue = define "jsonValue" $
     jsonObject]
 
 -- | Parse a JSON document (value with optional surrounding whitespace)
+-- | Parse a JSON document (value with optional surrounding whitespace)
 parseJson :: TTermDefinition (String -> ParseResult J.Value)
 parseJson = define "parseJson" $
   doc "Parse a JSON document from a string" $
@@ -381,3 +374,27 @@ parseJson = define "parseJson" $
             Parsers.bind @@ Parsers.eof @@ (constant $
               Parsers.pure @@ var "v"))))) @@
       (var "input")
+-- | Parse a token followed by optional whitespace
+token :: TTermDefinition (Parser a -> Parser a)
+token = define "token" $
+  doc "Parse a token followed by optional whitespace" $
+  "p" ~>
+    Parsers.bind @@ var "p" @@ ("x" ~>
+      Parsers.bind @@ whitespace @@ (constant $
+        Parsers.pure @@ var "x"))
+
+-- | Parse JSON null
+-- | Parse zero or more whitespace characters
+whitespace :: TTermDefinition (Parser ())
+whitespace = define "whitespace" $
+  doc "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)" $
+  Parsers.map @@ (constant unit) @@
+    (Parsers.many @@
+      (Parsers.satisfy @@ ("c" ~>
+        Logic.ors (list [
+          Equality.equal (var "c") spaceCode,
+          Equality.equal (var "c") tabCode,
+          Equality.equal (var "c") newlineCode,
+          Equality.equal (var "c") returnCode]))))
+
+-- | Parse a token followed by optional whitespace
