@@ -147,7 +147,7 @@
                             "argument": {"variable": "cx"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "hydra.constants.key_freshTypeVariableCount"},
+                                "argument": {"variable": "hydra.constants.keyFreshTypeVariableCount"},
                                 "function": {"variable": "hydra.annotations.getCount"}}}}},
                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                     "body": {
@@ -174,7 +174,7 @@
                                                 "function": {"variable": "hydra.lib.math.add"}}}}},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.constants.key_freshTypeVariableCount"},
+                                            "argument": {"variable": "hydra.constants.keyFreshTypeVariableCount"},
                                             "function": {"variable": "hydra.annotations.putCount"}}}}}}}}},
                             "type": {"variable": "hydra.core.Name"}}},
                         "type": {"variable": "hydra.context.Context"}}}}},

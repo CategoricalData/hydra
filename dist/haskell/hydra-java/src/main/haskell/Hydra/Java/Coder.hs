@@ -61,7 +61,7 @@ analyzeJavaFunction env term cx g = Analysis.analyzeFunctionTerm cx javaEnvGetGr
 annotateBodyWithCod :: Core.Type -> Core.Term -> Core.Term
 annotateBodyWithCod typ term =
 
-      let setAnn = \t -> Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ typ)) t
+      let setAnn = \t -> Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ typ)) t
       in case (Strip.deannotateTerm term) of
         Core.TermTypeApplication _ -> setAnn term
         Core.TermApplication v0 ->
@@ -108,9 +108,9 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
         let inner = Core.annotatedTermBody v0
             ann = Core.annotatedTermAnnotation v0
             ann_ =
-                    Maybes.cases (Maps.lookup Constants.key_type ann) ann (\typeTerm -> Eithers.either (\_ -> ann) (\t ->
+                    Maybes.cases (Maps.lookup Constants.keyType ann) ann (\typeTerm -> Eithers.either (\_ -> ann) (\t ->
                       let t_ = substituteTypeVarsWithTypes subst t
-                      in (Maps.insert Constants.key_type (EncodeCore.type_ t_) ann)) (DecodeCore.type_ cx typeTerm))
+                      in (Maps.insert Constants.keyType (EncodeCore.type_ t_) ann)) (DecodeCore.type_ cx typeTerm))
         in (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (applyOvergenSubstToTermAnnotations_go subst cx inner),
           Core.annotatedTermAnnotation = ann_}))
@@ -332,7 +332,7 @@ buildSubstFromAnnotations_go schemeVarSet g term =
             anns = Core.annotatedTermAnnotation v0
             bodySubst = buildSubstFromAnnotations_go schemeVarSet g body
             annSubst =
-                    Maybes.cases (Maps.lookup Constants.key_type anns) Maps.empty (\typeTerm -> Eithers.either (\_ -> Maps.empty) (\annType -> case (Strip.deannotateTerm body) of
+                    Maybes.cases (Maps.lookup Constants.keyType anns) Maps.empty (\typeTerm -> Eithers.either (\_ -> Maps.empty) (\annType -> case (Strip.deannotateTerm body) of
                       Core.TermLambda v1 -> Maybes.cases (Core.lambdaDomain v1) Maps.empty (\dom -> case (Strip.deannotateType annType) of
                         Core.TypeFunction v2 -> buildTypeVarSubst schemeVarSet (Core.functionTypeDomain v2) dom
                         _ -> Maps.empty)
@@ -1339,7 +1339,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                       _ -> Nothing)
                 encodeWithType =
                         \branchType -> \t1 ->
-                          let annotated = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ branchType)) t1
+                          let annotated = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ branchType)) t1
                           in (encodeTermInternal env anns [] annotated cx g)
                 eitherCall =
                         \methodName -> \expr -> Maybes.cases mtargs (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier methodName) [
@@ -1411,7 +1411,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                           in (Maybes.cases mftyp (encode (Core.fieldTerm fld)) (\ftyp ->
                             let resolvedType = Maybes.cases mTypeSubst ftyp (\subst -> applySubstFull subst ftyp)
                                 annotatedFieldTerm =
-                                        Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ resolvedType)) (Core.fieldTerm fld)
+                                        Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ resolvedType)) (Core.fieldTerm fld)
                             in (encodeTermInternal env anns [] annotatedFieldTerm cx g))))
             in (Eithers.bind (Eithers.mapList encodeField (Core.recordFields v0)) (\fieldExprs ->
               let consId = Utils.nameToJavaName aliases recName
@@ -1432,7 +1432,7 @@ encodeTermInternal env anns tyapps term cx g0 =
           in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp ->
             let annotatedBody =
                     Maybes.cases mtyp (Core.typeLambdaBody v0) (\t -> case t of
-                      Core.TypeForall v1 -> Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ (Core.forallTypeBody v1))) (Core.typeLambdaBody v0)
+                      Core.TypeForall v1 -> Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ (Core.forallTypeBody v1))) (Core.typeLambdaBody v0)
                       _ -> Core.typeLambdaBody v0)
             in (encodeTerm env2 annotatedBody cx g))))
         Core.TermInject v0 ->
@@ -1480,7 +1480,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                       let eitherTargs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs
                           encodeEitherBranch =
                                   \branchType -> \t1 ->
-                                    let annotated = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ branchType)) t1
+                                    let annotated = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ branchType)) t1
                                     in (encodeTermInternal env anns [] annotated cx g)
                       in (Eithers.either (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.first eitherBranchTypes) term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") eitherTargs [
                         expr])))) (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.second eitherBranchTypes) term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") eitherTargs [
@@ -2192,7 +2192,7 @@ peelExpectedTypes subst n t =
 propagateType :: Core.Type -> Core.Term -> Core.Term
 propagateType typ term =
 
-      let setTypeAnn = \t -> Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ typ)) t
+      let setTypeAnn = \t -> Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ typ)) t
       in case (Strip.deannotateTerm term) of
         Core.TermLambda _ ->
           let annotated = setTypeAnn term
@@ -2217,7 +2217,7 @@ propagateType typ term =
                                       Core.TypeFunction (Core.FunctionType {
                                         Core.functionTypeDomain = dom,
                                         Core.functionTypeCodomain = typ})
-                          in (Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ ft)) fun)
+                          in (Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ ft)) fun)
                         _ -> fun
           in (setTypeAnn (Core.TermApplication (Core.Application {
             Core.applicationFunction = annotatedFun,
@@ -2260,7 +2260,7 @@ propagateTypesInAppChain fixedCod resultType t =
                     Lists.foldl (\c -> \d -> Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = d,
                       Core.functionTypeCodomain = c})) bodyRetType (Lists.reverse lambdaDoms)
-            annotatedFun = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ funType)) fun
+            annotatedFun = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ funType)) fun
         in (rebuildApps annotatedFun args funType)) (case (Strip.deannotateTerm t) of
         Core.TermApplication v0 ->
           let lhs = Core.applicationFunction v0
@@ -2273,12 +2273,12 @@ propagateTypesInAppChain fixedCod resultType t =
                                       Core.TypeFunction (Core.FunctionType {
                                         Core.functionTypeDomain = dom,
                                         Core.functionTypeCodomain = fixedCod})
-                          in (Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ ft)) lhs)
+                          in (Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ ft)) lhs)
                         _ -> lhs
-          in (Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ resultType)) (Core.TermApplication (Core.Application {
+          in (Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ resultType)) (Core.TermApplication (Core.Application {
             Core.applicationFunction = annotatedLhs,
             Core.applicationArgument = rhs})))
-        _ -> Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ resultType)) t))
+        _ -> Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ resultType)) t))
 rebuildApps :: Core.Term -> [Core.Term] -> Core.Type -> Core.Term
 rebuildApps f args fType =
     Logic.ifElse (Lists.null args) f (case (Strip.deannotateType fType) of
@@ -2290,7 +2290,7 @@ rebuildApps f args fType =
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = f,
                       Core.applicationArgument = arg})
-            annotatedApp = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ remainingType)) app
+            annotatedApp = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ remainingType)) app
         in (rebuildApps annotatedApp rest remainingType)) (Lists.uncons args))
       _ -> Lists.foldl (\acc -> \a -> Core.TermApplication (Core.Application {
         Core.applicationFunction = acc,
@@ -2605,7 +2605,7 @@ toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings na
           value = Core.bindingTerm binding
       in (Eithers.bind (Maybes.cases (Core.bindingTypeScheme binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeBody ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
         let id = Utils.variableToJavaIdentifier name
-            annotatedValue = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ typ)) value
+            annotatedValue = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ typ)) value
         in (Eithers.bind (encodeTerm envExt annotatedValue cx g) (\rhs -> Logic.ifElse (Sets.member name recursiveVars) (Right (Syntax.BlockStatementStatement (Utils.javaMethodInvocationToJavaStatement (Utils.methodInvocation (Just (Left (Syntax.ExpressionName {
           Syntax.expressionNameQualifier = Nothing,
           Syntax.expressionNameIdentifier = id}))) (Syntax.Identifier JavaNames.setMethodName) [
@@ -2629,7 +2629,7 @@ tryInferFunctionType funTerm =
       Core.TermLambda v0 -> Maybes.bind (Core.lambdaDomain v0) (\dom ->
         let mCod =
                 case (Core.lambdaBody v0) of
-                  Core.TermAnnotated v1 -> Maybes.bind (Maps.lookup Constants.key_type (Core.annotatedTermAnnotation v1)) (\typeTerm -> decodeTypeFromTerm typeTerm)
+                  Core.TermAnnotated v1 -> Maybes.bind (Maps.lookup Constants.keyType (Core.annotatedTermAnnotation v1)) (\typeTerm -> decodeTypeFromTerm typeTerm)
                   Core.TermLambda _ -> tryInferFunctionType (Core.lambdaBody v0)
                   _ -> Nothing
         in (Maybes.map (\cod -> Core.TypeFunction (Core.FunctionType {
@@ -2639,7 +2639,7 @@ tryInferFunctionType funTerm =
 typeAppFallbackCast :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 typeAppFallbackCast env aliases anns tyapps jatyp body typ cx g =
 
-      let annotatedBody = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ typ)) body
+      let annotatedBody = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ typ)) body
       in (Eithers.bind (encodeTermInternal env anns (Lists.cons jatyp tyapps) annotatedBody cx g) (\jbody -> Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression jbody)))))))
 typeAppNullaryOrHoisted :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Core.Name -> JavaEnvironment.JavaSymbolClass -> [Core.Type] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName cls allTypeArgs cx g =

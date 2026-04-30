@@ -37,19 +37,19 @@
 (defn annotation-bindings []
   (list
     ;; hydra.constants
-    (vector "hydra.constants.key_classes"
+    (vector "hydra.constants.keyClasses"
           (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                         (list :literal (list :string "classes")))))
-    (vector "hydra.constants.key_description"
+    (vector "hydra.constants.keyDescription"
           (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                         (list :literal (list :string "description")))))
-    (vector "hydra.constants.key_type"
+    (vector "hydra.constants.keyType"
           (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                         (list :literal (list :string "type")))))
-    (vector "hydra.constants.key_debugId"
+    (vector "hydra.constants.keyDebugId"
           (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                         (list :literal (list :string "debugId")))))
-    (vector "hydra.constants.key_firstClassType"
+    (vector "hydra.constants.keyFirstClassType"
           (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                         (list :literal (list :string "firstClassType")))))
 
@@ -133,11 +133,11 @@
                                 (t-field "annotation" (t-var "anns"))))))))))))
 
     ;; hydra.annotations.setTermDescription = \d ->
-    ;;   setTermAnnotation(key_description, maybes.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
+    ;;   setTermAnnotation(keyDescription, maybes.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
     (vector "hydra.annotations.setTermDescription"
           (t-lam "d"
             (t-app (t-app (t-var "hydra.annotations.setTermAnnotation")
-              (t-var "hydra.constants.key_description"))
+              (t-var "hydra.constants.keyDescription"))
               (t-app (t-app (t-prim "hydra.lib.maybes.map")
                 (t-lam "s"
                   (t-inject "hydra.core.Term" "literal"
@@ -156,7 +156,7 @@
     ;; hydra.annotations.getDescription = \cx -> \g -> \anns ->
     ;;   maybe(right(nothing),
     ;;         \descTerm -> match Term { literal(\lit -> match Literal { string(\s -> right(just(s))) }) },
-    ;;         maps.lookup(key_description, anns))
+    ;;         maps.lookup(keyDescription, anns))
     (vector "hydra.annotations.getDescription"
           (t-lam "cx"
             (t-lam "g"
@@ -179,9 +179,9 @@
                                     (t-right (list :maybe (t-var "s"))))))
                               (t-var "lit")))))
                       (t-var "descTerm"))))
-                  ;; maps.lookup(key_description, anns)
+                  ;; maps.lookup(keyDescription, anns)
                   (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                    (t-var "hydra.constants.key_description"))
+                    (t-var "hydra.constants.keyDescription"))
                     (t-var "anns")))))))
 
     ;; hydra.annotations.getTermDescription = \cx -> \g -> \term ->

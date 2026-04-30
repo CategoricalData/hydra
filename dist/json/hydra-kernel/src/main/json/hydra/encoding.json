@@ -4348,7 +4348,7 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
                                                                                                                                       "pair": {
-                                                                                                                                        "first": {"variable": "hydra.constants.key_type"},
+                                                                                                                                        "first": {"variable": "hydra.constants.keyType"},
                                                                                                                                         "second": {"variable": "schemaTerm"}}},
                                                                                                                                     "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                 "type": {"variable": "hydra.core.Term"}}}]},
