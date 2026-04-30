@@ -34,7 +34,7 @@
     "hydra.pegasus.pdl": "39b990488de238f7a18f58cb4e1f549e2d0346feb044098478d45431b989e3a3",
     "hydra.pegasus.serde": "fff077b60c5cc5f02542b9899c3aea628e2f9f4830629afe8cf51b4de7de14ef",
     "hydra.protobuf.any": "49877f328f921e8dc844d79cfca1434725c0facdc5641146e7d26ab3ce08b090",
-    "hydra.protobuf.coder": "629534c3da7eba7fbe12db2eedebdb4d4b3d7b9bce5c48f3ed9f99bfcb947629",
+    "hydra.protobuf.coder": "ccc64184cf5d5525b12818a5290dbf1a1b41055f9c99410ec45eb0d069406e0b",
     "hydra.protobuf.environment": "56611edb46d8e65faab51fcbc000c0ca617d2c54b22ae48faaf86c6bb976b811",
     "hydra.protobuf.proto3": "13453e8c4b1a33e9c3afcc7a9c4e40e04ab9152e283c3e1ec437e57757c8eb58",
     "hydra.protobuf.serde": "272ce0f4ff85d061be3e95cc52650a8fda22fc4b9437c864a8cfed574fd6104c",
