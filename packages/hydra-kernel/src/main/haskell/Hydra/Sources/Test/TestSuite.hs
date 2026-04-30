@@ -67,6 +67,7 @@ import qualified Hydra.Sources.Test.Substitution as Substitution
 import qualified Hydra.Sources.Test.Unification as Unification
 import qualified Hydra.Sources.Test.Validate.All as ValidateAll
 import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
+import qualified Hydra.Sources.Test.Validate.Packaging as ValidatePackaging
 import qualified Hydra.Sources.Test.Variables as Variables
 
 
@@ -165,4 +166,4 @@ testSuiteModules =
    -- Substitution and unification tests
    Substitution.module_, Unification.module_,
    -- Validation tests
-   ValidateAll.module_, ValidateCore.module_]
+   ValidateAll.module_, ValidateCore.module_, ValidatePackaging.module_]
