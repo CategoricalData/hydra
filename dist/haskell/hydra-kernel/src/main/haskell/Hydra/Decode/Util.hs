@@ -58,13 +58,15 @@ precision cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int32 value")
-                          _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "bits",
+                        (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int32 value")
+                            _ -> Left (Errors.DecodingError "expected int32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

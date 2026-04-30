@@ -2218,19 +2218,21 @@ allTests =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermPair (Core.TermCases (Core.CaseStatement {
-                        Core.caseStatementTypeName = (Core.Name "Optional"),
-                        Core.caseStatementDefault = Nothing,
-                        Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                              Core.lambdaParameter = (Core.Name "y"),
-                              Core.lambdaDomain = Nothing,
-                              Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))),
+                      Core.bindingTerm = (Core.TermPair (
+                        Core.TermCases (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.Name "Optional"),
+                          Core.caseStatementDefault = Nothing,
+                          Core.caseStatementCases = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "just"),
+                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "y"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "nothing"),
+                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}),
+                        (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
@@ -2267,19 +2269,21 @@ allTests =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermCases (Core.CaseStatement {
-                        Core.caseStatementTypeName = (Core.Name "Optional"),
-                        Core.caseStatementDefault = Nothing,
-                        Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                              Core.lambdaParameter = (Core.Name "y"),
-                              Core.lambdaDomain = Nothing,
-                              Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                      Core.bindingTerm = (Core.TermPair (
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                        (Core.TermCases (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.Name "Optional"),
+                          Core.caseStatementDefault = Nothing,
+                          Core.caseStatementCases = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "just"),
+                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "y"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "nothing"),
+                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {

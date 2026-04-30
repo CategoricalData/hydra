@@ -70,12 +70,16 @@ allTests =
               Testing.testCaseWithMetadataName = "binary tree",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\cs -> Strings.cat2 "left(" (Strings.cat2 (Core.list (Core.list Literals.showInt32) cs) ")")) (\xs -> Strings.cat2 "right(" (Strings.cat2 (Core.list Literals.showInt32 xs) ")")) (Sorting.topologicalSort [
-                  (3, [
-                    1,
-                    4]),
-                  (4, [
-                    6,
-                    2]),
+                  (
+                    3,
+                    [
+                      1,
+                      4]),
+                  (
+                    4,
+                    [
+                      6,
+                      2]),
                   (1, [
                     5]),
                   (2, []),
@@ -94,12 +98,16 @@ allTests =
               Testing.testCaseWithMetadataName = "two trees",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\cs -> Strings.cat2 "left(" (Strings.cat2 (Core.list (Core.list Literals.showInt32) cs) ")")) (\xs -> Strings.cat2 "right(" (Strings.cat2 (Core.list Literals.showInt32 xs) ")")) (Sorting.topologicalSort [
-                  (3, [
-                    1,
-                    4]),
-                  (5, [
-                    6,
-                    2]),
+                  (
+                    3,
+                    [
+                      1,
+                      4]),
+                  (
+                    5,
+                    [
+                      6,
+                      2]),
                   (2, [
                     7]),
                   (1, []),
@@ -120,9 +128,11 @@ allTests =
               Testing.testCaseWithMetadataName = "diamond DAG",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\cs -> Strings.cat2 "left(" (Strings.cat2 (Core.list (Core.list Literals.showInt32) cs) ")")) (\xs -> Strings.cat2 "right(" (Strings.cat2 (Core.list Literals.showInt32 xs) ")")) (Sorting.topologicalSort [
-                  (1, [
-                    3,
-                    4]),
+                  (
+                    1,
+                    [
+                      3,
+                      4]),
                   (3, [
                     2]),
                   (4, [
@@ -160,9 +170,11 @@ allTests =
                     3]),
                   (3, [
                     2]),
-                  (2, [
-                    3,
-                    4]),
+                  (
+                    2,
+                    [
+                      3,
+                      4]),
                   (4, [
                     5]),
                   (5, [])])),
@@ -242,9 +254,11 @@ allTests =
               Testing.testCaseWithMetadataName = "multiple-element component",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Core.list (Core.list Literals.showInt32) (Sorting.topologicalSortComponents [
-                  (2, [
-                    1,
-                    3]),
+                  (
+                    2,
+                    [
+                      1,
+                      3]),
                   (1, [
                     3]),
                   (3, [])])),
@@ -356,9 +370,11 @@ allTests =
               Testing.testCaseWithMetadataName = "complex cycles",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Core.list (Core.list Literals.showInt32) (Sorting.topologicalSortComponents [
-                  (1, [
-                    2,
-                    3]),
+                  (
+                    1,
+                    [
+                      2,
+                      3]),
                   (2, [
                     3]),
                   (3, [
@@ -374,18 +390,22 @@ allTests =
               Testing.testCaseWithMetadataName = "chain of three SCCs",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Core.list (Core.list Literals.showInt32) (Sorting.topologicalSortComponents [
-                  (1, [
-                    2,
-                    10]),
+                  (
+                    1,
+                    [
+                      2,
+                      10]),
                   (2, [
                     3]),
                   (3, [
                     1]),
                   (10, [
                     20]),
-                  (20, [
-                    100,
-                    10]),
+                  (
+                    20,
+                    [
+                      100,
+                      10]),
                   (100, [])])),
                 Testing.universalTestCaseExpected = (Core.list (Core.list Literals.showInt32) [
                   [
@@ -403,23 +423,29 @@ allTests =
               Testing.testCaseWithMetadataName = "SCCs with dependencies to/from non-SCC nodes",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Core.list (Core.list Literals.showInt32) (Sorting.topologicalSortComponents [
-                  (1, [
-                    2,
-                    3,
-                    10]),
+                  (
+                    1,
+                    [
+                      2,
+                      3,
+                      10]),
                   (2, [
                     3]),
                   (3, [
                     1]),
-                  (10, [
-                    20,
-                    30]),
+                  (
+                    10,
+                    [
+                      20,
+                      30]),
                   (20, [
                     30]),
                   (30, []),
-                  (100, [
-                    200,
-                    2]),
+                  (
+                    100,
+                    [
+                      200,
+                      2]),
                   (200, []),
                   (300, [
                     100]),

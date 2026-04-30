@@ -219,17 +219,21 @@ allTests =
                     Testing.TestCaseWithMetadata {
                       Testing.testCaseWithMetadataName = "projection in a tuple",
                       Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                        Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "ETA ERROR: " "failed") (\result -> ShowCore.term result) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermProject (Core.Projection {
-                          Core.projectionTypeName = TestTypes.testTypePersonName,
-                          Core.projectionField = (Core.Name "firstName")}), (Core.TermLiteral (Core.LiteralString "default")))))),
-                        Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "v1"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermProject (Core.Projection {
-                              Core.projectionTypeName = TestTypes.testTypePersonName,
-                              Core.projectionField = (Core.Name "firstName")})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}), (Core.TermLiteral (Core.LiteralString "default")))))})),
+                        Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "ETA ERROR: " "failed") (\result -> ShowCore.term result) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+                          Core.TermProject (Core.Projection {
+                            Core.projectionTypeName = TestTypes.testTypePersonName,
+                            Core.projectionField = (Core.Name "firstName")}),
+                          (Core.TermLiteral (Core.LiteralString "default")))))),
+                        Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                          Core.TermLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "v1"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermProject (Core.Projection {
+                                Core.projectionTypeName = TestTypes.testTypePersonName,
+                                Core.projectionField = (Core.Name "firstName")})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}),
+                          (Core.TermLiteral (Core.LiteralString "default")))))})),
                       Testing.testCaseWithMetadataDescription = Nothing,
                       Testing.testCaseWithMetadataTags = []},
                     Testing.TestCaseWithMetadata {

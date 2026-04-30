@@ -274,9 +274,11 @@ typeOfCaseStatement cx tx typeArgs cs =
           in (Eithers.bind fcodsResult (\fcodsR ->
             let fcods = Pairs.first fcodsR
                 cods = Maybes.cat (Lists.cons tdflt (Lists.map Maybes.pure fcods))
-            in (Eithers.bind (checkSameType cx3 tx "case branches" cods) (\cod -> Right (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
-              Core.functionTypeCodomain = cod}), cx3)))))))))
+            in (Eithers.bind (checkSameType cx3 tx "case branches" cods) (\cod -> Right (
+              Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
+                Core.functionTypeCodomain = cod}),
+              cx3)))))))))
 -- | Reconstruct the type of an either value (Either/Context version)
 typeOfEither :: Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Context.Context)
 typeOfEither cx tx typeArgs et =
@@ -297,14 +299,18 @@ typeOfEither cx tx typeArgs et =
           in (Logic.ifElse (Equality.equal n 2) (Eithers.either (\leftTerm -> Eithers.bind (typeOf cx tx [] leftTerm) (\result ->
             let leftType = Pairs.first result
                 cx2 = Pairs.second result
-            in (Right (Core.TypeEither (Core.EitherType {
-              Core.eitherTypeLeft = leftType,
-              Core.eitherTypeRight = ta1}), cx2)))) (\rightTerm -> Eithers.bind (typeOf cx tx [] rightTerm) (\result ->
+            in (Right (
+              Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = leftType,
+                Core.eitherTypeRight = ta1}),
+              cx2)))) (\rightTerm -> Eithers.bind (typeOf cx tx [] rightTerm) (\result ->
             let rightType = Pairs.first result
                 cx2 = Pairs.second result
-            in (Right (Core.TypeEither (Core.EitherType {
-              Core.eitherTypeLeft = ta0,
-              Core.eitherTypeRight = rightType}), cx2)))) et) arityErr)) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs))
+            in (Right (
+              Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = ta0,
+                Core.eitherTypeRight = rightType}),
+              cx2)))) et) arityErr)) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs))
 -- | Reconstruct the type of a union injection (Either/Context version)
 typeOfInjection :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Injection -> Either Errors.Error (Core.Type, Context.Context)
 typeOfInjection cx tx typeArgs injection =
@@ -340,9 +346,11 @@ typeOfLambda cx tx typeArgs l =
           Graph.graphTypeVariables = (Graph.graphTypeVariables tx)}) [] body) (\codResult ->
           let cod = Pairs.first codResult
               cx2 = Pairs.second codResult
-          in (Right (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = dom,
-            Core.functionTypeCodomain = cod}), cx2))))) mdom) (\tbodyResult ->
+          in (Right (
+            Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = dom,
+              Core.functionTypeCodomain = cod}),
+            cx2))))) mdom) (\tbodyResult ->
         let tbody = Pairs.first tbodyResult
             cx3 = Pairs.second tbodyResult
         in (Eithers.bind (applyTypeArgumentsToType cx3 tx typeArgs tbody) (\applied -> Right (applied, cx3)))))
@@ -421,9 +429,11 @@ typeOfMap cx tx typeArgs m =
         let ta0 = Pairs.first uc0
         in (Maybes.maybe mapArityErr (\uc1 ->
           let ta1 = Pairs.first uc1
-          in (Right (Core.TypeMap (Core.MapType {
-            Core.mapTypeKeys = ta0,
-            Core.mapTypeValues = ta1}), cx))) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs)) mapArityErr) (
+          in (Right (
+            Core.TypeMap (Core.MapType {
+              Core.mapTypeKeys = ta0,
+              Core.mapTypeValues = ta1}),
+            cx))) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs)) mapArityErr) (
         let pairs = Maps.toList m
             keyFoldResult =
                     Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
@@ -486,9 +496,11 @@ typeOfPair cx tx typeArgs p =
           in (Eithers.bind (typeOf cx2 tx [] pairSnd) (\result2 ->
             let secondType = Pairs.first result2
                 cx3 = Pairs.second result2
-            in (Right (Core.TypePair (Core.PairType {
-              Core.pairTypeFirst = firstType,
-              Core.pairTypeSecond = secondType}), cx3))))))) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
+            in (Right (
+              Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = firstType,
+                Core.pairTypeSecond = secondType}),
+              cx3))))))) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
         Checking.typeArityMismatchErrorType = (Core.TypePair (Core.PairType {
           Core.pairTypeFirst = Core.TypeUnit,
           Core.pairTypeSecond = Core.TypeUnit})),
@@ -522,9 +534,11 @@ typeOfProjection cx tx typeArgs p =
         in (Eithers.bind (ExtractCore.recordType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp ->
           let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
               sftyp = Substitution.substInType subst ftyp
-          in (Right (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
-            Core.functionTypeCodomain = sftyp}), cx2)))))))
+          in (Right (
+            Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
+              Core.functionTypeCodomain = sftyp}),
+            cx2)))))))
 -- | Reconstruct the type of a record (Either/Context version)
 typeOfRecord :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Record -> Either Errors.Error (Core.Type, Context.Context)
 typeOfRecord cx tx typeArgs record =
@@ -613,9 +627,11 @@ typeOfUnwrap cx tx typeArgs tname =
       in (Eithers.bind (ExtractCore.wrappedType tname sbody) (\wrapped ->
         let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
             swrapped = Substitution.substInType subst wrapped
-        in (Right (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
-          Core.functionTypeCodomain = swrapped}), cx2)))))
+        in (Right (
+          Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
+            Core.functionTypeCodomain = swrapped}),
+          cx2)))))
 -- | Reconstruct the type of a variable (Either/Context version)
 typeOfVariable :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either Errors.Error (Core.Type, Context.Context)
 typeOfVariable cx tx typeArgs name =

@@ -26,19 +26,43 @@ checkingError cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "incorrectUnification", (\input -> Eithers.map (\t -> Checking.CheckingErrorIncorrectUnification t) (incorrectUnificationError cx input))),
-                      (Core.Name "notAForallType", (\input -> Eithers.map (\t -> Checking.CheckingErrorNotAForallType t) (notAForallTypeError cx input))),
-                      (Core.Name "notAFunctionType", (\input -> Eithers.map (\t -> Checking.CheckingErrorNotAFunctionType t) (notAFunctionTypeError cx input))),
+                      (
+                        Core.Name "incorrectUnification",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorIncorrectUnification t) (incorrectUnificationError cx input))),
+                      (
+                        Core.Name "notAForallType",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorNotAForallType t) (notAForallTypeError cx input))),
+                      (
+                        Core.Name "notAFunctionType",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorNotAFunctionType t) (notAFunctionTypeError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Checking.CheckingErrorOther t) (otherCheckingError cx input))),
-                      (Core.Name "typeArityMismatch", (\input -> Eithers.map (\t -> Checking.CheckingErrorTypeArityMismatch t) (typeArityMismatchError cx input))),
-                      (Core.Name "typeMismatch", (\input -> Eithers.map (\t -> Checking.CheckingErrorTypeMismatch t) (typeMismatchError cx input))),
-                      (Core.Name "unboundTypeVariables", (\input -> Eithers.map (\t -> Checking.CheckingErrorUnboundTypeVariables t) (unboundTypeVariablesError cx input))),
-                      (Core.Name "undefinedTermVariable", (\input -> Eithers.map (\t -> Checking.CheckingErrorUndefinedTermVariable t) (undefinedTermVariableCheckingError cx input))),
-                      (Core.Name "unequalTypes", (\input -> Eithers.map (\t -> Checking.CheckingErrorUnequalTypes t) (unequalTypesError cx input))),
-                      (Core.Name "unsupportedTermVariant", (\input -> Eithers.map (\t -> Checking.CheckingErrorUnsupportedTermVariant t) (unsupportedTermVariantError cx input))),
-                      (Core.Name "untypedLambda", (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedLambda t) (untypedLambdaError cx input))),
-                      (Core.Name "untypedLetBinding", (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedLetBinding t) (untypedLetBindingError cx input))),
-                      (Core.Name "untypedTermVariable", (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedTermVariable t) (untypedTermVariableCheckingError cx input)))]
+                      (
+                        Core.Name "typeArityMismatch",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorTypeArityMismatch t) (typeArityMismatchError cx input))),
+                      (
+                        Core.Name "typeMismatch",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorTypeMismatch t) (typeMismatchError cx input))),
+                      (
+                        Core.Name "unboundTypeVariables",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUnboundTypeVariables t) (unboundTypeVariablesError cx input))),
+                      (
+                        Core.Name "undefinedTermVariable",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUndefinedTermVariable t) (undefinedTermVariableCheckingError cx input))),
+                      (
+                        Core.Name "unequalTypes",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUnequalTypes t) (unequalTypesError cx input))),
+                      (
+                        Core.Name "unsupportedTermVariant",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUnsupportedTermVariant t) (unsupportedTermVariantError cx input))),
+                      (
+                        Core.Name "untypedLambda",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedLambda t) (untypedLambdaError cx input))),
+                      (
+                        Core.Name "untypedLetBinding",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedLetBinding t) (untypedLetBindingError cx input))),
+                      (
+                        Core.Name "untypedTermVariable",
+                        (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedTermVariable t) (untypedTermVariableCheckingError cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
