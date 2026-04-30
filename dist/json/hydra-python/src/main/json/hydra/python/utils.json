@@ -3788,7 +3788,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "tyexpr"},
-                                                    "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                                    "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                                 "function": {"variable": "hydra.serialization.printExpr"}}},
                                             "function": {"variable": "hydra.python.utils.doubleQuotedString"}}},
                                         "typeScheme": {
@@ -4053,7 +4053,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "tyexpr"},
-                                                    "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                                    "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                                 "function": {"variable": "hydra.serialization.printExpr"}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                         "body": {

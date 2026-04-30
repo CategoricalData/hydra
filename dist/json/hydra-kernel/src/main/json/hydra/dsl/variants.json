@@ -14,36 +14,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.EliminationVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.EliminationVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "record"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "record"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.EliminationVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.EliminationVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -59,36 +44,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.EliminationVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.EliminationVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "union"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "union"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.EliminationVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.EliminationVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -104,36 +74,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.EliminationVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.EliminationVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "wrap"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrap"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.EliminationVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.EliminationVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -149,36 +104,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.FunctionVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.FunctionVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "elimination"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "elimination"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.FunctionVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.FunctionVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -194,36 +134,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.FunctionVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.FunctionVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "lambda"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lambda"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.FunctionVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.FunctionVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -239,36 +164,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "binary"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "binary"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.LiteralVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -284,36 +194,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "boolean"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boolean"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.LiteralVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -329,36 +224,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "decimal"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decimal"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.LiteralVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -374,36 +254,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "float"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.LiteralVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -419,36 +284,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "integer"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "integer"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.LiteralVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -464,36 +314,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "string"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.LiteralVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -509,36 +344,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "annotated"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "annotated"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -554,36 +374,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "application"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "application"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -599,36 +404,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "cases"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "cases"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -644,36 +434,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "either"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "either"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -689,36 +464,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "inject"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "inject"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -734,36 +494,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "lambda"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lambda"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -779,36 +524,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "let"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "let"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -824,36 +554,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "list"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "list"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -869,36 +584,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "literal"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "literal"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -914,36 +614,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "map"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "map"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -959,36 +644,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "maybe"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybe"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1004,36 +674,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "pair"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pair"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1049,36 +704,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "project"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "project"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1094,36 +734,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "record"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "record"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1139,36 +764,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "set"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "set"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1184,36 +794,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "typeApplication"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeApplication"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1229,36 +824,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "typeLambda"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeLambda"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1274,36 +854,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "unit"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unit"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1319,36 +884,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "unwrap"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unwrap"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1364,36 +914,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "variable"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "variable"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1409,36 +944,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "wrap"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrap"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TermVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1454,36 +974,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "annotated"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "annotated"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1499,36 +1004,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "application"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "application"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1544,36 +1034,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "either"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "either"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1589,36 +1064,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "forall"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "forall"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1634,36 +1094,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "function"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "function"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1679,36 +1124,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "list"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "list"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1724,36 +1154,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "literal"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "literal"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1769,36 +1184,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "map"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "map"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1814,36 +1214,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "maybe"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybe"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1859,36 +1244,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "pair"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pair"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1904,36 +1274,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "record"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "record"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1949,36 +1304,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "set"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "set"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -1994,36 +1334,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "union"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "union"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -2039,36 +1364,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "unit"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unit"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -2084,36 +1394,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "variable"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "variable"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -2129,36 +1424,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "void"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "void"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}},
     {
       "term": {
@@ -2174,36 +1454,21 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.variants.TypeVariant"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "field",
                           "term": {
                             "record": {
                               "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "wrap"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
+                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrap"}}, "typeName": "hydra.core.Name"}}},
+                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}}],
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "typeScheme": {
           "body": {
-            "application": {
-              "argument": {"variable": "hydra.variants.TypeVariant"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
   "description": "DSL functions for hydra.variants",
   "namespace": "hydra.dsl.variants",

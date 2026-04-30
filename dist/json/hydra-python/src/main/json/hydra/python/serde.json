@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.python.serde.encodeAnnotatedRhs",
+        "name": "hydra.python.serde.annotatedRhsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -36,7 +36,7 @@
                                                 "argument": {"variable": "ses"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.python.serde.encodeStarExpression"},
+                                                    "argument": {"variable": "hydra.python.serde.starExpressionToExpr"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -72,7 +72,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAnnotatedStatement",
+        "name": "hydra.python.serde.annotatedStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -122,7 +122,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "stmt"},
-                                "function": {"variable": "hydra.python.serde.encodeStatement"}}}]},
+                                "function": {"variable": "hydra.python.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.AnnotatedStatement"},
                 "parameter": "as_"}}}},
@@ -134,7 +134,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAnnotation",
+        "name": "hydra.python.serde.annotationToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -157,7 +157,7 @@
                               "application": {
                                 "argument": {"variable": "ann"},
                                 "function": {"unwrap": "hydra.python.syntax.Annotation"}}},
-                            "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                            "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.Annotation"},
                 "parameter": "ann"}}}},
@@ -169,7 +169,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeArgs",
+        "name": "hydra.python.serde.argsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -224,7 +224,7 @@
                                     "argument": {"variable": "pos"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodePosArg"},
+                                        "argument": {"variable": "hydra.python.serde.posArgToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -237,7 +237,7 @@
                                     "argument": {"variable": "ks"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeKwargOrStarred"},
+                                        "argument": {"variable": "hydra.python.serde.kwargOrStarredToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -250,7 +250,7 @@
                                     "argument": {"variable": "kss"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeKwargOrDoubleStarred"},
+                                        "argument": {"variable": "hydra.python.serde.kwargOrDoubleStarredToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -262,10 +262,7 @@
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.lists.concat"},
                                 "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "hydra.serialization.inlineStyle"},
-                            "function": {"variable": "hydra.serialization.commaSep"}}}}}}},
+                        "function": {"variable": "hydra.serialization.commaSepAdaptive"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Args"},
                 "parameter": "args"}}}},
         "typeScheme": {
@@ -276,7 +273,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAssignment",
+        "name": "hydra.python.serde.assignmentToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -298,7 +295,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "t"},
-                                    "function": {"variable": "hydra.python.serde.encodeTypedAssignment"}}},
+                                    "function": {"variable": "hydra.python.serde.typedAssignmentToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.TypedAssignment"},
                                 "parameter": "t"}}},
                           {
@@ -308,7 +305,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "u"},
-                                    "function": {"variable": "hydra.python.serde.encodeUntypedAssignment"}}},
+                                    "function": {"variable": "hydra.python.serde.untypedAssignmentToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.UntypedAssignment"},
                                 "parameter": "u"}}},
                           {
@@ -332,7 +329,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAssignmentExpression",
+        "name": "hydra.python.serde.assignmentExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -374,7 +371,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "name"},
-                                "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": ":="}},
@@ -382,7 +379,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "expr"},
-                                "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.AssignmentExpression"},
                 "parameter": "ae"}}}},
@@ -394,7 +391,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAtom",
+        "name": "hydra.python.serde.atomToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -417,7 +414,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "d"},
-                                    "function": {"variable": "hydra.python.serde.encodeDict"}}},
+                                    "function": {"variable": "hydra.python.serde.dictToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Dict"},
                                 "parameter": "d"}}},
                           {
@@ -467,7 +464,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "g"},
-                                    "function": {"variable": "hydra.python.serde.encodeGroup"}}},
+                                    "function": {"variable": "hydra.python.serde.groupToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Group"},
                                 "parameter": "g"}}},
                           {
@@ -477,7 +474,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "l"},
-                                    "function": {"variable": "hydra.python.serde.encodeList"}}},
+                                    "function": {"variable": "hydra.python.serde.listToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.List"},
                                 "parameter": "l"}}},
                           {
@@ -497,7 +494,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "n"},
-                                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Name"},
                                 "parameter": "n"}}},
                           {
@@ -517,7 +514,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "n"},
-                                    "function": {"variable": "hydra.python.serde.encodeNumber"}}},
+                                    "function": {"variable": "hydra.python.serde.numberToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Number"},
                                 "parameter": "n"}}},
                           {
@@ -527,7 +524,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.python.serde.encodeSet"}}},
+                                    "function": {"variable": "hydra.python.serde.setToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Set"},
                                 "parameter": "s"}}},
                           {
@@ -547,7 +544,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.python.serde.encodeString"}}},
+                                    "function": {"variable": "hydra.python.serde.stringToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.String"},
                                 "parameter": "s"}}},
                           {
@@ -567,7 +564,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "t"},
-                                    "function": {"variable": "hydra.python.serde.encodeTuple"}}},
+                                    "function": {"variable": "hydra.python.serde.tupleToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Tuple"},
                                 "parameter": "t"}}}],
                         "typeName": "hydra.python.syntax.Atom"}}}},
@@ -581,7 +578,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAttribute",
+        "name": "hydra.python.serde.attributeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -600,7 +597,7 @@
                             "function": {"unwrap": "hydra.python.syntax.Attribute"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeName"},
+                            "argument": {"variable": "hydra.python.serde.nameToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -619,7 +616,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeAwaitPrimary",
+        "name": "hydra.python.serde.awaitPrimaryToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -652,7 +649,7 @@
                         "argument": {
                           "application": {
                             "argument": {"variable": "primary"},
-                            "function": {"variable": "hydra.python.serde.encodePrimary"}}},
+                            "function": {"variable": "hydra.python.serde.primaryToExpr"}}},
                         "function": {
                           "application": {
                             "argument": {
@@ -666,7 +663,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "primary"},
-                                        "function": {"variable": "hydra.python.serde.encodePrimary"}}}]},
+                                        "function": {"variable": "hydra.python.serde.primaryToExpr"}}}]},
                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
                             "function": {
                               "application": {
@@ -685,7 +682,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeBitwiseAnd",
+        "name": "hydra.python.serde.bitwiseAndToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -737,7 +734,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "l"},
-                                                        "function": {"variable": "hydra.python.serde.encodeBitwiseAnd"}}},
+                                                        "function": {"variable": "hydra.python.serde.bitwiseAndToExpr"}}},
                                                     {
                                                       "application": {
                                                         "argument": {"literal": {"string": "&"}},
@@ -756,7 +753,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "rhs"},
-                                      "function": {"variable": "hydra.python.serde.encodeShiftExpression"}}}}]},
+                                      "function": {"variable": "hydra.python.serde.shiftExpressionToExpr"}}}}]},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.cat"},
@@ -772,7 +769,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeBitwiseOr",
+        "name": "hydra.python.serde.bitwiseOrToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -824,7 +821,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "l"},
-                                                        "function": {"variable": "hydra.python.serde.encodeBitwiseOr"}}},
+                                                        "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}},
                                                     {
                                                       "application": {
                                                         "argument": {"literal": {"string": "|"}},
@@ -843,7 +840,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "rhs"},
-                                      "function": {"variable": "hydra.python.serde.encodeBitwiseXor"}}}}]},
+                                      "function": {"variable": "hydra.python.serde.bitwiseXorToExpr"}}}}]},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.cat"},
@@ -859,7 +856,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeBitwiseXor",
+        "name": "hydra.python.serde.bitwiseXorToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -911,7 +908,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "l"},
-                                                        "function": {"variable": "hydra.python.serde.encodeBitwiseXor"}}},
+                                                        "function": {"variable": "hydra.python.serde.bitwiseXorToExpr"}}},
                                                     {
                                                       "application": {
                                                         "argument": {"literal": {"string": "^"}},
@@ -930,7 +927,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "rhs"},
-                                      "function": {"variable": "hydra.python.serde.encodeBitwiseAnd"}}}}]},
+                                      "function": {"variable": "hydra.python.serde.bitwiseAndToExpr"}}}}]},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.cat"},
@@ -946,7 +943,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeBlock",
+        "name": "hydra.python.serde.blockToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -981,7 +978,7 @@
                                                         "argument": {"variable": "stmts"},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.python.serde.encodeStatement"},
+                                                            "argument": {"variable": "hydra.python.serde.statementToExpr"},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -1013,7 +1010,7 @@
                                         "argument": {"variable": "ss"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.python.serde.encodeSimpleStatement"},
+                                            "argument": {"variable": "hydra.python.serde.simpleStatementToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -1035,7 +1032,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeCapturePattern",
+        "name": "hydra.python.serde.capturePatternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1050,7 +1047,7 @@
                       "application": {
                         "argument": {"variable": "cp"},
                         "function": {"unwrap": "hydra.python.syntax.CapturePattern"}}},
-                    "function": {"variable": "hydra.python.serde.encodePatternCaptureTarget"}}},
+                    "function": {"variable": "hydra.python.serde.patternCaptureTargetToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.CapturePattern"},
                 "parameter": "cp"}}}},
         "typeScheme": {
@@ -1061,7 +1058,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeCaseBlock",
+        "name": "hydra.python.serde.caseBlockToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1124,13 +1121,13 @@
                                                   "maybe": {
                                                     "application": {
                                                       "argument": {"variable": "patterns"},
-                                                      "function": {"variable": "hydra.python.serde.encodePatterns"}}}},
+                                                      "function": {"variable": "hydra.python.serde.patternsToExpr"}}}},
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "guard"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.python.serde.encodeGuard"},
+                                                        "argument": {"variable": "hydra.python.serde.guardToExpr"},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
@@ -1151,7 +1148,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "body"},
-                                "function": {"variable": "hydra.python.serde.encodeBlock"}}}]},
+                                "function": {"variable": "hydra.python.serde.blockToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.CaseBlock"},
                 "parameter": "cb"}}}},
@@ -1163,7 +1160,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeClassDefinition",
+        "name": "hydra.python.serde.classDefinitionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1235,7 +1232,7 @@
                                             {
                                               "application": {
                                                 "argument": {"variable": "a"},
-                                                "function": {"variable": "hydra.python.serde.encodeArgs"}}},
+                                                "function": {"variable": "hydra.python.serde.argsToExpr"}}},
                                             {
                                               "application": {
                                                 "argument": {"literal": {"string": ")"}},
@@ -1262,7 +1259,7 @@
                                     "argument": {"variable": "decs"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeDecorators"},
+                                        "argument": {"variable": "hydra.python.serde.decoratorsToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -1289,7 +1286,7 @@
                                                         {
                                                           "application": {
                                                             "argument": {"variable": "name"},
-                                                            "function": {"variable": "hydra.python.serde.encodeName"}}}]},
+                                                            "function": {"variable": "hydra.python.serde.nameToExpr"}}}]},
                                                     "function": {"variable": "hydra.serialization.spaceSep"}}}},
                                               {"variable": "argPart"},
                                               {
@@ -1306,7 +1303,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "body"},
-                                      "function": {"variable": "hydra.python.serde.encodeBlock"}}}}]},
+                                      "function": {"variable": "hydra.python.serde.blockToExpr"}}}}]},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.cat"},
@@ -1322,7 +1319,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeClassPattern",
+        "name": "hydra.python.serde.classPatternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1380,7 +1377,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "noa"},
-                                      "function": {"variable": "hydra.python.serde.encodeNameOrAttribute"}}}},
+                                      "function": {"variable": "hydra.python.serde.nameOrAttributeToExpr"}}}},
                                 {
                                   "maybe": {
                                     "application": {
@@ -1391,7 +1388,7 @@
                                     "argument": {"variable": "pos"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodePositionalPatterns"},
+                                        "argument": {"variable": "hydra.python.serde.positionalPatternsToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -1404,7 +1401,7 @@
                                     "argument": {"variable": "kw"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeKeywordPatterns"},
+                                        "argument": {"variable": "hydra.python.serde.keywordPatternsToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -1432,7 +1429,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeClosedPattern",
+        "name": "hydra.python.serde.closedPatternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1464,7 +1461,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "c"},
-                                    "function": {"variable": "hydra.python.serde.encodeCapturePattern"}}},
+                                    "function": {"variable": "hydra.python.serde.capturePatternToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.CapturePattern"},
                                 "parameter": "c"}}},
                           {
@@ -1484,7 +1481,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "v"},
-                                    "function": {"variable": "hydra.python.serde.encodeValuePattern"}}},
+                                    "function": {"variable": "hydra.python.serde.valuePatternToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ValuePattern"},
                                 "parameter": "v"}}},
                           {
@@ -1524,7 +1521,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "c"},
-                                    "function": {"variable": "hydra.python.serde.encodeClassPattern"}}},
+                                    "function": {"variable": "hydra.python.serde.classPatternToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ClassPattern"},
                                 "parameter": "c"}}}],
                         "typeName": "hydra.python.syntax.ClosedPattern"}}}},
@@ -1538,7 +1535,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeComparison",
+        "name": "hydra.python.serde.comparisonToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1554,7 +1551,7 @@
                         "argument": {"variable": "cmp"},
                         "function": {
                           "project": {"field": "lhs", "typeName": "hydra.python.syntax.Comparison"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeBitwiseOr"}}},
+                    "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.Comparison"},
                 "parameter": "cmp"}}}},
         "typeScheme": {
@@ -1565,7 +1562,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeCompoundStatement",
+        "name": "hydra.python.serde.compoundStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1588,7 +1585,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "f"},
-                                    "function": {"variable": "hydra.python.serde.encodeFunctionDefinition"}}},
+                                    "function": {"variable": "hydra.python.serde.functionDefinitionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.FunctionDefinition"},
                                 "parameter": "f"}}},
                           {
@@ -1608,7 +1605,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "c"},
-                                    "function": {"variable": "hydra.python.serde.encodeClassDefinition"}}},
+                                    "function": {"variable": "hydra.python.serde.classDefinitionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ClassDefinition"},
                                 "parameter": "c"}}},
                           {
@@ -1648,7 +1645,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "w"},
-                                    "function": {"variable": "hydra.python.serde.encodeWhileStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.whileStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.WhileStatement"},
                                 "parameter": "w"}}},
                           {
@@ -1658,7 +1655,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "m"},
-                                    "function": {"variable": "hydra.python.serde.encodeMatchStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.matchStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.MatchStatement"},
                                 "parameter": "m"}}}],
                         "typeName": "hydra.python.syntax.CompoundStatement"}}}},
@@ -1672,7 +1669,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeConditional",
+        "name": "hydra.python.serde.conditionalToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1722,7 +1719,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "body"},
-                                "function": {"variable": "hydra.python.serde.encodeDisjunction"}}},
+                                "function": {"variable": "hydra.python.serde.disjunctionToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "if"}},
@@ -1730,7 +1727,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "cond"},
-                                "function": {"variable": "hydra.python.serde.encodeDisjunction"}}},
+                                "function": {"variable": "hydra.python.serde.disjunctionToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "else"}},
@@ -1738,7 +1735,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "elseExpr"},
-                                "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Conditional"},
                 "parameter": "c"}}}},
@@ -1750,7 +1747,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeConjunction",
+        "name": "hydra.python.serde.conjunctionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1769,7 +1766,7 @@
                             "function": {"unwrap": "hydra.python.syntax.Conjunction"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeInversion"},
+                            "argument": {"variable": "hydra.python.serde.inversionToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -1794,7 +1791,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeDecorators",
+        "name": "hydra.python.serde.decoratorsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1826,7 +1823,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "ne"},
-                                            "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}}]},
+                                            "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.NamedExpression"},
                                 "parameter": "ne"}},
@@ -1848,7 +1845,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeDict",
+        "name": "hydra.python.serde.dictToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1867,7 +1864,7 @@
                             "function": {"unwrap": "hydra.python.syntax.Dict"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeDoubleStarredKvpair"},
+                            "argument": {"variable": "hydra.python.serde.doubleStarredKvpairToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -1893,7 +1890,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeDisjunction",
+        "name": "hydra.python.serde.disjunctionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1912,7 +1909,7 @@
                             "function": {"unwrap": "hydra.python.syntax.Disjunction"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeConjunction"},
+                            "argument": {"variable": "hydra.python.serde.conjunctionToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -1937,7 +1934,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeDottedAsName",
+        "name": "hydra.python.serde.dottedAsNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -1979,7 +1976,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "name"},
-                                      "function": {"variable": "hydra.python.serde.encodeDottedName"}}}},
+                                      "function": {"variable": "hydra.python.serde.dottedNameToExpr"}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "alias"},
@@ -1998,7 +1995,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "a"},
-                                                        "function": {"variable": "hydra.python.serde.encodeName"}}}]},
+                                                        "function": {"variable": "hydra.python.serde.nameToExpr"}}}]},
                                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
                                             "domain": {"variable": "hydra.python.syntax.Name"},
                                             "parameter": "a"}},
@@ -2024,7 +2021,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeDottedName",
+        "name": "hydra.python.serde.dottedNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2076,7 +2073,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeDoubleStarredKvpair",
+        "name": "hydra.python.serde.doubleStarredKvpairToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2098,7 +2095,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "p"},
-                                    "function": {"variable": "hydra.python.serde.encodeKvpair"}}},
+                                    "function": {"variable": "hydra.python.serde.kvpairToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Kvpair"},
                                 "parameter": "p"}}},
                           {
@@ -2116,7 +2113,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "e"},
-                                            "function": {"variable": "hydra.python.serde.encodeBitwiseOr"}}}]},
+                                            "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.BitwiseOr"},
                                 "parameter": "e"}}}],
@@ -2131,7 +2128,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeExpression",
+        "name": "hydra.python.serde.expressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2153,7 +2150,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "d"},
-                                    "function": {"variable": "hydra.python.serde.encodeDisjunction"}}},
+                                    "function": {"variable": "hydra.python.serde.disjunctionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Disjunction"},
                                 "parameter": "d"}}},
                           {
@@ -2163,7 +2160,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "c"},
-                                    "function": {"variable": "hydra.python.serde.encodeConditional"}}},
+                                    "function": {"variable": "hydra.python.serde.conditionalToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Conditional"},
                                 "parameter": "c"}}},
                           {
@@ -2173,7 +2170,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "l"},
-                                    "function": {"variable": "hydra.python.serde.encodeLambda"}}},
+                                    "function": {"variable": "hydra.python.serde.lambdaToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Lambda"},
                                 "parameter": "l"}}}],
                         "typeName": "hydra.python.syntax.Expression"}}}},
@@ -2187,7 +2184,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeFactor",
+        "name": "hydra.python.serde.factorToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2217,7 +2214,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "inner"},
-                                            "function": {"variable": "hydra.python.serde.encodeFactor"}}}]},
+                                            "function": {"variable": "hydra.python.serde.factorToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Factor"},
                                 "parameter": "inner"}}},
@@ -2236,7 +2233,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "inner"},
-                                            "function": {"variable": "hydra.python.serde.encodeFactor"}}}]},
+                                            "function": {"variable": "hydra.python.serde.factorToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Factor"},
                                 "parameter": "inner"}}},
@@ -2255,7 +2252,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "inner"},
-                                            "function": {"variable": "hydra.python.serde.encodeFactor"}}}]},
+                                            "function": {"variable": "hydra.python.serde.factorToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Factor"},
                                 "parameter": "inner"}}},
@@ -2266,7 +2263,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "p"},
-                                    "function": {"variable": "hydra.python.serde.encodePower"}}},
+                                    "function": {"variable": "hydra.python.serde.powerToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Power"},
                                 "parameter": "p"}}}],
                         "typeName": "hydra.python.syntax.Factor"}}}},
@@ -2280,7 +2277,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeFunctionDefRaw",
+        "name": "hydra.python.serde.functionDefRawToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2383,7 +2380,7 @@
                                       "argument": {"variable": "tparams"},
                                       "function": {
                                         "application": {
-                                          "argument": {"variable": "hydra.python.serde.encodeTypeParameter"},
+                                          "argument": {"variable": "hydra.python.serde.typeParameterToExpr"},
                                           "function": {
                                             "typeApplication": {
                                               "body": {
@@ -2420,7 +2417,7 @@
                             "argument": {"variable": "params"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "hydra.python.serde.encodeParameters"},
+                                "argument": {"variable": "hydra.python.serde.parametersToExpr"},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
@@ -2449,7 +2446,7 @@
                                             {
                                               "application": {
                                                 "argument": {"variable": "t"},
-                                                "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                                "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}},
                                     "domain": {"variable": "hydra.python.syntax.Expression"},
                                     "parameter": "t"}},
@@ -2492,7 +2489,7 @@
                                                                 "maybe": {
                                                                   "application": {
                                                                     "argument": {"variable": "name"},
-                                                                    "function": {"variable": "hydra.python.serde.encodeName"}}}},
+                                                                    "function": {"variable": "hydra.python.serde.nameToExpr"}}}},
                                                               {"variable": "tparamPart"},
                                                               {
                                                                 "maybe": {
@@ -2524,7 +2521,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "block"},
-                                "function": {"variable": "hydra.python.serde.encodeBlock"}}}]},
+                                "function": {"variable": "hydra.python.serde.blockToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.FunctionDefRaw"},
                 "parameter": "fdr"}}}},
@@ -2536,7 +2533,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeFunctionDefinition",
+        "name": "hydra.python.serde.functionDefinitionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2581,7 +2578,7 @@
                                     "argument": {"variable": "decs"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeDecorators"},
+                                        "argument": {"variable": "hydra.python.serde.decoratorsToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -2593,7 +2590,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "raw"},
-                                      "function": {"variable": "hydra.python.serde.encodeFunctionDefRaw"}}}}]},
+                                      "function": {"variable": "hydra.python.serde.functionDefRawToExpr"}}}}]},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.cat"},
@@ -2609,7 +2606,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeGroup",
+        "name": "hydra.python.serde.groupToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2631,7 +2628,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "ne"},
-                                    "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.NamedExpression"},
                                 "parameter": "ne"}}},
                           {
@@ -2655,7 +2652,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeGuard",
+        "name": "hydra.python.serde.guardToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2678,7 +2675,7 @@
                               "application": {
                                 "argument": {"variable": "g"},
                                 "function": {"unwrap": "hydra.python.syntax.Guard"}}},
-                            "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}}]},
+                            "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                 "domain": {"variable": "hydra.python.syntax.Guard"},
                 "parameter": "g"}}}},
@@ -2690,7 +2687,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeImportFrom",
+        "name": "hydra.python.serde.importFromToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2753,7 +2750,7 @@
                                                       "maybe": {
                                                         "application": {
                                                           "argument": {"variable": "p"},
-                                                          "function": {"variable": "hydra.python.serde.encodeRelativeImportPrefix"}}}},
+                                                          "function": {"variable": "hydra.python.serde.relativeImportPrefixToExpr"}}}},
                                                     "domain": {"variable": "hydra.python.syntax.RelativeImportPrefix"},
                                                     "parameter": "p"}},
                                                 "function": {
@@ -2770,7 +2767,7 @@
                                                 "argument": {"variable": "name"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.python.serde.encodeDottedName"},
+                                                    "argument": {"variable": "hydra.python.serde.dottedNameToExpr"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -2804,7 +2801,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "targets"},
-                                "function": {"variable": "hydra.python.serde.encodeImportFromTargets"}}}]},
+                                "function": {"variable": "hydra.python.serde.importFromTargetsToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.ImportFrom"},
                 "parameter": "if_"}}}},
@@ -2816,7 +2813,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeImportFromAsName",
+        "name": "hydra.python.serde.importFromAsNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2860,7 +2857,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "name"},
-                                            "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                            "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                                         {
                                           "application": {
                                             "argument": {"literal": {"string": "as"}},
@@ -2868,7 +2865,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "a"},
-                                            "function": {"variable": "hydra.python.serde.encodeName"}}}]},
+                                            "function": {"variable": "hydra.python.serde.nameToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Name"},
                                 "parameter": "a"}},
@@ -2877,7 +2874,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "name"},
-                                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
@@ -2895,7 +2892,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeImportFromTargets",
+        "name": "hydra.python.serde.importFromTargetsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -2921,7 +2918,7 @@
                                         "argument": {"variable": "names"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.python.serde.encodeImportFromAsName"},
+                                            "argument": {"variable": "hydra.python.serde.importFromAsNameToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -2954,7 +2951,7 @@
                                                 "argument": {"variable": "names"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.python.serde.encodeImportFromAsName"},
+                                                    "argument": {"variable": "hydra.python.serde.importFromAsNameToExpr"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -2994,7 +2991,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeImportName",
+        "name": "hydra.python.serde.importNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3021,7 +3018,7 @@
                                     "function": {"unwrap": "hydra.python.syntax.ImportName"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.python.serde.encodeDottedAsName"},
+                                    "argument": {"variable": "hydra.python.serde.dottedAsNameToExpr"},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -3044,7 +3041,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeImportStatement",
+        "name": "hydra.python.serde.importStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3066,7 +3063,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "n"},
-                                    "function": {"variable": "hydra.python.serde.encodeImportName"}}},
+                                    "function": {"variable": "hydra.python.serde.importNameToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ImportName"},
                                 "parameter": "n"}}},
                           {
@@ -3076,7 +3073,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "f"},
-                                    "function": {"variable": "hydra.python.serde.encodeImportFrom"}}},
+                                    "function": {"variable": "hydra.python.serde.importFromToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ImportFrom"},
                                 "parameter": "f"}}}],
                         "typeName": "hydra.python.syntax.ImportStatement"}}}},
@@ -3090,7 +3087,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeInversion",
+        "name": "hydra.python.serde.inversionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3120,7 +3117,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "other"},
-                                            "function": {"variable": "hydra.python.serde.encodeInversion"}}}]},
+                                            "function": {"variable": "hydra.python.serde.inversionToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Inversion"},
                                 "parameter": "other"}}},
@@ -3131,7 +3128,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "c"},
-                                    "function": {"variable": "hydra.python.serde.encodeComparison"}}},
+                                    "function": {"variable": "hydra.python.serde.comparisonToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Comparison"},
                                 "parameter": "c"}}}],
                         "typeName": "hydra.python.syntax.Inversion"}}}},
@@ -3145,7 +3142,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeKeywordPattern",
+        "name": "hydra.python.serde.keywordPatternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3180,7 +3177,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "name"},
-                                "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "="}},
@@ -3188,7 +3185,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "pat"},
-                                "function": {"variable": "hydra.python.serde.encodePattern"}}}]},
+                                "function": {"variable": "hydra.python.serde.patternToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.KeywordPattern"},
                 "parameter": "kp"}}}},
@@ -3200,7 +3197,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeKeywordPatterns",
+        "name": "hydra.python.serde.keywordPatternsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3219,7 +3216,7 @@
                             "function": {"unwrap": "hydra.python.syntax.KeywordPatterns"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeKeywordPattern"},
+                            "argument": {"variable": "hydra.python.serde.keywordPatternToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -3241,7 +3238,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeKvpair",
+        "name": "hydra.python.serde.kvpairToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3284,7 +3281,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "k"},
-                                        "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                        "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                     {
                                       "application": {
                                         "argument": {"literal": {"string": ":"}},
@@ -3293,7 +3290,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "v"},
-                                "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Kvpair"},
                 "parameter": "kv"}}}},
@@ -3305,7 +3302,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeKwarg",
+        "name": "hydra.python.serde.kwargToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3342,7 +3339,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "name"},
-                                "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "="}},
@@ -3350,7 +3347,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "expr"},
-                                "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Kwarg"},
                 "parameter": "k"}}}},
@@ -3362,7 +3359,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeKwargOrDoubleStarred",
+        "name": "hydra.python.serde.kwargOrDoubleStarredToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3384,7 +3381,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "k"},
-                                    "function": {"variable": "hydra.python.serde.encodeKwarg"}}},
+                                    "function": {"variable": "hydra.python.serde.kwargToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Kwarg"},
                                 "parameter": "k"}}},
                           {
@@ -3402,7 +3399,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "e"},
-                                            "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                            "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Expression"},
                                 "parameter": "e"}}}],
@@ -3417,7 +3414,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeKwargOrStarred",
+        "name": "hydra.python.serde.kwargOrStarredToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3439,7 +3436,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "k"},
-                                    "function": {"variable": "hydra.python.serde.encodeKwarg"}}},
+                                    "function": {"variable": "hydra.python.serde.kwargToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Kwarg"},
                                 "parameter": "k"}}},
                           {
@@ -3449,7 +3446,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "se"},
-                                    "function": {"variable": "hydra.python.serde.encodeStarredExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.starredExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.StarredExpression"},
                                 "parameter": "se"}}}],
                         "typeName": "hydra.python.syntax.KwargOrStarred"}}}},
@@ -3463,7 +3460,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeLambda",
+        "name": "hydra.python.serde.lambdaToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3512,7 +3509,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "params"},
-                                            "function": {"variable": "hydra.python.serde.encodeLambdaParameters"}}},
+                                            "function": {"variable": "hydra.python.serde.lambdaParametersToExpr"}}},
                                         {
                                           "application": {
                                             "argument": {"literal": {"string": ":"}},
@@ -3521,7 +3518,7 @@
                                 {
                                   "application": {
                                     "argument": {"variable": "body"},
-                                    "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                    "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"variable": "hydra.serialization.parens"}}}}},
                 "domain": {"variable": "hydra.python.syntax.Lambda"},
@@ -3534,7 +3531,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeLambdaParamNoDefault",
+        "name": "hydra.python.serde.lambdaParamNoDefaultToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3550,7 +3547,7 @@
                       "application": {
                         "argument": {"variable": "p"},
                         "function": {"unwrap": "hydra.python.syntax.LambdaParamNoDefault"}}},
-                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.LambdaParamNoDefault"},
                 "parameter": "p"}}}},
         "typeScheme": {
@@ -3561,7 +3558,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeLambdaParameters",
+        "name": "hydra.python.serde.lambdaParametersToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3592,7 +3589,7 @@
                             "argument": {"variable": "nodef"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "hydra.python.serde.encodeLambdaParamNoDefault"},
+                                "argument": {"variable": "hydra.python.serde.lambdaParamNoDefaultToExpr"},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
@@ -3614,7 +3611,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeLambdaStarEtc",
+        "name": "hydra.python.serde.lambdaStarEtcToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3636,7 +3633,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "p"},
-                                    "function": {"variable": "hydra.python.serde.encodeLambdaParamNoDefault"}}},
+                                    "function": {"variable": "hydra.python.serde.lambdaParamNoDefaultToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.LambdaParamNoDefault"},
                                 "parameter": "p"}}},
                           {
@@ -3680,7 +3677,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeList",
+        "name": "hydra.python.serde.listToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3699,7 +3696,7 @@
                             "function": {"unwrap": "hydra.python.syntax.List"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
+                            "argument": {"variable": "hydra.python.serde.starNamedExpressionToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -3718,7 +3715,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeMatchStatement",
+        "name": "hydra.python.serde.matchStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3769,7 +3766,7 @@
                                             {
                                               "application": {
                                                 "argument": {"variable": "subj"},
-                                                "function": {"variable": "hydra.python.serde.encodeSubjectExpression"}}},
+                                                "function": {"variable": "hydra.python.serde.subjectExpressionToExpr"}}},
                                             {
                                               "application": {
                                                 "argument": {"literal": {"string": ":"}},
@@ -3783,7 +3780,7 @@
                                     "argument": {"variable": "cases"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeCaseBlock"},
+                                        "argument": {"variable": "hydra.python.serde.caseBlockToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -3803,7 +3800,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeModule",
+        "name": "hydra.python.serde.moduleToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3845,7 +3842,7 @@
                                             "argument": {"variable": "group"},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "hydra.python.serde.encodeStatement"},
+                                                "argument": {"variable": "hydra.python.serde.statementToExpr"},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
@@ -3887,7 +3884,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeName",
+        "name": "hydra.python.serde.nameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3913,7 +3910,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeNameOrAttribute",
+        "name": "hydra.python.serde.nameOrAttributeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3932,7 +3929,7 @@
                             "function": {"unwrap": "hydra.python.syntax.NameOrAttribute"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeName"},
+                            "argument": {"variable": "hydra.python.serde.nameToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -3951,7 +3948,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeNamedExpression",
+        "name": "hydra.python.serde.namedExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -3973,7 +3970,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "e"},
-                                    "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Expression"},
                                 "parameter": "e"}}},
                           {
@@ -3983,7 +3980,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "ae"},
-                                    "function": {"variable": "hydra.python.serde.encodeAssignmentExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.assignmentExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.AssignmentExpression"},
                                 "parameter": "ae"}}}],
                         "typeName": "hydra.python.syntax.NamedExpression"}}}},
@@ -3997,7 +3994,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeNumber",
+        "name": "hydra.python.serde.numberToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4052,7 +4049,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeOrPattern",
+        "name": "hydra.python.serde.orPatternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4071,7 +4068,7 @@
                             "function": {"unwrap": "hydra.python.syntax.OrPattern"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeClosedPattern"},
+                            "argument": {"variable": "hydra.python.serde.closedPatternToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -4096,7 +4093,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeParam",
+        "name": "hydra.python.serde.paramToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4136,13 +4133,13 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "name"},
-                                      "function": {"variable": "hydra.python.serde.encodeName"}}}},
+                                      "function": {"variable": "hydra.python.serde.nameToExpr"}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "ann"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeAnnotation"},
+                                        "argument": {"variable": "hydra.python.serde.annotationToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -4165,7 +4162,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeParamNoDefault",
+        "name": "hydra.python.serde.paramNoDefaultToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4181,7 +4178,7 @@
                         "argument": {"variable": "pnd"},
                         "function": {
                           "project": {"field": "param", "typeName": "hydra.python.syntax.ParamNoDefault"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeParam"}}},
+                    "function": {"variable": "hydra.python.serde.paramToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.ParamNoDefault"},
                 "parameter": "pnd"}}}},
         "typeScheme": {
@@ -4192,7 +4189,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeParamNoDefaultParameters",
+        "name": "hydra.python.serde.paramNoDefaultParametersToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4223,7 +4220,7 @@
                             "argument": {"variable": "nodef"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "hydra.python.serde.encodeParamNoDefault"},
+                                "argument": {"variable": "hydra.python.serde.paramNoDefaultToExpr"},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
@@ -4231,10 +4228,7 @@
                                         "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.python.syntax.ParamNoDefault"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "hydra.serialization.inlineStyle"},
-                            "function": {"variable": "hydra.serialization.commaSep"}}}}}}},
+                        "function": {"variable": "hydra.serialization.commaSepAdaptive"}}}}},
                 "domain": {"variable": "hydra.python.syntax.ParamNoDefaultParameters"},
                 "parameter": "pndp"}}}},
         "typeScheme": {
@@ -4245,7 +4239,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeParameters",
+        "name": "hydra.python.serde.parametersToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4267,7 +4261,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "pnd"},
-                                    "function": {"variable": "hydra.python.serde.encodeParamNoDefaultParameters"}}},
+                                    "function": {"variable": "hydra.python.serde.paramNoDefaultParametersToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ParamNoDefaultParameters"},
                                 "parameter": "pnd"}}},
                           {
@@ -4301,7 +4295,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePattern",
+        "name": "hydra.python.serde.patternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4323,7 +4317,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "op"},
-                                    "function": {"variable": "hydra.python.serde.encodeOrPattern"}}},
+                                    "function": {"variable": "hydra.python.serde.orPatternToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.OrPattern"},
                                 "parameter": "op"}}},
                           {
@@ -4347,7 +4341,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePatternCaptureTarget",
+        "name": "hydra.python.serde.patternCaptureTargetToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4362,7 +4356,7 @@
                       "application": {
                         "argument": {"variable": "pct"},
                         "function": {"unwrap": "hydra.python.syntax.PatternCaptureTarget"}}},
-                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.PatternCaptureTarget"},
                 "parameter": "pct"}}}},
         "typeScheme": {
@@ -4373,7 +4367,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePatterns",
+        "name": "hydra.python.serde.patternsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4395,7 +4389,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "p"},
-                                    "function": {"variable": "hydra.python.serde.encodePattern"}}},
+                                    "function": {"variable": "hydra.python.serde.patternToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Pattern"},
                                 "parameter": "p"}}},
                           {
@@ -4419,7 +4413,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePosArg",
+        "name": "hydra.python.serde.posArgToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4441,7 +4435,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "se"},
-                                    "function": {"variable": "hydra.python.serde.encodeStarredExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.starredExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.StarredExpression"},
                                 "parameter": "se"}}},
                           {
@@ -4451,7 +4445,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "ae"},
-                                    "function": {"variable": "hydra.python.serde.encodeAssignmentExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.assignmentExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.AssignmentExpression"},
                                 "parameter": "ae"}}},
                           {
@@ -4461,7 +4455,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "e"},
-                                    "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Expression"},
                                 "parameter": "e"}}}],
                         "typeName": "hydra.python.syntax.PosArg"}}}},
@@ -4475,7 +4469,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePositionalPatterns",
+        "name": "hydra.python.serde.positionalPatternsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4494,7 +4488,7 @@
                             "function": {"unwrap": "hydra.python.syntax.PositionalPatterns"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodePattern"},
+                            "argument": {"variable": "hydra.python.serde.patternToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -4516,7 +4510,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePower",
+        "name": "hydra.python.serde.powerToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4556,7 +4550,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "lhs"},
-                                      "function": {"variable": "hydra.python.serde.encodeAwaitPrimary"}}}},
+                                      "function": {"variable": "hydra.python.serde.awaitPrimaryToExpr"}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "rhs"},
@@ -4575,7 +4569,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "r"},
-                                                        "function": {"variable": "hydra.python.serde.encodeFactor"}}}]},
+                                                        "function": {"variable": "hydra.python.serde.factorToExpr"}}}]},
                                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
                                             "domain": {"variable": "hydra.python.syntax.Factor"},
                                             "parameter": "r"}},
@@ -4601,7 +4595,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePrimary",
+        "name": "hydra.python.serde.primaryToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4623,7 +4617,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "a"},
-                                    "function": {"variable": "hydra.python.serde.encodeAtom"}}},
+                                    "function": {"variable": "hydra.python.serde.atomToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Atom"},
                                 "parameter": "a"}}},
                           {
@@ -4633,7 +4627,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "pwr"},
-                                    "function": {"variable": "hydra.python.serde.encodePrimaryWithRhs"}}},
+                                    "function": {"variable": "hydra.python.serde.primaryWithRhsToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.PrimaryWithRhs"},
                                 "parameter": "pwr"}}}],
                         "typeName": "hydra.python.syntax.Primary"}}}},
@@ -4647,7 +4641,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePrimaryRhs",
+        "name": "hydra.python.serde.primaryRhsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4677,7 +4671,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "args"},
-                                            "function": {"variable": "hydra.python.serde.encodeArgs"}}},
+                                            "function": {"variable": "hydra.python.serde.argsToExpr"}}},
                                         {
                                           "application": {
                                             "argument": {"literal": {"string": ")"}},
@@ -4700,7 +4694,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "name"},
-                                            "function": {"variable": "hydra.python.serde.encodeName"}}}]},
+                                            "function": {"variable": "hydra.python.serde.nameToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.Name"},
                                 "parameter": "name"}}},
@@ -4719,7 +4713,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "slices"},
-                                            "function": {"variable": "hydra.python.serde.encodeSlices"}}},
+                                            "function": {"variable": "hydra.python.serde.slicesToExpr"}}},
                                         {
                                           "application": {
                                             "argument": {"literal": {"string": "]"}},
@@ -4748,7 +4742,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodePrimaryWithRhs",
+        "name": "hydra.python.serde.primaryWithRhsToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4785,11 +4779,11 @@
                             {
                               "application": {
                                 "argument": {"variable": "prim"},
-                                "function": {"variable": "hydra.python.serde.encodePrimary"}}},
+                                "function": {"variable": "hydra.python.serde.primaryToExpr"}}},
                             {
                               "application": {
                                 "argument": {"variable": "rhs"},
-                                "function": {"variable": "hydra.python.serde.encodePrimaryRhs"}}}]},
+                                "function": {"variable": "hydra.python.serde.primaryRhsToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.PrimaryWithRhs"},
                 "parameter": "pwr"}}}},
@@ -4801,7 +4795,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeRaiseExpression",
+        "name": "hydra.python.serde.raiseExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4845,7 +4839,7 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "expr"},
-                                      "function": {"variable": "hydra.python.serde.encodeExpression"}}}},
+                                      "function": {"variable": "hydra.python.serde.expressionToExpr"}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "from_"},
@@ -4864,7 +4858,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "f"},
-                                                        "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                                        "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
                                             "domain": {"variable": "hydra.python.syntax.Expression"},
                                             "parameter": "f"}},
@@ -4890,7 +4884,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeRaiseStatement",
+        "name": "hydra.python.serde.raiseStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4918,7 +4912,7 @@
                                     "function": {"unwrap": "hydra.python.syntax.RaiseStatement"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.python.serde.encodeRaiseExpression"},
+                                    "argument": {"variable": "hydra.python.serde.raiseExpressionToExpr"},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -4941,7 +4935,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeRelativeImportPrefix",
+        "name": "hydra.python.serde.relativeImportPrefixToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -4987,7 +4981,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeReturnStatement",
+        "name": "hydra.python.serde.returnStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5014,7 +5008,7 @@
                                     "function": {"unwrap": "hydra.python.syntax.ReturnStatement"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.python.serde.encodeStarExpression"},
+                                    "argument": {"variable": "hydra.python.serde.starExpressionToExpr"},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -5037,7 +5031,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSet",
+        "name": "hydra.python.serde.setToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5056,7 +5050,7 @@
                             "function": {"unwrap": "hydra.python.syntax.Set"}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
+                            "argument": {"variable": "hydra.python.serde.starNamedExpressionToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -5075,7 +5069,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeShiftExpression",
+        "name": "hydra.python.serde.shiftExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5091,7 +5085,7 @@
                         "argument": {"variable": "se"},
                         "function": {
                           "project": {"field": "rhs", "typeName": "hydra.python.syntax.ShiftExpression"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeSum"}}},
+                    "function": {"variable": "hydra.python.serde.sumToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.ShiftExpression"},
                 "parameter": "se"}}}},
         "typeScheme": {
@@ -5102,7 +5096,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSimpleStatement",
+        "name": "hydra.python.serde.simpleStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5125,7 +5119,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "a"},
-                                    "function": {"variable": "hydra.python.serde.encodeAssignment"}}},
+                                    "function": {"variable": "hydra.python.serde.assignmentToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Assignment"},
                                 "parameter": "a"}}},
                           {
@@ -5139,7 +5133,7 @@
                                         "argument": {"variable": "es"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.python.serde.encodeStarExpression"},
+                                            "argument": {"variable": "hydra.python.serde.starExpressionToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -5157,7 +5151,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "r"},
-                                    "function": {"variable": "hydra.python.serde.encodeReturnStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.returnStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ReturnStatement"},
                                 "parameter": "r"}}},
                           {
@@ -5167,7 +5161,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "r"},
-                                    "function": {"variable": "hydra.python.serde.encodeRaiseStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.raiseStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.RaiseStatement"},
                                 "parameter": "r"}}},
                           {
@@ -5207,7 +5201,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "i"},
-                                    "function": {"variable": "hydra.python.serde.encodeImportStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.importStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.ImportStatement"},
                                 "parameter": "i"}}},
                           {
@@ -5217,7 +5211,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "t"},
-                                    "function": {"variable": "hydra.python.serde.encodeTypeAlias"}}},
+                                    "function": {"variable": "hydra.python.serde.typeAliasToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.TypeAlias"},
                                 "parameter": "t"}}},
                           {
@@ -5271,7 +5265,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSimpleTypeParameter",
+        "name": "hydra.python.serde.simpleTypeParameterToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5289,7 +5283,7 @@
                           "project": {
                             "field": "name",
                             "typeName": "hydra.python.syntax.SimpleTypeParameter"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.SimpleTypeParameter"},
                 "parameter": "stp"}}}},
         "typeScheme": {
@@ -5300,7 +5294,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSingleTarget",
+        "name": "hydra.python.serde.singleTargetToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5322,7 +5316,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "n"},
-                                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Name"},
                                 "parameter": "n"}}},
                           {
@@ -5356,7 +5350,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSlice",
+        "name": "hydra.python.serde.sliceToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5378,7 +5372,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "ne"},
-                                    "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.NamedExpression"},
                                 "parameter": "ne"}}},
                           {
@@ -5402,7 +5396,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSliceOrStarredExpression",
+        "name": "hydra.python.serde.sliceOrStarredExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5424,7 +5418,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "sl"},
-                                    "function": {"variable": "hydra.python.serde.encodeSlice"}}},
+                                    "function": {"variable": "hydra.python.serde.sliceToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Slice"},
                                 "parameter": "sl"}}},
                           {
@@ -5434,7 +5428,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "se"},
-                                    "function": {"variable": "hydra.python.serde.encodeStarredExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.starredExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.StarredExpression"},
                                 "parameter": "se"}}}],
                         "typeName": "hydra.python.syntax.SliceOrStarredExpression"}}}},
@@ -5448,7 +5442,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSlices",
+        "name": "hydra.python.serde.slicesToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5487,7 +5481,7 @@
                                 "argument": {"variable": "tl"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.python.serde.encodeSliceOrStarredExpression"},
+                                    "argument": {"variable": "hydra.python.serde.sliceOrStarredExpressionToExpr"},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -5500,7 +5494,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "hd"},
-                                    "function": {"variable": "hydra.python.serde.encodeSlice"}}},
+                                    "function": {"variable": "hydra.python.serde.sliceToExpr"}}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.lists.cons"},
@@ -5519,7 +5513,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStarAtom",
+        "name": "hydra.python.serde.starAtomToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5541,7 +5535,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "n"},
-                                    "function": {"variable": "hydra.python.serde.encodeName"}}},
+                                    "function": {"variable": "hydra.python.serde.nameToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Name"},
                                 "parameter": "n"}}},
                           {
@@ -5585,7 +5579,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStarExpression",
+        "name": "hydra.python.serde.starExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5615,7 +5609,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "bor"},
-                                            "function": {"variable": "hydra.python.serde.encodeBitwiseOr"}}}]},
+                                            "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.BitwiseOr"},
                                 "parameter": "bor"}}},
@@ -5626,7 +5620,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "e"},
-                                    "function": {"variable": "hydra.python.serde.encodeExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.expressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Expression"},
                                 "parameter": "e"}}}],
                         "typeName": "hydra.python.syntax.StarExpression"}}}},
@@ -5640,7 +5634,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStarNamedExpression",
+        "name": "hydra.python.serde.starNamedExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5670,7 +5664,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "bor"},
-                                            "function": {"variable": "hydra.python.serde.encodeBitwiseOr"}}}]},
+                                            "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.BitwiseOr"},
                                 "parameter": "bor"}}},
@@ -5681,7 +5675,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "ne"},
-                                    "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.NamedExpression"},
                                 "parameter": "ne"}}}],
                         "typeName": "hydra.python.syntax.StarNamedExpression"}}}},
@@ -5695,7 +5689,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStarTarget",
+        "name": "hydra.python.serde.starTargetToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5717,7 +5711,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "t"},
-                                    "function": {"variable": "hydra.python.serde.encodeTargetWithStarAtom"}}},
+                                    "function": {"variable": "hydra.python.serde.targetWithStarAtomToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"},
                                 "parameter": "t"}}},
                           {
@@ -5735,7 +5729,7 @@
                                         {
                                           "application": {
                                             "argument": {"variable": "inner"},
-                                            "function": {"variable": "hydra.python.serde.encodeStarTarget"}}}]},
+                                            "function": {"variable": "hydra.python.serde.starTargetToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.noSep"}}},
                                 "domain": {"variable": "hydra.python.syntax.StarTarget"},
                                 "parameter": "inner"}}}],
@@ -5750,7 +5744,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStarredExpression",
+        "name": "hydra.python.serde.starredExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5773,7 +5767,7 @@
                               "application": {
                                 "argument": {"variable": "se"},
                                 "function": {"unwrap": "hydra.python.syntax.StarredExpression"}}},
-                            "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                            "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.noSep"}}},
                 "domain": {"variable": "hydra.python.syntax.StarredExpression"},
                 "parameter": "se"}}}},
@@ -5785,7 +5779,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStatement",
+        "name": "hydra.python.serde.statementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5807,7 +5801,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "a"},
-                                    "function": {"variable": "hydra.python.serde.encodeAnnotatedStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.annotatedStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.AnnotatedStatement"},
                                 "parameter": "a"}}},
                           {
@@ -5821,7 +5815,7 @@
                                         "argument": {"variable": "ss"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "hydra.python.serde.encodeSimpleStatement"},
+                                            "argument": {"variable": "hydra.python.serde.simpleStatementToExpr"},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -5839,7 +5833,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "c"},
-                                    "function": {"variable": "hydra.python.serde.encodeCompoundStatement"}}},
+                                    "function": {"variable": "hydra.python.serde.compoundStatementToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.CompoundStatement"},
                                 "parameter": "c"}}}],
                         "typeName": "hydra.python.syntax.Statement"}}}},
@@ -5853,7 +5847,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeString",
+        "name": "hydra.python.serde.stringToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5955,7 +5949,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSubjectExpression",
+        "name": "hydra.python.serde.subjectExpressionToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -5977,7 +5971,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "ne"},
-                                    "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}},
+                                    "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.NamedExpression"},
                                 "parameter": "ne"}}},
                           {
@@ -6001,7 +5995,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeSum",
+        "name": "hydra.python.serde.sumToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6016,7 +6010,7 @@
                       "application": {
                         "argument": {"variable": "s"},
                         "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Sum"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeTerm"}}},
+                    "function": {"variable": "hydra.python.serde.termToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.Sum"},
                 "parameter": "s"}}}},
         "typeScheme": {
@@ -6027,7 +6021,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTPrimary",
+        "name": "hydra.python.serde.tPrimaryToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6049,7 +6043,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "a"},
-                                    "function": {"variable": "hydra.python.serde.encodeAtom"}}},
+                                    "function": {"variable": "hydra.python.serde.atomToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.Atom"},
                                 "parameter": "a"}}},
                           {
@@ -6059,7 +6053,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "pn"},
-                                    "function": {"variable": "hydra.python.serde.encodeTPrimaryAndName"}}},
+                                    "function": {"variable": "hydra.python.serde.tPrimaryAndNameToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"},
                                 "parameter": "pn"}}},
                           {
@@ -6103,7 +6097,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTPrimaryAndName",
+        "name": "hydra.python.serde.tPrimaryAndNameToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6142,7 +6136,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "prim"},
-                                "function": {"variable": "hydra.python.serde.encodeTPrimary"}}},
+                                "function": {"variable": "hydra.python.serde.tPrimaryToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "."}},
@@ -6150,7 +6144,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "name_"},
-                                "function": {"variable": "hydra.python.serde.encodeName"}}}]},
+                                "function": {"variable": "hydra.python.serde.nameToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"},
                 "parameter": "pn"}}}},
@@ -6162,7 +6156,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTargetWithStarAtom",
+        "name": "hydra.python.serde.targetWithStarAtomToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6184,7 +6178,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "a"},
-                                    "function": {"variable": "hydra.python.serde.encodeStarAtom"}}},
+                                    "function": {"variable": "hydra.python.serde.starAtomToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.StarAtom"},
                                 "parameter": "a"}}},
                           {
@@ -6194,7 +6188,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "pn"},
-                                    "function": {"variable": "hydra.python.serde.encodeTPrimaryAndName"}}},
+                                    "function": {"variable": "hydra.python.serde.tPrimaryAndNameToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"},
                                 "parameter": "pn"}}},
                           {
@@ -6218,7 +6212,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTerm",
+        "name": "hydra.python.serde.termToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6233,7 +6227,7 @@
                       "application": {
                         "argument": {"variable": "t"},
                         "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Term"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeFactor"}}},
+                    "function": {"variable": "hydra.python.serde.factorToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.Term"},
                 "parameter": "t"}}}},
         "typeScheme": {
@@ -6244,7 +6238,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTuple",
+        "name": "hydra.python.serde.tupleToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6289,7 +6283,7 @@
                                                 "argument": {"variable": "es"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
+                                                    "argument": {"variable": "hydra.python.serde.starNamedExpressionToExpr"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -6297,10 +6291,7 @@
                                                             "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"boolean": false}},
-                                                "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                            "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                                         "function": {
                                           "application": {
                                             "argument": {
@@ -6312,7 +6303,7 @@
                                                         {
                                                           "application": {
                                                             "argument": {"variable": "firstEs"},
-                                                            "function": {"variable": "hydra.python.serde.encodeStarNamedExpression"}}},
+                                                            "function": {"variable": "hydra.python.serde.starNamedExpressionToExpr"}}},
                                                         {
                                                           "application": {
                                                             "argument": {"literal": {"string": ","}},
@@ -6359,7 +6350,7 @@
                                     "argument": {"variable": "es"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
+                                        "argument": {"variable": "hydra.python.serde.starNamedExpressionToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -6367,10 +6358,7 @@
                                                 "body": {"variable": "hydra.lib.lists.map"},
                                                 "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
                                             "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"literal": {"boolean": false}},
-                                    "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.maybes.fromMaybe"},
@@ -6385,7 +6373,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTypeAlias",
+        "name": "hydra.python.serde.typeAliasToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6437,7 +6425,7 @@
                                       "maybe": {
                                         "application": {
                                           "argument": {"variable": "name"},
-                                          "function": {"variable": "hydra.python.serde.encodeName"}}}},
+                                          "function": {"variable": "hydra.python.serde.nameToExpr"}}}},
                                     {
                                       "application": {
                                         "argument": {
@@ -6448,7 +6436,7 @@
                                                   "argument": {"variable": "tparams"},
                                                   "function": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.python.serde.encodeTypeParameter"},
+                                                      "argument": {"variable": "hydra.python.serde.typeParameterToExpr"},
                                                       "function": {
                                                         "typeApplication": {
                                                           "body": {
@@ -6499,7 +6487,7 @@
                             {
                               "application": {
                                 "argument": {"variable": "expr"},
-                                "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                                "function": {"variable": "hydra.python.serde.expressionToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.python.syntax.TypeAlias"},
                 "parameter": "ta"}}}},
@@ -6511,7 +6499,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTypeParameter",
+        "name": "hydra.python.serde.typeParameterToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6533,7 +6521,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.python.serde.encodeSimpleTypeParameter"}}},
+                                    "function": {"variable": "hydra.python.serde.simpleTypeParameterToExpr"}}},
                                 "domain": {"variable": "hydra.python.syntax.SimpleTypeParameter"},
                                 "parameter": "s"}}},
                           {
@@ -6567,7 +6555,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTypedAssignment",
+        "name": "hydra.python.serde.typedAssignmentToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6623,7 +6611,7 @@
                                           {
                                             "application": {
                                               "argument": {"variable": "lhs"},
-                                              "function": {"variable": "hydra.python.serde.encodeSingleTarget"}}},
+                                              "function": {"variable": "hydra.python.serde.singleTargetToExpr"}}},
                                           {
                                             "application": {
                                               "argument": {"literal": {"string": ":"}},
@@ -6633,13 +6621,13 @@
                                   "maybe": {
                                     "application": {
                                       "argument": {"variable": "typ"},
-                                      "function": {"variable": "hydra.python.serde.encodeExpression"}}}},
+                                      "function": {"variable": "hydra.python.serde.expressionToExpr"}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "rhs"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeAnnotatedRhs"},
+                                        "argument": {"variable": "hydra.python.serde.annotatedRhsToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -6662,7 +6650,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeUntypedAssignment",
+        "name": "hydra.python.serde.untypedAssignmentToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6707,7 +6695,7 @@
                                     "argument": {"variable": "targets"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.python.serde.encodeStarTarget"},
+                                        "argument": {"variable": "hydra.python.serde.starTargetToExpr"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -6720,7 +6708,7 @@
                                     {
                                       "application": {
                                         "argument": {"variable": "rhs"},
-                                        "function": {"variable": "hydra.python.serde.encodeAnnotatedRhs"}}}]}]},
+                                        "function": {"variable": "hydra.python.serde.annotatedRhsToExpr"}}}]}]},
                             "function": {
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.lists.concat"},
@@ -6736,7 +6724,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeValuePattern",
+        "name": "hydra.python.serde.valuePatternToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6751,7 +6739,7 @@
                       "application": {
                         "argument": {"variable": "vp"},
                         "function": {"unwrap": "hydra.python.syntax.ValuePattern"}}},
-                    "function": {"variable": "hydra.python.serde.encodeAttribute"}}},
+                    "function": {"variable": "hydra.python.serde.attributeToExpr"}}},
                 "domain": {"variable": "hydra.python.syntax.ValuePattern"},
                 "parameter": "vp"}}}},
         "typeScheme": {
@@ -6762,7 +6750,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeWhileStatement",
+        "name": "hydra.python.serde.whileStatementToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -6830,7 +6818,7 @@
                                                           {
                                                             "application": {
                                                               "argument": {"variable": "cond"},
-                                                              "function": {"variable": "hydra.python.serde.encodeNamedExpression"}}},
+                                                              "function": {"variable": "hydra.python.serde.namedExpressionToExpr"}}},
                                                           {
                                                             "application": {
                                                               "argument": {"literal": {"string": ":"}},
@@ -6840,7 +6828,7 @@
                                           {
                                             "application": {
                                               "argument": {"variable": "body"},
-                                              "function": {"variable": "hydra.python.serde.encodeBlock"}}}]},
+                                              "function": {"variable": "hydra.python.serde.blockToExpr"}}}]},
                                       "function": {"variable": "hydra.serialization.newlineSep"}}}},
                                 {
                                   "application": {
@@ -6860,7 +6848,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {"variable": "eb"},
-                                                        "function": {"variable": "hydra.python.serde.encodeBlock"}}}]},
+                                                        "function": {"variable": "hydra.python.serde.blockToExpr"}}}]},
                                                 "function": {"variable": "hydra.serialization.newlineSep"}}},
                                             "domain": {"variable": "hydra.python.syntax.Block"},
                                             "parameter": "eb"}},

@@ -419,7 +419,7 @@
                     "argument": {
                       "application": {
                         "argument": {"variable": "g"},
-                        "function": {"variable": "hydra.rdf.serde.writeGraph"}}},
+                        "function": {"variable": "hydra.rdf.serde.graphToExpr"}}},
                     "function": {"variable": "hydra.serialization.printExpr"}}},
                 "domain": {"variable": "hydra.rdf.syntax.Graph"},
                 "parameter": "g"}}}},
@@ -431,7 +431,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeBlankNode",
+        "name": "hydra.rdf.serde.blankNodeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -466,7 +466,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeGraph",
+        "name": "hydra.rdf.serde.graphToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -491,7 +491,7 @@
                                 "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
                         "function": {
                           "application": {
-                            "argument": {"variable": "hydra.rdf.serde.writeTriple"},
+                            "argument": {"variable": "hydra.rdf.serde.tripleToExpr"},
                             "function": {
                               "typeApplication": {
                                 "body": {
@@ -510,7 +510,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeIri",
+        "name": "hydra.rdf.serde.iriToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -552,7 +552,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeLanguageTag",
+        "name": "hydra.rdf.serde.languageTagToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -587,7 +587,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeLiteral",
+        "name": "hydra.rdf.serde.literalToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -649,7 +649,7 @@
                             "argument": {"variable": "lang"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "hydra.rdf.serde.writeLanguageTag"},
+                                "argument": {"variable": "hydra.rdf.serde.languageTagToExpr"},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -663,7 +663,7 @@
                                             {
                                               "application": {
                                                 "argument": {"variable": "dt"},
-                                                "function": {"variable": "hydra.rdf.serde.writeIri"}}}]},
+                                                "function": {"variable": "hydra.rdf.serde.iriToExpr"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}},
                                     "function": {
                                       "typeApplication": {
@@ -687,7 +687,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeNode",
+        "name": "hydra.rdf.serde.nodeToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -709,7 +709,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "iri"},
-                                    "function": {"variable": "hydra.rdf.serde.writeIri"}}},
+                                    "function": {"variable": "hydra.rdf.serde.iriToExpr"}}},
                                 "domain": {"variable": "hydra.rdf.syntax.Iri"},
                                 "parameter": "iri"}}},
                           {
@@ -719,7 +719,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "bnode"},
-                                    "function": {"variable": "hydra.rdf.serde.writeBlankNode"}}},
+                                    "function": {"variable": "hydra.rdf.serde.blankNodeToExpr"}}},
                                 "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
                                 "parameter": "bnode"}}},
                           {
@@ -729,7 +729,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "lit"},
-                                    "function": {"variable": "hydra.rdf.serde.writeLiteral"}}},
+                                    "function": {"variable": "hydra.rdf.serde.literalToExpr"}}},
                                 "domain": {"variable": "hydra.rdf.syntax.Literal"},
                                 "parameter": "lit"}}}],
                         "typeName": "hydra.rdf.syntax.Node"}}}},
@@ -743,7 +743,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeResource",
+        "name": "hydra.rdf.serde.resourceToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -765,7 +765,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "iri"},
-                                    "function": {"variable": "hydra.rdf.serde.writeIri"}}},
+                                    "function": {"variable": "hydra.rdf.serde.iriToExpr"}}},
                                 "domain": {"variable": "hydra.rdf.syntax.Iri"},
                                 "parameter": "iri"}}},
                           {
@@ -775,7 +775,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "bnode"},
-                                    "function": {"variable": "hydra.rdf.serde.writeBlankNode"}}},
+                                    "function": {"variable": "hydra.rdf.serde.blankNodeToExpr"}}},
                                 "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
                                 "parameter": "bnode"}}}],
                         "typeName": "hydra.rdf.syntax.Resource"}}}},
@@ -789,7 +789,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.serde.writeTriple",
+        "name": "hydra.rdf.serde.tripleToExpr",
         "term": {
           "annotated": {
             "annotation": [
@@ -832,15 +832,15 @@
                             {
                               "application": {
                                 "argument": {"variable": "subj"},
-                                "function": {"variable": "hydra.rdf.serde.writeResource"}}},
+                                "function": {"variable": "hydra.rdf.serde.resourceToExpr"}}},
                             {
                               "application": {
                                 "argument": {"variable": "pred"},
-                                "function": {"variable": "hydra.rdf.serde.writeIri"}}},
+                                "function": {"variable": "hydra.rdf.serde.iriToExpr"}}},
                             {
                               "application": {
                                 "argument": {"variable": "obj"},
-                                "function": {"variable": "hydra.rdf.serde.writeNode"}}},
+                                "function": {"variable": "hydra.rdf.serde.nodeToExpr"}}},
                             {
                               "application": {
                                 "argument": {"literal": {"string": "."}},
