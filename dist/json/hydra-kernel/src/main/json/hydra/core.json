@@ -6,33 +6,21 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A term together with an annotation"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A term together with an annotation"}}}],
               "body": {
                 "record": [
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The term being annotated"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The term being annotated"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "annotation",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The annotation as a map from keys to values"}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"variable": "hydra.core.Name"},
-                            "values": {"variable": "hydra.core.Term"}}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The annotation as a map from keys to values"}}}],
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -40,33 +28,21 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type together with an annotation"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A type together with an annotation"}}}],
               "body": {
                 "record": [
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type being annotated"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type being annotated"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "annotation",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The annotation as a map from keys to values"}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"variable": "hydra.core.Name"},
-                            "values": {"variable": "hydra.core.Term"}}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The annotation as a map from keys to values"}}}],
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -74,30 +50,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A term which applies a function to an argument"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A term which applies a function to an argument"}}}],
               "body": {
                 "record": [
                   {
                     "name": "function",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The left-hand side of the application"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the application"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "argument",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The right-hand side of the application"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the application"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}},
     {
@@ -106,30 +72,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "The type-level analog of an application term"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The type-level analog of an application term"}}}],
               "body": {
                 "record": [
                   {
                     "name": "function",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The left-hand side of the application"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the application"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "argument",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The right-hand side of the application"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the application"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -141,37 +97,26 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A field with an optional type scheme, used to bind variables to terms in a 'let' expression"}}}],
+                  "value": {"literal": {"string": "A field with an optional type scheme, used to bind variables to terms in a 'let' expression"}}}],
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the bound variable"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the bound variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "term",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The term to which the variable is bound"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The term to which the variable is bound"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "typeScheme",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The optional type scheme of the bound term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The optional type scheme of the bound term"}}}],
                         "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
           "variables": []}}},
     {
@@ -180,20 +125,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A union elimination; a case statement"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A union elimination; a case statement"}}}],
               "body": {
                 "record": [
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the union type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "default",
@@ -202,19 +141,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "An optional default case, used if none of the explicit cases match"}}}],
+                            "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}],
                         "body": {"maybe": {"variable": "hydra.core.Term"}}}}},
                   {
                     "name": "cases",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A list of case alternatives, one per union field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A list of case alternatives, one per union field"}}}],
                         "body": {"list": {"variable": "hydra.core.Field"}}}}}]}}},
           "variables": []}}},
     {
@@ -226,28 +159,20 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A type which provides a choice between a 'left' type and a 'right' type"}}}],
+                  "value": {"literal": {"string": "A type which provides a choice between a 'left' type and a 'right' type"}}}],
               "body": {
                 "record": [
                   {
                     "name": "left",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The 'left' alternative"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The 'left' alternative"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "right",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The 'right' alternative"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The 'right' alternative"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -256,30 +181,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A type which pairs a 'first' type and a 'second' type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A type which pairs a 'first' type and a 'second' type"}}}],
               "body": {
                 "record": [
                   {
                     "name": "first",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The first component of the pair"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "second",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The second component of the pair"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -288,29 +203,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A name/term pair"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A name/term pair"}}}],
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the field"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "term",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The term value of the field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The term value of the field"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}},
     {
@@ -319,29 +225,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A name/type pair"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A name/type pair"}}}],
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the field"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "type",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of the field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the field"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -350,38 +247,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A floating-point type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A floating-point type"}}}],
               "body": {
                 "union": [
                   {
                     "name": "bigfloat",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An arbitrary-precision floating-point type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision floating-point type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "float32",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 32-bit floating-point type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 32-bit floating-point type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "float64",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 64-bit floating-point type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit floating-point type"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
@@ -390,38 +275,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A floating-point literal value"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A floating-point literal value"}}}],
               "body": {
                 "union": [
                   {
                     "name": "bigfloat",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An arbitrary-precision floating-point value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision floating-point value"}}}],
                         "body": {"literal": {"float": {"bigfloat": {}}}}}}},
                   {
                     "name": "float32",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 32-bit floating-point value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 32-bit floating-point value"}}}],
                         "body": {"literal": {"float": {"float32": {}}}}}}},
                   {
                     "name": "float64",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 64-bit floating-point value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit floating-point value"}}}],
                         "body": {"literal": {"float": {"float64": {}}}}}}}]}}},
           "variables": []}}},
     {
@@ -442,19 +315,13 @@
                     "name": "parameter",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The variable which is bound by the lambda"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The variable which is bound by the lambda"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The body of the lambda"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The body of the lambda"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -463,30 +330,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A function type, also known as an arrow type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A function type, also known as an arrow type"}}}],
               "body": {
                 "record": [
                   {
                     "name": "domain",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The domain (input) type of the function"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (input) type of the function"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "codomain",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The codomain (output) type of the function"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The codomain (output) type of the function"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -498,29 +355,20 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()"}}}],
+                  "value": {"literal": {"string": "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()"}}}],
               "body": {
                 "record": [
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the union type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "field",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The field being injected, including its name and value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The field being injected, including its name and value"}}}],
                         "body": {"variable": "hydra.core.Field"}}}}]}}},
           "variables": []}}},
     {
@@ -529,92 +377,62 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An integer type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An integer type"}}}],
               "body": {
                 "union": [
                   {
                     "name": "bigint",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An arbitrary-precision integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "int8",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An 8-bit signed integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An 8-bit signed integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "int16",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 16-bit signed integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 16-bit signed integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "int32",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 32-bit signed integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 32-bit signed integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "int64",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 64-bit signed integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit signed integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "uint8",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An 8-bit unsigned integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An 8-bit unsigned integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "uint16",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 16-bit unsigned integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 16-bit unsigned integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "uint32",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 32-bit unsigned integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 32-bit unsigned integer type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "uint64",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 64-bit unsigned integer type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit unsigned integer type"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
@@ -623,94 +441,62 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An integer literal value"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An integer literal value"}}}],
               "body": {
                 "union": [
                   {
                     "name": "bigint",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An arbitrary-precision integer value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision integer value"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}}},
                   {
                     "name": "int8",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An 8-bit signed integer value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An 8-bit signed integer value"}}}],
                         "body": {"literal": {"integer": {"int8": {}}}}}}},
                   {
                     "name": "int16",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 16-bit signed integer value (short value)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 16-bit signed integer value (short value)"}}}],
                         "body": {"literal": {"integer": {"int16": {}}}}}}},
                   {
                     "name": "int32",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 32-bit signed integer value (int value)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 32-bit signed integer value (int value)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "int64",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 64-bit signed integer value (long value)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit signed integer value (long value)"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
                   {
                     "name": "uint8",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An 8-bit unsigned integer value (byte)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An 8-bit unsigned integer value (byte)"}}}],
                         "body": {"literal": {"integer": {"uint8": {}}}}}}},
                   {
                     "name": "uint16",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A 16-bit unsigned integer value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 16-bit unsigned integer value"}}}],
                         "body": {"literal": {"integer": {"uint16": {}}}}}}},
                   {
                     "name": "uint32",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A 32-bit unsigned integer value (unsigned int)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 32-bit unsigned integer value (unsigned int)"}}}],
                         "body": {"literal": {"integer": {"uint32": {}}}}}}},
                   {
                     "name": "uint64",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A 64-bit unsigned integer value (unsigned long)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit unsigned integer value (unsigned long)"}}}],
                         "body": {"literal": {"integer": {"uint64": {}}}}}}}]}}},
           "variables": []}}},
     {
@@ -719,38 +505,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A function abstraction (lambda)"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A function abstraction (lambda)"}}}],
               "body": {
                 "record": [
                   {
                     "name": "parameter",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The parameter of the lambda"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The parameter of the lambda"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "domain",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An optional domain type for the lambda"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional domain type for the lambda"}}}],
                         "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The body of the lambda"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The body of the lambda"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}},
     {
@@ -762,29 +536,20 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A set of (possibly recursive) 'let' bindings together with a body in which they are bound"}}}],
+                  "value": {"literal": {"string": "A set of (possibly recursive) 'let' bindings together with a body in which they are bound"}}}],
               "body": {
                 "record": [
                   {
                     "name": "bindings",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The list of variable bindings"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The list of variable bindings"}}}],
                         "body": {"list": {"variable": "hydra.core.Binding"}}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The body term in which the variables are bound"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The body term in which the variables are bound"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}},
     {
@@ -793,66 +558,44 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A term constant; an instance of a literal type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A term constant; an instance of a literal type"}}}],
               "body": {
                 "union": [
                   {
                     "name": "binary",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A binary literal"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A binary literal"}}}],
                         "body": {"literal": {"binary": {}}}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A boolean literal"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean literal"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "decimal",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An arbitrary-precision decimal literal"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision decimal literal"}}}],
                         "body": {"literal": {"decimal": {}}}}}},
                   {
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A floating-point literal"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A floating-point literal"}}}],
                         "body": {"variable": "hydra.core.FloatValue"}}}},
                   {
                     "name": "integer",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An integer literal"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An integer literal"}}}],
                         "body": {"variable": "hydra.core.IntegerValue"}}}},
                   {
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A string literal"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A string literal"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -873,56 +616,37 @@
                     "name": "binary",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of a binary (byte string) value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a binary (byte string) value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of a boolean (true/false) value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a boolean (true/false) value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "decimal",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The type of an arbitrary-precision decimal value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of an arbitrary-precision decimal value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of a floating-point value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a floating-point value"}}}],
                         "body": {"variable": "hydra.core.FloatType"}}}},
                   {
                     "name": "integer",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of an integer value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of an integer value"}}}],
                         "body": {"variable": "hydra.core.IntegerType"}}}},
                   {
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of a string value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a string value"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
@@ -931,27 +655,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A map type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A map type"}}}],
               "body": {
                 "record": [
                   {
                     "name": "keys",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of keys in the map"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of keys in the map"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "values",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type of values in the map"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type of values in the map"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -960,11 +677,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A unique identifier in some context; a string-valued key"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier in some context; a string-valued key"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -973,29 +686,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A record elimination; a projection"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A record elimination; a projection"}}}],
               "body": {
                 "record": [
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the record type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the record type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "field",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the projected field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the projected field"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -1004,32 +708,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A record, or labeled tuple; a map of field names to terms"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A record, or labeled tuple; a map of field names to terms"}}}],
               "body": {
                 "record": [
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the record type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the record type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "fields",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The fields of the record, as a list of name/term pairs"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The fields of the record, as a list of name/term pairs"}}}],
                         "body": {"list": {"variable": "hydra.core.Field"}}}}}]}}},
           "variables": []}}},
     {
@@ -1038,78 +730,50 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A data term"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A data term"}}}],
               "body": {
                 "union": [
                   {
                     "name": "annotated",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A term annotated with metadata"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A term annotated with metadata"}}}],
                         "body": {"variable": "hydra.core.AnnotatedTerm"}}}},
                   {
                     "name": "application",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A function application"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A function application"}}}],
                         "body": {"variable": "hydra.core.Application"}}}},
                   {
                     "name": "cases",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A union elimination; a case statement"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A union elimination; a case statement"}}}],
                         "body": {"variable": "hydra.core.CaseStatement"}}}},
                   {
                     "name": "either",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An either value"}}}],
-                        "body": {
-                          "either": {
-                            "left": {"variable": "hydra.core.Term"},
-                            "right": {"variable": "hydra.core.Term"}}}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An either value"}}}],
+                        "body": {"either": {"left": {"variable": "hydra.core.Term"}, "right": {"variable": "hydra.core.Term"}}}}}},
                   {
                     "name": "inject",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An injection; an instance of a union type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An injection; an instance of a union type"}}}],
                         "body": {"variable": "hydra.core.Injection"}}}},
                   {
                     "name": "lambda",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A function abstraction (lambda)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A function abstraction (lambda)"}}}],
                         "body": {"variable": "hydra.core.Lambda"}}}},
                   {
                     "name": "let",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A 'let' term, which binds variables to terms"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A 'let' term, which binds variables to terms"}}}],
                         "body": {"variable": "hydra.core.Let"}}}},
                   {
                     "name": "list",
@@ -1121,126 +785,79 @@
                     "name": "literal",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A literal value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A literal value"}}}],
                         "body": {"variable": "hydra.core.Literal"}}}},
                   {
                     "name": "map",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A map of keys to values"}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"variable": "hydra.core.Term"},
-                            "values": {"variable": "hydra.core.Term"}}}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A map of keys to values"}}}],
+                        "body": {"map": {"keys": {"variable": "hydra.core.Term"}, "values": {"variable": "hydra.core.Term"}}}}}},
                   {
                     "name": "maybe",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An optional value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional value"}}}],
                         "body": {"maybe": {"variable": "hydra.core.Term"}}}}},
                   {
                     "name": "pair",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A pair (2-tuple)"}}}],
-                        "body": {
-                          "pair": {
-                            "first": {"variable": "hydra.core.Term"},
-                            "second": {"variable": "hydra.core.Term"}}}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A pair (2-tuple)"}}}],
+                        "body": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}}}}},
                   {
                     "name": "project",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A record elimination; a projection"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A record elimination; a projection"}}}],
                         "body": {"variable": "hydra.core.Projection"}}}},
                   {
                     "name": "record",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A record term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A record term"}}}],
                         "body": {"variable": "hydra.core.Record"}}}},
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A set of values"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A set of values"}}}],
                         "body": {"set": {"variable": "hydra.core.Term"}}}}},
                   {
                     "name": "typeApplication",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A System F type application term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A System F type application term"}}}],
                         "body": {"variable": "hydra.core.TypeApplicationTerm"}}}},
                   {
                     "name": "typeLambda",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A System F type abstraction term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A System F type abstraction term"}}}],
                         "body": {"variable": "hydra.core.TypeLambda"}}}},
                   {
                     "name": "unit",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A unit value; a term with no value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A unit value; a term with no value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "unwrap",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "An unwrap elimination; the inverse of a wrap"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An unwrap elimination; the inverse of a wrap"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "variable",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A variable reference"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A variable reference"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "wrap",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A wrapped term; an instance of a wrapper type (newtype)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A wrapped term; an instance of a wrapper type (newtype)"}}}],
                         "body": {"variable": "hydra.core.WrappedTerm"}}}}]}}},
           "variables": []}}},
     {
@@ -1249,160 +866,108 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A data type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A data type"}}}],
               "body": {
                 "union": [
                   {
                     "name": "annotated",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An annotated type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An annotated type"}}}],
                         "body": {"variable": "hydra.core.AnnotatedType"}}}},
                   {
                     "name": "application",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A type application"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type application"}}}],
                         "body": {"variable": "hydra.core.ApplicationType"}}}},
                   {
                     "name": "either",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An either (sum) type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An either (sum) type"}}}],
                         "body": {"variable": "hydra.core.EitherType"}}}},
                   {
                     "name": "forall",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A universally quantified (polymorphic) type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A universally quantified (polymorphic) type"}}}],
                         "body": {"variable": "hydra.core.ForallType"}}}},
                   {
                     "name": "function",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A function type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A function type"}}}],
                         "body": {"variable": "hydra.core.FunctionType"}}}},
                   {
                     "name": "list",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A list type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A list type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "literal",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A literal type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A literal type"}}}],
                         "body": {"variable": "hydra.core.LiteralType"}}}},
                   {
                     "name": "map",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "A map type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A map type"}}}],
                         "body": {"variable": "hydra.core.MapType"}}}},
                   {
                     "name": "maybe",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An optional type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "pair",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A pair (2-tuple) type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A pair (2-tuple) type"}}}],
                         "body": {"variable": "hydra.core.PairType"}}}},
                   {
                     "name": "record",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A record type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A record type"}}}],
                         "body": {"list": {"variable": "hydra.core.FieldType"}}}}},
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "A set type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A set type"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "union",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A union type with field names"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A union type with field names"}}}],
                         "body": {"list": {"variable": "hydra.core.FieldType"}}}}},
                   {
                     "name": "unit",
                     "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The unit type"}}}],
-                        "body": {"unit": {}}}}},
+                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "The unit type"}}}], "body": {"unit": {}}}}},
                   {
                     "name": "variable",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A type variable"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "void",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The void (uninhabited, or bottom) type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The void (uninhabited, or bottom) type"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "wrap",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A wrapped type (newtype)"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A wrapped type (newtype)"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -1411,30 +976,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A term applied to a type; a type application"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A term applied to a type; a type application"}}}],
               "body": {
                 "record": [
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The term being applied to a type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The term being applied to a type"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
                     "name": "type",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type argument"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type argument"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -1443,30 +998,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A System F type abstraction term"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A System F type abstraction term"}}}],
               "body": {
                 "record": [
                   {
                     "name": "parameter",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The type variable introduced by the abstraction"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type variable introduced by the abstraction"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The body of the abstraction"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The body of the abstraction"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}},
     {
@@ -1478,28 +1023,20 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A type expression together with free type variables occurring in the expression"}}}],
+                  "value": {"literal": {"string": "A type expression together with free type variables occurring in the expression"}}}],
               "body": {
                 "record": [
                   {
                     "name": "variables",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The free type variables"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The free type variables"}}}],
                         "body": {"list": {"variable": "hydra.core.Name"}}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The type expression"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type expression"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "constraints",
@@ -1511,11 +1048,7 @@
                             "value": {
                               "literal": {
                                 "string": "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names."}}}],
-                        "body": {
-                          "maybe": {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}]}}},
+                        "body": {"maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1526,20 +1059,14 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "Metadata associated with a type variable, including typeclass constraints"}}}],
+                  "value": {"literal": {"string": "Metadata associated with a type variable, including typeclass constraints"}}}],
               "body": {
                 "record": [
                   {
                     "name": "classes",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The set of typeclass constraints on this type variable"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The set of typeclass constraints on this type variable"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
           "variables": []}}},
     {
@@ -1548,29 +1075,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A term wrapped in a type name"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A term wrapped in a type name"}}}],
               "body": {
                 "record": [
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the wrapper type"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the wrapper type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "body",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The wrapped term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The wrapped term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}}],
   "description": "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.",

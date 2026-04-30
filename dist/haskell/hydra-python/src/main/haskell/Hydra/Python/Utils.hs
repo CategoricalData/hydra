@@ -433,7 +433,7 @@ typeAliasStatement name tparams mcomment tyexpr =
 typeAliasStatement310 :: Syntax.Name -> t0 -> Maybe String -> Syntax.Expression -> Syntax.Statement
 typeAliasStatement310 name _tparams mcomment tyexpr =
 
-      let quotedExpr = doubleQuotedString (Serialization.printExpr (Serde.encodeExpression tyexpr))
+      let quotedExpr = doubleQuotedString (Serialization.printExpr (Serde.expressionToExpr tyexpr))
       in (annotatedStatement mcomment (pyAssignmentToPyStatement (Syntax.AssignmentTyped (Syntax.TypedAssignment {
         Syntax.typedAssignmentLhs = (Syntax.SingleTargetName name),
         Syntax.typedAssignmentType = (Syntax.ExpressionSimple (Syntax.Disjunction [
@@ -464,7 +464,7 @@ unionTypeClassStatements310 name mcomment tyexpr extraStmts =
 
       let nameStr = Syntax.unName name
           metaName = Syntax.Name (Strings.cat2 (Strings.cat2 "_" nameStr) "Meta")
-          docString = Serialization.printExpr (Serde.encodeExpression tyexpr)
+          docString = Serialization.printExpr (Serde.expressionToExpr tyexpr)
           returnObject =
                   pySimpleStatementToPyStatement (Syntax.SimpleStatementReturn (Syntax.ReturnStatement [
                     Syntax.StarExpressionSimple (Syntax.ExpressionSimple (Syntax.Disjunction [

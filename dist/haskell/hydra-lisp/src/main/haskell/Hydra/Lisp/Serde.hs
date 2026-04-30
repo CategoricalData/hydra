@@ -17,7 +17,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 andExpressionToExpr :: Syntax.Dialect -> Syntax.AndExpression -> Ast.Expr
 andExpressionToExpr d andExpr =
-    Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+    Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
       Serialization.cst "and"] (Lists.map (expressionToExpr d) (Syntax.andExpressionExpressions andExpr))))
 applicationToExpr :: Syntax.Dialect -> Syntax.Application -> Ast.Expr
 applicationToExpr d app =
@@ -36,7 +36,7 @@ applicationToExpr d app =
                     Serialization.cst "funcall",
                     fun] args) (Lists.concat2 [
                     fun] args)
-      in (Serialization.parens (Serialization.spaceSep allParts))
+      in (Serialization.parens (Serialization.spaceSepAdaptive allParts))
 caseExpressionToExpr :: Syntax.Dialect -> Syntax.CaseExpression -> Ast.Expr
 caseExpressionToExpr d caseExpr =
 
@@ -44,15 +44,15 @@ caseExpressionToExpr d caseExpr =
           clauses = Syntax.caseExpressionClauses caseExpr
           dflt = Syntax.caseExpressionDefault caseExpr
           clauseExprs =
-                  Lists.map (\c -> Serialization.parens (Serialization.spaceSep [
-                    Serialization.parens (Serialization.spaceSep (Lists.map (expressionToExpr d) (Syntax.caseClauseKeys c))),
+                  Lists.map (\c -> Serialization.parens (Serialization.spaceSepAdaptive [
+                    Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (expressionToExpr d) (Syntax.caseClauseKeys c))),
                     (expressionToExpr d (Syntax.caseClauseBody c))])) clauses
           defaultPart =
                   Maybes.maybe [] (\e -> [
-                    Serialization.parens (Serialization.spaceSep [
+                    Serialization.parens (Serialization.spaceSepAdaptive [
                       Serialization.cst "else",
                       (expressionToExpr d e)])]) dflt
-      in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+      in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
         [
           Serialization.cst "case",
           scrutinee],
@@ -78,52 +78,52 @@ condExpressionToExpr d condExpr =
                       Maybes.maybe [] (\e -> [
                         Serialization.cst ":else",
                         (expressionToExpr d e)]) dflt
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
             clauseExprs,
             defaultPart])))
         Syntax.DialectEmacsLisp ->
           let clauseExprs =
-                  Lists.map (\c -> Serialization.parens (Serialization.spaceSep [
+                  Lists.map (\c -> Serialization.parens (Serialization.spaceSepAdaptive [
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))])) clauses
               defaultPart =
                       Maybes.maybe [] (\e -> [
-                        Serialization.parens (Serialization.spaceSep [
+                        Serialization.parens (Serialization.spaceSepAdaptive [
                           Serialization.cst "t",
                           (expressionToExpr d e)])]) dflt
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
             clauseExprs,
             defaultPart])))
         Syntax.DialectCommonLisp ->
           let clauseExprs =
-                  Lists.map (\c -> Serialization.parens (Serialization.spaceSep [
+                  Lists.map (\c -> Serialization.parens (Serialization.spaceSepAdaptive [
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))])) clauses
               defaultPart =
                       Maybes.maybe [] (\e -> [
-                        Serialization.parens (Serialization.spaceSep [
+                        Serialization.parens (Serialization.spaceSepAdaptive [
                           Serialization.cst "t",
                           (expressionToExpr d e)])]) dflt
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
             clauseExprs,
             defaultPart])))
         Syntax.DialectScheme ->
           let clauseExprs =
-                  Lists.map (\c -> Serialization.parens (Serialization.spaceSep [
+                  Lists.map (\c -> Serialization.parens (Serialization.spaceSepAdaptive [
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))])) clauses
               defaultPart =
                       Maybes.maybe [] (\e -> [
-                        Serialization.parens (Serialization.spaceSep [
+                        Serialization.parens (Serialization.spaceSepAdaptive [
                           Serialization.cst "else",
                           (expressionToExpr d e)])]) dflt
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
             clauseExprs,
@@ -133,7 +133,7 @@ constantDefinitionToExpr d cdef =
 
       let name = symbolToExpr (Syntax.constantDefinitionName cdef)
           value = expressionToExpr d (Syntax.constantDefinitionValue cdef)
-      in (Serialization.parens (Serialization.spaceSep [
+      in (Serialization.parens (Serialization.spaceSepAdaptive [
         Serialization.cst (defconstKeyword d),
         name,
         value]))
@@ -174,7 +174,7 @@ doExpressionToExpr d doExpr =
                 Syntax.DialectEmacsLisp -> "progn"
                 Syntax.DialectCommonLisp -> "progn"
                 Syntax.DialectScheme -> "begin"
-      in (Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+      in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
         Serialization.cst kw] (Lists.map (expressionToExpr d) (Syntax.doExpressionExpressions doExpr)))))
 docstringToExpr :: Syntax.Docstring -> Ast.Expr
 docstringToExpr ds =
@@ -189,16 +189,16 @@ exportDeclarationToExpr d edecl =
       let syms = Lists.map symbolToExpr (Syntax.exportDeclarationSymbols edecl)
       in case d of
         Syntax.DialectClojure -> Serialization.cst ""
-        Syntax.DialectEmacsLisp -> Serialization.newlineSep (Lists.map (\s -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectEmacsLisp -> Serialization.newlineSep (Lists.map (\s -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "provide",
           (Serialization.noSep [
             Serialization.cst "'",
             s])])) syms)
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst ":export"] (Lists.map (\s -> Serialization.noSep [
           Serialization.cst ":",
           s]) syms)))
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst "export"] syms))
 expressionToExpr :: Syntax.Dialect -> Syntax.Expression -> Ast.Expr
 expressionToExpr d expr =
@@ -213,7 +213,7 @@ expressionToExpr d expr =
       Syntax.ExpressionOr v0 -> orExpressionToExpr d v0
       Syntax.ExpressionNot v0 -> notExpressionToExpr d v0
       Syntax.ExpressionDo v0 -> doExpressionToExpr d v0
-      Syntax.ExpressionBegin v0 -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+      Syntax.ExpressionBegin v0 -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
         Serialization.cst "begin"] (Lists.map (expressionToExpr d) (Syntax.beginExpressionExpressions v0))))
       Syntax.ExpressionVariable v0 -> variableReferenceToExpr d v0
       Syntax.ExpressionLiteral v0 -> literalToExpr d v0
@@ -221,11 +221,11 @@ expressionToExpr d expr =
       Syntax.ExpressionVector v0 -> vectorLiteralToExpr d v0
       Syntax.ExpressionMap v0 -> mapLiteralToExpr d v0
       Syntax.ExpressionSet v0 -> setLiteralToExpr d v0
-      Syntax.ExpressionCons v0 -> Serialization.parens (Serialization.spaceSep [
+      Syntax.ExpressionCons v0 -> Serialization.parens (Serialization.spaceSepAdaptive [
         Serialization.cst "cons",
         (expressionToExpr d (Syntax.consExpressionHead v0)),
         (expressionToExpr d (Syntax.consExpressionTail v0))])
-      Syntax.ExpressionDottedPair v0 -> Serialization.parens (Serialization.spaceSep [
+      Syntax.ExpressionDottedPair v0 -> Serialization.parens (Serialization.spaceSepAdaptive [
         expressionToExpr d (Syntax.dottedPairCar v0),
         (Serialization.cst "."),
         (expressionToExpr d (Syntax.dottedPairCdr v0))])
@@ -278,24 +278,24 @@ fieldAccessToExpr d fa =
           field = symbolToExpr (Syntax.fieldAccessField fa)
           target = expressionToExpr d (Syntax.fieldAccessTarget fa)
       in case d of
-        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.noSep [
             Serialization.cst ":",
             field],
           target])
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.noSep [
             rtype,
             (Serialization.cst "-"),
             field],
           target])
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.noSep [
             rtype,
             (Serialization.cst "-"),
             field],
           target])
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.noSep [
             rtype,
             (Serialization.cst "-"),
@@ -325,32 +325,32 @@ functionDefinitionToExpr d fdef =
           params = Lists.map symbolToExpr (Syntax.functionDefinitionParams fdef)
           body = Lists.map (expressionToExpr d) (Syntax.functionDefinitionBody fdef)
       in case d of
-        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "defn",
             name],
           [
             Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
           body]))
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "defun",
             name],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "defun",
             name],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "define"],
           [
-            Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+            Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
               name] params))],
           body]))
 ifExpressionToExpr :: Syntax.Dialect -> Syntax.IfExpression -> Ast.Expr
@@ -361,7 +361,7 @@ ifExpressionToExpr d ifExpr =
           else_ = Syntax.ifExpressionElse ifExpr
           elsePart = Maybes.maybe [] (\e -> [
                 expressionToExpr d e]) else_
-      in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+      in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
         [
           Serialization.cst "if",
           cond,
@@ -372,19 +372,19 @@ importDeclarationToExpr d idecl =
 
       let modName = Syntax.unNamespaceName (Syntax.importDeclarationModule idecl)
       in case d of
-        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst ":require",
           (Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep [
             Serialization.cst modName]))])
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "require",
           (Serialization.noSep [
             Serialization.cst "'",
             (Serialization.cst modName)])])
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst ":use",
           (Serialization.cst (Strings.cat2 ":" modName))])
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "import",
           (Serialization.parens (Serialization.cst modName))])
 keywordToExpr :: Syntax.Dialect -> Syntax.Keyword -> Ast.Expr
@@ -415,35 +415,35 @@ lambdaToExpr d lam =
           mname = Syntax.lambdaName lam
           kw = lambdaKeyword d
       in case d of
-        Syntax.DialectClojure -> Maybes.maybe (Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectClojure -> Maybes.maybe (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw],
           [
             Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
-          body]))) (\sym -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+          body]))) (\sym -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw,
             (symbolToExpr sym)],
           [
             Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
           body]))) mname
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
 letExpressionToExpr :: Syntax.Dialect -> Syntax.LetExpression -> Ast.Expr
 letExpressionToExpr d letExpr =
@@ -467,23 +467,23 @@ letExpressionToExpr d letExpr =
                           Syntax.ExpressionLambda v3 ->
                             let params = Lists.map symbolToExpr (Syntax.lambdaParams v3)
                                 lbody = Lists.map (expressionToExpr d) (Syntax.lambdaBody v3)
-                            in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+                            in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
                               [
                                 name],
                               [
                                 Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
                               lbody])))
-                          _ -> Serialization.parens (Serialization.spaceSep [
+                          _ -> Serialization.parens (Serialization.spaceSepAdaptive [
                             name,
                             (expressionToExpr d val)])
                       Syntax.LetBindingDestructuring _ -> Serialization.cst "<destructuring>") bindings
-            in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+            in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
               [
                 Serialization.cst "letfn"],
               [
                 Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep fnSpecs)],
               body])))
-          Syntax.LetKindParallel -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+          Syntax.LetKindParallel -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "let"],
             [
@@ -491,7 +491,7 @@ letExpressionToExpr d letExpr =
                 Pairs.first p,
                 (Pairs.second p)]) bindingPairs)))],
             body]))
-          Syntax.LetKindSequential -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+          Syntax.LetKindSequential -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "let"],
             [
@@ -506,14 +506,14 @@ letExpressionToExpr d letExpr =
                     Syntax.LetKindSequential -> "let*"
                     Syntax.LetKindRecursive -> "letrec"
               bindingExprs =
-                      Lists.map (\p -> Serialization.parens (Serialization.spaceSep [
+                      Lists.map (\p -> Serialization.parens (Serialization.spaceSepAdaptive [
                         Pairs.first p,
                         (Pairs.second p)])) bindingPairs
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst kw],
             [
-              Serialization.parens (Serialization.spaceSep bindingExprs)],
+              Serialization.parens (Serialization.spaceSepAdaptive bindingExprs)],
             body])))
         Syntax.DialectCommonLisp ->
           let kw =
@@ -522,14 +522,14 @@ letExpressionToExpr d letExpr =
                     Syntax.LetKindSequential -> "let*"
                     Syntax.LetKindRecursive -> "letrec"
               bindingExprs =
-                      Lists.map (\p -> Serialization.parens (Serialization.spaceSep [
+                      Lists.map (\p -> Serialization.parens (Serialization.spaceSepAdaptive [
                         Pairs.first p,
                         (Pairs.second p)])) bindingPairs
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst kw],
             [
-              Serialization.parens (Serialization.spaceSep bindingExprs)],
+              Serialization.parens (Serialization.spaceSepAdaptive bindingExprs)],
             body])))
         Syntax.DialectScheme ->
           let kw =
@@ -538,14 +538,14 @@ letExpressionToExpr d letExpr =
                     Syntax.LetKindSequential -> "let*"
                     Syntax.LetKindRecursive -> "letrec"
               bindingExprs =
-                      Lists.map (\p -> Serialization.parens (Serialization.spaceSep [
+                      Lists.map (\p -> Serialization.parens (Serialization.spaceSepAdaptive [
                         Pairs.first p,
                         (Pairs.second p)])) bindingPairs
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst kw],
             [
-              Serialization.parens (Serialization.spaceSep bindingExprs)],
+              Serialization.parens (Serialization.spaceSepAdaptive bindingExprs)],
             body])))
 listKeyword :: Syntax.Dialect -> String
 listKeyword d =
@@ -561,7 +561,7 @@ listLiteralToExpr d ll =
           quoted = Syntax.listLiteralQuoted ll
       in (Logic.ifElse quoted (Serialization.noSep [
         Serialization.cst "'",
-        (Serialization.parens (Serialization.spaceSep elems))]) (Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+        (Serialization.parens (Serialization.spaceSepAdaptive elems))]) (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
         Serialization.cst (listKeyword d)] elems))))
 literalToExpr :: Syntax.Dialect -> Syntax.Literal -> Ast.Expr
 literalToExpr d lit =
@@ -633,28 +633,28 @@ macroDefinitionToExpr d mdef =
           params = Lists.map symbolToExpr (Syntax.macroDefinitionParams mdef)
           body = Lists.map (expressionToExpr d) (Syntax.macroDefinitionBody mdef)
       in case d of
-        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "defmacro",
             name],
           [
             Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
           body]))
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "defmacro",
             name],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "defmacro",
             name],
           [
-            Serialization.parens (Serialization.spaceSep params)],
+            Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "define-syntax",
             name],
@@ -669,18 +669,18 @@ mapLiteralToExpr d ml =
           (expressionToExpr d (Syntax.mapEntryValue e))]) entries)))
         Syntax.DialectEmacsLisp -> Serialization.noSep [
           Serialization.cst "'",
-          (Serialization.parens (Serialization.spaceSep (Lists.map (\e -> Serialization.parens (Serialization.spaceSep [
+          (Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (\e -> Serialization.parens (Serialization.spaceSepAdaptive [
             expressionToExpr d (Syntax.mapEntryKey e),
             (Serialization.cst "."),
             (expressionToExpr d (Syntax.mapEntryValue e))])) entries)))]
         Syntax.DialectCommonLisp -> Serialization.noSep [
           Serialization.cst "'",
-          (Serialization.parens (Serialization.spaceSep (Lists.map (\e -> Serialization.parens (Serialization.spaceSep [
+          (Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (\e -> Serialization.parens (Serialization.spaceSepAdaptive [
             expressionToExpr d (Syntax.mapEntryKey e),
             (Serialization.cst "."),
             (expressionToExpr d (Syntax.mapEntryValue e))])) entries)))]
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
-          Serialization.cst "list"] (Lists.map (\e -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
+          Serialization.cst "list"] (Lists.map (\e -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "cons",
           (expressionToExpr d (Syntax.mapEntryKey e)),
           (expressionToExpr d (Syntax.mapEntryValue e))])) entries)))
@@ -689,28 +689,28 @@ moduleDeclarationToExpr d mdecl =
 
       let name = Syntax.unNamespaceName (Syntax.moduleDeclarationName mdecl)
       in case d of
-        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectClojure -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "ns",
           (Serialization.cst name)])
         Syntax.DialectEmacsLisp -> Serialization.newlineSep [
-          Serialization.parens (Serialization.spaceSep [
+          Serialization.parens (Serialization.spaceSepAdaptive [
             Serialization.cst "require",
             (Serialization.noSep [
               Serialization.cst "'",
               (Serialization.cst "cl-lib")])]),
-          (Serialization.parens (Serialization.spaceSep [
+          (Serialization.parens (Serialization.spaceSepAdaptive [
             Serialization.cst "provide",
             (Serialization.noSep [
               Serialization.cst "'",
               (Serialization.cst name)])]))]
         Syntax.DialectCommonLisp -> Serialization.newlineSep [
-          Serialization.parens (Serialization.spaceSep [
+          Serialization.parens (Serialization.spaceSepAdaptive [
             Serialization.cst "defpackage",
             (Serialization.cst (Strings.cat2 ":" name))]),
-          (Serialization.parens (Serialization.spaceSep [
+          (Serialization.parens (Serialization.spaceSepAdaptive [
             Serialization.cst "in-package",
             (Serialization.cst (Strings.cat2 ":" name))]))]
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "define-library",
           (Serialization.parens (Serialization.cst name))])
 nilExpr :: Syntax.Dialect -> Ast.Expr
@@ -722,12 +722,12 @@ nilExpr d =
       Syntax.DialectScheme -> Serialization.cst "'()"
 notExpressionToExpr :: Syntax.Dialect -> Syntax.NotExpression -> Ast.Expr
 notExpressionToExpr d notExpr =
-    Serialization.parens (Serialization.spaceSep [
+    Serialization.parens (Serialization.spaceSepAdaptive [
       Serialization.cst "not",
       (expressionToExpr d (Syntax.notExpressionExpression notExpr))])
 orExpressionToExpr :: Syntax.Dialect -> Syntax.OrExpression -> Ast.Expr
 orExpressionToExpr d orExpr =
-    Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+    Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
       Serialization.cst "or"] (Lists.map (expressionToExpr d) (Syntax.orExpressionExpressions orExpr))))
 programToExpr :: Syntax.Program -> Ast.Expr
 programToExpr prog =
@@ -749,7 +749,7 @@ programToExpr prog =
                         (Serialization.cst ":refer"),
                         (Serialization.cst ":all")])) importNames
               nsForm =
-                      Logic.ifElse (Lists.null requireClauses) (Serialization.parens (Serialization.spaceSep [
+                      Logic.ifElse (Lists.null requireClauses) (Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "ns",
                         (Serialization.cst nameStr)])) (Serialization.parens (Serialization.newlineSep [
                         Serialization.spaceSep [
@@ -769,7 +769,7 @@ programToExpr prog =
                           _ -> []) forms)
               declareForm =
                       Logic.ifElse (Lists.null varNames) [] [
-                        Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+                        Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
                           Serialization.cst "declare"] varNames))]
           in (Serialization.doubleNewlineSep (Lists.concat [
             [
@@ -779,19 +779,19 @@ programToExpr prog =
         Syntax.DialectEmacsLisp -> Maybes.maybe (Serialization.doubleNewlineSep formPart) (\m ->
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               requireClLib =
-                      Serialization.parens (Serialization.spaceSep [
+                      Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "require",
                         (Serialization.noSep [
                           Serialization.cst "'",
                           (Serialization.cst "cl-lib")])])
               requireImports =
-                      Lists.map (\imp -> Serialization.parens (Serialization.spaceSep [
+                      Lists.map (\imp -> Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "require",
                         (Serialization.noSep [
                           Serialization.cst "'",
                           (Serialization.cst imp)])])) importNames
               provideForm =
-                      Serialization.parens (Serialization.spaceSep [
+                      Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "provide",
                         (Serialization.noSep [
                           Serialization.cst "'",
@@ -807,12 +807,12 @@ programToExpr prog =
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               colonName = Strings.cat2 ":" nameStr
               useClause =
-                      Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+                      Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
                         Serialization.cst ":use",
                         (Serialization.cst ":cl")] (Lists.map (\imp -> Serialization.cst (Strings.cat2 ":" imp)) importNames)))
               exportClause =
                       Logic.ifElse (Lists.null exportSyms) [] [
-                        Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+                        Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
                           Serialization.cst ":export"] (Lists.map (\s -> Serialization.noSep [
                           Serialization.cst ":",
                           s]) exportSyms)))]
@@ -826,7 +826,7 @@ programToExpr prog =
                           useClause],
                         exportClause]))
               inpkgForm =
-                      Serialization.parens (Serialization.spaceSep [
+                      Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "in-package",
                         (Serialization.cst colonName)])
           in (Serialization.doubleNewlineSep (Lists.concat [
@@ -837,20 +837,21 @@ programToExpr prog =
         Syntax.DialectScheme -> Maybes.maybe (Serialization.doubleNewlineSep formPart) (\m ->
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               nameParts = Lists.map (\p -> Formatting.convertCaseCamelToLowerSnake p) (Strings.splitOn "." nameStr)
-              nameExpr = Serialization.parens (Serialization.spaceSep (Lists.map (\p -> Serialization.cst p) nameParts))
+              nameExpr = Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (\p -> Serialization.cst p) nameParts))
               domainImportExprs =
                       Lists.map (\idecl ->
                         let nsName = Syntax.unNamespaceName (Syntax.importDeclarationModule idecl)
                             nsParts = Lists.map (\p -> Formatting.convertCaseCamelToLowerSnake p) (Strings.splitOn "." nsName)
-                        in (Serialization.parens (Serialization.spaceSep (Lists.map (\p -> Serialization.cst p) nsParts)))) imports
+                        in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (\p -> Serialization.cst p) nsParts)))) imports
               schemeBaseExpr =
-                      Serialization.parens (Serialization.spaceSep [
+                      Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "scheme",
                         (Serialization.cst "base")])
               allImportExprs = Lists.concat2 [
                     schemeBaseExpr] domainImportExprs
-              importClause = Serialization.parens (Serialization.spaceSep (Lists.concat2 [
-                    Serialization.cst "import"] allImportExprs))
+              importClause =
+                      Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
+                        Serialization.cst "import"] allImportExprs))
               exportClauses = Lists.map (\edecl -> exportDeclarationToExpr d edecl) exports
               beginClause = Serialization.parens (Serialization.newlineSep (Lists.concat2 [
                     Serialization.cst "begin"] formPart))
@@ -874,29 +875,29 @@ recordTypeDefinitionToExpr d rdef =
           let nameStr = Syntax.unSymbol (Syntax.recordTypeDefinitionName rdef)
               fieldNames = Lists.map (\f -> Syntax.unSymbol (Syntax.fieldDefinitionName f)) (Syntax.recordTypeDefinitionFields rdef)
               defrecordForm =
-                      Serialization.parens (Serialization.spaceSep [
+                      Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst "defrecord",
                         name,
                         (Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep fields))])
               makeAlias =
-                      Serialization.parens (Serialization.spaceSep (Lists.concat [
+                      Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
                         [
                           Serialization.cst "defn",
                           (Serialization.cst (Strings.cat2 "make-" nameStr))],
                         [
                           Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep fields)],
                         [
-                          Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+                          Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
                             Serialization.cst (Strings.cat2 "->" nameStr)] (Lists.map (\fn -> Serialization.cst fn) fieldNames)))]]))
           in (Serialization.newlineSep [
             defrecordForm,
             makeAlias])
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "cl-defstruct",
             name],
           fields]))
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst "cl:defstruct",
             name],
@@ -905,17 +906,17 @@ recordTypeDefinitionToExpr d rdef =
           let nameStr = Syntax.unSymbol (Syntax.recordTypeDefinitionName rdef)
               fieldNames = Lists.map (\f -> Syntax.unSymbol (Syntax.fieldDefinitionName f)) (Syntax.recordTypeDefinitionFields rdef)
               constructor =
-                      Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+                      Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
                         Serialization.cst (Strings.cat2 "make-" nameStr)] (Lists.map (\fn -> Serialization.cst fn) fieldNames)))
               predicate = Serialization.cst (Strings.cat2 nameStr "?")
               accessors =
-                      Lists.map (\fn -> Serialization.parens (Serialization.spaceSep [
+                      Lists.map (\fn -> Serialization.parens (Serialization.spaceSepAdaptive [
                         Serialization.cst fn,
                         (Serialization.cst (Strings.cat [
                           nameStr,
                           "-",
                           fn]))])) fieldNames
-          in (Serialization.parens (Serialization.spaceSep (Lists.concat [
+          in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "define-record-type",
               name,
@@ -926,7 +927,7 @@ sExpressionToExpr :: Syntax.SExpression -> Ast.Expr
 sExpressionToExpr sexpr =
     case sexpr of
       Syntax.SExpressionAtom v0 -> Serialization.cst v0
-      Syntax.SExpressionList v0 -> Serialization.parens (Serialization.spaceSep (Lists.map sExpressionToExpr v0))
+      Syntax.SExpressionList v0 -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.map sExpressionToExpr v0))
 setLiteralToExpr :: Syntax.Dialect -> Syntax.SetLiteral -> Ast.Expr
 setLiteralToExpr d sl =
 
@@ -935,11 +936,11 @@ setLiteralToExpr d sl =
         Syntax.DialectClojure -> Serialization.noSep [
           Serialization.cst "#",
           (Serialization.brackets Serialization.curlyBraces Serialization.inlineStyle (Serialization.spaceSep elems))]
-        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+        Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst "list"] elems))
-        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+        Syntax.DialectCommonLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst "cl:list"] elems))
-        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSep (Lists.concat2 [
+        Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst "list"] elems))
 symbolToExpr :: Syntax.Symbol -> Ast.Expr
 symbolToExpr s = Serialization.cst (Syntax.unSymbol s)
@@ -980,7 +981,7 @@ variableDefinitionToExpr d vdef =
 
       let name = symbolToExpr (Syntax.variableDefinitionName vdef)
           value = expressionToExpr d (Syntax.variableDefinitionValue vdef)
-      in (Serialization.parens (Serialization.spaceSep [
+      in (Serialization.parens (Serialization.spaceSepAdaptive [
         Serialization.cst (defKeyword d),
         name,
         value]))
@@ -1005,7 +1006,7 @@ vectorLiteralToExpr d vl =
         Syntax.DialectEmacsLisp -> Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep elems)
         Syntax.DialectCommonLisp -> Serialization.noSep [
           Serialization.cst "#",
-          (Serialization.parens (Serialization.spaceSep elems))]
+          (Serialization.parens (Serialization.spaceSepAdaptive elems))]
         Syntax.DialectScheme -> Serialization.noSep [
           Serialization.cst "#",
-          (Serialization.parens (Serialization.spaceSep elems))]
+          (Serialization.parens (Serialization.spaceSepAdaptive elems))]
