@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.ExampleGraphSchema where
+module Hydra.Demos.Genpg.ExampleGraphSchema where
 
 import Hydra.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
 import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)

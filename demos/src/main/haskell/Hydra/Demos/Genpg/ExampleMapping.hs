@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.ExampleMapping where
+module Hydra.Demos.Genpg.ExampleMapping where
 
 import Hydra.Core (Term)
 import Hydra.Pg.Model (Edge, Vertex, LazyGraph)
@@ -9,7 +9,7 @@ import Hydra.Dsl.Pg.Mappings (column, edge, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
-import Hydra.Demos.GenPG.ExampleGraphSchema
+import Hydra.Demos.Genpg.ExampleGraphSchema
 
 -- Helpers -----------------------
 
