@@ -10,7 +10,7 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ---
 
-## [0.15.0] - in progress
+## [0.15.0] - 2026-04-29
 
 A maintenance and structural-cleanup release. The dominant theme is a
 top-to-bottom repository reorganization (#290) into a three-tree
@@ -41,6 +41,13 @@ demo.
 - **Incremental, content-hash-based caches** across the sync pipeline (#247),
   with three new generation-only targets in progress: Coq (#326),
   WebAssembly (#325), and an automatic-differentiation demo (#324).
+- **Per-package publishable distributions** for Java and Python: each
+  `dist/<lang>/<pkg>/` is now a self-contained, publishable build —
+  four Maven Central artifacts (`hydra-kernel`, `hydra-rdf`, `hydra-pg`,
+  `hydra-java`) and five PyPI / conda-forge wheels (`hydra-kernel`,
+  `hydra-rdf`, `hydra-pg`, `hydra-ext`, `hydra-python`), each pulling
+  its inter-package dependencies transitively. Replaces the previous
+  monolithic `hydra-java` and `hydra` rollup artifacts.
 
 ### Breaking Changes
 
@@ -115,6 +122,29 @@ demo.
 
 ### New Features
 
+- **Per-package publishable distributions** (#305): four Maven Central
+  artifacts (`hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-java`) and
+  five PyPI / conda-forge wheels (`hydra-kernel`, `hydra-rdf`, `hydra-pg`,
+  `hydra-ext`, `hydra-python`). Each `dist/<lang>/<pkg>/` carries its own
+  generated build manifest (`build.gradle` or `pyproject.toml`) declaring
+  inter-package `api`/`run` dependencies, so consumers who add e.g.
+  `hydra-pg` get `hydra-rdf` and `hydra-kernel` resolved transitively.
+  hydra-kernel ships with the hand-written runtime support copied in
+  (`hydra/{util,lib,dsl,json,tools}/`) so the published artifact is
+  self-contained. New generators: `bin/lib/generate-java-package-build.py`
+  and `bin/lib/generate-python-package-build.py`. New per-language
+  helper: `heads/{java,python}/bin/copy-kernel-runtime.sh`. Java publish
+  uses the `com.gradleup.nmcp` plugin's
+  `publishAggregationToCentralPortal` task. Hackage continues to ship a
+  monolithic `hydra` Haskell head (assembled via a 0.15-only
+  `heads/haskell/bin/assemble-hackage-sdist.sh` bridge); 0.16 will
+  switch Hackage to per-package as well.
+- **JSON kernel format v1** (#343): formal wire-format spec for
+  `dist/json/**`, including a `formatVersion` field, four-field
+  rename (`Binding.type`, `TermDefinition.type`, `TypeDefinition.type`,
+  `Primitive.type` → `typeScheme`), `Module` field reorder, symmetric
+  `float32` encoding, and lexicographic manifest sorting. Documented at
+  `docs/json-format.md`.
 - **`decimal` literal type** in the kernel (#338): arbitrary-precision
   decimal values across all hosts (Haskell `Scientific`, Java
   `BigDecimal`, Python `Decimal`, Clojure `BigDecimal`, etc.). The YAML
