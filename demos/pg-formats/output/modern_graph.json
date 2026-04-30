@@ -1,0 +1,99 @@
+{
+  "edges": [
+    {
+      "@key": {"integer": {"int32": 7}},
+      "@value": {
+        "id": {"integer": {"int32": 7}},
+        "in": {"integer": {"int32": 2}},
+        "label": "knows",
+        "out": {"integer": {"int32": 1}},
+        "properties": [{"@key": "weight", "@value": {"float": {"float64": 0.5}}}]}},
+    {
+      "@key": {"integer": {"int32": 8}},
+      "@value": {
+        "id": {"integer": {"int32": 8}},
+        "in": {"integer": {"int32": 4}},
+        "label": "knows",
+        "out": {"integer": {"int32": 1}},
+        "properties": [{"@key": "weight", "@value": {"float": {"float64": 1}}}]}},
+    {
+      "@key": {"integer": {"int32": 9}},
+      "@value": {
+        "id": {"integer": {"int32": 9}},
+        "in": {"integer": {"int32": 3}},
+        "label": "created",
+        "out": {"integer": {"int32": 1}},
+        "properties": [{"@key": "weight", "@value": {"float": {"float64": 0.4}}}]}},
+    {
+      "@key": {"integer": {"int32": 10}},
+      "@value": {
+        "id": {"integer": {"int32": 10}},
+        "in": {"integer": {"int32": 5}},
+        "label": "created",
+        "out": {"integer": {"int32": 4}},
+        "properties": [{"@key": "weight", "@value": {"float": {"float64": 1}}}]}},
+    {
+      "@key": {"integer": {"int32": 11}},
+      "@value": {
+        "id": {"integer": {"int32": 11}},
+        "in": {"integer": {"int32": 3}},
+        "label": "created",
+        "out": {"integer": {"int32": 4}},
+        "properties": [{"@key": "weight", "@value": {"float": {"float64": 0.4}}}]}},
+    {
+      "@key": {"integer": {"int32": 12}},
+      "@value": {
+        "id": {"integer": {"int32": 12}},
+        "in": {"integer": {"int32": 3}},
+        "label": "created",
+        "out": {"integer": {"int32": 6}},
+        "properties": [{"@key": "weight", "@value": {"float": {"float64": 0.2}}}]}}],
+  "vertices": [
+    {
+      "@key": {"integer": {"int32": 1}},
+      "@value": {
+        "id": {"integer": {"int32": 1}},
+        "label": "person",
+        "properties": [
+          {"@key": "age", "@value": {"integer": {"int32": 29}}},
+          {"@key": "name", "@value": {"string": "marko"}}]}},
+    {
+      "@key": {"integer": {"int32": 2}},
+      "@value": {
+        "id": {"integer": {"int32": 2}},
+        "label": "person",
+        "properties": [
+          {"@key": "age", "@value": {"integer": {"int32": 27}}},
+          {"@key": "name", "@value": {"string": "vadas"}}]}},
+    {
+      "@key": {"integer": {"int32": 3}},
+      "@value": {
+        "id": {"integer": {"int32": 3}},
+        "label": "software",
+        "properties": [
+          {"@key": "lang", "@value": {"string": "java"}},
+          {"@key": "name", "@value": {"string": "lop"}}]}},
+    {
+      "@key": {"integer": {"int32": 4}},
+      "@value": {
+        "id": {"integer": {"int32": 4}},
+        "label": "person",
+        "properties": [
+          {"@key": "age", "@value": {"integer": {"int32": 32}}},
+          {"@key": "name", "@value": {"string": "josh"}}]}},
+    {
+      "@key": {"integer": {"int32": 5}},
+      "@value": {
+        "id": {"integer": {"int32": 5}},
+        "label": "software",
+        "properties": [
+          {"@key": "lang", "@value": {"string": "java"}},
+          {"@key": "name", "@value": {"string": "ripple"}}]}},
+    {
+      "@key": {"integer": {"int32": 6}},
+      "@value": {
+        "id": {"integer": {"int32": 6}},
+        "label": "person",
+        "properties": [
+          {"@key": "age", "@value": {"integer": {"int32": 35}}},
+          {"@key": "name", "@value": {"string": "peter"}}]}}]}
