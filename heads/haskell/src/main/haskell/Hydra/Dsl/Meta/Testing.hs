@@ -15,6 +15,7 @@ import Hydra.Dsl.Testing hiding (
   universalTestCase, unTag)
 import Hydra.Kernel
 import Hydra.Error.Core (InvalidTermError)
+import Hydra.Error.Packaging (InvalidModuleError, InvalidPackageError)
 import Hydra.Testing as Testing
 import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
@@ -103,6 +104,49 @@ validateCoreTermRef = TTerm $ TermVariable $ Name "hydra.validate.core.term"
 
 showInvalidTermErrorRef :: TTerm (InvalidTermError -> String)
 showInvalidTermErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.core.invalidTermError"
+
+-- | Refs for hydra.validate.packaging validators and their show functions.
+checkConflictingModuleNamespacesRef :: TTerm (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNamespacesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkConflictingModuleNamespaces"
+
+checkConflictingVariantNamesRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkConflictingVariantNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkConflictingVariantNames"
+
+checkDefinitionDocumentationRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionDocumentationRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionDocumentation"
+
+checkDefinitionNameConventionRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionNameConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionNameConvention"
+
+checkDefinitionNamespacesRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionNamespacesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionNamespaces"
+
+checkDefinitionOrderingRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionOrderingRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDefinitionOrdering"
+
+checkDuplicateDefinitionNamesRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkDuplicateDefinitionNamesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDuplicateDefinitionNames"
+
+checkDuplicateModuleNamespacesRef :: TTerm (Package -> Maybe InvalidPackageError)
+checkDuplicateModuleNamespacesRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkDuplicateModuleNamespaces"
+
+checkModuleNamespaceConventionRef :: TTerm (Module -> Maybe InvalidModuleError)
+checkModuleNamespaceConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkModuleNamespaceConvention"
+
+checkPackageNameConventionRef :: TTerm (Package -> Maybe InvalidPackageError)
+checkPackageNameConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkPackageNameConvention"
+
+kernelModuleRef :: TTerm (Module -> Maybe InvalidModuleError)
+kernelModuleRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.kernelModule"
+
+kernelPackageRef :: TTerm (Package -> Maybe InvalidPackageError)
+kernelPackageRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.kernelPackage"
+
+showInvalidModuleErrorRef :: TTerm (InvalidModuleError -> String)
+showInvalidModuleErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.packaging.invalidModuleError"
+
+showInvalidPackageErrorRef :: TTerm (InvalidPackageError -> String)
+showInvalidPackageErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.packaging.invalidPackageError"
 
 showTypeSchemeRef :: TTerm (TypeScheme -> String)
 showTypeSchemeRef = TTerm $ TermVariable $ Name "hydra.show.core.typeScheme"
@@ -289,6 +333,40 @@ validateCoreTermCase cname typed input expected = universalCase cname
   (retype $ Maybes.maybe
     (Phantoms.string "valid")
     (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
+    expected)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Convenience function for creating module-validation test cases.
+-- Applies a packaging-level Module validator to an input module and compares
+-- the result against the expected Maybe InvalidModuleError.
+validatePackagingModuleCase :: String -> TTerm (Module -> Maybe InvalidModuleError) -> TTerm Module -> TTerm (Maybe InvalidModuleError) -> TTerm TestCaseWithMetadata
+validatePackagingModuleCase cname validator input expected = universalCase cname
+  (retype $ Maybes.maybe
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e"))
+    (validator @@ input))
+  (retype $ Maybes.maybe
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e"))
+    expected)
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Convenience function for creating package-validation test cases.
+-- Applies a packaging-level Package validator to an input package and compares
+-- the result against the expected Maybe InvalidPackageError.
+validatePackagingPackageCase :: String -> TTerm (Package -> Maybe InvalidPackageError) -> TTerm Package -> TTerm (Maybe InvalidPackageError) -> TTerm TestCaseWithMetadata
+validatePackagingPackageCase cname validator input expected = universalCase cname
+  (retype $ Maybes.maybe
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e"))
+    (validator @@ input))
+  (retype $ Maybes.maybe
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e"))
     expected)
   where
     retype :: TTerm x -> TTerm String
