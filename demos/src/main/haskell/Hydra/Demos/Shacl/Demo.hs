@@ -15,22 +15,18 @@ module Hydra.Demos.Shacl.Demo where
 import Hydra.Kernel
 import Hydra.Generation (modulesToGraph, loadModulesFromJson, readManifestField)
 import Hydra.Sources.All (kernelModules)
-import Hydra.Module.Compat (moduleBindings)
 
 import qualified Hydra.Shacl.Coder as ShaclCoder
 import qualified Hydra.Rdf.Syntax as Rdf
 import qualified Hydra.Shacl.Model as Shacl
 import qualified Hydra.Rdf.Utils as RdfUtils
 import qualified Hydra.Rdf.Serde as Serde
-import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Packaging as EncodePackaging
 import qualified Hydra.Context as Context
 import qualified Hydra.Lexical as Lexical
 
 import Hydra.Demos.Shacl.ShaclRdf (shapesGraphToTriples)
 
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 import Control.Exception (catch, SomeException, evaluate)
 import System.CPUTime (getCPUTime)
@@ -62,8 +58,8 @@ runDemo jsonDir outDir = do
   -- Step 2: Generate SHACL shapes from kernel type elements, skipping unsupported types
   putStrLn "Step 2: Generating SHACL shapes from kernel type modules..."
   startTime <- getCPUTime
-  let allTypeEls = concatMap (\m -> filter isNativeType (moduleBindings m)) kernelModules
-  let (shapes, nSkipped) = encodeShapes cx graph allTypeEls
+  let allTypeDefs = concatMap (\m -> [td | DefinitionType td <- moduleDefinitions m]) kernelModules
+  let (shapes, nSkipped) = encodeShapes cx allTypeDefs
   let allTriples = shapesGraphToTriples shapes
   let shapesNt = triplesToNtriples allTriples
   let shapesFile = outDir </> "shapes.nt"
@@ -107,28 +103,27 @@ runDemo jsonDir outDir = do
   putStrLn $ "  invalid.nt: non-conforming RDF data"
   hPutStrLn stderr $ "HYDRA_TIME_MS=" ++ totalMs
 
--- | Encode type elements as SHACL shapes, skipping types that the SHACL language
+-- | Encode type definitions as SHACL shapes, skipping types that the SHACL language
 -- doesn't support (function types, type variables, etc.). Returns the shapes graph
 -- and the count of skipped elements.
-encodeShapes :: Context.Context -> Graph -> [Binding] -> (Shacl.ShapesGraph, Int)
-encodeShapes cx graph elements =
-  let results = map (encodeOneShape cx graph) elements
+encodeShapes :: Context.Context -> [TypeDefinition] -> (Shacl.ShapesGraph, Int)
+encodeShapes cx defs =
+  let results = map (encodeOneShape cx) defs
       successes = [d | Right d <- results]
       failures = length [() | Left _ <- results]
   in (Shacl.ShapesGraph (S.fromList successes), failures)
 
--- | Try to encode a single type element as a SHACL Definition<Shape>.
+-- | Try to encode a single type definition as a SHACL Definition<Shape>.
 -- Replicates the toShape logic from shaclCoder but returns Either for error recovery.
-encodeOneShape :: Context.Context -> Graph -> Binding -> Either String (Shacl.Definition Shacl.Shape)
-encodeOneShape cx graph el =
-  case DecodeCore.type_ graph (bindingTerm el) of
-    Left de -> Left $ "decode error: " ++ unDecodingError de
-    Right typ ->
-      case ShaclCoder.encodeType (bindingName el) typ cx of
-        Left _ic -> Left $ "encode error for " ++ unName (bindingName el)
-        Right cp -> Right $ Shacl.Definition {
-          Shacl.definitionIri = RdfUtils.nameToIri (bindingName el),
-          Shacl.definitionTarget = Shacl.ShapeNode (Shacl.NodeShape cp) }
+encodeOneShape :: Context.Context -> TypeDefinition -> Either String (Shacl.Definition Shacl.Shape)
+encodeOneShape cx td =
+  let nm = typeDefinitionName td
+      typ = typeSchemeBody (typeDefinitionTypeScheme td)
+  in case ShaclCoder.encodeType nm typ cx of
+       Left _ic -> Left $ "encode error for " ++ unName nm
+       Right cp -> Right $ Shacl.Definition {
+         Shacl.definitionIri = RdfUtils.nameToIri nm,
+         Shacl.definitionTarget = Shacl.ShapeNode (Shacl.NodeShape cp) }
 
 -- | Encode loaded modules as RDF. Each Module is simplified (element terms stripped)
 -- then converted to a term and encoded as RDF via the SHACL term encoder.

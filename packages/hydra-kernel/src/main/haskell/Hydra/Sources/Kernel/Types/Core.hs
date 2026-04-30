@@ -6,6 +6,7 @@ import Hydra.Dsl.Annotations (doc)
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Data.Map as M
 
@@ -17,7 +18,17 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 hydraCoreGraph :: Graph
-hydraCoreGraph = elementsToGraph bootstrapGraph M.empty (moduleBindings module_)
+hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
+    [typeDefinitionAsBinding td | DefinitionType td <- moduleDefinitions module_]
+  where
+    -- elementsToGraph still consumes Bindings; module_ contains only type definitions.
+    typeDefinitionAsBinding td = Binding {
+        bindingName = typeDefinitionName td,
+        bindingTerm = TermAnnotated $ AnnotatedTerm {
+          annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td)),
+          annotatedTermAnnotation = M.fromList [
+            (Name "type", TermVariable (Name "hydra.core.Type"))]},
+        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
 module_ :: Module
 module_ = Module {

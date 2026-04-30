@@ -63,6 +63,13 @@ import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 import qualified System.FilePath as FP
 
 
+-- | True if the module contains at least one type definition.
+moduleHasTypeDefinition :: Module -> Bool
+moduleHasTypeDefinition m = any isType (moduleDefinitions m)
+  where
+    isType (DefinitionType _) = True
+    isType _ = False
+
 -- | Format elapsed time for display.
 formatTime :: Double -> String
 formatTime secs
@@ -375,7 +382,7 @@ main = do
         then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods
         else allMods
   let filtered2 = if optTypesOnly opts
-        then Prelude.filter (\m -> any isNativeType (moduleBindings m)) filtered1
+        then Prelude.filter moduleHasTypeDefinition filtered1
         else filtered1
   let allMainMods = filtered2
 
@@ -411,7 +418,7 @@ main = do
                 isCoder = any (\(pfx, _) -> pfx `isPrefixOf` nsStr) packagePrefixes
                 isYaml  = "hydra.yaml." `isPrefixOf` nsStr
                 isPgSynthInput = nsStr `elem` pgSynthNs
-                hasType = any isNativeType (moduleBindings m)
+                hasType = moduleHasTypeDefinition m
                 isKernel = (nsStr `elem` kernelNsList) && not isCoder && not isYaml
             in hasType && (isKernel || isPgSynthInput)
       let typeMods = Prelude.filter isSynthInput allMainMods
