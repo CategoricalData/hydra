@@ -68,6 +68,7 @@
     "hydra.serialization": "91b09c16a1d258c6297bf3b88698ba46ea41d60b3d2b9961d09de4c497c2623a",
     "hydra.show.core": "2276afb2f76f45fdbe5af3f2bc2bb5b627be01223921ab0da3dde46f7f7e90ae",
     "hydra.show.error.core": "9f960bbde9dcbb935dfb37927c87d0c9bb3beb166fdae46d3394acb9eb1c142c",
+    "hydra.show.error.packaging": "645e784ccac0f65102c1b7a775d10bcc7f06f78504c87a5676cffc0628530dfa",
     "hydra.show.errors": "efb406d1ef1621b42c38523f7554dfc5c1f4280cca3b6a564052bba01b8d480a",
     "hydra.show.graph": "fb894974ce671c154d91d7a2bb298824c5f62241c3b1f8bd7e5611c840626edf",
     "hydra.show.paths": "db92a8bac4a2049e98f47d28626070769bbc28c7e0dba4bc25a1180a31f15ff4",
