@@ -58,7 +58,7 @@ heads/wasm/bin/test-wasm.sh path/to/manifest.json
   "tests": [
     { "name": "...", "export": "hydra.constants.max_int32",
       "kind": "i32", "expected": 2147483647 },
-    { "name": "...", "export": "hydra.constants.key_classes",
+    { "name": "...", "export": "hydra.constants.keyClasses",
       "kind": "string", "expected": "classes" }
   ]
 }
