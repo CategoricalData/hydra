@@ -1497,10 +1497,31 @@ declarationForRecordType' = def "declarationForRecordType'" $
         (var "fields"))
       (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))) $
     "cons" <<~ (recordConstructor @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "cx" @@ var "g") $
-    "consComment" <~ Strings.cat (list [
+    "paramLines" <<~ (Eithers.mapList (lambda "f" $
+      "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
+      "mDoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "f") $
+      right (Maybes.maybe
+        (string "")
+        (lambda "d" $ Strings.cat (list [
+          string "@param ",
+          var "fname",
+          string " ",
+          var "d"]))
+        (var "mDoc")))
+      (var "fields")) $
+    "nonEmptyParamLines" <~ Lists.filter
+      (lambda "l" $ Logic.not (Equality.equal (var "l") (string "")))
+      (var "paramLines") $
+    "consBaseComment" <~ Strings.cat (list [
       string "Constructs an immutable {@link ",
       var "elNameStr",
       string "}."]) $
+    "consComment" <~ Logic.ifElse (Lists.null (var "nonEmptyParamLines"))
+      (var "consBaseComment")
+      (Strings.cat (list [
+        var "consBaseComment",
+        string "\n\n",
+        Strings.intercalate (string "\n") (var "nonEmptyParamLines")])) $
     "consWithComment" <~ (withCommentString @@ var "consComment" @@ var "cons") $
     "tn" <<~ (Logic.ifElse (var "isInner")
       (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))
