@@ -708,12 +708,24 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
                       "} with {@code ",
                       fname,
                       "} replaced."]
-        in (Right (withCommentString comment decl)))) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons ->
-        let consComment =
-                Strings.cat [
-                  "Constructs an immutable {@link ",
-                  elNameStr,
-                  "}."]
+        in (Right (withCommentString comment decl)))) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons -> Eithers.bind (Eithers.mapList (\f ->
+        let fname = Core.unName (Core.fieldTypeName f)
+        in (Eithers.bind (Annotations.commentsFromFieldType cx g f) (\mDoc -> Right (Maybes.maybe "" (\d -> Strings.cat [
+          "@param ",
+          fname,
+          " ",
+          d]) mDoc)))) fields) (\paramLines ->
+        let nonEmptyParamLines = Lists.filter (\l -> Logic.not (Equality.equal l "")) paramLines
+            consBaseComment =
+                    Strings.cat [
+                      "Constructs an immutable {@link ",
+                      elNameStr,
+                      "}."]
+            consComment =
+                    Logic.ifElse (Lists.null nonEmptyParamLines) consBaseComment (Strings.cat [
+                      consBaseComment,
+                      "\n\n",
+                      (Strings.intercalate "\n" nonEmptyParamLines)])
             consWithComment = withCommentString consComment cons
         in (Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType elName aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
           let comparableMethods =
@@ -733,7 +745,7 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
                         noCommentMethods,
                         withMethods]
               ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
-          in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))))
+          in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls))))))))))
 declarationForUnionType :: Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForUnionType isSer aliases tparams elName fields cx g =
     Eithers.bind (Eithers.mapList (\ft ->
