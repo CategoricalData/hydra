@@ -503,6 +503,26 @@ appear in the same order as their entries in the `definitions` list.
 **Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
 definition body together — they must stay in sync.
 
+When reordering, preserve the original list shape.
+Term-style modules (e.g. `Hydra/Sources/Kernel/Terms/*.hs`) wrap each
+entry in `toDefinition X`; type-style modules (e.g.
+`Hydra/Sources/Kernel/Types/*.hs`) use the binding name alone:
+
+```haskell
+-- Term-style
+definitions = [
+  toDefinition adaptType,
+  toDefinition adaptTermForLanguage]
+
+-- Type-style
+definitions = [
+  annotatedTerm,
+  application]
+```
+
+Adding `toDefinition` to a type-style list (or removing it from a
+term-style list) breaks the build.
+
 ### Other style checks
 
 The following are harder to automate but worth reviewing manually,
@@ -932,6 +952,29 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
    (`hydra.dsl.*`, `hydra.encode.*`, `hydra.decode.*`) — those use a
    semantic grouping in their definitions list and would always fail the
    ordering check.
+
+   Until a dedicated executable lands, a one-shot `runghc` driver works.
+   Save the script below to a temp file, then run from `heads/haskell/`:
+
+   ```haskell
+   -- /tmp/run-kernel-validate.hs
+   import Hydra.Kernel
+   import Hydra.Sources.All (kernelModules)
+   import qualified Hydra.Validate.Packaging as VP
+
+   main :: IO ()
+   main = do
+     let bad = [(moduleNamespace m, e) | m <- kernelModules, Just e <- [VP.kernelModule m]]
+     putStrLn $ "Modules with errors: " ++ show (length bad)
+     mapM_ (\(ns, e) -> putStrLn $ "  " ++ show ns ++ ": " ++ show e) bad
+   ```
+
+   ```bash
+   cd heads/haskell && stack runghc /tmp/run-kernel-validate.hs
+   ```
+
+   Drives `kernelModule` per-module so all violations surface in one run
+   rather than just the first.
 6. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
 7. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
 8. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.

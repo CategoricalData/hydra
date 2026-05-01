@@ -117,6 +117,28 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS'
 
 The sync scripts handle this automatically.
 
+### Build appears to succeed but the kernel didn't actually compile
+
+**Symptom**: `stack build` reports exit 0, but a later step fails because
+generated artifacts weren't updated.
+
+**Cause**: A pipeline like `stack build 2>&1 | tail -30` masks Stack's
+non-zero exit code with `tail`'s zero exit. Stack's compile-error output
+also runs into hundreds of lines, so `tail -30` typically captures only the
+final `[S-7282]` postscript without the actual `error: [GHC-...]` line that
+identifies the broken module.
+
+**Fix**: Redirect to a file and inspect by greppable patterns:
+
+```bash
+stack build > /tmp/build.log 2>&1
+grep -E "error:|S-7011" /tmp/build.log | head
+```
+
+For a long compile, run in the background and tail-watch a specific filter
+rather than the raw log; the noise-to-signal ratio for full Stack output
+is high.
+
 ### "No such field: X" during code generation
 
 **Cause**: Missing entries in `Meta.hs` enums (`TermVariant`/`TypeVariant`). This happens

@@ -191,7 +191,10 @@ A few things to know:
 - **Shared object store**: commits made in any worktree are immediately visible
   from every other worktree (`git log` in worktree A will see a commit made in
   worktree B). You only ever push or fetch from *one* worktree;
-  the result is global.
+  the result is global. This also means `git cherry-pick <sha>` from another
+  branch's commits works without any fetch step — useful when a sibling
+  feature branch carries a fix or capability you need now and waiting for
+  its merge to staging would block progress.
 - **Adding a new worktree**: from inside any existing worktree or from the
   bare repo, run
   `git worktree add ../<branch-name> <branch-name>`
