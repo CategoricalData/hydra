@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 -- | Default term-level implementations of Pair functions for the Hydra interpreter.
 
-module Hydra.Lib.Default.Pairs where
+module Hydra.Lib.Defaults.Pairs where
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Pairs as Pairs

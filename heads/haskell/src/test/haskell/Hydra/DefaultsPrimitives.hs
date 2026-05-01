@@ -1,8 +1,8 @@
 -- | Default-library primitive adapters. Wraps the generated default library functions
---   (from Hydra.Lib.Default.*) into Primitive values for the test infrastructure.
+--   (from Hydra.Lib.Defaults.*) into Primitive values for the test infrastructure.
 --   The generated code is the source of truth; this module only adapts calling conventions.
 
-module Hydra.DefaultPrimitives (
+module Hydra.DefaultsPrimitives (
   defaultLibraries,
 ) where
 
@@ -10,15 +10,15 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Prims as Prims
 
-import qualified Hydra.Lib.Default.Eithers as DefaultEithers
-import qualified Hydra.Lib.Default.Equality as DefaultEquality
-import qualified Hydra.Lib.Default.Lists as DefaultLists
-import qualified Hydra.Lib.Default.Logic as DefaultLogic
-import qualified Hydra.Lib.Default.Maps as DefaultMaps
-import qualified Hydra.Lib.Default.Math as DefaultMath
-import qualified Hydra.Lib.Default.Maybes as DefaultMaybes
-import qualified Hydra.Lib.Default.Pairs as DefaultPairs
-import qualified Hydra.Lib.Default.Sets as DefaultSets
+import qualified Hydra.Lib.Defaults.Eithers as DefaultEithers
+import qualified Hydra.Lib.Defaults.Equality as DefaultEquality
+import qualified Hydra.Lib.Defaults.Lists as DefaultLists
+import qualified Hydra.Lib.Defaults.Logic as DefaultLogic
+import qualified Hydra.Lib.Defaults.Maps as DefaultMaps
+import qualified Hydra.Lib.Defaults.Math as DefaultMath
+import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
+import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
+import qualified Hydra.Lib.Defaults.Sets as DefaultSets
 
 
 -- | All default-library implementations, to be used as replacements for standard libraries in test mode.

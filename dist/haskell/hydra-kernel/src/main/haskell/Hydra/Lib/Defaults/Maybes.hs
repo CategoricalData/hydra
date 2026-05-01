@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 -- | Default term-level implementations of Maybe functions for the Hydra interpreter.
 
-module Hydra.Lib.Default.Maybes where
+module Hydra.Lib.Defaults.Maybes where
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore

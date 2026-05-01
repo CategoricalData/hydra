@@ -2,7 +2,7 @@ module Main where
 
 import Hydra.Generation (writeModulesJson)
 import Hydra.Sources.All (kernelModules)
-import Hydra.Sources.Kernel.Lib.Default.All (defaultLibModules)
+import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import Control.Exception (catch, SomeException)
