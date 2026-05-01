@@ -10,9 +10,7 @@
                 "annotation": [
                   {
                     "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Populate language constraints based on TinkerPop Graph.Features"}}}],
+                    "value": {"literal": {"string": "Populate language constraints based on TinkerPop Graph.Features"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -31,19 +29,10 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "features"},
-                                                "function": {
-                                                  "project": {"field": "vertex", "typeName": "hydra.tinkerpop.features.Features"}}}},
-                                            "function": {
-                                              "project": {
-                                                "field": "properties",
-                                                "typeName": "hydra.tinkerpop.features.VertexFeatures"}}}},
-                                        "function": {
-                                          "project": {
-                                            "field": "dataTypeFeatures",
-                                            "typeName": "hydra.tinkerpop.features.VertexPropertyFeatures"}}}},
-                                    "typeScheme": {
-                                      "body": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"},
-                                      "variables": []}},
+                                                "function": {"project": {"field": "vertex", "typeName": "hydra.tinkerpop.features.Features"}}}},
+                                            "function": {"project": {"field": "properties", "typeName": "hydra.tinkerpop.features.VertexFeatures"}}}},
+                                        "function": {"project": {"field": "dataTypeFeatures", "typeName": "hydra.tinkerpop.features.VertexPropertyFeatures"}}}},
+                                    "typeScheme": {"body": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}, "variables": []}},
                                   {
                                     "name": "cond",
                                     "term": {
@@ -54,24 +43,17 @@
                                               "lambda": {
                                                 "body": {
                                                   "application": {
-                                                    "argument": {
-                                                      "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
+                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "v"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.maybes.pure"},
-                                                                "type": {"variable": "t1"}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.pure"}, "type": {"variable": "t1"}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "b"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                "type": {"maybe": {"variable": "t1"}}}}}}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "t1"}}}}}}}}}},
                                                 "domain": {"literal": {"boolean": {}}},
                                                 "parameter": "b"}},
                                             "domain": {"variable": "t1"},
@@ -80,10 +62,7 @@
                                     "typeScheme": {
                                       "body": {
                                         "function": {
-                                          "codomain": {
-                                            "function": {
-                                              "codomain": {"maybe": {"variable": "t1"}},
-                                              "domain": {"literal": {"boolean": {}}}}},
+                                          "codomain": {"function": {"codomain": {"maybe": {"variable": "t1"}}, "domain": {"literal": {"boolean": {}}}}},
                                           "domain": {"variable": "t1"}}},
                                       "variables": ["t1"]}},
                                   {
@@ -103,69 +82,48 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "vpFeatures"},
-                                                                "function": {
-                                                                  "project": {
-                                                                    "field": "supportsStringArrayValues",
-                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                "function": {"project": {"field": "supportsStringArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "vpFeatures"},
-                                                                    "function": {
-                                                                      "project": {
-                                                                        "field": "supportsLongArrayValues",
-                                                                        "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                    "function": {"project": {"field": "supportsLongArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                 "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "vpFeatures"},
-                                                                "function": {
-                                                                  "project": {
-                                                                    "field": "supportsIntegerArrayValues",
-                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                "function": {"project": {"field": "supportsIntegerArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                             "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "vpFeatures"},
-                                                            "function": {
-                                                              "project": {
-                                                                "field": "supportsFloatArrayValues",
-                                                                "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                            "function": {"project": {"field": "supportsFloatArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                         "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsDoubleArrayValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsDoubleArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {"variable": "hydra.lib.logic.or"}}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "vpFeatures"},
-                                                    "function": {
-                                                      "project": {
-                                                        "field": "supportsByteArrayValues",
-                                                        "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                    "function": {"project": {"field": "supportsByteArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                 "function": {"variable": "hydra.lib.logic.or"}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "vpFeatures"},
-                                                "function": {
-                                                  "project": {
-                                                    "field": "supportsBooleanArrayValues",
-                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                "function": {"project": {"field": "supportsBooleanArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                             "function": {"variable": "hydra.lib.logic.or"}}}}},
                                     "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
@@ -177,19 +135,13 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "vpFeatures"},
-                                        "function": {
-                                          "project": {
-                                            "field": "supportsMapValues",
-                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                        "function": {"project": {"field": "supportsMapValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                     "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "eliminationVariants",
                                     "term": {
                                       "typeLambda": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.empty"},
-                                            "type": {"variable": "t1"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t1"}}},
                                         "parameter": "t1"}},
                                     "typeScheme": {
                                       "body": {"set": {"variable": "t1"}},
@@ -208,39 +160,21 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsByteArrayValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsByteArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "binary", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.LiteralVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "binary", "term": {"unit": {}}}, "typeName": "hydra.variants.LiteralVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsBooleanValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsBooleanValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "boolean", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.LiteralVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "boolean", "term": {"unit": {}}}, "typeName": "hydra.variants.LiteralVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {
@@ -248,30 +182,18 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "vpFeatures"},
-                                                            "function": {
-                                                              "project": {
-                                                                "field": "supportsDoubleValues",
-                                                                "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                            "function": {"project": {"field": "supportsDoubleValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "vpFeatures"},
-                                                                "function": {
-                                                                  "project": {
-                                                                    "field": "supportsFloatValues",
-                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                "function": {"project": {"field": "supportsFloatValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                             "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "float", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.LiteralVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "float", "term": {"unit": {}}}, "typeName": "hydra.variants.LiteralVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {
@@ -279,60 +201,33 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "vpFeatures"},
-                                                            "function": {
-                                                              "project": {
-                                                                "field": "supportsLongValues",
-                                                                "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                            "function": {"project": {"field": "supportsLongValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "vpFeatures"},
-                                                                "function": {
-                                                                  "project": {
-                                                                    "field": "supportsIntegerValues",
-                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                "function": {"project": {"field": "supportsIntegerValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                             "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "integer", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.LiteralVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "integer", "term": {"unit": {}}}, "typeName": "hydra.variants.LiteralVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsStringValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsStringValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "string", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.LiteralVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}}]},
+                                                        "argument": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.variants.LiteralVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}}}}]},
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cat"},
-                                                "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.fromList"},
-                                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
-                                      "variables": []}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
+                                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.LiteralVariant"}}, "variables": []}},
                                   {
                                     "name": "floatTypes",
                                     "term": {
@@ -346,58 +241,29 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsFloatValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsFloatValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "float32", "term": {"unit": {}}},
-                                                            "typeName": "hydra.core.FloatType"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.core.FloatType"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "float32", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.core.FloatType"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsDoubleValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsDoubleValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "float64", "term": {"unit": {}}},
-                                                            "typeName": "hydra.core.FloatType"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.core.FloatType"}}}}}}}]},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cat"},
-                                                "type": {"variable": "hydra.core.FloatType"}}}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.fromList"},
-                                            "type": {"variable": "hydra.core.FloatType"}}}}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "hydra.core.FloatType"}},
-                                      "variables": []}},
+                                                        "argument": {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.core.FloatType"}}}}}}}]},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.core.FloatType"}}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}}}},
+                                    "typeScheme": {"body": {"set": {"variable": "hydra.core.FloatType"}}, "variables": []}},
                                   {
                                     "name": "functionVariants",
                                     "term": {
                                       "typeLambda": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.empty"},
-                                            "type": {"variable": "t1"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t1"}}},
                                         "parameter": "t1"}},
                                     "typeScheme": {
                                       "body": {"set": {"variable": "t1"}},
@@ -416,50 +282,24 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsIntegerValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsIntegerValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                                            "typeName": "hydra.core.IntegerType"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.core.IntegerType"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "int32", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.core.IntegerType"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "vpFeatures"},
-                                                        "function": {
-                                                          "project": {
-                                                            "field": "supportsLongValues",
-                                                            "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                        "function": {"project": {"field": "supportsLongValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "int64", "term": {"unit": {}}},
-                                                            "typeName": "hydra.core.IntegerType"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.core.IntegerType"}}}}}}}]},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cat"},
-                                                "type": {"variable": "hydra.core.IntegerType"}}}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.fromList"},
-                                            "type": {"variable": "hydra.core.IntegerType"}}}}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
-                                      "variables": []}},
+                                                        "argument": {"inject": {"field": {"name": "int64", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.core.IntegerType"}}}}}}}]},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.core.IntegerType"}}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.IntegerType"}}}}},
+                                    "typeScheme": {"body": {"set": {"variable": "hydra.core.IntegerType"}}, "variables": []}},
                                   {
                                     "name": "termVariants",
                                     "term": {
@@ -473,61 +313,30 @@
                                                     "argument": {"variable": "supportsLists"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "list", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.TermVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.TermVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "list", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.TermVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "supportsLiterals"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "literal", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.TermVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.TermVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "literal", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.TermVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "supportsMaps"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "map", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.TermVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.TermVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "map", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.TermVariant"}}}}}}},
                                                 {
                                                   "application": {
-                                                    "argument": {
-                                                      "inject": {
-                                                        "field": {"name": "maybe", "term": {"unit": {}}},
-                                                        "typeName": "hydra.variants.TermVariant"}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.pure"},
-                                                        "type": {"variable": "hydra.variants.TermVariant"}}}}}]},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cat"},
-                                                "type": {"variable": "hydra.variants.TermVariant"}}}}},
+                                                    "argument": {"inject": {"field": {"name": "maybe", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.pure"}, "type": {"variable": "hydra.variants.TermVariant"}}}}}]},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.variants.TermVariant"}}}}},
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.fromList"},
-                                            "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
-                                      "variables": []}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TermVariant"}}}}},
+                                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.TermVariant"}}, "variables": []}},
                                   {
                                     "name": "typeVariants",
                                     "term": {
@@ -541,71 +350,34 @@
                                                     "argument": {"variable": "supportsLists"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "list", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.TypeVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.TypeVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "list", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "supportsLiterals"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "literal", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.TypeVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.TypeVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "literal", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}}}},
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "supportsMaps"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "map", "term": {"unit": {}}},
-                                                            "typeName": "hydra.variants.TypeVariant"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "cond"},
-                                                            "type": {"variable": "hydra.variants.TypeVariant"}}}}}}},
+                                                        "argument": {"inject": {"field": {"name": "map", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "cond"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}}}},
                                                 {
                                                   "application": {
-                                                    "argument": {
-                                                      "inject": {
-                                                        "field": {"name": "maybe", "term": {"unit": {}}},
-                                                        "typeName": "hydra.variants.TypeVariant"}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.pure"},
-                                                        "type": {"variable": "hydra.variants.TypeVariant"}}}}},
+                                                    "argument": {"inject": {"field": {"name": "maybe", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.pure"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                                                 {
                                                   "application": {
-                                                    "argument": {
-                                                      "inject": {
-                                                        "field": {"name": "wrap", "term": {"unit": {}}},
-                                                        "typeName": "hydra.variants.TypeVariant"}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.pure"},
-                                                        "type": {"variable": "hydra.variants.TypeVariant"}}}}}]},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cat"},
-                                                "type": {"variable": "hydra.variants.TypeVariant"}}}}},
+                                                    "argument": {"inject": {"field": {"name": "wrap", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.pure"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}}]},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.sets.fromList"},
-                                            "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
-                                      "variables": []}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TypeVariant"}}}}},
+                                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.TypeVariant"}}, "variables": []}},
                                   {
                                     "name": "typePredicate",
                                     "term": {
@@ -615,10 +387,7 @@
                                             "bindings": [
                                               {
                                                 "name": "dt",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "typ"},
-                                                    "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                "term": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.strip.deannotateType"}}},
                                                 "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -632,10 +401,7 @@
                                                           "lambda": {
                                                             "body": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t"},
-                                                                    "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                 "function": {
                                                                   "cases": {
                                                                     "cases": [
@@ -656,10 +422,7 @@
                                                                                             "body": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                "function": {
-                                                                                                  "project": {
-                                                                                                    "field": "supportsBooleanArrayValues",
-                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                "function": {"project": {"field": "supportsBooleanArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                             "domain": {"unit": {}},
                                                                                             "parameter": "_"}}},
                                                                                       {
@@ -679,10 +442,7 @@
                                                                                                             "body": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                                "function": {
-                                                                                                                  "project": {
-                                                                                                                    "field": "supportsDoubleArrayValues",
-                                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                                "function": {"project": {"field": "supportsDoubleArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                                             "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}},
                                                                                                       {
@@ -692,10 +452,7 @@
                                                                                                             "body": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                                "function": {
-                                                                                                                  "project": {
-                                                                                                                    "field": "supportsFloatArrayValues",
-                                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                                "function": {"project": {"field": "supportsFloatArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                                             "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}}],
                                                                                                     "default": {"literal": {"boolean": false}},
@@ -719,10 +476,7 @@
                                                                                                             "body": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                                "function": {
-                                                                                                                  "project": {
-                                                                                                                    "field": "supportsByteArrayValues",
-                                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                                "function": {"project": {"field": "supportsByteArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                                             "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}},
                                                                                                       {
@@ -732,10 +486,7 @@
                                                                                                             "body": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                                "function": {
-                                                                                                                  "project": {
-                                                                                                                    "field": "supportsIntegerArrayValues",
-                                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                                "function": {"project": {"field": "supportsIntegerArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                                             "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}},
                                                                                                       {
@@ -745,10 +496,7 @@
                                                                                                             "body": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                                "function": {
-                                                                                                                  "project": {
-                                                                                                                    "field": "supportsLongArrayValues",
-                                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                                "function": {"project": {"field": "supportsLongArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                                             "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}}],
                                                                                                     "default": {"literal": {"boolean": false}},
@@ -762,10 +510,7 @@
                                                                                             "body": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "vpFeatures"},
-                                                                                                "function": {
-                                                                                                  "project": {
-                                                                                                    "field": "supportsStringArrayValues",
-                                                                                                    "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
+                                                                                                "function": {"project": {"field": "supportsStringArrayValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                                                                             "domain": {"unit": {}},
                                                                                             "parameter": "_"}}}],
                                                                                     "default": {"literal": {"boolean": false}},
@@ -778,11 +523,7 @@
                                                             "parameter": "t"}}},
                                                       {
                                                         "name": "literal",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {"literal": {"boolean": true}},
-                                                            "domain": {"variable": "hydra.core.LiteralType"},
-                                                            "parameter": "_"}}},
+                                                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.LiteralType"}, "parameter": "_"}}},
                                                       {
                                                         "name": "map",
                                                         "term": {
@@ -790,48 +531,32 @@
                                                             "body": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "mt"},
-                                                                    "function": {"project": {"field": "keys", "typeName": "hydra.core.MapType"}}}},
+                                                                  "application": {"argument": {"variable": "mt"}, "function": {"project": {"field": "keys", "typeName": "hydra.core.MapType"}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "extras"},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {
-                                                                          "project": {
-                                                                            "field": "supportsMapKey",
-                                                                            "typeName": "hydra.tinkerpop.features.ExtraFeatures"}},
+                                                                        "body": {"project": {"field": "supportsMapKey", "typeName": "hydra.tinkerpop.features.ExtraFeatures"}},
                                                                         "type": {"variable": "t0"}}}}}}},
                                                             "domain": {"variable": "hydra.core.MapType"},
                                                             "parameter": "mt"}}},
                                                       {
                                                         "name": "wrap",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {"literal": {"boolean": true}},
-                                                            "domain": {"variable": "hydra.core.Type"},
-                                                            "parameter": "_"}}},
+                                                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}}},
                                                       {
                                                         "name": "maybe",
                                                         "term": {
                                                           "lambda": {
                                                             "body": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "ot"},
-                                                                    "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                                "argument": {"application": {"argument": {"variable": "ot"}, "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                 "function": {
                                                                   "cases": {
                                                                     "cases": [
                                                                       {
                                                                         "name": "literal",
-                                                                        "term": {
-                                                                          "lambda": {
-                                                                            "body": {"literal": {"boolean": true}},
-                                                                            "domain": {"variable": "hydra.core.LiteralType"},
-                                                                            "parameter": "_"}}}],
+                                                                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.LiteralType"}, "parameter": "_"}}}],
                                                                     "default": {"literal": {"boolean": false}},
                                                                     "typeName": "hydra.core.Type"}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
@@ -841,10 +566,7 @@
                                         "domain": {"variable": "hydra.core.Type"},
                                         "parameter": "typ"}},
                                     "typeScheme": {
-                                      "body": {
-                                        "function": {
-                                          "codomain": {"literal": {"boolean": {}}},
-                                          "domain": {"variable": "hydra.core.Type"}}},
+                                      "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}},
                                       "variables": []}}],
                                 "body": {
                                   "record": {
@@ -858,27 +580,19 @@
                                               {
                                                 "name": "eliminationVariants",
                                                 "term": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "eliminationVariants"},
-                                                    "type": {"variable": "hydra.variants.EliminationVariant"}}}},
+                                                  "typeApplication": {"body": {"variable": "eliminationVariants"}, "type": {"variable": "hydra.variants.EliminationVariant"}}}},
                                               {"name": "literalVariants", "term": {"variable": "literalVariants"}},
                                               {"name": "floatTypes", "term": {"variable": "floatTypes"}},
                                               {
                                                 "name": "functionVariants",
-                                                "term": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "functionVariants"},
-                                                    "type": {"variable": "hydra.variants.FunctionVariant"}}}},
+                                                "term": {"typeApplication": {"body": {"variable": "functionVariants"}, "type": {"variable": "hydra.variants.FunctionVariant"}}}},
                                               {"name": "integerTypes", "term": {"variable": "integerTypes"}},
                                               {"name": "termVariants", "term": {"variable": "termVariants"}},
                                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                                               {"name": "types", "term": {"variable": "typePredicate"}}],
                                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                                     "typeName": "hydra.coders.Language"}}}},
-                            "domain": {
-                              "application": {
-                                "argument": {"variable": "t0"},
-                                "function": {"variable": "hydra.tinkerpop.features.ExtraFeatures"}}},
+                            "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.tinkerpop.features.ExtraFeatures"}}},
                             "parameter": "extras"}},
                         "domain": {"variable": "hydra.tinkerpop.features.Features"},
                         "parameter": "features"}},
@@ -893,10 +607,7 @@
                   "codomain": {
                     "function": {
                       "codomain": {"variable": "hydra.coders.Language"},
-                      "domain": {
-                        "application": {
-                          "argument": {"variable": "t0"},
-                          "function": {"variable": "hydra.tinkerpop.features.ExtraFeatures"}}}}},
+                      "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.tinkerpop.features.ExtraFeatures"}}}}},
                   "domain": {"variable": "hydra.tinkerpop.features.Features"}}},
               "domain": {"variable": "hydra.coders.LanguageName"}}},
           "variables": ["t0"]}}}],

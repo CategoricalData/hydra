@@ -2,7 +2,7 @@
   "version": 2,
   "generator": "v0-unstamped",
   "inputs": {
-    "hydra.java.coder": { "kind": "Other", "hash": "9f6a1fd69c61fecdf6a9392494ef11d278b4614716bdc384daca97879ca2ab19" },
+    "hydra.java.coder": { "kind": "Other", "hash": "529f22d36e2d488fd6029e4d06eecc23f45df69c8afcc970bd82ccbc74dd4555" },
     "hydra.java.environment": { "kind": "Other", "hash": "32583eab4a73db06c4104ddf5652fbf7b57fe9616ed1e4605a2bce387a9666fd" },
     "hydra.java.names": { "kind": "Other", "hash": "1258bfecd82df22f428af8532d7b996fbce86c58e511ce53235db37e49322358" },
     "hydra.java.serde": { "kind": "Other", "hash": "e60769ed8cd9424af3f765a0af52cfe8f952dadbff8e519fbb0a0afee1ba1569" },
@@ -13,7 +13,7 @@
   "outputs": {
     "Hydra/Dsl/Java/Environment.hs": { "kind": "TargetFile", "hash": "c0684eb62e7ac7b5f5cc0de125ddd4b637787fd4782ae1da66ad1912ad811478" },
     "Hydra/Dsl/Java/Syntax.hs": { "kind": "TargetFile", "hash": "ed55ffca2f76ae505de2d3da817e57e477a2c8c26d7ac3d7487cb6ec2bfa9868" },
-    "Hydra/Java/Coder.hs": { "kind": "TargetFile", "hash": "bf143f21bcf300072fa8aa413b5ca3674ed754514709d4fafe24da0bbe08d430" },
+    "Hydra/Java/Coder.hs": { "kind": "TargetFile", "hash": "4cdf51c2ae615af9823213021ee305bcd508b4153fa522c4051ab56ec54aee8c" },
     "Hydra/Java/Environment.hs": { "kind": "TargetFile", "hash": "6f10a4847a321f64b710e5e1f84a39b270b7f41720ee2de1d52a3b1f4612d602" },
     "Hydra/Java/Language.hs": { "kind": "TargetFile", "hash": "e9cba1049829b0ca2120e3f810005c7e4a2bdc8bdcf4a89f7e0987730d151635" },
     "Hydra/Java/Names.hs": { "kind": "TargetFile", "hash": "88599e8fafa787c04e1f20f05cdc8da775a9848dfd19911ffcc8562e93fb2512" },
