@@ -382,6 +382,7 @@ rewriteAndFoldTermWithPath f term0 =
                   _ -> dflt
           recurse = f (fsub recurse)
       in (recurse [] term0)
+-- | Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both.
 rewriteTerm :: ((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term
 rewriteTerm f term0 =
 
@@ -714,6 +715,7 @@ rewriteTermWithGraph f cx0 term0 =
                   _ -> f recurse1 cx term
           rewrite = \cx -> \term -> f2 rewrite cx term
       in (rewrite cx0 term0)
+-- | Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both.
 rewriteType :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type
 rewriteType f typ0 =
 

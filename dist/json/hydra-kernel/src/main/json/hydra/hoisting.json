@@ -4588,20 +4588,24 @@
       "term": {
         "name": "hydra.hoisting.isApplicationFunction",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {"key": "description", "value": {"literal": {"string": "Check whether a SubtermStep is the applicationFunction step"}}}],
             "body": {
-              "application": {
-                "argument": {"variable": "acc"},
-                "function": {
-                  "cases": {
-                    "cases": [
-                      {
-                        "name": "applicationFunction",
-                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"unit": {}}, "parameter": "_"}}}],
-                    "default": {"literal": {"boolean": false}},
-                    "typeName": "hydra.paths.SubtermStep"}}}},
-            "domain": {"variable": "hydra.paths.SubtermStep"},
-            "parameter": "acc"}},
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "acc"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "applicationFunction",
+                            "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"unit": {}}, "parameter": "_"}}}],
+                        "default": {"literal": {"boolean": false}},
+                        "typeName": "hydra.paths.SubtermStep"}}}},
+                "domain": {"variable": "hydra.paths.SubtermStep"},
+                "parameter": "acc"}}}},
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.paths.SubtermStep"}}},
           "variables": []}}},
@@ -4609,20 +4613,23 @@
       "term": {
         "name": "hydra.hoisting.isLambdaBody",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a SubtermStep is the lambdaBody step"}}}],
             "body": {
-              "application": {
-                "argument": {"variable": "acc"},
-                "function": {
-                  "cases": {
-                    "cases": [
-                      {
-                        "name": "lambdaBody",
-                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"unit": {}}, "parameter": "_"}}}],
-                    "default": {"literal": {"boolean": false}},
-                    "typeName": "hydra.paths.SubtermStep"}}}},
-            "domain": {"variable": "hydra.paths.SubtermStep"},
-            "parameter": "acc"}},
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "acc"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "lambdaBody",
+                            "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"unit": {}}, "parameter": "_"}}}],
+                        "default": {"literal": {"boolean": false}},
+                        "typeName": "hydra.paths.SubtermStep"}}}},
+                "domain": {"variable": "hydra.paths.SubtermStep"},
+                "parameter": "acc"}}}},
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.paths.SubtermStep"}}},
           "variables": []}}},

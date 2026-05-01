@@ -170,7 +170,7 @@ generateRecordAccessor origType typeName ft =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (nominalResultType typeName origType)})
-          body =
+          rawBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just paramDomain),
@@ -207,6 +207,13 @@ generateRecordAccessor origType typeName ft =
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
+          description =
+                  Strings.cat [
+                    "DSL accessor for the ",
+                    (Core.unName fieldName),
+                    " field of ",
+                    (Core.unName typeName)]
+          body = Annotations.setTermDescription (Just description) rawBody
           ts = dslTypeScheme origType [
                 nominalResultType typeName origType] (Core.fieldTypeType ft)
       in Core.Binding {
@@ -255,11 +262,16 @@ generateRecordConstructor origType typeName fieldTypes =
                     (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                       Core.applicationTypeArgument = (Core.fieldTypeType ft)})))) fieldTypes
-          body =
+          rawBody =
                   Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name (Pairs.first pp)),
                     Core.lambdaDomain = (Just (Pairs.second pp)),
                     Core.lambdaBody = acc})) recordTerm (Lists.reverse paramPairs)
+          description =
+                  Strings.cat [
+                    "DSL constructor for ",
+                    (Core.unName typeName)]
+          body = Annotations.setTermDescription (Just description) rawBody
           paramTypes = Lists.map (\ft -> Core.fieldTypeType ft) fieldTypes
           resultType = nominalResultType typeName origType
           ts = dslTypeScheme origType paramTypes resultType
@@ -331,7 +343,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType targetField)})
-          body =
+          rawBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "original"),
                     Core.lambdaDomain = (Just recDomain),
@@ -355,6 +367,13 @@ generateRecordWithUpdater origType typeName allFields targetField =
                                 Core.Field {
                                   Core.fieldName = (Core.Name "fields"),
                                   Core.fieldTerm = (Core.TermList dFields)}]}))}}))}))}))})
+          description =
+                  Strings.cat [
+                    "DSL updater for the ",
+                    (Core.unName targetFieldName),
+                    " field of ",
+                    (Core.unName typeName)]
+          body = Annotations.setTermDescription (Just description) rawBody
           recType = nominalResultType typeName origType
           ts =
                   dslTypeScheme origType [
@@ -419,11 +438,18 @@ generateUnionInjector origType typeName ft =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType ft)})
-          body =
+          rawBody =
                   Logic.ifElse isUnit injectionTerm (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just variantDomain),
                     Core.lambdaBody = injectionTerm}))
+          description =
+                  Strings.cat [
+                    "DSL injection for the ",
+                    (Core.unName fieldName),
+                    " variant of ",
+                    (Core.unName typeName)]
+          body = Annotations.setTermDescription (Just description) rawBody
           unionType = nominalResultType typeName origType
           ts = Logic.ifElse isUnit (dslTypeScheme origType [] unionType) (dslTypeScheme origType [
                 Core.fieldTypeType ft] unionType)
@@ -447,7 +473,7 @@ generateWrappedTypeAccessors origType typeName innerType =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = innerType})
-          wrapBody =
+          rawWrapBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just wrapDomain),
@@ -470,11 +496,17 @@ generateWrappedTypeAccessors origType typeName innerType =
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
+          wrapDescription =
+                  Strings.cat [
+                    "DSL constructor for the ",
+                    (Core.unName typeName),
+                    " wrapper"]
+          wrapBody = Annotations.setTermDescription (Just wrapDescription) rawWrapBody
           unwrapDomain =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = wrapperType})
-          unwrapBody =
+          rawUnwrapBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just unwrapDomain),
@@ -501,6 +533,11 @@ generateWrappedTypeAccessors origType typeName innerType =
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
+          unwrapDescription =
+                  Strings.cat [
+                    "DSL accessor for the body of ",
+                    (Core.unName typeName)]
+          unwrapBody = Annotations.setTermDescription (Just unwrapDescription) rawUnwrapBody
           wrapTs = dslTypeScheme origType [
                 innerType] wrapperType
           unwrapTs = dslTypeScheme origType [

@@ -77,10 +77,16 @@ collectTypeVariablesFromType typ =
 -- | Transform a type binding into a decoder binding
 decodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 decodeBinding cx graph b =
-    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
-      Core.bindingName = (decodeBindingName (Core.bindingName b)),
-      Core.bindingTerm = (decodeTypeNamed (Core.bindingName b) typ),
-      Core.bindingTypeScheme = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))}))
+    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ ->
+      let rawBody = decodeTypeNamed (Core.bindingName b) typ
+          description =
+                  Strings.cat [
+                    "Decoder for ",
+                    (Core.unName (Core.bindingName b))]
+      in (Right (Core.Binding {
+        Core.bindingName = (decodeBindingName (Core.bindingName b)),
+        Core.bindingTerm = (Annotations.setTermDescription (Just description) rawBody),
+        Core.bindingTypeScheme = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))})))
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: Core.Name -> Core.Name
 decodeBindingName n =
