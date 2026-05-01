@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.pairs.bimap",
+        "name": "hydra.lib.default.pairs.bimap",
         "term": {
           "typeLambda": {
             "body": {
@@ -156,7 +156,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.pairs.first",
+        "name": "hydra.lib.default.pairs.first",
         "term": {
           "typeLambda": {
             "body": {
@@ -246,7 +246,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.pairs.second",
+        "name": "hydra.lib.default.pairs.second",
         "term": {
           "typeLambda": {
             "body": {
@@ -334,8 +334,8 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "Evaluation-level implementations of Pair functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.pairs",
+  "description": "Default term-level implementations of Pair functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.pairs",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

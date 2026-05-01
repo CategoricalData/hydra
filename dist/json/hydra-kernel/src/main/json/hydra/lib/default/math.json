@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.math.even",
+        "name": "hydra.lib.default.math.even",
         "term": {
           "typeLambda": {
             "body": {
@@ -180,7 +180,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.math.odd",
+        "name": "hydra.lib.default.math.odd",
         "term": {
           "typeLambda": {
             "body": {
@@ -262,8 +262,8 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1", "t2"]}}}],
-  "description": "Evaluation-level implementations of Math functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.math",
+  "description": "Default term-level implementations of Math functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.math",
   "termDependencies": [],
   "typeDependencies": [
     "hydra.paths",

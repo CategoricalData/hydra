@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Evaluation-level implementations of Pair functions for the Hydra interpreter.
+-- | Default term-level implementations of Pair functions for the Hydra interpreter.
 
-module Hydra.Eval.Lib.Pairs where
+module Hydra.Lib.Default.Pairs where
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Pairs as Pairs
