@@ -6,10 +6,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Operator associativity"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Operator associativity"}}}],
               "body": {
                 "union": [
                   {"name": "none", "type": {"unit": {}}},
@@ -23,40 +20,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Formatting option for code blocks"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Formatting option for code blocks"}}}],
               "body": {
                 "record": [
                   {
                     "name": "indent",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An optional indentation string"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "newlineBeforeContent",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Whether to place a newline before the content"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "newlineAfterContent",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Whether to place a newline after the content"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -65,39 +48,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An expression enclosed by brackets"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An expression enclosed by brackets"}}}],
               "body": {
                 "record": [
                   {
                     "name": "brackets",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
                         "body": {"variable": "hydra.ast.Brackets"}}}},
                   {
                     "name": "enclosed",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The expression within the brackets"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
                         "body": {"variable": "hydra.ast.Expr"}}}},
                   {
                     "name": "style",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The formatting style for the bracketed block"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
                         "body": {"variable": "hydra.ast.BlockStyle"}}}}]}}},
           "variables": []}}},
     {
@@ -106,29 +76,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Matching open and close bracket symbols"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Matching open and close bracket symbols"}}}],
               "body": {
                 "record": [
                   {
                     "name": "open",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The opening bracket symbol"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}}},
                   {
                     "name": "close",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The closing bracket symbol"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}}}]}}},
           "variables": []}}},
     {
@@ -137,47 +98,32 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An abstract expression"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An abstract expression"}}}],
               "body": {
                 "union": [
                   {
                     "name": "const",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A constant symbol"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A constant symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}}},
                   {
                     "name": "indent",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An indented expression"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An indented expression"}}}],
                         "body": {"variable": "hydra.ast.IndentedExpression"}}}},
                   {
                     "name": "op",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An operator expression"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An operator expression"}}}],
                         "body": {"variable": "hydra.ast.OpExpr"}}}},
                   {
                     "name": "brackets",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A bracketed expression"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A bracketed expression"}}}],
                         "body": {"variable": "hydra.ast.BracketExpr"}}}},
                   {
                     "name": "seq",
@@ -197,29 +143,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An expression indented in a certain style"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An expression indented in a certain style"}}}],
               "body": {
                 "record": [
                   {
                     "name": "style",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The indentation style"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
                         "body": {"variable": "hydra.ast.IndentStyle"}}}},
                   {
                     "name": "expr",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The expression to be indented"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
                         "body": {"variable": "hydra.ast.Expr"}}}}]}}},
           "variables": []}}},
     {
@@ -228,30 +165,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Any of several indentation styles"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Any of several indentation styles"}}}],
               "body": {
                 "union": [
                   {
                     "name": "allLines",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Indent all lines with the given string"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Indent all lines with the given string"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "subsequentLines",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Indent only lines after the first with the given string"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -260,47 +187,32 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An operator symbol"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An operator symbol"}}}],
               "body": {
                 "record": [
                   {
                     "name": "symbol",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The operator symbol"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}}},
                   {
                     "name": "padding",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The padding around the operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
                         "body": {"variable": "hydra.ast.Padding"}}}},
                   {
                     "name": "precedence",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The precedence of the operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
                         "body": {"variable": "hydra.ast.Precedence"}}}},
                   {
                     "name": "associativity",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The associativity of the operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
                         "body": {"variable": "hydra.ast.Associativity"}}}}]}}},
           "variables": []}}},
     {
@@ -309,38 +221,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An operator expression"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An operator expression"}}}],
               "body": {
                 "record": [
                   {
                     "name": "op",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
                         "body": {"variable": "hydra.ast.Op"}}}},
                   {
                     "name": "lhs",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The left-hand side operand"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
                         "body": {"variable": "hydra.ast.Expr"}}}},
                   {
                     "name": "rhs",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The right-hand side operand"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
                         "body": {"variable": "hydra.ast.Expr"}}}}]}}},
           "variables": []}}},
     {
@@ -349,29 +249,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Left and right padding for an operator"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Left and right padding for an operator"}}}],
               "body": {
                 "record": [
                   {
                     "name": "left",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Padding to the left of the operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
                         "body": {"variable": "hydra.ast.Ws"}}}},
                   {
                     "name": "right",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Padding to the right of the operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
                         "body": {"variable": "hydra.ast.Ws"}}}}]}}},
           "variables": []}}},
     {
@@ -380,10 +271,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Operator precedence"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Operator precedence"}}}],
               "body": {"wrap": {"literal": {"integer": {"int32": {}}}}}}},
           "variables": []}}},
     {
@@ -404,19 +292,13 @@
                     "name": "op",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The separator operator"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
                         "body": {"variable": "hydra.ast.Op"}}}},
                   {
                     "name": "elements",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The expressions to join"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
                         "body": {"list": {"variable": "hydra.ast.Expr"}}}}}]}}},
           "variables": []}}},
     {
@@ -425,8 +307,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "Any symbol"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Any symbol"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -435,57 +316,31 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "One of several classes of whitespace"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "One of several classes of whitespace"}}}],
               "body": {
                 "union": [
                   {
                     "name": "none",
                     "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "No whitespace"}}}],
-                        "body": {"unit": {}}}}},
+                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "No whitespace"}}}], "body": {"unit": {}}}}},
                   {
                     "name": "space",
                     "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A single space"}}}],
-                        "body": {"unit": {}}}}},
+                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "A single space"}}}], "body": {"unit": {}}}}},
                   {
                     "name": "break",
                     "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A line break"}}}],
-                        "body": {"unit": {}}}}},
+                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "A line break"}}}], "body": {"unit": {}}}}},
                   {
                     "name": "breakAndIndent",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A line break followed by indentation"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A line break followed by indentation"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "doubleBreak",
                     "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two line breaks"}}}],
-                        "body": {"unit": {}}}}}]}}},
+                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Two line breaks"}}}], "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
   "description": "A model which provides a common syntax tree for Hydra serializers",
   "namespace": "hydra.ast",

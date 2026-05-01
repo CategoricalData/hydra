@@ -6,11 +6,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "The identifier of an elimination constructor (legacy)"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of an elimination constructor (legacy)"}}}],
               "body": {
                 "union": [
                   {"name": "record", "type": {"unit": {}}},
@@ -23,15 +19,8 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "The identifier of a function constructor (legacy)"}}}],
-              "body": {
-                "union": [
-                  {"name": "elimination", "type": {"unit": {}}},
-                  {"name": "lambda", "type": {"unit": {}}}]}}},
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a function constructor (legacy)"}}}],
+              "body": {"union": [{"name": "elimination", "type": {"unit": {}}}, {"name": "lambda", "type": {"unit": {}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -39,10 +28,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The identifier of a literal constructor"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a literal constructor"}}}],
               "body": {
                 "union": [
                   {"name": "binary", "type": {"unit": {}}},
@@ -58,11 +44,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "The identifier of a term expression constructor"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a term expression constructor"}}}],
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},
@@ -93,10 +75,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The identifier of a type constructor"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a type constructor"}}}],
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},

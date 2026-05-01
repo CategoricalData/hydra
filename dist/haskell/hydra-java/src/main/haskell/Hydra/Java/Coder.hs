@@ -220,7 +220,7 @@ augmentVariantClass aliases tparams elName cd =
                       Syntax.ClassModifierFinal]
             oldBody = Syntax.normalClassDeclarationBody v0
             oldDecls = Syntax.unClassBody oldBody
-            acceptDecl = noComment (Utils.toAcceptMethod False tparams)
+            acceptDecl = withCommentString "Dispatch to {@code visitor}." (Utils.toAcceptMethod False tparams)
             newBody = Syntax.ClassBody (Lists.concat2 oldDecls [
                   acceptDecl])
         in (Syntax.ClassDeclarationNormal (Syntax.NormalClassDeclaration {
@@ -575,8 +575,8 @@ compareToZeroClause tmpName fname =
       in (Utils.javaEqualityExpressionToJavaInclusiveOrExpression (Syntax.EqualityExpressionEqual (Syntax.EqualityExpression_Binary {
         Syntax.equalityExpression_BinaryLhs = lhs,
         Syntax.equalityExpression_BinaryRhs = rhs})))
-constantDecl :: String -> JavaEnvironment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
-constantDecl javaName aliases name cx g =
+constantDecl :: String -> String -> JavaEnvironment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
+constantDecl comment javaName aliases name cx g =
 
       let mods =
               [
@@ -593,16 +593,30 @@ constantDecl javaName aliases name cx g =
                 Syntax.VariableInitializerExpression (Utils.javaConstructorCall (Utils.javaConstructorName nameName Nothing) [
                   arg] Nothing)
             var = Utils.javaVariableDeclarator (Syntax.Identifier javaName) (Just init)
-        in (Right (noComment (Utils.javaMemberField mods jt var))))))
-constantDeclForFieldType :: JavaEnvironment.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
-constantDeclForFieldType aliases ftyp cx g =
+        in (Right (withCommentString comment (Utils.javaMemberField mods jt var))))))
+constantDeclForFieldType :: Core.Name -> JavaEnvironment.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
+constantDeclForFieldType parentName aliases ftyp cx g =
 
       let name = Core.fieldTypeName ftyp
           javaName =
                   Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))
-      in (constantDecl javaName aliases name cx g)
+          comment =
+                  Strings.cat [
+                    "Name of the {@code ",
+                    (Core.unName parentName),
+                    ".",
+                    (Core.unName name),
+                    "} field."]
+      in (constantDecl comment javaName aliases name cx g)
 constantDeclForTypeName :: JavaEnvironment.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
-constantDeclForTypeName aliases name cx g = constantDecl "TYPE_" aliases name cx g
+constantDeclForTypeName aliases name cx g =
+
+      let comment =
+              Strings.cat [
+                "Name of the {@code ",
+                (Core.unName name),
+                "} type."]
+      in (constantDecl comment "TYPE_" aliases name cx g)
 constructElementsInterface :: Packaging.Module -> [Syntax.InterfaceMemberDeclaration] -> (Core.Name, Syntax.CompilationUnit)
 constructElementsInterface mod members =
 
@@ -683,18 +697,43 @@ declarationForRecordType isInner isSer aliases tparams elName fields cx g =
     declarationForRecordType_ isInner isSer aliases tparams elName Nothing fields cx g
 declarationForRecordType_ :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
-    Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ -> Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> recordWithMethod aliases elName fields f cx g) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons -> Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
-      let comparableMethods =
-              Maybes.cases parentName (Logic.ifElse (Logic.and (Logic.not isInner) isSer) [
-                recordCompareToMethod aliases tparams elName fields] []) (\pn -> Logic.ifElse isSer [
-                variantCompareToMethod aliases tparams pn elName fields] [])
-          bodyDecls =
-                  Lists.concat2 tn (Lists.concat2 memberVars_ (Lists.map (\x -> noComment x) (Lists.concat2 [
-                    cons,
-                    (recordEqualsMethod aliases elName fields),
-                    (recordHashCodeMethod fields)] (Lists.concat2 comparableMethods withMethods))))
-          ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
-      in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))
+    Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ ->
+      let elNameStr = Core.unName elName
+      in (Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> Eithers.bind (recordWithMethod aliases elName fields f cx g) (\decl ->
+        let fname = Core.unName (Core.fieldTypeName f)
+            comment =
+                    Strings.cat [
+                      "Returns a copy of this {@link ",
+                      elNameStr,
+                      "} with {@code ",
+                      fname,
+                      "} replaced."]
+        in (Right (withCommentString comment decl)))) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons ->
+        let consComment =
+                Strings.cat [
+                  "Constructs an immutable {@link ",
+                  elNameStr,
+                  "}."]
+            consWithComment = withCommentString consComment cons
+        in (Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType elName aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
+          let comparableMethods =
+                  Maybes.cases parentName (Logic.ifElse (Logic.and (Logic.not isInner) isSer) [
+                    recordCompareToMethod aliases tparams elName fields] []) (\pn -> Logic.ifElse isSer [
+                    variantCompareToMethod aliases tparams pn elName fields] [])
+              noCommentMethods =
+                      Lists.map (\x -> noComment x) (Lists.concat2 [
+                        recordEqualsMethod aliases elName fields,
+                        (recordHashCodeMethod fields)] comparableMethods)
+              bodyDecls =
+                      Lists.concat [
+                        tn,
+                        memberVars_,
+                        [
+                          consWithComment],
+                        noCommentMethods,
+                        withMethods]
+              ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
+          in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))))
 declarationForUnionType :: Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForUnionType isSer aliases tparams elName fields cx g =
     Eithers.bind (Eithers.mapList (\ft ->
@@ -714,17 +753,26 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
             acceptDecl = Utils.toAcceptMethod True tparams
             vtparams = Lists.concat2 tparams [
                   Utils.javaTypeParameter JavaNames.visitorReturnParameter]
+            elNameStr = Core.unName elName
             visitorMethods =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
+                          fnameStr = Core.unName fname
                           typeArgs = Lists.map (\tp -> Utils.typeParameterToTypeArgument tp) tparams
-                          varRef =
-                                  Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs (Utils.variantClassName False elName fname) Nothing)
+                          varName = Utils.variantClassName False elName fname
+                          varNameStr = Core.unName varName
+                          varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           resultR = Utils.javaTypeToJavaResult (Syntax.TypeReference Utils.visitorTypeVariable)
-                      in (Utils.interfaceMethodDeclaration [] [] JavaNames.visitMethodName [
-                        param] resultR Nothing)) fields
-            visitorBody = Syntax.InterfaceBody (Lists.map (\m -> noInterfaceComment m) visitorMethods)
+                          comment =
+                                  Strings.cat [
+                                    "Visit the {@link ",
+                                    varNameStr,
+                                    "} case."]
+                      in (comment, (Utils.interfaceMethodDeclaration [] [] JavaNames.visitMethodName [
+                        param] resultR Nothing))) fields
+            visitorBody =
+                    Syntax.InterfaceBody (Lists.map (\p -> withInterfaceCommentString (Pairs.first p) (Pairs.second p)) visitorMethods)
             visitor =
                     Utils.javaInterfaceDeclarationToJavaClassBodyDeclaration (Syntax.NormalInterfaceDeclaration {
                       Syntax.normalInterfaceDeclarationModifiers = [
@@ -751,22 +799,31 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                     Utils.interfaceMethodDeclaration defaultMod [] JavaNames.otherwiseMethodName [
                       mainInstanceParam] resultR (Just [
                       throwStmt])
+            otherwiseComment = "Default branch for unhandled cases."
             pvVisitMethods =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
-                          varRef =
-                                  Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs (Utils.variantClassName False elName fname) Nothing)
+                          varName = Utils.variantClassName False elName fname
+                          varNameStr = Core.unName varName
+                          varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           mi =
                                   Utils.methodInvocation Nothing (Syntax.Identifier JavaNames.otherwiseMethodName) [
                                     Utils.javaIdentifierToJavaExpression (Syntax.Identifier "instance")]
                           returnOtherwise =
                                   Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (Utils.javaPrimaryToJavaExpression (Utils.javaMethodInvocationToJavaPrimary mi))))
-                      in (Utils.interfaceMethodDeclaration defaultMod [] JavaNames.visitMethodName [
-                        param] resultR (Just [
-                        returnOtherwise]))) fields
-            pvBody = Syntax.InterfaceBody (Lists.map (\m -> noInterfaceComment m) (Lists.concat2 [
-                  otherwiseDecl] pvVisitMethods))
+                          comment =
+                                  Strings.cat [
+                                    "Visit the {@link ",
+                                    varNameStr,
+                                    "} case."]
+                      in (
+                        comment,
+                        (Utils.interfaceMethodDeclaration defaultMod [] JavaNames.visitMethodName [
+                          param] resultR (Just [
+                          returnOtherwise])))) fields
+            pvBody =
+                    Syntax.InterfaceBody (Lists.cons (withInterfaceCommentString otherwiseComment otherwiseDecl) (Lists.map (\p -> withInterfaceCommentString (Pairs.first p) (Pairs.second p)) pvVisitMethods))
             partialVisitor =
                     Utils.javaInterfaceDeclarationToJavaClassBodyDeclaration (Syntax.NormalInterfaceDeclaration {
                       Syntax.normalInterfaceDeclarationModifiers = [
@@ -776,15 +833,31 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                       Syntax.normalInterfaceDeclarationExtends = [
                         Syntax.InterfaceType visitorClassType],
                       Syntax.normalInterfaceDeclarationBody = pvBody})
-        in (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\tn0 -> Eithers.bind (Eithers.mapList (\ft -> constantDeclForFieldType aliases ft cx g) fields) (\tn1 ->
+        in (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\tn0 -> Eithers.bind (Eithers.mapList (\ft -> constantDeclForFieldType elName aliases ft cx g) fields) (\tn1 ->
           let tn = Lists.concat2 [
                 tn0] tn1
+              privateConstComment =
+                      Strings.cat [
+                        "Constructs an immutable {@link ",
+                        elNameStr,
+                        "}."]
+              acceptComment = "Dispatch to {@code visitor}."
+              visitorIfaceComment =
+                      Strings.cat [
+                        "Visitor over {@link ",
+                        elNameStr,
+                        "}."]
+              partialVisitorIfaceComment =
+                      Strings.cat [
+                        "Partial visitor over {@link ",
+                        elNameStr,
+                        "} with a default {@link #otherwise} branch."]
               otherDecls =
-                      Lists.map (\d -> noComment d) [
-                        privateConst,
-                        acceptDecl,
-                        visitor,
-                        partialVisitor]
+                      [
+                        withCommentString privateConstComment privateConst,
+                        (withCommentString acceptComment acceptDecl),
+                        (withCommentString visitorIfaceComment visitor),
+                        (withCommentString partialVisitorIfaceComment partialVisitor)]
               bodyDecls =
                       Lists.concat [
                         tn,
