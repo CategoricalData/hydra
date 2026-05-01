@@ -165,8 +165,8 @@ scalaLanguage = define "scalaLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.scala")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.scala")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

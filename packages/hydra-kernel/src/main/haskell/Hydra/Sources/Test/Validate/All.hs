@@ -14,6 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map  as M
 
 import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
+import qualified Hydra.Sources.Test.Validate.Packaging as ValidatePackaging
 
 
 ns :: Namespace
@@ -28,11 +29,11 @@ module_ = Module {
             moduleDescription = Just "Hydra's validation test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]
-    namespaces = [ValidateCore.ns]
+    namespaces = [ValidateCore.ns, ValidatePackaging.ns]
 
 allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all validation tests" $
     Testing.testGroup (string "validation") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
   where
-    subgroups = [ValidateCore.allTests]
+    subgroups = [ValidateCore.allTests, ValidatePackaging.allTests]

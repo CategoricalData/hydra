@@ -68,8 +68,8 @@ yamlLanguage = define "yamlLanguage" $
         (Just true) [
         _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName_ (string "hydra.yaml"))
-    (Coders.languageConstraints_
+    (Coders.languageName2 (string "hydra.yaml"))
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

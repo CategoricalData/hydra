@@ -160,8 +160,8 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.haskell")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.haskell")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

@@ -4,15 +4,15 @@
 -- Term-encoded schemas and mappings) that are shared by both the Python
 -- and Java code generators.
 
-module Hydra.Demos.GenPG.Modules where
+module Hydra.Demos.Genpg.Modules where
 
 import Hydra.Kernel
-import Hydra.Demos.GenPG.Examples.Sales.DatabaseSchema as Sales
-import Hydra.Demos.GenPG.Examples.Sales.GraphSchema as Sales
-import Hydra.Demos.GenPG.Examples.Sales.Mapping as Sales
-import Hydra.Demos.GenPG.Examples.Health.DatabaseSchema as Health
-import Hydra.Demos.GenPG.Examples.Health.GraphSchema as Health
-import Hydra.Demos.GenPG.Examples.Health.Mapping as Health
+import Hydra.Demos.Genpg.Examples.Sales.DatabaseSchema as Sales
+import Hydra.Demos.Genpg.Examples.Sales.GraphSchema as Sales
+import Hydra.Demos.Genpg.Examples.Sales.Mapping as Sales
+import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema as Health
+import Hydra.Demos.Genpg.Examples.Health.GraphSchema as Health
+import Hydra.Demos.Genpg.Examples.Health.Mapping as Health
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Pg.Model as EncodePg
 import qualified Hydra.Encode.Tabular as EncodeTabular

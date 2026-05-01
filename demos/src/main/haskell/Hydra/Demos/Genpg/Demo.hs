@@ -1,13 +1,13 @@
-module Hydra.Demos.GenPG.Demo where
+module Hydra.Demos.Genpg.Demo where
 
 import Hydra.Kernel
 import qualified Hydra.Show.Errors as ShowError
-import Hydra.Demos.GenPG.Examples.Sales.DatabaseSchema
-import Hydra.Demos.GenPG.Examples.Sales.GraphSchema
-import Hydra.Demos.GenPG.Examples.Sales.Mapping
-import Hydra.Demos.GenPG.Examples.Health.DatabaseSchema
-import Hydra.Demos.GenPG.Examples.Health.GraphSchema
-import Hydra.Demos.GenPG.Examples.Health.Mapping
+import Hydra.Demos.Genpg.Examples.Sales.DatabaseSchema
+import Hydra.Demos.Genpg.Examples.Sales.GraphSchema
+import Hydra.Demos.Genpg.Examples.Sales.Mapping
+import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema
+import Hydra.Demos.Genpg.Examples.Health.GraphSchema
+import Hydra.Demos.Genpg.Examples.Health.Mapping
 import Hydra.Dsl.Pg.Mappings
 import Hydra.Lib.Literals
 import Hydra.Pg.Graphson.Utils

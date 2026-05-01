@@ -10,17 +10,10 @@
         "name": "hydra.test.testEnv.testGraph",
         "term": {
           "typeLambda": {
-            "body": {
-              "lambda": {
-                "body": {"variable": "hydra.lexical.emptyGraph"},
-                "domain": {"variable": "t0"},
-                "parameter": "tys"}},
+            "body": {"lambda": {"body": {"variable": "hydra.lexical.emptyGraph"}, "domain": {"variable": "t0"}, "parameter": "tys"}},
             "parameter": "t0"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.graph.Graph"},
-              "domain": {"variable": "t0"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
   "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
   "namespace": "hydra.test.testEnv",

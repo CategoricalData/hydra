@@ -474,29 +474,22 @@ This applies to:
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
 
-**Check a single module:**
-```bash
-grep 'toDefinition\|toBinding' packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs \
-  | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
-  | awk '{name=$1} NR>1 && name<prev {print prev " before " name " (out of order)"} {prev=name}'
-```
+**`definitions` list ordering is validator-enforced.**
+The `Validate.Packaging.checkDefinitionOrdering` check (run as part of
+`Validate.Packaging.kernelModule` / `kernelPackage`) walks each module's
+`definitions` list and reports any consecutive pair whose local names are
+not in ascending lexicographic ASCII order.
+This check runs against `Sources.kernelModules` as part of `/sync-haskell()`,
+so list-order violations fail the sync.
+A maintenance pass therefore does not need to re-check the list order.
 
-**Batch check all Source modules:**
-```bash
-#!/bin/bash
-# check-definition-order.sh — run from the repo root
-for f in $(find packages/*/src/main/haskell -name '*.hs' 2>/dev/null); do
-  out=$(grep 'toDefinition\|toBinding' "$f" \
-    | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
-    | awk '{name=$1} NR>1 && name<prev {print "  " prev " before " name} {prev=name}')
-  if [ -n "$out" ]; then
-    echo "$f:"
-    echo "$out"
-  fi
-done
-```
-
-Modules with no output are correctly ordered.
+**Body ordering is not validator-enforced.**
+The validator inspects only the `definitions` list, not the order of
+function bindings in the source file.
+Per the style guide, body order must mirror list order, but this
+correspondence is still a manual / LLM-assisted check.
+For each Source module, walk the file and confirm that top-level bindings
+appear in the same order as their entries in the `definitions` list.
 
 **Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
 definition body together — they must stay in sync.
@@ -917,13 +910,20 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 3. Check for design violations (post-generation patches, hand-written files under
    `dist/`, host-specific code under `packages/`); fix at the generator or move
    to `heads/`.
-4. Check coding style (definition ordering) across all Source modules; fix violations.
-5. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
-6. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
-7. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
-8. Check Python `__init__.py` freshness.
-9. Review user documentation for accuracy, broken links, and small improvements.
-10. Do a logical code review pass on a sampled slice (report-first, no edits);
+4. Check that definition **bodies** are listed in the same order as the `definitions`
+   list across all Source modules; fix violations.
+   The `definitions` list itself is validator-enforced — see below.
+5. Run `Validate.Packaging.kernelPackage` against `Sources.kernelModules`
+   (i.e. the kernel-quality validator suite, including `checkDefinitionOrdering`,
+   `checkDefinitionDocumentation`, `checkDefinitionNameConvention`, etc.).
+   This step belongs in `/sync-haskell()` and may move there in the future;
+   until it does, run it as part of `/maintenance()`.
+6. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
+7. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
+8. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
+9. Check Python `__init__.py` freshness.
+10. Review user documentation for accuracy, broken links, and small improvements.
+11. Do a logical code review pass on a sampled slice (report-first, no edits);
     discuss findings with the user before acting.
 
 After all checks, present a summary of findings and changes to the user.
@@ -942,7 +942,8 @@ If no changes affect generated files or tests, skip the sync.
 | Non-source file scan | After branch merges, periodically |
 | Stale generated files | After refactoring (renames, deletes, splits) |
 | Design violations | Periodically, before release, after adding sync-script patches |
-| Coding style | After large changes, before release |
+| Coding style (body order vs list order) | After large changes, before release |
+| Kernel package validation (`kernelPackage`) | Every maintenance pass; ideally part of `/sync-haskell()` |
 | Primitive consistency | After adding/changing primitives, after adding a new implementation |
 | Test parity | After sync-all, after benchmarking runs |
 | `.cabal` exposed-modules | After deleting generated Haskell modules |

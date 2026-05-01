@@ -69,8 +69,8 @@ module_ = Module {
             moduleDescription = Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")}
   where
     definitions = [
-      toDefinition bind_,
       toDefinition bimap_,
+      toDefinition bind_,
       toDefinition either_,
       toDefinition foldl_,
       toDefinition fromLeft_,
@@ -84,6 +84,22 @@ module_ = Module {
       toDefinition mapSet_,
       toDefinition partitionEithers_,
       toDefinition rights_]
+
+-- | Interpreter-friendly bimap for Either terms.
+-- Takes two function terms (for left and right) and an Either term, applies
+-- the appropriate function to the contained value and re-wraps the result.
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ = define "bimap" $
+  doc "Interpreter-friendly bimap for Either terms." $
+  "cx" ~> "g" ~>
+  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      right $ Eithers.either_
+        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
+        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
+        (var "e")]
 
 -- | Interpreter-friendly bind for Either terms.
 -- Takes an Either term and a function term, applies the function to the Right
@@ -101,22 +117,6 @@ bind_ = define "bind" $
         ("val" ~> Core.termEither $ left $ var "val")
         -- If Right: apply funTerm to the value
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "e")]
-
--- | Interpreter-friendly bimap for Either terms.
--- Takes two function terms (for left and right) and an Either term, applies
--- the appropriate function to the contained value and re-wraps the result.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
-bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Either terms." $
-  "cx" ~> "g" ~>
-  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
-        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
 
 -- | Interpreter-friendly case analysis for Either terms.
