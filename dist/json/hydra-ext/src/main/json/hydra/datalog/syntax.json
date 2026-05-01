@@ -15,9 +15,7 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Program",
-        "typeScheme": {
-          "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program_Elmt",
@@ -33,12 +31,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "Relation",
-                "type": {"variable": "hydra.datalog.syntax.Relation"}},
-              {
-                "name": "ConstantList",
-                "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
+              {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
+              {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
           "variables": []}}},
     {
       "type": {
@@ -47,9 +41,7 @@
           "body": {
             "record": [
               {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {
-                "name": "AtomList",
-                "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
+              {"name": "AtomList", "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
           "variables": []}}},
     {
       "type": {
@@ -57,12 +49,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "Relation",
-                "type": {"variable": "hydra.datalog.syntax.Relation"}},
-              {
-                "name": "TermList",
-                "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
+              {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
+              {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
           "variables": []}}},
     {
       "type": {
@@ -71,9 +59,7 @@
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {
-                "name": "multiple",
-                "type": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}]},
+              {"name": "multiple", "type": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}]},
           "variables": []}}},
     {
       "type": {
@@ -82,9 +68,7 @@
           "body": {
             "record": [
               {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {
-                "name": "AtomList",
-                "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
+              {"name": "AtomList", "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
           "variables": []}}},
     {
       "type": {
@@ -92,12 +76,8 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "Constant",
-                "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {
-                "name": "Variable",
-                "type": {"variable": "hydra.datalog.syntax.Variable"}}]},
+              {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
+              {"name": "Variable", "type": {"variable": "hydra.datalog.syntax.Variable"}}]},
           "variables": []}}},
     {
       "type": {
@@ -106,9 +86,7 @@
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
-              {
-                "name": "multiple",
-                "type": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}]},
+              {"name": "multiple", "type": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}]},
           "variables": []}}},
     {
       "type": {
@@ -117,9 +95,7 @@
           "body": {
             "record": [
               {"name": "Term", "type": {"variable": "hydra.datalog.syntax.Term"}},
-              {
-                "name": "TermList",
-                "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
+              {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
           "variables": []}}},
     {
       "type": {
@@ -127,12 +103,8 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "single",
-                "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {
-                "name": "multiple",
-                "type": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}]},
+              {"name": "single", "type": {"variable": "hydra.datalog.syntax.Constant"}},
+              {"name": "multiple", "type": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}]},
           "variables": []}}},
     {
       "type": {
@@ -140,12 +112,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "Constant",
-                "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {
-                "name": "ConstantList",
-                "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
+              {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
+              {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
           "variables": []}}}],
   "description": "A basic Datalog model",
   "namespace": "hydra.datalog.syntax",

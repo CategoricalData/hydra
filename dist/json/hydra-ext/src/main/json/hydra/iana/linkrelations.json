@@ -6,10 +6,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An IANA link relation type"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An IANA link relation type"}}}],
               "body": {
                 "union": [
                   {
@@ -19,9 +16,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a resource that is the subject of the link's context. [RFC6903], section 2"}}}],
+                            "value": {"literal": {"string": "Refers to a resource that is the subject of the link's context. [RFC6903], section 2"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "acl",
@@ -38,11 +33,7 @@
                     "name": "alternate",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Refers to a substitute for this context [HTML]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to a substitute for this context [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "amphtml",
@@ -52,18 +43,13 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Used to reference alternative content that uses the AMP profile of the HTML format. [AMP HTML]"}}}],
+                              "literal": {"string": "Used to reference alternative content that uses the AMP profile of the HTML format. [AMP HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "appendix",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Refers to an appendix. [HTML 4.01 Specification]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to an appendix. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "apple-touch-icon",
@@ -72,9 +58,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to an icon for the context. Synonym for icon. [Configuring Web Applications]"}}}],
+                            "value": {"literal": {"string": "Refers to an icon for the context. Synonym for icon. [Configuring Web Applications]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "apple-touch-startup-image",
@@ -83,9 +67,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a launch screen for the context. [Configuring Web Applications]"}}}],
+                            "value": {"literal": {"string": "Refers to a launch screen for the context. [Configuring Web Applications]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "archives",
@@ -95,17 +77,13 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Refers to a collection of records, documents, or other materials of historical interest. [HTML5]"}}}],
+                              "literal": {"string": "Refers to a collection of records, documents, or other materials of historical interest. [HTML5]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "author",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Refers to the context's author. [HTML]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to the context's author. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "blocked-by",
@@ -115,8 +93,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Identifies the entity that blocks access to a resource following receipt of a legal demand. [RFC7725]"}}}],
+                              "literal": {"string": "Identifies the entity that blocks access to a resource following receipt of a legal demand. [RFC7725]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bookmark",
@@ -125,9 +102,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Gives a permanent link to use for bookmarking purposes. [HTML]"}}}],
+                            "value": {"literal": {"string": "Gives a permanent link to use for bookmarking purposes. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "canonical",
@@ -136,9 +111,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Designates the preferred version of a resource (the IRI and its contents). [RFC6596]"}}}],
+                            "value": {"literal": {"string": "Designates the preferred version of a resource (the IRI and its contents). [RFC6596]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "chapter",
@@ -147,9 +120,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a chapter in a collection of resources. [HTML 4.01 Specification]"}}}],
+                            "value": {"literal": {"string": "Refers to a chapter in a collection of resources. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "cite-as",
@@ -177,11 +148,7 @@
                     "name": "contents",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Refers to a table of contents. [HTML 4.01 Specification]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to a table of contents. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "convertedfrom",
@@ -201,9 +168,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a copyright statement that applies to the link's context. [HTML 4.01 Specification]"}}}],
+                            "value": {"literal": {"string": "Refers to a copyright statement that applies to the link's context. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "create-form",
@@ -212,9 +177,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The target IRI points to a resource where a submission form can be obtained. [RFC6861]"}}}],
+                            "value": {"literal": {"string": "The target IRI points to a resource where a submission form can be obtained. [RFC6861]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "current",
@@ -224,8 +187,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Refers to a resource containing the most recent item(s) in a collection of resources. [RFC5005]"}}}],
+                              "literal": {"string": "Refers to a resource containing the most recent item(s) in a collection of resources. [RFC5005]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "describedby",
@@ -289,9 +251,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a resource that can be used to edit the link's context. [RFC5023]"}}}],
+                            "value": {"literal": {"string": "Refers to a resource that can be used to edit the link's context. [RFC5023]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "edit-form",
@@ -312,8 +272,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Refers to a resource that can be used to edit media associated with the link's context. [RFC5023]"}}}],
+                              "literal": {"string": "Refers to a resource that can be used to edit media associated with the link's context. [RFC5023]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "enclosure",
@@ -323,8 +282,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Identifies a related resource that is potentially large and might require special handling. [RFC4287]"}}}],
+                              "literal": {"string": "Identifies a related resource that is potentially large and might require special handling. [RFC4287]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "external",
@@ -333,9 +291,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a resource that is not part of the same site as the current context. [HTML]"}}}],
+                            "value": {"literal": {"string": "Refers to a resource that is not part of the same site as the current context. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "first",
@@ -352,20 +308,13 @@
                     "name": "glossary",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Refers to a glossary of terms. [HTML 4.01 Specification]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to a glossary of terms. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "help",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Refers to context-sensitive help. [HTML]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to context-sensitive help. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "hosts",
@@ -393,22 +342,13 @@
                     "name": "icon",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to an icon representing the link's context. [HTML]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to an icon representing the link's context. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "index",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Refers to an index. [HTML 4.01 Specification]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to an index. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "intervalafter",
@@ -604,9 +544,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Points to a resource containing the latest (e.g., current) version of the context. [RFC5829]"}}}],
+                            "value": {"literal": {"string": "Points to a resource containing the latest (e.g., current) version of the context. [RFC5829]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "license",
@@ -646,11 +584,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Links to a manifest file for the context. [Web App Manifest]"}}}],
+                          {"key": "description", "value": {"literal": {"string": "Links to a manifest file for the context. [Web App Manifest]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "mask-icon",
@@ -659,9 +593,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a mask that can be applied to the icon for the context. [Creating Pinned Tab Icons]"}}}],
+                            "value": {"literal": {"string": "Refers to a mask that can be applied to the icon for the context. [Creating Pinned Tab Icons]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "media-feed",
@@ -689,11 +621,7 @@
                     "name": "micropub",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Links to the context's Micropub endpoint. [Micropub]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Links to the context's Micropub endpoint. [Micropub]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "modulepreload",
@@ -713,9 +641,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a resource that can be used to monitor changes in an HTTP resource. [RFC5989]"}}}],
+                            "value": {"literal": {"string": "Refers to a resource that can be used to monitor changes in an HTTP resource. [RFC5989]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "monitor-group",
@@ -725,8 +651,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Refers to a resource that can be used to monitor changes in a specified group of HTTP resources. [RFC5989]"}}}],
+                              "literal": {"string": "Refers to a resource that can be used to monitor changes in a specified group of HTTP resources. [RFC5989]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "next",
@@ -746,9 +671,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to the immediately following archive resource. [RFC5005]"}}}],
+                            "value": {"literal": {"string": "Refers to the immediately following archive resource. [RFC5005]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "nofollow",
@@ -758,8 +681,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Indicates that the context's original author or publisher does not endorse the link target. [HTML]"}}}],
+                              "literal": {"string": "Indicates that the context's original author or publisher does not endorse the link target. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "noopener",
@@ -779,9 +701,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Indicates that no referrer information is to be leaked when following the link. [HTML]"}}}],
+                            "value": {"literal": {"string": "Indicates that no referrer information is to be leaked when following the link. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "opener",
@@ -856,9 +776,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Gives the address of the pingback resource for the link context. [Pingback 1.0]"}}}],
+                            "value": {"literal": {"string": "Gives the address of the pingback resource for the link context. [Pingback 1.0]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "preconnect",
@@ -878,9 +796,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Points to a resource containing the predecessor version in the version history. [RFC5829]"}}}],
+                            "value": {"literal": {"string": "Points to a resource containing the predecessor version in the version history. [RFC5829]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "prefetch",
@@ -933,9 +849,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a resource that provides a preview of the link's context. [RFC6903], section 3"}}}],
+                            "value": {"literal": {"string": "Refers to a resource that provides a preview of the link's context. [RFC6903], section 3"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "previous",
@@ -955,9 +869,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to the immediately preceding archive resource. [RFC5005]"}}}],
+                            "value": {"literal": {"string": "Refers to the immediately preceding archive resource. [RFC5005]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "privacy-policy",
@@ -966,9 +878,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a privacy policy associated with the link's context. [RFC6903], section 4"}}}],
+                            "value": {"literal": {"string": "Refers to a privacy policy associated with the link's context. [RFC6903], section 4"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "profile",
@@ -996,10 +906,7 @@
                     "name": "related",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Identifies a related resource. [RFC4287]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Identifies a related resource. [RFC4287]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "restconf",
@@ -1019,9 +926,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Identifies a resource that is a reply to the context of the link. [RFC4685]"}}}],
+                            "value": {"literal": {"string": "Identifies a resource that is a reply to the context of the link. [RFC4685]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "ruleinput",
@@ -1052,19 +957,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to a section in a collection of resources. [HTML 4.01 Specification]"}}}],
+                            "value": {"literal": {"string": "Refers to a section in a collection of resources. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "self",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Conveys an identifier for the link's context. [RFC4287]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Conveys an identifier for the link's context. [RFC4287]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "service",
@@ -1139,9 +1038,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to the first resource in a collection of resources. [HTML 4.01 Specification]"}}}],
+                            "value": {"literal": {"string": "Refers to the first resource in a collection of resources. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "status",
@@ -1150,18 +1047,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Identifies a resource that represents the context's status. [RFC8631]"}}}],
+                            "value": {"literal": {"string": "Identifies a resource that represents the context's status. [RFC8631]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "stylesheet",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Refers to a stylesheet. [HTML]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Refers to a stylesheet. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "subsection",
@@ -1171,8 +1063,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Refers to a resource serving as a subsection in a collection of resources. [HTML 4.01 Specification]"}}}],
+                              "literal": {"string": "Refers to a resource serving as a subsection in a collection of resources. [HTML 4.01 Specification]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "successor-version",
@@ -1181,9 +1072,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Points to a resource containing the successor version in the version history. [RFC5829]"}}}],
+                            "value": {"literal": {"string": "Points to a resource containing the successor version in the version history. [RFC5829]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "sunset",
@@ -1193,8 +1082,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Identifies a resource that provides information about the context's retirement policy. [RFC8594]"}}}],
+                              "literal": {"string": "Identifies a resource that provides information about the context's retirement policy. [RFC8594]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "tag",
@@ -1203,9 +1091,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Gives a tag (identified by the given address) that applies to the current document. [HTML]"}}}],
+                            "value": {"literal": {"string": "Gives a tag (identified by the given address) that applies to the current document. [HTML]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "terms-of-service",
@@ -1214,9 +1100,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Refers to the terms of service associated with the link's context. [RFC6903], section 5"}}}],
+                            "value": {"literal": {"string": "Refers to the terms of service associated with the link's context. [RFC6903], section 5"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "timegate",
@@ -1259,8 +1143,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Refers to a resource that is within a context that is User Generated Content. [Google Blog post 09-2019]"}}}],
+                              "literal": {"string": "Refers to a resource that is within a context that is User Generated Content. [Google Blog post 09-2019]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "up",
@@ -1280,9 +1163,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Points to a resource containing the version history for the context. [RFC5829]"}}}],
+                            "value": {"literal": {"string": "Points to a resource containing the version history for the context. [RFC5829]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "via",
@@ -1291,9 +1172,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Identifies a resource that is the source of the information in the link's context. [RFC4287]"}}}],
+                            "value": {"literal": {"string": "Identifies a resource that is the source of the information in the link's context. [RFC4287]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "webmention",
@@ -1310,11 +1189,7 @@
                     "name": "working-copy",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Points to a working copy for this resource. [RFC5829]"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Points to a working copy for this resource. [RFC5829]"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "working-copy-of",
@@ -1323,9 +1198,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Points to the versioned resource from which this working copy was obtained. [RFC5829]"}}}],
+                            "value": {"literal": {"string": "Points to the versioned resource from which this working copy was obtained. [RFC5829]"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
   "description": "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml",

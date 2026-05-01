@@ -3149,369 +3149,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.core.pairType",
-        "term": {
-          "lambda": {
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "record",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "fields",
-                                  "term": {
-                                    "list": [
-                                      {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {"application": {"argument": {"variable": "first"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                          "typeName": "hydra.core.Field"}},
-                                      {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {"application": {"argument": {"variable": "second"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                          "typeName": "hydra.core.Field"}}]}}],
-                              "typeName": "hydra.core.Record"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "second"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "first"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
-                          "body": {"variable": "hydra.core.Type"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.core.pairTypeFirst",
-        "term": {
-          "lambda": {
-            "body": {
-              "wrap": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "application",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "function",
-                              "term": {
-                                "inject": {
-                                  "field": {
-                                    "name": "project",
-                                    "term": {
-                                      "record": {
-                                        "fields": [
-                                          {
-                                            "name": "typeName",
-                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
-                                        "typeName": "hydra.core.Projection"}}},
-                                  "typeName": "hydra.core.Term"}}},
-                            {
-                              "name": "argument",
-                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                          "typeName": "hydra.core.Application"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.core.pairTypeSecond",
-        "term": {
-          "lambda": {
-            "body": {
-              "wrap": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "application",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "function",
-                              "term": {
-                                "inject": {
-                                  "field": {
-                                    "name": "project",
-                                    "term": {
-                                      "record": {
-                                        "fields": [
-                                          {
-                                            "name": "typeName",
-                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
-                                        "typeName": "hydra.core.Projection"}}},
-                                  "typeName": "hydra.core.Term"}}},
-                            {
-                              "name": "argument",
-                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                          "typeName": "hydra.core.Application"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.core.pairTypeWithFirst",
-        "term": {
-          "lambda": {
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "record",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "fields",
-                                  "term": {
-                                    "list": [
-                                      {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                          "typeName": "hydra.core.Field"}},
-                                      {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "inject": {
-                                                  "field": {
-                                                    "name": "application",
-                                                    "term": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {
-                                                            "name": "function",
-                                                            "term": {
-                                                              "inject": {
-                                                                "field": {
-                                                                  "name": "project",
-                                                                  "term": {
-                                                                    "record": {
-                                                                      "fields": [
-                                                                        {
-                                                                          "name": "typeName",
-                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
-                                                                      "typeName": "hydra.core.Projection"}}},
-                                                                "typeName": "hydra.core.Term"}}},
-                                                          {
-                                                            "name": "argument",
-                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                        "typeName": "hydra.core.Application"}}},
-                                                  "typeName": "hydra.core.Term"}}}],
-                                          "typeName": "hydra.core.Field"}}]}}],
-                              "typeName": "hydra.core.Record"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "newVal"}},
-            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "original"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
-                          "body": {"variable": "hydra.core.Type"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.core.pairTypeWithSecond",
-        "term": {
-          "lambda": {
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "record",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "fields",
-                                  "term": {
-                                    "list": [
-                                      {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "inject": {
-                                                  "field": {
-                                                    "name": "application",
-                                                    "term": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {
-                                                            "name": "function",
-                                                            "term": {
-                                                              "inject": {
-                                                                "field": {
-                                                                  "name": "project",
-                                                                  "term": {
-                                                                    "record": {
-                                                                      "fields": [
-                                                                        {
-                                                                          "name": "typeName",
-                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
-                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
-                                                                      "typeName": "hydra.core.Projection"}}},
-                                                                "typeName": "hydra.core.Term"}}},
-                                                          {
-                                                            "name": "argument",
-                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                                        "typeName": "hydra.core.Application"}}},
-                                                  "typeName": "hydra.core.Term"}}}],
-                                          "typeName": "hydra.core.Field"}},
-                                      {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                          "typeName": "hydra.core.Field"}}]}}],
-                              "typeName": "hydra.core.Record"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "newVal"}},
-            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "original"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-                  "domain": {
-                    "application": {
-                      "argument": {
-                        "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
-                          "body": {"variable": "hydra.core.Type"}}},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.dsl.core.field",
         "term": {
           "lambda": {
@@ -8215,6 +7852,369 @@
             "function": {
               "codomain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {"application": {"argument": {"variable": "hydra.core.Name"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.core.pairType",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "first"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "second"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
+                        "body": {"variable": "hydra.core.Type"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "second"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "first"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.core.pairTypeFirst",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.core.pairTypeSecond",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "project",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                        "typeName": "hydra.core.Projection"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.core.pairTypeWithFirst",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
+                        "body": {"variable": "hydra.core.Type"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.core.pairTypeWithSecond",
+        "term": {
+          "lambda": {
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "project",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.core.PairType"}}, "typeName": "hydra.core.Name"}}},
+                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
+                                                                      "typeName": "hydra.core.Projection"}}},
+                                                                "typeName": "hydra.core.Term"}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                        "typeName": "hydra.core.Application"}}},
+                                                  "typeName": "hydra.core.Term"}}}],
+                                          "typeName": "hydra.core.Field"}},
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
+                        "body": {"variable": "hydra.core.Type"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "newVal"}},
+            "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "original"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {"application": {"argument": {"variable": "hydra.core.PairType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {

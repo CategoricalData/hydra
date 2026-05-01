@@ -75,6 +75,16 @@ _Expr_indent = Core.Name "indent"
 _Expr_op = Core.Name "op"
 _Expr_brackets = Core.Name "brackets"
 _Expr_seq = Core.Name "seq"
+-- | Any of several indentation styles
+data IndentStyle =
+  -- | Indent all lines with the given string
+  IndentStyleAllLines String |
+  -- | Indent only lines after the first with the given string
+  IndentStyleSubsequentLines String
+  deriving (Eq, Ord, Read, Show)
+_IndentStyle = Core.Name "hydra.ast.IndentStyle"
+_IndentStyle_allLines = Core.Name "allLines"
+_IndentStyle_subsequentLines = Core.Name "subsequentLines"
 -- | An expression indented in a certain style
 data IndentedExpression =
   IndentedExpression {
@@ -86,16 +96,6 @@ data IndentedExpression =
 _IndentedExpression = Core.Name "hydra.ast.IndentedExpression"
 _IndentedExpression_style = Core.Name "style"
 _IndentedExpression_expr = Core.Name "expr"
--- | Any of several indentation styles
-data IndentStyle =
-  -- | Indent all lines with the given string
-  IndentStyleAllLines String |
-  -- | Indent only lines after the first with the given string
-  IndentStyleSubsequentLines String
-  deriving (Eq, Ord, Read, Show)
-_IndentStyle = Core.Name "hydra.ast.IndentStyle"
-_IndentStyle_allLines = Core.Name "allLines"
-_IndentStyle_subsequentLines = Core.Name "subsequentLines"
 -- | An operator symbol
 data Op =
   Op {

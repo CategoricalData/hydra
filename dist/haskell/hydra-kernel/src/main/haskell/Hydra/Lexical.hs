@@ -44,6 +44,7 @@ buildGraph elements environment primitives =
         Graph.graphPrimitives = primitives,
         Graph.graphSchemaTypes = Maps.empty,
         Graph.graphTypeVariables = Sets.empty}
+-- | Pick a name that does not collide with a reserved set, by appending a numeric suffix to the requested name when necessary
 chooseUniqueName :: S.Set Core.Name -> Core.Name -> Core.Name
 chooseUniqueName reserved name =
 
@@ -121,6 +122,7 @@ fieldsOf t =
         Core.TypeRecord v0 -> v0
         Core.TypeUnion v0 -> v0
         _ -> []
+-- | Look up a field by name in a record's field map and decode its value, failing if the field is missing
 getField :: M.Map Core.Name t0 -> Core.Name -> (t0 -> Either Errors.Error t1) -> Either Errors.Error t1
 getField m fname decode =
     Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
@@ -155,9 +157,11 @@ lookupPrimitive graph name = Maps.lookup name (Graph.graphPrimitives graph)
 -- | Look up a term by name in a graph
 lookupTerm :: Graph.Graph -> Core.Name -> Maybe Core.Term
 lookupTerm graph name = Maps.lookup name (Graph.graphBoundTerms graph)
+-- | Match a term against an enum type, dispatching on the variant name to a value from the supplied list
 matchEnum :: Graph.Graph -> Core.Name -> [(Core.Name, t0)] -> Core.Term -> Either Errors.Error t0
 matchEnum graph tname pairs =
     matchUnion graph tname (Lists.map (\pair -> matchUnitField (Pairs.first pair) (Pairs.second pair)) pairs)
+-- | Match a term against a record type and decode its fields, failing if the term is not a record
 matchRecord :: t0 -> (M.Map Core.Name Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error t1
 matchRecord graph decode term =
 
@@ -167,6 +171,7 @@ matchRecord graph decode term =
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "record",
           Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))
+-- | Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching.
 matchUnion :: Graph.Graph -> Core.Name -> [(Core.Name, (Core.Term -> Either Errors.Error t0))] -> Core.Term -> Either Errors.Error t0
 matchUnion graph tname pairs term =
 
@@ -187,8 +192,10 @@ matchUnion graph tname pairs term =
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = (Strings.cat2 "injection for type " (Core.unName tname)),
           Errors.unexpectedShapeErrorActual = (ShowCore.term stripped)})))
+-- | Build a (fieldName, decoder) pair for a unit-valued union variant: the decoder ignores its argument and returns a fixed value
 matchUnitField :: t0 -> t1 -> (t0, (t2 -> Either t3 t1))
 matchUnitField fname x = (fname, (\ignored -> Right x))
+-- | Look up a binding in a graph by name, failing with a list of available names if it is not found
 requireBinding :: Graph.Graph -> Core.Name -> Either Errors.Error Core.Binding
 requireBinding graph name =
 
@@ -199,16 +206,19 @@ requireBinding graph name =
           errMsg =
                   Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map Core.unName (Maps.keys (Graph.graphBoundTerms graph)))))) "}"
       in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorOther (Errors.OtherResolutionError errMsg)))) (\x -> Right x) (lookupBinding graph name))
+-- | Look up a primitive in a graph by name, failing if it is not registered
 requirePrimitive :: Graph.Graph -> Core.Name -> Either Errors.Error Graph.Primitive
 requirePrimitive graph name =
     Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
       Errors.noSuchPrimitiveErrorName = name})))) (\x -> Right x) (lookupPrimitive graph name)
+-- | Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered
 requirePrimitiveType :: Graph.Graph -> Core.Name -> Either Errors.Error Core.TypeScheme
 requirePrimitiveType tx name =
 
       let mts = Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
         Errors.noSuchPrimitiveErrorName = name})))) (\ts -> Right ts) mts)
+-- | Resolve a name to a term in the graph, following variable references, and fail if the name is not bound
 requireTerm :: Graph.Graph -> Core.Name -> Either Errors.Error Core.Term
 requireTerm graph name =
     Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
@@ -224,6 +234,7 @@ resolveTerm graph name =
                   Core.TermVariable v0 -> resolveTerm graph v0
                   _ -> Just term
       in (Maybes.maybe Nothing recurse (lookupTerm graph name))
+-- | Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached
 stripAndDereferenceTerm :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 stripAndDereferenceTerm graph term =
 

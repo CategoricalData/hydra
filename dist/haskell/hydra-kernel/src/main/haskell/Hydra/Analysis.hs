@@ -49,6 +49,7 @@ analyzeFunctionTerm cx getTC setTC env term =
 analyzeFunctionTermWith :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith cx forBinding getTC setTC env term =
     analyzeFunctionTermWithGather cx forBinding getTC setTC True env [] [] [] [] [] term
+-- | Final step of the function-term walk: type-apply the body and assemble the FunctionStructure
 analyzeFunctionTermWithFinish :: Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps body =
 
@@ -65,6 +66,7 @@ analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps bod
         Typing.functionStructureDomains = (Lists.reverse doms),
         Typing.functionStructureCodomain = mcod,
         Typing.functionStructureEnvironment = fEnv}))
+-- | Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish
 analyzeFunctionTermWithGather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
     case (Strip.deannotateTerm t) of
