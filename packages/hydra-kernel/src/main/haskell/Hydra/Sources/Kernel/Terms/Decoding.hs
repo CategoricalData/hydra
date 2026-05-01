@@ -302,9 +302,13 @@ decodeBinding = define "decodeBinding" $
   "cx" ~> "graph" ~> "b" ~>
     Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
       "typ" ~>
+      "rawBody" <~ (decodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ")) $
+      "description" <~ (Strings.cat $ list [
+        string "Decoder for ",
+        Core.unName (Core.bindingName (var "b"))]) $
       right (Core.binding
         (decodeBindingName @@ (Core.bindingName (var "b")))
-        (decodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ"))
+        (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody")
         (just (decoderTypeSchemeNamed @@ (Core.bindingName (var "b")) @@ var "typ"))))
 
 -- | Generate a fully qualified binding name for a decoder function from a type name
