@@ -149,6 +149,7 @@ projection = define "projection" $
 
 field :: TTermDefinition (Field -> String)
 field = define "field" $
+  doc "Show a field as a string" $
   "field" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
@@ -156,6 +157,7 @@ field = define "field" $
 
 fieldType :: TTermDefinition (FieldType -> String)
 fieldType = define "fieldType" $
+  doc "Show a field type as a string" $
   "ft" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
   "ftyp" <~ Core.fieldTypeType (var "ft") $

@@ -175,6 +175,7 @@ formatError = "e" ~> ShowError.error_ @@ var "e"
 
 allEqual :: TTermDefinition ([a] -> Bool)
 allEqual = define "allEqual" $
+  doc "True if every element of the list is equal to every other element (vacuously true for the empty list)" $
   "els" ~>
   Maybes.maybe
     true

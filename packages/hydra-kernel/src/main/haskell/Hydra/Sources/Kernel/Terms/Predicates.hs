@@ -213,6 +213,7 @@ isEnumType = define "isEnumType" $
 --   Type aliases (applications, functions, literal types, etc.) return false.
 isNominalType :: TTermDefinition (Type -> Bool)
 isNominalType = define "isNominalType" $
+  doc "Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false." $
   lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
       (Just false) [

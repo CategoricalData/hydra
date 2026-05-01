@@ -128,12 +128,14 @@ dereferenceType = define "dereferenceType" $
 
 fieldMap :: TTermDefinition ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
+  doc "Build a map from field name to field term, given a list of fields" $
   "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypeMap :: TTermDefinition ([FieldType] -> M.Map Name Type)
 fieldTypeMap = define "fieldTypeMap" $
+  doc "Build a map from field name to field type, given a list of field types" $
   "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
