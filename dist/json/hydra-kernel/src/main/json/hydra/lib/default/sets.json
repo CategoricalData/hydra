@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.sets.difference",
+        "name": "hydra.lib.default.sets.difference",
         "term": {
           "typeLambda": {
             "body": {
@@ -204,7 +204,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.sets.intersection",
+        "name": "hydra.lib.default.sets.intersection",
         "term": {
           "typeLambda": {
             "body": {
@@ -406,7 +406,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.sets.map",
+        "name": "hydra.lib.default.sets.map",
         "term": {
           "typeLambda": {
             "body": {
@@ -522,7 +522,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.sets.union",
+        "name": "hydra.lib.default.sets.union",
         "term": {
           "typeLambda": {
             "body": {
@@ -642,7 +642,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.sets.unions",
+        "name": "hydra.lib.default.sets.unions",
         "term": {
           "typeLambda": {
             "body": {
@@ -758,8 +758,8 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Evaluation-level implementations of Set functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.sets",
+  "description": "Default term-level implementations of Set functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.sets",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.lists.apply",
+        "name": "hydra.lib.default.lists.apply",
         "term": {
           "typeLambda": {
             "body": {
@@ -140,7 +140,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.bind",
+        "name": "hydra.lib.default.lists.bind",
         "term": {
           "typeLambda": {
             "body": {
@@ -253,7 +253,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.concat2",
+        "name": "hydra.lib.default.lists.concat2",
         "term": {
           "typeLambda": {
             "body": {
@@ -330,7 +330,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.dropWhile",
+        "name": "hydra.lib.default.lists.dropWhile",
         "term": {
           "typeLambda": {
             "body": {
@@ -433,7 +433,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.elem",
+        "name": "hydra.lib.default.lists.elem",
         "term": {
           "typeLambda": {
             "body": {
@@ -555,7 +555,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.filter",
+        "name": "hydra.lib.default.lists.filter",
         "term": {
           "typeLambda": {
             "body": {
@@ -726,7 +726,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.find",
+        "name": "hydra.lib.default.lists.find",
         "term": {
           "typeLambda": {
             "body": {
@@ -829,7 +829,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.foldl",
+        "name": "hydra.lib.default.lists.foldl",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly left fold for List terms."}}}],
@@ -965,7 +965,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.foldr",
+        "name": "hydra.lib.default.lists.foldr",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly right fold for List terms."}}}],
@@ -1098,7 +1098,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.group",
+        "name": "hydra.lib.default.lists.group",
         "term": {
           "typeLambda": {
             "body": {
@@ -1900,7 +1900,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.intercalate",
+        "name": "hydra.lib.default.lists.intercalate",
         "term": {
           "typeLambda": {
             "body": {
@@ -2003,7 +2003,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.intersperse",
+        "name": "hydra.lib.default.lists.intersperse",
         "term": {
           "typeLambda": {
             "body": {
@@ -2129,7 +2129,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.map",
+        "name": "hydra.lib.default.lists.map",
         "term": {
           "typeLambda": {
             "body": {
@@ -2239,7 +2239,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.maybeHead",
+        "name": "hydra.lib.default.lists.maybeHead",
         "term": {
           "typeLambda": {
             "body": {
@@ -2332,7 +2332,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.nub",
+        "name": "hydra.lib.default.lists.nub",
         "term": {
           "typeLambda": {
             "body": {
@@ -2602,7 +2602,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.partition",
+        "name": "hydra.lib.default.lists.partition",
         "term": {
           "typeLambda": {
             "body": {
@@ -2913,7 +2913,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.pure",
+        "name": "hydra.lib.default.lists.pure",
         "term": {
           "typeLambda": {
             "body": {
@@ -2960,7 +2960,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.replicate",
+        "name": "hydra.lib.default.lists.replicate",
         "term": {
           "typeLambda": {
             "body": {
@@ -3101,7 +3101,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.singleton",
+        "name": "hydra.lib.default.lists.singleton",
         "term": {
           "typeLambda": {
             "body": {
@@ -3148,7 +3148,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.sort",
+        "name": "hydra.lib.default.lists.sort",
         "term": {
           "typeLambda": {
             "body": {
@@ -3232,7 +3232,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.sortOn",
+        "name": "hydra.lib.default.lists.sortOn",
         "term": {
           "typeLambda": {
             "body": {
@@ -3538,7 +3538,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.span",
+        "name": "hydra.lib.default.lists.span",
         "term": {
           "typeLambda": {
             "body": {
@@ -4056,7 +4056,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.uncons",
+        "name": "hydra.lib.default.lists.uncons",
         "term": {
           "typeLambda": {
             "body": {
@@ -4171,7 +4171,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.lists.zipWith",
+        "name": "hydra.lib.default.lists.zipWith",
         "term": {
           "typeLambda": {
             "body": {
@@ -4339,8 +4339,8 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Evaluation-level implementations of List functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.lists",
+  "description": "Default term-level implementations of List functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.lists",
   "termDependencies": ["hydra.extract.core", "hydra.reduction", "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

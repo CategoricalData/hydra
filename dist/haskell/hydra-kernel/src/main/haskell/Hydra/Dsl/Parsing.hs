@@ -7,6 +7,7 @@ import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | DSL constructor for hydra.parsing.ParseError
 parseError :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
 parseError message remainder =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -18,6 +19,7 @@ parseError message remainder =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm remainder)}]}))
+-- | DSL accessor for the message field of hydra.parsing.ParseError
 parseErrorMessage :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String
 parseErrorMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -25,6 +27,7 @@ parseErrorMessage x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
         Core.projectionField = (Core.Name "message")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the remainder field of hydra.parsing.ParseError
 parseErrorRemainder :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String
 parseErrorRemainder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -32,6 +35,7 @@ parseErrorRemainder x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
         Core.projectionField = (Core.Name "remainder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the message field of hydra.parsing.ParseError
 parseErrorWithMessage :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
 parseErrorWithMessage original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -47,6 +51,7 @@ parseErrorWithMessage original newVal =
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
               Core.projectionField = (Core.Name "remainder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the remainder field of hydra.parsing.ParseError
 parseErrorWithRemainder :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
 parseErrorWithRemainder original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -62,6 +67,7 @@ parseErrorWithRemainder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the failure variant of hydra.parsing.ParseResult
 parseResultFailure :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm (Parsing.ParseResult a)
 parseResultFailure x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -69,6 +75,7 @@ parseResultFailure x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "failure"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the success variant of hydra.parsing.ParseResult
 parseResultSuccess :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm (Parsing.ParseResult a)
 parseResultSuccess x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -76,6 +83,7 @@ parseResultSuccess x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "success"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for hydra.parsing.ParseSuccess
 parseSuccess :: Phantoms.TTerm a -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
 parseSuccess value remainder =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -87,6 +95,7 @@ parseSuccess value remainder =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm remainder)}]}))
+-- | DSL accessor for the remainder field of hydra.parsing.ParseSuccess
 parseSuccessRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String
 parseSuccessRemainder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -94,6 +103,7 @@ parseSuccessRemainder x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
         Core.projectionField = (Core.Name "remainder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the value field of hydra.parsing.ParseSuccess
 parseSuccessValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a
 parseSuccessValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -101,6 +111,7 @@ parseSuccessValue x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
         Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the remainder field of hydra.parsing.ParseSuccess
 parseSuccessWithRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
 parseSuccessWithRemainder original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -116,6 +127,7 @@ parseSuccessWithRemainder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the value field of hydra.parsing.ParseSuccess
 parseSuccessWithValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a -> Phantoms.TTerm (Parsing.ParseSuccess a)
 parseSuccessWithValue original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -131,11 +143,13 @@ parseSuccessWithValue original newVal =
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
               Core.projectionField = (Core.Name "remainder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for the hydra.parsing.Parser wrapper
 parser :: Phantoms.TTerm (String -> Parsing.ParseResult a) -> Phantoms.TTerm (Parsing.Parser a)
 parser x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.parsing.Parser"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.parsing.Parser
 unParser :: Phantoms.TTerm (Parsing.Parser a) -> Phantoms.TTerm (String -> Parsing.ParseResult a)
 unParser x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
