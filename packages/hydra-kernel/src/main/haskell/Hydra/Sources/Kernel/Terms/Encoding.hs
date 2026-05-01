@@ -134,9 +134,13 @@ encodeBinding = define "encodeBinding" $
   "cx" ~> "graph" ~> "b" ~>
     Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
       "typ" ~>
+      "rawBody" <~ (encodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ")) $
+      "description" <~ (Strings.cat $ list [
+        string "Encoder for ",
+        Core.unName (Core.bindingName (var "b"))]) $
       right (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))
-        (encodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ"))
+        (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody")
         (just (encoderTypeSchemeNamed @@ (Core.bindingName (var "b")) @@ var "typ"))))
 
 -- | Construct a TypeScheme for an encoder function from a source type definition.
