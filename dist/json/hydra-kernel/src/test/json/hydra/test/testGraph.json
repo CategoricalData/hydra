@@ -13,26 +13,15 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "first": {
-                              "wrap": {
-                                "body": {"literal": {"string": "testDataArthur"}},
-                                "typeName": "hydra.core.Name"}},
+                            "first": {"wrap": {"body": {"literal": {"string": "testDataArthur"}}, "typeName": "hydra.core.Name"}},
                             "second": {"variable": "hydra.test.testTerms.testDataArthur"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Term"}}}]},
             "function": {
               "typeApplication": {
-                "body": {
-                  "typeApplication": {
-                    "body": {"variable": "hydra.lib.maps.fromList"},
-                    "type": {"variable": "hydra.core.Name"}}},
+                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Term"}}}}},
-        "typeScheme": {
-          "body": {
-            "map": {
-              "keys": {"variable": "hydra.core.Name"},
-              "values": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testTypes",
@@ -246,8 +235,7 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "first": {
-                              "variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName"},
+                            "first": {"variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName"},
                             "second": {"variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursive"}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
@@ -263,32 +251,18 @@
                     "type": {"variable": "hydra.core.Type"}}}]},
             "function": {
               "typeApplication": {
-                "body": {
-                  "typeApplication": {
-                    "body": {"variable": "hydra.lib.maps.fromList"},
-                    "type": {"variable": "hydra.core.Name"}}},
+                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Type"}}}}},
-        "typeScheme": {
-          "body": {
-            "map": {
-              "keys": {"variable": "hydra.core.Name"},
-              "values": {"variable": "hydra.core.Type"}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testNamespace",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "testGraph"}},
-            "typeName": "hydra.packaging.Namespace"}},
+        "term": {"wrap": {"body": {"literal": {"string": "testGraph"}}, "typeName": "hydra.packaging.Namespace"}},
         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testSchemaNamespace",
-        "term": {
-          "wrap": {
-            "body": {"literal": {"string": "testSchemaGraph"}},
-            "typeName": "hydra.packaging.Namespace"}},
+        "term": {"wrap": {"body": {"literal": {"string": "testSchemaGraph"}}, "typeName": "hydra.packaging.Namespace"}},
         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
@@ -299,10 +273,7 @@
             "function": {
               "typeApplication": {
                 "body": {"variable": "hydra.test.testEnv.testGraph"},
-                "type": {
-                  "map": {
-                    "keys": {"variable": "hydra.core.Name"},
-                    "values": {"variable": "hydra.core.Type"}}}}}}},
+                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}}},
         "typeScheme": {"body": {"variable": "hydra.graph.Graph"}, "variables": []}}},
     {
       "term": {
@@ -311,11 +282,7 @@
         "typeScheme": {"body": {"variable": "hydra.context.Context"}, "variables": []}}}],
   "description": "A module defining the graph used in the test suite.",
   "namespace": "hydra.test.testGraph",
-  "termDependencies": [
-    "hydra.test.testTerms",
-    "hydra.test.testTypes",
-    "hydra.test.testEnv",
-    "hydra.lexical"],
+  "termDependencies": ["hydra.test.testTerms", "hydra.test.testTypes", "hydra.test.testEnv", "hydra.lexical"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

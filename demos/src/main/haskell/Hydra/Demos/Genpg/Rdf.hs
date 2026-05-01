@@ -4,16 +4,16 @@
 -- existing GraphSON output. Uses the same CSV-to-property-graph pipeline; only
 -- the final serialization differs.
 
-module Hydra.Demos.GenPG.Rdf where
+module Hydra.Demos.Genpg.Rdf where
 
 import Hydra.Kernel
-import Hydra.Demos.GenPG.Examples.Sales.DatabaseSchema
-import Hydra.Demos.GenPG.Examples.Sales.GraphSchema
-import Hydra.Demos.GenPG.Examples.Sales.Mapping
-import Hydra.Demos.GenPG.Examples.Health.DatabaseSchema
-import Hydra.Demos.GenPG.Examples.Health.GraphSchema
-import Hydra.Demos.GenPG.Examples.Health.Mapping
-import Hydra.Demos.GenPG.Demo (transformTables)
+import Hydra.Demos.Genpg.Examples.Sales.DatabaseSchema
+import Hydra.Demos.Genpg.Examples.Sales.GraphSchema
+import Hydra.Demos.Genpg.Examples.Sales.Mapping
+import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema
+import Hydra.Demos.Genpg.Examples.Health.GraphSchema
+import Hydra.Demos.Genpg.Examples.Health.Mapping
+import Hydra.Demos.Genpg.Demo (transformTables)
 import Hydra.Demos.Shacl.ShaclRdf (shapesGraphToNtriples)
 import Hydra.Lib.Literals (showInt32)
 import qualified Hydra.Pg.Rdf.Environment as PgRdfEnv

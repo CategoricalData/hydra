@@ -99,17 +99,214 @@ module_ = Module {
             moduleDescription = Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."}
   where
     definitions = [
-      toDefinition fromJson,
-      toDefinition decodeLiteral,
       toDefinition decodeFloat,
       toDefinition decodeInteger,
-      toDefinition parseSpecialFloat,
-      toDefinition parseSpecialFloat32,
-      toDefinition expectString,
+      toDefinition decodeLiteral,
       toDefinition expectArray,
+      toDefinition expectNumber,
       toDefinition expectObject,
-      toDefinition expectNumber]
+      toDefinition expectString,
+      toDefinition fromJson,
+      toDefinition parseSpecialFloat,
+      toDefinition parseSpecialFloat32]
 
+-- | Decode a JSON value to a float term
+-- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
+-- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
+decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
+decodeFloat = define "decodeFloat" $
+  doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
+  "ft" ~> "value" ~>
+  cases _FloatType (var "ft") Nothing [
+    -- Bigfloat: JSON number (Scientific) -> decimal -> float64 -> bigfloat. NaN/Inf are not
+    -- representable in JSON's grammar, so they can only arrive via the string sentinel path below.
+    _FloatType_bigfloat>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or special float string for bigfloat") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
+          Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "n",
+        _Value_string>>: "s" ~>
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid bigfloat sentinel: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
+              Literals.float64ToBigfloat $ var "v")
+            (parseSpecialFloat @@ var "s")],
+    -- Float32: JSON number (Scientific) -> float32, or special sentinel string
+    _FloatType_float32>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or special float string for float32") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ Literals.decimalToFloat32 $ var "n",
+        _Value_string>>: "s" ~>
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid float32 sentinel: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
+            (parseSpecialFloat32 @@ var "s")],
+    -- Float64: JSON number (Scientific) -> float64, or special sentinel string
+    _FloatType_float64>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or special float string for float64") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "n",
+        _Value_string>>: "s" ~>
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid float64 sentinel: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")
+            (parseSpecialFloat @@ var "s")]]
+
+-- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
+-- "NaN", "Infinity", "-Infinity", or "-0.0". Returns Nothing for unrecognized strings.
+-- The -0.0 case is here so that IEEE negative zero survives a round trip through JSON via
+-- the encoder's string-escape path; Scientific-backed number decoding would normalize it to 0.
+-- | Decode a JSON value to an integer term
+-- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
+-- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
+decodeInteger :: TTermDefinition (IntegerType -> Value -> Either String Term)
+decodeInteger = define "decodeInteger" $
+  doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
+  "it" ~> "value" ~>
+  cases _IntegerType (var "it") Nothing [
+    -- Large integers: decode from JSON string
+    _IntegerType_bigint>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readBigint $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid bigint: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    _IntegerType_int64>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readInt64 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid int64: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    _IntegerType_uint32>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readUint32 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid uint32: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    _IntegerType_uint64>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("s" ~>
+          "parsed" <~ (Literals.readUint64 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid uint64: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v")
+            (var "parsed"))
+        (var "strResult"),
+    -- Small integers: decode from JSON number
+    _IntegerType_int8>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt8 $
+          Literals.bigintToInt8 $ Literals.decimalToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_int16>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt16 $
+          Literals.bigintToInt16 $ Literals.decimalToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_int32>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $
+          Literals.bigintToInt32 $ Literals.decimalToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_uint8>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint8 $
+          Literals.bigintToUint8 $ Literals.decimalToBigint $ var "n")
+        (var "numResult"),
+    _IntegerType_uint16>>: constant $
+      "numResult" <~ (expectNumber @@ var "value") $
+      Eithers.map
+        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint16 $
+          Literals.bigintToUint16 $ Literals.decimalToBigint $ var "n")
+        (var "numResult")]
+
+-- | Extract a string from a JSON value
+-- | Decode a JSON value to a literal term given a literal type
+decodeLiteral :: TTermDefinition (LiteralType -> Value -> Either String Term)
+decodeLiteral = define "decodeLiteral" $
+  doc "Decode a JSON value to a literal term" $
+  "lt" ~> "value" ~>
+  cases _LiteralType (var "lt") Nothing [
+    _LiteralType_binary>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.stringToBinary $ var "s") (var "strResult"),
+
+    _LiteralType_boolean>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected boolean") [
+        _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
+
+    _LiteralType_decimal>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number for decimal") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalDecimal $ var "n"],
+
+    _LiteralType_float>>: "ft" ~> decodeFloat @@ var "ft" @@ var "value",
+
+    _LiteralType_integer>>: "it" ~> decodeInteger @@ var "it" @@ var "value",
+
+    _LiteralType_string>>: constant $
+      "strResult" <~ (expectString @@ var "value") $
+      Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
+
+-- | Decode a JSON value to a float term
+-- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
+-- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
+-- | Extract an array from a JSON value
+expectArray :: TTermDefinition (Value -> Either String [Value])
+expectArray = define "expectArray" $
+  doc "Extract an array from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected array") [
+    _Value_array>>: "arr" ~> right $ var "arr"]
+
+-- | Extract an object from a JSON value
+-- | Extract a number from a JSON value
+expectNumber :: TTermDefinition (Value -> Either String Sci.Scientific)
+expectNumber = define "expectNumber" $
+  doc "Extract a number from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected number") [
+    _Value_number>>: "n" ~> right $ var "n"]
+-- | Extract an object from a JSON value
+expectObject :: TTermDefinition (Value -> Either String (M.Map String Value))
+expectObject = define "expectObject" $
+  doc "Extract an object from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected object") [
+    _Value_object>>: "obj" ~> right $ var "obj"]
+
+-- | Extract a number from a JSON value
+-- | Extract a string from a JSON value
+expectString :: TTermDefinition (Value -> Either String String)
+expectString = define "expectString" $
+  doc "Extract a string from a JSON value" $
+  "value" ~> cases _Value (var "value")
+    (Just $ left $ string "expected string") [
+    _Value_string>>: "s" ~> right $ var "s"]
+
+-- | Extract an array from a JSON value
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.
 fromJson :: TTermDefinition (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
@@ -347,75 +544,6 @@ fromJson = define "fromJson" $
         (var "lookedUp")]
 
 -- | Decode a JSON value to a literal term given a literal type
-decodeLiteral :: TTermDefinition (LiteralType -> Value -> Either String Term)
-decodeLiteral = define "decodeLiteral" $
-  doc "Decode a JSON value to a literal term" $
-  "lt" ~> "value" ~>
-  cases _LiteralType (var "lt") Nothing [
-    _LiteralType_binary>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.stringToBinary $ var "s") (var "strResult"),
-
-    _LiteralType_boolean>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected boolean") [
-        _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
-
-    _LiteralType_decimal>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected number for decimal") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalDecimal $ var "n"],
-
-    _LiteralType_float>>: "ft" ~> decodeFloat @@ var "ft" @@ var "value",
-
-    _LiteralType_integer>>: "it" ~> decodeInteger @@ var "it" @@ var "value",
-
-    _LiteralType_string>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
-
--- | Decode a JSON value to a float term
--- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
--- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
-decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
-decodeFloat = define "decodeFloat" $
-  doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
-  "ft" ~> "value" ~>
-  cases _FloatType (var "ft") Nothing [
-    -- Bigfloat: JSON number (Scientific) -> decimal -> float64 -> bigfloat. NaN/Inf are not
-    -- representable in JSON's grammar, so they can only arrive via the string sentinel path below.
-    _FloatType_bigfloat>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected number or special float string for bigfloat") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
-          Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "n",
-        _Value_string>>: "s" ~>
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid bigfloat sentinel: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
-              Literals.float64ToBigfloat $ var "v")
-            (parseSpecialFloat @@ var "s")],
-    -- Float32: JSON number (Scientific) -> float32, or special sentinel string
-    _FloatType_float32>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected number or special float string for float32") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ Literals.decimalToFloat32 $ var "n",
-        _Value_string>>: "s" ~>
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid float32 sentinel: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
-            (parseSpecialFloat32 @@ var "s")],
-    -- Float64: JSON number (Scientific) -> float64, or special sentinel string
-    _FloatType_float64>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected number or special float string for float64") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "n",
-        _Value_string>>: "s" ~>
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid float64 sentinel: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")
-            (parseSpecialFloat @@ var "s")]]
-
 -- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
 -- "NaN", "Infinity", "-Infinity", or "-0.0". Returns Nothing for unrecognized strings.
 -- The -0.0 case is here so that IEEE negative zero survives a round trip through JSON via
@@ -434,6 +562,8 @@ parseSpecialFloat = define "parseSpecialFloat" $
 
 -- | Parse a string as an IEEE sentinel float32. Same accepted strings as 'parseSpecialFloat',
 -- but returns a float32 value.
+-- | Parse a string as an IEEE sentinel float32. Same accepted strings as 'parseSpecialFloat',
+-- but returns a float32 value.
 parseSpecialFloat32 :: TTermDefinition (String -> Maybe Float)
 parseSpecialFloat32 = define "parseSpecialFloat32" $
   doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings." $
@@ -449,116 +579,3 @@ parseSpecialFloat32 = define "parseSpecialFloat32" $
 -- | Decode a JSON value to an integer term
 -- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
 -- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
-decodeInteger :: TTermDefinition (IntegerType -> Value -> Either String Term)
-decodeInteger = define "decodeInteger" $
-  doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
-  "it" ~> "value" ~>
-  cases _IntegerType (var "it") Nothing [
-    -- Large integers: decode from JSON string
-    _IntegerType_bigint>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readBigint $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid bigint: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_int64>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readInt64 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid int64: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_uint32>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readUint32 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid uint32: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_uint64>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readUint64 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid uint64: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    -- Small integers: decode from JSON number
-    _IntegerType_int8>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt8 $
-          Literals.bigintToInt8 $ Literals.decimalToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_int16>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt16 $
-          Literals.bigintToInt16 $ Literals.decimalToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_int32>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $
-          Literals.bigintToInt32 $ Literals.decimalToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_uint8>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint8 $
-          Literals.bigintToUint8 $ Literals.decimalToBigint $ var "n")
-        (var "numResult"),
-    _IntegerType_uint16>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint16 $
-          Literals.bigintToUint16 $ Literals.decimalToBigint $ var "n")
-        (var "numResult")]
-
--- | Extract a string from a JSON value
-expectString :: TTermDefinition (Value -> Either String String)
-expectString = define "expectString" $
-  doc "Extract a string from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected string") [
-    _Value_string>>: "s" ~> right $ var "s"]
-
--- | Extract an array from a JSON value
-expectArray :: TTermDefinition (Value -> Either String [Value])
-expectArray = define "expectArray" $
-  doc "Extract an array from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected array") [
-    _Value_array>>: "arr" ~> right $ var "arr"]
-
--- | Extract an object from a JSON value
-expectObject :: TTermDefinition (Value -> Either String (M.Map String Value))
-expectObject = define "expectObject" $
-  doc "Extract an object from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected object") [
-    _Value_object>>: "obj" ~> right $ var "obj"]
-
--- | Extract a number from a JSON value
-expectNumber :: TTermDefinition (Value -> Either String Sci.Scientific)
-expectNumber = define "expectNumber" $
-  doc "Extract a number from a JSON value" $
-  "value" ~> cases _Value (var "value")
-    (Just $ left $ string "expected number") [
-    _Value_number>>: "n" ~> right $ var "n"]

@@ -76,8 +76,8 @@ hydraLanguage = definitionInModule module_ "hydraLanguage" $
   "typeVariants">: Sets.fromList Reflect.typeVariants,
   "types">: "t" ~> cases _Type (var "t") (Just true) []] $
   Coders.language
-    (Coders.languageName_ (string "hydra.core"))
-    (Coders.languageConstraints_
+    (Coders.languageName2 (string "hydra.core"))
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

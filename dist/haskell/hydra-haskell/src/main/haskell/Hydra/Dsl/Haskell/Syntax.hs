@@ -2187,6 +2187,20 @@ moduleHead x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Module"),
         Core.projectionField = (Core.Name "head")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+moduleHead2 :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ModuleName -> Phantoms.TTerm [Syntax.Export] -> Phantoms.TTerm Syntax.ModuleHead
+moduleHead2 comments name exports =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ModuleHead"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "exports"),
+          Core.fieldTerm = (Phantoms.unTTerm exports)}]}))
 moduleHeadComments :: Phantoms.TTerm Syntax.ModuleHead -> Phantoms.TTerm (Maybe String)
 moduleHeadComments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -2274,20 +2288,6 @@ moduleHeadWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ModuleHead"),
               Core.projectionField = (Core.Name "exports")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-moduleHead_ :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ModuleName -> Phantoms.TTerm [Syntax.Export] -> Phantoms.TTerm Syntax.ModuleHead
-moduleHead_ comments name exports =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ModuleHead"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Phantoms.unTTerm comments)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "exports"),
-          Core.fieldTerm = (Phantoms.unTTerm exports)}]}))
 moduleImports :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.Import]
 moduleImports x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {

@@ -160,8 +160,8 @@ csharpLanguage = define "csharpLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $ -- TODO: verify whether all are supported
   Coders.language
-    (Coders.languageName_ $ string "hydra.csharp")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.csharp")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

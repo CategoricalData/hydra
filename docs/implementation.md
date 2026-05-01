@@ -1536,7 +1536,7 @@ is tracked but never touched by a fresh sync.
 | `sync-java.sh`, `sync-python.sh`, `sync-scala.sh` | Per-language wrappers (host == target). |
 | `sync-clojure.sh`, `sync-common-lisp.sh`, `sync-emacs-lisp.sh`, `sync-scheme.sh` | Per-Lisp-dialect wrappers. |
 | `regenerate-lexicon.sh` | Regenerate `docs/hydra-lexicon.txt` from the Haskell kernel. On-demand / pre-release (not part of regular sync). |
-| `verify-release.sh` | Cross-implementation pre-release verification. |
+| `prepare-release.sh` | Cross-implementation pre-release preparation: verification + upload-ready sdist/docs. |
 | `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java`. |
 
 ### Haskell (`heads/haskell/bin/`)

@@ -158,8 +158,8 @@ cppLanguage = define "cppLanguage" $
     Variants.typeVariantWrap],       -- wrapper class
   "typePredicate">: constant true] $ -- TODO: refine this with C++ specific constraints
   Coders.language
-    (Coders.languageName_ $ string "hydra.cpp")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.cpp")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

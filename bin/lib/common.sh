@@ -11,7 +11,7 @@
 # Banner widths
 #
 # Three levels, each a consistent width (use a single hline per message):
-#   LEVEL 1 (orchestrator):  48 wide, "=" (e.g. sync-all, verify-release, bootstrap)
+#   LEVEL 1 (orchestrator):  48 wide, "=" (e.g. sync-all, prepare-release, bootstrap)
 #   LEVEL 2 (script):        44 wide, "-" (e.g. sync-haskell, sync-java headers)
 #   LEVEL 3 (step):          no banner, "Step N/M: ..." line only
 # ---------------------------------------------------------------------------

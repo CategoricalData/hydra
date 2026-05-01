@@ -10,6 +10,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -17,6 +18,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
@@ -30,16 +32,15 @@ collectForallVars typ =
       Core.TypeAnnotated v0 -> collectForallVars (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallVars (Core.forallTypeBody v0))
       _ -> []
--- | Deduplicate bindings by appending underscore suffixes to duplicate names
+-- | Deduplicate bindings by appending numeric suffixes to duplicate names
 deduplicateBindings :: [Core.Binding] -> [Core.Binding]
 deduplicateBindings bindings =
     Lists.foldl (\acc -> \b ->
-      let n = Core.unName (Core.bindingName b)
-          usedNames = Lists.map (\a -> Core.unName (Core.bindingName a)) acc
-          uniqueName = findUniqueName n usedNames
+      let usedNames = Sets.fromList (Lists.map (\a -> Core.bindingName a) acc)
+          uniqueName = Lexical.chooseUniqueName usedNames (Core.bindingName b)
       in (Lists.concat2 acc [
         Core.Binding {
-          Core.bindingName = (Core.Name uniqueName),
+          Core.bindingName = uniqueName,
           Core.bindingTerm = (Core.bindingTerm b),
           Core.bindingTypeScheme = (Core.bindingTypeScheme b)}])) [] bindings
 -- | Generate a binding name for a DSL function from a type name
@@ -140,12 +141,6 @@ dslTypeScheme origType paramTypes resultType =
 filterTypeBindings :: t0 -> t1 -> [Core.Binding] -> Either t2 [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
--- | Find a unique name by appending underscores
-findUniqueName :: String -> [String] -> String
-findUniqueName candidate usedNames =
-    Logic.ifElse (Lists.null (Lists.filter (Equality.equal candidate) usedNames)) candidate (findUniqueName (Strings.cat [
-      candidate,
-      "_"]) usedNames)
 -- | Generate all DSL bindings for a type binding
 generateBindingsForType :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError [Core.Binding]
 generateBindingsForType cx graph b =
