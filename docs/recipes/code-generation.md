@@ -401,6 +401,29 @@ tests, the universe must include both main and test dependencies.
 Also check that `--include-coders` / `--include-ext` / `--include-dsls`
 flags match what the target generation actually references.
 
+### Editing the synthesizer itself (Dsls.hs, the Haskell coder, etc.)
+
+When a kernel source change alters the *behavior of a synthesizer that
+produces JSON output* — e.g., editing
+`Hydra/Sources/Kernel/Terms/Dsls.hs` (the DSL-wrapper synthesizer) or
+`Hydra/Sources/Haskell/Coder.hs` — one `/sync-haskell()` is not enough.
+Phase 1 builds a new binary with your change, but Phase 2 runs that
+binary against the existing JSON inputs to regenerate downstream JSON.
+Outputs that depend on the *new* synthesizer behavior (the DSL-wrapper
+JSONs, dist Haskell, etc.) need a *second* sync to fully propagate:
+the first sync rebuilds the binary, the second runs the new binary
+against the now-updated source state.
+
+If you edit a synthesizer and only see partial propagation, run
+`/sync-haskell()` a second time before debugging.
+
+This is a known limitation of the current cache key, which hashes the
+*input source* but not the *transform binary*. The fix is tracked in
+[#347 (Merkle trees for cache invalidation)](https://github.com/CategoricalData/hydra/issues/347):
+once the cache key incorporates a hash of the synthesizer binary
+itself, edits to the synthesizer will invalidate downstream outputs
+correctly and a single sync will suffice.
+
 ## Related documentation
 
 - [Exporting modules to JSON](json-kernel.md) -- JSON format, export scripts, verification

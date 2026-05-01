@@ -3,6 +3,7 @@
 
 module Hydra.Test.Validate.All where
 import qualified Hydra.Test.Validate.Core as Core
+import qualified Hydra.Test.Validate.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -13,5 +14,6 @@ allTests =
       Testing.testGroupName = "validation",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
-        Core.allTests],
+        Core.allTests,
+        Packaging.allTests],
       Testing.testGroupCases = []}
