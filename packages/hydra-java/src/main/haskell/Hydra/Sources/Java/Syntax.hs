@@ -133,6 +133,7 @@ module_ = Module {
       interfaceModifier,
       interfaceBody,
       interfaceMemberDeclaration,
+      interfaceMemberDeclarationWithComments,
       constantDeclaration,
       constantModifier,
       interfaceMethodDeclaration,
@@ -1124,7 +1125,7 @@ interfaceModifier = def "InterfaceModifier" $ T.union [
 --InterfaceBody:
 --  { {InterfaceMemberDeclaration} }
 interfaceBody :: Binding
-interfaceBody = def "InterfaceBody" $ T.wrap $ T.list $ java "InterfaceMemberDeclaration"
+interfaceBody = def "InterfaceBody" $ T.wrap $ T.list $ java "InterfaceMemberDeclarationWithComments"
 
 --InterfaceMemberDeclaration:
 interfaceMemberDeclaration :: Binding
@@ -1138,6 +1139,12 @@ interfaceMemberDeclaration = def "InterfaceMemberDeclaration" $ T.union [
 --  InterfaceDeclaration
   "interface">: java "InterfaceDeclaration"]
 --  ;
+
+interfaceMemberDeclarationWithComments :: Binding
+interfaceMemberDeclarationWithComments = def "InterfaceMemberDeclarationWithComments" $
+  T.record [
+    "value">: java "InterfaceMemberDeclaration",
+    "comments">: T.maybe T.string]
 
 --ConstantDeclaration:
 --  {ConstantModifier} UnannType VariableDeclaratorList ;
