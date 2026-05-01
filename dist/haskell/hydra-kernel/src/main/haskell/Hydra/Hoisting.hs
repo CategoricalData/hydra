@@ -400,11 +400,13 @@ hoistSubterms shouldHoist cx0 term0 =
                         _ -> (newCounter, recursedTerm)
                     _ -> recurse counter term
       in (Pairs.second (Rewriting.rewriteAndFoldTermWithGraphAndPath rewrite cx0 1 term0))
+-- | Check whether a SubtermStep is the applicationFunction step
 isApplicationFunction :: Paths.SubtermStep -> Bool
 isApplicationFunction acc =
     case acc of
       Paths.SubtermStepApplicationFunction -> True
       _ -> False
+-- | Check whether a SubtermStep is the lambdaBody step
 isLambdaBody :: Paths.SubtermStep -> Bool
 isLambdaBody acc =
     case acc of

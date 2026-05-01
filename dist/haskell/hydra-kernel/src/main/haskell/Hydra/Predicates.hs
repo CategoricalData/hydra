@@ -81,6 +81,7 @@ isEnumType typ =
     case (Strip.deannotateType typ) of
       Core.TypeUnion v0 -> isEnumRowType v0
       _ -> False
+-- | Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false.
 isNominalType :: Core.Type -> Bool
 isNominalType typ =
     case (Strip.deannotateType typ) of

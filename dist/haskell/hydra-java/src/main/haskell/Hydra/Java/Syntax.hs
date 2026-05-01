@@ -851,7 +851,7 @@ _InterfaceModifier_static = Core.Name "static"
 _InterfaceModifier_strictfb = Core.Name "strictfb"
 newtype InterfaceBody =
   InterfaceBody {
-    unInterfaceBody :: [InterfaceMemberDeclaration]}
+    unInterfaceBody :: [InterfaceMemberDeclarationWithComments]}
   deriving (Eq, Ord, Read, Show)
 _InterfaceBody = Core.Name "hydra.java.syntax.InterfaceBody"
 data InterfaceMemberDeclaration =
@@ -865,6 +865,14 @@ _InterfaceMemberDeclaration_constant = Core.Name "constant"
 _InterfaceMemberDeclaration_interfaceMethod = Core.Name "interfaceMethod"
 _InterfaceMemberDeclaration_class = Core.Name "class"
 _InterfaceMemberDeclaration_interface = Core.Name "interface"
+data InterfaceMemberDeclarationWithComments =
+  InterfaceMemberDeclarationWithComments {
+    interfaceMemberDeclarationWithCommentsValue :: InterfaceMemberDeclaration,
+    interfaceMemberDeclarationWithCommentsComments :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+_InterfaceMemberDeclarationWithComments = Core.Name "hydra.java.syntax.InterfaceMemberDeclarationWithComments"
+_InterfaceMemberDeclarationWithComments_value = Core.Name "value"
+_InterfaceMemberDeclarationWithComments_comments = Core.Name "comments"
 data ConstantDeclaration =
   ConstantDeclaration {
     constantDeclarationModifiers :: [ConstantModifier],

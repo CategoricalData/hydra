@@ -177,28 +177,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.core.PairType",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A type which pairs a 'first' type and a 'second' type"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "first",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
-                        "body": {"variable": "hydra.core.Type"}}}},
-                  {
-                    "name": "second",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
-                        "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.core.Field",
         "typeScheme": {
           "body": {
@@ -679,6 +657,28 @@
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier in some context; a string-valued key"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.core.PairType",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A type which pairs a 'first' type and a 'second' type"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "first",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first component of the pair"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "second",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second component of the pair"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
       "type": {
