@@ -57,6 +57,7 @@ caseStatement cs =
 either :: (t0 -> String) -> (t1 -> String) -> Either t0 t1 -> String
 either showA showB e =
     Eithers.either (\a -> Strings.cat2 "left(" (Strings.cat2 (showA a) ")")) (\b -> Strings.cat2 "right(" (Strings.cat2 (showB b) ")")) e
+-- | Show a field as a string
 field :: Core.Field -> String
 field field =
 
@@ -66,6 +67,7 @@ field field =
         fname,
         "=",
         (term fterm)])
+-- | Show a field type as a string
 fieldType :: Core.FieldType -> String
 fieldType ft =
 

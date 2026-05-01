@@ -5894,6 +5894,34 @@ interfaceMemberDeclarationInterfaceMethod x =
         Core.fieldName = (Core.Name "interfaceMethod"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+interfaceMemberDeclarationWithComments :: Phantoms.TTerm Syntax.InterfaceMemberDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.InterfaceMemberDeclarationWithComments
+interfaceMemberDeclarationWithComments value comments =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclarationWithComments"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = (Phantoms.unTTerm value)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+
+interfaceMemberDeclarationWithCommentsComments :: Phantoms.TTerm Syntax.InterfaceMemberDeclarationWithComments -> Phantoms.TTerm (Maybe String)
+interfaceMemberDeclarationWithCommentsComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclarationWithComments"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+interfaceMemberDeclarationWithCommentsValue :: Phantoms.TTerm Syntax.InterfaceMemberDeclarationWithComments -> Phantoms.TTerm Syntax.InterfaceMemberDeclaration
+interfaceMemberDeclarationWithCommentsValue x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclarationWithComments"),
+        Core.projectionField = (Core.Name "value")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
 interfaceMethodDeclaration :: Phantoms.TTerm [Syntax.InterfaceMethodModifier] -> Phantoms.TTerm Syntax.MethodHeader -> Phantoms.TTerm Syntax.MethodBody -> Phantoms.TTerm Syntax.InterfaceMethodDeclaration
 interfaceMethodDeclaration modifiers header body =
     Phantoms.TTerm (Core.TermRecord (Core.Record {

@@ -493,7 +493,7 @@ integralTypeToExpr t =
       Syntax.IntegralTypeChar -> Serialization.cst "char"
 interfaceBodyToExpr :: Syntax.InterfaceBody -> Ast.Expr
 interfaceBodyToExpr ib =
-    Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map interfaceMemberDeclarationToExpr (Syntax.unInterfaceBody ib)))
+    Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map interfaceMemberDeclarationWithCommentsToExpr (Syntax.unInterfaceBody ib)))
 interfaceDeclarationToExpr :: Syntax.InterfaceDeclaration -> Ast.Expr
 interfaceDeclarationToExpr d =
     case d of
@@ -506,6 +506,12 @@ interfaceMemberDeclarationToExpr d =
       Syntax.InterfaceMemberDeclarationInterfaceMethod v0 -> interfaceMethodDeclarationToExpr v0
       Syntax.InterfaceMemberDeclarationClass v0 -> classDeclarationToExpr v0
       Syntax.InterfaceMemberDeclarationInterface v0 -> interfaceDeclarationToExpr v0
+interfaceMemberDeclarationWithCommentsToExpr :: Syntax.InterfaceMemberDeclarationWithComments -> Ast.Expr
+interfaceMemberDeclarationWithCommentsToExpr imdwc =
+
+      let d = Syntax.interfaceMemberDeclarationWithCommentsValue imdwc
+          mc = Syntax.interfaceMemberDeclarationWithCommentsComments imdwc
+      in (withComments mc (interfaceMemberDeclarationToExpr d))
 interfaceMethodDeclarationToExpr :: Syntax.InterfaceMethodDeclaration -> Ast.Expr
 interfaceMethodDeclarationToExpr imd =
 

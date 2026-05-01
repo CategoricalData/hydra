@@ -27,10 +27,16 @@ import qualified Data.Scientific as Sci
 -- | Transform a type binding into an encoder binding
 encodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 encodeBinding cx graph b =
-    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
-      Core.bindingName = (encodeBindingName (Core.bindingName b)),
-      Core.bindingTerm = (encodeTypeNamed (Core.bindingName b) typ),
-      Core.bindingTypeScheme = (Just (encoderTypeSchemeNamed (Core.bindingName b) typ))}))
+    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ ->
+      let rawBody = encodeTypeNamed (Core.bindingName b) typ
+          description =
+                  Strings.cat [
+                    "Encoder for ",
+                    (Core.unName (Core.bindingName b))]
+      in (Right (Core.Binding {
+        Core.bindingName = (encodeBindingName (Core.bindingName b)),
+        Core.bindingTerm = (Annotations.setTermDescription (Just description) rawBody),
+        Core.bindingTypeScheme = (Just (encoderTypeSchemeNamed (Core.bindingName b) typ))})))
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: Core.Name -> Core.Name
 encodeBindingName n =

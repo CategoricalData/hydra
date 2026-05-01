@@ -39,6 +39,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+-- | True if every element of the list is equal to every other element (vacuously true for the empty list)
 allEqual :: Eq t0 => ([t0] -> Bool)
 allEqual els =
     Maybes.maybe True (\uc ->
