@@ -6,12 +6,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "annot",
-                "type": {"variable": "hydra.coq.syntax.QualidAnnotated"}},
-              {
-                "name": "terms",
-                "type": {"list": {"variable": "hydra.coq.syntax.Term1"}}}]},
+              {"name": "annot", "type": {"variable": "hydra.coq.syntax.QualidAnnotated"}},
+              {"name": "terms", "type": {"list": {"variable": "hydra.coq.syntax.Term1"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -19,12 +15,8 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "normal",
-                "type": {"variable": "hydra.coq.syntax.NormalApplication"}},
-              {
-                "name": "annotated",
-                "type": {"variable": "hydra.coq.syntax.AnnotatedApplication"}}]},
+              {"name": "normal", "type": {"variable": "hydra.coq.syntax.NormalApplication"}},
+              {"name": "annotated", "type": {"variable": "hydra.coq.syntax.AnnotatedApplication"}}]},
           "variables": []}}},
     {
       "type": {
@@ -33,9 +25,7 @@
           "body": {
             "union": [
               {"name": "ident", "type": {"variable": "hydra.coq.syntax.IdentArg"}},
-              {
-                "name": "natural",
-                "type": {"variable": "hydra.coq.syntax.NaturalArg"}},
+              {"name": "natural", "type": {"variable": "hydra.coq.syntax.NaturalArg"}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term1"}}]},
           "variables": []}}},
     {
@@ -47,12 +37,8 @@
               {"name": "name", "type": {"variable": "hydra.coq.syntax.Name"}},
               {"name": "type", "type": {"variable": "hydra.coq.syntax.TypeBinders"}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.LetBinder"}},
-              {
-                "name": "implicit",
-                "type": {"variable": "hydra.coq.syntax.ImplicitBinders"}},
-              {
-                "name": "generalizing",
-                "type": {"variable": "hydra.coq.syntax.GeneralizingBinder"}},
+              {"name": "implicit", "type": {"variable": "hydra.coq.syntax.ImplicitBinders"}},
+              {"name": "generalizing", "type": {"variable": "hydra.coq.syntax.GeneralizingBinder"}},
               {"name": "pattern", "type": {"variable": "hydra.coq.syntax.Pattern0"}}]},
           "variables": []}}},
     {
@@ -62,12 +48,8 @@
           "body": {
             "record": [
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term100"}},
-              {
-                "name": "as",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Name"}}},
-              {
-                "name": "in",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Pattern"}}}]},
+              {"name": "as", "type": {"maybe": {"variable": "hydra.coq.syntax.Name"}}},
+              {"name": "in", "type": {"maybe": {"variable": "hydra.coq.syntax.Pattern"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -76,9 +58,7 @@
           "body": {
             "record": [
               {"name": "body", "type": {"variable": "hydra.coq.syntax.CofixBody"}},
-              {
-                "name": "qual",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.CofixQual"}}}]},
+              {"name": "qual", "type": {"maybe": {"variable": "hydra.coq.syntax.CofixQual"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -87,12 +67,8 @@
           "body": {
             "record": [
               {"name": "ident", "type": {"variable": "hydra.coq.syntax.Ident"}},
-              {
-                "name": "binders",
-                "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-              {
-                "name": "type",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
+              {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+              {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]},
           "variables": []}}},
     {
@@ -110,12 +86,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "with",
-                "type": {"list": {"variable": "hydra.coq.syntax.CofixBody"}}},
-              {
-                "name": "for",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}}]},
+              {"name": "with", "type": {"list": {"variable": "hydra.coq.syntax.CofixBody"}}},
+              {"name": "for", "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -123,9 +95,7 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "pattern",
-                "type": {"list": {"list": {"variable": "hydra.coq.syntax.Pattern"}}}},
+              {"name": "pattern", "type": {"list": {"list": {"variable": "hydra.coq.syntax.Pattern"}}}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]},
           "variables": []}}},
     {
@@ -135,9 +105,7 @@
           "body": {
             "record": [
               {"name": "ident", "type": {"variable": "hydra.coq.syntax.Ident"}},
-              {
-                "name": "variant",
-                "type": {"variable": "hydra.coq.syntax.ExistentialVariableVariant"}}]},
+              {"name": "variant", "type": {"variable": "hydra.coq.syntax.ExistentialVariableVariant"}}]},
           "variables": []}}},
     {
       "type": {
@@ -148,16 +116,12 @@
               {"name": "placeholder", "type": {"unit": {}}},
               {"name": "inside1", "type": {"unit": {}}},
               {"name": "inside2", "type": {"unit": {}}},
-              {
-                "name": "outside",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.IdentArg"}}}]},
+              {"name": "outside", "type": {"maybe": {"variable": "hydra.coq.syntax.IdentArg"}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FieldIdent",
-        "typeScheme": {
-          "body": {"wrap": {"variable": "hydra.coq.syntax.Ident"}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"variable": "hydra.coq.syntax.Ident"}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Fix",
@@ -165,9 +129,7 @@
           "body": {
             "union": [
               {"name": "decl", "type": {"variable": "hydra.coq.syntax.Fix_Decl"}},
-              {
-                "name": "qual",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Fix_Qual"}}}]},
+              {"name": "qual", "type": {"maybe": {"variable": "hydra.coq.syntax.Fix_Qual"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -177,9 +139,7 @@
             "union": [
               {"name": "struct", "type": {"variable": "hydra.coq.syntax.Ident"}},
               {"name": "wf", "type": {"variable": "hydra.coq.syntax.FixAnnot_Wf"}},
-              {
-                "name": "measure",
-                "type": {"variable": "hydra.coq.syntax.FixAnnot_Measure"}}]},
+              {"name": "measure", "type": {"variable": "hydra.coq.syntax.FixAnnot_Measure"}}]},
           "variables": []}}},
     {
       "type": {
@@ -188,12 +148,8 @@
           "body": {
             "record": [
               {"name": "term", "type": {"variable": "hydra.coq.syntax.OneTerm"}},
-              {
-                "name": "ident",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}},
-              {
-                "name": "term2",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.OneTerm"}}}]},
+              {"name": "ident", "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}},
+              {"name": "term2", "type": {"maybe": {"variable": "hydra.coq.syntax.OneTerm"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -211,15 +167,9 @@
           "body": {
             "record": [
               {"name": "ident", "type": {"variable": "hydra.coq.syntax.Ident"}},
-              {
-                "name": "binders",
-                "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-              {
-                "name": "annot",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.FixAnnot"}}},
-              {
-                "name": "type",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
+              {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+              {"name": "annot", "type": {"maybe": {"variable": "hydra.coq.syntax.FixAnnot"}}},
+              {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]},
           "variables": []}}},
     {
@@ -237,12 +187,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "decls",
-                "type": {"list": {"variable": "hydra.coq.syntax.Fix_Decl"}}},
-              {
-                "name": "for",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}}]},
+              {"name": "decls", "type": {"list": {"variable": "hydra.coq.syntax.Fix_Decl"}}},
+              {"name": "for", "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -250,9 +196,7 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "binders",
-                "type": {"variable": "hydra.coq.syntax.OpenBinders"}},
+              {"name": "binders", "type": {"variable": "hydra.coq.syntax.OpenBinders"}},
               {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}}]},
           "variables": []}}},
     {
@@ -270,9 +214,7 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "binders",
-                "type": {"variable": "hydra.coq.syntax.OpenBinders"}},
+              {"name": "binders", "type": {"variable": "hydra.coq.syntax.OpenBinders"}},
               {"name": "body", "type": {"variable": "hydra.coq.syntax.Term"}}]},
           "variables": []}}},
     {
@@ -288,9 +230,7 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Terms surrounded by `( ) introduce their free variables as explicit arguments"}}}],
+                        "value": {"literal": {"string": "Terms surrounded by `( ) introduce their free variables as explicit arguments"}}}],
                     "body": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}},
               {
                 "name": "implicitMaximallyInserted",
@@ -300,8 +240,7 @@
                       {
                         "key": "description",
                         "value": {
-                          "literal": {
-                            "string": "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments"}}}],
+                          "literal": {"string": "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments"}}}],
                     "body": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}},
               {
                 "name": "implicitNonMaximallyInserted",
@@ -310,17 +249,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments"}}}],
+                        "value": {"literal": {"string": "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments"}}}],
                     "body": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Ident",
-        "typeScheme": {
-          "body": {"wrap": {"variable": "hydra.coq.syntax.String"}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"variable": "hydra.coq.syntax.String"}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.IdentArg",
@@ -336,16 +271,11 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Pattern match on boolean values"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Pattern match on boolean values"}}}],
               "body": {
                 "record": [
                   {"name": "condition", "type": {"variable": "hydra.coq.syntax.Term"}},
-                  {
-                    "name": "returnAs",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.ReturnAs"}}},
+                  {"name": "returnAs", "type": {"maybe": {"variable": "hydra.coq.syntax.ReturnAs"}}},
                   {"name": "then", "type": {"variable": "hydra.coq.syntax.Term"}},
                   {"name": "else", "type": {"variable": "hydra.coq.syntax.Term"}}]}}},
           "variables": []}}},
@@ -359,8 +289,7 @@
                 {
                   "key": "description",
                   "value": {
-                    "literal": {
-                      "string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}],
+                    "literal": {"string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}],
               "body": {
                 "union": [
                   {
@@ -370,9 +299,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The first form, with curly braces, makes name a maximally inserted implicit argument"}}}],
+                            "value": {"literal": {"string": "The first form, with curly braces, makes name a maximally inserted implicit argument"}}}],
                         "body": {"variable": "hydra.coq.syntax.TypeBinders"}}}},
                   {
                     "name": "nonMaximallyInserted",
@@ -381,9 +308,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The second form, with square brackets, makes name a non-maximally inserted implicit argument."}}}],
+                            "value": {"literal": {"string": "The second form, with square brackets, makes name a non-maximally inserted implicit argument."}}}],
                         "body": {"variable": "hydra.coq.syntax.TypeBinders"}}}}]}}},
           "variables": []}}},
     {
@@ -392,15 +317,10 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A let-in definition"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A let-in definition"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "bindings",
-                    "type": {"variable": "hydra.coq.syntax.LetBindings"}},
+                  {"name": "bindings", "type": {"variable": "hydra.coq.syntax.LetBindings"}},
                   {"name": "in", "type": {"variable": "hydra.coq.syntax.Term"}}]}}},
           "variables": []}}},
     {
@@ -412,15 +332,11 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}],
+                  "value": {"literal": {"string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Name"}},
-                  {
-                    "name": "type",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
+                  {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
                   {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]}}},
           "variables": []}}},
     {
@@ -430,9 +346,7 @@
           "body": {
             "union": [
               {"name": "named", "type": {"variable": "hydra.coq.syntax.LetNamed"}},
-              {
-                "name": "destructuring",
-                "type": {"variable": "hydra.coq.syntax.LetDestructuring"}}]},
+              {"name": "destructuring", "type": {"variable": "hydra.coq.syntax.LetDestructuring"}}]},
           "variables": []}}},
     {
       "type": {
@@ -441,9 +355,7 @@
           "body": {
             "record": [
               {"name": "binder", "type": {"variable": "hydra.coq.syntax.LetBinder"}},
-              {
-                "name": "binders",
-                "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}}]},
+              {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -451,15 +363,9 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "variant1",
-                "type": {"variable": "hydra.coq.syntax.LetDestructuring_Variant1"}},
-              {
-                "name": "variant2",
-                "type": {"variable": "hydra.coq.syntax.LetDestructuring_Variant2"}},
-              {
-                "name": "variant3",
-                "type": {"variable": "hydra.coq.syntax.LetDestructuring_Variant3"}}]},
+              {"name": "variant1", "type": {"variable": "hydra.coq.syntax.LetDestructuring_Variant1"}},
+              {"name": "variant2", "type": {"variable": "hydra.coq.syntax.LetDestructuring_Variant2"}},
+              {"name": "variant3", "type": {"variable": "hydra.coq.syntax.LetDestructuring_Variant3"}}]},
           "variables": []}}},
     {
       "type": {
@@ -467,12 +373,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "names",
-                "type": {"list": {"variable": "hydra.coq.syntax.Name"}}},
-              {
-                "name": "returnAs",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.ReturnAs"}}},
+              {"name": "names", "type": {"list": {"variable": "hydra.coq.syntax.Name"}}},
+              {"name": "returnAs", "type": {"maybe": {"variable": "hydra.coq.syntax.ReturnAs"}}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]},
           "variables": []}}},
     {
@@ -483,9 +385,7 @@
             "record": [
               {"name": "pattern", "type": {"variable": "hydra.coq.syntax.Pattern"}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}},
-              {
-                "name": "return",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Term100"}}}]},
+              {"name": "return", "type": {"maybe": {"variable": "hydra.coq.syntax.Term100"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -504,33 +404,22 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "caseItems",
-                "type": {"list": {"variable": "hydra.coq.syntax.CaseItem"}}},
-              {
-                "name": "return",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Term100"}}},
+              {"name": "caseItems", "type": {"list": {"variable": "hydra.coq.syntax.CaseItem"}}},
+              {"name": "return", "type": {"maybe": {"variable": "hydra.coq.syntax.Term100"}}},
               {"name": "pipe", "type": {"literal": {"boolean": {}}}},
-              {
-                "name": "equations",
-                "type": {"list": {"variable": "hydra.coq.syntax.Equation"}}}]},
+              {"name": "equations", "type": {"list": {"variable": "hydra.coq.syntax.Equation"}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Name",
-        "typeScheme": {
-          "body": {"wrap": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Natural",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}],
               "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}},
           "variables": []}}},
     {
@@ -549,25 +438,19 @@
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.coq.syntax.Term1"}},
-              {
-                "name": "rhs",
-                "type": {"list": {"variable": "hydra.coq.syntax.Arg"}}}]},
+              {"name": "rhs", "type": {"list": {"variable": "hydra.coq.syntax.Arg"}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Number",
-        "typeScheme": {
-          "body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.OneTerm",
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "explicit",
-                "type": {"variable": "hydra.coq.syntax.QualidAnnotated"}},
+              {"name": "explicit", "type": {"variable": "hydra.coq.syntax.QualidAnnotated"}},
               {"name": "term1", "type": {"variable": "hydra.coq.syntax.Term1"}}]},
           "variables": []}}},
     {
@@ -577,9 +460,7 @@
           "body": {
             "union": [
               {"name": "type", "type": {"variable": "hydra.coq.syntax.TypeBinders"}},
-              {
-                "name": "binders",
-                "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}}]},
+              {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -587,12 +468,8 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "pattern",
-                "type": {"variable": "hydra.coq.syntax.Pattern10"}},
-              {
-                "name": "term",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Term"}}}]},
+              {"name": "pattern", "type": {"variable": "hydra.coq.syntax.Pattern10"}},
+              {"name": "term", "type": {"maybe": {"variable": "hydra.coq.syntax.Term"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -601,13 +478,9 @@
           "body": {
             "union": [
               {"name": "qualid", "type": {"variable": "hydra.coq.syntax.Qualid"}},
-              {
-                "name": "qualIdAndPattern",
-                "type": {"variable": "hydra.coq.syntax.QualidAndPattern"}},
+              {"name": "qualIdAndPattern", "type": {"variable": "hydra.coq.syntax.QualidAndPattern"}},
               {"name": "placeholder", "type": {"unit": {}}},
-              {
-                "name": "parens",
-                "type": {"list": {"variable": "hydra.coq.syntax.Pattern"}}},
+              {"name": "parens", "type": {"list": {"variable": "hydra.coq.syntax.Pattern"}}},
               {"name": "number", "type": {"variable": "hydra.coq.syntax.Number"}},
               {"name": "string", "type": {"variable": "hydra.coq.syntax.String"}}]},
           "variables": []}}},
@@ -618,9 +491,7 @@
           "body": {
             "record": [
               {"name": "pattern", "type": {"variable": "hydra.coq.syntax.Pattern0"}},
-              {
-                "name": "scope",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.ScopeKey"}}}]},
+              {"name": "scope", "type": {"maybe": {"variable": "hydra.coq.syntax.ScopeKey"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -629,12 +500,8 @@
           "body": {
             "union": [
               {"name": "as", "type": {"variable": "hydra.coq.syntax.Pattern10_As"}},
-              {
-                "name": "patterns",
-                "type": {"variable": "hydra.coq.syntax.Pattern10_Patterns"}},
-              {
-                "name": "qualiid",
-                "type": {"variable": "hydra.coq.syntax.Pattern10_Qualid"}}]},
+              {"name": "patterns", "type": {"variable": "hydra.coq.syntax.Pattern10_Patterns"}},
+              {"name": "qualiid", "type": {"variable": "hydra.coq.syntax.Pattern10_Qualid"}}]},
           "variables": []}}},
     {
       "type": {
@@ -652,9 +519,7 @@
           "body": {
             "record": [
               {"name": "pattern", "type": {"variable": "hydra.coq.syntax.Pattern1"}},
-              {
-                "name": "patterns",
-                "type": {"list": {"variable": "hydra.coq.syntax.Pattern1"}}}]},
+              {"name": "patterns", "type": {"list": {"variable": "hydra.coq.syntax.Pattern1"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -663,9 +528,7 @@
           "body": {
             "record": [
               {"name": "qualid", "type": {"variable": "hydra.coq.syntax.Qualid"}},
-              {
-                "name": "patterns",
-                "type": {"list": {"variable": "hydra.coq.syntax.Pattern1"}}}]},
+              {"name": "patterns", "type": {"list": {"variable": "hydra.coq.syntax.Pattern1"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -682,16 +545,11 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A qualified identifier"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A qualified identifier"}}}],
               "body": {
                 "record": [
                   {"name": "id", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "fieldIds",
-                    "type": {"list": {"variable": "hydra.coq.syntax.FieldIdent"}}}]}}},
+                  {"name": "fieldIds", "type": {"list": {"variable": "hydra.coq.syntax.FieldIdent"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -709,9 +567,7 @@
           "body": {
             "record": [
               {"name": "qualid", "type": {"variable": "hydra.coq.syntax.Qualid"}},
-              {
-                "name": "univAnnot",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.UnivAnnot"}}}]},
+              {"name": "univAnnot", "type": {"maybe": {"variable": "hydra.coq.syntax.UnivAnnot"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -719,38 +575,27 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "as",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Name"}}},
+              {"name": "as", "type": {"maybe": {"variable": "hydra.coq.syntax.Name"}}},
               {"name": "return", "type": {"variable": "hydra.coq.syntax.Term100"}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ScopeKey",
-        "typeScheme": {
-          "body": {"wrap": {"variable": "hydra.coq.syntax.Ident"}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"variable": "hydra.coq.syntax.Ident"}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Sort",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The types of types are called sorts."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The types of types are called sorts."}}}],
               "body": {
                 "union": [
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The sort 𝖲𝖾𝗍 intends to be the type of small sets."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The sort 𝖲𝖾𝗍 intends to be the type of small sets."}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "prop",
@@ -759,9 +604,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions."}}}],
+                            "value": {"literal": {"string": "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions."}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "sProp",
@@ -776,23 +619,17 @@
                         "body": {"unit": {}}}}},
                   {"name": "type", "type": {"unit": {}}},
                   {"name": "typeWithAnyUniverse", "type": {"unit": {}}},
-                  {
-                    "name": "typeWithUniverse",
-                    "type": {"variable": "hydra.coq.syntax.Universe"}}]}}},
+                  {"name": "typeWithUniverse", "type": {"variable": "hydra.coq.syntax.Universe"}}]}}},
           "variables": []}}},
     {
-      "type": {
-        "name": "hydra.coq.syntax.String",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"name": "hydra.coq.syntax.String", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term",
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "forallOrFun",
-                "type": {"variable": "hydra.coq.syntax.ForallOrFun"}},
+              {"name": "forallOrFun", "type": {"variable": "hydra.coq.syntax.ForallOrFun"}},
               {"name": "let", "type": {"variable": "hydra.coq.syntax.Let"}},
               {"name": "if", "type": {"variable": "hydra.coq.syntax.If"}},
               {"name": "fix", "type": {"variable": "hydra.coq.syntax.Fix"}},
@@ -805,16 +642,10 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "qualidAnnotated",
-                "type": {"variable": "hydra.coq.syntax.QualidAnnotated"}},
+              {"name": "qualidAnnotated", "type": {"variable": "hydra.coq.syntax.QualidAnnotated"}},
               {"name": "sort", "type": {"variable": "hydra.coq.syntax.Sort"}},
-              {
-                "name": "primitiveNotations",
-                "type": {"variable": "hydra.coq.syntax.PrimitiveNotations"}},
-              {
-                "name": "evar",
-                "type": {"variable": "hydra.coq.syntax.ExistentialVariable"}},
+              {"name": "primitiveNotations", "type": {"variable": "hydra.coq.syntax.PrimitiveNotations"}},
+              {"name": "evar", "type": {"variable": "hydra.coq.syntax.ExistentialVariable"}},
               {"name": "match", "type": {"variable": "hydra.coq.syntax.Match"}},
               {"name": "record", "type": {"unit": {}}},
               {"name": "generalizing", "type": {"unit": {}}},
@@ -837,9 +668,7 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "application",
-                "type": {"variable": "hydra.coq.syntax.Application"}},
+              {"name": "application", "type": {"variable": "hydra.coq.syntax.Application"}},
               {"name": "oneTerm", "type": {"variable": "hydra.coq.syntax.OneTerm"}}]},
           "variables": []}}},
     {
@@ -854,9 +683,7 @@
     {
       "type": {
         "name": "hydra.coq.syntax.Type",
-        "typeScheme": {
-          "body": {"wrap": {"variable": "hydra.coq.syntax.Term"}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"variable": "hydra.coq.syntax.Term"}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TypeCast",
@@ -865,9 +692,7 @@
             "record": [
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term10"}},
               {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}},
-              {
-                "name": "operator",
-                "type": {"variable": "hydra.coq.syntax.TypeCastOperator"}}]},
+              {"name": "operator", "type": {"variable": "hydra.coq.syntax.TypeCastOperator"}}]},
           "variables": []}}},
     {
       "type": {
@@ -883,8 +708,7 @@
                       {
                         "key": "description",
                         "value": {
-                          "literal": {
-                            "string": "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."}}}],
+                          "literal": {"string": "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."}}}],
                     "body": {"unit": {}}}}},
               {
                 "name": "vmCompute",
@@ -915,9 +739,7 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "names",
-                "type": {"list": {"variable": "hydra.coq.syntax.Name"}}},
+              {"name": "names", "type": {"list": {"variable": "hydra.coq.syntax.Name"}}},
               {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}}]},
           "variables": []}}},
     {
@@ -926,30 +748,22 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "name",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Name"}}},
+              {"name": "name", "type": {"maybe": {"variable": "hydra.coq.syntax.Name"}}},
               {"name": "generalizing", "type": {"literal": {"boolean": {}}}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.UnivAnnot",
-        "typeScheme": {
-          "body": {"wrap": {"list": {"variable": "hydra.coq.syntax.UniverseLevel"}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.coq.syntax.UniverseLevel"}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Universe",
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "max",
-                "type": {"list": {"variable": "hydra.coq.syntax.Universe_Expr"}}},
-              {
-                "name": "expr",
-                "type": {"variable": "hydra.coq.syntax.Universe_Expr"}}]},
+              {"name": "max", "type": {"list": {"variable": "hydra.coq.syntax.Universe_Expr"}}},
+              {"name": "expr", "type": {"variable": "hydra.coq.syntax.Universe_Expr"}}]},
           "variables": []}}},
     {
       "type": {
@@ -957,12 +771,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "name",
-                "type": {"variable": "hydra.coq.syntax.UniverseName"}},
-              {
-                "name": "number",
-                "type": {"maybe": {"variable": "hydra.coq.syntax.Natural"}}}]},
+              {"name": "name", "type": {"variable": "hydra.coq.syntax.UniverseName"}},
+              {"name": "number", "type": {"maybe": {"variable": "hydra.coq.syntax.Natural"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -992,11 +802,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -1008,10 +814,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Coq comment (* ... *)"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Coq comment (* ... *)"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -1020,19 +823,12 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A constructor in an Inductive definition"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A constructor in an Inductive definition"}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "binders",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-                  {
-                    "name": "type",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}}]}}},
+                  {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+                  {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1043,21 +839,13 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A Definition or Let command: Definition name binders : type := term."}}}],
+                  "value": {"literal": {"string": "A Definition or Let command: Definition name binders : type := term."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "locality",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
+                  {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "binders",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-                  {
-                    "name": "type",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
+                  {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+                  {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
                   {"name": "body", "type": {"variable": "hydra.coq.syntax.Term"}}]}}},
           "variables": []}}},
     {
@@ -1066,15 +854,8 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A complete Coq .v file"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "sentences",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A complete Coq .v file"}}}],
+              "body": {"record": [{"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1082,30 +863,16 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A Fixpoint command for recursive definitions"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Fixpoint command for recursive definitions"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "locality",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
+                  {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "binders",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-                  {
-                    "name": "annot",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.FixAnnot"}}},
-                  {
-                    "name": "type",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
+                  {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+                  {"name": "annot", "type": {"maybe": {"variable": "hydra.coq.syntax.FixAnnot"}}},
+                  {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
                   {"name": "body", "type": {"variable": "hydra.coq.syntax.Term"}},
-                  {
-                    "name": "with",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Fix_Decl"}}}]}}},
+                  {"name": "with", "type": {"list": {"variable": "hydra.coq.syntax.Fix_Decl"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1113,14 +880,8 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Qualification for Require/Import commands"}}}],
-              "body": {
-                "union": [
-                  {"name": "import", "type": {"unit": {}}},
-                  {"name": "export", "type": {"unit": {}}}]}}},
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Qualification for Require/Import commands"}}}],
+              "body": {"union": [{"name": "import", "type": {"unit": {}}}, {"name": "export", "type": {"unit": {}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1131,21 +892,13 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}],
+                  "value": {"literal": {"string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "binders",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-                  {
-                    "name": "type",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
-                  {
-                    "name": "constructors",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Constructor"}}}]}}},
+                  {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+                  {"name": "type", "type": {"maybe": {"variable": "hydra.coq.syntax.Type"}}},
+                  {"name": "constructors", "type": {"list": {"variable": "hydra.coq.syntax.Constructor"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1156,18 +909,12 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}],
+                  "value": {"literal": {"string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "locality",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
+                  {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
                   {"name": "coinductive", "type": {"literal": {"boolean": {}}}},
-                  {
-                    "name": "bodies",
-                    "type": {"list": {"variable": "hydra.coq.syntax.InductiveBody"}}}]}}},
+                  {"name": "bodies", "type": {"list": {"variable": "hydra.coq.syntax.InductiveBody"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1175,14 +922,8 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Local or Global qualifier for commands"}}}],
-              "body": {
-                "union": [
-                  {"name": "local", "type": {"unit": {}}},
-                  {"name": "global", "type": {"unit": {}}}]}}},
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Local or Global qualifier for commands"}}}],
+              "body": {"union": [{"name": "local", "type": {"unit": {}}}, {"name": "global", "type": {"unit": {}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1190,16 +931,11 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Module ... End block"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Module ... End block"}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "sentences",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
+                  {"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1207,20 +943,13 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Notation declaration"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Notation declaration"}}}],
               "body": {
                 "record": [
                   {"name": "notation", "type": {"variable": "hydra.coq.syntax.String"}},
                   {"name": "definition", "type": {"variable": "hydra.coq.syntax.Term"}},
-                  {
-                    "name": "level",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Natural"}}},
-                  {
-                    "name": "associativity",
-                    "type": {"maybe": {"literal": {"string": {}}}}}]}}},
+                  {"name": "level", "type": {"maybe": {"variable": "hydra.coq.syntax.Natural"}}},
+                  {"name": "associativity", "type": {"maybe": {"literal": {"string": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1228,18 +957,11 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The body of a Record definition"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The body of a Record definition"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "constructor",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}},
-                  {
-                    "name": "fields",
-                    "type": {"list": {"variable": "hydra.coq.syntax.RecordField"}}}]}}},
+                  {"name": "constructor", "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}},
+                  {"name": "fields", "type": {"list": {"variable": "hydra.coq.syntax.RecordField"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1247,22 +969,13 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Record or Structure definition"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Record or Structure definition"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "locality",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
+                  {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "binders",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
-                  {
-                    "name": "sort",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Sort"}}},
+                  {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+                  {"name": "sort", "type": {"maybe": {"variable": "hydra.coq.syntax.Sort"}}},
                   {"name": "body", "type": {"variable": "hydra.coq.syntax.RecordBody"}}]}}},
           "variables": []}}},
     {
@@ -1271,10 +984,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A field in a Record definition"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A field in a Record definition"}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -1286,22 +996,13 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Require Import/Export command"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Require Import/Export command"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "from",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Qualid"}}},
+                  {"name": "from", "type": {"maybe": {"variable": "hydra.coq.syntax.Qualid"}}},
                   {"name": "require", "type": {"literal": {"boolean": {}}}},
-                  {
-                    "name": "qualification",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.ImportQualification"}}},
-                  {
-                    "name": "modules",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Qualid"}}}]}}},
+                  {"name": "qualification", "type": {"maybe": {"variable": "hydra.coq.syntax.ImportQualification"}}},
+                  {"name": "modules", "type": {"list": {"variable": "hydra.coq.syntax.Qualid"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1309,16 +1010,11 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Section ... End block"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Section ... End block"}}}],
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "sentences",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
+                  {"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1329,17 +1025,11 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}],
+                  "value": {"literal": {"string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "comment",
-                    "type": {"maybe": {"variable": "hydra.coq.syntax.Comment"}}},
-                  {
-                    "name": "content",
-                    "type": {"variable": "hydra.coq.syntax.SentenceContent"}}]}}},
+                  {"name": "comment", "type": {"maybe": {"variable": "hydra.coq.syntax.Comment"}}},
+                  {"name": "content", "type": {"variable": "hydra.coq.syntax.SentenceContent"}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1347,42 +1037,19 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The content of a top-level sentence"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The content of a top-level sentence"}}}],
               "body": {
                 "union": [
-                  {
-                    "name": "axiom",
-                    "type": {"variable": "hydra.coq.syntax.AxiomDeclaration"}},
-                  {
-                    "name": "definition",
-                    "type": {"variable": "hydra.coq.syntax.Definition"}},
-                  {
-                    "name": "fixpoint",
-                    "type": {"variable": "hydra.coq.syntax.FixpointDefinition"}},
-                  {
-                    "name": "inductive",
-                    "type": {"variable": "hydra.coq.syntax.InductiveDefinition"}},
-                  {
-                    "name": "module",
-                    "type": {"variable": "hydra.coq.syntax.ModuleDefinition"}},
-                  {
-                    "name": "notation",
-                    "type": {"variable": "hydra.coq.syntax.NotationDeclaration"}},
-                  {
-                    "name": "record",
-                    "type": {"variable": "hydra.coq.syntax.RecordDefinition"}},
-                  {
-                    "name": "requireImport",
-                    "type": {"variable": "hydra.coq.syntax.RequireImport"}},
-                  {
-                    "name": "section",
-                    "type": {"variable": "hydra.coq.syntax.SectionDefinition"}},
-                  {
-                    "name": "theorem",
-                    "type": {"variable": "hydra.coq.syntax.TheoremBody"}}]}}},
+                  {"name": "axiom", "type": {"variable": "hydra.coq.syntax.AxiomDeclaration"}},
+                  {"name": "definition", "type": {"variable": "hydra.coq.syntax.Definition"}},
+                  {"name": "fixpoint", "type": {"variable": "hydra.coq.syntax.FixpointDefinition"}},
+                  {"name": "inductive", "type": {"variable": "hydra.coq.syntax.InductiveDefinition"}},
+                  {"name": "module", "type": {"variable": "hydra.coq.syntax.ModuleDefinition"}},
+                  {"name": "notation", "type": {"variable": "hydra.coq.syntax.NotationDeclaration"}},
+                  {"name": "record", "type": {"variable": "hydra.coq.syntax.RecordDefinition"}},
+                  {"name": "requireImport", "type": {"variable": "hydra.coq.syntax.RequireImport"}},
+                  {"name": "section", "type": {"variable": "hydra.coq.syntax.SectionDefinition"}},
+                  {"name": "theorem", "type": {"variable": "hydra.coq.syntax.TheoremBody"}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1390,18 +1057,12 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}],
               "body": {
                 "record": [
                   {"name": "kind", "type": {"variable": "hydra.coq.syntax.TheoremKind"}},
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
-                  {
-                    "name": "binders",
-                    "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
+                  {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
                   {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}},
                   {"name": "proof", "type": {"variable": "hydra.coq.syntax.Term"}}]}}},
           "variables": []}}},
@@ -1411,10 +1072,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The kind of theorem command"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "The kind of theorem command"}}}],
               "body": {
                 "union": [
                   {"name": "theorem", "type": {"unit": {}}},

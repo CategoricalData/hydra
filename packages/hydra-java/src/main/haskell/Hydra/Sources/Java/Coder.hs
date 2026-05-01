@@ -247,6 +247,7 @@ module_ = Module {
       toDefinition namespaceParent,
       toDefinition needsThunking,
       toDefinition noComment,
+      toDefinition noInterfaceComment,
       toDefinition otherwiseBranch,
       toDefinition peelDomainTypes,
       toDefinition peelDomainsAndCod,
@@ -285,6 +286,8 @@ module_ = Module {
       toDefinition unwrapReturnType,
       toDefinition variantCompareToMethod,
       toDefinition visitBranch,
+      toDefinition withCommentString,
+      toDefinition withInterfaceCommentString,
       toDefinition withLambda,
       toDefinition withTypeLambda,
       toDefinition wrapInSupplierLambda,
@@ -566,7 +569,7 @@ augmentVariantClass = def "augmentVariantClass" $
           inject Java._ClassModifier Java._ClassModifier_final unit] $
         "oldBody" <~ project Java._NormalClassDeclaration Java._NormalClassDeclaration_body @@ var "ncd" $
         "oldDecls" <~ (unwrap Java._ClassBody @@ var "oldBody") $
-        "acceptDecl" <~ (noComment @@ (JavaUtilsSource.toAcceptMethod @@ false @@ var "tparams")) $
+        "acceptDecl" <~ (withCommentString @@ string "Dispatch to {@code visitor}." @@ (JavaUtilsSource.toAcceptMethod @@ false @@ var "tparams")) $
         "newBody" <~ wrap Java._ClassBody (Lists.concat2 (var "oldDecls") (list [var "acceptDecl"])) $
         inject Java._ClassDeclaration Java._ClassDeclaration_normal (record Java._NormalClassDeclaration [
           Java._NormalClassDeclaration_modifiers>>: var "newMods",
@@ -1283,9 +1286,9 @@ compareToZeroClause = def "compareToZeroClause" $
       @@ (JavaDsl.equalityExpressionEqual (JavaDsl.equalityExpressionBinary (var "lhs") (var "rhs")))
 
 -- | Create a constant field declaration (e.g., public static final Name TYPE_ = new Name("..."))
-constantDecl :: TTermDefinition (String -> JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+constantDecl :: TTermDefinition (String -> String -> JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDecl = def "constantDecl" $
-  lambda "javaName" $ lambda "aliases" $ lambda "name" $
+  lambda "comment" $ lambda "javaName" $ lambda "aliases" $ lambda "name" $
     "cx" ~> "g" ~>
     lets [
     "mods">: list [inject Java._FieldModifier Java._FieldModifier_public unit,
@@ -1301,24 +1304,35 @@ constantDecl = def "constantDecl" $
       (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "nameName" @@ nothing)
         @@ list [var "arg"] @@ nothing)) $
     "var" <~ (JavaUtilsSource.javaVariableDeclarator @@ wrap Java._Identifier (var "javaName") @@ just (var "init")) $
-    right (noComment @@ (JavaUtilsSource.javaMemberField @@ var "mods" @@ var "jt" @@ var "var"))
+    right (withCommentString @@ var "comment" @@ (JavaUtilsSource.javaMemberField @@ var "mods" @@ var "jt" @@ var "var"))
 
--- | Create a constant field declaration for a field name.
-constantDeclForFieldType :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+-- | Create a constant field declaration for a field name. The parentName is the FQN of the enclosing type.
+constantDeclForFieldType :: TTermDefinition (Name -> JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDeclForFieldType = def "constantDeclForFieldType" $
-  lambda "aliases" $ lambda "ftyp" $
+  lambda "parentName" $ lambda "aliases" $ lambda "ftyp" $
     "cx" ~> "g" ~>
     lets [
     "name">: Core.fieldTypeName (var "ftyp"),
-    "javaName">: Formatting.nonAlnumToUnderscores @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (unwrap _Name @@ var "name"))] $
-    constantDecl @@ var "javaName" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
+    "javaName">: Formatting.nonAlnumToUnderscores @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (unwrap _Name @@ var "name")),
+    "comment">: Strings.cat (list [
+      string "Name of the {@code ",
+      unwrap _Name @@ var "parentName",
+      string ".",
+      unwrap _Name @@ var "name",
+      string "} field."])] $
+    constantDecl @@ var "comment" @@ var "javaName" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Create a constant field declaration for a type name.
 constantDeclForTypeName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDeclForTypeName = def "constantDeclForTypeName" $
   lambda "aliases" $ lambda "name" $
     "cx" ~> "g" ~>
-    constantDecl @@ string "TYPE_" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
+    lets [
+    "comment">: Strings.cat (list [
+      string "Name of the {@code ",
+      unwrap _Name @@ var "name",
+      string "} type."])] $
+    constantDecl @@ var "comment" @@ string "TYPE_" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Construct an elements interface for a module's data definitions
 constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit))
@@ -1332,7 +1346,7 @@ constructElementsInterface = def "constructElementsInterface" $
     "mods">: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
     "className">: elementsClassName @@ var "ns",
     "elName">: elementsQualifiedName @@ var "ns",
-    "body">: wrap Java._InterfaceBody (var "members"),
+    "body">: wrap Java._InterfaceBody (Lists.map (lambda "m" $ noInterfaceComment @@ var "m") (var "members")),
     "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
         (record Java._NormalInterfaceDeclaration [
@@ -1468,14 +1482,51 @@ declarationForRecordType' = def "declarationForRecordType'" $
     "memberVars" <<~ (Eithers.mapList (lambda "f" $ recordMemberVar @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
     "memberVars'" <<~ (Eithers.mapList (lambda "p" $ addComment @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")) @@ var "cx" @@ var "g")
       (Lists.zip (var "memberVars") (var "fields"))) $
+    "elNameStr" <~ (unwrap _Name @@ var "elName") $
     "withMethods" <<~ (Logic.ifElse (Equality.gt (Lists.length (var "fields")) (int32 1))
-      (Eithers.mapList (lambda "f" $ recordWithMethod @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "f" @@ var "cx" @@ var "g") (var "fields"))
-      (right (list ([] :: [TTerm Java.ClassBodyDeclaration])))) $
+      (Eithers.mapList (lambda "f" $
+          "decl" <<~ (recordWithMethod @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "f" @@ var "cx" @@ var "g") $
+          "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
+          "comment" <~ Strings.cat (list [
+            string "Returns a copy of this {@link ",
+            var "elNameStr",
+            string "} with {@code ",
+            var "fname",
+            string "} replaced."]) $
+          right (withCommentString @@ var "comment" @@ var "decl"))
+        (var "fields"))
+      (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))) $
     "cons" <<~ (recordConstructor @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "cx" @@ var "g") $
+    "paramLines" <<~ (Eithers.mapList (lambda "f" $
+      "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
+      "mDoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "f") $
+      right (Maybes.maybe
+        (string "")
+        (lambda "d" $ Strings.cat (list [
+          string "@param ",
+          var "fname",
+          string " ",
+          var "d"]))
+        (var "mDoc")))
+      (var "fields")) $
+    "nonEmptyParamLines" <~ Lists.filter
+      (lambda "l" $ Logic.not (Equality.equal (var "l") (string "")))
+      (var "paramLines") $
+    "consBaseComment" <~ Strings.cat (list [
+      string "Constructs an immutable {@link ",
+      var "elNameStr",
+      string "}."]) $
+    "consComment" <~ Logic.ifElse (Lists.null (var "nonEmptyParamLines"))
+      (var "consBaseComment")
+      (Strings.cat (list [
+        var "consBaseComment",
+        string "\n\n",
+        Strings.intercalate (string "\n") (var "nonEmptyParamLines")])) $
+    "consWithComment" <~ (withCommentString @@ var "consComment" @@ var "cons") $
     "tn" <<~ (Logic.ifElse (var "isInner")
       (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))
       ("d" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
-        "dfields" <<~ (Eithers.mapList (lambda "f" $ constantDeclForFieldType @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
+        "dfields" <<~ (Eithers.mapList (lambda "f" $ constantDeclForFieldType @@ var "elName" @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
         right (Lists.cons (var "d") (var "dfields")))) $
     "comparableMethods" <~ (Maybes.cases (var "parentName")
       (Logic.ifElse (Logic.and (Logic.not (var "isInner")) (var "isSer"))
@@ -1484,13 +1535,17 @@ declarationForRecordType' = def "declarationForRecordType'" $
       (lambda "pn" $ Logic.ifElse (var "isSer")
         (list [variantCompareToMethod @@ var "aliases" @@ var "tparams" @@ var "pn" @@ var "elName" @@ var "fields"])
         (list ([] :: [TTerm Java.ClassBodyDeclaration])))) $
-    "bodyDecls" <~ (Lists.concat2 (var "tn") (Lists.concat2 (var "memberVars'")
-      (Lists.map (lambda "x" $ noComment @@ var "x")
-        (Lists.concat2
-          (list [var "cons",
-                 recordEqualsMethod @@ var "aliases" @@ var "elName" @@ var "fields",
-                 recordHashCodeMethod @@ var "fields"])
-          (Lists.concat2 (var "comparableMethods") (var "withMethods")))))) $
+    "noCommentMethods" <~ Lists.map (lambda "x" $ noComment @@ var "x")
+      (Lists.concat2
+        (list [recordEqualsMethod @@ var "aliases" @@ var "elName" @@ var "fields",
+               recordHashCodeMethod @@ var "fields"])
+        (var "comparableMethods")) $
+    "bodyDecls" <~ (Lists.concat (list [
+      var "tn",
+      var "memberVars'",
+      list [var "consWithComment"],
+      var "noCommentMethods",
+      var "withMethods"])) $
     "ifaces" <~ (Logic.ifElse (var "isInner")
       (serializableTypes @@ var "isSer")
       (interfaceTypes @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName")) $
@@ -1528,19 +1583,29 @@ declarationForUnionType = def "declarationForUnionType" $
     "acceptDecl" <~ (JavaUtilsSource.toAcceptMethod @@ true @@ var "tparams") $
     -- Build visitor and partial visitor interfaces
     "vtparams" <~ Lists.concat2 (var "tparams") (list [JavaUtilsSource.javaTypeParameter @@ asTerm JavaNamesSource.visitorReturnParameter]) $
+    "elNameStr" <~ (unwrap _Name @@ var "elName") $
     "visitorMethods" <~ Lists.map
       (lambda "ft" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
+        "fnameStr" <~ (unwrap _Name @@ var "fname") $
         "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
+        "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
+        "varNameStr" <~ (unwrap _Name @@ var "varName") $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
-            @@ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") @@ nothing)) $
+            @@ var "varName" @@ nothing)) $
         "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "varRef" @@ wrap _Name (string "instance")) $
         "resultR" <~ (JavaUtilsSource.javaTypeToJavaResult @@ (JavaDsl.typeReference (asTerm JavaUtilsSource.visitorTypeVariable))) $
-        JavaUtilsSource.interfaceMethodDeclaration @@ list ([] :: [TTerm Java.InterfaceMethodModifier]) @@ list ([] :: [TTerm Java.TypeParameter])
-          @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR" @@ nothing)
+        "comment" <~ Strings.cat (list [
+          string "Visit the {@link ",
+          var "varNameStr",
+          string "} case."]) $
+        pair (var "comment")
+          (JavaUtilsSource.interfaceMethodDeclaration @@ list ([] :: [TTerm Java.InterfaceMethodModifier]) @@ list ([] :: [TTerm Java.TypeParameter])
+            @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR" @@ nothing))
       (var "fields") $
-    "visitorBody" <~ wrap Java._InterfaceBody (var "visitorMethods") $
+    "visitorBody" <~ wrap Java._InterfaceBody (Lists.map (lambda "p" $
+      withInterfaceCommentString @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p"))) (var "visitorMethods")) $
     "visitor" <~ (JavaUtilsSource.javaInterfaceDeclarationToJavaClassBodyDeclaration @@
       (record Java._NormalInterfaceDeclaration [
         Java._NormalInterfaceDeclaration_modifiers>>: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
@@ -1569,13 +1634,16 @@ declarationForUnionType = def "declarationForUnionType" $
     "otherwiseDecl" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TTerm Java.TypeParameter])
       @@ asTerm JavaNamesSource.otherwiseMethodName @@ list [var "mainInstanceParam"] @@ var "resultR"
       @@ just (list [var "throwStmt"])) $
+    "otherwiseComment" <~ string "Default branch for unhandled cases." $
     -- Partial visitor visit methods: default to calling otherwise()
     "pvVisitMethods" <~ Lists.map
       (lambda "ft" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
+        "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
+        "varNameStr" <~ (unwrap _Name @@ var "varName") $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
-            @@ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") @@ nothing)) $
+            @@ var "varName" @@ nothing)) $
         "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "varRef" @@ wrap _Name (string "instance")) $
         "mi" <~ (JavaUtilsSource.methodInvocation @@ nothing
               @@ JavaDsl.identifier (asTerm JavaNamesSource.otherwiseMethodName)
@@ -1583,11 +1651,19 @@ declarationForUnionType = def "declarationForUnionType" $
         "returnOtherwise" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just
           (JavaUtilsSource.javaPrimaryToJavaExpression @@
             (JavaUtilsSource.javaMethodInvocationToJavaPrimary @@ var "mi")))) $
-        JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TTerm Java.TypeParameter])
-          @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR"
-          @@ just (list [var "returnOtherwise"]))
+        "comment" <~ Strings.cat (list [
+          string "Visit the {@link ",
+          var "varNameStr",
+          string "} case."]) $
+        pair (var "comment")
+          (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TTerm Java.TypeParameter])
+            @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR"
+            @@ just (list [var "returnOtherwise"])))
       (var "fields") $
-    "pvBody" <~ wrap Java._InterfaceBody (list [var "otherwiseDecl"] `Lists.concat2` var "pvVisitMethods") $
+    "pvBody" <~ wrap Java._InterfaceBody (Lists.cons
+      (withInterfaceCommentString @@ var "otherwiseComment" @@ var "otherwiseDecl")
+      (Lists.map (lambda "p" $
+        withInterfaceCommentString @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p"))) (var "pvVisitMethods"))) $
     "partialVisitor" <~ (JavaUtilsSource.javaInterfaceDeclarationToJavaClassBodyDeclaration @@
       (record Java._NormalInterfaceDeclaration [
         Java._NormalInterfaceDeclaration_modifiers>>: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
@@ -1597,10 +1673,26 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_body>>: var "pvBody"])) $
     -- Build constant declarations
     "tn0" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
-    "tn1" <<~ (Eithers.mapList (lambda "ft" $ constantDeclForFieldType @@ var "aliases" @@ var "ft" @@ var "cx" @@ var "g") (var "fields")) $
+    "tn1" <<~ (Eithers.mapList (lambda "ft" $ constantDeclForFieldType @@ var "elName" @@ var "aliases" @@ var "ft" @@ var "cx" @@ var "g") (var "fields")) $
     "tn" <~ list [var "tn0"] `Lists.concat2` var "tn1" $
-    "otherDecls" <~ Lists.map (lambda "d" $ noComment @@ var "d")
-      (list [var "privateConst", var "acceptDecl", var "visitor", var "partialVisitor"]) $
+    "privateConstComment" <~ Strings.cat (list [
+      string "Constructs an immutable {@link ",
+      var "elNameStr",
+      string "}."]) $
+    "acceptComment" <~ string "Dispatch to {@code visitor}." $
+    "visitorIfaceComment" <~ Strings.cat (list [
+      string "Visitor over {@link ",
+      var "elNameStr",
+      string "}."]) $
+    "partialVisitorIfaceComment" <~ Strings.cat (list [
+      string "Partial visitor over {@link ",
+      var "elNameStr",
+      string "} with a default {@link #otherwise} branch."]) $
+    "otherDecls" <~ list [
+      withCommentString @@ var "privateConstComment" @@ var "privateConst",
+      withCommentString @@ var "acceptComment" @@ var "acceptDecl",
+      withCommentString @@ var "visitorIfaceComment" @@ var "visitor",
+      withCommentString @@ var "partialVisitorIfaceComment" @@ var "partialVisitor"] $
     "bodyDecls" <~ Lists.concat (list [var "tn", var "otherDecls", var "variantDecls'"]) $
     "mods" <~ Lists.concat2 (asTerm classModsPublic) (list [inject Java._ClassModifier Java._ClassModifier_abstract unit]) $
     right (JavaUtilsSource.javaClassDeclaration @@ var "aliases" @@ var "tparams" @@ var "elName" @@ var "mods"
@@ -4337,6 +4429,27 @@ needsThunking = def "needsThunking" $
 noComment :: TTermDefinition (Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
 noComment = def "noComment" $
   lambda "decl" $ JavaDsl.classBodyDeclarationWithComments (var "decl") nothing
+
+-- | Wrap a class body declaration with a Javadoc comment.
+withCommentString :: TTermDefinition (String -> Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
+withCommentString = def "withCommentString" $
+  lambda "comment" $ lambda "decl" $
+    JavaDsl.classBodyDeclarationWithComments (var "decl") (just (var "comment"))
+
+-- | Wrap an interface member declaration with no comment.
+noInterfaceComment :: TTermDefinition (Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+noInterfaceComment = def "noInterfaceComment" $
+  lambda "decl" $ record Java._InterfaceMemberDeclarationWithComments [
+    Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
+    Java._InterfaceMemberDeclarationWithComments_comments>>: nothing]
+
+-- | Wrap an interface member declaration with a Javadoc comment.
+withInterfaceCommentString :: TTermDefinition (String -> Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+withInterfaceCommentString = def "withInterfaceCommentString" $
+  lambda "comment" $ lambda "decl" $
+    record Java._InterfaceMemberDeclarationWithComments [
+      Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
+      Java._InterfaceMemberDeclarationWithComments_comments>>: just (var "comment")]
 
 -- | Generate the otherwise (default) branch of a visitor.
 otherwiseBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)

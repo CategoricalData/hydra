@@ -9,180 +9,116 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "Base interface for features that relate to supporting different data types."}}}],
+                  "value": {"literal": {"string": "Base interface for features that relate to supporting different data types."}}}],
               "body": {
                 "record": [
                   {
                     "name": "supportsBooleanArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of boolean values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of boolean values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsBooleanValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a boolean value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a boolean value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsByteArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of byte values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of byte values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsByteValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a byte value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a byte value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsDoubleArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of double values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of double values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsDoubleValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a double value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a double value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsFloatArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of float values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of float values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsFloatValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a float value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a float value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsIntegerArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of integer values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of integer values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsIntegerValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a integer value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a integer value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsLongArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of long values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of long values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsLongValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a long value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a long value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsMapValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a Map value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a Map value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsMixedListValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a List value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a List value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsSerializableValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of a Java serializable value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a Java serializable value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsStringArrayValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Supports setting of an array of string values."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of an array of string values."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsStringValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a string value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a string value."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsUniformListValues",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Supports setting of a List value."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a List value."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -191,38 +127,22 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Features that are related to Edge operations."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Edge operations."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "elementFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.ElementFeatures"}},
-                  {
-                    "name": "properties",
-                    "type": {"variable": "hydra.tinkerpop.features.EdgePropertyFeatures"}},
+                  {"name": "elementFeatures", "type": {"variable": "hydra.tinkerpop.features.ElementFeatures"}},
+                  {"name": "properties", "type": {"variable": "hydra.tinkerpop.features.EdgePropertyFeatures"}},
                   {
                     "name": "supportsAddEdges",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Determines if an Edge can be added to a Vertex."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Determines if an Edge can be added to a Vertex."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsRemoveEdges",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Determines if an Edge can be removed from a Vertex."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Determines if an Edge can be removed from a Vertex."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsUpsert",
@@ -242,16 +162,8 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Features that are related to Edge Property objects."}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "propertyFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.PropertyFeatures"}}]}}},
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Edge Property objects."}}}],
+              "body": {"record": [{"name": "propertyFeatures", "type": {"variable": "hydra.tinkerpop.features.PropertyFeatures"}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -259,22 +171,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Features that are related to Element objects."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Element objects."}}}],
               "body": {
                 "record": [
                   {
                     "name": "supportsAddProperty",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Determines if an Element allows properties to be added."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Determines if an Element allows properties to be added."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsAnyIds",
@@ -283,9 +187,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element any Java object is a suitable identifier."}}}],
+                            "value": {"literal": {"string": "Determines if an Element any Java object is a suitable identifier."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsCustomIds",
@@ -294,9 +196,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element has a specific custom object as their internal representation."}}}],
+                            "value": {"literal": {"string": "Determines if an Element has a specific custom object as their internal representation."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsNumericIds",
@@ -305,20 +205,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element has numeric identifiers as their internal representation."}}}],
+                            "value": {"literal": {"string": "Determines if an Element has numeric identifiers as their internal representation."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsRemoveProperty",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element allows properties to be removed."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Determines if an Element allows properties to be removed."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsStringIds",
@@ -327,20 +220,14 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element has string identifiers as their internal representation."}}}],
+                            "value": {"literal": {"string": "Determines if an Element has string identifiers as their internal representation."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsUserSuppliedIds",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element can have a user defined identifier."}}}],
+                          {"key": "description", "value": {"literal": {"string": "Determines if an Element can have a user defined identifier."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsUuidIds",
@@ -349,9 +236,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if an Element has UUID identifiers as their internal representation."}}}],
+                            "value": {"literal": {"string": "Determines if an Element has UUID identifiers as their internal representation."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -372,10 +257,7 @@
                     "record": [
                       {
                         "name": "supportsMapKey",
-                        "type": {
-                          "function": {
-                            "codomain": {"literal": {"boolean": {}}},
-                            "domain": {"variable": "hydra.core.Type"}}}}]},
+                        "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}},
     {
@@ -396,31 +278,19 @@
                     "name": "edge",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Gets the features related to edge operation."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Gets the features related to edge operation."}}}],
                         "body": {"variable": "hydra.tinkerpop.features.EdgeFeatures"}}}},
                   {
                     "name": "graph",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Gets the features related to graph operation."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Gets the features related to graph operation."}}}],
                         "body": {"variable": "hydra.tinkerpop.features.GraphFeatures"}}}},
                   {
                     "name": "vertex",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Gets the features related to vertex operation."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Gets the features related to vertex operation."}}}],
                         "body": {"variable": "hydra.tinkerpop.features.VertexFeatures"}}}}]}}},
           "variables": []}}},
     {
@@ -429,11 +299,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Features specific to a operations of a graph."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features specific to a operations of a graph."}}}],
               "body": {
                 "record": [
                   {
@@ -443,9 +309,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if the Graph implementation supports GraphComputer based processing."}}}],
+                            "value": {"literal": {"string": "Determines if the Graph implementation supports GraphComputer based processing."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsConcurrentAccess",
@@ -487,9 +351,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if the Graph implementation supports persisting it's contents natively to disk."}}}],
+                            "value": {"literal": {"string": "Determines if the Graph implementation supports persisting it's contents natively to disk."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsThreadedTransactions",
@@ -509,20 +371,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if the Graph implementations supports transactions."}}}],
+                            "value": {"literal": {"string": "Determines if the Graph implementations supports transactions."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "variables",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Gets the features related to graph sideEffects operation."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Gets the features related to graph sideEffects operation."}}}],
                         "body": {"variable": "hydra.tinkerpop.features.VariableFeatures"}}}}]}}},
           "variables": []}}},
     {
@@ -531,16 +386,10 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A base interface for Edge or Vertex Property features."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A base interface for Edge or Vertex Property features."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "dataTypeFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}},
+                  {"name": "dataTypeFeatures", "type": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}},
                   {
                     "name": "supportsProperties",
                     "type": {
@@ -549,8 +398,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "Determines if an Element allows for the processing of at least one data type defined by the features."}}}],
+                              "literal": {"string": "Determines if an Element allows for the processing of at least one data type defined by the features."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -559,15 +407,10 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Features for Graph.Variables."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features for Graph.Variables."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "dataTypeFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}},
+                  {"name": "dataTypeFeatures", "type": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}},
                   {
                     "name": "supportsVariables",
                     "type": {
@@ -576,8 +419,7 @@
                           {
                             "key": "description",
                             "value": {
-                              "literal": {
-                                "string": "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."}}}],
+                              "literal": {"string": "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -586,28 +428,16 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Features that are related to Vertex operations."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Vertex operations."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "elementFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.ElementFeatures"}},
-                  {
-                    "name": "properties",
-                    "type": {"variable": "hydra.tinkerpop.features.VertexPropertyFeatures"}},
+                  {"name": "elementFeatures", "type": {"variable": "hydra.tinkerpop.features.ElementFeatures"}},
+                  {"name": "properties", "type": {"variable": "hydra.tinkerpop.features.VertexPropertyFeatures"}},
                   {
                     "name": "supportsAddVertices",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Determines if a Vertex can be added to the Graph."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Determines if a Vertex can be added to the Graph."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsDuplicateMultiProperties",
@@ -616,9 +446,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if a Vertex can support non-unique values on the same key."}}}],
+                            "value": {"literal": {"string": "Determines if a Vertex can support non-unique values on the same key."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsMetaProperties",
@@ -627,9 +455,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if a Vertex can support properties on vertex properties."}}}],
+                            "value": {"literal": {"string": "Determines if a Vertex can support properties on vertex properties."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsMultiProperties",
@@ -638,19 +464,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if a Vertex can support multiple properties with the same key."}}}],
+                            "value": {"literal": {"string": "Determines if a Vertex can support multiple properties with the same key."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsRemoveVertices",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Determines if a Vertex can be removed from the Graph."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Determines if a Vertex can be removed from the Graph."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "supportsUpsert",
@@ -670,22 +490,12 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Features that are related to Vertex Property objects."}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Vertex Property objects."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "dataTypeFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}},
-                  {
-                    "name": "propertyFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.PropertyFeatures"}},
-                  {
-                    "name": "elementFeatures",
-                    "type": {"variable": "hydra.tinkerpop.features.ElementFeatures"}},
+                  {"name": "dataTypeFeatures", "type": {"variable": "hydra.tinkerpop.features.DataTypeFeatures"}},
+                  {"name": "propertyFeatures", "type": {"variable": "hydra.tinkerpop.features.PropertyFeatures"}},
+                  {"name": "elementFeatures", "type": {"variable": "hydra.tinkerpop.features.ElementFeatures"}},
                   {
                     "name": "supportsRemove",
                     "type": {
@@ -693,9 +503,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Determines if a VertexProperty allows properties to be removed."}}}],
+                            "value": {"literal": {"string": "Determines if a VertexProperty allows properties to be removed."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
   "description": "A model derived from TinkerPop's Graph.Features. See\n  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n\nAn interface that represents the capabilities of a Graph implementation.\nBy default all methods of features return true and it is up to implementers to disable feature they don't support.\nUsers should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\nFor example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().",
