@@ -6,11 +6,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An error that occurred during decoding of a term"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during decoding of a term"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -22,9 +18,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An empty list was encountered where a non-empty list was required"}}}],
+                  "value": {"literal": {"string": "An empty list was encountered where a non-empty list was required"}}}],
               "body": {"unit": {}}}},
           "variables": []}}},
     {
@@ -36,139 +30,93 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An error of any kind, with kernel errors particularly differentiated"}}}],
+                  "value": {"literal": {"string": "An error of any kind, with kernel errors particularly differentiated"}}}],
               "body": {
                 "union": [
                   {
                     "name": "checking",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A type checking error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type checking error"}}}],
                         "body": {"variable": "hydra.error.checking.CheckingError"}}}},
                   {
                     "name": "decoding",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "An error that occurred during decoding of a term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during decoding of a term"}}}],
                         "body": {"variable": "hydra.errors.DecodingError"}}}},
                   {
                     "name": "duplicateBinding",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A duplicate binding name error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A duplicate binding name error"}}}],
                         "body": {"variable": "hydra.error.core.DuplicateBindingError"}}}},
                   {
                     "name": "duplicateField",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A duplicate field name error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A duplicate field name error"}}}],
                         "body": {"variable": "hydra.error.core.DuplicateFieldError"}}}},
                   {
                     "name": "extraction",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "An error that occurred while extracting a value from a term"}}}],
+                          {"key": "description", "value": {"literal": {"string": "An error that occurred while extracting a value from a term"}}}],
                         "body": {"variable": "hydra.errors.ExtractionError"}}}},
                   {
                     "name": "inference",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A type inference error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type inference error"}}}],
                         "body": {"variable": "hydra.errors.InferenceError"}}}},
                   {
                     "name": "other",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Any other error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Any other error"}}}],
                         "body": {"variable": "hydra.errors.OtherError"}}}},
                   {
                     "name": "resolution",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A name-resolution error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A name-resolution error"}}}],
                         "body": {"variable": "hydra.errors.ResolutionError"}}}},
                   {
                     "name": "undefinedField",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A reference to an undefined field"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to an undefined field"}}}],
                         "body": {"variable": "hydra.error.core.UndefinedFieldError"}}}},
                   {
                     "name": "undefinedTermVariable",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A reference to an undefined term variable"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to an undefined term variable"}}}],
                         "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}}},
                   {
                     "name": "untypedTermVariable",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A term variable whose type is not known"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A term variable whose type is not known"}}}],
                         "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}}},
                   {
                     "name": "unexpectedTermVariant",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An unexpected term variant"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected term variant"}}}],
                         "body": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}}},
                   {
                     "name": "unexpectedTypeVariant",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An unexpected type variant"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected type variant"}}}],
                         "body": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}}},
                   {
                     "name": "unification",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A type unification error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type unification error"}}}],
                         "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
           "variables": []}}},
     {
@@ -180,9 +128,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An error that occurred while extracting a typed value from a term"}}}],
+                  "value": {"literal": {"string": "An error that occurred while extracting a typed value from a term"}}}],
               "body": {
                 "union": [
                   {
@@ -192,50 +138,31 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "An empty list was encountered where a non-empty list was required"}}}],
+                            "value": {"literal": {"string": "An empty list was encountered where a non-empty list was required"}}}],
                         "body": {"variable": "hydra.errors.EmptyListError"}}}},
                   {
                     "name": "multipleBindings",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Multiple let bindings were found with the same name"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple let bindings were found with the same name"}}}],
                         "body": {"variable": "hydra.errors.MultipleBindingsError"}}}},
                   {
                     "name": "multipleFields",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Multiple record fields were found with the same field name"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple record fields were found with the same field name"}}}],
                         "body": {"variable": "hydra.errors.MultipleFieldsError"}}}},
                   {
                     "name": "noMatchingField",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "No field with the expected name was found in a record"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "No field with the expected name was found in a record"}}}],
                         "body": {"variable": "hydra.errors.NoMatchingFieldError"}}}},
                   {
                     "name": "noSuchBinding",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "No let binding with the expected name was found"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "No let binding with the expected name was found"}}}],
                         "body": {"variable": "hydra.errors.NoSuchBindingError"}}}},
                   {
                     "name": "notEnoughCases",
@@ -244,9 +171,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A case statement did not contain enough cases to match the target"}}}],
+                            "value": {"literal": {"string": "A case statement did not contain enough cases to match the target"}}}],
                         "body": {"variable": "hydra.errors.NotEnoughCasesError"}}}},
                   {
                     "name": "unexpectedShape",
@@ -255,9 +180,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A term, type, literal, or other value had an unexpected shape"}}}],
+                            "value": {"literal": {"string": "A term, type, literal, or other value had an unexpected shape"}}}],
                         "body": {"variable": "hydra.errors.UnexpectedShapeError"}}}}]}}},
           "variables": []}}},
     {
@@ -266,22 +189,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An error that occurred during type inference"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during type inference"}}}],
               "body": {
                 "union": [
                   {
                     "name": "checking",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A type checking error encountered during inference"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type checking error encountered during inference"}}}],
                         "body": {"variable": "hydra.error.checking.CheckingError"}}}},
                   {
                     "name": "other",
@@ -298,11 +213,7 @@
                     "name": "unification",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A unification failure encountered while inferring types"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A unification failure encountered while inferring types"}}}],
                         "body": {"variable": "hydra.errors.UnificationInferenceError"}}}}]}}},
           "variables": []}}},
     {
@@ -311,21 +222,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Multiple let bindings with the same name were found"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple let bindings with the same name were found"}}}],
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The binding name which was duplicated"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was duplicated"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -334,23 +238,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "Multiple fields with the same name were found in a record"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple fields with the same name were found in a record"}}}],
               "body": {
                 "record": [
                   {
                     "name": "fieldName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The field name which appeared more than once"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which appeared more than once"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -359,20 +254,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "No field with the expected name was present"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "No field with the expected name was present"}}}],
               "body": {
                 "record": [
                   {
                     "name": "fieldName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The field name which was not found"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The field name which was not found"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -381,21 +270,14 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "No let binding with the expected name was present"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "No let binding with the expected name was present"}}}],
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The binding name which was not found"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The binding name which was not found"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -407,19 +289,14 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "No primitive function with the expected name was registered in the graph"}}}],
+                  "value": {"literal": {"string": "No primitive function with the expected name was registered in the graph"}}}],
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The primitive name which was not found"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The primitive name which was not found"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -431,9 +308,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A case statement was missing a case for the requested variant"}}}],
+                  "value": {"literal": {"string": "A case statement was missing a case for the requested variant"}}}],
               "body": {"unit": {}}}},
           "variables": []}}},
     {
@@ -442,10 +317,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Any other error"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Any other error"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -454,31 +326,20 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A generic inference error: message + subterm path"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A generic inference error: message + subterm path"}}}],
               "body": {
                 "record": [
                   {
                     "name": "path",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The subterm path at which the error was observed"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}}},
                   {
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A human-readable error message"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -487,10 +348,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A generic resolution error: message"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A generic resolution error: message"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -502,20 +360,14 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An error that occurred while resolving a name, primitive, or record/union shape in a graph"}}}],
+                  "value": {"literal": {"string": "An error that occurred while resolving a name, primitive, or record/union shape in a graph"}}}],
               "body": {
                 "union": [
                   {
                     "name": "noSuchBinding",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "No binding with the expected name was found in the graph"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "No binding with the expected name was found in the graph"}}}],
                         "body": {"variable": "hydra.errors.NoSuchBindingError"}}}},
                   {
                     "name": "noSuchPrimitive",
@@ -524,9 +376,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "No primitive function with the expected name was found in the graph"}}}],
+                            "value": {"literal": {"string": "No primitive function with the expected name was found in the graph"}}}],
                         "body": {"variable": "hydra.errors.NoSuchPrimitiveError"}}}},
                   {
                     "name": "noMatchingField",
@@ -535,19 +385,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "No field with the expected name was present in a record or case statement"}}}],
+                            "value": {"literal": {"string": "No field with the expected name was present in a record or case statement"}}}],
                         "body": {"variable": "hydra.errors.NoMatchingFieldError"}}}},
                   {
                     "name": "other",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A generic resolution error carrying a message"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A generic resolution error carrying a message"}}}],
                         "body": {"variable": "hydra.errors.OtherResolutionError"}}}},
                   {
                     "name": "unexpectedShape",
@@ -556,9 +400,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A term had a shape other than the one expected (e.g. a record, an injection)"}}}],
+                            "value": {"literal": {"string": "A term had a shape other than the one expected (e.g. a record, an injection)"}}}],
                         "body": {"variable": "hydra.errors.UnexpectedShapeError"}}}}]}}},
           "variables": []}}},
     {
@@ -570,29 +412,20 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A term, type, literal, or related value had a shape other than the one expected"}}}],
+                  "value": {"literal": {"string": "A term, type, literal, or related value had a shape other than the one expected"}}}],
               "body": {
                 "record": [
                   {
                     "name": "expected",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A description of the expected shape"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the expected shape"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "actual",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A description of the shape actually encountered"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the shape actually encountered"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -601,39 +434,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An error that occurred during type unification"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during type unification"}}}],
               "body": {
                 "record": [
                   {
                     "name": "leftType",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The left-hand type in the unification"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand type in the unification"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "rightType",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The right-hand type in the unification"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type in the unification"}}}],
                         "body": {"variable": "hydra.core.Type"}}}},
                   {
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A human-readable error message"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
@@ -645,9 +465,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A unification failure at a specific subterm locus during inference"}}}],
+                  "value": {"literal": {"string": "A unification failure at a specific subterm locus during inference"}}}],
               "body": {
                 "record": [
                   {
@@ -657,18 +475,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The subterm path at which the unification failure was observed"}}}],
+                            "value": {"literal": {"string": "The subterm path at which the unification failure was observed"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}}},
                   {
                     "name": "cause",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The underlying unification error"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                         "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
           "variables": []}}}],
   "description": "Top-level error types for the Hydra kernel",

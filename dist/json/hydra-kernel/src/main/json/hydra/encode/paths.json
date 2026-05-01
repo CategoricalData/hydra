@@ -14,10 +14,7 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtermEdge"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermEdge"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "fields",
                           "term": {
@@ -25,60 +22,37 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "source"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "source", "typeName": "hydra.paths.SubtermEdge"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "source", "typeName": "hydra.paths.SubtermEdge"}}}},
                                           "function": {"variable": "hydra.encode.paths.subtermNode"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "path"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "path"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "path", "typeName": "hydra.paths.SubtermEdge"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "path", "typeName": "hydra.paths.SubtermEdge"}}}},
                                           "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "target"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "target", "typeName": "hydra.paths.SubtermEdge"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "target", "typeName": "hydra.paths.SubtermEdge"}}}},
                                           "function": {"variable": "hydra.encode.paths.subtermNode"}}}}],
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
@@ -86,10 +60,7 @@
             "domain": {"variable": "hydra.paths.SubtermEdge"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtermEdge"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtermEdge"}}},
           "variables": []}}},
     {
       "term": {
@@ -105,10 +76,7 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtermGraph"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermGraph"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "fields",
                           "term": {
@@ -116,21 +84,13 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "nodes"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "nodes"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "nodes", "typeName": "hydra.paths.SubtermGraph"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "nodes", "typeName": "hydra.paths.SubtermGraph"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
@@ -145,10 +105,7 @@
                                                             "argument": {"variable": "hydra.encode.paths.subtermNode"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.map"},
-                                                                    "type": {"variable": "hydra.paths.SubtermNode"}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtermNode"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"list": {"variable": "hydra.paths.SubtermNode"}},
@@ -157,21 +114,13 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "edges"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "edges"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "edges", "typeName": "hydra.paths.SubtermGraph"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "edges", "typeName": "hydra.paths.SubtermGraph"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
@@ -186,10 +135,7 @@
                                                             "argument": {"variable": "hydra.encode.paths.subtermEdge"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.map"},
-                                                                    "type": {"variable": "hydra.paths.SubtermEdge"}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtermEdge"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"list": {"variable": "hydra.paths.SubtermEdge"}},
@@ -200,10 +146,7 @@
             "domain": {"variable": "hydra.paths.SubtermGraph"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtermGraph"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtermGraph"}}},
           "variables": []}}},
     {
       "term": {
@@ -219,10 +162,7 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtermNode"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermNode"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "fields",
                           "term": {
@@ -230,49 +170,32 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "name"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "name", "typeName": "hydra.paths.SubtermNode"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "name", "typeName": "hydra.paths.SubtermNode"}}}},
                                           "function": {"variable": "hydra.encode.core.name"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "label"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "label"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "label", "typeName": "hydra.paths.SubtermNode"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "label", "typeName": "hydra.paths.SubtermNode"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
                                                 "inject": {
                                                   "field": {
                                                     "name": "literal",
-                                                    "term": {
-                                                      "inject": {
-                                                        "field": {"name": "string", "term": {"variable": "x"}},
-                                                        "typeName": "hydra.core.Literal"}}},
+                                                    "term": {"inject": {"field": {"name": "string", "term": {"variable": "x"}}, "typeName": "hydra.core.Literal"}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"literal": {"string": {}}},
                                               "parameter": "x"}}}}}],
@@ -280,28 +203,20 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "id", "typeName": "hydra.paths.SubtermNode"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "id", "typeName": "hydra.paths.SubtermNode"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
                                                 "inject": {
                                                   "field": {
                                                     "name": "literal",
-                                                    "term": {
-                                                      "inject": {
-                                                        "field": {"name": "string", "term": {"variable": "x"}},
-                                                        "typeName": "hydra.core.Literal"}}},
+                                                    "term": {"inject": {"field": {"name": "string", "term": {"variable": "x"}}, "typeName": "hydra.core.Literal"}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"literal": {"string": {}}},
                                               "parameter": "x"}}}}}],
@@ -311,10 +226,7 @@
             "domain": {"variable": "hydra.paths.SubtermNode"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtermNode"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtermNode"}}},
           "variables": []}}},
     {
       "term": {
@@ -330,18 +242,12 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtermPath"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermPath"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "body",
                           "term": {
                             "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {"variable": "x"},
-                                  "function": {"unwrap": "hydra.paths.SubtermPath"}}},
+                              "argument": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.paths.SubtermPath"}}},
                               "function": {
                                 "lambda": {
                                   "body": {
@@ -356,10 +262,7 @@
                                                 "argument": {"variable": "hydra.encode.paths.subtermStep"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
-                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                       "typeName": "hydra.core.Term"}},
                                   "domain": {"list": {"variable": "hydra.paths.SubtermStep"}},
@@ -369,10 +272,7 @@
             "domain": {"variable": "hydra.paths.SubtermPath"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtermPath"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtermPath"}}},
           "variables": []}}},
     {
       "term": {
@@ -393,21 +293,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "annotatedBody"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "annotatedBody"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -415,10 +307,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -439,10 +328,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -450,10 +336,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "applicationFunction"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "applicationFunction"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -461,10 +344,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -485,10 +365,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -496,10 +373,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "applicationArgument"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "applicationArgument"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -507,10 +381,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -531,21 +402,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "lambdaBody"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lambdaBody"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -553,10 +416,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -577,10 +437,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -588,10 +445,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "unionCasesDefault"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "unionCasesDefault"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -599,10 +453,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -623,27 +474,16 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "unionCasesBranch"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unionCasesBranch"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "y"},
-                                              "function": {"variable": "hydra.encode.core.name"}}}}],
+                                          "term": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
@@ -662,21 +502,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "letBody"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "letBody"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -684,10 +516,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -708,27 +537,16 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "letBinding"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "letBinding"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "y"},
-                                              "function": {"variable": "hydra.encode.core.name"}}}}],
+                                          "term": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
@@ -747,21 +565,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "listElement"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "listElement"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -777,10 +587,7 @@
                                                           "inject": {
                                                             "field": {
                                                               "name": "integer",
-                                                              "term": {
-                                                                "inject": {
-                                                                  "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                              "term": {"inject": {"field": {"name": "int32", "term": {"variable": "x"}}, "typeName": "hydra.core.IntegerValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}},
@@ -803,21 +610,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "mapKey"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapKey"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -833,10 +632,7 @@
                                                           "inject": {
                                                             "field": {
                                                               "name": "integer",
-                                                              "term": {
-                                                                "inject": {
-                                                                  "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                              "term": {"inject": {"field": {"name": "int32", "term": {"variable": "x"}}, "typeName": "hydra.core.IntegerValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}},
@@ -859,21 +655,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "mapValue"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapValue"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -889,10 +677,7 @@
                                                           "inject": {
                                                             "field": {
                                                               "name": "integer",
-                                                              "term": {
-                                                                "inject": {
-                                                                  "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                              "term": {"inject": {"field": {"name": "int32", "term": {"variable": "x"}}, "typeName": "hydra.core.IntegerValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}},
@@ -915,21 +700,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "maybeTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybeTerm"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -937,10 +714,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -961,21 +735,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "productTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "productTerm"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -991,10 +757,7 @@
                                                           "inject": {
                                                             "field": {
                                                               "name": "integer",
-                                                              "term": {
-                                                                "inject": {
-                                                                  "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                              "term": {"inject": {"field": {"name": "int32", "term": {"variable": "x"}}, "typeName": "hydra.core.IntegerValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}},
@@ -1017,27 +780,16 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "recordField"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "recordField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "y"},
-                                              "function": {"variable": "hydra.encode.core.name"}}}}],
+                                          "term": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
@@ -1056,21 +808,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "setElement"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "setElement"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1086,10 +830,7 @@
                                                           "inject": {
                                                             "field": {
                                                               "name": "integer",
-                                                              "term": {
-                                                                "inject": {
-                                                                  "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                              "term": {"inject": {"field": {"name": "int32", "term": {"variable": "x"}}, "typeName": "hydra.core.IntegerValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}},
@@ -1112,21 +853,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "sumTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "sumTerm"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1134,10 +867,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1158,21 +888,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "typeLambdaBody"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeLambdaBody"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1180,10 +902,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1204,10 +923,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -1215,10 +931,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "typeApplicationTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "typeApplicationTerm"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1226,10 +939,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1250,21 +960,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "injectionTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "injectionTerm"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1272,10 +974,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1296,21 +995,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtermStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtermStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "wrappedTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrappedTerm"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1318,10 +1009,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1331,10 +1019,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.paths.SubtermStep"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtermStep"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtermStep"}}},
           "variables": []}}},
     {
       "term": {
@@ -1350,10 +1035,7 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtypeEdge"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeEdge"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "fields",
                           "term": {
@@ -1361,60 +1043,37 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "source"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "source", "typeName": "hydra.paths.SubtypeEdge"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "source", "typeName": "hydra.paths.SubtypeEdge"}}}},
                                           "function": {"variable": "hydra.encode.paths.subtypeNode"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "path"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "path"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "path", "typeName": "hydra.paths.SubtypeEdge"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "path", "typeName": "hydra.paths.SubtypeEdge"}}}},
                                           "function": {"variable": "hydra.encode.paths.subtypePath"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "target"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "target", "typeName": "hydra.paths.SubtypeEdge"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "target", "typeName": "hydra.paths.SubtypeEdge"}}}},
                                           "function": {"variable": "hydra.encode.paths.subtypeNode"}}}}],
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
@@ -1422,10 +1081,7 @@
             "domain": {"variable": "hydra.paths.SubtypeEdge"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtypeEdge"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypeEdge"}}},
           "variables": []}}},
     {
       "term": {
@@ -1441,10 +1097,7 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtypeGraph"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeGraph"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "fields",
                           "term": {
@@ -1452,21 +1105,13 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "nodes"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "nodes"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "nodes", "typeName": "hydra.paths.SubtypeGraph"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "nodes", "typeName": "hydra.paths.SubtypeGraph"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
@@ -1481,10 +1126,7 @@
                                                             "argument": {"variable": "hydra.encode.paths.subtypeNode"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.map"},
-                                                                    "type": {"variable": "hydra.paths.SubtypeNode"}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtypeNode"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"list": {"variable": "hydra.paths.SubtypeNode"}},
@@ -1493,21 +1135,13 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "edges"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "edges"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "project": {"field": "edges", "typeName": "hydra.paths.SubtypeGraph"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "edges", "typeName": "hydra.paths.SubtypeGraph"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
@@ -1522,10 +1156,7 @@
                                                             "argument": {"variable": "hydra.encode.paths.subtypeEdge"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.map"},
-                                                                    "type": {"variable": "hydra.paths.SubtypeEdge"}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtypeEdge"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"list": {"variable": "hydra.paths.SubtypeEdge"}},
@@ -1536,10 +1167,7 @@
             "domain": {"variable": "hydra.paths.SubtypeGraph"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtypeGraph"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypeGraph"}}},
           "variables": []}}},
     {
       "term": {
@@ -1555,10 +1183,7 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtypeNode"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeNode"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "fields",
                           "term": {
@@ -1566,49 +1191,32 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "name"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "name", "typeName": "hydra.paths.SubtypeNode"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "name", "typeName": "hydra.paths.SubtypeNode"}}}},
                                           "function": {"variable": "hydra.encode.core.name"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "label"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "label"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "label", "typeName": "hydra.paths.SubtypeNode"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "label", "typeName": "hydra.paths.SubtypeNode"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
                                                 "inject": {
                                                   "field": {
                                                     "name": "literal",
-                                                    "term": {
-                                                      "inject": {
-                                                        "field": {"name": "string", "term": {"variable": "x"}},
-                                                        "typeName": "hydra.core.Literal"}}},
+                                                    "term": {"inject": {"field": {"name": "string", "term": {"variable": "x"}}, "typeName": "hydra.core.Literal"}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"literal": {"string": {}}},
                                               "parameter": "x"}}}}}],
@@ -1616,28 +1224,20 @@
                               {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
                                       "term": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {"project": {"field": "id", "typeName": "hydra.paths.SubtypeNode"}}}},
+                                            "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "id", "typeName": "hydra.paths.SubtypeNode"}}}},
                                           "function": {
                                             "lambda": {
                                               "body": {
                                                 "inject": {
                                                   "field": {
                                                     "name": "literal",
-                                                    "term": {
-                                                      "inject": {
-                                                        "field": {"name": "string", "term": {"variable": "x"}},
-                                                        "typeName": "hydra.core.Literal"}}},
+                                                    "term": {"inject": {"field": {"name": "string", "term": {"variable": "x"}}, "typeName": "hydra.core.Literal"}}},
                                                   "typeName": "hydra.core.Term"}},
                                               "domain": {"literal": {"string": {}}},
                                               "parameter": "x"}}}}}],
@@ -1647,10 +1247,7 @@
             "domain": {"variable": "hydra.paths.SubtypeNode"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtypeNode"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypeNode"}}},
           "variables": []}}},
     {
       "term": {
@@ -1666,18 +1263,12 @@
                       "fields": [
                         {
                           "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.paths.SubtypePath"}},
-                              "typeName": "hydra.core.Name"}}},
+                          "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypePath"}}, "typeName": "hydra.core.Name"}}},
                         {
                           "name": "body",
                           "term": {
                             "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {"variable": "x"},
-                                  "function": {"unwrap": "hydra.paths.SubtypePath"}}},
+                              "argument": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.paths.SubtypePath"}}},
                               "function": {
                                 "lambda": {
                                   "body": {
@@ -1692,10 +1283,7 @@
                                                 "argument": {"variable": "hydra.encode.paths.subtypeStep"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
-                                                        "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                       "typeName": "hydra.core.Term"}},
                                   "domain": {"list": {"variable": "hydra.paths.SubtypeStep"}},
@@ -1705,10 +1293,7 @@
             "domain": {"variable": "hydra.paths.SubtypePath"},
             "parameter": "x"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtypePath"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypePath"}}},
           "variables": []}}},
     {
       "term": {
@@ -1729,21 +1314,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "annotatedBody"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "annotatedBody"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1751,10 +1328,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1775,10 +1349,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -1786,10 +1357,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "applicationFunction"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "applicationFunction"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1797,10 +1365,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1821,10 +1386,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -1832,10 +1394,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "applicationArgument"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "applicationArgument"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1843,10 +1402,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1867,21 +1423,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "eitherLeft"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "eitherLeft"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1889,10 +1437,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1913,21 +1458,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "eitherRight"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "eitherRight"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1935,10 +1472,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -1959,21 +1493,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "forallBody"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "forallBody"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -1981,10 +1507,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2005,21 +1528,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "functionDomain"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "functionDomain"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2027,10 +1542,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2051,21 +1563,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "functionCodomain"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "functionCodomain"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2073,10 +1577,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2097,21 +1598,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "listElement"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "listElement"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2119,10 +1612,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2143,21 +1633,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "mapKeys"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapKeys"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2165,10 +1647,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2189,21 +1668,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "mapValues"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapValues"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2211,10 +1682,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2235,21 +1703,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "maybeElement"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybeElement"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2257,10 +1717,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2281,21 +1738,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "pairFirst"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pairFirst"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2303,10 +1752,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2327,21 +1773,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "pairSecond"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pairSecond"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2349,10 +1787,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2373,27 +1808,16 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "recordField"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "recordField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "y"},
-                                              "function": {"variable": "hydra.encode.core.name"}}}}],
+                                          "term": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
@@ -2412,21 +1836,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "setElement"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "setElement"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2434,10 +1850,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2458,27 +1871,16 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "unionField"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unionField"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "y"},
-                                              "function": {"variable": "hydra.encode.core.name"}}}}],
+                                          "term": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
@@ -2497,21 +1899,13 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.paths.SubtypeStep"}},
-                                      "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.paths.SubtypeStep"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "wrappedType"}},
-                                              "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrappedType"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -2519,10 +1913,7 @@
                                               "argument": {"variable": "y"},
                                               "function": {
                                                 "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
+                                                  "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
@@ -2532,10 +1923,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.paths.SubtypeStep"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.paths.SubtypeStep"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypeStep"}}},
           "variables": []}}}],
   "description": "Term encoders for hydra.paths",
   "namespace": "hydra.encode.paths",

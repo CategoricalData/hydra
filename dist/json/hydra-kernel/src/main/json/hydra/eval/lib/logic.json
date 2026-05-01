@@ -11,10 +11,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Interpreter-friendly logical AND."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly logical AND."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -60,10 +57,7 @@
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
-                                                                                                        "typeName": "hydra.core.Name"}}},
+                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.logic.ifElse"}}, "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {"name": "argument", "term": {"variable": "a"}}],
                                                                                           "typeName": "hydra.core.Application"}}},
@@ -77,10 +71,7 @@
                                                                     "inject": {
                                                                       "field": {
                                                                         "name": "literal",
-                                                                        "term": {
-                                                                          "inject": {
-                                                                            "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
-                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                        "term": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": false}}}, "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}}}],
                                                               "typeName": "hydra.core.Application"}}},
                                                         "typeName": "hydra.core.Term"}}}},
@@ -106,8 +97,7 @@
                     "function": {
                       "codomain": {
                         "function": {
-                          "codomain": {
-                            "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                          "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
                           "domain": {"variable": "hydra.core.Term"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "t1"}}},
@@ -124,10 +114,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Interpreter-friendly logical NOT."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly logical NOT."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -171,10 +158,7 @@
                                                                                             "inject": {
                                                                                               "field": {
                                                                                                 "name": "variable",
-                                                                                                "term": {
-                                                                                                  "wrap": {
-                                                                                                    "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
-                                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.logic.ifElse"}}, "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {"name": "argument", "term": {"variable": "a"}}],
                                                                                       "typeName": "hydra.core.Application"}}},
@@ -185,10 +169,7 @@
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "literal",
-                                                                                  "term": {
-                                                                                    "inject": {
-                                                                                      "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
-                                                                                      "typeName": "hydra.core.Literal"}}},
+                                                                                  "term": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": false}}}, "typeName": "hydra.core.Literal"}}},
                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                         "typeName": "hydra.core.Application"}}},
                                                                   "typeName": "hydra.core.Term"}}},
@@ -198,10 +179,7 @@
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
-                                                                    "term": {
-                                                                      "inject": {
-                                                                        "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                    "term": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}}}],
                                                           "typeName": "hydra.core.Application"}}},
                                                     "typeName": "hydra.core.Term"}}}},
@@ -223,8 +201,7 @@
                 "function": {
                   "codomain": {
                     "function": {
-                      "codomain": {
-                        "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
@@ -240,10 +217,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Interpreter-friendly logical OR."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly logical OR."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -289,10 +263,7 @@
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
-                                                                                                        "typeName": "hydra.core.Name"}}},
+                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.logic.ifElse"}}, "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {"name": "argument", "term": {"variable": "a"}}],
                                                                                           "typeName": "hydra.core.Application"}}},
@@ -303,10 +274,7 @@
                                                                                   "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
-                                                                                      "term": {
-                                                                                        "inject": {
-                                                                                          "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
-                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                      "term": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}}},
@@ -335,8 +303,7 @@
                     "function": {
                       "codomain": {
                         "function": {
-                          "codomain": {
-                            "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                          "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
                           "domain": {"variable": "hydra.core.Term"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "t1"}}},
