@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.maps.alter",
+        "name": "hydra.lib.default.maps.alter",
         "term": {
           "typeLambda": {
             "body": {
@@ -268,7 +268,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maps.bimap",
+        "name": "hydra.lib.default.maps.bimap",
         "term": {
           "typeLambda": {
             "body": {
@@ -459,7 +459,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maps.filter",
+        "name": "hydra.lib.default.maps.filter",
         "term": {
           "typeLambda": {
             "body": {
@@ -723,7 +723,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maps.filterWithKey",
+        "name": "hydra.lib.default.maps.filterWithKey",
         "term": {
           "typeLambda": {
             "body": {
@@ -1001,7 +1001,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maps.findWithDefault",
+        "name": "hydra.lib.default.maps.findWithDefault",
         "term": {
           "typeLambda": {
             "body": {
@@ -1123,7 +1123,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maps.map",
+        "name": "hydra.lib.default.maps.map",
         "term": {
           "typeLambda": {
             "body": {
@@ -1299,7 +1299,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maps.mapKeys",
+        "name": "hydra.lib.default.maps.mapKeys",
         "term": {
           "typeLambda": {
             "body": {
@@ -1473,8 +1473,8 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "Evaluation-level implementations of Map functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.maps",
+  "description": "Default term-level implementations of Map functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.maps",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

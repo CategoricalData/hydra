@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.bimap",
+        "name": "hydra.lib.default.eithers.bimap",
         "term": {
           "typeLambda": {
             "body": {
@@ -165,7 +165,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.bind",
+        "name": "hydra.lib.default.eithers.bind",
         "term": {
           "typeLambda": {
             "body": {
@@ -295,7 +295,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.either",
+        "name": "hydra.lib.default.eithers.either",
         "term": {
           "typeLambda": {
             "body": {
@@ -432,7 +432,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.foldl",
+        "name": "hydra.lib.default.eithers.foldl",
         "term": {
           "typeLambda": {
             "body": {
@@ -649,7 +649,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.fromLeft",
+        "name": "hydra.lib.default.eithers.fromLeft",
         "term": {
           "typeLambda": {
             "body": {
@@ -755,7 +755,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.fromRight",
+        "name": "hydra.lib.default.eithers.fromRight",
         "term": {
           "typeLambda": {
             "body": {
@@ -861,7 +861,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.isLeft",
+        "name": "hydra.lib.default.eithers.isLeft",
         "term": {
           "typeLambda": {
             "body": {
@@ -978,7 +978,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.isRight",
+        "name": "hydra.lib.default.eithers.isRight",
         "term": {
           "typeLambda": {
             "body": {
@@ -1095,7 +1095,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.lefts",
+        "name": "hydra.lib.default.eithers.lefts",
         "term": {
           "typeLambda": {
             "body": {
@@ -1223,7 +1223,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.map",
+        "name": "hydra.lib.default.eithers.map",
         "term": {
           "typeLambda": {
             "body": {
@@ -1366,7 +1366,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.mapList",
+        "name": "hydra.lib.default.eithers.mapList",
         "term": {
           "typeLambda": {
             "body": {
@@ -1709,7 +1709,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.mapMaybe",
+        "name": "hydra.lib.default.eithers.mapMaybe",
         "term": {
           "typeLambda": {
             "body": {
@@ -1954,7 +1954,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.mapSet",
+        "name": "hydra.lib.default.eithers.mapSet",
         "term": {
           "typeLambda": {
             "body": {
@@ -2303,7 +2303,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.partitionEithers",
+        "name": "hydra.lib.default.eithers.partitionEithers",
         "term": {
           "typeLambda": {
             "body": {
@@ -2501,7 +2501,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.eithers.rights",
+        "name": "hydra.lib.default.eithers.rights",
         "term": {
           "typeLambda": {
             "body": {
@@ -2627,8 +2627,8 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Evaluation-level implementations of Either functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.eithers",
+  "description": "Default term-level implementations of Either functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.eithers",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

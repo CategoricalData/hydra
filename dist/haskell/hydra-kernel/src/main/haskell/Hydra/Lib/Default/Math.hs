@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Evaluation-level implementations of Math functions for the Hydra interpreter.
+-- | Default term-level implementations of Math functions for the Hydra interpreter.
 
-module Hydra.Eval.Lib.Math where
+module Hydra.Lib.Default.Math where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

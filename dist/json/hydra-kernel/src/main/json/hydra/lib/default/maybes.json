@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.apply",
+        "name": "hydra.lib.default.maybes.apply",
         "term": {
           "typeLambda": {
             "body": {
@@ -171,7 +171,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.bind",
+        "name": "hydra.lib.default.maybes.bind",
         "term": {
           "typeLambda": {
             "body": {
@@ -289,7 +289,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.cases",
+        "name": "hydra.lib.default.maybes.cases",
         "term": {
           "typeLambda": {
             "body": {
@@ -414,7 +414,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.cat",
+        "name": "hydra.lib.default.maybes.cat",
         "term": {
           "typeLambda": {
             "body": {
@@ -534,7 +534,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.compose",
+        "name": "hydra.lib.default.maybes.compose",
         "term": {
           "typeLambda": {
             "body": {
@@ -635,7 +635,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.fromJust",
+        "name": "hydra.lib.default.maybes.fromJust",
         "term": {
           "typeLambda": {
             "body": {
@@ -758,7 +758,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.fromMaybe",
+        "name": "hydra.lib.default.maybes.fromMaybe",
         "term": {
           "typeLambda": {
             "body": {
@@ -861,7 +861,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.isJust",
+        "name": "hydra.lib.default.maybes.isJust",
         "term": {
           "typeLambda": {
             "body": {
@@ -971,7 +971,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.isNothing",
+        "name": "hydra.lib.default.maybes.isNothing",
         "term": {
           "typeLambda": {
             "body": {
@@ -1081,7 +1081,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.map",
+        "name": "hydra.lib.default.maybes.map",
         "term": {
           "typeLambda": {
             "body": {
@@ -1198,7 +1198,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.mapMaybe",
+        "name": "hydra.lib.default.maybes.mapMaybe",
         "term": {
           "typeLambda": {
             "body": {
@@ -1311,7 +1311,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.maybe",
+        "name": "hydra.lib.default.maybes.maybe",
         "term": {
           "typeLambda": {
             "body": {
@@ -1433,7 +1433,7 @@
           "variables": ["t0", "t1"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.pure",
+        "name": "hydra.lib.default.maybes.pure",
         "term": {
           "typeLambda": {
             "body": {
@@ -1480,7 +1480,7 @@
           "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
-        "name": "hydra.eval.lib.maybes.toList",
+        "name": "hydra.lib.default.maybes.toList",
         "term": {
           "typeLambda": {
             "body": {
@@ -1586,8 +1586,8 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "Evaluation-level implementations of Maybe functions for the Hydra interpreter.",
-  "namespace": "hydra.eval.lib.maybes",
+  "description": "Default term-level implementations of Maybe functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.default.maybes",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
     "hydra.paths",

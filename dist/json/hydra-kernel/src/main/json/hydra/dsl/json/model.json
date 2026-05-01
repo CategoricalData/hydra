@@ -4,40 +4,46 @@
       "term": {
         "name": "hydra.dsl.json.model.valueArray",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the array variant of hydra.json.model.Value"}}}],
             "body": {
-              "wrap": {
+              "lambda": {
                 "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "array"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
-                    "body": {"list": {"variable": "hydra.json.model.Value"}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "array"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
+                        "body": {"list": {"variable": "hydra.json.model.Value"}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -54,40 +60,46 @@
       "term": {
         "name": "hydra.dsl.json.model.valueBoolean",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.json.model.Value"}}}],
             "body": {
-              "wrap": {
+              "lambda": {
                 "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boolean"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
-                    "body": {"literal": {"boolean": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boolean"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
+                        "body": {"literal": {"boolean": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -104,36 +116,9 @@
       "term": {
         "name": "hydra.dsl.json.model.valueNull",
         "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "null"}}, "typeName": "hydra.core.Name"}}},
-                                {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.json.model.valueNumber",
-        "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {"key": "description", "value": {"literal": {"string": "DSL injection for the null variant of hydra.json.model.Value"}}}],
             "body": {
               "wrap": {
                 "body": {
@@ -151,22 +136,59 @@
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "number"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "null"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
-                    "body": {"literal": {"decimal": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.model.valueNumber",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the number variant of hydra.json.model.Value"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "number"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
+                        "body": {"literal": {"decimal": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -183,40 +205,46 @@
       "term": {
         "name": "hydra.dsl.json.model.valueObject",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the object variant of hydra.json.model.Value"}}}],
             "body": {
-              "wrap": {
+              "lambda": {
                 "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "object"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
-                    "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "object"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -233,40 +261,46 @@
       "term": {
         "name": "hydra.dsl.json.model.valueString",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the string variant of hydra.json.model.Value"}}}],
             "body": {
-              "wrap": {
+              "lambda": {
                 "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
-                    "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.json.model.Value"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
+                        "body": {"literal": {"string": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
         "typeScheme": {
           "body": {
             "function": {

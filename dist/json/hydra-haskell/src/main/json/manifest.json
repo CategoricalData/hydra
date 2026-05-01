@@ -1,6 +1,6 @@
 {
+  "defaultLibModules": [],
   "dslModules": ["hydra.dsl.haskell.environment", "hydra.dsl.haskell.syntax"],
-  "evalLibModules": [],
   "mainModules": [
     "hydra.haskell.coder",
     "hydra.haskell.environment",
