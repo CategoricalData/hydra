@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.Maps where
+module Hydra.Sources.Kernel.Lib.Default.Maps where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (map)
@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.maps"
+ns = Namespace "hydra.lib.default.maps"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
@@ -66,7 +66,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleTermDependencies = [ExtractCore.ns, ShowCore.ns],
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Evaluation-level implementations of Map functions for the Hydra interpreter.")}
+            moduleDescription = Just ("Default term-level implementations of Map functions for the Hydra interpreter.")}
   where
     definitions = [
       toDefinition alter_,

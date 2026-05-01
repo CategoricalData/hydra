@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.All where
+module Hydra.Sources.Kernel.Lib.Default.Equality where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -50,52 +50,69 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
-import qualified Hydra.Sources.Eval.Lib.Equality as EvalEquality
-import qualified Hydra.Sources.Eval.Lib.Lists as EvalLists
-import qualified Hydra.Sources.Eval.Lib.Logic as EvalLogic
-import qualified Hydra.Sources.Eval.Lib.Maps as EvalMaps
-import qualified Hydra.Sources.Eval.Lib.Math as EvalMath
-import qualified Hydra.Sources.Eval.Lib.Maybes as EvalMaybes
-import qualified Hydra.Sources.Eval.Lib.Pairs as EvalPairs
-import qualified Hydra.Sources.Eval.Lib.Sets as EvalSets
-
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib"
+ns = Namespace "hydra.lib.default.equality"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
-
--- | All eval library modules
--- Note: Eithers, Lists, Maps, Maybes, and Sets modules cannot currently be code-generated
--- due to DSL type inference limitations. The eval primitive implementations in those modules
--- use meta-level DSL functions (Maybes.maybe, Eithers.either_, etc.) applied to Term-level
--- values, which causes unification errors. These modules still work at runtime via the
--- native Haskell implementations in EvalPrimitives.hs.
-evalLibModules :: [Module]
-evalLibModules = [
-  EvalEithers.module_,
-  EvalEquality.module_,
-  EvalLists.module_,
-  EvalLogic.module_,
-  EvalMaps.module_,
-  EvalMath.module_,
-  EvalMaybes.module_,
-  EvalPairs.module_,
-  EvalSets.module_
-  ]
-
--- | Namespaces of all eval library modules
-evalLibNamespaces :: [Namespace]
-evalLibNamespaces = Prelude.map moduleNamespace evalLibModules
 
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = evalLibNamespaces,
+            moduleTermDependencies = [],
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Registry of evaluation-level primitive implementations for the Hydra interpreter.")}
+            moduleDescription = Just ("Default term-level implementations of Equality functions for the Hydra interpreter.")}
   where
-    definitions = []
+    definitions = [
+      toDefinition identity_,
+      toDefinition max_,
+      toDefinition min_]
+
+-- | Interpreter-friendly identity function.
+-- identity x = x
+identity_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+identity_ = define "identity" $
+  doc "Interpreter-friendly identity function." $
+  "cx" ~> "g" ~>
+  "x" ~>
+  right $ var "x"
+
+-- | Interpreter-friendly max.
+-- max x y = ifElse (gte x y) x y
+max_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+max_ = define "max" $
+  doc "Interpreter-friendly max." $
+  "cx" ~> "g" ~>
+  "x" ~> "y" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _logic_ifElse)
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termVariable $ encodedName _equality_gte)
+            (var "x"))
+          (var "y")))
+      (var "x"))
+    (var "y")
+
+-- | Interpreter-friendly min.
+-- min x y = ifElse (lte x y) x y
+min_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+min_ = define "min" $
+  doc "Interpreter-friendly min." $
+  "cx" ~> "g" ~>
+  "x" ~> "y" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _logic_ifElse)
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termVariable $ encodedName _equality_lte)
+            (var "x"))
+          (var "y")))
+      (var "x"))
+    (var "y")

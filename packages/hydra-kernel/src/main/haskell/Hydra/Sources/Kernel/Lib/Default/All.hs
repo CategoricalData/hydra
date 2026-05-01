@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.Logic where
+module Hydra.Sources.Kernel.Lib.Default.All where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -27,7 +27,6 @@ import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta.Literals as MetaLiterals
 import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
@@ -51,67 +50,53 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import qualified Hydra.Sources.Kernel.Lib.Default.Eithers as DefaultEithers
+import qualified Hydra.Sources.Kernel.Lib.Default.Equality as DefaultEquality
+import qualified Hydra.Sources.Kernel.Lib.Default.Lists as DefaultLists
+import qualified Hydra.Sources.Kernel.Lib.Default.Logic as DefaultLogic
+import qualified Hydra.Sources.Kernel.Lib.Default.Maps as DefaultMaps
+import qualified Hydra.Sources.Kernel.Lib.Default.Math as DefaultMath
+import qualified Hydra.Sources.Kernel.Lib.Default.Maybes as DefaultMaybes
+import qualified Hydra.Sources.Kernel.Lib.Default.Pairs as DefaultPairs
+import qualified Hydra.Sources.Kernel.Lib.Default.Sets as DefaultSets
+
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.logic"
+ns = Namespace "hydra.lib.default"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
+
+-- | All default library modules (term-level fallback implementations used by the interpreter
+-- when a host does not supply a native primitive).
+-- Note: Eithers, Lists, Maps, Maybes, and Sets modules cannot currently be code-generated
+-- due to DSL type inference limitations. The interpreter-level implementations in those modules
+-- use meta-level DSL functions (Maybes.maybe, Eithers.either_, etc.) applied to Term-level
+-- values, which causes unification errors. These modules still work at runtime via the
+-- native Haskell implementations registered via DefaultPrimitives.
+defaultLibModules :: [Module]
+defaultLibModules = [
+  DefaultEithers.module_,
+  DefaultEquality.module_,
+  DefaultLists.module_,
+  DefaultLogic.module_,
+  DefaultMaps.module_,
+  DefaultMath.module_,
+  DefaultMaybes.module_,
+  DefaultPairs.module_,
+  DefaultSets.module_
+  ]
+
+-- | Namespaces of all default library modules
+defaultLibNamespaces :: [Namespace]
+defaultLibNamespaces = Prelude.map moduleNamespace defaultLibModules
 
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
+            moduleTermDependencies = defaultLibNamespaces,
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Evaluation-level implementations of Logic functions for the Hydra interpreter.")}
+            moduleDescription = Just ("Registry of default term-level library implementations used by the Hydra interpreter when no native primitive is available.")}
   where
-    definitions = [
-      toDefinition and_,
-      toDefinition not_,
-      toDefinition or_]
-
--- | Interpreter-friendly logical AND.
--- and a b = ifElse a b false
-and_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
-and_ = define "and" $
-  doc "Interpreter-friendly logical AND." $
-  "cx" ~> "g" ~>
-  "a" ~> "b" ~>
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _logic_ifElse)
-        (var "a"))
-      (var "b"))
-    (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
-
--- | Interpreter-friendly logical NOT.
--- not a = ifElse a false true
-not_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
-not_ = define "not" $
-  doc "Interpreter-friendly logical NOT." $
-  "cx" ~> "g" ~>
-  "a" ~>
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _logic_ifElse)
-        (var "a"))
-      (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False))
-    (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
-
--- | Interpreter-friendly logical OR.
--- or a b = ifElse a true b
-or_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
-or_ = define "or" $
-  doc "Interpreter-friendly logical OR." $
-  "cx" ~> "g" ~>
-  "a" ~> "b" ~>
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _logic_ifElse)
-        (var "a"))
-      (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True))
-    (var "b")
+    definitions = []

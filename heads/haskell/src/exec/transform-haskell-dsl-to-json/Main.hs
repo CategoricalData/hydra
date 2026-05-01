@@ -33,7 +33,7 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
-import Hydra.Sources.Eval.Lib.All (evalLibModules)
+import Hydra.Sources.Kernel.Lib.Default.All (defaultLibModules)
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
@@ -66,7 +66,7 @@ dedupByNamespace = go S.empty
 fullMainUniverse :: [Kernel.Module]
 fullMainUniverse = dedupByNamespace $ L.concat
   [ mainModules
-  , evalLibModules
+  , defaultLibModules
   , dslSourceModules
   , hydraCoqModules
   , hydraJavaModules
