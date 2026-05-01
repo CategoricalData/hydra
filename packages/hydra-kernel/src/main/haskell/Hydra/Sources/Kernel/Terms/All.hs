@@ -40,6 +40,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Paths      as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowErrors
 import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error.Packaging as ShowErrorPackaging
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Variants       as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
@@ -141,6 +142,7 @@ kernelPrimaryTermsModules = [
   ShowCore.module_,
   ShowErrors.module_,
   ShowErrorCore.module_,
+  ShowErrorPackaging.module_,
   ShowGraph.module_,
   ShowVariants.module_,
   ShowTyping.module_,

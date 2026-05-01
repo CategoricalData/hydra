@@ -154,6 +154,29 @@ by 1 ULP across platforms. When adding float64 test cases for these functions, u
 `roundedPrimCase1` / `roundedPrimCase2` instead of raw `primCase`.
 See [extending tests](recipes/extending-tests.md#floating-point-test-portability).
 
+## Annotated `Core.Term` values in test fixtures
+
+When a Hydra-DSL test fixture builds a `Core.Term` value that needs to be a
+`TermAnnotated` -- e.g. to test a validator that inspects annotation maps --
+do **not** use `Phantoms.doc` to attach the annotation.
+The Haskell coder's `encodeTerm` strips outer-layer annotations before its
+variant dispatch (the description, if any, has already been captured at the
+enclosing binding via `getTermDescription` and emitted as a Haskell comment).
+That stripping silently drops the annotation when the annotated term is
+nested inside a record literal rather than at a definition's top level.
+
+Use the explicit data-constructor form instead:
+
+```haskell
+Core.termAnnotated $ Core.annotatedTerm
+  someBody
+  (Maps.fromList $ list [Phantoms.pair (Core.name $ string "description")
+    (Core.termLiteral $ Core.literalString $ string "...")])
+```
+
+This produces a `TermInject _Term "annotated" ...` Hydra term, which the coder
+treats as data and emits as `Core.TermAnnotated (Core.AnnotatedTerm{...})`.
+
 ## Related resources
 
 - [Adding primitives](recipes/adding-primitives.md) -- full checklist for new primitives
