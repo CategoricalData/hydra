@@ -474,6 +474,15 @@ This applies to:
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
 
+**Generator-derived modules are exempt.** The `hydra.dsl.*`, `hydra.encode.*`,
+and `hydra.decode.*` module families are produced by `dslModule`,
+`encodeModule`, and `decodeModule` from the corresponding type modules. Their
+`definitions` lists are deliberately grouped by source type (e.g., for each
+record: constructor, then field accessors, then with-updaters), which is more
+readable than alphabetical and reflects the structure of the originating type.
+The validator must not be applied to these modules; they pass through
+generation untouched by ordering checks.
+
 **`definitions` list ordering is validator-enforced.**
 The `Validate.Packaging.checkDefinitionOrdering` check (run as part of
 `Validate.Packaging.kernelModule` / `kernelPackage`) walks each module's
@@ -918,6 +927,11 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
    `checkDefinitionDocumentation`, `checkDefinitionNameConvention`, etc.).
    This step belongs in `/sync-haskell()` and may move there in the future;
    until it does, run it as part of `/maintenance()`.
+   The validator must be invoked only on the hand-written Source modules
+   (`Sources.kernelModules`); do not pass in generator-derived modules
+   (`hydra.dsl.*`, `hydra.encode.*`, `hydra.decode.*`) — those use a
+   semantic grouping in their definitions list and would always fail the
+   ordering check.
 6. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
 7. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
 8. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
