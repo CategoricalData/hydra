@@ -424,6 +424,40 @@ once the cache key incorporates a hash of the synthesizer binary
 itself, edits to the synthesizer will invalidate downstream outputs
 correctly and a single sync will suffice.
 
+### Renaming a generated namespace leaves orphan files in `dist/`
+
+Sync writes new generated files but does not delete files that no
+longer correspond to any source. If a DSL module's namespace changes
+from `hydra.foo.x` to `hydra.bar.x`, the next sync will write
+`dist/json/.../hydra/bar/x.json` and `dist/haskell/.../Hydra/Bar/X.hs`
+but the old `hydra/foo/x.json` and `Hydra/Foo/X.hs` will remain on
+disk and stay tracked in git. The "Checking for new files..." block at
+the end of sync only flags additions, never removals.
+
+After any namespace rename, manually `git rm` the orphaned dist files
+and verify with `git status` before committing. A regen commit that
+ships both the new and the old files inflates the diff and leaves the
+old modules as "phantom" code that still gets compiled by Stack but is
+never referenced.
+
+### Hand-written test adapters that import generated modules
+
+`heads/<lang>/src/test/...` files that import a generated module
+(e.g., `Hydra.Lib.Default.*`) cannot be built by `stack test` until
+the generated modules exist on disk. After renaming the namespace of
+such a module, the build sequence is:
+
+1. `stack build` -- verifies the library and execs compile against
+   the renamed source. The test target is *not* configured at this
+   step, so it cannot fail on the missing generated module.
+2. `/sync-haskell()` -- regenerates the dist files under the new
+   namespace, then runs `stack test` itself as part of its final
+   verification phase.
+
+Running `stack test` between steps 1 and 2 will fail at the test
+adapter with `Could not find module 'Hydra.Lib.Default.X'`. This is
+expected; defer the test run until after sync.
+
 ## Related documentation
 
 - [Exporting modules to JSON](json-kernel.md) -- JSON format, export scripts, verification
