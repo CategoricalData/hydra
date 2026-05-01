@@ -244,6 +244,11 @@ checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
 -- naming both the preceding and following definitions. The check inspects the order
 -- of the definitions list itself, not the order of declarations in the source file.
 -- Fails on the first out-of-order pair found.
+--
+-- This check is appropriate only for hand-written Source modules. Generator-derived
+-- modules (e.g. 'hydra.dsl.*', 'hydra.encode.*', 'hydra.decode.*') deliberately use
+-- a semantic grouping by source type and would always fail this check; do not run
+-- it against them.
 checkDefinitionOrdering :: TTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionOrdering = define "checkDefinitionOrdering" $
   doc "Check that a module's definitions list is sorted in ascending lexicographic order by local name" $
@@ -356,6 +361,13 @@ checkPackageNameConvention = define "checkPackageNameConvention" $
 -- alphabetical ordering, and the existing structural checks. Use this for kernel
 -- and kernel-quality modules; non-kernel modules can use 'module'' which only runs
 -- the structural checks.
+--
+-- Intended for hand-written Source modules only (the ones that contribute to
+-- 'Sources.kernelModules'). Do not apply to generator-derived modules such as
+-- the 'hydra.dsl.*', 'hydra.encode.*', or 'hydra.decode.*' families: their
+-- 'definitions' lists follow a semantic grouping (e.g. constructor, then field
+-- accessors, then with-updaters per record type) which is more readable than
+-- alphabetical order.
 kernelModule :: TTermDefinition (Module -> Maybe InvalidModuleError)
 kernelModule = define "kernelModule" $
   doc "Validate a kernel module against all packaging rules; returns the first error found or nothing if valid" $
@@ -379,6 +391,11 @@ kernelModule = define "kernelModule" $
 -- Runs every package-level check, then validates each module with 'kernelModule'.
 -- Stops at the first failure. Use this for kernel and kernel-quality packages;
 -- non-kernel packages can use 'package' which only runs the structural checks.
+--
+-- The package's modules should be hand-written Source modules only. Generator
+-- output (such as 'hydra.dsl.*', 'hydra.encode.*', 'hydra.decode.*') must not
+-- be passed in: those modules use a semantic grouping in their 'definitions'
+-- list which would fail 'checkDefinitionOrdering'.
 kernelPackage :: TTermDefinition (Package -> Maybe InvalidPackageError)
 kernelPackage = define "kernelPackage" $
   doc "Validate a kernel package against all packaging rules; returns the first error found or nothing if valid" $
