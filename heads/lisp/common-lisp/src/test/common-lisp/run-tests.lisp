@@ -220,6 +220,7 @@
 
 ;; Validate tests
 (dolist (f '("validate/core.lisp"
+             "validate/packaging.lisp"
              "validate/all.lisp"))
   (load-test-file f))
 
