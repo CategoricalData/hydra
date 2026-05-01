@@ -558,7 +558,9 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   var "recurse" @@ list ([] :: [TTerm SubtermStep]) @@ var "term0"
 
 rewriteTerm :: TTermDefinition (((Term -> Term) -> Term -> Term) -> Term -> Term)
-rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
+rewriteTerm = define "rewriteTerm" $
+  doc "Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both." $
+  "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ (Core.fieldTerm $ var "f"))) $
     "forLet" <~ ("lt" ~>
@@ -898,7 +900,9 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
 rewriteType :: TTermDefinition (((Type -> Type) -> Type -> Type) -> Type -> Type)
-rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
+rewriteType = define "rewriteType" $
+  doc "Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both." $
+  "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~>
     "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
     cases _Type (var "typ") Nothing [

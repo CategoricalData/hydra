@@ -660,6 +660,7 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
 -- | Check if an accessor is applicationFunction
 isApplicationFunction :: TTermDefinition (SubtermStep -> Bool)
 isApplicationFunction = define "isApplicationFunction" $
+  doc "Check whether a SubtermStep is the applicationFunction step" $
   "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_applicationFunction>>: constant true]
@@ -667,6 +668,7 @@ isApplicationFunction = define "isApplicationFunction" $
 -- | Check if an accessor is lambdaBody
 isLambdaBody :: TTermDefinition (SubtermStep -> Bool)
 isLambdaBody = define "isLambdaBody" $
+  doc "Check whether a SubtermStep is the lambdaBody step" $
   "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_lambdaBody>>: constant true]

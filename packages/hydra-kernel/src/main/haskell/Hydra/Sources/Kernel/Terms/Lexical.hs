@@ -139,6 +139,7 @@ buildGraph = define "buildGraph" $
 
 chooseUniqueName :: TTermDefinition (S.Set Name -> Name -> Name)
 chooseUniqueName = define "chooseUniqueName" $
+  doc "Pick a name that does not collide with a reserved set, by appending a numeric suffix to the requested name when necessary" $
   "reserved" ~> "name" ~>
   "tryName" <~ ("index" ~>
     "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
@@ -217,6 +218,7 @@ fieldsOf = define "fieldsOf" $
 
 getField :: TTermDefinition (M.Map Name Term -> Name -> (Term -> Either Error b) -> Either Error b)
 getField = define "getField" $
+  doc "Look up a field by name in a record's field map and decode its value, failing if the field is missing" $
   "m" ~> "fname" ~> "decode" ~>
   Maybes.maybe
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
@@ -266,12 +268,14 @@ lookupTerm = define "lookupTerm" $
 
 matchEnum :: TTermDefinition (Graph -> Name -> [(Name, b)] -> Term -> Either Error b)
 matchEnum = define "matchEnum" $
+  doc "Match a term against an enum type, dispatching on the variant name to a value from the supplied list" $
   "graph" ~> "tname" ~> "pairs" ~>
   matchUnion @@ var "graph" @@ var "tname" @@ (Lists.map ("pair" ~>
     matchUnitField @@ (Pairs.first (var "pair")) @@ (Pairs.second (var "pair"))) (var "pairs"))
 
 matchRecord :: TTermDefinition (Graph -> (M.Map Name Term -> Either Error b) -> Term -> Either Error b)
 matchRecord = define "matchRecord" $
+  doc "Match a term against a record type and decode its fields, failing if the term is not a record" $
   "graph" ~> "decode" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
@@ -283,6 +287,7 @@ matchRecord = define "matchRecord" $
 
 matchUnion :: TTermDefinition (Graph -> Name -> [(Name, Term -> Either Error b)] -> Term -> Either Error b)
 matchUnion = define "matchUnion" $
+  doc "Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching." $
   "graph" ~> "tname" ~> "pairs" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ Maps.fromList (var "pairs") $
@@ -305,10 +310,12 @@ matchUnion = define "matchUnion" $
 
 matchUnitField :: TTermDefinition (Name -> y -> (Name, x -> Either Error y))
 matchUnitField = define "matchUnitField" $
+  doc "Build a (fieldName, decoder) pair for a unit-valued union variant: the decoder ignores its argument and returns a fixed value" $
   "fname" ~> "x" ~> pair (var "fname") ("ignored" ~> right (var "x"))
 
 requireBinding :: TTermDefinition (Graph -> Name -> Either Error Binding)
 requireBinding = define "requireBinding" $
+  doc "Look up a binding in a graph by name, failing with a list of available names if it is not found" $
   "graph" ~> "name" ~>
   "showAll" <~ false $
   "ellipsis" <~ ("strings" ~>
@@ -327,6 +334,7 @@ requireBinding = define "requireBinding" $
 
 requirePrimitive :: TTermDefinition (Graph -> Name -> Either Error Primitive)
 requirePrimitive = define "requirePrimitive" $
+  doc "Look up a primitive in a graph by name, failing if it is not registered" $
   "graph" ~> "name" ~>
   Maybes.maybe
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))
@@ -335,6 +343,7 @@ requirePrimitive = define "requirePrimitive" $
 
 requirePrimitiveType :: TTermDefinition (Graph -> Name -> Either Error TypeScheme)
 requirePrimitiveType = define "requirePrimitiveType" $
+  doc "Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered" $
   "tx" ~> "name" ~>
   -- Look up the primitive directly and extract its type, avoiding O(p) map reconstruction.
   "mts" <~ Maybes.map ("_p" ~> Graph.primitiveTypeScheme (var "_p"))
@@ -345,6 +354,7 @@ requirePrimitiveType = define "requirePrimitiveType" $
 
 requireTerm :: TTermDefinition (Graph -> Name -> Either Error Term)
 requireTerm = define "requireTerm" $
+  doc "Resolve a name to a term in the graph, following variable references, and fail if the name is not bound" $
   "graph" ~> "name" ~>
   Maybes.maybe
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")) (var "cx"))
@@ -367,6 +377,7 @@ resolveTerm = define "resolveTerm" $
 
 stripAndDereferenceTerm :: TTermDefinition (Graph -> Term -> Either Error Term)
 stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
+  doc "Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached" $
   "graph" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
