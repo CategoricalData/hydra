@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Lib.Default.Sets where
+module Hydra.Sources.Kernel.Lib.Defaults.Sets where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (map)
@@ -54,7 +54,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 ns :: Namespace
-ns = Namespace "hydra.lib.default.sets"
+ns = Namespace "hydra.lib.defaults.sets"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns

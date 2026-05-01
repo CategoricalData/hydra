@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Lib.Default.Math where
+module Hydra.Sources.Kernel.Lib.Defaults.Math where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -53,7 +53,7 @@ import qualified Data.Maybe              as Y
 
 
 ns :: Namespace
-ns = Namespace "hydra.lib.default.math"
+ns = Namespace "hydra.lib.defaults.math"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns

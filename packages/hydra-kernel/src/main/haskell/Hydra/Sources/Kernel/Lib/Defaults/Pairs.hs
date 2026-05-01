@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Lib.Default.Equality where
+module Hydra.Sources.Kernel.Lib.Defaults.Pairs where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -50,9 +50,12 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+
 
 ns :: Namespace
-ns = Namespace "hydra.lib.default.equality"
+ns = Namespace "hydra.lib.defaults.pairs"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
@@ -61,58 +64,51 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
+            moduleTermDependencies = [ExtractCore.ns, ShowCore.ns],
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Default term-level implementations of Equality functions for the Hydra interpreter.")}
+            moduleDescription = Just ("Default term-level implementations of Pair functions for the Hydra interpreter.")}
   where
     definitions = [
-      toDefinition identity_,
-      toDefinition max_,
-      toDefinition min_]
+      toDefinition bimap_,
+      toDefinition first_,
+      toDefinition second_]
 
--- | Interpreter-friendly identity function.
--- identity x = x
-identity_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
-identity_ = define "identity" $
-  doc "Interpreter-friendly identity function." $
+-- | Interpreter-friendly bimap for Pair terms.
+-- Applies firstFun to the first element and secondFun to the second element.
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+bimap_ = define "bimap" $
+  doc "Interpreter-friendly bimap for Pair terms." $
   "cx" ~> "g" ~>
-  "x" ~>
-  right $ var "x"
+  "firstFun" ~> "secondFun" ~> "pairTerm" ~>
+  cases _Term (var "pairTerm")
+    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
+    _Term_pair>>: "p" ~>
+      "fst" <~ Pairs.first (var "p") $
+      "snd" <~ Pairs.second (var "p") $
+      right $ Core.termPair $ pair
+        (Core.termApplication $ Core.application (var "firstFun") (var "fst"))
+        (Core.termApplication $ Core.application (var "secondFun") (var "snd"))]
 
--- | Interpreter-friendly max.
--- max x y = ifElse (gte x y) x y
-max_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
-max_ = define "max" $
-  doc "Interpreter-friendly max." $
+-- | Interpreter-friendly first for Pair terms.
+-- Extracts the first element of a pair.
+first_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+first_ = define "first" $
+  doc "Interpreter-friendly first for Pair terms." $
   "cx" ~> "g" ~>
-  "x" ~> "y" ~>
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _logic_ifElse)
-        (Core.termApplication $ Core.application
-          (Core.termApplication $ Core.application
-            (Core.termVariable $ encodedName _equality_gte)
-            (var "x"))
-          (var "y")))
-      (var "x"))
-    (var "y")
+  "pairTerm" ~>
+  cases _Term (var "pairTerm")
+    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
+    _Term_pair>>: "p" ~>
+      right $ Pairs.first (var "p")]
 
--- | Interpreter-friendly min.
--- min x y = ifElse (lte x y) x y
-min_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
-min_ = define "min" $
-  doc "Interpreter-friendly min." $
+-- | Interpreter-friendly second for Pair terms.
+-- Extracts the second element of a pair.
+second_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+second_ = define "second" $
+  doc "Interpreter-friendly second for Pair terms." $
   "cx" ~> "g" ~>
-  "x" ~> "y" ~>
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termApplication $ Core.application
-        (Core.termVariable $ encodedName _logic_ifElse)
-        (Core.termApplication $ Core.application
-          (Core.termApplication $ Core.application
-            (Core.termVariable $ encodedName _equality_lte)
-            (var "x"))
-          (var "y")))
-      (var "x"))
-    (var "y")
+  "pairTerm" ~>
+  cases _Term (var "pairTerm")
+    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
+    _Term_pair>>: "p" ~>
+      right $ Pairs.second (var "p")]

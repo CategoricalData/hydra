@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Lib.Default.Eithers where
+module Hydra.Sources.Kernel.Lib.Defaults.Eithers where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (either)
@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 ns :: Namespace
-ns = Namespace "hydra.lib.default.eithers"
+ns = Namespace "hydra.lib.defaults.eithers"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
