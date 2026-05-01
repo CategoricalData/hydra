@@ -629,97 +629,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.formatting.normalizeComment",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Normalize a comment string for consistent output across coders"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "stripped",
-                        "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.formatting.stripLeadingAndTrailingWhitespace"}}},
-                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "lastIdx",
-                                "term": {
-                                  "application": {
-                                    "argument": {"literal": {"integer": {"int32": 1}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.length"}}},
-                                        "function": {"variable": "hydra.lib.math.sub"}}}}},
-                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "appended",
-                                    "term": {
-                                      "application": {
-                                        "argument": {"literal": {"string": "."}},
-                                        "function": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "stripped"},
-                                        "function": {"application": {"argument": {"variable": "lastIdx"}, "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "application": {
-                                                "argument": {"variable": "appended"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "stripped"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"literal": {"integer": {"int32": 46}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "lastChar"},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
-                                            "domain": {"literal": {"integer": {"int32": {}}}},
-                                            "parameter": "lastChar"}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "appended"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"literal": {"string": ""}},
-                            "function": {
-                              "application": {
-                                "argument": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.null"}}},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
-                "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.formatting.nonAlnumToUnderscores",
         "term": {
           "annotated": {
@@ -968,6 +877,97 @@
                                 "function": {"variable": "hydra.lib.strings.fromList"}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "input"}}}},
+        "typeScheme": {
+          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.formatting.normalizeComment",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Normalize a comment string for consistent output across coders"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "stripped",
+                        "term": {
+                          "application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.formatting.stripLeadingAndTrailingWhitespace"}}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "lastIdx",
+                                "term": {
+                                  "application": {
+                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.length"}}},
+                                        "function": {"variable": "hydra.lib.math.sub"}}}}},
+                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "appended",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "."}},
+                                        "function": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "stripped"},
+                                        "function": {"application": {"argument": {"variable": "lastIdx"}, "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "appended"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "stripped"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"literal": {"integer": {"int32": 46}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "lastChar"},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
+                                            "domain": {"literal": {"integer": {"int32": {}}}},
+                                            "parameter": "lastChar"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "appended"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {"literal": {"string": ""}},
+                            "function": {
+                              "application": {
+                                "argument": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.null"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
+                "domain": {"literal": {"string": {}}},
+                "parameter": "s"}}}},
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},

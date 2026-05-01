@@ -43,11 +43,13 @@ fTypeIsPolymorphic typ =
       Core.TypeAnnotated v0 -> fTypeIsPolymorphic (Core.annotatedTypeBody v0)
       Core.TypeForall _ -> True
       _ -> False
+-- | Build a map from field name to field term, given a list of fields
 fieldMap :: [Core.Field] -> M.Map Core.Name Core.Term
 fieldMap fields =
 
       let toPair = \f -> (Core.fieldName f, (Core.fieldTerm f))
       in (Maps.fromList (Lists.map toPair fields))
+-- | Build a map from field name to field type, given a list of field types
 fieldTypeMap :: [Core.FieldType] -> M.Map Core.Name Core.Type
 fieldTypeMap fields =
 

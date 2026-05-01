@@ -1870,59 +1870,253 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.extract.core.stripWithDecodingError",
+        "name": "hydra.extract.core.eitherTerm",
         "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip annotations and dereference variables, returning Either DecodingError Term"}}}],
+          "typeLambda": {
             "body": {
-              "lambda": {
+              "typeLambda": {
                 "body": {
-                  "lambda": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "Extract an either value from a term, applying functions to the left and right values"}}}],
                     "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "term"},
-                            "function": {
-                              "application": {"argument": {"variable": "g"}, "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"lambda": {"body": {"variable": "x"}, "domain": {"variable": "hydra.core.Term"}, "parameter": "x"}},
-                            "function": {
-                              "application": {
-                                "argument": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "lambda": {
+                                "body": {
                                   "lambda": {
                                     "body": {
-                                      "wrap": {
-                                        "body": {"application": {"argument": {"variable": "_e"}, "function": {"variable": "hydra.show.errors.error"}}},
-                                        "typeName": "hydra.errors.DecodingError"}},
-                                    "domain": {"variable": "hydra.errors.Error"},
-                                    "parameter": "_e"}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"variable": "hydra.errors.Error"}}},
-                                            "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"variable": "hydra.errors.DecodingError"}}},
-                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                    "domain": {"variable": "hydra.core.Term"},
-                    "parameter": "term"}},
-                "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "g"}}}},
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "term"},
+                                                "function": {
+                                                  "cases": {
+                                                    "cases": [
+                                                      {
+                                                        "name": "either",
+                                                        "term": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "et"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"application": {"argument": {"variable": "r"}, "function": {"variable": "rightFun"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "x"}}}, "type": {"variable": "t0"}}},
+                                                                                        "type": {"variable": "t1"}}},
+                                                                                    "domain": {"variable": "t1"},
+                                                                                    "parameter": "x"}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t1"}}},
+                                                                                        "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
+                                                                                    "type": {"variable": "hydra.errors.Error"}}}}}}},
+                                                                        "domain": {"variable": "hydra.core.Term"},
+                                                                        "parameter": "r"}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {"application": {"argument": {"variable": "l"}, "function": {"variable": "leftFun"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"either": {"left": {"variable": "x"}}}, "type": {"variable": "t0"}}},
+                                                                                            "type": {"variable": "t1"}}},
+                                                                                        "domain": {"variable": "t0"},
+                                                                                        "parameter": "x"}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t0"}}},
+                                                                                            "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
+                                                                                        "type": {"variable": "hydra.errors.Error"}}}}}}},
+                                                                            "domain": {"variable": "hydra.core.Term"},
+                                                                            "parameter": "l"}},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                            "type": {
+                                                                              "either": {
+                                                                                "left": {"variable": "hydra.errors.Error"},
+                                                                                "right": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}}}}}}}}}},
+                                                            "domain": {"either": {"left": {"variable": "hydra.core.Term"}, "right": {"variable": "hydra.core.Term"}}},
+                                                            "parameter": "et"}}}],
+                                                    "default": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "left": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "extraction",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "unexpectedShape",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {"name": "expected", "term": {"literal": {"string": "either value"}}},
+                                                                                  {
+                                                                                    "name": "actual",
+                                                                                    "term": {"application": {"argument": {"variable": "term"}, "function": {"variable": "hydra.show.core.term"}}}}],
+                                                                                "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                                          "typeName": "hydra.errors.ExtractionError"}}},
+                                                                    "typeName": "hydra.errors.Error"}}}},
+                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                        "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
+                                                    "typeName": "hydra.core.Term"}}}},
+                                            "domain": {"variable": "hydra.core.Term"},
+                                            "parameter": "term"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "term0"},
+                                                "function": {"application": {"argument": {"variable": "graph"}, "function": {"variable": "hydra.lexical.stripAndDereferenceTerm"}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}}}}}},
+                                    "domain": {"variable": "hydra.core.Term"},
+                                    "parameter": "term0"}},
+                                "domain": {"variable": "hydra.graph.Graph"},
+                                "parameter": "graph"}},
+                            "domain": {
+                              "function": {
+                                "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}},
+                                "domain": {"variable": "hydra.core.Term"}}},
+                            "parameter": "rightFun"}},
+                        "domain": {
+                          "function": {
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t0"}}},
+                            "domain": {"variable": "hydra.core.Term"}}},
+                        "parameter": "leftFun"}}}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
         "typeScheme": {
           "body": {
             "function": {
               "codomain": {
                 "function": {
-                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "either": {
+                              "left": {"variable": "hydra.errors.Error"},
+                              "right": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
+                          "domain": {"variable": "hydra.core.Term"}}},
+                      "domain": {"variable": "hydra.graph.Graph"}}},
+                  "domain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}},
+                      "domain": {"variable": "hydra.core.Term"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t0"}}},
+                  "domain": {"variable": "hydra.core.Term"}}}}},
+          "variables": ["t0", "t1"]}}},
+    {
+      "term": {
+        "name": "hydra.extract.core.eitherType",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the left and right types from an either type"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "stripped",
+                        "term": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.strip.deannotateType"}}},
+                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "stripped"},
+                        "function": {
+                          "cases": {
+                            "cases": [
+                              {
+                                "name": "either",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "et"}}}, "type": {"variable": "hydra.errors.Error"}}},
+                                        "type": {"variable": "hydra.core.EitherType"}}},
+                                    "domain": {"variable": "hydra.core.EitherType"},
+                                    "parameter": "et"}}}],
+                            "default": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "either": {
+                                        "left": {
+                                          "inject": {
+                                            "field": {
+                                              "name": "extraction",
+                                              "term": {
+                                                "inject": {
+                                                  "field": {
+                                                    "name": "unexpectedShape",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {"name": "expected", "term": {"literal": {"string": "either type"}}},
+                                                          {
+                                                            "name": "actual",
+                                                            "term": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.show.core.type"}}}}],
+                                                        "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                  "typeName": "hydra.errors.ExtractionError"}}},
+                                            "typeName": "hydra.errors.Error"}}}},
+                                    "type": {"variable": "hydra.errors.Error"}}},
+                                "type": {"variable": "hydra.core.EitherType"}}},
+                            "typeName": "hydra.core.Type"}}}}}},
+                "domain": {"variable": "hydra.core.Type"},
+                "parameter": "typ"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.EitherType"}}},
+              "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}},
     {
       "term": {
@@ -2480,256 +2674,6 @@
                   "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.FloatValue"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.extract.core.eitherTerm",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "typeLambda": {
-                "body": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Extract an either value from a term, applying functions to the left and right values"}}}],
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "lambda": {
-                            "body": {
-                              "lambda": {
-                                "body": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "application": {
-                                                "argument": {"variable": "term"},
-                                                "function": {
-                                                  "cases": {
-                                                    "cases": [
-                                                      {
-                                                        "name": "either",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {"variable": "et"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "application": {
-                                                                            "argument": {"application": {"argument": {"variable": "r"}, "function": {"variable": "rightFun"}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "lambda": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "x"}}}, "type": {"variable": "t0"}}},
-                                                                                        "type": {"variable": "t1"}}},
-                                                                                    "domain": {"variable": "t1"},
-                                                                                    "parameter": "x"}},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t1"}}},
-                                                                                        "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
-                                                                                    "type": {"variable": "hydra.errors.Error"}}}}}}},
-                                                                        "domain": {"variable": "hydra.core.Term"},
-                                                                        "parameter": "r"}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"application": {"argument": {"variable": "l"}, "function": {"variable": "leftFun"}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "lambda": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"either": {"left": {"variable": "x"}}}, "type": {"variable": "t0"}}},
-                                                                                            "type": {"variable": "t1"}}},
-                                                                                        "domain": {"variable": "t0"},
-                                                                                        "parameter": "x"}},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t0"}}},
-                                                                                            "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
-                                                                                        "type": {"variable": "hydra.errors.Error"}}}}}}},
-                                                                            "domain": {"variable": "hydra.core.Term"},
-                                                                            "parameter": "l"}},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.core.Term"}}},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {
-                                                                              "either": {
-                                                                                "left": {"variable": "hydra.errors.Error"},
-                                                                                "right": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}}}}}}}}}},
-                                                            "domain": {"either": {"left": {"variable": "hydra.core.Term"}, "right": {"variable": "hydra.core.Term"}}},
-                                                            "parameter": "et"}}}],
-                                                    "default": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "either": {
-                                                                "left": {
-                                                                  "inject": {
-                                                                    "field": {
-                                                                      "name": "extraction",
-                                                                      "term": {
-                                                                        "inject": {
-                                                                          "field": {
-                                                                            "name": "unexpectedShape",
-                                                                            "term": {
-                                                                              "record": {
-                                                                                "fields": [
-                                                                                  {"name": "expected", "term": {"literal": {"string": "either value"}}},
-                                                                                  {
-                                                                                    "name": "actual",
-                                                                                    "term": {"application": {"argument": {"variable": "term"}, "function": {"variable": "hydra.show.core.term"}}}}],
-                                                                                "typeName": "hydra.errors.UnexpectedShapeError"}}},
-                                                                          "typeName": "hydra.errors.ExtractionError"}}},
-                                                                    "typeName": "hydra.errors.Error"}}}},
-                                                            "type": {"variable": "hydra.errors.Error"}}},
-                                                        "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
-                                                    "typeName": "hydra.core.Term"}}}},
-                                            "domain": {"variable": "hydra.core.Term"},
-                                            "parameter": "term"}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "term0"},
-                                                "function": {"application": {"argument": {"variable": "graph"}, "function": {"variable": "hydra.lexical.stripAndDereferenceTerm"}}}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                    "type": {"variable": "hydra.core.Term"}}},
-                                                "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}}}}}},
-                                    "domain": {"variable": "hydra.core.Term"},
-                                    "parameter": "term0"}},
-                                "domain": {"variable": "hydra.graph.Graph"},
-                                "parameter": "graph"}},
-                            "domain": {
-                              "function": {
-                                "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}},
-                                "domain": {"variable": "hydra.core.Term"}}},
-                            "parameter": "rightFun"}},
-                        "domain": {
-                          "function": {
-                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t0"}}},
-                            "domain": {"variable": "hydra.core.Term"}}},
-                        "parameter": "leftFun"}}}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
-                          "domain": {"variable": "hydra.core.Term"}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}},
-                      "domain": {"variable": "hydra.core.Term"}}}}},
-              "domain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t0"}}},
-                  "domain": {"variable": "hydra.core.Term"}}}}},
-          "variables": ["t0", "t1"]}}},
-    {
-      "term": {
-        "name": "hydra.extract.core.eitherType",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the left and right types from an either type"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "stripped",
-                        "term": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.strip.deannotateType"}}},
-                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "stripped"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "name": "either",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "et"}}}, "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"variable": "hydra.core.EitherType"}}},
-                                    "domain": {"variable": "hydra.core.EitherType"},
-                                    "parameter": "et"}}}],
-                            "default": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "either": {
-                                        "left": {
-                                          "inject": {
-                                            "field": {
-                                              "name": "extraction",
-                                              "term": {
-                                                "inject": {
-                                                  "field": {
-                                                    "name": "unexpectedShape",
-                                                    "term": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {"name": "expected", "term": {"literal": {"string": "either type"}}},
-                                                          {
-                                                            "name": "actual",
-                                                            "term": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.show.core.type"}}}}],
-                                                        "typeName": "hydra.errors.UnexpectedShapeError"}}},
-                                                  "typeName": "hydra.errors.ExtractionError"}}},
-                                            "typeName": "hydra.errors.Error"}}}},
-                                    "type": {"variable": "hydra.errors.Error"}}},
-                                "type": {"variable": "hydra.core.EitherType"}}},
-                            "typeName": "hydra.core.Type"}}}}}},
-                "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.EitherType"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}},
     {
       "term": {
@@ -3532,45 +3476,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.extract.core.lambdaBody",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the body of a lambda term"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "term"},
-                            "function": {"application": {"argument": {"variable": "graph"}, "function": {"variable": "hydra.extract.core.lambda"}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"project": {"field": "body", "typeName": "hydra.core.Lambda"}},
-                            "function": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.core.Lambda"}}},
-                                    "type": {"variable": "hydra.core.Term"}}},
-                                "type": {"variable": "hydra.errors.Error"}}}}}}},
-                    "domain": {"variable": "hydra.core.Term"},
-                    "parameter": "term"}},
-                "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "graph"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.extract.core.lambda",
         "term": {
           "annotated": {
@@ -3651,6 +3556,130 @@
               "codomain": {
                 "function": {
                   "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Lambda"}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.extract.core.lambdaBody",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the body of a lambda term"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "term"},
+                            "function": {"application": {"argument": {"variable": "graph"}, "function": {"variable": "hydra.extract.core.lambda"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {"project": {"field": "body", "typeName": "hydra.core.Lambda"}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.core.Lambda"}}},
+                                    "type": {"variable": "hydra.core.Term"}}},
+                                "type": {"variable": "hydra.errors.Error"}}}}}}},
+                    "domain": {"variable": "hydra.core.Term"},
+                    "parameter": "term"}},
+                "domain": {"variable": "hydra.graph.Graph"},
+                "parameter": "graph"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.extract.core.let",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a let expression from a term"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "term"},
+                                "function": {
+                                  "cases": {
+                                    "cases": [
+                                      {
+                                        "name": "let",
+                                        "term": {
+                                          "lambda": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"either": {"right": {"variable": "lt"}}}, "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {"variable": "hydra.core.Let"}}},
+                                            "domain": {"variable": "hydra.core.Let"},
+                                            "parameter": "lt"}}}],
+                                    "default": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "left": {
+                                                  "inject": {
+                                                    "field": {
+                                                      "name": "extraction",
+                                                      "term": {
+                                                        "inject": {
+                                                          "field": {
+                                                            "name": "unexpectedShape",
+                                                            "term": {
+                                                              "record": {
+                                                                "fields": [
+                                                                  {"name": "expected", "term": {"literal": {"string": "let term"}}},
+                                                                  {
+                                                                    "name": "actual",
+                                                                    "term": {"application": {"argument": {"variable": "term"}, "function": {"variable": "hydra.show.core.term"}}}}],
+                                                                "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                          "typeName": "hydra.errors.ExtractionError"}}},
+                                                    "typeName": "hydra.errors.Error"}}}},
+                                            "type": {"variable": "hydra.errors.Error"}}},
+                                        "type": {"variable": "hydra.core.Let"}}},
+                                    "typeName": "hydra.core.Term"}}}},
+                            "domain": {"variable": "hydra.core.Term"},
+                            "parameter": "term"}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "term0"},
+                                "function": {"application": {"argument": {"variable": "graph"}, "function": {"variable": "hydra.lexical.stripAndDereferenceTerm"}}}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                    "type": {"variable": "hydra.core.Term"}}},
+                                "type": {"variable": "hydra.core.Let"}}}}}}},
+                    "domain": {"variable": "hydra.core.Term"},
+                    "parameter": "term0"}},
+                "domain": {"variable": "hydra.graph.Graph"},
+                "parameter": "graph"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Let"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}},
@@ -3852,91 +3881,6 @@
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.extract.core.let",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a let expression from a term"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {"variable": "term"},
-                                "function": {
-                                  "cases": {
-                                    "cases": [
-                                      {
-                                        "name": "let",
-                                        "term": {
-                                          "lambda": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"either": {"right": {"variable": "lt"}}}, "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {"variable": "hydra.core.Let"}}},
-                                            "domain": {"variable": "hydra.core.Let"},
-                                            "parameter": "lt"}}}],
-                                    "default": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "either": {
-                                                "left": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "extraction",
-                                                      "term": {
-                                                        "inject": {
-                                                          "field": {
-                                                            "name": "unexpectedShape",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "expected", "term": {"literal": {"string": "let term"}}},
-                                                                  {
-                                                                    "name": "actual",
-                                                                    "term": {"application": {"argument": {"variable": "term"}, "function": {"variable": "hydra.show.core.term"}}}}],
-                                                                "typeName": "hydra.errors.UnexpectedShapeError"}}},
-                                                          "typeName": "hydra.errors.ExtractionError"}}},
-                                                    "typeName": "hydra.errors.Error"}}}},
-                                            "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"variable": "hydra.core.Let"}}},
-                                    "typeName": "hydra.core.Term"}}}},
-                            "domain": {"variable": "hydra.core.Term"},
-                            "parameter": "term"}},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "term0"},
-                                "function": {"application": {"argument": {"variable": "graph"}, "function": {"variable": "hydra.lexical.stripAndDereferenceTerm"}}}}},
-                            "function": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                    "type": {"variable": "hydra.core.Term"}}},
-                                "type": {"variable": "hydra.core.Let"}}}}}}},
-                    "domain": {"variable": "hydra.core.Term"},
-                    "parameter": "term0"}},
-                "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "graph"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Let"}}},
-                  "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}},
     {
       "term": {
@@ -4656,107 +4600,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.extract.core.nArgs",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Ensure a function has the expected number of arguments"}}}],
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "either": {
-                                            "left": {
-                                              "inject": {
-                                                "field": {
-                                                  "name": "extraction",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "unexpectedShape",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "expected",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "list": [
-                                                                        {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                        {"literal": {"string": " arguments to primitive "}},
-                                                                        {
-                                                                          "application": {
-                                                                            "argument": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.core.Name"}}},
-                                                                            "function": {"variable": "hydra.lib.literals.showString"}}}]},
-                                                                    "function": {"variable": "hydra.lib.strings.cat"}}}},
-                                                              {
-                                                                "name": "actual",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "args"},
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "t0"}}}}},
-                                                                    "function": {"variable": "hydra.lib.literals.showInt32"}}}}],
-                                                            "typeName": "hydra.errors.UnexpectedShapeError"}}},
-                                                      "typeName": "hydra.errors.ExtractionError"}}},
-                                                "typeName": "hydra.errors.Error"}}}},
-                                        "type": {"variable": "hydra.errors.Error"}}},
-                                    "type": {"unit": {}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"either": {"right": {"unit": {}}}}, "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"unit": {}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "n"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "args"},
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "t0"}}}}},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"unit": {}}}}}}}}}}}},
-                            "domain": {"list": {"variable": "t0"}},
-                            "parameter": "args"}},
-                        "domain": {"literal": {"integer": {"int32": {}}}},
-                        "parameter": "n"}},
-                    "domain": {"variable": "hydra.core.Name"},
-                    "parameter": "name"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"unit": {}}}},
-                      "domain": {"list": {"variable": "t0"}}}},
-                  "domain": {"literal": {"integer": {"int32": {}}}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": ["t0"]}}},
-    {
-      "term": {
         "name": "hydra.extract.core.maybeTerm",
         "term": {
           "typeLambda": {
@@ -4959,6 +4802,107 @@
               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.extract.core.nArgs",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "annotated": {
+                "annotation": [{"key": "description", "value": {"literal": {"string": "Ensure a function has the expected number of arguments"}}}],
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "either": {
+                                            "left": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "extraction",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "unexpectedShape",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "expected",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "list": [
+                                                                        {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                        {"literal": {"string": " arguments to primitive "}},
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.core.Name"}}},
+                                                                            "function": {"variable": "hydra.lib.literals.showString"}}}]},
+                                                                    "function": {"variable": "hydra.lib.strings.cat"}}}},
+                                                              {
+                                                                "name": "actual",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "args"},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "t0"}}}}},
+                                                                    "function": {"variable": "hydra.lib.literals.showInt32"}}}}],
+                                                            "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                      "typeName": "hydra.errors.ExtractionError"}}},
+                                                "typeName": "hydra.errors.Error"}}}},
+                                        "type": {"variable": "hydra.errors.Error"}}},
+                                    "type": {"unit": {}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"either": {"right": {"unit": {}}}}, "type": {"variable": "hydra.errors.Error"}}},
+                                        "type": {"unit": {}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "n"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "args"},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "t0"}}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"unit": {}}}}}}}}}}}},
+                            "domain": {"list": {"variable": "t0"}},
+                            "parameter": "args"}},
+                        "domain": {"literal": {"integer": {"int32": {}}}},
+                        "parameter": "n"}},
+                    "domain": {"variable": "hydra.core.Name"},
+                    "parameter": "name"}}}},
+            "parameter": "t0"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"unit": {}}}},
+                      "domain": {"list": {"variable": "t0"}}}},
+                  "domain": {"literal": {"integer": {"int32": {}}}}}},
+              "domain": {"variable": "hydra.core.Name"}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.extract.core.pair",
@@ -5760,6 +5704,62 @@
             "function": {
               "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"literal": {"string": {}}}}},
               "domain": {"variable": "hydra.core.Literal"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.extract.core.stripWithDecodingError",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Strip annotations and dereference variables, returning Either DecodingError Term"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "term"},
+                            "function": {
+                              "application": {"argument": {"variable": "g"}, "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {"lambda": {"body": {"variable": "x"}, "domain": {"variable": "hydra.core.Term"}, "parameter": "x"}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "wrap": {
+                                        "body": {"application": {"argument": {"variable": "_e"}, "function": {"variable": "hydra.show.errors.error"}}},
+                                        "typeName": "hydra.errors.DecodingError"}},
+                                    "domain": {"variable": "hydra.errors.Error"},
+                                    "parameter": "_e"}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"variable": "hydra.core.Term"}}},
+                                        "type": {"variable": "hydra.errors.DecodingError"}}},
+                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                    "domain": {"variable": "hydra.core.Term"},
+                    "parameter": "term"}},
+                "domain": {"variable": "hydra.graph.Graph"},
+                "parameter": "g"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}},
     {
       "term": {

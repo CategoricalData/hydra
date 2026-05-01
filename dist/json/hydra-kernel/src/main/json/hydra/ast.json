@@ -139,28 +139,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.ast.IndentedExpression",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An expression indented in a certain style"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "style",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
-                        "body": {"variable": "hydra.ast.IndentStyle"}}}},
-                  {
-                    "name": "expr",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
-                        "body": {"variable": "hydra.ast.Expr"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.ast.IndentStyle",
         "typeScheme": {
           "body": {
@@ -180,6 +158,28 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ast.IndentedExpression",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An expression indented in a certain style"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "style",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
+                        "body": {"variable": "hydra.ast.IndentStyle"}}}},
+                  {
+                    "name": "expr",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
+                        "body": {"variable": "hydra.ast.Expr"}}}}]}}},
           "variables": []}}},
     {
       "type": {

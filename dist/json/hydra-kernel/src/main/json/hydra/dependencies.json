@@ -2820,33 +2820,41 @@
       "term": {
         "name": "hydra.dependencies.typeDependencyNames",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references"}}}],
             "body": {
               "lambda": {
                 "body": {
-                  "application": {
-                    "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.variables.freeVariablesInType"}}},
-                    "function": {
+                  "lambda": {
+                    "body": {
                       "application": {
-                        "argument": {
+                        "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.variables.freeVariablesInType"}}},
+                        "function": {
                           "application": {
                             "argument": {
                               "application": {
-                                "argument": {"variable": "typ"},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "typ"},
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.dependencies.typeNamesInType"}, "type": {"variable": "hydra.core.Name"}}}}},
                                 "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.dependencies.typeNamesInType"}, "type": {"variable": "hydra.core.Name"}}}}},
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.variables.freeVariablesInType"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.core.Name"}}}}}}},
                             "function": {
                               "application": {
-                                "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.variables.freeVariablesInType"}}},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.core.Name"}}}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "withSchema"},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"set": {"variable": "hydra.core.Name"}}}}}}}}}},
-                "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ"}},
-            "domain": {"literal": {"boolean": {}}},
-            "parameter": "withSchema"}},
+                                "argument": {"variable": "withSchema"},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"set": {"variable": "hydra.core.Name"}}}}}}}}}},
+                    "domain": {"variable": "hydra.core.Type"},
+                    "parameter": "typ"}},
+                "domain": {"literal": {"boolean": {}}},
+                "parameter": "withSchema"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -2859,45 +2867,51 @@
         "term": {
           "typeLambda": {
             "body": {
-              "lambda": {
+              "annotated": {
+                "annotation": [
+                  {
+                    "key": "description",
+                    "value": {"literal": {"string": "Collect every type name that appears anywhere inside a type expression"}}}],
                 "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "addNames",
-                        "term": {
-                          "typeLambda": {
-                            "body": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "addNames",
+                            "term": {
                               "typeLambda": {
                                 "body": {
-                                  "lambda": {
-                                    "body": {"lambda": {"body": {"variable": "names"}, "domain": {"variable": "t2"}, "parameter": "typ"}},
-                                    "domain": {"variable": "t1"},
-                                    "parameter": "names"}},
-                                "parameter": "t2"}},
-                            "parameter": "t1"}},
-                        "typeScheme": {
-                          "body": {
-                            "function": {"codomain": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t2"}}}, "domain": {"variable": "t1"}}},
-                          "variables": ["t1", "t2"]}}],
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "typ0"},
-                        "function": {
+                                  "typeLambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {"lambda": {"body": {"variable": "names"}, "domain": {"variable": "t2"}, "parameter": "typ"}},
+                                        "domain": {"variable": "t1"},
+                                        "parameter": "names"}},
+                                    "parameter": "t2"}},
+                                "parameter": "t1"}},
+                            "typeScheme": {
+                              "body": {
+                                "function": {"codomain": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t2"}}}, "domain": {"variable": "t1"}}},
+                              "variables": ["t1", "t2"]}}],
+                        "body": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t0"}}},
+                            "argument": {"variable": "typ0"},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "addNames"}, "type": {"set": {"variable": "t0"}}}},
-                                    "type": {"variable": "hydra.core.Type"}}},
+                                "argument": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t0"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"inject": {"field": {"name": "pre", "term": {"unit": {}}}, "typeName": "hydra.coders.TraversalOrder"}},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.rewriting.foldOverType"}, "type": {"set": {"variable": "t0"}}}}}}}}}}}}}},
-                "domain": {"variable": "hydra.core.Type"},
-                "parameter": "typ0"}},
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "addNames"}, "type": {"set": {"variable": "t0"}}}},
+                                        "type": {"variable": "hydra.core.Type"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"inject": {"field": {"name": "pre", "term": {"unit": {}}}, "typeName": "hydra.coders.TraversalOrder"}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.rewriting.foldOverType"}, "type": {"set": {"variable": "t0"}}}}}}}}}}}}}},
+                    "domain": {"variable": "hydra.core.Type"},
+                    "parameter": "typ0"}}}},
             "parameter": "t0"}},
         "typeScheme": {
           "body": {"function": {"codomain": {"set": {"variable": "t0"}}, "domain": {"variable": "hydra.core.Type"}}},

@@ -2,6 +2,32 @@
   "definitions": [
     {
       "type": {
+        "name": "hydra.error.core.ConstantConditionError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "An application of ifElse where the condition is a literal boolean, creating a dead branch (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the constant condition within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "value",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The constant boolean value of the condition"}}}],
+                        "body": {"literal": {"boolean": {}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.error.core.DuplicateBindingError",
         "typeScheme": {
           "body": {
@@ -46,96 +72,47 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.error.core.UndefinedFieldError",
+        "name": "hydra.error.core.DuplicateRecordTypeFieldNamesError",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A reference to a field that does not exist in the given type"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "fieldName",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined field"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}},
-                  {
-                    "name": "typeName",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type in which the field was expected"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UnexpectedTermVariantError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected term variant was encountered"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "expectedVariant",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expected term variant"}}}],
-                        "body": {"variable": "hydra.variants.TermVariant"}}}},
-                  {
-                    "name": "actualTerm",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The actual term that was encountered"}}}],
-                        "body": {"variable": "hydra.core.Term"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UnexpectedTypeVariantError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected type variant was encountered"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "expectedVariant",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type variant"}}}],
-                        "body": {"variable": "hydra.variants.TypeVariant"}}}},
-                  {
-                    "name": "actualType",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type that was encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.ConstantConditionError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An application of ifElse where the condition is a literal boolean, creating a dead branch (optional)"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A record type with duplicate field names"}}}],
               "body": {
                 "record": [
                   {
                     "name": "location",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the constant condition within the term"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the record type with duplicate fields"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}}},
                   {
-                    "name": "value",
+                    "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The constant boolean value of the condition"}}}],
-                        "body": {"literal": {"boolean": {}}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated field name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.DuplicateUnionTypeFieldNamesError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A union type with duplicate field names"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the union type with duplicate fields"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated field name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -177,6 +154,25 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.error.core.EmptyRecordTypeError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A record type with no fields; TypeUnit is preferred for the unit-like case (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty record type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.error.core.EmptyTermAnnotationError",
         "typeScheme": {
           "body": {
@@ -189,6 +185,22 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty annotation within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.EmptyTypeAnnotationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A type annotation with an empty annotation map (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty annotation"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
           "variables": []}}},
     {
@@ -209,6 +221,50 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the term with the empty type name"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.EmptyUnionTypeError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A union type with no alternatives; TypeVoid is preferred (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty union type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.InvalidForallParameterNameError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A forall type parameter name that violates type variable naming conventions (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the forall type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid parameter name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -258,322 +314,6 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid binding name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.InvalidTypeLambdaParameterNameError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type lambda parameter name that violates naming conventions (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid type lambda parameter name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.NestedTermAnnotationError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A term annotation directly wrapping another term annotation; annotations should be merged (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the outer annotation within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.RedundantWrapUnwrapError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "typeName",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type name of the wrapper"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.SelfApplicationError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the self-application within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variable applied to itself"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.TermVariableShadowingError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A lambda parameter or let binding name that shadows a variable already in scope (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the shadowing binding within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the shadowed variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.TypeVariableShadowingInTypeLambdaError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type lambda parameter that shadows a type variable already in scope (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the shadowed type variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UndefinedTermVariableError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A variable reference to a term name that is not bound in scope"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the undefined variable within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UndefinedTypeVariableInBindingTypeError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type variable in a lambda domain annotation that is not bound in scope"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type variable in a type application term that is not bound in scope"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type application within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UnknownPrimitiveNameError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A primitive function reference to a name not in the known primitive registry"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the primitive reference within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The unknown primitive name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UnnecessaryIdentityApplicationError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "An application of an identity lambda to an argument, which simplifies to the argument (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the identity application within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UntypedTermVariableError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A term variable whose type is not known in the current scope"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the untyped variable within the term"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -732,323 +472,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.error.core.DuplicateRecordTypeFieldNamesError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A record type with duplicate field names"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the record type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated field name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.DuplicateUnionTypeFieldNamesError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A union type with duplicate field names"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the union type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated field name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.EmptyRecordTypeError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A record type with no fields; TypeUnit is preferred for the unit-like case (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty record type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.EmptyTypeAnnotationError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A type annotation with an empty annotation map (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty annotation"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.EmptyUnionTypeError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A union type with no alternatives; TypeVoid is preferred (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the empty union type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.InvalidForallParameterNameError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A forall type parameter name that violates type variable naming conventions (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the forall type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid parameter name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.InvalidTypeSchemeVariableNameError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type scheme variable name that violates type variable naming conventions (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type scheme"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid variable name"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.NestedTypeAnnotationError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A type annotation directly wrapping another type annotation; annotations should be merged (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the outer annotation"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.NonComparableMapKeyTypeError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "A map type whose key type is or directly contains a function type, which cannot be compared for equality"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the map type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "keyType",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The non-comparable key type"}}}],
-                        "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.NonComparableSetElementTypeError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A set type whose element type is or directly contains a function type, which cannot be compared for equality"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the set type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "elementType",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The non-comparable element type"}}}],
-                        "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.SingleVariantUnionError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A union type with exactly one field; could be a wrapped type or record instead (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the single-variant union type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "fieldName",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the single field"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.TypeVariableShadowingInForallError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A forall type parameter that shadows a type variable already in scope (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the shadowing forall type"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the shadowed type variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.UndefinedTypeVariableError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A type variable reference to a name that is not bound in scope"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the undefined type variable"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.error.core.VoidInNonBottomPositionError",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "location",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the void type in a non-bottom position"}}}],
-                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.error.core.InvalidTypeError",
         "typeScheme": {
           "body": {
@@ -1152,6 +575,583 @@
                             "key": "description",
                             "value": {"literal": {"string": "TypeVoid in a position where no value can be constructed (optional)"}}}],
                         "body": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.InvalidTypeLambdaParameterNameError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A type lambda parameter name that violates naming conventions (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type lambda within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid type lambda parameter name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.InvalidTypeSchemeVariableNameError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A type scheme variable name that violates type variable naming conventions (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type scheme"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid variable name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.NestedTermAnnotationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "A term annotation directly wrapping another term annotation; annotations should be merged (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the outer annotation within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.NestedTypeAnnotationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "A type annotation directly wrapping another type annotation; annotations should be merged (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the outer annotation"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.NonComparableMapKeyTypeError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "A map type whose key type is or directly contains a function type, which cannot be compared for equality"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the map type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "keyType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The non-comparable key type"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.NonComparableSetElementTypeError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A set type whose element type is or directly contains a function type, which cannot be compared for equality"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the set type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "elementType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The non-comparable element type"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.RedundantWrapUnwrapError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type name of the wrapper"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.SelfApplicationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the self-application within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variable applied to itself"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.SingleVariantUnionError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A union type with exactly one field; could be a wrapped type or record instead (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the single-variant union type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "fieldName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the single field"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.TermVariableShadowingError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A lambda parameter or let binding name that shadows a variable already in scope (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the shadowing binding within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the shadowed variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.TypeVariableShadowingInForallError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A forall type parameter that shadows a type variable already in scope (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the shadowing forall type"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the shadowed type variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.TypeVariableShadowingInTypeLambdaError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A type lambda parameter that shadows a type variable already in scope (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type lambda within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the shadowed type variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndefinedFieldError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {"key": "description", "value": {"literal": {"string": "A reference to a field that does not exist in the given type"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "fieldName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined field"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type in which the field was expected"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndefinedTermVariableError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A variable reference to a term name that is not bound in scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the undefined variable within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndefinedTypeVariableError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A type variable reference to a name that is not bound in scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the undefined type variable"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndefinedTypeVariableInBindingTypeError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the binding within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A type variable in a lambda domain annotation that is not bound in scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the lambda within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A type variable in a type application term that is not bound in scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the type application within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined type variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UnexpectedTermVariantError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected term variant was encountered"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expectedVariant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expected term variant"}}}],
+                        "body": {"variable": "hydra.variants.TermVariant"}}}},
+                  {
+                    "name": "actualTerm",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The actual term that was encountered"}}}],
+                        "body": {"variable": "hydra.core.Term"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UnexpectedTypeVariantError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An unexpected type variant was encountered"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expectedVariant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type variant"}}}],
+                        "body": {"variable": "hydra.variants.TypeVariant"}}}},
+                  {
+                    "name": "actualType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type that was encountered"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UnknownPrimitiveNameError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A primitive function reference to a name not in the known primitive registry"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the primitive reference within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The unknown primitive name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UnnecessaryIdentityApplicationError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "An application of an identity lambda to an argument, which simplifies to the argument (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the identity application within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UntypedTermVariableError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {"key": "description", "value": {"literal": {"string": "A term variable whose type is not known in the current scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the untyped variable within the term"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.VoidInNonBottomPositionError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to the void type in a non-bottom position"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
           "variables": []}}}],
   "description": "Error types for core type and term validation",
   "namespace": "hydra.error.core",

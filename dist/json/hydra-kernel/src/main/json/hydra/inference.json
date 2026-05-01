@@ -10579,47 +10579,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.inference.inferTypeOfTypeLambda",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a type abstraction (Either version)"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "application": {
-                            "argument": {"literal": {"string": "type abstraction"}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "cx"},
-                                    "function": {"application": {"argument": {"variable": "fcx"}, "function": {"variable": "hydra.inference.inferTypeOfTerm"}}}}}}}}},
-                        "domain": {"variable": "hydra.core.TypeLambda"},
-                        "parameter": "ta"}},
-                    "domain": {"variable": "hydra.graph.Graph"},
-                    "parameter": "cx"}},
-                "domain": {"variable": "hydra.context.Context"},
-                "parameter": "fcx"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.typing.InferenceResult"}}},
-                      "domain": {"variable": "hydra.core.TypeLambda"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.inference.inferTypeOfTypeApplication",
         "term": {
           "annotated": {
@@ -10658,6 +10617,47 @@
                     "function": {
                       "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.typing.InferenceResult"}}},
                       "domain": {"variable": "hydra.core.TypeApplicationTerm"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.inference.inferTypeOfTypeLambda",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a type abstraction (Either version)"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"literal": {"string": "type abstraction"}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "cx"},
+                                    "function": {"application": {"argument": {"variable": "fcx"}, "function": {"variable": "hydra.inference.inferTypeOfTerm"}}}}}}}}},
+                        "domain": {"variable": "hydra.core.TypeLambda"},
+                        "parameter": "ta"}},
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "parameter": "cx"}},
+                "domain": {"variable": "hydra.context.Context"},
+                "parameter": "fcx"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.typing.InferenceResult"}}},
+                      "domain": {"variable": "hydra.core.TypeLambda"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}},

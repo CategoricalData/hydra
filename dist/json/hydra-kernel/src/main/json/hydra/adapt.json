@@ -2,117 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.adapt.adaptFloatType",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Attempt to adapt a floating-point type using the given language constraints"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "supported",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "constraints"},
-                                    "function": {"project": {"field": "floatTypes", "typeName": "hydra.coders.LanguageConstraints"}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "ft"},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.core.FloatType"}}}}}}},
-                            "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
-                        "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "alt",
-                                "term": {"application": {"argument": {"variable": "constraints"}, "function": {"variable": "hydra.adapt.adaptFloatType"}}},
-                                "typeScheme": {
-                                  "body": {
-                                    "function": {"codomain": {"maybe": {"variable": "hydra.core.FloatType"}}, "domain": {"variable": "hydra.core.FloatType"}}},
-                                  "variables": []}}],
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "forUnsupported",
-                                    "term": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "ft"},
-                                            "function": {
-                                              "cases": {
-                                                "cases": [
-                                                  {
-                                                    "name": "bigfloat",
-                                                    "term": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
-                                                            "function": {"variable": "alt"}}},
-                                                        "domain": {"unit": {}},
-                                                        "parameter": "_"}}},
-                                                  {
-                                                    "name": "float32",
-                                                    "term": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
-                                                            "function": {"variable": "alt"}}},
-                                                        "domain": {"unit": {}},
-                                                        "parameter": "_"}}},
-                                                  {
-                                                    "name": "float64",
-                                                    "term": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
-                                                            "function": {"variable": "alt"}}},
-                                                        "domain": {"unit": {}},
-                                                        "parameter": "_"}}}],
-                                                "typeName": "hydra.core.FloatType"}}}},
-                                        "domain": {"variable": "hydra.core.FloatType"},
-                                        "parameter": "ft"}},
-                                    "typeScheme": {
-                                      "body": {
-                                        "function": {"codomain": {"maybe": {"variable": "hydra.core.FloatType"}}, "domain": {"variable": "hydra.core.FloatType"}}},
-                                      "variables": []}}],
-                                "body": {
-                                  "application": {
-                                    "argument": {"application": {"argument": {"variable": "ft"}, "function": {"variable": "forUnsupported"}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"maybe": {"variable": "ft"}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "supported"},
-                                            "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.core.FloatType"}}}}}}}}}}}}}}}},
-                    "domain": {"variable": "hydra.core.FloatType"},
-                    "parameter": "ft"}},
-                "domain": {"variable": "hydra.coders.LanguageConstraints"},
-                "parameter": "constraints"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"maybe": {"variable": "hydra.core.FloatType"}}, "domain": {"variable": "hydra.core.FloatType"}}},
-              "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.adapt.adaptDataGraph",
         "term": {
           "typeLambda": {
@@ -956,6 +845,117 @@
                   "domain": {"literal": {"boolean": {}}}}},
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": ["t0"]}}},
+    {
+      "term": {
+        "name": "hydra.adapt.adaptFloatType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Attempt to adapt a floating-point type using the given language constraints"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "supported",
+                            "term": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "constraints"},
+                                    "function": {"project": {"field": "floatTypes", "typeName": "hydra.coders.LanguageConstraints"}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "ft"},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.core.FloatType"}}}}}}},
+                            "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "alt",
+                                "term": {"application": {"argument": {"variable": "constraints"}, "function": {"variable": "hydra.adapt.adaptFloatType"}}},
+                                "typeScheme": {
+                                  "body": {
+                                    "function": {"codomain": {"maybe": {"variable": "hydra.core.FloatType"}}, "domain": {"variable": "hydra.core.FloatType"}}},
+                                  "variables": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "forUnsupported",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "ft"},
+                                            "function": {
+                                              "cases": {
+                                                "cases": [
+                                                  {
+                                                    "name": "bigfloat",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
+                                                            "function": {"variable": "alt"}}},
+                                                        "domain": {"unit": {}},
+                                                        "parameter": "_"}}},
+                                                  {
+                                                    "name": "float32",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
+                                                            "function": {"variable": "alt"}}},
+                                                        "domain": {"unit": {}},
+                                                        "parameter": "_"}}},
+                                                  {
+                                                    "name": "float64",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
+                                                            "function": {"variable": "alt"}}},
+                                                        "domain": {"unit": {}},
+                                                        "parameter": "_"}}}],
+                                                "typeName": "hydra.core.FloatType"}}}},
+                                        "domain": {"variable": "hydra.core.FloatType"},
+                                        "parameter": "ft"}},
+                                    "typeScheme": {
+                                      "body": {
+                                        "function": {"codomain": {"maybe": {"variable": "hydra.core.FloatType"}}, "domain": {"variable": "hydra.core.FloatType"}}},
+                                      "variables": []}}],
+                                "body": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "ft"}, "function": {"variable": "forUnsupported"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"maybe": {"variable": "ft"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "supported"},
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.core.FloatType"}}}}}}}}}}}}}}}},
+                    "domain": {"variable": "hydra.core.FloatType"},
+                    "parameter": "ft"}},
+                "domain": {"variable": "hydra.coders.LanguageConstraints"},
+                "parameter": "constraints"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"maybe": {"variable": "hydra.core.FloatType"}}, "domain": {"variable": "hydra.core.FloatType"}}},
+              "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.adapt.adaptGraphSchema",
@@ -5389,6 +5389,63 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.adapt.prepareSame",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "typeLambda": {
+                    "body": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Return a value unchanged with identity transform and no messages"}}}],
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "pair": {
+                                        "first": {"variable": "x"},
+                                        "second": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"lambda": {"body": {"variable": "y"}, "domain": {"variable": "t1"}, "parameter": "y"}},
+                                                    "second": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t2"}}}}},
+                                                "type": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}}}},
+                                            "type": {"set": {"variable": "t2"}}}}}},
+                                    "type": {"variable": "t0"}}},
+                                "type": {
+                                  "pair": {
+                                    "first": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}},
+                                    "second": {"set": {"variable": "t2"}}}}}},
+                            "domain": {"variable": "t0"},
+                            "parameter": "x"}}}},
+                    "parameter": "t2"}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "pair": {
+                  "first": {"variable": "t0"},
+                  "second": {
+                    "pair": {
+                      "first": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}},
+                      "second": {"set": {"variable": "t2"}}}}}},
+              "domain": {"variable": "t0"}}},
+          "constraints": [{"key": "t2", "value": {"classes": ["ordering"]}}],
+          "variables": ["t0", "t1", "t2"]}}},
+    {
+      "term": {
         "name": "hydra.adapt.prepareType",
         "term": {
           "typeLambda": {
@@ -5559,63 +5616,6 @@
                   "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}},
-    {
-      "term": {
-        "name": "hydra.adapt.prepareSame",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "typeLambda": {
-                "body": {
-                  "typeLambda": {
-                    "body": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Return a value unchanged with identity transform and no messages"}}}],
-                        "body": {
-                          "lambda": {
-                            "body": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "pair": {
-                                        "first": {"variable": "x"},
-                                        "second": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "pair": {
-                                                    "first": {"lambda": {"body": {"variable": "y"}, "domain": {"variable": "t1"}, "parameter": "y"}},
-                                                    "second": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t2"}}}}},
-                                                "type": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}}}},
-                                            "type": {"set": {"variable": "t2"}}}}}},
-                                    "type": {"variable": "t0"}}},
-                                "type": {
-                                  "pair": {
-                                    "first": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}},
-                                    "second": {"set": {"variable": "t2"}}}}}},
-                            "domain": {"variable": "t0"},
-                            "parameter": "x"}}}},
-                    "parameter": "t2"}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "pair": {
-                  "first": {"variable": "t0"},
-                  "second": {
-                    "pair": {
-                      "first": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}},
-                      "second": {"set": {"variable": "t2"}}}}}},
-              "domain": {"variable": "t0"}}},
-          "constraints": [{"key": "t2", "value": {"classes": ["ordering"]}}],
-          "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
         "name": "hydra.adapt.pushTypeAppsInward",

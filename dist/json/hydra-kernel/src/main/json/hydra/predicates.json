@@ -515,39 +515,47 @@
       "term": {
         "name": "hydra.predicates.isNominalType",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false."}}}],
             "body": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.strip.deannotateType"}}},
-                "function": {
-                  "cases": {
-                    "cases": [
-                      {
-                        "name": "record",
-                        "term": {
-                          "lambda": {"body": {"literal": {"boolean": true}}, "domain": {"list": {"variable": "hydra.core.FieldType"}}, "parameter": "rt"}}},
-                      {
-                        "name": "union",
-                        "term": {
-                          "lambda": {"body": {"literal": {"boolean": true}}, "domain": {"list": {"variable": "hydra.core.FieldType"}}, "parameter": "rt"}}},
-                      {
-                        "name": "wrap",
-                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "wt"}}},
-                      {
-                        "name": "forall",
-                        "term": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {
-                                  "application": {"argument": {"variable": "fa"}, "function": {"project": {"field": "body", "typeName": "hydra.core.ForallType"}}}},
-                                "function": {"variable": "hydra.predicates.isNominalType"}}},
-                            "domain": {"variable": "hydra.core.ForallType"},
-                            "parameter": "fa"}}}],
-                    "default": {"literal": {"boolean": false}},
-                    "typeName": "hydra.core.Type"}}}},
-            "domain": {"variable": "hydra.core.Type"},
-            "parameter": "typ"}},
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.strip.deannotateType"}}},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "record",
+                            "term": {
+                              "lambda": {"body": {"literal": {"boolean": true}}, "domain": {"list": {"variable": "hydra.core.FieldType"}}, "parameter": "rt"}}},
+                          {
+                            "name": "union",
+                            "term": {
+                              "lambda": {"body": {"literal": {"boolean": true}}, "domain": {"list": {"variable": "hydra.core.FieldType"}}, "parameter": "rt"}}},
+                          {
+                            "name": "wrap",
+                            "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "wt"}}},
+                          {
+                            "name": "forall",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {"argument": {"variable": "fa"}, "function": {"project": {"field": "body", "typeName": "hydra.core.ForallType"}}}},
+                                    "function": {"variable": "hydra.predicates.isNominalType"}}},
+                                "domain": {"variable": "hydra.core.ForallType"},
+                                "parameter": "fa"}}}],
+                        "default": {"literal": {"boolean": false}},
+                        "typeName": "hydra.core.Type"}}}},
+                "domain": {"variable": "hydra.core.Type"},
+                "parameter": "typ"}}}},
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}},
