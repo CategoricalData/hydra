@@ -404,10 +404,16 @@ generateRecordAccessor = define "generateRecordAccessor" $
   "accessorName" <~ (dslDefinitionName @@ var "typeName" @@ var "accessorLocalName") $
   -- Body: projection as a simple elimination
   "paramDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
-  "body" <~ (Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
+  "rawBody" <~ (Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
       wrapTermInTTerm (deepApplication
         (deepProjection (var "typeName") (var "fieldName"))
         (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "description" <~ (Strings.cat $ list [
+    string "DSL accessor for the ",
+    Core.unName (var "fieldName"),
+    string " field of ",
+    Core.unName (var "typeName")]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
   "ts" <~ (dslTypeScheme @@ var "origType"
     @@ list [nominalResultType @@ var "typeName" @@ var "origType"]
     @@ Core.fieldTypeType (var "ft")) $
@@ -448,11 +454,15 @@ generateRecordConstructor = define "generateRecordConstructor" $
       (wrapInTTerm (Core.fieldTypeType (var "ft"))))
     (var "fieldTypes")) $
   -- Wrap in typed lambdas for each parameter (right to left)
-  "body" <~ (Lists.foldl
+  "rawBody" <~ (Lists.foldl
     ("acc" ~> "pp" ~>
       Core.termLambda $ Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
     (var "recordTerm")
     (Lists.reverse (var "paramPairs"))) $
+  "description" <~ (Strings.cat $ list [
+    string "DSL constructor for ",
+    Core.unName (var "typeName")]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
   -- Type: TTerm<FieldType1> -> TTerm<FieldType2> -> ... -> TTerm<RecordType>
   "paramTypes" <~ (Lists.map ("ft" ~> Core.fieldTypeType (var "ft")) (var "fieldTypes")) $
   "resultType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
@@ -496,10 +506,16 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
     (var "allFields")) $
   "recDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
   "fieldDomain" <~ (wrapInTTerm (Core.fieldTypeType (var "targetField"))) $
-  "body" <~ (
+  "rawBody" <~ (
     Core.termLambda $ Core.lambda (Core.name (string "original")) (just (var "recDomain")) $
     Core.termLambda $ Core.lambda (Core.name (string "newVal")) (just (var "fieldDomain")) $
     wrapTermInTTerm (deepRecord (var "typeName") (var "dFields"))) $
+  "description" <~ (Strings.cat $ list [
+    string "DSL updater for the ",
+    Core.unName (var "targetFieldName"),
+    string " field of ",
+    Core.unName (var "typeName")]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
   "recType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   "ts" <~ (dslTypeScheme @@ var "origType"
     @@ list [var "recType", Core.fieldTypeType (var "targetField")]
@@ -544,9 +560,15 @@ generateUnionInjector = define "generateUnionInjector" $
   "injectionTerm" <~ (wrapTermInTTerm (deepInjection (var "typeName") (deepField (var "fieldName") (var "dFieldValue")))) $
   -- For non-unit variants, wrap in a typed lambda; for unit, it's a constant TTerm
   "variantDomain" <~ (wrapInTTerm (Core.fieldTypeType (var "ft"))) $
-  "body" <~ (Logic.ifElse (var "isUnit")
+  "rawBody" <~ (Logic.ifElse (var "isUnit")
     (var "injectionTerm")
     (Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "variantDomain")) (var "injectionTerm"))) $
+  "description" <~ (Strings.cat $ list [
+    string "DSL injection for the ",
+    Core.unName (var "fieldName"),
+    string " variant of ",
+    Core.unName (var "typeName")]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
   "unionType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   "ts" <~ (Logic.ifElse (var "isUnit")
     (dslTypeScheme @@ var "origType" @@ list ([] :: [TTerm Type]) @@ var "unionType")
@@ -576,17 +598,26 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   "wrapperType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   -- Wrap: \(x :: TTerm<InnerType>) -> WrappedTerm typeName x
   "wrapDomain" <~ (wrapInTTerm (var "innerType")) $
-  "wrapBody" <~ (
+  "rawWrapBody" <~ (
     Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "wrapDomain")) $
         wrapTermInTTerm (deepWrap (var "typeName")
           (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "wrapDescription" <~ (Strings.cat $ list [
+    string "DSL constructor for the ",
+    Core.unName (var "typeName"),
+    string " wrapper"]) $
+  "wrapBody" <~ (Annotations.setTermDescription @@ (just (var "wrapDescription")) @@ var "rawWrapBody") $
   -- Unwrap: \(x :: TTerm<WrapperType>) -> TTerm(apply (unwrap typeName) (unTTerm x))
   "unwrapDomain" <~ (wrapInTTerm (var "wrapperType")) $
-  "unwrapBody" <~ (
+  "rawUnwrapBody" <~ (
     Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "unwrapDomain")) $
         wrapTermInTTerm (deepApplication
           (deepUnwrap (var "typeName"))
           (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "unwrapDescription" <~ (Strings.cat $ list [
+    string "DSL accessor for the body of ",
+    Core.unName (var "typeName")]) $
+  "unwrapBody" <~ (Annotations.setTermDescription @@ (just (var "unwrapDescription")) @@ var "rawUnwrapBody") $
   "wrapTs" <~ (dslTypeScheme @@ var "origType" @@ list [var "innerType"] @@ var "wrapperType") $
   "unwrapTs" <~ (dslTypeScheme @@ var "origType" @@ list [var "wrapperType"] @@ var "innerType") $
   list [
