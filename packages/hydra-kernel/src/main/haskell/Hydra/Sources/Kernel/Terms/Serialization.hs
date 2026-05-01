@@ -142,10 +142,12 @@ define = definitionInModule module_
 
 angleBraces :: TTermDefinition Brackets
 angleBraces = define "angleBraces" $
+  doc "Angle bracket pair `<` `>` for use with `brackets`" $
   Ast.brackets (Ast.symbol (string "<")) (Ast.symbol (string ">"))
 
 angleBracesList :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 angleBracesList = define "angleBracesList" $
+  doc "Comma-separate the elements inside angle brackets in the given block style; renders as `<>` when empty" $
   "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "<>")
@@ -169,6 +171,7 @@ bracketListAdaptive = define "bracketListAdaptive" $
 
 bracketList :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 bracketList = define "bracketList" $
+  doc "Comma-separate the elements inside square brackets in the given block style; renders as `[]` when empty" $
   "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "[]")
@@ -176,6 +179,7 @@ bracketList = define "bracketList" $
 
 brackets :: TTermDefinition (Brackets -> BlockStyle -> Expr -> Expr)
 brackets = define "brackets" $
+  doc "Wrap an expression in the given bracket pair using the given block style" $
   "br" ~> "style" ~> "e" ~>
     Ast.exprBrackets $ Ast.bracketExpr (var "br") (var "e") (var "style")
 
@@ -193,6 +197,7 @@ chooseLayout = define "chooseLayout" $
 
 commaSep :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 commaSep = define "commaSep" $
+  doc "Separate elements with a comma, using the given block style" $
   symbolSep @@ string ","
 
 commaSepAdaptive :: TTermDefinition ([Expr] -> Expr)
@@ -205,19 +210,23 @@ commaSepAdaptive = define "commaSepAdaptive" $
 
 cst :: TTermDefinition (String -> Expr)
 cst = define "cst" $
+  doc "Construct a constant expression from a literal string" $
   "s" ~> Ast.exprConst $ sym @@ var "s"
 
 curlyBlock :: TTermDefinition (BlockStyle -> Expr -> Expr)
 curlyBlock = define "curlyBlock" $
+  doc "Wrap a single expression in curly braces using the given block style" $
   "style" ~> "e" ~>
     curlyBracesList @@ nothing @@ var "style" @@ (list [var "e"])
 
 curlyBraces :: TTermDefinition Brackets
 curlyBraces = define "curlyBraces" $
+  doc "Curly brace pair `{` `}` for use with `brackets`" $
   Ast.brackets (Ast.symbol (string "{")) (Ast.symbol (string "}"))
 
 curlyBracesList :: TTermDefinition (Maybe String -> BlockStyle -> [Expr] -> Expr)
 curlyBracesList = define "curlyBracesList" $
+  doc "Separate the elements inside curly braces using the given symbol (default `,`) in the given block style; renders as `{}` when empty" $
   "msymb" ~> "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "{}")
@@ -226,6 +235,7 @@ curlyBracesList = define "curlyBracesList" $
 
 customIndentBlock :: TTermDefinition (String -> [Expr] -> Expr)
 customIndentBlock = define "customIndentBlock" $
+  doc "Render a list of expressions as a block whose first element starts where the surrounding context placed it and subsequent elements break onto fresh lines indented by the given prefix" $
   "idt" ~> "els" ~>
     "idtOp" <~ (Ast.op
       (sym @@ string "")
@@ -251,6 +261,7 @@ customIndent = define "customIndent" $
 
 dotSep :: TTermDefinition ([Expr] -> Expr)
 dotSep = define "dotSep" $
+  doc "Separate elements with a dot and no surrounding whitespace" $
   sep @@ (Ast.op
     (sym @@ string ".")
     (Ast.padding Ast.wsNone Ast.wsNone)
@@ -259,6 +270,7 @@ dotSep = define "dotSep" $
 
 doubleNewlineSep :: TTermDefinition ([Expr] -> Expr)
 doubleNewlineSep = define "doubleNewlineSep" $
+  doc "Separate elements with a blank line between them" $
   sep @@ (Ast.op
     (sym @@ string "")
     (Ast.padding Ast.wsBreak Ast.wsBreak)
@@ -267,6 +279,7 @@ doubleNewlineSep = define "doubleNewlineSep" $
 
 doubleSpace :: TTermDefinition String
 doubleSpace = define "doubleSpace" $
+  doc "The two-space string used as the canonical indent unit" $
   string "  "
 
 expressionLength :: TTermDefinition (Expr -> Int)
@@ -327,37 +340,45 @@ expressionLength = define "expressionLength" $
 
 fullBlockStyle :: TTermDefinition BlockStyle
 fullBlockStyle = define "fullBlockStyle" $
+  doc "Block style with double-space indent and newlines both before and after the bracketed content" $
   Ast.blockStyle (just doubleSpace) true true
 
 halfBlockStyle :: TTermDefinition BlockStyle
 halfBlockStyle = define "halfBlockStyle" $
+  doc "Block style with double-space indent, a newline before the content but not after" $
   Ast.blockStyle (just doubleSpace) true false
 
 ifx :: TTermDefinition (Op -> Expr -> Expr -> Expr)
 ifx = define "ifx" $
+  doc "Build an infix expression with the given operator and two operands" $
   "op" ~> "lhs" ~> "rhs" ~>
     Ast.exprOp $ Ast.opExpr (var "op") (var "lhs") (var "rhs")
 
 indentBlock :: TTermDefinition ([Expr] -> Expr)
 indentBlock = define "indentBlock" $
+  doc "Like `customIndentBlock`, but using `doubleSpace` as the indent prefix" $
   customIndentBlock @@ doubleSpace
 
 indent :: TTermDefinition (String -> String)
 indent = define "indent" $
+  doc "Indent every non-empty line of a string by `doubleSpace`" $
   customIndent @@ doubleSpace
 
 indentSubsequentLines :: TTermDefinition (String -> Expr -> Expr)
 indentSubsequentLines = define "indentSubsequentLines" $
+  doc "Indent every line of an expression except the first by the given prefix" $
   "idt" ~> "e" ~>
     Ast.exprIndent $ Ast.indentedExpression (Ast.indentStyleSubsequentLines $ var "idt") (var "e")
 
 infixWs :: TTermDefinition (String -> Expr -> Expr -> Expr)
 infixWs = define "infixWs" $
+  doc "Space-separate three elements: left operand, operator string, right operand" $
   "op" ~> "l" ~> "r" ~>
     spaceSep @@ list [var "l", cst @@ var "op", var "r"]
 
 infixWsList :: TTermDefinition (String -> [Expr] -> Expr)
 infixWsList = define "infixWsList" $
+  doc "Space-separate operands interleaved with the given operator string" $
   "op" ~> "opers" ~>
   "opExpr" <~ cst @@ var "op" $
   "foldFun" <~ ("e" ~> "r" ~>
@@ -368,6 +389,7 @@ infixWsList = define "infixWsList" $
 
 inlineStyle :: TTermDefinition BlockStyle
 inlineStyle = define "inlineStyle" $
+  doc "Block style with no indent and no surrounding newlines: contents stay on a single line" $
   Ast.blockStyle nothing false false
 
 maxLineWidth :: TTermDefinition Int
@@ -380,6 +402,7 @@ maxLineWidth = define "maxLineWidth" $
 
 newlineSep :: TTermDefinition ([Expr] -> Expr)
 newlineSep = define "newlineSep" $
+  doc "Separate elements by a newline (no leading whitespace)" $
   sep @@ (Ast.op
     (sym @@ string "")
     (Ast.padding Ast.wsNone Ast.wsBreak)
@@ -388,10 +411,12 @@ newlineSep = define "newlineSep" $
 
 noPadding :: TTermDefinition Padding
 noPadding = define "noPadding" $
+  doc "Operator padding with no whitespace on either side" $
   Ast.padding Ast.wsNone Ast.wsNone
 
 noSep :: TTermDefinition ([Expr] -> Expr)
 noSep = define "noSep" $
+  doc "Concatenate elements with no separator and no whitespace" $
   sep @@ (Ast.op
     (sym @@ string "")
     (Ast.padding Ast.wsNone Ast.wsNone)
@@ -400,10 +425,12 @@ noSep = define "noSep" $
 
 num :: TTermDefinition (Int -> Expr)
 num = define "num" $
+  doc "Construct a constant expression from an int32" $
   "i" ~> cst @@ (Literals.showInt32 $ var "i")
 
 op :: TTermDefinition (String -> Int -> Associativity -> Op)
 op = define "op" $
+  doc "Build an op with single-space padding from a symbol, precedence, and associativity" $
   "s" ~> "p" ~> "assoc" ~>
     Ast.op
       (sym @@ var "s")
@@ -413,6 +440,7 @@ op = define "op" $
 
 orOp :: TTermDefinition (Bool -> Op)
 orOp = define "orOp" $
+  doc "Build the `|` alternative-separator operator. The flag selects whether the right side breaks onto a new line." $
   "newlines" ~> Ast.op
     (sym @@ string "|")
     (Ast.padding Ast.wsSpace (Logic.ifElse (var "newlines") Ast.wsBreak Ast.wsSpace))
@@ -421,6 +449,7 @@ orOp = define "orOp" $
 
 orSep :: TTermDefinition (BlockStyle -> [Expr] -> Expr)
 orSep = define "orSep" $
+  doc "Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content" $
   "style" ~> "l" ~>
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
     Maybes.maybe (cst @@ string "")
@@ -429,6 +458,7 @@ orSep = define "orSep" $
 
 parenList :: TTermDefinition (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
+  doc "Comma-separate the elements inside parentheses; switches to a half-block style when newlines are requested and there is more than one element. Renders as `()` when empty." $
   "newlines" ~> "els" ~>
     "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
       (halfBlockStyle)
@@ -447,14 +477,17 @@ parenListAdaptive = define "parenListAdaptive" $
 
 parens :: TTermDefinition (Expr -> Expr)
 parens = define "parens" $
+  doc "Wrap an expression in inline parentheses" $
   brackets @@ parentheses @@ inlineStyle
 
 parentheses :: TTermDefinition Brackets
 parentheses = define "parentheses" $
+  doc "Round parenthesis pair `(` `)` for use with `brackets`" $
   Ast.brackets (Ast.symbol (string "(")) (Ast.symbol (string ")"))
 
 parenthesize :: TTermDefinition (Expr -> Expr)
 parenthesize = define "parenthesize" $
+  doc "Recursively insert parentheses around subexpressions where required by operator precedence and associativity. The traversal descends into bracket, indent, sequence, and operator expressions and parenthesizes left or right operands whose binding is weaker than the surrounding operator." $
   "exp" ~>
     "assocLeft" <~ ("a" ~> cases _Associativity (var "a")
       (Just true) [
@@ -516,6 +549,7 @@ parenthesize = define "parenthesize" $
 
 prefix :: TTermDefinition (String -> Expr -> Expr)
 prefix = define "prefix" $
+  doc "Prepend a prefix string to an expression with no surrounding whitespace" $
   "p" ~> "expr" ~>
   "preOp" <~ Ast.op
     (sym @@ var "p")
@@ -526,6 +560,7 @@ prefix = define "prefix" $
 
 printExpr :: TTermDefinition (Expr -> String)
 printExpr = define "printExpr" $
+  doc "Render an expression to a string, expanding bracket pairs, block styles, indents, and operator chains" $
   "e" ~>
   "pad" <~ ("ws" ~> cases _Ws (var "ws") Nothing [
     _Ws_none>>: constant $ string "",
@@ -673,10 +708,12 @@ printExpr = define "printExpr" $
 
 semicolonSep :: TTermDefinition ([Expr] -> Expr)
 semicolonSep = define "semicolonSep" $
+  doc "Separate elements with `;` inline" $
   symbolSep @@ string ";" @@ inlineStyle
 
 sep :: TTermDefinition (Op -> [Expr] -> Expr)
 sep = define "sep" $
+  doc "Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list." $
   "op" ~> "els" ~>
     Maybes.maybe (cst @@ string "")
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
@@ -684,6 +721,7 @@ sep = define "sep" $
 
 spaceSep :: TTermDefinition ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
+  doc "Space-separate elements (no break between them)" $
   sep @@ (Ast.op
     (sym @@ string "")
     (Ast.padding Ast.wsSpace Ast.wsNone)
@@ -719,6 +757,7 @@ structuralSpaceSep = define "structuralSpaceSep" $
 
 squareBrackets :: TTermDefinition Brackets
 squareBrackets = define "squareBrackets" $
+  doc "Square bracket pair `[` `]` for use with `brackets`" $
   Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
 
 suffix :: TTermDefinition (String -> Expr -> Expr)
@@ -734,10 +773,12 @@ suffix = define "suffix" $
 
 sym :: TTermDefinition (String -> Symbol)
 sym = define "sym" $
+  doc "Construct a Symbol from a string" $
   "s" ~> Ast.symbol (var "s")
 
 symbolSep :: TTermDefinition (String -> BlockStyle -> [Expr] -> Expr)
 symbolSep = define "symbolSep" $
+  doc "Separate elements with the given symbol; trailing whitespace per element is determined by the block style's newline-before/after flags (space, single break, or double break)" $
   "symb" ~> "style" ~> "l" ~>
     "breakCount" <~ (Lists.length $ Lists.filter identity $ list [
       Ast.blockStyleNewlineBeforeContent $ var "style",
@@ -758,31 +799,38 @@ symbolSep = define "symbolSep" $
 
 tabIndent :: TTermDefinition (Expr -> Expr)
 tabIndent = define "tabIndent" $
+  doc "Indent every line of an expression by four spaces" $
   "e" ~> Ast.exprIndent $ Ast.indentedExpression
     (Ast.indentStyleAllLines $ string "    ")
     (var "e")
 
 tabIndentDoubleSpace :: TTermDefinition ([Expr] -> Expr)
 tabIndentDoubleSpace = define "tabIndentDoubleSpace" $
+  doc "Tab-indent a list of expressions, separated by blank lines" $
   "exprs" ~> tabIndent @@ (doubleNewlineSep @@ var "exprs")
 
 tabIndentSingleSpace :: TTermDefinition ([Expr] -> Expr)
 tabIndentSingleSpace = define "tabIndentSingleSpace" $
+  doc "Tab-indent a list of expressions, separated by single newlines" $
   "exprs" ~> tabIndent @@ (newlineSep @@ var "exprs")
 
 unsupportedType :: TTermDefinition (String -> Expr)
 unsupportedType = define "unsupportedType" $
+  doc "Render a placeholder for a type the writer does not yet handle, e.g. `[bigint]`" $
   "label" ~> cst @@ (string "[" ++ var "label" ++ string "]")
 
 unsupportedVariant :: TTermDefinition (String -> a -> Expr)
 unsupportedVariant = define "unsupportedVariant" $
+  doc "Render a placeholder for an unsupported variant, including a string representation of the offending value" $
   "label" ~> "obj" ~>
     cst @@ (string "[unsupported " ++ var "label" ++ string ": " ++ (Literals.showString $ var "obj") ++ string "]")
 
 withComma :: TTermDefinition (Expr -> Expr)
 withComma = define "withComma" $
+  doc "Append a trailing comma to an expression" $
   "e" ~> noSep @@ list [var "e", cst @@ string ","]
 
 withSemi :: TTermDefinition (Expr -> Expr)
 withSemi = define "withSemi" $
+  doc "Append a trailing semicolon to an expression" $
   "e" ~> noSep @@ list [var "e", cst @@ string ";"]

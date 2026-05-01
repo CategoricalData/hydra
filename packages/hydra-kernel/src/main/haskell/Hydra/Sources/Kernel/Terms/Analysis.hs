@@ -109,8 +109,8 @@ module_ = Module {
       toDefinition gatherApplications,
       toDefinition gatherArgs,
       toDefinition gatherArgsWithTypeApps,
-      toDefinition isSimpleAssignment,
       toDefinition isSelfTailRecursive,
+      toDefinition isSimpleAssignment,
       toDefinition isTailRecursiveInTailPosition,
       toDefinition moduleContainsBinaryLiterals,
       toDefinition moduleContainsDecimalLiterals,
@@ -168,6 +168,7 @@ analyzeFunctionTermWithFinish :: TTermDefinition (
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Either Error (FunctionStructure env))
 analyzeFunctionTermWithFinish = define "analyzeFunctionTermWithFinish" $
+  doc "Final step of the function-term walk: type-apply the body and assemble the FunctionStructure" $
   "cx" ~> "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
   "bodyWithTapps" <~ Lists.foldl
     ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
@@ -193,6 +194,7 @@ analyzeFunctionTermWithGather :: TTermDefinition (
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Either Error (FunctionStructure env))
 analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
+  doc "Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
   cases _Term (Strip.deannotateTerm @@ var "t")

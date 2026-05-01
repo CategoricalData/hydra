@@ -152,13 +152,13 @@ module_ = Module {
       toDefinition typeOfProjection,
       toDefinition typeOfRecord,
       toDefinition typeOfSet,
+      toDefinition typeOfTerm,
       toDefinition typeOfTypeApplication,
       toDefinition typeOfTypeLambda,
       toDefinition typeOfUnit,
       toDefinition typeOfUnwrap,
       toDefinition typeOfVariable,
       toDefinition typeOfWrappedTerm,
-      toDefinition typeOfTerm,
       toDefinition typesAllEffectivelyEqual,
       toDefinition typesEffectivelyEqual]
 
@@ -175,6 +175,7 @@ formatError = "e" ~> ShowError.error_ @@ var "e"
 
 allEqual :: TTermDefinition ([a] -> Bool)
 allEqual = define "allEqual" $
+  doc "True if every element of the list is equal to every other element (vacuously true for the empty list)" $
   "els" ~>
   Maybes.maybe
     true
@@ -285,6 +286,7 @@ checkSameType = define "checkSameType" $
     (var "unequalErr")
 
 -- TODO: unused
+-- TODO: unused
 checkType :: TTermDefinition (Context -> Graph -> Term -> Type -> Prelude.Either Error ())
 checkType = define "checkType" $
   doc "Check that a term has the expected type" $
@@ -329,21 +331,14 @@ checkTypeVariables = define "checkTypeVariables" $
   unit
 
 -- Note: with Graph, this converts TypeSchemes back to System F types
-toFContext :: TTermDefinition (Graph -> M.Map Name Type)
-toFContext = define "toFContext" $
-  doc "Get the bound types from a graph as a type environment" $
-  "cx" ~> Maps.map (Scoping.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
-
-typeListsEffectivelyEqual :: TTermDefinition (Graph -> [Type] -> [Type] -> Bool)
-typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
-  doc "Check whether two lists of types are effectively equal, disregarding type aliases" $
-  "tx" ~> "tlist1" ~> "tlist2" ~>
-  Logic.ifElse (Equality.equal (Lists.length (var "tlist1")) (Lists.length (var "tlist2")))
-    (Lists.foldl (binaryFunction Logic.and) true $
-      Lists.zipWith (typesEffectivelyEqual @@ var "tx") (var "tlist1") (var "tlist2"))
-    false
-
--- Old typeOf* variant functions removed; typeOf now uses Either-based typeOfE
+-- | Check if a type contains any type variable that's in scope (from graphTypeVariables)
+containsInScopeTypeVars :: TTermDefinition (Graph -> Type -> Bool)
+containsInScopeTypeVars = define "containsInScopeTypeVars" $
+  doc "Check if a type contains any type variable from the current scope" $
+  "tx" ~> "t" ~>
+  "vars" <~ Graph.graphTypeVariables (var "tx") $
+  "freeVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
+  Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
 
 normalizeTypeFreeVars :: TTermDefinition (Type -> Type)
 normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
@@ -359,51 +354,22 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
   "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ Maps.empty @@ var "typ" $
   Variables.substituteTypeVariables @@ var "subst" @@ var "typ"
 
-typesAllEffectivelyEqual :: TTermDefinition (Graph -> [Type] -> Bool)
-typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
-  doc ("Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming."
-    <> " Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.") $
-  "tx" ~> "tlist" ~>
-  "types" <~ (Graph.graphSchemaTypes $ var "tx") $
-  "containsFreeVar" <~ ("t" ~>
-    "allVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
-    "schemaNames" <~ Sets.fromList (Maps.keys $ var "types") $
-    Logic.not $ Sets.null $ Sets.difference (var "allVars") (var "schemaNames")) $
-  "anyContainsFreeVar" <~ Lists.foldl ("acc" ~> "t" ~> Logic.or (var "acc") (var "containsFreeVar" @@ var "t")) false (var "tlist") $
-  Logic.ifElse (var "anyContainsFreeVar")
-    true
-    (Logic.ifElse (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ var "t") (var "tlist")))
-      true
-      (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ (Strip.deannotateTypeRecursive @@ (Dependencies.replaceTypedefs @@ var "types" @@ var "t"))) (var "tlist"))))
+-- Note: with Graph, this converts TypeSchemes back to System F types
+toFContext :: TTermDefinition (Graph -> M.Map Name Type)
+toFContext = define "toFContext" $
+  doc "Get the bound types from a graph as a type environment" $
+  "cx" ~> Maps.map (Scoping.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
 
--- | Check if a type contains any type variable that's in scope (from graphTypeVariables)
-containsInScopeTypeVars :: TTermDefinition (Graph -> Type -> Bool)
-containsInScopeTypeVars = define "containsInScopeTypeVars" $
-  doc "Check if a type contains any type variable from the current scope" $
-  "tx" ~> "t" ~>
-  "vars" <~ Graph.graphTypeVariables (var "tx") $
-  "freeVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
-  Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
+typeListsEffectivelyEqual :: TTermDefinition (Graph -> [Type] -> [Type] -> Bool)
+typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
+  doc "Check whether two lists of types are effectively equal, disregarding type aliases" $
+  "tx" ~> "tlist1" ~> "tlist2" ~>
+  Logic.ifElse (Equality.equal (Lists.length (var "tlist1")) (Lists.length (var "tlist2")))
+    (Lists.foldl (binaryFunction Logic.and) true $
+      Lists.zipWith (typesEffectivelyEqual @@ var "tx") (var "tlist1") (var "tlist2"))
+    false
 
-typesEffectivelyEqual :: TTermDefinition (Graph -> Type -> Type -> Bool)
-typesEffectivelyEqual = define "typesEffectivelyEqual" $
-  doc "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards" $
-  "tx" ~> "t1" ~> "t2" ~>
-  -- If either type contains in-scope type variables, treat them as matching
-  -- This handles the case where fresh type variables from instantiation haven't been substituted
-  Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t1") $
-  Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t2") $
-  typesAllEffectivelyEqual @@ var "tx" @@ list [
-    Resolution.fullyStripAndNormalizeType @@ var "t1",
-    Resolution.fullyStripAndNormalizeType @@ var "t2"]
-
--- ============================================================================
--- Either/Context-threading versions of typeOf* functions
--- ============================================================================
--- These functions thread a Context through to support pure fresh-name generation.
--- The return type is (Type, Context) to propagate
--- the updated counter.
-
+-- Old typeOf* variant functions removed; typeOf now uses Either-based typeOfE
 typeOf :: TTermDefinition (Context -> Graph -> [Type] -> Term -> Prelude.Either Error (Type, Context))
 typeOf = define "typeOf" $
   doc "Given a type context, reconstruct the type of a System F term" $
@@ -922,3 +888,41 @@ typeOfWrappedTerm = define "typeOfWrappedTerm" $
   "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "body" $
   "cx2" <~ Pairs.second (var "result") $
   right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
+
+typesAllEffectivelyEqual :: TTermDefinition (Graph -> [Type] -> Bool)
+typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
+  doc ("Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming."
+    <> " Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.") $
+  "tx" ~> "tlist" ~>
+  "types" <~ (Graph.graphSchemaTypes $ var "tx") $
+  "containsFreeVar" <~ ("t" ~>
+    "allVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
+    "schemaNames" <~ Sets.fromList (Maps.keys $ var "types") $
+    Logic.not $ Sets.null $ Sets.difference (var "allVars") (var "schemaNames")) $
+  "anyContainsFreeVar" <~ Lists.foldl ("acc" ~> "t" ~> Logic.or (var "acc") (var "containsFreeVar" @@ var "t")) false (var "tlist") $
+  Logic.ifElse (var "anyContainsFreeVar")
+    true
+    (Logic.ifElse (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ var "t") (var "tlist")))
+      true
+      (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ (Strip.deannotateTypeRecursive @@ (Dependencies.replaceTypedefs @@ var "types" @@ var "t"))) (var "tlist"))))
+
+-- | Check if a type contains any type variable that's in scope (from graphTypeVariables)
+
+typesEffectivelyEqual :: TTermDefinition (Graph -> Type -> Type -> Bool)
+typesEffectivelyEqual = define "typesEffectivelyEqual" $
+  doc "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards" $
+  "tx" ~> "t1" ~> "t2" ~>
+  -- If either type contains in-scope type variables, treat them as matching
+  -- This handles the case where fresh type variables from instantiation haven't been substituted
+  Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t1") $
+  Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t2") $
+  typesAllEffectivelyEqual @@ var "tx" @@ list [
+    Resolution.fullyStripAndNormalizeType @@ var "t1",
+    Resolution.fullyStripAndNormalizeType @@ var "t2"]
+
+-- ============================================================================
+-- Either/Context-threading versions of typeOf* functions
+-- ============================================================================
+-- These functions thread a Context through to support pure fresh-name generation.
+-- The return type is (Type, Context) to propagate
+-- the updated counter.

@@ -1,6 +1,6 @@
--- | Java code generation for the GenPG demo.
+-- | Python code generation for the GenPG demo.
 --
--- This module provides functions to generate all Java modules needed for
+-- This module provides functions to generate all Python modules needed for
 -- the GenPG demo, including:
 --   - hydra.pg.model, hydra.pg.mapping
 --   - hydra.pg.graphson.* (coder, construct, syntax, utils)
@@ -10,32 +10,32 @@
 --   - hydra.demos.genpg.health (health database/graph schemas and mapping)
 --
 -- Usage from GHCI:
---   > import Hydra.Demos.GenPG.GenerateJava
---   > generateJavaModules
+--   > import Hydra.Demos.Genpg.GeneratePython
+--   > generatePythonModules
 
-module Hydra.Demos.GenPG.GenerateJava where
+module Hydra.Demos.Genpg.GeneratePython where
 
 import Hydra.ExtGeneration
 import Hydra.Sources.All (kernelModules)
 import Hydra.Sources.Ext (hydraExtModules, genpgModules)
-import Hydra.Demos.GenPG.Modules (salesModule, healthModule)
+import Hydra.Demos.Genpg.Modules (salesModule, healthModule)
 import System.Directory (createDirectoryIfMissing)
 import System.IO (hFlush, stdout)
 
 
--- | Generate all Java modules for the GenPG demo.
+-- | Generate all Python modules for the GenPG demo.
 --
--- This generates to demos/src/main/java:
+-- This generates to demos/src/main/python:
 --   - hydra.pg.* modules
 --   - hydra.demos.genpg.transform
 --   - hydra.demos.genpg.sales
 --   - hydra.demos.genpg.health
-generateJavaModules :: IO ()
-generateJavaModules = do
-  let outputDir = "../../demos/src/main/java"
+generatePythonModules :: IO ()
+generatePythonModules = do
+  let outputDir = "../../demos/src/main/python"
   createDirectoryIfMissing True outputDir
 
-  putStrLn "=== Generate Java GenPG Modules ==="
+  putStrLn "=== Generate Python GenPG Modules ==="
   putStrLn ""
   putStrLn $ "Output directory: " ++ outputDir
   putStrLn ""
@@ -54,7 +54,7 @@ generateJavaModules = do
   -- We generate genpgModules plus the sales and health modules
   let universeModules = kernelModules ++ hydraExtModules ++ [salesModule, healthModule]
   let modulesToGenerate = genpgModules ++ [salesModule, healthModule]
-  writeJava outputDir universeModules modulesToGenerate
+  writePython outputDir universeModules modulesToGenerate
 
   putStrLn ""
   putStrLn "=== Done! ==="

@@ -126,8 +126,8 @@ avroLanguage = define "avroLanguage" $
       (Just true) [
       _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.avro")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.avro")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

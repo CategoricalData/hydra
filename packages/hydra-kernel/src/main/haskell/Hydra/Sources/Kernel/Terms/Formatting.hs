@@ -78,8 +78,8 @@ module_ = Module {
       toDefinition indentLines,
       toDefinition javaStyleComment,
       toDefinition mapFirstLetter,
-      toDefinition normalizeComment,
       toDefinition nonAlnumToUnderscores,
+      toDefinition normalizeComment,
       toDefinition sanitizeWithUnderscores,
       toDefinition showList,
       toDefinition stripLeadingAndTrailingWhitespace,
@@ -124,11 +124,6 @@ convertCase = define "convertCase" $
   where
     emptyParts = list [list ([] :: [TTerm Char])]
 
-convertCaseCamelToLowerSnake :: TTermDefinition (String -> String)
-convertCaseCamelToLowerSnake = define "convertCaseCamelToLowerSnake" $
-  doc "Convert a string from camel case to lower snake case" $
-  convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake
-
 convertCaseCamelOrUnderscoreToLowerSnake :: TTermDefinition (String -> String)
 convertCaseCamelOrUnderscoreToLowerSnake = define "convertCaseCamelOrUnderscoreToLowerSnake" $
   doc "Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case." $
@@ -136,6 +131,11 @@ convertCaseCamelOrUnderscoreToLowerSnake = define "convertCaseCamelOrUnderscoreT
     "parts" <~ Strings.splitOn (string "_") (var "s") $
     "snakeParts" <~ Lists.map (lambda "p" $ convertCaseCamelToLowerSnake @@ var "p") (var "parts") $
     Strings.intercalate (string "_") (var "snakeParts")
+
+convertCaseCamelToLowerSnake :: TTermDefinition (String -> String)
+convertCaseCamelToLowerSnake = define "convertCaseCamelToLowerSnake" $
+  doc "Convert a string from camel case to lower snake case" $
+  convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake
 
 convertCaseCamelToUpperSnake :: TTermDefinition (String -> String)
 convertCaseCamelToUpperSnake = define "convertCaseCamelToUpperSnake" $
@@ -173,6 +173,7 @@ javaStyleComment = define "javaStyleComment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
+-- TODO: simplify this helper
 mapFirstLetter :: TTermDefinition ((String -> String) -> String -> String)
 mapFirstLetter = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
@@ -186,6 +187,26 @@ mapFirstLetter = define "mapFirstLetter" $
          "firstLetter" <~ (var "mapping" @@ Strings.fromList (Lists.pure (Pairs.first $ var "uc"))) $
          Strings.cat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
          (Lists.uncons $ var "list"))
+
+nonAlnumToUnderscores :: TTermDefinition (String -> String)
+nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
+  doc "Replace sequences of non-alphanumeric characters with single underscores" $
+  "input" ~>
+  "isAlnum" <~ ("c" ~> Logic.or
+    (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
+    (Logic.or
+      (Logic.and (Equality.gte (var "c") (char 'a')) (Equality.lte (var "c") (char 'z')))
+      (Logic.and (Equality.gte (var "c") (char '0')) (Equality.lte (var "c") (char '9'))))) $
+  "replace" <~ ("p" ~> "c" ~>
+    "s" <~ Pairs.first (var "p") $
+    "b" <~ Pairs.second (var "p") $
+    Logic.ifElse (var "isAlnum" @@ var "c")
+      (pair (Lists.cons (var "c") (var "s")) (boolean False))
+      (Logic.ifElse (var "b")
+        (pair (var "s") (boolean True))
+        (pair (Lists.cons (char '_') (var "s")) (boolean True)))) $
+  "result" <~ Lists.foldl (var "replace") (pair (list ([] :: [TTerm Char])) (boolean False)) (Strings.toList $ var "input") $
+  Strings.fromList $ Lists.reverse $ Pairs.first $ var "result"
 
 normalizeComment :: TTermDefinition (String -> String)
 normalizeComment = define "normalizeComment" $
@@ -207,26 +228,6 @@ normalizeComment = define "normalizeComment" $
          (var "stripped")
          (var "appended"))
        (Strings.maybeCharAt (var "lastIdx") (var "stripped")))
-
-nonAlnumToUnderscores :: TTermDefinition (String -> String)
-nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
-  doc "Replace sequences of non-alphanumeric characters with single underscores" $
-  "input" ~>
-  "isAlnum" <~ ("c" ~> Logic.or
-    (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
-    (Logic.or
-      (Logic.and (Equality.gte (var "c") (char 'a')) (Equality.lte (var "c") (char 'z')))
-      (Logic.and (Equality.gte (var "c") (char '0')) (Equality.lte (var "c") (char '9'))))) $
-  "replace" <~ ("p" ~> "c" ~>
-    "s" <~ Pairs.first (var "p") $
-    "b" <~ Pairs.second (var "p") $
-    Logic.ifElse (var "isAlnum" @@ var "c")
-      (pair (Lists.cons (var "c") (var "s")) (boolean False))
-      (Logic.ifElse (var "b")
-        (pair (var "s") (boolean True))
-        (pair (Lists.cons (char '_') (var "s")) (boolean True)))) $
-  "result" <~ Lists.foldl (var "replace") (pair (list ([] :: [TTerm Char])) (boolean False)) (Strings.toList $ var "input") $
-  Strings.fromList $ Lists.reverse $ Pairs.first $ var "result"
 
 sanitizeWithUnderscores :: TTermDefinition (S.Set String -> String -> String)
 sanitizeWithUnderscores = define "sanitizeWithUnderscores" $

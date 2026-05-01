@@ -1,4 +1,4 @@
-module Hydra.Demos.GenPG.Runtime where
+module Hydra.Demos.Genpg.Runtime where
 
 import Hydra.Kernel
 import qualified Hydra.Show.Errors as ShowError

@@ -99,26 +99,26 @@ module_ = Module {
             moduleDescription = Just "Pure code generation pipeline for bootstrapping Hydra across languages."}
   where
     definitions = [
-      toDefinition namespaceToPath,
-      toDefinition transitiveDeps,
-      toDefinition moduleTermDepsTransitive,
-      toDefinition moduleTypeDepsTransitive,
-      toDefinition modulesToGraph,
-      toDefinition generateSourceFiles,
-      toDefinition formatTermBinding,
-      toDefinition formatPrimitive,
-      toDefinition formatTypeBinding,
       toDefinition buildSchemaMap,
-      toDefinition moduleToSourceModule,
+      toDefinition decodeModuleFromJson,
+      toDefinition escapeControlCharsInJson,
+      toDefinition formatPrimitive,
+      toDefinition formatTermBinding,
+      toDefinition formatTypeBinding,
+      toDefinition generateCoderModules,
       toDefinition generateLexicon,
-      toDefinition moduleToJson,
-      toDefinition refreshModule,
+      toDefinition generateSourceFiles,
+      toDefinition inferAndGenerateLexicon,
       toDefinition inferModules,
       toDefinition inferModulesGiven,
-      toDefinition generateCoderModules,
-      toDefinition inferAndGenerateLexicon,
-      toDefinition escapeControlCharsInJson,
-      toDefinition decodeModuleFromJson]
+      toDefinition moduleTermDepsTransitive,
+      toDefinition moduleToJson,
+      toDefinition moduleToSourceModule,
+      toDefinition moduleTypeDepsTransitive,
+      toDefinition modulesToGraph,
+      toDefinition namespaceToPath,
+      toDefinition refreshModule,
+      toDefinition transitiveDeps]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
@@ -162,111 +162,171 @@ moduleTypeNames m = Maybes.cat $ Lists.map
     _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
   (Packaging.moduleDefinitions m)
 
--- | Convert a namespace to a file path (e.g., "hydra.core" -> "hydra/core").
-namespaceToPath :: TTermDefinition (Namespace -> String)
-namespaceToPath = define "namespaceToPath" $
-  doc "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)" $
-  "ns" ~>
-  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns"))
+-- | Build a schema map (Name -> Type) from a graph's schema types.
+-- Used by the JSON decoder to resolve type variables.
+buildSchemaMap :: TTermDefinition (Graph -> M.Map Name Type)
+buildSchemaMap = define "buildSchemaMap" $
+  doc "Build a schema map (Name -> Type) from a graph's schema types" $
+  "g" ~>
+  Maps.map ("ts" ~> Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
+    (Graph.graphSchemaTypes $ var "g")
 
--- | Compute transitive closure of dependencies.
--- Given a function that extracts dependency namespaces from a module,
--- a namespace-to-module map, and starting modules, returns the transitive closure
--- of all reachable namespaces (excluding self-references from start modules).
-transitiveDeps :: TTermDefinition ((Module -> [Namespace]) -> M.Map Namespace Module -> [Module] -> S.Set Namespace)
-transitiveDeps = define "transitiveDeps" $
-  doc "Compute transitive closure of module dependencies" $
-  "getDeps" ~> "nsMap" ~> "startMods" ~>
-  -- Start with dependencies of start modules, excluding self-references
-  "initialDeps" <~ Sets.fromList (Lists.concat (Lists.map
-    ("m" ~> Lists.filter
-      ("dep" ~> Logic.not $ Equality.equal (var "dep") (Packaging.moduleNamespace $ var "m"))
-      (var "getDeps" @@ var "m"))
-    (var "startMods"))) $
-  -- Iterative closure: go pending visited
-  "go" <~ ("pending" ~> "visited" ~>
-    Logic.ifElse (Sets.null $ var "pending")
-      (var "visited")
-      ("newVisited" <~ Sets.union (var "visited") (var "pending") $
-       "nextDeps" <~ Sets.fromList (Lists.concat (Lists.map
-         ("nsv" ~> optCases (Maps.lookup (var "nsv") (var "nsMap"))
-           (TTerm (Terms.list []) :: TTerm [Namespace])
-           ("depMod" ~> var "getDeps" @@ var "depMod"))
-         (Sets.toList $ var "pending"))) $
-       "newPending" <~ Sets.difference (var "nextDeps") (var "newVisited") $
-       var "go" @@ var "newPending" @@ var "newVisited")) $
-  var "go" @@ var "initialDeps" @@ (Sets.empty :: TTerm (S.Set Namespace))
+-- | Convert a generated Module into a Source module.
+-- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
+-- The namespace transforms e.g. "hydra.encode.util" to "hydra.sources.encode.util"
+-- | Decode a single module from a JSON value.
+-- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
+-- This is the pure core of the JSON module loading pipeline.
+decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> JsonModel.Value -> Either Error Module)
+decodeModuleFromJson = define "decodeModuleFromJson" $
+  doc "Decode a single module from a JSON value" $
+  "bsGraph" ~> "universeModules" ~> "jsonVal" ~>
+  "graph" <~ modulesToGraph @@ var "bsGraph" @@ var "universeModules" @@ var "universeModules" $
+  "schemaMap" <~ buildSchemaMap @@ var "graph" $
+  "modType" <~ Core.typeVariable (Core.nameLift _Module) $
+  -- Step 1: JSON -> Term
+  Eithers.either_
+    ("err" ~> left (Error.errorOther $ Error.otherError $ var "err"))
+    ("term" ~>
+      -- Step 2: Term -> Module (via decoderFor _Module)
+      Eithers.either_
+        ("decErr" ~> left (Error.errorDecoding $ var "decErr"))
+        ("mod" ~> right (var "mod"))
+        (decoderFor _Module @@ var "graph" @@ var "term"))
+    (JsonDecode.fromJson @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")
+-- | Escape unescaped control characters (< 0x20) inside JSON string literals.
+-- Operates on a list of int32 character codes (bytes).
+-- Walks through the list tracking whether we're inside a string and
+-- replaces raw control chars with \\uXXXX escape sequences.
+escapeControlCharsInJson :: TTermDefinition ([Int] -> [Int])
+escapeControlCharsInJson = define "escapeControlCharsInJson" $
+  doc "Escape unescaped control characters inside JSON string literals" $
+  "input" ~>
+  "hexDigit" <~ ("n" ~>
+    Logic.ifElse (Equality.lt (var "n") (int32 10))
+      (Math.add (int32 0x30) (var "n"))       -- '0' + n
+      (Math.add (int32 0x61) (Math.sub (var "n") (int32 10)))) $ -- 'a' + (n - 10)
+  -- Divisor is a literal 16 (non-zero), so maybeDiv/maybeMod always succeed;
+  -- the 0 fallback is unreachable.
+  "escapeToUnicode" <~ ("b" ~>
+    list [int32 0x5C, int32 0x75, int32 0x30, int32 0x30,
+          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "b") (int32 16))),
+          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
+  -- go :: Bool -> Bool -> [Int32] -> [Int32]
+  "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
+    Maybes.maybe
+      (TTerm (Terms.list []) :: TTerm [Int])
+      ("uc" ~>
+       "b" <~ Pairs.first (var "uc") $
+       "bs" <~ Pairs.second (var "uc") $
+       Logic.ifElse (var "esc")
+         -- after backslash, pass through next byte
+         (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
+         (Logic.ifElse (Logic.and (Equality.equal (var "b") (int32 0x5C)) (var "inStr"))
+           -- backslash inside string
+           (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean True @@ var "bs"))
+           (Logic.ifElse (Equality.equal (var "b") (int32 0x22))
+             -- quote toggles string mode
+             (Lists.cons (var "b") (var "go" @@ (Logic.not $ var "inStr") @@ boolean False @@ var "bs"))
+             (Logic.ifElse (Logic.and (var "inStr") (Equality.lt (var "b") (int32 0x20)))
+               -- control char: replace with \uXXXX
+               (Lists.concat2 (var "escapeToUnicode" @@ var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
+               -- normal byte
+               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))
+      (Lists.uncons $ var "bytes")) $
+  var "go" @@ boolean False @@ boolean False @@ var "input"
 
--- | Compute the transitive closure of term dependencies for a set of modules.
--- Returns the modules that are transitively depended upon (including the input modules).
-moduleTermDepsTransitive :: TTermDefinition (M.Map Namespace Module -> [Module] -> [Module])
-moduleTermDepsTransitive = define "moduleTermDepsTransitive" $
-  doc "Compute transitive closure of term dependencies for a set of modules" $
-  "nsMap" ~> "modules" ~>
-  "closure" <~ Sets.union
-    (transitiveDeps @@ ("m" ~> Packaging.moduleTermDependencies (var "m")) @@ var "nsMap" @@ var "modules")
-    (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "modules")) $
-  Maybes.cat $ Lists.map
-    ("n" ~> Maps.lookup (var "n") (var "nsMap"))
-    (Sets.toList $ var "closure")
+-- | Decode a single module from a JSON value.
+-- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
+-- This is the pure core of the JSON module loading pipeline.
+-- | Format a primitive for the lexicon: "  name : typeScheme"
+formatPrimitive :: TTermDefinition (Primitive -> String)
+formatPrimitive = define "formatPrimitive" $
+  doc "Format a primitive for the lexicon" $
+  "prim" ~>
+  "name" <~ Core.unName (Graph.primitiveName $ var "prim") $
+  "typeStr" <~ ShowCore.typeScheme @@ (Graph.primitiveTypeScheme $ var "prim") $
+  (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
--- | Compute the transitive closure of type dependencies for a set of modules.
--- First computes transitive term deps, then type deps from those.
-moduleTypeDepsTransitive :: TTermDefinition (M.Map Namespace Module -> [Module] -> [Module])
-moduleTypeDepsTransitive = define "moduleTypeDepsTransitive" $
-  doc "Compute transitive closure of type dependencies for a set of modules" $
-  "nsMap" ~> "modules" ~>
-  "termMods" <~ moduleTermDepsTransitive @@ var "nsMap" @@ var "modules" $
-  "typeNamespaces" <~ Sets.toList (transitiveDeps @@ ("m" ~> Packaging.moduleTypeDependencies (var "m")) @@ var "nsMap" @@ var "termMods") $
-  Maybes.cat $ Lists.map
-    ("n" ~> Maps.lookup (var "n") (var "nsMap"))
-    (var "typeNamespaces")
+-- | Format a type binding for the lexicon: "  name = type"
+-- | Format a term binding for the lexicon: "  name : typeScheme"
+formatTermBinding :: TTermDefinition (Binding -> String)
+formatTermBinding = define "formatTermBinding" $
+  doc "Format a term binding for the lexicon" $
+  "binding" ~>
+  "name" <~ Core.unName (Core.bindingName $ var "binding") $
+  "typeStr" <~ optCases (Core.bindingTypeScheme $ var "binding")
+    (string "?")
+    ("scheme" ~> ShowCore.typeScheme @@ var "scheme") $
+  (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
--- | Build a graph from a list of modules, using an explicit bootstrap graph.
--- Type definitions become schema elements and term definitions become data elements.
--- Any type schemes already present on universe term bindings (e.g. from a prior
--- inference run) are installed as the graph's boundTypes so incremental inference
--- can use them as a read-only lookup.
-modulesToGraph :: TTermDefinition (Graph -> [Module] -> [Module] -> Graph)
-modulesToGraph = define "modulesToGraph" $
-  doc "Build a graph from universe modules and working modules, using an explicit bootstrap graph" $
-  "bsGraph" ~> "universeModules" ~> "modules" ~>
-  "universe" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
-    (Lists.concat2 (var "universeModules") (var "modules"))) $
-  "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "modules" $
-  "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "modules" $
-  -- Include type elements from both transitive type dependencies AND the input modules themselves
-  "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
-      (Lists.concat2 (var "schemaModules") (var "modules"))) $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "dataModules")) $
-  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ Maps.empty @@ var "schemaElements" $
-  -- Decode the schema graph to a Map Name TypeScheme (interim solution until schema graphs are eliminated)
-  "schemaTypes" <~ Eithers.either_
-    (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
-    ("_r" ~> var "_r")
-    (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
-  "baseGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements" $
-  -- Collect pre-existing type schemes from universe term bindings and install them as boundTypes.
-  -- Inference coins fresh type variables for any binding it is actively solving, so stale schemes
-  -- for target bindings are transparently overridden; schemes for non-target bindings act as a
-  -- read-only lookup that lets incremental inference skip re-solving known definitions.
-  "universeDataElements" <~ Lists.concat (Lists.map
-      ("m" ~> moduleTermBindings (var "m")) (var "universeModules")) $
-  "universeBoundTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
-    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingTypeScheme (var "b"))) (var "universeDataElements"))) $
-  Graph.graphWithBoundTypes (var "baseGraph") (var "universeBoundTypes")
-
--- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
--- and modules to generate, produce a list of (filePath, content) pairs.
--- This function contains no I/O and can be generated to other languages.
+-- | Format a primitive for the lexicon: "  name : typeScheme"
 generateSourceFiles
   :: TTermDefinition ((Module -> [Definition] -> Context -> Graph -> Prelude.Either Error (M.Map String String))
     -> Language
     -> Bool -> Bool -> Bool -> Bool
     -> Graph -> [Module] -> [Module]
     -> Context -> Prelude.Either Error [(String, String)])
+-- | Format a type binding for the lexicon: "  name = type"
+formatTypeBinding :: TTermDefinition (Graph -> Binding -> Prelude.Either Error String)
+formatTypeBinding = define "formatTypeBinding" $
+  doc "Format a type binding for the lexicon" $
+  "graph" ~> "binding" ~>
+  "typ" <<~ Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding")) $
+  right $
+    (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
+
+-- | Build a schema map (Name -> Type) from a graph's schema types.
+-- Used by the JSON decoder to resolve type variables.
+generateCoderModules = define "generateCoderModules" $
+  doc "Generate encoder or decoder modules for a list of type modules" $
+  "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~> "cx" ~>
+  -- Build a graph that includes both schema and data elements, since codecs need to dereference type elements
+  "universe" <~ Maps.fromList (Lists.map
+    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
+    (Lists.concat2 (var "universeModules") (var "universeModules"))) $
+  "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "universeModules" $
+  "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "universeModules" $
+  "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
+      (Lists.concat2 (var "schemaModules") (var "universeModules"))) $
+  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "dataModules")) $
+  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ Maps.empty @@ var "schemaElements" $
+  "schemaTypes" <~ Eithers.either_
+    (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
+    ("_r" ~> var "_r")
+    (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
+  "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
+  "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
+  Eithers.map ("results" ~> Maybes.cat (var "results")) $
+    Eithers.mapList ("m" ~> var "codec" @@ var "cx" @@ var "graph" @@ var "m") (var "typeModules")
+
+-- | Perform type inference on a graph and generate its lexicon.
+-- Composes inferGraphTypes and generateLexicon into a single computation.
+-- | Generate the lexicon content from a graph.
+-- Lists all primitives, types, and terms with their types.
+generateLexicon :: TTermDefinition (Graph -> Prelude.Either Error String)
+generateLexicon = define "generateLexicon" $
+  doc "Generate the lexicon content from a graph" $
+  "graph" ~>
+  "bindings" <~ Lexical.graphToBindings @@ var "graph" $
+  "primitives" <~ Maps.elems (Graph.graphPrimitives $ var "graph") $
+  "partitioned" <~ Lists.partition ("b" ~> Annotations.isNativeType @@ var "b") (var "bindings") $ -- TODO: refactor lexicon to use Definition directly
+  "typeBindings" <~ Pairs.first (var "partitioned") $
+  "termBindings" <~ Pairs.second (var "partitioned") $
+  "sortedPrimitives" <~ Lists.sortOn ("p" ~> Graph.primitiveName (var "p")) (var "primitives") $
+  "sortedTypes" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "typeBindings") $
+  "sortedTerms" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "termBindings") $
+  "typeLines" <<~ Eithers.mapList ("b" ~> formatTypeBinding @@ var "graph" @@ var "b") (var "sortedTypes") $
+  "termLines" <~ Lists.map ("b" ~> formatTermBinding @@ var "b") (var "sortedTerms") $
+  "primitiveLines" <~ Lists.map ("p" ~> formatPrimitive @@ var "p") (var "sortedPrimitives") $
+  right $
+    (string "Primitives:\n") ++ Strings.unlines (var "primitiveLines")
+    ++ (string "\nTypes:\n") ++ Strings.unlines (var "typeLines")
+    ++ (string "\nTerms:\n") ++ Strings.unlines (var "termLines")
+
+-- | Convert a Module to a JSON string.
+-- Encodes the Module as a Term, converts to JSON, then serializes to a string.
+-- The schema map is used to resolve type variables during type-directed encoding.
 generateSourceFiles = define "generateSourceFiles" $
   doc ("Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,"
     <> " and modules to generate, produce a list of (filePath, content) pairs.") $
@@ -360,129 +420,22 @@ generateSourceFiles = define "generateSourceFiles" $
   right $ Lists.concat2 (var "schemaFiles") (var "termFiles")
 
 -- | Format a term binding for the lexicon: "  name : typeScheme"
-formatTermBinding :: TTermDefinition (Binding -> String)
-formatTermBinding = define "formatTermBinding" $
-  doc "Format a term binding for the lexicon" $
-  "binding" ~>
-  "name" <~ Core.unName (Core.bindingName $ var "binding") $
-  "typeStr" <~ optCases (Core.bindingTypeScheme $ var "binding")
-    (string "?")
-    ("scheme" ~> ShowCore.typeScheme @@ var "scheme") $
-  (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
+-- | Perform type inference on a graph and generate its lexicon.
+-- Composes inferGraphTypes and generateLexicon into a single computation.
+inferAndGenerateLexicon :: TTermDefinition (Context -> Graph -> [Module] -> Prelude.Either Error String)
+inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
+  doc "Perform type inference and generate the lexicon for a set of modules" $
+  "cx" ~> "bsGraph" ~> "kernelModules" ~>
+  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
+  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "kernelModules")) $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
+  "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
+  generateLexicon @@ var "g1"
 
--- | Format a primitive for the lexicon: "  name : typeScheme"
-formatPrimitive :: TTermDefinition (Primitive -> String)
-formatPrimitive = define "formatPrimitive" $
-  doc "Format a primitive for the lexicon" $
-  "prim" ~>
-  "name" <~ Core.unName (Graph.primitiveName $ var "prim") $
-  "typeStr" <~ ShowCore.typeScheme @@ (Graph.primitiveTypeScheme $ var "prim") $
-  (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
-
--- | Format a type binding for the lexicon: "  name = type"
-formatTypeBinding :: TTermDefinition (Graph -> Binding -> Prelude.Either Error String)
-formatTypeBinding = define "formatTypeBinding" $
-  doc "Format a type binding for the lexicon" $
-  "graph" ~> "binding" ~>
-  "typ" <<~ Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding")) $
-  right $
-    (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
-
--- | Build a schema map (Name -> Type) from a graph's schema types.
--- Used by the JSON decoder to resolve type variables.
-buildSchemaMap :: TTermDefinition (Graph -> M.Map Name Type)
-buildSchemaMap = define "buildSchemaMap" $
-  doc "Build a schema map (Name -> Type) from a graph's schema types" $
-  "g" ~>
-  Maps.map ("ts" ~> Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
-    (Graph.graphSchemaTypes $ var "g")
-
--- | Convert a generated Module into a Source module.
--- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
--- The namespace transforms e.g. "hydra.encode.util" to "hydra.sources.encode.util"
-moduleToSourceModule :: TTermDefinition (Module -> Module)
-moduleToSourceModule = define "moduleToSourceModule" $
-  doc "Convert a generated Module into a Source module" $
-  "m" ~>
-  -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
-  "sourceNs" <~ wrap _Namespace (
-    (string "hydra.sources.") ++ Strings.intercalate (string ".")
-      (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unNamespace $ Packaging.moduleNamespace $ var "m")))) $
-  -- The module type namespace
-  "modTypeNs" <~ (wrap _Namespace (string "hydra.packaging") :: TTerm Namespace) $
-  -- Create binding: module_ = <encoded Module term>
-  "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
-    (wrap _Name (Packaging.unNamespace (var "sourceNs") ++ (string ".module_")))
-    (encoderFor _Module @@ var "m")
-    nothing) $
-  Packaging.module_
-    (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
-    (var "sourceNs")
-    (list [var "modTypeNs"])
-    (list [var "modTypeNs"])
-    (list [var "moduleDef"])
-
--- | Generate the lexicon content from a graph.
--- Lists all primitives, types, and terms with their types.
-generateLexicon :: TTermDefinition (Graph -> Prelude.Either Error String)
-generateLexicon = define "generateLexicon" $
-  doc "Generate the lexicon content from a graph" $
-  "graph" ~>
-  "bindings" <~ Lexical.graphToBindings @@ var "graph" $
-  "primitives" <~ Maps.elems (Graph.graphPrimitives $ var "graph") $
-  "partitioned" <~ Lists.partition ("b" ~> Annotations.isNativeType @@ var "b") (var "bindings") $ -- TODO: refactor lexicon to use Definition directly
-  "typeBindings" <~ Pairs.first (var "partitioned") $
-  "termBindings" <~ Pairs.second (var "partitioned") $
-  "sortedPrimitives" <~ Lists.sortOn ("p" ~> Graph.primitiveName (var "p")) (var "primitives") $
-  "sortedTypes" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "typeBindings") $
-  "sortedTerms" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "termBindings") $
-  "typeLines" <<~ Eithers.mapList ("b" ~> formatTypeBinding @@ var "graph" @@ var "b") (var "sortedTypes") $
-  "termLines" <~ Lists.map ("b" ~> formatTermBinding @@ var "b") (var "sortedTerms") $
-  "primitiveLines" <~ Lists.map ("p" ~> formatPrimitive @@ var "p") (var "sortedPrimitives") $
-  right $
-    (string "Primitives:\n") ++ Strings.unlines (var "primitiveLines")
-    ++ (string "\nTypes:\n") ++ Strings.unlines (var "typeLines")
-    ++ (string "\nTerms:\n") ++ Strings.unlines (var "termLines")
-
--- | Convert a Module to a JSON string.
--- Encodes the Module as a Term, converts to JSON, then serializes to a string.
--- The schema map is used to resolve type variables during type-directed encoding.
-moduleToJson :: TTermDefinition (M.Map Name Type -> Module -> Either Error String)
-moduleToJson = define "moduleToJson" $
-  doc "Convert a Module to a JSON string" $
-  "schemaMap" ~> "m" ~>
-  "term" <~ encoderFor _Module @@ var "m" $
-  "modType" <~ Core.typeVariable (wrap _Name (string "hydra.packaging.Module")) $
-  Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
-    (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError $ var "_e") ("_a" ~> var "_a")
-      (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
-
--- | Rebuild a module's term definitions using freshly inferred bindings.
--- Type-only modules (containing only native type definitions) are returned unchanged.
--- Term definitions that are not present in the inferred-bindings list are dropped.
-refreshModule :: TTermDefinition ([Binding] -> Module -> Module)
-refreshModule = define "refreshModule" $
-  doc "Rebuild a module's term definitions using freshly inferred bindings" $
-  "inferredElements" ~> "m" ~>
-  Logic.ifElse (Logic.not $ hasTermDefinitions (var "m"))
-    (var "m")
-    (Packaging.module_
-      (Packaging.moduleDescription $ var "m")
-      (Packaging.moduleNamespace $ var "m")
-      (Packaging.moduleTermDependencies $ var "m")
-      (Packaging.moduleTypeDependencies $ var "m")
-      (Maybes.cat $ Lists.map
-        ("d" ~> cases _Definition (var "d") Nothing [
-          _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
-          _Definition_term>>: "td" ~> Maybes.map
-            ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-              (Core.bindingName $ var "b")
-              (Core.bindingTerm $ var "b")
-              (Core.bindingTypeScheme $ var "b")))
-            (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
-              (var "inferredElements"))])
-        (Packaging.moduleDefinitions $ var "m")))
-
+-- | Escape unescaped control characters (< 0x20) inside JSON string literals.
+-- Operates on a list of int32 character codes (bytes).
+-- Walks through the list tracking whether we're inside a string and
+-- replaces raw control chars with \\uXXXX escape sequences.
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
 -- are passed through unchanged.
@@ -497,6 +450,30 @@ inferModules = define "inferModules" $
   "inferredElements" <~ Pairs.second (var "inferResult") $
   right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
 
+-- | Incrementally infer types for target modules, using the universe as a seeded inference context.
+--
+-- Computes the transitive term-dependency closure of 'targetMods' (self-inclusive). Any binding in
+-- that closure is a candidate for inference; any binding OUTSIDE the closure is kept as-is. The
+-- candidate set is further partitioned:
+--
+-- 1. Bindings in the closure whose owning module is in 'targetMods', OR bindings without a
+--    pre-attached scheme, are fed to 'inferGraphTypes'. The first case is the caller's explicit
+--    request; the second covers transitive dependencies that haven't been inferred yet and would
+--    otherwise appear untyped to the inference pass.
+-- 2. Bindings in the closure that are already typed (have a 'TypeScheme' from a prior inference
+--    run) and whose module is NOT a target are kept verbatim. Their schemes flow into
+--    'graphBoundTypes' via 'modulesToGraph', so references from group (1) resolve through
+--    'inferTypeOfVariable's boundTypes branch — which already emits correctly-sized
+--    'TypeApplication' wrappers matching each cached scheme's quantifier count.
+-- 3. Bindings outside the closure are irrelevant to target inference and are returned unchanged.
+--
+-- The target modules are refreshed from the union of newly-inferred bindings (group 1) and
+-- the untouched typed closure bindings (group 2).
+--
+-- When 'targetMods' equals 'universeMods' and no non-target bindings are typed, this reduces to
+-- identical behavior to 'inferModules'. When a caching layer pre-populates schemes on clean
+-- modules, only the target set plus any transitively-reachable untyped binding is actually
+-- re-solved — the point of issue #247.
 -- | Incrementally infer types for target modules, using the universe as a seeded inference context.
 --
 -- Computes the transitive term-dependency closure of 'targetMods' (self-inclusive). Any binding in
@@ -563,102 +540,190 @@ inferModulesGiven = define "inferModulesGiven" $
 -- | Generate encoder or decoder modules for a list of type modules.
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.
 -- Returns the generated coder modules (Nothing results are filtered out).
+-- | Compute the transitive closure of term dependencies for a set of modules.
+-- Returns the modules that are transitively depended upon (including the input modules).
+moduleTermDepsTransitive :: TTermDefinition (M.Map Namespace Module -> [Module] -> [Module])
+moduleTermDepsTransitive = define "moduleTermDepsTransitive" $
+  doc "Compute transitive closure of term dependencies for a set of modules" $
+  "nsMap" ~> "modules" ~>
+  "closure" <~ Sets.union
+    (transitiveDeps @@ ("m" ~> Packaging.moduleTermDependencies (var "m")) @@ var "nsMap" @@ var "modules")
+    (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "modules")) $
+  Maybes.cat $ Lists.map
+    ("n" ~> Maps.lookup (var "n") (var "nsMap"))
+    (Sets.toList $ var "closure")
+
+-- | Compute the transitive closure of type dependencies for a set of modules.
+-- First computes transitive term deps, then type deps from those.
+-- | Convert a Module to a JSON string.
+-- Encodes the Module as a Term, converts to JSON, then serializes to a string.
+-- The schema map is used to resolve type variables during type-directed encoding.
+moduleToJson :: TTermDefinition (M.Map Name Type -> Module -> Either Error String)
+moduleToJson = define "moduleToJson" $
+  doc "Convert a Module to a JSON string" $
+  "schemaMap" ~> "m" ~>
+  "term" <~ encoderFor _Module @@ var "m" $
+  "modType" <~ Core.typeVariable (wrap _Name (string "hydra.packaging.Module")) $
+  Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
+    (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError $ var "_e") ("_a" ~> var "_a")
+      (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
+
+-- | Rebuild a module's term definitions using freshly inferred bindings.
+-- Type-only modules (containing only native type definitions) are returned unchanged.
+-- Term definitions that are not present in the inferred-bindings list are dropped.
+-- | Convert a generated Module into a Source module.
+-- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
+-- The namespace transforms e.g. "hydra.encode.util" to "hydra.sources.encode.util"
+moduleToSourceModule :: TTermDefinition (Module -> Module)
+moduleToSourceModule = define "moduleToSourceModule" $
+  doc "Convert a generated Module into a Source module" $
+  "m" ~>
+  -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
+  "sourceNs" <~ wrap _Namespace (
+    (string "hydra.sources.") ++ Strings.intercalate (string ".")
+      (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unNamespace $ Packaging.moduleNamespace $ var "m")))) $
+  -- The module type namespace
+  "modTypeNs" <~ (wrap _Namespace (string "hydra.packaging") :: TTerm Namespace) $
+  -- Create binding: module_ = <encoded Module term>
+  "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
+    (wrap _Name (Packaging.unNamespace (var "sourceNs") ++ (string ".module_")))
+    (encoderFor _Module @@ var "m")
+    nothing) $
+  Packaging.module_
+    (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
+    (var "sourceNs")
+    (list [var "modTypeNs"])
+    (list [var "modTypeNs"])
+    (list [var "moduleDef"])
+
+-- | Generate the lexicon content from a graph.
+-- Lists all primitives, types, and terms with their types.
+-- | Compute the transitive closure of type dependencies for a set of modules.
+-- First computes transitive term deps, then type deps from those.
+moduleTypeDepsTransitive :: TTermDefinition (M.Map Namespace Module -> [Module] -> [Module])
+moduleTypeDepsTransitive = define "moduleTypeDepsTransitive" $
+  doc "Compute transitive closure of type dependencies for a set of modules" $
+  "nsMap" ~> "modules" ~>
+  "termMods" <~ moduleTermDepsTransitive @@ var "nsMap" @@ var "modules" $
+  "typeNamespaces" <~ Sets.toList (transitiveDeps @@ ("m" ~> Packaging.moduleTypeDependencies (var "m")) @@ var "nsMap" @@ var "termMods") $
+  Maybes.cat $ Lists.map
+    ("n" ~> Maps.lookup (var "n") (var "nsMap"))
+    (var "typeNamespaces")
+
+-- | Build a graph from a list of modules, using an explicit bootstrap graph.
+-- Type definitions become schema elements and term definitions become data elements.
+-- Any type schemes already present on universe term bindings (e.g. from a prior
+-- inference run) are installed as the graph's boundTypes so incremental inference
+-- can use them as a read-only lookup.
 generateCoderModules
   :: TTermDefinition ((Context -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
     -> Context -> Prelude.Either Error [Module])
-generateCoderModules = define "generateCoderModules" $
-  doc "Generate encoder or decoder modules for a list of type modules" $
-  "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~> "cx" ~>
-  -- Build a graph that includes both schema and data elements, since codecs need to dereference type elements
+-- | Build a graph from a list of modules, using an explicit bootstrap graph.
+-- Type definitions become schema elements and term definitions become data elements.
+-- Any type schemes already present on universe term bindings (e.g. from a prior
+-- inference run) are installed as the graph's boundTypes so incremental inference
+-- can use them as a read-only lookup.
+modulesToGraph :: TTermDefinition (Graph -> [Module] -> [Module] -> Graph)
+modulesToGraph = define "modulesToGraph" $
+  doc "Build a graph from universe modules and working modules, using an explicit bootstrap graph" $
+  "bsGraph" ~> "universeModules" ~> "modules" ~>
   "universe" <~ Maps.fromList (Lists.map
     ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
-    (Lists.concat2 (var "universeModules") (var "universeModules"))) $
-  "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "universeModules" $
-  "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "universeModules" $
+    (Lists.concat2 (var "universeModules") (var "modules"))) $
+  "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "modules" $
+  "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "modules" $
+  -- Include type elements from both transitive type dependencies AND the input modules themselves
   "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
-      (Lists.concat2 (var "schemaModules") (var "universeModules"))) $
+      (Lists.concat2 (var "schemaModules") (var "modules"))) $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "dataModules")) $
   "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ Maps.empty @@ var "schemaElements" $
+  -- Decode the schema graph to a Map Name TypeScheme (interim solution until schema graphs are eliminated)
   "schemaTypes" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
     (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
-  "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
-  "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
-  Eithers.map ("results" ~> Maybes.cat (var "results")) $
-    Eithers.mapList ("m" ~> var "codec" @@ var "cx" @@ var "graph" @@ var "m") (var "typeModules")
+  "baseGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements" $
+  -- Collect pre-existing type schemes from universe term bindings and install them as boundTypes.
+  -- Inference coins fresh type variables for any binding it is actively solving, so stale schemes
+  -- for target bindings are transparently overridden; schemes for non-target bindings act as a
+  -- read-only lookup that lets incremental inference skip re-solving known definitions.
+  "universeDataElements" <~ Lists.concat (Lists.map
+      ("m" ~> moduleTermBindings (var "m")) (var "universeModules")) $
+  "universeBoundTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
+    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+      (Core.bindingTypeScheme (var "b"))) (var "universeDataElements"))) $
+  Graph.graphWithBoundTypes (var "baseGraph") (var "universeBoundTypes")
 
--- | Perform type inference on a graph and generate its lexicon.
--- Composes inferGraphTypes and generateLexicon into a single computation.
-inferAndGenerateLexicon :: TTermDefinition (Context -> Graph -> [Module] -> Prelude.Either Error String)
-inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
-  doc "Perform type inference and generate the lexicon for a set of modules" $
-  "cx" ~> "bsGraph" ~> "kernelModules" ~>
-  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "kernelModules")) $
-  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
-  "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
-  generateLexicon @@ var "g1"
+-- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
+-- and modules to generate, produce a list of (filePath, content) pairs.
+-- This function contains no I/O and can be generated to other languages.
+-- | Convert a namespace to a file path (e.g., "hydra.core" -> "hydra/core").
+namespaceToPath :: TTermDefinition (Namespace -> String)
+namespaceToPath = define "namespaceToPath" $
+  doc "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)" $
+  "ns" ~>
+  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns"))
 
--- | Escape unescaped control characters (< 0x20) inside JSON string literals.
--- Operates on a list of int32 character codes (bytes).
--- Walks through the list tracking whether we're inside a string and
--- replaces raw control chars with \\uXXXX escape sequences.
-escapeControlCharsInJson :: TTermDefinition ([Int] -> [Int])
-escapeControlCharsInJson = define "escapeControlCharsInJson" $
-  doc "Escape unescaped control characters inside JSON string literals" $
-  "input" ~>
-  "hexDigit" <~ ("n" ~>
-    Logic.ifElse (Equality.lt (var "n") (int32 10))
-      (Math.add (int32 0x30) (var "n"))       -- '0' + n
-      (Math.add (int32 0x61) (Math.sub (var "n") (int32 10)))) $ -- 'a' + (n - 10)
-  -- Divisor is a literal 16 (non-zero), so maybeDiv/maybeMod always succeed;
-  -- the 0 fallback is unreachable.
-  "escapeToUnicode" <~ ("b" ~>
-    list [int32 0x5C, int32 0x75, int32 0x30, int32 0x30,
-          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "b") (int32 16))),
-          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
-  -- go :: Bool -> Bool -> [Int32] -> [Int32]
-  "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
-    Maybes.maybe
-      (TTerm (Terms.list []) :: TTerm [Int])
-      ("uc" ~>
-       "b" <~ Pairs.first (var "uc") $
-       "bs" <~ Pairs.second (var "uc") $
-       Logic.ifElse (var "esc")
-         -- after backslash, pass through next byte
-         (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
-         (Logic.ifElse (Logic.and (Equality.equal (var "b") (int32 0x5C)) (var "inStr"))
-           -- backslash inside string
-           (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean True @@ var "bs"))
-           (Logic.ifElse (Equality.equal (var "b") (int32 0x22))
-             -- quote toggles string mode
-             (Lists.cons (var "b") (var "go" @@ (Logic.not $ var "inStr") @@ boolean False @@ var "bs"))
-             (Logic.ifElse (Logic.and (var "inStr") (Equality.lt (var "b") (int32 0x20)))
-               -- control char: replace with \uXXXX
-               (Lists.concat2 (var "escapeToUnicode" @@ var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
-               -- normal byte
-               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))
-      (Lists.uncons $ var "bytes")) $
-  var "go" @@ boolean False @@ boolean False @@ var "input"
+-- | Compute transitive closure of dependencies.
+-- Given a function that extracts dependency namespaces from a module,
+-- a namespace-to-module map, and starting modules, returns the transitive closure
+-- of all reachable namespaces (excluding self-references from start modules).
+-- | Rebuild a module's term definitions using freshly inferred bindings.
+-- Type-only modules (containing only native type definitions) are returned unchanged.
+-- Term definitions that are not present in the inferred-bindings list are dropped.
+refreshModule :: TTermDefinition ([Binding] -> Module -> Module)
+refreshModule = define "refreshModule" $
+  doc "Rebuild a module's term definitions using freshly inferred bindings" $
+  "inferredElements" ~> "m" ~>
+  Logic.ifElse (Logic.not $ hasTermDefinitions (var "m"))
+    (var "m")
+    (Packaging.module_
+      (Packaging.moduleDescription $ var "m")
+      (Packaging.moduleNamespace $ var "m")
+      (Packaging.moduleTermDependencies $ var "m")
+      (Packaging.moduleTypeDependencies $ var "m")
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") Nothing [
+          _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
+          _Definition_term>>: "td" ~> Maybes.map
+            ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+              (Core.bindingName $ var "b")
+              (Core.bindingTerm $ var "b")
+              (Core.bindingTypeScheme $ var "b")))
+            (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
+              (var "inferredElements"))])
+        (Packaging.moduleDefinitions $ var "m")))
 
--- | Decode a single module from a JSON value.
--- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
--- This is the pure core of the JSON module loading pipeline.
-decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> JsonModel.Value -> Either Error Module)
-decodeModuleFromJson = define "decodeModuleFromJson" $
-  doc "Decode a single module from a JSON value" $
-  "bsGraph" ~> "universeModules" ~> "jsonVal" ~>
-  "graph" <~ modulesToGraph @@ var "bsGraph" @@ var "universeModules" @@ var "universeModules" $
-  "schemaMap" <~ buildSchemaMap @@ var "graph" $
-  "modType" <~ Core.typeVariable (Core.nameLift _Module) $
-  -- Step 1: JSON -> Term
-  Eithers.either_
-    ("err" ~> left (Error.errorOther $ Error.otherError $ var "err"))
-    ("term" ~>
-      -- Step 2: Term -> Module (via decoderFor _Module)
-      Eithers.either_
-        ("decErr" ~> left (Error.errorDecoding $ var "decErr"))
-        ("mod" ~> right (var "mod"))
-        (decoderFor _Module @@ var "graph" @@ var "term"))
-    (JsonDecode.fromJson @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")
+-- | Perform type inference on a set of modules and reconstruct the target modules
+-- with inferred types. Type-only modules (containing only native type definitions)
+-- are passed through unchanged.
+-- | Compute transitive closure of dependencies.
+-- Given a function that extracts dependency namespaces from a module,
+-- a namespace-to-module map, and starting modules, returns the transitive closure
+-- of all reachable namespaces (excluding self-references from start modules).
+transitiveDeps :: TTermDefinition ((Module -> [Namespace]) -> M.Map Namespace Module -> [Module] -> S.Set Namespace)
+transitiveDeps = define "transitiveDeps" $
+  doc "Compute transitive closure of module dependencies" $
+  "getDeps" ~> "nsMap" ~> "startMods" ~>
+  -- Start with dependencies of start modules, excluding self-references
+  "initialDeps" <~ Sets.fromList (Lists.concat (Lists.map
+    ("m" ~> Lists.filter
+      ("dep" ~> Logic.not $ Equality.equal (var "dep") (Packaging.moduleNamespace $ var "m"))
+      (var "getDeps" @@ var "m"))
+    (var "startMods"))) $
+  -- Iterative closure: go pending visited
+  "go" <~ ("pending" ~> "visited" ~>
+    Logic.ifElse (Sets.null $ var "pending")
+      (var "visited")
+      ("newVisited" <~ Sets.union (var "visited") (var "pending") $
+       "nextDeps" <~ Sets.fromList (Lists.concat (Lists.map
+         ("nsv" ~> optCases (Maps.lookup (var "nsv") (var "nsMap"))
+           (TTerm (Terms.list []) :: TTerm [Namespace])
+           ("depMod" ~> var "getDeps" @@ var "depMod"))
+         (Sets.toList $ var "pending"))) $
+       "newPending" <~ Sets.difference (var "nextDeps") (var "newVisited") $
+       var "go" @@ var "newPending" @@ var "newVisited")) $
+  var "go" @@ var "initialDeps" @@ (Sets.empty :: TTerm (S.Set Namespace))
+
+-- | Compute the transitive closure of term dependencies for a set of modules.
+-- Returns the modules that are transitively depended upon (including the input modules).
