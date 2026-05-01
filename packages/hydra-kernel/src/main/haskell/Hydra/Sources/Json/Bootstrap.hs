@@ -61,7 +61,13 @@ typesByNameDefinition = TermDefinition {
 -- and tagged with a "type" annotation pointing at hydra.core.Type so that
 -- consumers can recognize the value as an encoded type.
 typesByNameTerm :: Term
-typesByNameTerm = TermMap $ M.fromList entries
+typesByNameTerm = TermAnnotated $ AnnotatedTerm {
+    annotatedTermBody = TermMap $ M.fromList entries,
+    annotatedTermAnnotation = M.fromList [
+      (Name "description", TermLiteral $ LiteralString
+        ("A bootstrap typing environment for decoding modules from JSON."
+          ++ " Maps each kernel type name to its encoded type, used to seed JSON"
+          ++ " decoding before the full kernel graph is available."))]}
   where
     entries = concatMap moduleEntries bootstrapTypeModules
     moduleEntries mod = [defEntry td | DefinitionType td <- moduleDefinitions mod]

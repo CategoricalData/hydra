@@ -293,12 +293,17 @@ define = definitionInModule module_
 -- | Helper: define a namespace constant
 defineNs :: String -> String -> TTermDefinition Namespace
 defineNs name nsStr = define name $
+  doc ("Namespace of the " <> name <> " library") $
   wrap _Namespace $ string nsStr
 
 -- | Helper: define a primitive name constant as a simple Name data constructor
 defineName :: String -> String -> String -> TTermDefinition Name
 defineName name nsStr localName = define name $
+  doc ("Name of the " <> libName <> "." <> localName <> " primitive") $
   wrap _Name $ string (nsStr <> "." <> localName)
+  where
+    -- Last dot-segment of nsStr, e.g. "hydra.lib.chars" -> "chars".
+    libName = reverse (takeWhile (/= '.') (reverse nsStr))
 
 -- Namespace constants
 
