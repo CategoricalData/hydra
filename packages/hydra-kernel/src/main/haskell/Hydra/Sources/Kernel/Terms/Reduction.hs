@@ -167,7 +167,9 @@ contractTerm = define "contractTerm" $
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
 countPrimitiveInvocations :: TTermDefinition Bool
-countPrimitiveInvocations = define "countPrimitiveInvocations" true
+countPrimitiveInvocations = define "countPrimitiveInvocations" $
+  doc "Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes." $
+  true
 
 -- | Eta-expand a term using Graph for type lookups. This is a pure function that does not
 -- require type inference, instead relying on the Graph being properly populated with types
