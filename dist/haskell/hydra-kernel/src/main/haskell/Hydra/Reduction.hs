@@ -82,6 +82,7 @@ contractTerm term =
                       _ -> rec
                   _ -> rec
       in (Rewriting.rewriteTerm rewrite term)
+-- | Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes.
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 -- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.

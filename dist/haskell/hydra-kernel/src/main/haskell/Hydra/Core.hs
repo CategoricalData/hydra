@@ -91,17 +91,6 @@ data EitherType =
 _EitherType = Name "hydra.core.EitherType"
 _EitherType_left = Name "left"
 _EitherType_right = Name "right"
--- | A type which pairs a 'first' type and a 'second' type
-data PairType =
-  PairType {
-    -- | The first component of the pair
-    pairTypeFirst :: Type,
-    -- | The second component of the pair
-    pairTypeSecond :: Type}
-  deriving (Eq, Ord, Read, Show)
-_PairType = Name "hydra.core.PairType"
-_PairType_first = Name "first"
-_PairType_second = Name "second"
 -- | A name/term pair
 data Field =
   Field {
@@ -331,6 +320,17 @@ newtype Name =
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 _Name = Name "hydra.core.Name"
+-- | A type which pairs a 'first' type and a 'second' type
+data PairType =
+  PairType {
+    -- | The first component of the pair
+    pairTypeFirst :: Type,
+    -- | The second component of the pair
+    pairTypeSecond :: Type}
+  deriving (Eq, Ord, Read, Show)
+_PairType = Name "hydra.core.PairType"
+_PairType_first = Name "first"
+_PairType_second = Name "second"
 -- | A record elimination; a projection
 data Projection =
   Projection {

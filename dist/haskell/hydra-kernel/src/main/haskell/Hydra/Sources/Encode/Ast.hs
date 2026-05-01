@@ -615,66 +615,6 @@ module_ =
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.ast.indentedExpression"),
-          Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "x"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermInject (Core.Injection {
-              Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-              Core.injectionField = Core.Field {
-                Core.fieldName = (Core.Name "record"),
-                Core.fieldTerm = (Core.TermRecord (Core.Record {
-                  Core.recordTypeName = (Core.Name "hydra.core.Record"),
-                  Core.recordFields = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "typeName"),
-                      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.ast.IndentedExpression"))}))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "fields"),
-                      Core.fieldTerm = (Core.TermList [
-                        Core.TermRecord (Core.Record {
-                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                          Core.recordFields = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "name"),
-                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "style"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "term"),
-                              Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.ast.indentStyle")),
-                                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.ast.IndentedExpression"),
-                                    Core.projectionField = (Core.Name "style")})),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                        (Core.TermRecord (Core.Record {
-                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                          Core.recordFields = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "name"),
-                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expr"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "term"),
-                              Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.ast.expr")),
-                                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.ast.IndentedExpression"),
-                                    Core.projectionField = (Core.Name "expr")})),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.ast.IndentedExpression")),
-              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.ast.indentStyle"),
           Packaging.termDefinitionTerm = (Core.TermCases (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.ast.IndentStyle"),
@@ -770,6 +710,66 @@ module_ =
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.ast.IndentStyle")),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.ast.indentedExpression"),
+          Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "x"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermInject (Core.Injection {
+              Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+              Core.injectionField = Core.Field {
+                Core.fieldName = (Core.Name "record"),
+                Core.fieldTerm = (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = (Core.Name "hydra.core.Record"),
+                  Core.recordFields = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "typeName"),
+                      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.ast.IndentedExpression"))}))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "fields"),
+                      Core.fieldTerm = (Core.TermList [
+                        Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "style"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.ast.indentStyle")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.ast.IndentedExpression"),
+                                    Core.projectionField = (Core.Name "style")})),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                        (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expr"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.ast.expr")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.ast.IndentedExpression"),
+                                    Core.projectionField = (Core.Name "expr")})),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.ast.IndentedExpression")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {

@@ -509,77 +509,22 @@
             "body": {
               "typeLambda": {
                 "body": {
-                  "lambda": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "Construct an OrderingIsomorphism between two orderings of the same elements. The two list arguments must be permutations of each other; the result is a pair of mappings that transport an element list from one ordering to the other."}}}],
                     "body": {
                       "lambda": {
                         "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "sourceToTargetMapping",
-                                "term": {
-                                  "typeLambda": {
-                                    "body": {
-                                      "lambda": {
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "mp",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "els"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "sourceOrd"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.zip"}, "type": {"variable": "t0"}}},
-                                                                "type": {"variable": "t2"}}}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "t0"}}},
-                                                        "type": {"variable": "t2"}}}}},
-                                                "typeScheme": {"body": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}}, "variables": []}}],
-                                            "body": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "targetOrd"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {"variable": "mp"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "n"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "t0"}}},
-                                                                        "type": {"variable": "t2"}}}}}}},
-                                                            "domain": {"variable": "t0"},
-                                                            "parameter": "n"}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "t0"}}},
-                                                            "type": {"maybe": {"variable": "t2"}}}}}}}},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "t2"}}}}}}},
-                                        "domain": {"list": {"variable": "t2"}},
-                                        "parameter": "els"}},
-                                    "parameter": "t2"}},
-                                "typeScheme": {
-                                  "body": {"function": {"codomain": {"list": {"variable": "t2"}}, "domain": {"list": {"variable": "t2"}}}},
-                                  "variables": ["t2"]}}],
+                          "lambda": {
                             "body": {
                               "let": {
                                 "bindings": [
                                   {
-                                    "name": "targetToSourceMapping",
+                                    "name": "sourceToTargetMapping",
                                     "term": {
                                       "typeLambda": {
                                         "body": {
@@ -596,7 +541,7 @@
                                                             "argument": {"variable": "els"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "targetOrd"},
+                                                                "argument": {"variable": "sourceOrd"},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.zip"}, "type": {"variable": "t0"}}},
@@ -610,7 +555,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"variable": "sourceOrd"},
+                                                        "argument": {"variable": "targetOrd"},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -639,22 +584,85 @@
                                       "body": {"function": {"codomain": {"list": {"variable": "t2"}}, "domain": {"list": {"variable": "t2"}}}},
                                       "variables": ["t2"]}}],
                                 "body": {
-                                  "typeApplication": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "targetToSourceMapping",
+                                        "term": {
+                                          "typeLambda": {
+                                            "body": {
+                                              "lambda": {
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "mp",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "els"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "targetOrd"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.zip"}, "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "t2"}}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "t0"}}},
+                                                                "type": {"variable": "t2"}}}}},
+                                                        "typeScheme": {"body": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}}, "variables": []}}],
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "sourceOrd"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "mp"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "n"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "t0"}}},
+                                                                                "type": {"variable": "t2"}}}}}}},
+                                                                    "domain": {"variable": "t0"},
+                                                                    "parameter": "n"}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "t0"}}},
+                                                                    "type": {"maybe": {"variable": "t2"}}}}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "t2"}}}}}}},
+                                                "domain": {"list": {"variable": "t2"}},
+                                                "parameter": "els"}},
+                                            "parameter": "t2"}},
+                                        "typeScheme": {
+                                          "body": {"function": {"codomain": {"list": {"variable": "t2"}}, "domain": {"list": {"variable": "t2"}}}},
+                                          "variables": ["t2"]}}],
                                     "body": {
-                                      "record": {
-                                        "fields": [
-                                          {
-                                            "name": "encode",
-                                            "term": {"typeApplication": {"body": {"variable": "sourceToTargetMapping"}, "type": {"variable": "t1"}}}},
-                                          {
-                                            "name": "decode",
-                                            "term": {"typeApplication": {"body": {"variable": "targetToSourceMapping"}, "type": {"variable": "t1"}}}}],
-                                        "typeName": "hydra.topology.OrderingIsomorphism"}},
-                                    "type": {"variable": "t1"}}}}}}},
+                                      "typeApplication": {
+                                        "body": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "encode",
+                                                "term": {"typeApplication": {"body": {"variable": "sourceToTargetMapping"}, "type": {"variable": "t1"}}}},
+                                              {
+                                                "name": "decode",
+                                                "term": {"typeApplication": {"body": {"variable": "targetToSourceMapping"}, "type": {"variable": "t1"}}}}],
+                                            "typeName": "hydra.topology.OrderingIsomorphism"}},
+                                        "type": {"variable": "t1"}}}}}}},
+                            "domain": {"list": {"variable": "t0"}},
+                            "parameter": "targetOrd"}},
                         "domain": {"list": {"variable": "t0"}},
-                        "parameter": "targetOrd"}},
-                    "domain": {"list": {"variable": "t0"}},
-                    "parameter": "sourceOrd"}},
+                        "parameter": "sourceOrd"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "typeScheme": {

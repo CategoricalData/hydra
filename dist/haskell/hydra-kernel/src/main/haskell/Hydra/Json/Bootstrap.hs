@@ -6,6 +6,7 @@ import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+-- | A bootstrap typing environment for decoding modules from JSON. Maps each kernel type name to its encoded type, used to seed JSON decoding before the full kernel graph is available.
 typesByName :: M.Map Core.Name Core.Type
 typesByName =
     M.fromList [

@@ -304,9 +304,11 @@ topologicalSortTypeDefinitions defs =
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
+-- | Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references
 typeDependencyNames :: Bool -> Core.Type -> S.Set Core.Name
 typeDependencyNames withSchema typ =
     Logic.ifElse withSchema (Sets.union (Variables.freeVariablesInType typ) (typeNamesInType typ)) (Variables.freeVariablesInType typ)
+-- | Collect every type name that appears anywhere inside a type expression
 typeNamesInType :: Ord t0 => (Core.Type -> S.Set t0)
 typeNamesInType typ0 =
 

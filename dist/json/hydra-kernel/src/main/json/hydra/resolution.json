@@ -170,52 +170,58 @@
       "term": {
         "name": "hydra.resolution.fieldMap",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Build a map from field name to field term, given a list of fields"}}}],
             "body": {
-              "let": {
-                "bindings": [
-                  {
-                    "name": "toPair",
-                    "term": {
-                      "lambda": {
-                        "body": {
-                          "typeApplication": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "toPair",
+                        "term": {
+                          "lambda": {
                             "body": {
                               "typeApplication": {
                                 "body": {
-                                  "pair": {
-                                    "first": {
-                                      "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
-                                    "second": {
-                                      "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}}}},
-                                "type": {"variable": "hydra.core.Name"}}},
-                            "type": {"variable": "hydra.core.Term"}}},
-                        "domain": {"variable": "hydra.core.Field"},
-                        "parameter": "f"}},
-                    "typeScheme": {
-                      "body": {
-                        "function": {
-                          "codomain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}},
-                          "domain": {"variable": "hydra.core.Field"}}},
-                      "variables": []}}],
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "fields"},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "toPair"},
+                                  "typeApplication": {
+                                    "body": {
+                                      "pair": {
+                                        "first": {
+                                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                        "second": {
+                                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}}}},
+                                    "type": {"variable": "hydra.core.Name"}}},
+                                "type": {"variable": "hydra.core.Term"}}},
+                            "domain": {"variable": "hydra.core.Field"},
+                            "parameter": "f"}},
+                        "typeScheme": {
+                          "body": {
                             "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Field"}}},
-                                "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}}}}}}}},
-                    "function": {
-                      "typeApplication": {
-                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                        "type": {"variable": "hydra.core.Term"}}}}}}},
-            "domain": {"list": {"variable": "hydra.core.Field"}},
-            "parameter": "fields"}},
+                              "codomain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}},
+                              "domain": {"variable": "hydra.core.Field"}}},
+                          "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "fields"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "toPair"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Field"}}},
+                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                            "type": {"variable": "hydra.core.Term"}}}}}}},
+                "domain": {"list": {"variable": "hydra.core.Field"}},
+                "parameter": "fields"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -226,52 +232,58 @@
       "term": {
         "name": "hydra.resolution.fieldTypeMap",
         "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Build a map from field name to field type, given a list of field types"}}}],
             "body": {
-              "let": {
-                "bindings": [
-                  {
-                    "name": "toPair",
-                    "term": {
-                      "lambda": {
-                        "body": {
-                          "typeApplication": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "toPair",
+                        "term": {
+                          "lambda": {
                             "body": {
                               "typeApplication": {
                                 "body": {
-                                  "pair": {
-                                    "first": {
-                                      "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
-                                    "second": {
-                                      "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
-                                "type": {"variable": "hydra.core.Name"}}},
-                            "type": {"variable": "hydra.core.Type"}}},
-                        "domain": {"variable": "hydra.core.FieldType"},
-                        "parameter": "f"}},
-                    "typeScheme": {
-                      "body": {
-                        "function": {
-                          "codomain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Type"}}},
-                          "domain": {"variable": "hydra.core.FieldType"}}},
-                      "variables": []}}],
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "fields"},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "toPair"},
+                                  "typeApplication": {
+                                    "body": {
+                                      "pair": {
+                                        "first": {
+                                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
+                                        "second": {
+                                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
+                                    "type": {"variable": "hydra.core.Name"}}},
+                                "type": {"variable": "hydra.core.Type"}}},
+                            "domain": {"variable": "hydra.core.FieldType"},
+                            "parameter": "f"}},
+                        "typeScheme": {
+                          "body": {
                             "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
-                                "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Type"}}}}}}}}},
-                    "function": {
-                      "typeApplication": {
-                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                        "type": {"variable": "hydra.core.Type"}}}}}}},
-            "domain": {"list": {"variable": "hydra.core.FieldType"}},
-            "parameter": "fields"}},
+                              "codomain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Type"}}},
+                              "domain": {"variable": "hydra.core.FieldType"}}},
+                          "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "fields"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "toPair"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Type"}}}}}}}}},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                            "type": {"variable": "hydra.core.Type"}}}}}}},
+                "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                "parameter": "fields"}}}},
         "typeScheme": {
           "body": {
             "function": {

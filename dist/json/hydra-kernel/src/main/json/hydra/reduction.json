@@ -469,7 +469,15 @@
     {
       "term": {
         "name": "hydra.reduction.countPrimitiveInvocations",
-        "term": {"literal": {"boolean": true}},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes."}}}],
+            "body": {"literal": {"boolean": true}}}},
         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
     {
       "term": {
