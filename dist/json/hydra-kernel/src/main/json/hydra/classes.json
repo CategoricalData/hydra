@@ -6,15 +6,8 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Any of a small number of built-in type classes"}}}],
-              "body": {
-                "union": [
-                  {"name": "equality", "type": {"unit": {}}},
-                  {"name": "ordering", "type": {"unit": {}}}]}}},
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Any of a small number of built-in type classes"}}}],
+              "body": {"union": [{"name": "equality", "type": {"unit": {}}}, {"name": "ordering", "type": {"unit": {}}}]}}},
           "variables": []}}}],
   "description": "Type classes",
   "namespace": "hydra.classes",
