@@ -8,7 +8,7 @@
 --   - haskell-to-*.sh (bootstrapping demo, writes to /tmp)
 --
 -- JSON sources:
---   dist/json/hydra-kernel/src/main/json/  — kernel, eval lib, and other modules
+--   dist/json/hydra-kernel/src/main/json/  — kernel, default lib, and other modules
 --   dist/json/hydra-kernel/src/test/json/  — test modules
 --   hydra-ext/../../dist/json/hydra-ext/src/main/json/      — ext coder modules (Java/Python coders)
 --
@@ -257,15 +257,15 @@ main = do
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn ""
 
-  -- Load a single package's mainModules + evalLibModules from its per-package
+  -- Load a single package's mainModules + defaultLibModules from its per-package
   -- manifest. Returns the accumulated Modules; missing fields are treated as
   -- empty.
   let loadPackageMain :: String -> IO [Module]
       loadPackageMain pkg = do
         let pkgDir = pkgMainDir pkg
         mainNs <- readManifestFieldOrEmpty pkgDir "mainModules"
-        evalNs <- readManifestFieldOrEmpty pkgDir "evalLibModules"
-        let allNs = mainNs ++ evalNs
+        defaultNs <- readManifestFieldOrEmpty pkgDir "defaultLibModules"
+        let allNs = mainNs ++ defaultNs
         if Prelude.null allNs
           then return []
           else do

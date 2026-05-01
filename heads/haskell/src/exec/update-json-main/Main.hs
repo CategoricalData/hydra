@@ -6,7 +6,7 @@
 -- directory via the routing table in Hydra.PackageRouting.
 --
 -- Universe (deduped by namespace before writing):
---   * hydra-kernel: mainModules + evalLibModules + dslSourceModules
+--   * hydra-kernel: mainModules + defaultLibModules + dslSourceModules
 --   * hydra-haskell: haskellModules (already in mainModules; routed here)
 --   * coder packages: hydraJavaModules, hydraPythonModules, hydraScalaModules,
 --     hydraLispModules
@@ -27,7 +27,7 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
-import Hydra.Sources.Eval.Lib.All (evalLibModules)
+import Hydra.Sources.Kernel.Lib.Default.All (defaultLibModules)
 
 import qualified Hydra.Kernel as Kernel
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
@@ -55,7 +55,7 @@ main = do
 
   let universe = dedupByNamespace $ L.concat
         [ mainModules
-        , evalLibModules
+        , defaultLibModules
         , dslSourceModules
         , hydraCoqModules
         , hydraJavaModules

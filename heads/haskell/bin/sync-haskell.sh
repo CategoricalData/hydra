@@ -18,7 +18,7 @@ set -euo pipefail
 #   synthesized from the loaded kernel type modules via --synthesize-sources.
 #
 # This replaces the older multi-pass approach (update-haskell-kernel →
-# update-kernel-tests → update-haskell-eval-lib → update-haskell-sources →
+# update-kernel-tests → update-haskell-default-lib → update-haskell-sources →
 # update-haskell-kernel again) with a single JSON-reading generator call.
 #
 # Prerequisites:

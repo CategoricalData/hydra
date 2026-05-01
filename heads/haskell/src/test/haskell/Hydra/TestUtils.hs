@@ -11,7 +11,7 @@ import Hydra.Generation (moduleAsBindings, showError)
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
-import qualified Hydra.EvalPrimitives as EvalPrims
+import qualified Hydra.DefaultPrimitives as DefaultPrims
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
@@ -151,7 +151,7 @@ evalCoreGraph = hydraCoreGraph {
   graphPrimitives = M.union evalPrimMap (graphPrimitives hydraCoreGraph)}
   where
     evalPrimMap = M.fromList $ fmap (\p -> (primitiveName p, p))
-      (L.concat (libraryPrimitives <$> EvalPrims.evalLibraries))
+      (L.concat (libraryPrimitives <$> DefaultPrims.defaultLibraries))
 
 evalEval :: Term -> Either String Term
 evalEval term = case reduceTerm testContext evalTestGraph True term of

@@ -120,7 +120,7 @@ universeMods = Phantoms.list [modA, modB]
 -- quantifiers (type variables that appear only in the domain, never in the
 -- codomain), plus a "stale" target that applies the function. This shape is
 -- actually produced by a prior inference run on the real kernel, e.g. the
--- stored scheme for `hydra.eval.lib.eithers.either` after round-tripping
+-- stored scheme for `hydra.lib.default.eithers.either` after round-tripping
 -- through JSON. `inferModules` and `inferModulesGiven` must agree on the
 -- rendered inferred modules for any such universe.
 --

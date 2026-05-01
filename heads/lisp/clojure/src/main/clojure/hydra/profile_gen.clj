@@ -122,8 +122,8 @@
     (println "Step 3: Loading modules from JSON...")
     (flush)
     (let [main-ns (read-manifest-field json-dir "mainModules")
-          eval-ns (read-manifest-field json-dir "evalLibModules")
-          all-kernel-ns (into (vec main-ns) eval-ns)
+          default-ns (read-manifest-field json-dir "defaultLibModules")
+          all-kernel-ns (into (vec main-ns) default-ns)
           all-mods (timed "load JSON" #(load-modules-from-json json-dir all-kernel-ns))]
       (println (str "  Loaded " (count all-mods) " modules"))
       (println)

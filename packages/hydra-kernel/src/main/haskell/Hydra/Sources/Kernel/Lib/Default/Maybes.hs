@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.Maybes where
+module Hydra.Sources.Kernel.Lib.Default.Maybes where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (maybe)
@@ -57,7 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.maybes"
+ns = Namespace "hydra.lib.default.maybes"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
@@ -68,7 +68,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleTermDependencies = [ExtractCore.ns, ShowCore.ns],
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Evaluation-level implementations of Maybe functions for the Hydra interpreter.")}
+            moduleDescription = Just ("Default term-level implementations of Maybe functions for the Hydra interpreter.")}
   where
     definitions = [
       toDefinition apply_,

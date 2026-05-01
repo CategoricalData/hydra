@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.Math where
+module Hydra.Sources.Kernel.Lib.Default.Math where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -53,7 +53,7 @@ import qualified Data.Maybe              as Y
 
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.math"
+ns = Namespace "hydra.lib.default.math"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
@@ -64,7 +64,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleTermDependencies = [],
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Evaluation-level implementations of Math functions for the Hydra interpreter.")}
+            moduleDescription = Just ("Default term-level implementations of Math functions for the Hydra interpreter.")}
   where
     definitions = [
       toDefinition even_,

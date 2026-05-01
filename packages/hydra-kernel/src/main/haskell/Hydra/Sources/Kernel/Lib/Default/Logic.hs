@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Eval.Lib.Pairs where
+module Hydra.Sources.Kernel.Lib.Default.Logic where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -27,6 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta.Literals as MetaLiterals
 import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
@@ -50,12 +51,9 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.pairs"
+ns = Namespace "hydra.lib.default.logic"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
@@ -64,51 +62,56 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ExtractCore.ns, ShowCore.ns],
+            moduleTermDependencies = [],
             moduleTypeDependencies = kernelTypesNamespaces,
-            moduleDescription = Just ("Evaluation-level implementations of Pair functions for the Hydra interpreter.")}
+            moduleDescription = Just ("Default term-level implementations of Logic functions for the Hydra interpreter.")}
   where
     definitions = [
-      toDefinition bimap_,
-      toDefinition first_,
-      toDefinition second_]
+      toDefinition and_,
+      toDefinition not_,
+      toDefinition or_]
 
--- | Interpreter-friendly bimap for Pair terms.
--- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
-bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Pair terms." $
+-- | Interpreter-friendly logical AND.
+-- and a b = ifElse a b false
+and_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+and_ = define "and" $
+  doc "Interpreter-friendly logical AND." $
   "cx" ~> "g" ~>
-  "firstFun" ~> "secondFun" ~> "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      "fst" <~ Pairs.first (var "p") $
-      "snd" <~ Pairs.second (var "p") $
-      right $ Core.termPair $ pair
-        (Core.termApplication $ Core.application (var "firstFun") (var "fst"))
-        (Core.termApplication $ Core.application (var "secondFun") (var "snd"))]
+  "a" ~> "b" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _logic_ifElse)
+        (var "a"))
+      (var "b"))
+    (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
 
--- | Interpreter-friendly first for Pair terms.
--- Extracts the first element of a pair.
-first_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
-first_ = define "first" $
-  doc "Interpreter-friendly first for Pair terms." $
+-- | Interpreter-friendly logical NOT.
+-- not a = ifElse a false true
+not_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+not_ = define "not" $
+  doc "Interpreter-friendly logical NOT." $
   "cx" ~> "g" ~>
-  "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      right $ Pairs.first (var "p")]
+  "a" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _logic_ifElse)
+        (var "a"))
+      (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False))
+    (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
 
--- | Interpreter-friendly second for Pair terms.
--- Extracts the second element of a pair.
-second_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
-second_ = define "second" $
-  doc "Interpreter-friendly second for Pair terms." $
+-- | Interpreter-friendly logical OR.
+-- or a b = ifElse a true b
+or_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+or_ = define "or" $
+  doc "Interpreter-friendly logical OR." $
   "cx" ~> "g" ~>
-  "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      right $ Pairs.second (var "p")]
+  "a" ~> "b" ~>
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termVariable $ encodedName _logic_ifElse)
+        (var "a"))
+      (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True))
+    (var "b")

@@ -20,7 +20,7 @@ import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
 import qualified Hydra.Show.Errors as ShowError
-import qualified Hydra.Sources.Eval.Lib.All as EvalLib
+import qualified Hydra.Sources.Kernel.Lib.Default.All as DefaultAll
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Encode.Core as EncodeCore
 
@@ -613,7 +613,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
     let jsonVal = Json.ValueObject $ M.fromList [
             ("dslModules", namespacesJson nonEmptyDsls),
-            ("evalLibModules", namespacesJson EvalLib.evalLibModules),
+            ("defaultLibModules", namespacesJson DefaultAll.defaultLibModules),
             ("kernelModules", namespacesJson kernelModules),
             ("mainModules", namespacesJson mainModules),
             ("testModules", namespacesJson testModules)]
@@ -652,21 +652,21 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
     let mainByPkg = groupByPackage mainModules
     let dslByPkg  = M.fromList (groupByPackage nonEmptyDsls)
     let testByPkg = M.fromList (groupByPackage testModules)
-    let evalLibSet = M.fromList (groupByPackage EvalLib.evalLibModules)
+    let defaultLibSet = M.fromList (groupByPackage DefaultAll.defaultLibModules)
     let packages = L.nub
           $ fmap fst mainByPkg
           ++ M.keys dslByPkg
           ++ M.keys testByPkg
-          ++ M.keys evalLibSet
+          ++ M.keys defaultLibSet
     CM.forM_ (L.sort packages) $ \pkg -> do
       let mainForPkg   = Y.fromMaybe [] (lookup pkg mainByPkg)
           dslForPkg    = M.findWithDefault [] pkg dslByPkg
           testForPkg   = M.findWithDefault [] pkg testByPkg
-          evalForPkg   = M.findWithDefault [] pkg evalLibSet
+          defaultForPkg   = M.findWithDefault [] pkg defaultLibSet
           jsonVal = Json.ValueObject $ M.fromList [
               ("package",        Json.ValueString pkg),
               ("dslModules",     namespacesJson dslForPkg),
-              ("evalLibModules", namespacesJson evalForPkg),
+              ("defaultLibModules", namespacesJson defaultForPkg),
               ("mainModules",    namespacesJson mainForPkg),
               ("testModules",    namespacesJson testForPkg)]
           jsonStr = JsonWriter.printJson jsonVal
