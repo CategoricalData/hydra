@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 -- | Default term-level implementations of Equality functions for the Hydra interpreter.
 
-module Hydra.Lib.Default.Equality where
+module Hydra.Lib.Defaults.Equality where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

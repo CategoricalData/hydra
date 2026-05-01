@@ -1,7 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 -- | Default term-level implementations of List functions for the Hydra interpreter.
 
-module Hydra.Lib.Default.Lists where
+module Hydra.Lib.Defaults.Lists where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors

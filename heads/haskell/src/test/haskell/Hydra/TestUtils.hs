@@ -11,7 +11,7 @@ import Hydra.Generation (moduleAsBindings, showError)
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
-import qualified Hydra.DefaultPrimitives as DefaultPrims
+import qualified Hydra.DefaultsPrimitives as DefaultPrims
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
