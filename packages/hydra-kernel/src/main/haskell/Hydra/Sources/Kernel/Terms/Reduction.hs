@@ -504,7 +504,15 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
         right (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
       _Term_application>>: "a" ~>
-        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $ -- TODO: hack for type checking
+        -- Inference hack: this Logic.ifElse always evaluates to `list []`,
+        -- but the dead `true` branch annotates the empty list with element
+        -- type `Type` so downstream Java code generation sees `list<Type>`
+        -- (not `list<unit>`). Excising the hack causes bootstrap-from-json
+        -- for the Java target to fail with "type mismatch: expected
+        -- list<hydra.core.Type> but found list<unit>". Validate.Core's
+        -- constant-condition rule flags this; the rule is disabled in
+        -- update-json-main's exemption list along with the comment there.
+        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $
         "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
         "rhs" <<~ var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
         right (Core.termApplication $ Core.application (var "lhs") (var "rhs")),

@@ -36,6 +36,7 @@ graph = define "Graph" $
 
 orderingIsomorphism :: Binding
 orderingIsomorphism = define "OrderingIsomorphism" $
+  doc "A pair of inverse permutations on lists, used to relate two orderings of the same elements" $
   T.forAll "a" $ T.record [
     "encode">:
       doc "Mapping from source ordering to target ordering" $
@@ -46,6 +47,7 @@ orderingIsomorphism = define "OrderingIsomorphism" $
 
 tarjanState :: Binding
 tarjanState = define "TarjanState" $
+  doc "State carried by Tarjan's strongly connected components algorithm during a depth-first traversal" $
   T.record [
     "counter">:
       doc "Next available index for vertices in the DFS traversal"
