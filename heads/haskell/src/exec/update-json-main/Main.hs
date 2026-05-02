@@ -27,7 +27,7 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
-import Hydra.Sources.Kernel.Lib.Default.All (defaultLibModules)
+import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 
 import qualified Hydra.Kernel as Kernel
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
