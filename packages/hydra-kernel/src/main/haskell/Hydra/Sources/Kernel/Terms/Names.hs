@@ -114,10 +114,10 @@ nameToFilePath = define "nameToFilePath" $
   "qualName" <~ qualifyName @@ var "name" $
   "ns" <~ Packaging.qualifiedNameNamespace (var "qualName") $
   "local" <~ Packaging.qualifiedNameLocal (var "qualName") $
-  "nsToFilePath" <~ ("ns" ~>
+  "nsToFilePath" <~ ("nsArg" ~>
     Strings.intercalate (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
-      (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))) $
+      (Strings.splitOn (string ".") (Packaging.unNamespace (var "nsArg"))))) $
   "prefix" <~ Maybes.maybe (string "")
     ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
     (var "ns") $

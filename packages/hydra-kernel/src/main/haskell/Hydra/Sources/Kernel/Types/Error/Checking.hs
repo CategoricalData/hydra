@@ -173,6 +173,9 @@ unsupportedTermVariantError = define "UnsupportedTermVariantError" $
 untypedLambdaError :: Binding
 untypedLambdaError = define "UntypedLambdaError" $
   doc "A lambda expression without a type annotation on its parameter" $
+  -- TODO: this should be `T.wrap T.unit` (per the EmptyRecordType validator
+  -- rule). The migration ripples through encode/decode/DSL helpers + every
+  -- host language and is sized as its own change; tracked separately.
   T.record []
 
 untypedLetBindingError :: Binding
