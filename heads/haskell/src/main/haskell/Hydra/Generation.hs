@@ -20,7 +20,7 @@ import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
 import qualified Hydra.Show.Errors as ShowError
-import qualified Hydra.Sources.Kernel.Lib.Default.All as DefaultAll
+import qualified Hydra.Sources.Kernel.Lib.Defaults.All as DefaultAll
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Encode.Core as EncodeCore
 
