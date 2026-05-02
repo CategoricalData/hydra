@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.error.checking.CheckingError
 checkingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.CheckingError
 checkingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -68,6 +69,7 @@ checkingError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.IncorrectUnificationError
 incorrectUnificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.IncorrectUnificationError
 incorrectUnificationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -76,6 +78,7 @@ incorrectUnificationError cx raw =
         in (Eithers.bind (ExtractCore.requireField "substitution" Typing.typeSubst fieldMap cx) (\field_substitution -> Right (Checking.IncorrectUnificationError {
           Checking.incorrectUnificationErrorSubstitution = field_substitution})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.NotAForallTypeError
 notAForallTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.NotAForallTypeError
 notAForallTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -85,6 +88,7 @@ notAForallTypeError cx raw =
           Checking.notAForallTypeErrorType = field_type,
           Checking.notAForallTypeErrorTypeArguments = field_typeArguments}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.NotAFunctionTypeError
 notAFunctionTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.NotAFunctionTypeError
 notAFunctionTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -93,6 +97,7 @@ notAFunctionTypeError cx raw =
         in (Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Right (Checking.NotAFunctionTypeError {
           Checking.notAFunctionTypeErrorType = field_type})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.OtherCheckingError
 otherCheckingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.OtherCheckingError
 otherCheckingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -106,6 +111,7 @@ otherCheckingError cx raw =
           Checking.otherCheckingErrorPath = field_path,
           Checking.otherCheckingErrorMessage = field_message}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.TypeArityMismatchError
 typeArityMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.TypeArityMismatchError
 typeArityMismatchError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -129,6 +135,7 @@ typeArityMismatchError cx raw =
           Checking.typeArityMismatchErrorActualArity = field_actualArity,
           Checking.typeArityMismatchErrorTypeArguments = field_typeArguments}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.TypeMismatchError
 typeMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.TypeMismatchError
 typeMismatchError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -138,6 +145,7 @@ typeMismatchError cx raw =
           Checking.typeMismatchErrorExpectedType = field_expectedType,
           Checking.typeMismatchErrorActualType = field_actualType}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UnboundTypeVariablesError
 unboundTypeVariablesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UnboundTypeVariablesError
 unboundTypeVariablesError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -147,6 +155,7 @@ unboundTypeVariablesError cx raw =
           Checking.unboundTypeVariablesErrorVariables = field_variables,
           Checking.unboundTypeVariablesErrorType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -156,6 +165,7 @@ undefinedTermVariableCheckingError cx raw =
           Checking.undefinedTermVariableCheckingErrorPath = field_path,
           Checking.undefinedTermVariableCheckingErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UnequalTypesError
 unequalTypesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UnequalTypesError
 unequalTypesError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -169,6 +179,7 @@ unequalTypesError cx raw =
           Checking.unequalTypesErrorTypes = field_types,
           Checking.unequalTypesErrorDescription = field_description}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UnsupportedTermVariantError
 unsupportedTermVariantError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UnsupportedTermVariantError
 unsupportedTermVariantError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -177,6 +188,7 @@ unsupportedTermVariantError cx raw =
         in (Eithers.bind (ExtractCore.requireField "termVariant" Variants.termVariant fieldMap cx) (\field_termVariant -> Right (Checking.UnsupportedTermVariantError {
           Checking.unsupportedTermVariantErrorTermVariant = field_termVariant})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UntypedLambdaError
 untypedLambdaError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UntypedLambdaError
 untypedLambdaError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -185,6 +197,7 @@ untypedLambdaError cx raw =
         in (Right (Checking.UntypedLambdaError {
         }))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UntypedLetBindingError
 untypedLetBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UntypedLetBindingError
 untypedLetBindingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -193,6 +206,7 @@ untypedLetBindingError cx raw =
         in (Eithers.bind (ExtractCore.requireField "binding" DecodeCore.binding fieldMap cx) (\field_binding -> Right (Checking.UntypedLetBindingError {
           Checking.untypedLetBindingErrorBinding = field_binding})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.checking.UntypedTermVariableCheckingError
 untypedTermVariableCheckingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UntypedTermVariableCheckingError
 untypedTermVariableCheckingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
