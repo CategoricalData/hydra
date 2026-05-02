@@ -16,6 +16,9 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
+ns :: Namespace
+ns = Namespace "hydra.json.schema"
+
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
@@ -24,7 +27,6 @@ module_ = Module {
             moduleTypeDependencies = [Core.ns],
             moduleDescription = Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")}
   where
-    ns = Namespace "hydra.json.schema"
     def = datatype ns
     js = typeref ns
     json = typeref $ JsonModel.ns
