@@ -1,6 +1,6 @@
 {
   "$defs": {
-    "EdgeLabel": {"title": "hydra.pg.model.EdgeLabel", "type": "string"},
+    "EdgeLabel": {"title": "EdgeLabel", "type": "string"},
     "EdgeType": {
       "additionalProperties": false,
       "properties": {
@@ -13,7 +13,7 @@
           "items": {"$ref": "#/$defs/PropertyType"},
           "type": "array"}},
       "required": ["label", "id", "out", "in", "properties"],
-      "title": "hydra.pg.model.EdgeType",
+      "title": "EdgeType",
       "type": "object"},
     "GraphSchema": {
       "additionalProperties": false,
@@ -27,9 +27,9 @@
           "description": "A unique vertex type for each vertex label which may occur in a graph",
           "type": "object"}},
       "required": ["vertices", "edges"],
-      "title": "hydra.pg.model.GraphSchema",
+      "title": "GraphSchema",
       "type": "object"},
-    "PropertyKey": {"title": "hydra.pg.model.PropertyKey", "type": "string"},
+    "PropertyKey": {"title": "PropertyKey", "type": "string"},
     "PropertyType": {
       "additionalProperties": false,
       "properties": {
@@ -39,9 +39,9 @@
           "type": "boolean"},
         "value": {"$ref": "#/$defs/t", "description": "The type of a property's value"}},
       "required": ["key", "value", "required"],
-      "title": "hydra.pg.model.PropertyType",
+      "title": "PropertyType",
       "type": "object"},
-    "VertexLabel": {"title": "hydra.pg.model.VertexLabel", "type": "string"},
+    "VertexLabel": {"title": "VertexLabel", "type": "string"},
     "VertexType": {
       "additionalProperties": false,
       "properties": {
@@ -52,8 +52,7 @@
           "items": {"$ref": "#/$defs/PropertyType"},
           "type": "array"}},
       "required": ["label", "id", "properties"],
-      "title": "hydra.pg.model.VertexType",
-      "type": "object"},
-    "t": {"title": "t"}},
+      "title": "VertexType",
+      "type": "object"}},
   "$ref": "#/$defs/GraphSchema",
   "$schema": "http://json-schema.org/2020-12/schema"}
