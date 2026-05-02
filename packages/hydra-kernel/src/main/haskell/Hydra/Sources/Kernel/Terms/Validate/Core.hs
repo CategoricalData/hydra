@@ -764,17 +764,14 @@ validateTypeNode = define "validateTypeNode" $
             record _EmptyUnionTypeError [
               _EmptyUnionTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
           noTypeError,
-        -- Y3. SingleVariantUnionError
-        Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
-          (Maybes.maybe
-            noTypeError
-            ("singleField" ~>
-              mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
-                record _SingleVariantUnionError [
-                  _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
-                  _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")])
-            (Lists.maybeHead $ var "fields"))
-          noTypeError,
+        -- Y3. SingleVariantUnionError -- DISABLED.
+        -- Single-variant unions are sometimes a deliberate design choice
+        -- (e.g. an extensible variant kept as a union from the start so
+        -- that adding a second variant is a non-breaking change). The
+        -- SingleVariantUnionError variant is retained in the error model
+        -- so the check can be re-enabled later via an options flag if a
+        -- warning channel is added; for now it is a non-error.
+        noTypeError,
         -- Y5. DuplicateUnionTypeFieldNamesError
         checkDuplicateFieldTypes @@ (var "fields")
           @@ ("dupName" ~>
