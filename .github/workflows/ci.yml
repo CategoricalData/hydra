@@ -195,27 +195,35 @@ jobs:
         run: |
           set -euo pipefail
           # Use signed-by keyring (modern pattern; apt-key is deprecated).
-          # Fetch via gpg --recv-keys (HKP protocol) rather than curling the
-          # web lookup endpoint and piping through gpg --dearmor: the previous
-          # curl-based form silently accepted HTML "key not found" pages from
-          # keys.openpgp.org and tried to dearmor them, causing the install
-          # to fail. Try multiple keyservers in order; fail loudly if none
-          # serve the SBT signing key.
+          # The GitHub Actions ubuntu-latest image doesn't ship dirmngr (so
+          # `gpg --recv-keys` can't speak HKP), and `keys.openpgp.org`'s web
+          # lookup endpoint serves HTML "not found" pages with 200 status for
+          # unverified keys -- which an unconditional `curl | gpg --dearmor`
+          # accepts and then fails on. So we curl the HTTP keyserver lookup
+          # to a temp file, validate it really is an OpenPGP block before
+          # importing, and try multiple keyservers in order.
           KEYID=2EE0EA64E40A89B84B2DF73499E82A75642AC823
           KEYRING=/etc/apt/keyrings/sbt.gpg
           sudo install -m 0755 -d /etc/apt/keyrings
+          tmpkey=$(mktemp)
 
           fetched=0
-          for ks in hkps://keyserver.ubuntu.com hkps://pgp.mit.edu hkps://keys.openpgp.org; do
-            if sudo gpg --no-default-keyring --keyring "$KEYRING" \
-                        --keyserver "$ks" --recv-keys "$KEYID"; then
+          for ks in keyserver.ubuntu.com pgp.mit.edu keys.openpgp.org; do
+            if curl -sSfL --max-time 30 \
+                 "https://${ks}/pks/lookup?op=get&options=mr&search=0x${KEYID}" \
+                 -o "$tmpkey" \
+               && head -1 "$tmpkey" | grep -qF -- "-----BEGIN PGP PUBLIC KEY BLOCK-----"
+            then
               echo "Fetched SBT signing key from ${ks}"
               fetched=1
               break
             fi
-            echo "Keyserver ${ks} did not respond; trying next..."
+            echo "Keyserver ${ks} did not return an armored OpenPGP key; trying next..."
           done
           test "$fetched" -eq 1
+
+          sudo gpg --dearmor -o "$KEYRING" < "$tmpkey"
+          rm -f "$tmpkey"
           test -s "$KEYRING"
 
           echo "deb [signed-by=$KEYRING] https://repo.scala-sbt.org/scalasbt/debian all main" \
