@@ -1335,7 +1335,7 @@ constantDeclForTypeName = def "constantDeclForTypeName" $
     constantDecl @@ var "comment" @@ string "TYPE_" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Construct an elements interface for a module's data definitions
-constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit))
+constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclarationWithComments] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
     "ns">: Packaging.moduleNamespace (var "mod"),
@@ -1346,7 +1346,7 @@ constructElementsInterface = def "constructElementsInterface" $
     "mods">: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
     "className">: elementsClassName @@ var "ns",
     "elName">: elementsQualifiedName @@ var "ns",
-    "body">: wrap Java._InterfaceBody (Lists.map (lambda "m" $ noInterfaceComment @@ var "m") (var "members")),
+    "body">: wrap Java._InterfaceBody (var "members"),
     "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
         (record Java._NormalInterfaceDeclaration [
@@ -2602,12 +2602,13 @@ encodeTerm = def "encodeTerm" $
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
 -- type variable substitution, accumulator unification, and body annotation.
-encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either Error Java.InterfaceMemberDeclaration)
+encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either Error Java.InterfaceMemberDeclarationWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "env" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TermDefinition _TermDefinition_name @@ var "tdef") $
     "term0" <~ (project _TermDefinition _TermDefinition_term @@ var "tdef") $
+    "mDoc" <<~ (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term0") $
     "ts" <~ Maybes.maybe
       (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
       ("x" ~> var "x")
@@ -2753,9 +2754,13 @@ encodeTermDefinition = def "encodeTermDefinition" $
         ("jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody" @@ var "cx" @@ var "g") $
           "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
           right $ Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
-      right (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
+      "imdMember" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
         @@ var "jname" @@ var "jformalParams" @@ var "result"
-        @@ just (var "methodBody")))
+        @@ just (var "methodBody")) $
+      right (Maybes.maybe
+        (noInterfaceComment @@ var "imdMember")
+        (lambda "doc" $ withInterfaceCommentString @@ var "doc" @@ var "imdMember")
+        (var "mDoc")))
 
 -- | Internal term encoder with annotation and type-application accumulators.
 encodeTermInternal :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> Context -> Graph -> Either Error Java.Expression)
