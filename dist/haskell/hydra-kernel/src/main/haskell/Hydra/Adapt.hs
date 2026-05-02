@@ -341,7 +341,36 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
         let adapted = Pairs.first adaptResult
             adaptedBindings = Pairs.second adaptResult
         in (Eithers.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->
-          let bins5 = normalizeBindings bins4
+          let bins5Raw = normalizeBindings bins4
+              peelOne =
+                      \t -> case t of
+                        Core.TermTypeLambda v0 -> Core.typeLambdaBody v0
+                        Core.TermTypeApplication v0 -> Core.typeApplicationTermBody v0
+                        _ -> t
+              extractAnn =
+                      \t -> case t of
+                        Core.TermAnnotated v0 -> Just (Core.annotatedTermAnnotation v0)
+                        _ -> Nothing
+              findAnn =
+                      \t ->
+                        let t1 = peelOne t
+                            t2 = peelOne t1
+                            t3 = peelOne t2
+                        in (Maybes.maybe (Maybes.maybe (Maybes.maybe (extractAnn t3) (\a -> Just a) (extractAnn t2)) (\a -> Just a) (extractAnn t1)) (\a -> Just a) (extractAnn t))
+              originalAnnotations =
+                      Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.maybe Nothing (\ann -> Just (Core.bindingName b, ann)) (findAnn (Core.bindingTerm b))) originalBindings))
+              reattachAnnotation =
+                      \b -> Maybes.maybe b (\ann -> Core.Binding {
+                        Core.bindingName = (Core.bindingName b),
+                        Core.bindingTerm = case (Core.bindingTerm b) of
+                          Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
+                            Core.annotatedTermBody = (Core.annotatedTermBody v0),
+                            Core.annotatedTermAnnotation = (Maps.union (Core.annotatedTermAnnotation v0) ann)})
+                          _ -> Core.TermAnnotated (Core.AnnotatedTerm {
+                            Core.annotatedTermBody = (Core.bindingTerm b),
+                            Core.annotatedTermAnnotation = ann}),
+                        Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Maps.lookup (Core.bindingName b) originalAnnotations)
+              bins5 = Lists.map reattachAnnotation bins5Raw
               toDef =
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),

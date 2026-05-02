@@ -617,7 +617,7 @@ constantDeclForTypeName aliases name cx g =
                 (Core.unName name),
                 "} type."]
       in (constantDecl comment "TYPE_" aliases name cx g)
-constructElementsInterface :: Packaging.Module -> [Syntax.InterfaceMemberDeclaration] -> (Core.Name, Syntax.CompilationUnit)
+constructElementsInterface :: Packaging.Module -> [Syntax.InterfaceMemberDeclarationWithComments] -> (Core.Name, Syntax.CompilationUnit)
 constructElementsInterface mod members =
 
       let ns = Packaging.moduleNamespace mod
@@ -627,7 +627,7 @@ constructElementsInterface mod members =
                 Syntax.InterfaceModifierPublic]
           className = elementsClassName ns
           elName = elementsQualifiedName ns
-          body = Syntax.InterfaceBody (Lists.map (\m -> noInterfaceComment m) members)
+          body = Syntax.InterfaceBody members
           itf =
                   Syntax.TypeDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface (Syntax.NormalInterfaceDeclaration {
                     Syntax.normalInterfaceDeclarationModifiers = mods,
@@ -1306,108 +1306,111 @@ encodeNullaryPrimitiveByName env typ name cx g =
         in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs className methodName targs []))))))
 encodeTerm :: JavaEnvironment.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeTerm env term cx g = encodeTermInternal env [] [] term cx g
-encodeTermDefinition :: JavaEnvironment.JavaEnvironment -> Packaging.TermDefinition -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.InterfaceMemberDeclaration
+encodeTermDefinition :: JavaEnvironment.JavaEnvironment -> Packaging.TermDefinition -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.InterfaceMemberDeclarationWithComments
 encodeTermDefinition env tdef cx g =
 
       let name = Packaging.termDefinitionName tdef
           term0 = Packaging.termDefinitionTerm tdef
-          ts =
-                  Maybes.maybe (Core.TypeScheme {
-                    Core.typeSchemeVariables = [],
-                    Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                    Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionTypeScheme tdef)
-          term = Variables.unshadowVariables term0
-      in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
-        let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)
-            termVars = Typing.functionStructureTypeParams fs
-            schemeTypeVars = collectTypeVars (Core.typeSchemeBody ts)
-            usedSchemeVars = Lists.filter (\v -> Sets.member v schemeTypeVars) schemeVars
-            tparams = Logic.ifElse (Lists.null usedSchemeVars) termVars usedSchemeVars
-            params = Typing.functionStructureParams fs
-            bindings = Typing.functionStructureBindings fs
-            body = Typing.functionStructureBody fs
-            doms = Typing.functionStructureDomains fs
-            env2 = Typing.functionStructureEnvironment fs
-            schemeType = Core.typeSchemeBody ts
-            numParams = Lists.length params
-            peelResult = peelDomainsAndCod numParams schemeType
-            schemeDoms = Pairs.first peelResult
-            cod = Pairs.second peelResult
-            schemeVarSet = Sets.fromList tparams
-        in (Eithers.bind (Logic.ifElse (Lists.null tparams) (Right Maps.empty) (buildSubstFromAnnotations schemeVarSet term cx g)) (\typeVarSubst ->
-          let overgenSubst = detectAccumulatorUnification schemeDoms cod tparams
-              overgenVarSubst =
-                      Maps.fromList (Maybes.cat (Lists.map (\entry ->
-                        let k = Pairs.first entry
-                            v = Pairs.second entry
-                        in case v of
-                          Core.TypeVariable v0 -> Just (k, v0)
-                          _ -> Nothing) (Maps.toList overgenSubst)))
-              fixedCod = Logic.ifElse (Maps.null overgenSubst) cod (substituteTypeVarsWithTypes overgenSubst cod)
-              fixedDoms =
-                      Logic.ifElse (Maps.null overgenSubst) schemeDoms (Lists.map (\d -> substituteTypeVarsWithTypes overgenSubst d) schemeDoms)
-              fixedTparams =
-                      Logic.ifElse (Maps.null overgenSubst) tparams (Lists.filter (\v -> Logic.not (Maps.member v overgenSubst)) tparams)
-              constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-              jparams = Lists.map (\v -> Utils.javaTypeParameter (Formatting.capitalize (Core.unName v))) fixedTparams
-              aliases2base = JavaEnvironment.javaEnvironmentAliases env2
-              trustedVars = Sets.unions (Lists.map (\d -> collectTypeVars d) (Lists.concat2 fixedDoms [
-                    fixedCod]))
-              fixedSchemeVarSet = Sets.fromList fixedTparams
-              aliases2 =
-                      JavaEnvironment.Aliases {
-                        JavaEnvironment.aliasesCurrentNamespace = (JavaEnvironment.aliasesCurrentNamespace aliases2base),
-                        JavaEnvironment.aliasesPackages = (JavaEnvironment.aliasesPackages aliases2base),
-                        JavaEnvironment.aliasesBranchVars = (JavaEnvironment.aliasesBranchVars aliases2base),
-                        JavaEnvironment.aliasesRecursiveVars = (JavaEnvironment.aliasesRecursiveVars aliases2base),
-                        JavaEnvironment.aliasesInScopeTypeParams = fixedSchemeVarSet,
-                        JavaEnvironment.aliasesPolymorphicLocals = (JavaEnvironment.aliasesPolymorphicLocals aliases2base),
-                        JavaEnvironment.aliasesInScopeJavaVars = (JavaEnvironment.aliasesInScopeJavaVars aliases2base),
-                        JavaEnvironment.aliasesVarRenames = (JavaEnvironment.aliasesVarRenames aliases2base),
-                        JavaEnvironment.aliasesLambdaVars = (Sets.union (JavaEnvironment.aliasesLambdaVars aliases2base) (Sets.fromList params)),
-                        JavaEnvironment.aliasesTypeVarSubst = (Maps.union overgenVarSubst typeVarSubst),
-                        JavaEnvironment.aliasesTrustedTypeVars = (Sets.intersection trustedVars fixedSchemeVarSet),
-                        JavaEnvironment.aliasesMethodCodomain = (Just fixedCod),
-                        JavaEnvironment.aliasesThunkedVars = (JavaEnvironment.aliasesThunkedVars aliases2base)}
-              env2WithTypeParams =
-                      JavaEnvironment.JavaEnvironment {
-                        JavaEnvironment.javaEnvironmentAliases = aliases2,
-                        JavaEnvironment.javaEnvironmentGraph = (JavaEnvironment.javaEnvironmentGraph env2)}
-          in (Eithers.bind (bindingsToStatements env2WithTypeParams bindings cx g) (\bindResult ->
-            let bindingStmts = Pairs.first bindResult
-                env3 = Pairs.second bindResult
-            in (Eithers.bind (Logic.ifElse (Maps.null overgenSubst) (Right body) (applyOvergenSubstToTermAnnotations overgenSubst body cx g)) (\body_ ->
-              let annotatedBody = propagateTypesInAppChain fixedCod fixedCod body_
-              in (Eithers.bind (Eithers.mapList (\pair -> Eithers.bind (encodeType aliases2 Sets.empty (Pairs.first pair) cx g) (\jdom -> Right (Utils.javaTypeToJavaFormalParameter jdom (Pairs.second pair)))) (Lists.zip fixedDoms params)) (\jformalParams -> Eithers.bind (encodeType aliases2 Sets.empty fixedCod cx g) (\jcod ->
-                let result = Utils.javaTypeToJavaResult jcod
-                    mods = [
-                          Syntax.InterfaceMethodModifierStatic]
-                    jname = Utils.sanitizeJavaName (Formatting.decapitalize (Names.localNameOf name))
-                    isTCO = False
-                in (Eithers.bind (Logic.ifElse isTCO (
-                  let tcoSuffix = "_tco"
-                      snapshotNames = Lists.map (\p -> Core.Name (Strings.cat2 (Core.unName p) tcoSuffix)) params
-                      tcoVarRenames = Maps.fromList (Lists.zip params snapshotNames)
-                      snapshotDecls =
-                              Lists.map (\pair -> Utils.finalVarDeclarationStatement (Utils.variableToJavaIdentifier (Pairs.second pair)) (Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier (Pairs.first pair)))) (Lists.zip params snapshotNames)
-                      tcoBody =
-                              Logic.ifElse (Lists.null bindings) annotatedBody (Core.TermLet (Core.Let {
-                                Core.letBindings = bindings,
-                                Core.letBody = annotatedBody}))
-                  in (Eithers.bind (encodeTermTCO env2WithTypeParams name params tcoVarRenames 0 tcoBody cx g) (\tcoStmts ->
-                    let whileBodyStmts = Lists.concat2 snapshotDecls tcoStmts
-                        whileBodyBlock =
-                                Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block whileBodyStmts))
-                        noCond = Nothing
-                        whileStmt =
-                                Syntax.BlockStatementStatement (Syntax.StatementWhile (Syntax.WhileStatement {
-                                  Syntax.whileStatementCond = noCond,
-                                  Syntax.whileStatementBody = whileBodyBlock}))
-                    in (Right [
-                      whileStmt])))) (Eithers.bind (encodeTerm env3 annotatedBody cx g) (\jbody ->
-                  let returnSt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jbody))
-                  in (Right (Lists.concat2 bindingStmts [
-                    returnSt]))))) (\methodBody -> Right (Utils.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)))))))))))))))
+      in (Eithers.bind (Annotations.getTermDescription cx g term0) (\mDoc ->
+        let ts =
+                Maybes.maybe (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
+                  Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionTypeScheme tdef)
+            term = Variables.unshadowVariables term0
+        in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
+          let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)
+              termVars = Typing.functionStructureTypeParams fs
+              schemeTypeVars = collectTypeVars (Core.typeSchemeBody ts)
+              usedSchemeVars = Lists.filter (\v -> Sets.member v schemeTypeVars) schemeVars
+              tparams = Logic.ifElse (Lists.null usedSchemeVars) termVars usedSchemeVars
+              params = Typing.functionStructureParams fs
+              bindings = Typing.functionStructureBindings fs
+              body = Typing.functionStructureBody fs
+              doms = Typing.functionStructureDomains fs
+              env2 = Typing.functionStructureEnvironment fs
+              schemeType = Core.typeSchemeBody ts
+              numParams = Lists.length params
+              peelResult = peelDomainsAndCod numParams schemeType
+              schemeDoms = Pairs.first peelResult
+              cod = Pairs.second peelResult
+              schemeVarSet = Sets.fromList tparams
+          in (Eithers.bind (Logic.ifElse (Lists.null tparams) (Right Maps.empty) (buildSubstFromAnnotations schemeVarSet term cx g)) (\typeVarSubst ->
+            let overgenSubst = detectAccumulatorUnification schemeDoms cod tparams
+                overgenVarSubst =
+                        Maps.fromList (Maybes.cat (Lists.map (\entry ->
+                          let k = Pairs.first entry
+                              v = Pairs.second entry
+                          in case v of
+                            Core.TypeVariable v0 -> Just (k, v0)
+                            _ -> Nothing) (Maps.toList overgenSubst)))
+                fixedCod = Logic.ifElse (Maps.null overgenSubst) cod (substituteTypeVarsWithTypes overgenSubst cod)
+                fixedDoms =
+                        Logic.ifElse (Maps.null overgenSubst) schemeDoms (Lists.map (\d -> substituteTypeVarsWithTypes overgenSubst d) schemeDoms)
+                fixedTparams =
+                        Logic.ifElse (Maps.null overgenSubst) tparams (Lists.filter (\v -> Logic.not (Maps.member v overgenSubst)) tparams)
+                constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
+                jparams = Lists.map (\v -> Utils.javaTypeParameter (Formatting.capitalize (Core.unName v))) fixedTparams
+                aliases2base = JavaEnvironment.javaEnvironmentAliases env2
+                trustedVars = Sets.unions (Lists.map (\d -> collectTypeVars d) (Lists.concat2 fixedDoms [
+                      fixedCod]))
+                fixedSchemeVarSet = Sets.fromList fixedTparams
+                aliases2 =
+                        JavaEnvironment.Aliases {
+                          JavaEnvironment.aliasesCurrentNamespace = (JavaEnvironment.aliasesCurrentNamespace aliases2base),
+                          JavaEnvironment.aliasesPackages = (JavaEnvironment.aliasesPackages aliases2base),
+                          JavaEnvironment.aliasesBranchVars = (JavaEnvironment.aliasesBranchVars aliases2base),
+                          JavaEnvironment.aliasesRecursiveVars = (JavaEnvironment.aliasesRecursiveVars aliases2base),
+                          JavaEnvironment.aliasesInScopeTypeParams = fixedSchemeVarSet,
+                          JavaEnvironment.aliasesPolymorphicLocals = (JavaEnvironment.aliasesPolymorphicLocals aliases2base),
+                          JavaEnvironment.aliasesInScopeJavaVars = (JavaEnvironment.aliasesInScopeJavaVars aliases2base),
+                          JavaEnvironment.aliasesVarRenames = (JavaEnvironment.aliasesVarRenames aliases2base),
+                          JavaEnvironment.aliasesLambdaVars = (Sets.union (JavaEnvironment.aliasesLambdaVars aliases2base) (Sets.fromList params)),
+                          JavaEnvironment.aliasesTypeVarSubst = (Maps.union overgenVarSubst typeVarSubst),
+                          JavaEnvironment.aliasesTrustedTypeVars = (Sets.intersection trustedVars fixedSchemeVarSet),
+                          JavaEnvironment.aliasesMethodCodomain = (Just fixedCod),
+                          JavaEnvironment.aliasesThunkedVars = (JavaEnvironment.aliasesThunkedVars aliases2base)}
+                env2WithTypeParams =
+                        JavaEnvironment.JavaEnvironment {
+                          JavaEnvironment.javaEnvironmentAliases = aliases2,
+                          JavaEnvironment.javaEnvironmentGraph = (JavaEnvironment.javaEnvironmentGraph env2)}
+            in (Eithers.bind (bindingsToStatements env2WithTypeParams bindings cx g) (\bindResult ->
+              let bindingStmts = Pairs.first bindResult
+                  env3 = Pairs.second bindResult
+              in (Eithers.bind (Logic.ifElse (Maps.null overgenSubst) (Right body) (applyOvergenSubstToTermAnnotations overgenSubst body cx g)) (\body_ ->
+                let annotatedBody = propagateTypesInAppChain fixedCod fixedCod body_
+                in (Eithers.bind (Eithers.mapList (\pair -> Eithers.bind (encodeType aliases2 Sets.empty (Pairs.first pair) cx g) (\jdom -> Right (Utils.javaTypeToJavaFormalParameter jdom (Pairs.second pair)))) (Lists.zip fixedDoms params)) (\jformalParams -> Eithers.bind (encodeType aliases2 Sets.empty fixedCod cx g) (\jcod ->
+                  let result = Utils.javaTypeToJavaResult jcod
+                      mods = [
+                            Syntax.InterfaceMethodModifierStatic]
+                      jname = Utils.sanitizeJavaName (Formatting.decapitalize (Names.localNameOf name))
+                      isTCO = False
+                  in (Eithers.bind (Logic.ifElse isTCO (
+                    let tcoSuffix = "_tco"
+                        snapshotNames = Lists.map (\p -> Core.Name (Strings.cat2 (Core.unName p) tcoSuffix)) params
+                        tcoVarRenames = Maps.fromList (Lists.zip params snapshotNames)
+                        snapshotDecls =
+                                Lists.map (\pair -> Utils.finalVarDeclarationStatement (Utils.variableToJavaIdentifier (Pairs.second pair)) (Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier (Pairs.first pair)))) (Lists.zip params snapshotNames)
+                        tcoBody =
+                                Logic.ifElse (Lists.null bindings) annotatedBody (Core.TermLet (Core.Let {
+                                  Core.letBindings = bindings,
+                                  Core.letBody = annotatedBody}))
+                    in (Eithers.bind (encodeTermTCO env2WithTypeParams name params tcoVarRenames 0 tcoBody cx g) (\tcoStmts ->
+                      let whileBodyStmts = Lists.concat2 snapshotDecls tcoStmts
+                          whileBodyBlock =
+                                  Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block whileBodyStmts))
+                          noCond = Nothing
+                          whileStmt =
+                                  Syntax.BlockStatementStatement (Syntax.StatementWhile (Syntax.WhileStatement {
+                                    Syntax.whileStatementCond = noCond,
+                                    Syntax.whileStatementBody = whileBodyBlock}))
+                      in (Right [
+                        whileStmt])))) (Eithers.bind (encodeTerm env3 annotatedBody cx g) (\jbody ->
+                    let returnSt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jbody))
+                    in (Right (Lists.concat2 bindingStmts [
+                      returnSt]))))) (\methodBody ->
+                    let imdMember = Utils.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)
+                    in (Right (Maybes.maybe (noInterfaceComment imdMember) (\doc -> withInterfaceCommentString doc imdMember) mDoc)))))))))))))))))
 encodeTermInternal :: JavaEnvironment.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeTermInternal env anns tyapps term cx g0 =
 

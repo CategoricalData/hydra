@@ -6,6 +6,7 @@ import qualified Hydra.Classes as Classes
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.classes.TypeClass
 typeClass :: Classes.TypeClass -> Core.Term
 typeClass x =
     case x of
