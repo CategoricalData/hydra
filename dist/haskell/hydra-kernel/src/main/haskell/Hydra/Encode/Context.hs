@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.context.Context
 context :: Context.Context -> Core.Term
 context x =
     Core.TermRecord (Core.Record {
@@ -23,6 +24,7 @@ context x =
         Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.term m)) (Context.contextOther x))}]})
+-- | Encoder for hydra.context.InContext
 inContext :: (t0 -> Core.Term) -> Context.InContext t0 -> Core.Term
 inContext e x =
     Core.TermRecord (Core.Record {

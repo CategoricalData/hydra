@@ -8,6 +8,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.ast.Associativity
 associativity :: Ast.Associativity -> Core.Term
 associativity x =
     case x of
@@ -31,6 +32,7 @@ associativity x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "both"),
           Core.fieldTerm = Core.TermUnit}})
+-- | Encoder for hydra.ast.BlockStyle
 blockStyle :: Ast.BlockStyle -> Core.Term
 blockStyle x =
     Core.TermRecord (Core.Record {
@@ -45,6 +47,7 @@ blockStyle x =
         Core.Field {
           Core.fieldName = (Core.Name "newlineAfterContent"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Ast.blockStyleNewlineAfterContent x))}]})
+-- | Encoder for hydra.ast.BracketExpr
 bracketExpr :: Ast.BracketExpr -> Core.Term
 bracketExpr x =
     Core.TermRecord (Core.Record {
@@ -59,6 +62,7 @@ bracketExpr x =
         Core.Field {
           Core.fieldName = (Core.Name "style"),
           Core.fieldTerm = (blockStyle (Ast.bracketExprStyle x))}]})
+-- | Encoder for hydra.ast.Brackets
 brackets :: Ast.Brackets -> Core.Term
 brackets x =
     Core.TermRecord (Core.Record {
@@ -70,6 +74,7 @@ brackets x =
         Core.Field {
           Core.fieldName = (Core.Name "close"),
           Core.fieldTerm = (symbol (Ast.bracketsClose x))}]})
+-- | Encoder for hydra.ast.Expr
 expr :: Ast.Expr -> Core.Term
 expr x =
     case x of
@@ -98,6 +103,7 @@ expr x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "seq"),
           Core.fieldTerm = (seqExpr v0)}})
+-- | Encoder for hydra.ast.IndentStyle
 indentStyle :: Ast.IndentStyle -> Core.Term
 indentStyle x =
     case x of
@@ -111,6 +117,7 @@ indentStyle x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "subsequentLines"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
+-- | Encoder for hydra.ast.IndentedExpression
 indentedExpression :: Ast.IndentedExpression -> Core.Term
 indentedExpression x =
     Core.TermRecord (Core.Record {
@@ -122,6 +129,7 @@ indentedExpression x =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (expr (Ast.indentedExpressionExpr x))}]})
+-- | Encoder for hydra.ast.Op
 op :: Ast.Op -> Core.Term
 op x =
     Core.TermRecord (Core.Record {
@@ -139,6 +147,7 @@ op x =
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
           Core.fieldTerm = (associativity (Ast.opAssociativity x))}]})
+-- | Encoder for hydra.ast.OpExpr
 opExpr :: Ast.OpExpr -> Core.Term
 opExpr x =
     Core.TermRecord (Core.Record {
@@ -153,6 +162,7 @@ opExpr x =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (expr (Ast.opExprRhs x))}]})
+-- | Encoder for hydra.ast.Padding
 padding :: Ast.Padding -> Core.Term
 padding x =
     Core.TermRecord (Core.Record {
@@ -164,11 +174,13 @@ padding x =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (ws (Ast.paddingRight x))}]})
+-- | Encoder for hydra.ast.Precedence
 precedence :: Ast.Precedence -> Core.Term
 precedence x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ast.Precedence"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Ast.unPrecedence x))})
+-- | Encoder for hydra.ast.SeqExpr
 seqExpr :: Ast.SeqExpr -> Core.Term
 seqExpr x =
     Core.TermRecord (Core.Record {
@@ -180,11 +192,13 @@ seqExpr x =
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map expr xs)) (Ast.seqExprElements x))}]})
+-- | Encoder for hydra.ast.Symbol
 symbol :: Ast.Symbol -> Core.Term
 symbol x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ast.Symbol"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Ast.unSymbol x))})
+-- | Encoder for hydra.ast.Ws
 ws :: Ast.Ws -> Core.Term
 ws x =
     case x of

@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.query.ComparisonConstraint
 comparisonConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.ComparisonConstraint
 comparisonConstraint cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -44,6 +45,7 @@ comparisonConstraint cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Edge
 edge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Edge
 edge cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -54,6 +56,7 @@ edge cx raw =
           Query.edgeOut = field_out,
           Query.edgeIn = field_in})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.GraphPattern
 graphPattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.GraphPattern
 graphPattern cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -63,6 +66,7 @@ graphPattern cx raw =
           Query.graphPatternGraph = field_graph,
           Query.graphPatternPatterns = field_patterns}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Node
 node :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Node
 node cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -80,6 +84,7 @@ node cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Path
 path :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Path
 path cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -97,6 +102,7 @@ path cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.PathEquation
 pathEquation :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PathEquation
 pathEquation cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -106,6 +112,7 @@ pathEquation cx raw =
           Query.pathEquationLeft = field_left,
           Query.pathEquationRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Pattern
 pattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Pattern
 pattern cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -129,6 +136,7 @@ pattern cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.PatternImplication
 patternImplication :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PatternImplication
 patternImplication cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -138,6 +146,7 @@ patternImplication cx raw =
           Query.patternImplicationAntecedent = field_antecedent,
           Query.patternImplicationConsequent = field_consequent}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Query
 query :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Query
 query cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -147,6 +156,7 @@ query cx raw =
           Query.queryVariables = field_variables,
           Query.queryPatterns = field_patterns}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Range
 range :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Range
 range cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -168,6 +178,7 @@ range cx raw =
           Query.rangeMin = field_min,
           Query.rangeMax = field_max}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.RegexQuantifier
 regexQuantifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexQuantifier
 regexQuantifier cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -207,6 +218,7 @@ regexQuantifier cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.RegexSequence
 regexSequence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexSequence
 regexSequence cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -216,6 +228,7 @@ regexSequence cx raw =
           Query.regexSequencePath = field_path,
           Query.regexSequenceQuantifier = field_quantifier}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Step
 step :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Step
 step cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -233,6 +246,7 @@ step cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.TriplePattern
 triplePattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.TriplePattern
 triplePattern cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -243,6 +257,7 @@ triplePattern cx raw =
           Query.triplePatternPredicate = field_predicate,
           Query.triplePatternObject = field_object})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.query.Variable
 variable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Variable
 variable cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

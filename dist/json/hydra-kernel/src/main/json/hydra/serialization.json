@@ -2596,7 +2596,7 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "line"},
-                                                                            "function": {"application": {"argument": {"variable": "idt"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                            "function": {"application": {"argument": {"variable": "pre"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "line"},
@@ -2613,7 +2613,7 @@
                                                                     "domain": {"literal": {"string": {}}},
                                                                     "parameter": "line"}},
                                                                 "domain": {"literal": {"string": {}}},
-                                                                "parameter": "idt"}},
+                                                                "parameter": "pre"}},
                                                             "typeScheme": {
                                                               "body": {
                                                                 "function": {
@@ -2640,13 +2640,13 @@
                                                                                     "argument": {"variable": "lns"},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"application": {"argument": {"variable": "idt"}, "function": {"variable": "indentLine"}}},
+                                                                                        "argument": {"application": {"argument": {"variable": "pre"}, "function": {"variable": "indentLine"}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
                                                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                                                 "domain": {"literal": {"string": {}}},
-                                                                                "parameter": "idt"}}},
+                                                                                "parameter": "pre"}}},
                                                                           {
                                                                             "name": "subsequentLines",
                                                                             "term": {
@@ -2678,7 +2678,7 @@
                                                                                                                     "type": {"list": {"literal": {"string": {}}}}}}}},
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {"application": {"argument": {"variable": "idt"}, "function": {"variable": "indentLine"}}},
+                                                                                                                "argument": {"application": {"argument": {"variable": "pre"}, "function": {"variable": "indentLine"}}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
@@ -2723,7 +2723,7 @@
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"literal": {"string": {}}}}}}}}}}}},
                                                                                 "domain": {"literal": {"string": {}}},
-                                                                                "parameter": "idt"}}}],
+                                                                                "parameter": "pre"}}}],
                                                                         "typeName": "hydra.ast.IndentStyle"}}}},
                                                                 "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                                             "body": {
@@ -3363,9 +3363,9 @@
                                                                                                 "body": {
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "body"},
-                                                                                                    "function": {"application": {"argument": {"variable": "idt"}, "function": {"variable": "hydra.serialization.customIndent"}}}}},
+                                                                                                    "function": {"application": {"argument": {"variable": "pre"}, "function": {"variable": "hydra.serialization.customIndent"}}}}},
                                                                                                 "domain": {"literal": {"string": {}}},
-                                                                                                "parameter": "idt"}},
+                                                                                                "parameter": "pre"}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "body"},

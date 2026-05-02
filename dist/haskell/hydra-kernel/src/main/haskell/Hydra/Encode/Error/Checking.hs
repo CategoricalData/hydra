@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.error.checking.CheckingError
 checkingError :: Checking.CheckingError -> Core.Term
 checkingError x =
     case x of
@@ -80,6 +81,7 @@ checkingError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),
           Core.fieldTerm = (untypedTermVariableCheckingError v0)}})
+-- | Encoder for hydra.error.checking.IncorrectUnificationError
 incorrectUnificationError :: Checking.IncorrectUnificationError -> Core.Term
 incorrectUnificationError x =
     Core.TermRecord (Core.Record {
@@ -88,6 +90,7 @@ incorrectUnificationError x =
         Core.Field {
           Core.fieldName = (Core.Name "substitution"),
           Core.fieldTerm = (Typing.typeSubst (Checking.incorrectUnificationErrorSubstitution x))}]})
+-- | Encoder for hydra.error.checking.NotAForallTypeError
 notAForallTypeError :: Checking.NotAForallTypeError -> Core.Term
 notAForallTypeError x =
     Core.TermRecord (Core.Record {
@@ -99,6 +102,7 @@ notAForallTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.type_ xs)) (Checking.notAForallTypeErrorTypeArguments x))}]})
+-- | Encoder for hydra.error.checking.NotAFunctionTypeError
 notAFunctionTypeError :: Checking.NotAFunctionTypeError -> Core.Term
 notAFunctionTypeError x =
     Core.TermRecord (Core.Record {
@@ -107,6 +111,7 @@ notAFunctionTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Checking.notAFunctionTypeErrorType x))}]})
+-- | Encoder for hydra.error.checking.OtherCheckingError
 otherCheckingError :: Checking.OtherCheckingError -> Core.Term
 otherCheckingError x =
     Core.TermRecord (Core.Record {
@@ -118,6 +123,7 @@ otherCheckingError x =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Checking.otherCheckingErrorMessage x))}]})
+-- | Encoder for hydra.error.checking.TypeArityMismatchError
 typeArityMismatchError :: Checking.TypeArityMismatchError -> Core.Term
 typeArityMismatchError x =
     Core.TermRecord (Core.Record {
@@ -135,6 +141,7 @@ typeArityMismatchError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.type_ xs)) (Checking.typeArityMismatchErrorTypeArguments x))}]})
+-- | Encoder for hydra.error.checking.TypeMismatchError
 typeMismatchError :: Checking.TypeMismatchError -> Core.Term
 typeMismatchError x =
     Core.TermRecord (Core.Record {
@@ -146,6 +153,7 @@ typeMismatchError x =
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
           Core.fieldTerm = (EncodeCore.type_ (Checking.typeMismatchErrorActualType x))}]})
+-- | Encoder for hydra.error.checking.UnboundTypeVariablesError
 unboundTypeVariablesError :: Checking.UnboundTypeVariablesError -> Core.Term
 unboundTypeVariablesError x =
     Core.TermRecord (Core.Record {
@@ -157,6 +165,7 @@ unboundTypeVariablesError x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Checking.unboundTypeVariablesErrorType x))}]})
+-- | Encoder for hydra.error.checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingError :: Checking.UndefinedTermVariableCheckingError -> Core.Term
 undefinedTermVariableCheckingError x =
     Core.TermRecord (Core.Record {
@@ -168,6 +177,7 @@ undefinedTermVariableCheckingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Checking.undefinedTermVariableCheckingErrorName x))}]})
+-- | Encoder for hydra.error.checking.UnequalTypesError
 unequalTypesError :: Checking.UnequalTypesError -> Core.Term
 unequalTypesError x =
     Core.TermRecord (Core.Record {
@@ -179,6 +189,7 @@ unequalTypesError x =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Checking.unequalTypesErrorDescription x))}]})
+-- | Encoder for hydra.error.checking.UnsupportedTermVariantError
 unsupportedTermVariantError :: Checking.UnsupportedTermVariantError -> Core.Term
 unsupportedTermVariantError x =
     Core.TermRecord (Core.Record {
@@ -187,11 +198,13 @@ unsupportedTermVariantError x =
         Core.Field {
           Core.fieldName = (Core.Name "termVariant"),
           Core.fieldTerm = (Variants.termVariant (Checking.unsupportedTermVariantErrorTermVariant x))}]})
+-- | Encoder for hydra.error.checking.UntypedLambdaError
 untypedLambdaError :: t0 -> Core.Term
 untypedLambdaError x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.checking.UntypedLambdaError"),
       Core.recordFields = []})
+-- | Encoder for hydra.error.checking.UntypedLetBindingError
 untypedLetBindingError :: Checking.UntypedLetBindingError -> Core.Term
 untypedLetBindingError x =
     Core.TermRecord (Core.Record {
@@ -200,6 +213,7 @@ untypedLetBindingError x =
         Core.Field {
           Core.fieldName = (Core.Name "binding"),
           Core.fieldTerm = (EncodeCore.binding (Checking.untypedLetBindingErrorBinding x))}]})
+-- | Encoder for hydra.error.checking.UntypedTermVariableCheckingError
 untypedTermVariableCheckingError :: Checking.UntypedTermVariableCheckingError -> Core.Term
 untypedTermVariableCheckingError x =
     Core.TermRecord (Core.Record {
