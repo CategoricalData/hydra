@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | YAML encoding and decoding for Hydra terms
 
 module Hydra.Yaml.Coder where
-
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
@@ -26,7 +24,6 @@ import qualified Hydra.Yaml.Language as Language
 import qualified Hydra.Yaml.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Decode a YAML value to a record term
 decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either Errors.Error Core.Term
 decodeRecord tname coders cx n =
@@ -49,7 +46,6 @@ decodeRecord tname coders cx n =
       in case n of
         Model.NodeMapping v0 -> decodeObjectBody v0
         _ -> Left (Errors.ErrorOther (Errors.OtherError "expected mapping"))
-
 -- | Encode a record term to YAML
 encodeRecord :: [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Model.Node
 encodeRecord coders cx graph term =
@@ -73,7 +69,6 @@ encodeRecord coders cx graph term =
       in (Eithers.bind (ExtractCore.termRecord graph stripped) (\record ->
         let fields = Core.recordFields record
         in (Eithers.bind (Eithers.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Right (Model.NodeMapping (Maps.fromList (Maybes.cat maybeFields)))))))
-
 -- | Create a YAML coder for literal types
 literalYamlCoder :: Core.LiteralType -> Either t0 (Coders.Coder Core.Literal Model.Scalar)
 literalYamlCoder lt =
@@ -128,7 +123,6 @@ literalYamlCoder lt =
                       Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.stringLiteral lit) (\s -> Right (Model.ScalarStr s))),
                       Coders.coderDecode = decodeString}
       in (Right encoded)
-
 -- | Create a YAML coder for record types
 recordCoder :: Core.Name -> [Core.FieldType] -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term Model.Node)
 recordCoder tname rt cx g =
@@ -137,12 +131,10 @@ recordCoder tname rt cx g =
       in (Eithers.bind (Eithers.mapList getCoder rt) (\coders -> Right (Coders.Coder {
         Coders.coderEncode = (\cx2 -> \term -> encodeRecord coders cx2 g term),
         Coders.coderDecode = (\cx2 -> \val -> decodeRecord tname coders cx2 val)})))
-
 -- | True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar.
 requiresYamlStringSentinel :: String -> Bool
 requiresYamlStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
-
 -- | Create a YAML coder for term types
 termCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term Model.Node)
 termCoder typ cx g =
@@ -220,7 +212,6 @@ termCoder typ cx g =
                       "unsupported type in YAML: ",
                       (ShowCore.type_ typ)])))
       in result
-
 -- | YAML coder for unit values
 unitCoder :: Coders.Coder Core.Term Model.Node
 unitCoder =
@@ -240,7 +231,6 @@ unitCoder =
             Model.ScalarNull -> Right Core.TermUnit
             _ -> Left (Errors.ErrorOther (Errors.OtherError "expected null scalar"))
           _ -> Left (Errors.ErrorOther (Errors.OtherError "expected null"))
-
 -- | Create a YAML coder for a given type
 yamlCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term Model.Node)
 yamlCoder typ cx g =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms
 
 module Hydra.Avro.Coder where
-
 import qualified Hydra.Avro.Environment as Environment
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
@@ -28,7 +26,6 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Annotate an adapter's target type with optional annotations
 annotateAdapter :: Maybe (M.Map Core.Name Core.Term) -> Coders.Adapter t0 Core.Type t1 t2 -> Coders.Adapter t0 Core.Type t1 t2
 annotateAdapter ann ad =
@@ -39,34 +36,37 @@ annotateAdapter ann ad =
         Core.annotatedTypeBody = (Coders.adapterTarget ad),
         Core.annotatedTypeAnnotation = n})),
       Coders.adapterCoder = (Coders.adapterCoder ad)}) ann
-
 -- | Create an adapter between Avro schemas and Hydra types/terms
 avroHydraAdapter :: t0 -> Schema.Schema -> Environment.AvroEnvironment -> Either Errors.Error (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
 avroHydraAdapter cx schema env0 =
 
       let simpleAdapter =
-              \env -> \typ -> \encode -> \decode -> Right (Coders.Adapter {
-                Coders.adapterIsLossy = False,
-                Coders.adapterSource = schema,
-                Coders.adapterTarget = typ,
-                Coders.adapterCoder = Coders.Coder {
-                  Coders.coderEncode = encode,
-                  Coders.coderDecode = decode}}, env)
+              \env -> \typ -> \encode -> \decode -> Right (
+                Coders.Adapter {
+                  Coders.adapterIsLossy = False,
+                  Coders.adapterSource = schema,
+                  Coders.adapterTarget = typ,
+                  Coders.adapterCoder = Coders.Coder {
+                    Coders.coderEncode = encode,
+                    Coders.coderDecode = decode}},
+                env)
           doubleToInt = \d -> Literals.bigintToInt32 (Literals.decimalToBigint d)
           doubleToLong = \d -> Literals.bigintToInt64 (Literals.decimalToBigint d)
       in case schema of
         Schema.SchemaArray v0 -> Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->
           let ad = Pairs.first adEnv
               env1 = Pairs.second adEnv
-          in (Right (Coders.Adapter {
-            Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
-            Coders.adapterSource = schema,
-            Coders.adapterTarget = (Core.TypeList (Coders.adapterTarget ad)),
-            Coders.adapterCoder = Coders.Coder {
-              Coders.coderEncode = (\cx1 -> \v -> case v of
-                Model.ValueArray v1 -> Eithers.map (\ts -> Core.TermList ts) (Eithers.mapList (\jv -> Coders.coderEncode (Coders.adapterCoder ad) cx1 jv) v1)),
-              Coders.coderDecode = (\cx1 -> \t -> case t of
-                Core.TermList v1 -> Eithers.map (\jvs -> Model.ValueArray jvs) (Eithers.mapList (\tv -> Coders.coderDecode (Coders.adapterCoder ad) cx1 tv) v1))}}, env1)))
+          in (Right (
+            Coders.Adapter {
+              Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
+              Coders.adapterSource = schema,
+              Coders.adapterTarget = (Core.TypeList (Coders.adapterTarget ad)),
+              Coders.adapterCoder = Coders.Coder {
+                Coders.coderEncode = (\cx1 -> \v -> case v of
+                  Model.ValueArray v1 -> Eithers.map (\ts -> Core.TermList ts) (Eithers.mapList (\jv -> Coders.coderEncode (Coders.adapterCoder ad) cx1 jv) v1)),
+                Coders.coderDecode = (\cx1 -> \t -> case t of
+                  Core.TermList v1 -> Eithers.map (\jvs -> Model.ValueArray jvs) (Eithers.mapList (\tv -> Coders.coderDecode (Coders.adapterCoder ad) cx1 tv) v1))}},
+            env1)))
         Schema.SchemaMap v0 -> Eithers.bind (avroHydraAdapter cx (Schema.mapValues v0) env0) (\adEnv ->
           let ad = Pairs.first adEnv
               env1 = Pairs.second adEnv
@@ -75,32 +75,34 @@ avroHydraAdapter cx schema env0 =
                         let k = Pairs.first entry
                             v = Pairs.second entry
                         in (Eithers.map (\v_ -> (Core.TermLiteral (Core.LiteralString k), v_)) (Coders.coderEncode (Coders.adapterCoder ad) cx1 v))
-          in (Right (Coders.Adapter {
-            Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
-            Coders.adapterSource = schema,
-            Coders.adapterTarget = (Core.TypeMap (Core.MapType {
-              Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
-              Core.mapTypeValues = (Coders.adapterTarget ad)})),
-            Coders.adapterCoder = Coders.Coder {
-              Coders.coderEncode = (\cx1 -> \v -> case v of
-                Model.ValueObject v1 -> Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) (Maps.toList v1))),
-              Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (ExtractCore.map (\t -> ExtractCore.string (Graph.Graph {
-                Graph.graphBoundTerms = Maps.empty,
-                Graph.graphBoundTypes = Maps.empty,
-                Graph.graphClassConstraints = Maps.empty,
-                Graph.graphLambdaVariables = Sets.empty,
-                Graph.graphMetadata = Maps.empty,
-                Graph.graphPrimitives = Maps.empty,
-                Graph.graphSchemaTypes = Maps.empty,
-                Graph.graphTypeVariables = Sets.empty}) t) (\t -> Coders.coderDecode (Coders.adapterCoder ad) cx1 t) (Graph.Graph {
-                Graph.graphBoundTerms = Maps.empty,
-                Graph.graphBoundTypes = Maps.empty,
-                Graph.graphClassConstraints = Maps.empty,
-                Graph.graphLambdaVariables = Sets.empty,
-                Graph.graphMetadata = Maps.empty,
-                Graph.graphPrimitives = Maps.empty,
-                Graph.graphSchemaTypes = Maps.empty,
-                Graph.graphTypeVariables = Sets.empty}) m))}}, env1)))
+          in (Right (
+            Coders.Adapter {
+              Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
+              Coders.adapterSource = schema,
+              Coders.adapterTarget = (Core.TypeMap (Core.MapType {
+                Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.mapTypeValues = (Coders.adapterTarget ad)})),
+              Coders.adapterCoder = Coders.Coder {
+                Coders.coderEncode = (\cx1 -> \v -> case v of
+                  Model.ValueObject v1 -> Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) (Maps.toList v1))),
+                Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (ExtractCore.map (\t -> ExtractCore.string (Graph.Graph {
+                  Graph.graphBoundTerms = Maps.empty,
+                  Graph.graphBoundTypes = Maps.empty,
+                  Graph.graphClassConstraints = Maps.empty,
+                  Graph.graphLambdaVariables = Sets.empty,
+                  Graph.graphMetadata = Maps.empty,
+                  Graph.graphPrimitives = Maps.empty,
+                  Graph.graphSchemaTypes = Maps.empty,
+                  Graph.graphTypeVariables = Sets.empty}) t) (\t -> Coders.coderDecode (Coders.adapterCoder ad) cx1 t) (Graph.Graph {
+                  Graph.graphBoundTerms = Maps.empty,
+                  Graph.graphBoundTypes = Maps.empty,
+                  Graph.graphClassConstraints = Maps.empty,
+                  Graph.graphLambdaVariables = Sets.empty,
+                  Graph.graphMetadata = Maps.empty,
+                  Graph.graphPrimitives = Maps.empty,
+                  Graph.graphSchemaTypes = Maps.empty,
+                  Graph.graphTypeVariables = Sets.empty}) m))}},
+            env1)))
         Schema.SchemaNamed v0 ->
           let ns = Schema.namedNamespace v0
               manns = namedAnnotationsToCore v0
@@ -177,17 +179,19 @@ avroHydraAdapter cx schema env0 =
                                 Core.fieldTypeName = (Core.Name (Schema.fieldName (Pairs.first fad))),
                                 Core.fieldTypeType = (Coders.adapterTarget (Pairs.second fad))}) (Maps.elems adaptersByFieldName)
                       target = Core.TypeRecord hfields
-                  in (Right (Coders.Adapter {
-                    Coders.adapterIsLossy = lossy,
-                    Coders.adapterSource = schema,
-                    Coders.adapterTarget = target,
-                    Coders.adapterCoder = Coders.Coder {
-                      Coders.coderEncode = (\cx1 -> \jv -> case jv of
-                        Model.ValueObject v2 -> Eithers.map (\fields -> Core.TermRecord (Core.Record {
-                          Core.recordTypeName = hydraName,
-                          Core.recordFields = fields})) (Eithers.mapList (\e -> encodePair cx1 e) (Maps.toList v2))),
-                      Coders.coderDecode = (\cx1 -> \t -> case t of
-                        Core.TermRecord v2 -> Eithers.map (\kvs -> Model.ValueObject (Maps.fromList kvs)) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))}}, env2))))))) (\adEnv2 ->
+                  in (Right (
+                    Coders.Adapter {
+                      Coders.adapterIsLossy = lossy,
+                      Coders.adapterSource = schema,
+                      Coders.adapterTarget = target,
+                      Coders.adapterCoder = Coders.Coder {
+                        Coders.coderEncode = (\cx1 -> \jv -> case jv of
+                          Model.ValueObject v2 -> Eithers.map (\fields -> Core.TermRecord (Core.Record {
+                            Core.recordTypeName = hydraName,
+                            Core.recordFields = fields})) (Eithers.mapList (\e -> encodePair cx1 e) (Maps.toList v2))),
+                        Coders.coderDecode = (\cx1 -> \t -> case t of
+                          Core.TermRecord v2 -> Eithers.map (\kvs -> Model.ValueObject (Maps.fromList kvs)) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))}},
+                    env2))))))) (\adEnv2 ->
             let ad = Pairs.first adEnv2
                 env2 = Pairs.second adEnv2
                 env3 = putAvroHydraAdapter qname ad env2
@@ -295,25 +299,28 @@ avroHydraAdapter cx schema env0 =
                       \s -> Eithers.bind (avroHydraAdapter cx s env0) (\adEnv ->
                         let ad = Pairs.first adEnv
                             env1 = Pairs.second adEnv
-                        in (Right (Coders.Adapter {
-                          Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
-                          Coders.adapterSource = schema,
-                          Coders.adapterTarget = (Core.TypeMaybe (Coders.adapterTarget ad)),
-                          Coders.adapterCoder = Coders.Coder {
-                            Coders.coderEncode = (\cx1 -> \v -> case v of
-                              Model.ValueNull -> Right (Core.TermMaybe Nothing)
-                              _ -> Eithers.map (\t -> Core.TermMaybe (Just t)) (Coders.coderEncode (Coders.adapterCoder ad) cx1 v)),
-                            Coders.coderDecode = (\cx1 -> \t -> case t of
-                              Core.TermMaybe v1 -> Maybes.maybe (Right Model.ValueNull) (\term_ -> Coders.coderDecode (Coders.adapterCoder ad) cx1 term_) v1)}}, env1)))
+                        in (Right (
+                          Coders.Adapter {
+                            Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
+                            Coders.adapterSource = schema,
+                            Coders.adapterTarget = (Core.TypeMaybe (Coders.adapterTarget ad)),
+                            Coders.adapterCoder = Coders.Coder {
+                              Coders.coderEncode = (\cx1 -> \v -> case v of
+                                Model.ValueNull -> Right (Core.TermMaybe Nothing)
+                                _ -> Eithers.map (\t -> Core.TermMaybe (Just t)) (Coders.coderEncode (Coders.adapterCoder ad) cx1 v)),
+                              Coders.coderDecode = (\cx1 -> \t -> case t of
+                                Core.TermMaybe v1 -> Maybes.maybe (Right Model.ValueNull) (\term_ -> Coders.coderDecode (Coders.adapterCoder ad) cx1 term_) v1)}},
+                          env1)))
           in (Logic.ifElse (Equality.gt (Lists.length nonNulls) 1) (err cx "general-purpose unions are not yet supported") (Maybes.maybe (err cx "cannot generate the empty type") (\nonNullHead -> Logic.ifElse hasNull (forOptional nonNullHead) (Eithers.bind (avroHydraAdapter cx nonNullHead env0) (\adEnv ->
             let ad = Pairs.first adEnv
                 env1 = Pairs.second adEnv
-            in (Right (Coders.Adapter {
-              Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
-              Coders.adapterSource = schema,
-              Coders.adapterTarget = (Coders.adapterTarget ad),
-              Coders.adapterCoder = (Coders.adapterCoder ad)}, env1))))) (Lists.maybeHead nonNulls)))
-
+            in (Right (
+              Coders.Adapter {
+                Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
+                Coders.adapterSource = schema,
+                Coders.adapterTarget = (Coders.adapterTarget ad),
+                Coders.adapterCoder = (Coders.adapterCoder ad)},
+              env1))))) (Lists.maybeHead nonNulls)))
 -- | Convert an Avro qualified name to a Hydra name
 avroNameToHydraName :: Environment.AvroQualifiedName -> Core.Name
 avroNameToHydraName qname =
@@ -323,13 +330,10 @@ avroNameToHydraName qname =
       in (Names.unqualifyName (Packaging.QualifiedName {
         Packaging.qualifiedNameNamespace = (Maybes.map (\s -> Packaging.Namespace s) mns),
         Packaging.qualifiedNameLocal = local}))
-
 avro_foreignKey :: String
 avro_foreignKey = "@foreignKey"
-
 avro_primaryKey :: String
 avro_primaryKey = "@primaryKey"
-
 -- | An empty Avro environment with no named adapters, no namespace, and no elements
 emptyAvroEnvironment :: Environment.AvroEnvironment
 emptyAvroEnvironment =
@@ -337,7 +341,6 @@ emptyAvroEnvironment =
       Environment.avroEnvironmentNamedAdapters = Maps.empty,
       Environment.avroEnvironmentNamespace = Nothing,
       Environment.avroEnvironmentElements = Maps.empty}
-
 -- | Encode a JSON value as a Hydra term for annotation purposes
 encodeAnnotationValue :: Model.Value -> Core.Term
 encodeAnnotationValue v =
@@ -351,29 +354,24 @@ encodeAnnotationValue v =
             v_ = Pairs.second entry
         in (Core.TermLiteral (Core.LiteralString k), (encodeAnnotationValue v_))) (Maps.toList v0)))
       Model.ValueString v0 -> Core.TermLiteral (Core.LiteralString v0)
-
 -- | Construct an error result with a message in context
 err :: t0 -> String -> Either Errors.Error t1
 err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
-
 -- | Extract a JSON array or return an error
 expectArrayE :: t0 -> Model.Value -> Either t1 [Model.Value]
 expectArrayE cx value =
     case value of
       Model.ValueArray v0 -> Right v0
-
 -- | Extract a JSON object or return an error
 expectObjectE :: t0 -> Model.Value -> Either t1 (M.Map String Model.Value)
 expectObjectE cx value =
     case value of
       Model.ValueObject v0 -> Right v0
-
 -- | Extract a JSON string or return an error
 expectStringE :: t0 -> Model.Value -> Either t1 String
 expectStringE cx value =
     case value of
       Model.ValueString v0 -> Right v0
-
 -- | Extract field annotations and convert them to core Name/Term pairs
 fieldAnnotationsToCore :: Schema.Field -> M.Map Core.Name Core.Term
 fieldAnnotationsToCore f =
@@ -381,14 +379,12 @@ fieldAnnotationsToCore f =
       let k = Pairs.first entry
           v = Pairs.second entry
       in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.fieldAnnotations f)))
-
 -- | Find the primary key field among a list of Avro fields
 findAvroPrimaryKeyField :: t0 -> Environment.AvroQualifiedName -> [Schema.Field] -> Either Errors.Error (Maybe Environment.AvroPrimaryKey)
 findAvroPrimaryKeyField cx qname avroFields =
 
       let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
       in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Lists.maybeHead keys)) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
-
 -- | Extract a foreign key annotation from a field, if present
 foreignKeyE :: t0 -> Schema.Field -> Either Errors.Error (Maybe Environment.AvroForeignKey)
 foreignKeyE cx f =
@@ -397,11 +393,9 @@ foreignKeyE cx f =
       in (Right (Just (Environment.AvroForeignKey {
         Environment.avroForeignKeyTypeName = tname,
         Environment.avroForeignKeyConstructor = constr}))))))) (Maps.lookup avro_foreignKey (Schema.fieldAnnotations f))
-
 -- | Look up an adapter by qualified name in the environment
 getAvroHydraAdapter :: Environment.AvroQualifiedName -> Environment.AvroEnvironment -> Maybe (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)
 getAvroHydraAdapter qname env = Maps.lookup qname (Environment.avroEnvironmentNamedAdapters env)
-
 -- | Convert a JSON value to a string, supporting booleans, strings, and numbers
 jsonToStringE :: t0 -> Model.Value -> Either Errors.Error String
 jsonToStringE cx v =
@@ -410,7 +404,6 @@ jsonToStringE cx v =
       Model.ValueString v0 -> Right v0
       Model.ValueNumber v0 -> Right (Literals.showDecimal v0)
       _ -> unexpectedE cx "string, number, or boolean" "other"
-
 -- | Extract named type annotations and convert them to core Name/Term pairs
 namedAnnotationsToCore :: Schema.Named -> M.Map Core.Name Core.Term
 namedAnnotationsToCore n =
@@ -418,12 +411,10 @@ namedAnnotationsToCore n =
       let k = Pairs.first entry
           v = Pairs.second entry
       in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.namedAnnotations n)))
-
 -- | Look up an optional string attribute in a JSON object map
 optStringE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe String))
 optStringE cx fname m =
     Maybes.maybe (Right Nothing) (\v -> Eithers.map (\s -> Maybes.pure s) (expectStringE cx v)) (Maps.lookup fname m)
-
 -- | Parse a dotted Avro name into a qualified name
 parseAvroName :: Maybe String -> String -> Environment.AvroQualifiedName
 parseAvroName mns name_ =
@@ -435,11 +426,9 @@ parseAvroName mns name_ =
         Environment.avroQualifiedNameName = local}) (Environment.AvroQualifiedName {
         Environment.avroQualifiedNameNamespace = (Maybes.map (\ps -> Strings.intercalate "." ps) (Lists.maybeInit parts)),
         Environment.avroQualifiedNameName = local}))
-
 -- | Create a name constructor from a pattern string
 patternToNameConstructor :: String -> String -> Core.Name
 patternToNameConstructor pat s = Core.Name (Strings.intercalate s (Strings.splitOn "${}" pat))
-
 -- | Prepare a single field, producing an adapter and updated environment
 prepareField :: t0 -> Environment.AvroEnvironment -> Schema.Field -> Either Errors.Error ((String, (Schema.Field, (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
 prepareField cx env f =
@@ -460,11 +449,13 @@ prepareField cx env f =
                         Core.TermVariable v0 -> Eithers.bind (stringToTermE cx1 (Coders.adapterTarget ad0) (Core.unName v0)) (\term_ -> Coders.coderDecode (Coders.adapterCoder ad0) cx1 term_)
                         _ -> err cx1 "expected variable"
               forTypeAndCoder =
-                      \env2 -> \ad1 -> \typ -> \cdr -> Right (Coders.Adapter {
-                        Coders.adapterIsLossy = (Coders.adapterIsLossy ad1),
-                        Coders.adapterSource = (Schema.fieldType f),
-                        Coders.adapterTarget = typ,
-                        Coders.adapterCoder = cdr}, env2)
+                      \env2 -> \ad1 -> \typ -> \cdr -> Right (
+                        Coders.Adapter {
+                          Coders.adapterIsLossy = (Coders.adapterIsLossy ad1),
+                          Coders.adapterSource = (Schema.fieldType f),
+                          Coders.adapterTarget = typ,
+                          Coders.adapterCoder = cdr},
+                        env2)
           in case (Strip.deannotateType (Coders.adapterTarget ad0)) of
             Core.TypeMaybe v0 -> case v0 of
               Core.TypeLiteral _ -> forTypeAndCoder env1 ad0 (Core.TypeMaybe elTyp) (Coders.Coder {
@@ -485,7 +476,6 @@ prepareField cx env f =
         let ad = Pairs.first adEnv
             env1 = Pairs.second adEnv
         in (Right ((Schema.fieldName f, (f, (annotateAdapter ann ad))), env1)))))
-
 -- | Thread AvroEnvironment through preparing multiple fields
 prepareFields :: t0 -> Environment.AvroEnvironment -> [Schema.Field] -> Either Errors.Error (M.Map String (Schema.Field, (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
 prepareFields cx env fields =
@@ -498,14 +488,12 @@ prepareFields cx env fields =
             k = Pairs.first kv
             v = Pairs.second kv
         in (Right (Maps.insert k v m, env2)))))) (Right (Maps.empty, env)) fields
-
 -- | Extract a primary key annotation from a field, if present
 primaryKeyE :: t0 -> Schema.Field -> Maybe Environment.AvroPrimaryKey
 primaryKeyE cx f =
     Maybes.maybe Nothing (\v -> Eithers.either (\_ -> Nothing) (\s -> Just (Environment.AvroPrimaryKey {
       Environment.avroPrimaryKeyFieldName = (Core.Name (Schema.fieldName f)),
       Environment.avroPrimaryKeyConstructor = (patternToNameConstructor s)})) (expectStringE cx v)) (Maps.lookup avro_primaryKey (Schema.fieldAnnotations f))
-
 -- | Store an adapter in the environment by qualified name
 putAvroHydraAdapter :: Environment.AvroQualifiedName -> Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term -> Environment.AvroEnvironment -> Environment.AvroEnvironment
 putAvroHydraAdapter qname ad env =
@@ -513,7 +501,6 @@ putAvroHydraAdapter qname ad env =
       Environment.avroEnvironmentNamedAdapters = (Maps.insert qname ad (Environment.avroEnvironmentNamedAdapters env)),
       Environment.avroEnvironmentNamespace = (Environment.avroEnvironmentNamespace env),
       Environment.avroEnvironmentElements = (Environment.avroEnvironmentElements env)}
-
 -- | Look up a required string attribute in a JSON object map
 requireStringE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error String
 requireStringE cx fname m =
@@ -521,7 +508,6 @@ requireStringE cx fname m =
       "required attribute ",
       (Literals.showString fname),
       " not found"])) (\v -> expectStringE cx v) (Maps.lookup fname m)
-
 -- | Recursively rewrite an Avro schema using a monadic transformation function
 rewriteAvroSchemaM :: ((Schema.Schema -> Either t0 Schema.Schema) -> Schema.Schema -> Either t0 Schema.Schema) -> Schema.Schema -> Either t0 Schema.Schema
 rewriteAvroSchemaM f schema =
@@ -553,7 +539,6 @@ rewriteAvroSchemaM f schema =
                     Schema.SchemaUnion v0 -> Eithers.map (\schemas_ -> Schema.SchemaUnion (Schema.Union schemas_)) (Eithers.mapList (\us -> recurse us) (Schema.unUnion v0))
                     _ -> Right s
       in (f fsub schema)
-
 -- | Convert an Avro qualified name to a display string
 showQname :: Environment.AvroQualifiedName -> String
 showQname qname =
@@ -561,7 +546,6 @@ showQname qname =
       let mns = Environment.avroQualifiedNameNamespace qname
           local = Environment.avroQualifiedNameName qname
       in (Strings.cat2 (Maybes.maybe "" (\ns -> Strings.cat2 ns ".") mns) local)
-
 -- | Parse a string into a term of the expected type
 stringToTermE :: t0 -> Core.Type -> String -> Either Errors.Error Core.Term
 stringToTermE cx typ s =
@@ -584,7 +568,6 @@ stringToTermE cx typ s =
           Core.LiteralTypeString -> Right (Core.TermLiteral (Core.LiteralString s))
           _ -> unexpectedE cx "literal type" "other literal type"
         _ -> unexpectedE cx "literal type" "other"
-
 -- | Convert a literal term to its string representation
 termToStringE :: t0 -> Core.Term -> Either Errors.Error String
 termToStringE cx term =
@@ -605,7 +588,6 @@ termToStringE cx term =
         _ -> unexpectedE cx "boolean, integer, or string" "other literal"
       Core.TermMaybe v0 -> Maybes.maybe (unexpectedE cx "literal value" "Nothing") (\term_ -> termToStringE cx term_) v0
       _ -> unexpectedE cx "literal value" "other"
-
 -- | Construct an error for unexpected values
 unexpectedE :: t0 -> String -> String -> Either Errors.Error t1
 unexpectedE cx expected found =
