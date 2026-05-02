@@ -333,8 +333,9 @@ main = do
   --                    individually with --package <pkg>.
   let allExtPackages = extPackages ++ extDemoPackages
   let packageDeps p = case p of
-        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
-        _          -> [p]
+        "hydra-pg"  -> ["hydra-pg", "hydra-rdf"]
+        "hydra-ext" -> ["hydra-ext", "hydra-rdf"]
+        _           -> [p]
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
         | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
