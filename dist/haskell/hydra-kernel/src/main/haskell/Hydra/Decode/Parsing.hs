@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.parsing.ParseError
 parseError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Parsing.ParseError
 parseError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -30,6 +31,7 @@ parseError cx raw =
           Parsing.parseErrorMessage = field_message,
           Parsing.parseErrorRemainder = field_remainder}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.parsing.ParseResult
 parseResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseResult t0)
 parseResult a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -46,6 +48,7 @@ parseResult a cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.parsing.ParseSuccess
 parseSuccess :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseSuccess t0)
 parseSuccess a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

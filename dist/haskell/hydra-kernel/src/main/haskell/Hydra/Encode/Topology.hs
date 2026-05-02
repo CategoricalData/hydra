@@ -10,8 +10,10 @@ import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+-- | Encoder for hydra.topology.Graph
 graph :: M.Map Int [Int] -> Core.Term
 graph m = Core.TermMap (Maps.bimap vertex (\xs -> Core.TermList (Lists.map vertex xs)) m)
+-- | Encoder for hydra.topology.TarjanState
 tarjanState :: Topology.TarjanState -> Core.Term
 tarjanState x =
     Core.TermRecord (Core.Record {
@@ -35,5 +37,6 @@ tarjanState x =
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs2 -> Core.TermList (Lists.map vertex xs2)) xs)) (Topology.tarjanStateSccs x))}]})
+-- | Encoder for hydra.topology.Vertex
 vertex :: Int -> Core.Term
 vertex x = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))

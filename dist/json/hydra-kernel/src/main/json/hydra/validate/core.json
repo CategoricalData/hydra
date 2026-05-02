@@ -3073,67 +3073,7 @@
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.core.FieldType"}}}}},
                                                         "function": {
                                                           "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.error.core.InvalidTypeError"}}}}}}}}}},
-                                            {
-                                              "application": {
-                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.core.InvalidTypeError"}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "fields"},
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.FieldType"}}}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "maybe": {
-                                                                    "inject": {
-                                                                      "field": {
-                                                                        "name": "singleVariantUnion",
-                                                                        "term": {
-                                                                          "record": {
-                                                                            "fields": [
-                                                                              {
-                                                                                "name": "location",
-                                                                                "term": {
-                                                                                  "wrap": {
-                                                                                    "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.paths.SubtermStep"}}},
-                                                                                    "typeName": "hydra.paths.SubtermPath"}}},
-                                                                              {
-                                                                                "name": "fieldName",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "singleField"},
-                                                                                    "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}],
-                                                                            "typeName": "hydra.error.core.SingleVariantUnionError"}}},
-                                                                      "typeName": "hydra.error.core.InvalidTypeError"}}},
-                                                                "domain": {"variable": "hydra.core.FieldType"},
-                                                                "parameter": "singleField"}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.core.InvalidTypeError"}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"maybe": {"variable": "hydra.error.core.InvalidTypeError"}}}},
-                                                                    "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"literal": {"integer": {"int32": 1}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "fields"},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.FieldType"}}}}},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                        "function": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.error.core.InvalidTypeError"}}}}}}}}}},
+                                            {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.core.InvalidTypeError"}}},
                                             {
                                               "application": {
                                                 "argument": {

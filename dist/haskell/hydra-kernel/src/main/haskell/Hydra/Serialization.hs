@@ -388,7 +388,7 @@ printExpr e =
           let style = Ast.indentedExpressionStyle v0
               expr = Ast.indentedExpressionExpr v0
               lns = Strings.lines (printExpr expr)
-              indentLine = \idt2 -> \line -> Logic.ifElse (Equality.equal line "") line (Strings.cat2 idt2 line)
+              indentLine = \pre -> \line -> Logic.ifElse (Equality.equal line "") line (Strings.cat2 pre line)
               ilns =
                       case style of
                         Ast.IndentStyleAllLines v1 -> Lists.map (indentLine v1) lns
@@ -456,7 +456,7 @@ printExpr e =
               doIndent = Ast.blockStyleIndent style
               nlBefore = Ast.blockStyleNewlineBeforeContent style
               nlAfter = Ast.blockStyleNewlineAfterContent style
-              ibody = Maybes.maybe body (\idt2 -> customIndent idt2 body) doIndent
+              ibody = Maybes.maybe body (\pre -> customIndent pre body) doIndent
               pre = Logic.ifElse nlBefore "\n" ""
               suf = Logic.ifElse nlAfter "\n" ""
           in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 l pre) ibody) suf) r)

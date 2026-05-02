@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.testing.Tag
 tag :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.Tag
 tag cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -22,6 +23,7 @@ tag cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.testing.TestCase
 testCase :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.TestCase
 testCase cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -37,6 +39,7 @@ testCase cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.testing.TestCaseWithMetadata
 testCaseWithMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.TestCaseWithMetadata
 testCaseWithMetadata cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -56,6 +59,7 @@ testCaseWithMetadata cx raw =
           Testing.testCaseWithMetadataDescription = field_description,
           Testing.testCaseWithMetadataTags = field_tags}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.testing.TestGroup
 testGroup :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.TestGroup
 testGroup cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -75,6 +79,7 @@ testGroup cx raw =
           Testing.testGroupSubgroups = field_subgroups,
           Testing.testGroupCases = field_cases}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.testing.UniversalTestCase
 universalTestCase :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Testing.UniversalTestCase
 universalTestCase cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
