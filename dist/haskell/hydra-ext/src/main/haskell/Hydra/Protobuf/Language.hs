@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints for Protobuf v3
 
 module Hydra.Protobuf.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -13,7 +11,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for Protocol Buffers v3
 protobufLanguage :: Coders.Language
 protobufLanguage =
@@ -86,7 +83,6 @@ protobufLanguage =
               Core.TypeMaybe _ -> False
               _ -> True
           _ -> True
-
 -- | A set of reserved words in Protobuf
 protobufReservedWords :: S.Set String
 protobufReservedWords = Sets.fromList (Lists.concat [
