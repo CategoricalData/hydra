@@ -1,14 +1,11 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto
 
 module Hydra.Protobuf.Any where
-
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
-
 -- | `Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.
 data Any =
   Any {
@@ -17,9 +14,6 @@ data Any =
     -- | Must be a valid serialized protocol buffer of the above specified type.
     anyValue :: B.ByteString}
   deriving (Eq, Ord, Read, Show)
-
 _Any = Core.Name "hydra.protobuf.any.Any"
-
 _Any_typeUrl = Core.Name "typeUrl"
-
 _Any_value = Core.Name "value"

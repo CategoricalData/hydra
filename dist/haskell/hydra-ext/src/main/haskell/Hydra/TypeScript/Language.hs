@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints for TypeScript
 
 module Hydra.TypeScript.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -13,7 +11,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for TypeScript
 typeScriptLanguage :: Coders.Language
 typeScriptLanguage =
@@ -63,7 +60,6 @@ typeScriptLanguage =
             Core.TypeMaybe _ -> False
             _ -> True
           _ -> True
-
 -- | A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536
 typeScriptReservedWords :: S.Set String
 typeScriptReservedWords =
