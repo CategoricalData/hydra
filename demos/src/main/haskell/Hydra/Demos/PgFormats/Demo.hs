@@ -38,13 +38,11 @@ import qualified Hydra.Sources.Pg.Graphson.Syntax as GraphsonSyntaxSource
 import qualified Hydra.Sources.All as SourcesAll
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Variables as Variables
-import Hydra.ExtGeneration (writeProtobuf)
+import Hydra.ExtGeneration (writeJsonSchema, writeProtobuf)
 import qualified Hydra.Avro.Encoder as AvroEncoder
 import qualified Hydra.Avro.SchemaJson as AvroSchemaJson
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Lexical as Lexical
-
-import Hydra.Demos.PgFormats.JsonSchemaShim (moduleToJsonSchemaDocs)
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -69,18 +67,18 @@ generatePgFormats outDir = do
   log_ $ "  wrote " ++ graphsonPath
 
   -- 2. JSON Schema documents for the hydra.pg.model module.
-  --    Emits one document per type definition; we keep only Graph and GraphSchema.
-  docs <- case moduleToJsonSchemaDocs PgModelSource.module_ of
-    Left err -> fail $ "JSON Schema shim failed (pg.model): " ++ ShowError.error err
-    Right d  -> return d
-  writeJsonSchemaIfPresent outDir "hydra.pg.model" "Graph" "Graph.schema.json" docs
-  writeJsonSchemaIfPresent outDir "hydra.pg.model" "GraphSchema" "GraphSchema.schema.json" docs
+  --    writeJsonSchema emits one document per type definition under
+  --    <staging>/hydra/pg/model/<TypeName>.json. We promote Graph and GraphSchema
+  --    to flat names alongside the other artifacts.
+  let jsStaging = outDir </> "_jsonschema-staging"
+  _ <- writeJsonSchema jsStaging SourcesAll.kernelModules [PgModelSource.module_]
+  promoteJsonSchema jsStaging outDir "hydra/pg/model/Graph.json"            "Graph.schema.json"
+  promoteJsonSchema jsStaging outDir "hydra/pg/model/GraphSchema.json"      "GraphSchema.schema.json"
 
   -- 3. JSON Schema for the GraphSON document root: hydra.pg.graphson.syntax.Vertex.
-  gsonDocs <- case moduleToJsonSchemaDocs GraphsonSyntaxSource.module_ of
-    Left err -> fail $ "JSON Schema shim failed (graphson.syntax): " ++ ShowError.error err
-    Right d  -> return d
-  writeJsonSchemaIfPresent outDir "hydra.pg.graphson.syntax" "Vertex" "GraphsonVertex.schema.json" gsonDocs
+  _ <- writeJsonSchema jsStaging SourcesAll.kernelModules [GraphsonSyntaxSource.module_]
+  promoteJsonSchema jsStaging outDir "hydra/pg/graphson/syntax/Vertex.json" "GraphsonVertex.schema.json"
+  removeDirectoryRecursive jsStaging
 
   -- 4. Protobuf v3 definitions for the hydra.pg.model namespace.
   --    writeProtobuf emits to <outDir>/<namespace-as-path>.proto, i.e.
@@ -129,14 +127,16 @@ generatePgFormats outDir = do
   where
     log_ msg = putStrLn msg >> hFlush stdout
     jsonValuesToString vs = L.intercalate "\n" (fmap JsonWriter.printJson vs) ++ "\n"
-    writeJsonSchemaIfPresent dir nsPrefix name fname m =
-      let key = nsPrefix ++ "." ++ name
-      in case M.lookup key m of
-        Just s -> do
-          let p = dir </> fname
-          writeFile p s
-          putStrLn $ "  wrote " ++ p
-        Nothing -> fail $ "JSON Schema shim did not produce a document for " ++ key
+    promoteJsonSchema staging dir relSrc fname = do
+      let src = staging </> relSrc
+      let dst = dir </> fname
+      exists <- doesFileExist src
+      if exists
+        then do
+          contents <- readFile src
+          length contents `seq` writeFile dst contents
+          putStrLn $ "  wrote " ++ dst
+        else fail $ "writeJsonSchema did not produce expected file " ++ src
     writeAvroSchema dir tmap typeNameStr fname =
       let typeName = Core.Name typeNameStr
           cx = Lexical.emptyContext
