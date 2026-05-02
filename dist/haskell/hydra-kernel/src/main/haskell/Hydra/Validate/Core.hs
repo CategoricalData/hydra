@@ -321,9 +321,7 @@ validateTypeNode boundVars typ =
       Core.TypeUnion v0 -> firstTypeError [
         Logic.ifElse (Lists.null v0) (Just (ErrorCore.InvalidTypeErrorEmptyUnionType (ErrorCore.EmptyUnionTypeError {
           ErrorCore.emptyUnionTypeErrorLocation = (Paths.SubtermPath [])}))) Nothing,
-        (Logic.ifElse (Equality.equal (Lists.length v0) 1) (Maybes.maybe Nothing (\singleField -> Just (ErrorCore.InvalidTypeErrorSingleVariantUnion (ErrorCore.SingleVariantUnionError {
-          ErrorCore.singleVariantUnionErrorLocation = (Paths.SubtermPath []),
-          ErrorCore.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)}))) (Lists.maybeHead v0)) Nothing),
+        Nothing,
         (checkDuplicateFieldTypes v0 (\dupName -> Just (ErrorCore.InvalidTypeErrorDuplicateUnionTypeFieldNames (ErrorCore.DuplicateUnionTypeFieldNamesError {
           ErrorCore.duplicateUnionTypeFieldNamesErrorLocation = (Paths.SubtermPath []),
           ErrorCore.duplicateUnionTypeFieldNamesErrorName = dupName})))),

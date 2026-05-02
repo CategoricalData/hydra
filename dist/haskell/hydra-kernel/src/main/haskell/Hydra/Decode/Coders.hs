@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.coders.CoderDirection
 coderDirection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.CoderDirection
 coderDirection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -29,6 +30,7 @@ coderDirection cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.coders.LanguageName
 languageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.LanguageName
 languageName cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -38,6 +40,7 @@ languageName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.coders.TraversalOrder
 traversalOrder :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.TraversalOrder
 traversalOrder cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

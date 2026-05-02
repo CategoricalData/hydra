@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.phantoms.TBinding
 tBinding :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Phantoms.TBinding t1)
 tBinding a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -20,11 +21,13 @@ tBinding a cx raw =
           Phantoms.tBindingName = field_name,
           Phantoms.tBindingTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.phantoms.TTerm
 tTerm :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Phantoms.TTerm t1)
 tTerm a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Phantoms.TTerm b) (DecodeCore.term cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.phantoms.TTermDefinition
 tTermDefinition :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Phantoms.TTermDefinition t1)
 tTermDefinition a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

@@ -11,6 +11,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.context.Context
 context :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Context.Context
 context cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -29,6 +30,7 @@ context cx raw =
           Context.contextMessages = field_messages,
           Context.contextOther = field_other})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.context.InContext
 inContext :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Context.InContext t0)
 inContext e cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
