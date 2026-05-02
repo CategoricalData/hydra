@@ -9,18 +9,18 @@
         "out": {"$ref": "#/$defs/v", "description": "The id of the out-vertex (tail) of the edge"},
         "properties": {"additionalProperties": {"$ref": "#/$defs/v"}, "description": "A key/value map of edge properties", "type": "object"}},
       "required": ["label", "id", "out", "in", "properties"],
-      "title": "hydra.pg.model.Edge",
+      "title": "Edge",
       "type": "object"},
-    "EdgeLabel": {"title": "hydra.pg.model.EdgeLabel", "type": "string"},
+    "EdgeLabel": {"title": "EdgeLabel", "type": "string"},
     "Graph": {
       "additionalProperties": false,
       "properties": {
         "edges": {"additionalProperties": {"$ref": "#/$defs/Edge"}, "type": "object"},
         "vertices": {"additionalProperties": {"$ref": "#/$defs/Vertex"}, "type": "object"}},
       "required": ["vertices", "edges"],
-      "title": "hydra.pg.model.Graph",
+      "title": "Graph",
       "type": "object"},
-    "PropertyKey": {"title": "hydra.pg.model.PropertyKey", "type": "string"},
+    "PropertyKey": {"title": "PropertyKey", "type": "string"},
     "Vertex": {
       "additionalProperties": false,
       "properties": {
@@ -28,9 +28,8 @@
         "label": {"$ref": "#/$defs/VertexLabel", "description": "The label of the vertex"},
         "properties": {"additionalProperties": {"$ref": "#/$defs/v"}, "description": "A key/value map of vertex properties", "type": "object"}},
       "required": ["label", "id", "properties"],
-      "title": "hydra.pg.model.Vertex",
+      "title": "Vertex",
       "type": "object"},
-    "VertexLabel": {"title": "hydra.pg.model.VertexLabel", "type": "string"},
-    "v": {"title": "v"}},
+    "VertexLabel": {"title": "VertexLabel", "type": "string"}},
   "$ref": "#/$defs/Graph",
   "$schema": "http://json-schema.org/2020-12/schema"}
