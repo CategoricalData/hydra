@@ -611,7 +611,59 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   "bins4" <<~ var "checkBindingsTyped" @@ (string "after adaptation") @@ var "adaptedBindings" $
 
   -- Step 5: normalize bindings
-  "bins5" <~ var "normalizeBindings" @@ var "bins4" $
+  "bins5Raw" <~ var "normalizeBindings" @@ var "bins4" $
+
+  -- Step 5.5: re-attach the outer term-level annotation from originalBindings.
+  -- The adaptation pipeline (specifically termAlternatives' handling of TermAnnotated)
+  -- strips outer Annotated wrappers when the target language's term variants do not
+  -- include termVariantAnnotated. This loses metadata such as 'description' that
+  -- downstream coders consume for documentation generation. Walk originalBindings,
+  -- pull each binding's outermost annotation map (if any), and re-wrap the
+  -- post-adaptation term so the annotation reaches the coder.
+  -- Peel one TypeLambda/TypeApplication layer if present, else return term as-is.
+  -- Inference wraps polymorphic bindings as TypeLambda{Annotated{...}}, so the
+  -- top-level term may not itself be Annotated. Three-level unfold covers
+  -- typical TypeLambda chains.
+  "peelOne" <~ ("t" ~> cases _Term (var "t")
+    (Just $ var "t") [
+    _Term_typeLambda>>: "tl" ~> Core.typeLambdaBody $ var "tl",
+    _Term_typeApplication>>: "ta" ~> Core.typeApplicationTermBody $ var "ta"]) $
+  "extractAnn" <~ ("t" ~> cases _Term (var "t")
+    (Just nothing) [
+    _Term_annotated>>: "at" ~> just (Core.annotatedTermAnnotation $ var "at")]) $
+  -- Try term as-is, then one level of peel, then two, then three.
+  "findAnn" <~ ("t" ~>
+    "t1" <~ var "peelOne" @@ var "t" $
+    "t2" <~ var "peelOne" @@ var "t1" $
+    "t3" <~ var "peelOne" @@ var "t2" $
+    optCases (var "extractAnn" @@ var "t") (
+      optCases (var "extractAnn" @@ var "t1") (
+        optCases (var "extractAnn" @@ var "t2")
+          (var "extractAnn" @@ var "t3")
+          ("a" ~> just $ var "a"))
+        ("a" ~> just $ var "a"))
+      ("a" ~> just $ var "a")) $
+  "originalAnnotations" <~ Maps.fromList
+    (Maybes.cat (Lists.map
+      ("b" ~> optCases (var "findAnn" @@ (Core.bindingTerm $ var "b"))
+        nothing
+        ("ann" ~> just $ pair (Core.bindingName $ var "b") (var "ann")))
+      (var "originalBindings"))) $
+  "reattachAnnotation" <~ ("b" ~>
+    optCases (Maps.lookup (Core.bindingName $ var "b") (var "originalAnnotations"))
+      (var "b")
+      ("ann" ~> Core.binding
+        (Core.bindingName $ var "b")
+        (cases _Term (Core.bindingTerm $ var "b")
+          -- If already annotated, merge annotations (post-adaptation annotation wins on conflict).
+          (Just $ Core.termAnnotated $ Core.annotatedTerm
+            (Core.bindingTerm $ var "b")
+            (var "ann")) [
+          _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
+            (Core.annotatedTermBody $ var "at")
+            (Maps.union (Core.annotatedTermAnnotation $ var "at") (var "ann"))])
+        (Core.bindingTypeScheme $ var "b"))) $
+  "bins5" <~ Lists.map (var "reattachAnnotation") (var "bins5Raw") $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>
@@ -929,7 +981,11 @@ termAlternatives = define "termAlternatives" $
     _Term_annotated>>: "at" ~>
       "term2" <~ Core.annotatedTermBody (var "at") $
       right $ list [
-        var "term2"], -- TODO: lossy
+        var "term2"], -- Lossy: outer Annotated wrapper is dropped here when
+                      -- the target language's termVariants does not include
+                      -- termVariantAnnotated. dataGraphToDefinitions
+                      -- re-attaches the description annotation post-adaptation
+                      -- so coders can emit it as documentation. See #349.
     _Term_maybe>>: "ot" ~> right $ list [
       Core.termList $ optCases (var "ot")
         (list ([] :: [TTerm Term]))
