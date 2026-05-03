@@ -109,7 +109,7 @@ the descriptions below cover the main ones:
 - Central hub defining fundamental types: `Term`, `Type`, `Literal`, `Function`, `Application`, `Lambda`, `Let`,
   `Record`, `Union`, etc.
 - All other modules depend on Core directly or transitively
-- Special property: imports itself as a type-level dependency
+- Special property: imports itself as a dependency
 
 **Variants.hs** - `hydra.variants` namespace
 - Supplements Core with metadata types NOT referenced by Core
@@ -232,8 +232,7 @@ def "Module" $
   record [
     "namespace">: packaging "Namespace",
     "definitions">: list $ packaging "Definition",
-    "termDependencies">: list $ packaging "Namespace",
-    "typeDependencies">: list $ packaging "Namespace",
+    "dependencies">: list $ packaging "Namespace",
     "description">: optional string
   ]
 ```
