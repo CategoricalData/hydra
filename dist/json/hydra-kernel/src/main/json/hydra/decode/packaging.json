@@ -2340,9 +2340,9 @@
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.decode.core",
-    "hydra.decode.graph",
     "hydra.packaging",
-    "hydra.util"],
+    "hydra.util",
+    "hydra.decode.core",
+    "hydra.decode.graph"],
   "description": "Term decoders for hydra.packaging",
   "namespace": "hydra.decode.packaging"}
