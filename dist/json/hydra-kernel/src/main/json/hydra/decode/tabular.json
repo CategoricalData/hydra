@@ -876,9 +876,9 @@
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.decode.core",
-    "hydra.decode.relational",
     "hydra.tabular",
-    "hydra.util"],
+    "hydra.util",
+    "hydra.decode.core",
+    "hydra.decode.relational"],
   "description": "Term decoders for hydra.tabular",
   "namespace": "hydra.decode.tabular"}

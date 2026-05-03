@@ -3813,6 +3813,6 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.ast", "hydra.util"],
+  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.ast", "hydra.util", "hydra.decode.core"],
   "description": "Term decoders for hydra.ast",
   "namespace": "hydra.decode.ast"}
