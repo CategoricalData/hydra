@@ -95,8 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Serialization.ns],
-            moduleTypeDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Serialization.ns] L.++ (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting C++ AST to abstract expressions"}
   where
     definitions = [

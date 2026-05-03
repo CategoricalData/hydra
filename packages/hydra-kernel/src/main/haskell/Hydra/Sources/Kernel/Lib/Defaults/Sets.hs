@@ -63,8 +63,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ExtractCore.ns, ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ExtractCore.ns, ShowCore.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Default term-level implementations of Set functions for the Hydra interpreter.")}
   where
     definitions = [

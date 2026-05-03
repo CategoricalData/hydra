@@ -20,8 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Core.ns, Context.ns],
-            moduleTypeDependencies = [Core.ns, Context.ns],
+            moduleDependencies = [Core.ns, Context.ns, Core.ns, Context.ns],
             moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
     definitions = [

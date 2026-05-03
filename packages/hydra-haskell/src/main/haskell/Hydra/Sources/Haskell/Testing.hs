@@ -33,6 +33,7 @@ import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors    as ShowError
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
@@ -53,9 +54,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns],
-            moduleTypeDependencies = (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
+     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
   where
     definitions = [
@@ -105,8 +105,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
     "tempModule">: record _Module [
       _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_namespace>>: Packaging.moduleNamespace (var "mod"),
-      _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
-      _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
+      _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
         (Core.bindingTypeScheme $ var "b")))

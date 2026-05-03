@@ -93,8 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, Serialization.ns],
-            moduleTypeDependencies = (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Formatting.ns, Serialization.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting Pegasus PDL AST to abstract expressions"}
   where
     definitions = [

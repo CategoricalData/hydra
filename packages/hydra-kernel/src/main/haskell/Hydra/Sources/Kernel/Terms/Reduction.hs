@@ -81,10 +81,9 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
+            moduleDependencies = [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
-      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
   where
    definitions = [

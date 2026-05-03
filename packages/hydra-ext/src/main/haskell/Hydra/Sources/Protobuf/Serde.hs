@@ -93,8 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, Serialization.ns],
-            moduleTypeDependencies = (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Formatting.ns, Serialization.ns] L.++ (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"}
   where
     definitions = [

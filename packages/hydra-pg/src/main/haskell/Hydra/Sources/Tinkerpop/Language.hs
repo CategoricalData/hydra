@@ -93,8 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Strip.ns],
-            moduleTypeDependencies = (TinkerpopFeatures.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Strip.ns] L.++ (TinkerpopFeatures.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Language constraints based on TinkerPop Graph.Features"}
   where
     definitions = [

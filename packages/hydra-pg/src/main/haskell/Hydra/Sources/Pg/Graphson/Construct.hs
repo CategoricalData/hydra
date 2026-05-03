@@ -101,8 +101,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [GraphsonCoder.ns],
-            moduleTypeDependencies = (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]),
+            moduleDependencies = ([GraphsonCoder.ns] L.++ (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns])),
             moduleDescription = Just "Functions for constructing GraphSON vertices from property graph vertices."}
   where
     definitions = [

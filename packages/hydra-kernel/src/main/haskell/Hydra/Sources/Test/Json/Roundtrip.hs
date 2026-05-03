@@ -38,8 +38,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, Namespace "hydra.json.encode", Namespace "hydra.json.decode"],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Namespace "hydra.json.encode", Namespace "hydra.json.decode"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Round-trip test cases for JSON encoding and decoding")}
   where
     definitions = [

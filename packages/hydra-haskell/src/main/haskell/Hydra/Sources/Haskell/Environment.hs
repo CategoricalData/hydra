@@ -21,8 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [],
+            moduleDependencies = [],
             moduleDescription = Just "Environment types for Haskell code generation"}
   where
     definitions = [

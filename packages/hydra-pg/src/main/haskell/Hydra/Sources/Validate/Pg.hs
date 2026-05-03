@@ -13,6 +13,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 import qualified Data.Map                                  as M
 import qualified Data.Maybe                                as Y
 
@@ -30,8 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.validate.pg"),
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [PgModel.ns, ErrorPg.ns],
+            moduleDependencies = [PgModel.ns, ErrorPg.ns],
             moduleDescription = Just "Validation functions for property graphs"}
   where
    definitions = [

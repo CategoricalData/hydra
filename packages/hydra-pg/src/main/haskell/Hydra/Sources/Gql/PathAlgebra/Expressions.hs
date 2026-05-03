@@ -29,8 +29,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = kernelTypesNamespaces,
             moduleDescription = Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"}
   where
     definitions = [

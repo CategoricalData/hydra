@@ -31,8 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns] ++ kernelTypesNamespaces,
             moduleDescription = Just "Test cases for Ord instance comparisons on complex Hydra types"}
   where
     definitions = [Phantoms.toDefinition allTests]
