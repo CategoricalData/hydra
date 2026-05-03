@@ -64,8 +64,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "A utility which instantiates a nonrecursive type with default values"}
   where
    definitions = [

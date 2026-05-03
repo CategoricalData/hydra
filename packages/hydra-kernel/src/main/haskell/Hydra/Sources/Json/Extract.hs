@@ -91,8 +91,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Utilities for extracting values from JSON objects"}
   where
     definitions = [

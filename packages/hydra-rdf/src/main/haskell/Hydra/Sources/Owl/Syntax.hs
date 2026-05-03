@@ -61,8 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Core.ns, RdfSyntax.ns, XmlSchema.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns, RdfSyntax.ns, XmlSchema.ns, Core.ns],
             moduleDescription = Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"}
   where
     definitions = generalDefinitions ++ owl2Definitions

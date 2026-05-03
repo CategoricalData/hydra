@@ -106,11 +106,9 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [
-              Annotations.ns, Constants.ns, Dependencies.ns, Environment.ns,
+            moduleDependencies = [Annotations.ns, Constants.ns, Dependencies.ns, Environment.ns,
               Formatting.ns, Names.ns, Predicates.ns, Reflect.ns,
-              ShowVariants.ns, Strip.ns, Variables.ns, JsonSchemaSerde.ns],
-            moduleTypeDependencies = (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces),
+              ShowVariants.ns, Strip.ns, Variables.ns, JsonSchemaSerde.ns] L.++ (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"}
   where
     definitions = [

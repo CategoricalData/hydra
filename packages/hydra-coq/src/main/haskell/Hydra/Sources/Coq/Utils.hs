@@ -30,6 +30,7 @@ import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Coq.Language                as CoqLanguage
 import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
+import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
@@ -44,8 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Pure helpers for the Coq code generator"}
   where
     definitions = [
@@ -70,7 +70,7 @@ module_ = Module {
       toDefinition isTypeVarLike,
       toDefinition localName,
       toDefinition localNameRaw,
-      toDefinition moduleDependencies,
+      toDefinition moduleDependencyNames,
       toDefinition normalizeInnerTypeLambdas,
       toDefinition processLetSCCs,
       toDefinition qualifiedFromName,
@@ -383,17 +383,14 @@ termRefs = define "termRefs" $
     _Term_wrap>>: "wt" ~>
       termRefs @@ var "locals" @@ (Core.wrappedTermBody $ var "wt")]
 
--- | Collect the dependency namespaces of a Hydra Module: the union of its
--- type and term dependency namespaces, minus the module's own namespace,
--- deduplicated while preserving first-occurrence order.
-moduleDependencies :: TTermDefinition (Module -> [String])
-moduleDependencies = define "moduleDependencies" $
+-- | Collect the dependency namespaces of a Hydra Module, minus the module's
+-- own namespace, deduplicated while preserving first-occurrence order.
+moduleDependencyNames :: TTermDefinition (Module -> [String])
+moduleDependencyNames = define "moduleDependencyNames" $
   doc "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace" $
   lambda "m" $ lets [
-    "typeDeps">: Lists.map (lambda "ns" $ Packaging.unNamespace (var "ns")) (Packaging.moduleTypeDependencies (var "m")),
-    "termDeps">: Lists.map (lambda "ns" $ Packaging.unNamespace (var "ns")) (Packaging.moduleTermDependencies (var "m")),
+    "allDeps">: Lists.map (lambda "ns" $ Packaging.unNamespace (var "ns")) (Packaging.moduleDependencies (var "m")),
     "ownNs">: Packaging.unNamespace (Packaging.moduleNamespace (var "m")),
-    "allDeps">: Lists.concat2 (var "typeDeps") (var "termDeps"),
     "filtered">: Lists.filter (lambda "s" $ Logic.not (Equality.equal (var "s") (var "ownNs"))) (var "allDeps")] $
     (Lists.nub :: TTerm [String] -> TTerm [String]) (var "filtered")
 

@@ -20,8 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Graph.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns, Graph.ns],
             moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
   where
     definitions = [
@@ -77,11 +76,8 @@ module' = define "Module" $
     "namespace">:
       doc "A common prefix for all element names in the module"
       namespace,
-    "termDependencies">:
-      doc "Any modules which the term expressions of this module directly depend upon" $
-      T.list namespace,
-    "typeDependencies">:
-      doc "Any modules which the type expressions of this module directly depend upon" $
+    "dependencies">:
+      doc "Any modules which this module directly depends on" $
       T.list namespace,
     "definitions">:
       doc "The definitions in this module" $

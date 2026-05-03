@@ -32,8 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.json.writer"],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Namespace "hydra.json.writer"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for JSON serialization")}
   where
     definitions = [

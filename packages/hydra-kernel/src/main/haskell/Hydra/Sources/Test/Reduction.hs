@@ -32,8 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core"],
-            moduleTypeDependencies = [],
+            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core"],
             moduleDescription = Just "Test cases for term reduction/evaluation mechanics"}
   where
     definitions = [Phantoms.toDefinition allTests]

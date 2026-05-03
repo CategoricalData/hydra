@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
+import qualified Data.List                                 as L
 import qualified Data.Set                                  as S
 
 
@@ -27,8 +28,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Strip.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Type preparation functions for Scala code generation"}
   where
     definitions = [

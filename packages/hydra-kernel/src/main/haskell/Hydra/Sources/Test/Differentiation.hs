@@ -33,8 +33,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Diff.ns, Variables.ns, ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Diff.ns, Variables.ns, ShowCore.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for automatic differentiation")}
   where
     definitions = [Phantoms.toDefinition allTests]

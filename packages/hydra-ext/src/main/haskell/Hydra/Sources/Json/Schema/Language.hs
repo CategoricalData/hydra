@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [toDefinition jsonSchemaLanguage],
-            moduleTermDependencies = [Reflect.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Reflect.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for JSON Schema"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

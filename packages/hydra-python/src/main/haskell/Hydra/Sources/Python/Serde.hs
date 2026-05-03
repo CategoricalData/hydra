@@ -96,8 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Serialization.ns],
-            moduleTypeDependencies = (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Python serializer: converts Python AST to concrete syntax"}
   where
     definitions = [

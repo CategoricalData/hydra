@@ -37,8 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Formatting.ns],
-            moduleTypeDependencies = (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Formatting.ns] DL.++ (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Language constraints for Coq code generation"}
   where
     definitions = [

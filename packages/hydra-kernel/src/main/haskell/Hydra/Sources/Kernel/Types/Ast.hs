@@ -19,8 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "A model which provides a common syntax tree for Hydra serializers"}
   where
     definitions = [

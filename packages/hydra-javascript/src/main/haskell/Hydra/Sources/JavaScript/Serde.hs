@@ -99,8 +99,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Serialization.ns, JavaScriptOperators.ns],
-            moduleTypeDependencies = (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Serialization.ns, JavaScriptOperators.ns] L.++ (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting JavaScript AST to abstract expressions"}
   where
     definitions = [

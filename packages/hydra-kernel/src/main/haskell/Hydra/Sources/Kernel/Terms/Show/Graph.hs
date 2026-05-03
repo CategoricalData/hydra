@@ -60,8 +60,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "String representations of hydra.graph types"}
   where
    definitions = [

@@ -86,8 +86,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.typeScript.language"),
             moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
-            moduleTermDependencies = [Strip.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for TypeScript"}
 typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $

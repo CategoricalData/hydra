@@ -66,8 +66,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, Constants.ns, Formatting.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Functions for working with qualified names.")}
   where
    definitions = [

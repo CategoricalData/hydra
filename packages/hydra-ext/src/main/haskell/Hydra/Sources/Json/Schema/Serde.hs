@@ -98,8 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [jsonWriterNs],
-            moduleTypeDependencies = (jsonSchemaSyntaxNs:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [jsonWriterNs] L.++ (jsonSchemaSyntaxNs:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting JSON Schema documents to JSON values"}
   where
     definitions = [

@@ -47,8 +47,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Formatting.ns, Serialization.ns],
-            moduleTypeDependencies = (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Formatting.ns, Serialization.ns] DL.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme"}
   where
     definitions = [

@@ -41,8 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("A module defining the graph used in the test suite.")}
   where
    definitions = [

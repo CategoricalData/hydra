@@ -78,8 +78,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = namespaces,
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = namespaces ++ kernelTypesNamespaces,
             moduleDescription = Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")}
   where
