@@ -12,15 +12,14 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term decoders for hydra.packaging"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.packaging"),
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.extract.core",
         (Packaging.Namespace "hydra.lexical"),
         (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.packaging"),
+        (Packaging.Namespace "hydra.util"),
         (Packaging.Namespace "hydra.decode.core"),
         (Packaging.Namespace "hydra.decode.graph")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.packaging",
-        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.packaging.definition"),
@@ -419,14 +418,14 @@ module_ =
                                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
-                                                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "termDependencies"))})),
+                                                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "dependencies"))})),
                                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))}))})),
                                                   Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                             Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                              Core.lambdaParameter = (Core.Name "field_termDependencies"),
+                                              Core.lambdaParameter = (Core.Name "field_dependencies"),
                                               Core.lambdaDomain = Nothing,
                                               Core.lambdaBody = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -436,50 +435,30 @@ module_ =
                                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
-                                                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "typeDependencies"))})),
+                                                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "definitions"))})),
                                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
-                                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))}))})),
+                                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.definition"))}))})),
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                                 Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                                  Core.lambdaParameter = (Core.Name "field_typeDependencies"),
+                                                  Core.lambdaParameter = (Core.Name "field_definitions"),
                                                   Core.lambdaDomain = Nothing,
-                                                  Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
-                                                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
-                                                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "definitions"))})),
-                                                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
-                                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.definition"))}))})),
-                                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
-                                                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
-                                                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                                      Core.lambdaParameter = (Core.Name "field_definitions"),
-                                                      Core.lambdaDomain = Nothing,
-                                                      Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                                        Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
-                                                        Core.recordFields = [
-                                                          Core.Field {
-                                                            Core.fieldName = (Core.Name "description"),
-                                                            Core.fieldTerm = (Core.TermVariable (Core.Name "field_description"))},
-                                                          Core.Field {
-                                                            Core.fieldName = (Core.Name "namespace"),
-                                                            Core.fieldTerm = (Core.TermVariable (Core.Name "field_namespace"))},
-                                                          Core.Field {
-                                                            Core.fieldName = (Core.Name "termDependencies"),
-                                                            Core.fieldTerm = (Core.TermVariable (Core.Name "field_termDependencies"))},
-                                                          Core.Field {
-                                                            Core.fieldName = (Core.Name "typeDependencies"),
-                                                            Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeDependencies"))},
-                                                          Core.Field {
-                                                            Core.fieldName = (Core.Name "definitions"),
-                                                            Core.fieldTerm = (Core.TermVariable (Core.Name "field_definitions"))}]}))))}))}))}))}))}))}))}))}))}))}))}))}))}]})),
+                                                  Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
+                                                    Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
+                                                    Core.recordFields = [
+                                                      Core.Field {
+                                                        Core.fieldName = (Core.Name "description"),
+                                                        Core.fieldTerm = (Core.TermVariable (Core.Name "field_description"))},
+                                                      Core.Field {
+                                                        Core.fieldName = (Core.Name "namespace"),
+                                                        Core.fieldTerm = (Core.TermVariable (Core.Name "field_namespace"))},
+                                                      Core.Field {
+                                                        Core.fieldName = (Core.Name "dependencies"),
+                                                        Core.fieldTerm = (Core.TermVariable (Core.Name "field_dependencies"))},
+                                                      Core.Field {
+                                                        Core.fieldName = (Core.Name "definitions"),
+                                                        Core.fieldTerm = (Core.TermVariable (Core.Name "field_definitions"))}]}))))}))}))}))}))}))}))}))}))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {

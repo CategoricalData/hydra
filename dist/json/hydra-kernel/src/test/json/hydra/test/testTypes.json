@@ -1692,10 +1692,7 @@
         "name": "hydra.test.testTypes.testTypeName",
         "term": {"wrap": {"body": {"literal": {"string": "Test"}}, "typeName": "hydra.core.Name"}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}}],
-  "description": "Type definitions for the test suite",
-  "namespace": "hydra.test.testTypes",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1718,4 +1715,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Type definitions for the test suite",
+  "namespace": "hydra.test.testTypes"}

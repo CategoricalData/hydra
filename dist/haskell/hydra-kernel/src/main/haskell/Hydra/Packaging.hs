@@ -43,18 +43,15 @@ data Module =
     moduleDescription :: (Maybe String),
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
-    -- | Any modules which the term expressions of this module directly depend upon
-    moduleTermDependencies :: [Namespace],
-    -- | Any modules which the type expressions of this module directly depend upon
-    moduleTypeDependencies :: [Namespace],
+    -- | Any modules which this module directly depends on
+    moduleDependencies :: [Namespace],
     -- | The definitions in this module
     moduleDefinitions :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 _Module = Core.Name "hydra.packaging.Module"
 _Module_description = Core.Name "description"
 _Module_namespace = Core.Name "namespace"
-_Module_termDependencies = Core.Name "termDependencies"
-_Module_typeDependencies = Core.Name "typeDependencies"
+_Module_dependencies = Core.Name "dependencies"
 _Module_definitions = Core.Name "definitions"
 -- | A prefix for element names
 newtype Namespace =

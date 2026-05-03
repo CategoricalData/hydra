@@ -1990,8 +1990,7 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core"],
-      Packaging.moduleTypeDependencies = [
+      Packaging.moduleDependencies = [
+        Packaging.Namespace "hydra.encode.core",
         Packaging.Namespace "hydra.pg.model"],
       Packaging.moduleDescription = (Just "Term encoders for hydra.pg.model")}

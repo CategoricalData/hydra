@@ -1806,7 +1806,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list of S-expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.SExpression"}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms.",
-  "namespace": "hydra.lisp.syntax",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.lisp.syntax"}

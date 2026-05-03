@@ -12,10 +12,9 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.classes"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.classes"),
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core"],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.classes"],
+      Packaging.moduleDependencies = [
+        Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.classes")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.classes.typeClass"),

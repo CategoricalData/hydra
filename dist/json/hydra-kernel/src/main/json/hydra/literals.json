@@ -299,10 +299,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"integer": {"bigint": {}}}}, "domain": {"variable": "hydra.core.IntegerValue"}}},
           "variables": []}}}],
-  "description": "Conversion functions for literal values.",
-  "namespace": "hydra.literals",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -325,4 +322,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Conversion functions for literal values.",
+  "namespace": "hydra.literals"}

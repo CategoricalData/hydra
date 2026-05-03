@@ -3803,7 +3803,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.coq.utils.moduleDependencies",
+        "name": "hydra.coq.utils.moduleDependencyNames",
         "term": {
           "annotated": {
             "annotation": [
@@ -3817,33 +3817,13 @@
                   "let": {
                     "bindings": [
                       {
-                        "name": "typeDeps",
+                        "name": "allDeps",
                         "term": {
                           "application": {
                             "argument": {
                               "application": {
                                 "argument": {"variable": "m"},
-                                "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
-                                    "domain": {"variable": "hydra.packaging.Namespace"},
-                                    "parameter": "ns"}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}},
-                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
-                      {
-                        "name": "termDeps",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "m"},
-                                "function": {"project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}},
+                                "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -3864,16 +3844,6 @@
                               "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"unwrap": "hydra.packaging.Namespace"}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
-                      {
-                        "name": "allDeps",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "termDeps"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "typeDeps"},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}}}}}},
-                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "filtered",
                         "term": {
@@ -7239,10 +7209,12 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Pure helpers for the Coq code generator",
-  "namespace": "hydra.coq.utils",
-  "termDependencies": ["hydra.formatting", "hydra.rewriting", "hydra.sorting", "hydra.variables", "hydra.coq.language"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.formatting",
+    "hydra.rewriting",
+    "hydra.sorting",
+    "hydra.variables",
+    "hydra.coq.language",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -7265,4 +7237,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Pure helpers for the Coq code generator",
+  "namespace": "hydra.coq.utils"}

@@ -3776,9 +3776,7 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1", "t2"]}}}],
-  "description": "Pegasus PDL code generator: converts Hydra modules to PDL schema files",
-  "namespace": "hydra.pegasus.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.pegasus.serde",
     "hydra.pegasus.language",
     "hydra.formatting",
@@ -3789,8 +3787,7 @@
     "hydra.strip",
     "hydra.annotations",
     "hydra.serialization",
-    "hydra.show.core"],
-  "typeDependencies": [
+    "hydra.show.core",
     "hydra.pegasus.pdl",
     "hydra.paths",
     "hydra.ast",
@@ -3814,4 +3811,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Pegasus PDL code generator: converts Hydra modules to PDL schema files",
+  "namespace": "hydra.pegasus.coder"}

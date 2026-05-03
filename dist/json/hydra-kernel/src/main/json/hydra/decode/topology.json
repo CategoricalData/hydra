@@ -801,7 +801,6 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.topology", "hydra.util"],
   "description": "Term decoders for hydra.topology",
-  "namespace": "hydra.decode.topology",
-  "termDependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core"],
-  "typeDependencies": ["hydra.topology", "hydra.util"]}
+  "namespace": "hydra.decode.topology"}

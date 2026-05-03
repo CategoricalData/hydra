@@ -1586,10 +1586,9 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "Default term-level implementations of Maybe functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.maybes",
-  "termDependencies": ["hydra.extract.core", "hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1612,4 +1611,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Default term-level implementations of Maybe functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.defaults.maybes"}

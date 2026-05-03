@@ -4731,17 +4731,7 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.errors.UnificationInferenceError"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "description": "DSL functions for hydra.errors",
-  "namespace": "hydra.dsl.errors",
-  "termDependencies": [
-    "hydra.dsl.context",
-    "hydra.dsl.core",
-    "hydra.dsl.error.checking",
-    "hydra.dsl.error.core",
-    "hydra.dsl.paths",
-    "hydra.dsl.typing",
-    "hydra.dsl.variants"],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.errors",
     "hydra.phantoms",
     "hydra.context",
@@ -4750,4 +4740,13 @@
     "hydra.error.core",
     "hydra.paths",
     "hydra.typing",
-    "hydra.variants"]}
+    "hydra.variants",
+    "hydra.dsl.context",
+    "hydra.dsl.core",
+    "hydra.dsl.error.checking",
+    "hydra.dsl.error.core",
+    "hydra.dsl.paths",
+    "hydra.dsl.typing",
+    "hydra.dsl.variants"],
+  "description": "DSL functions for hydra.errors",
+  "namespace": "hydra.dsl.errors"}

@@ -60,7 +60,6 @@
                             "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "Phantom types for use with Hydra DSLs",
-  "namespace": "hydra.phantoms",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.phantoms"}

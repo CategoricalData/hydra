@@ -44,7 +44,6 @@
                             "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
+  "dependencies": [],
   "description": "Environment types for Haskell code generation",
-  "namespace": "hydra.haskell.environment",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.haskell.environment"}

@@ -439,7 +439,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Access the type inside a wrapped type"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A model for subterm and subtype access patterns",
-  "namespace": "hydra.paths",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.paths"}

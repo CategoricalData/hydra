@@ -257,7 +257,7 @@
                                                                 "bindings": [
                                                                   {
                                                                     "name": "deps",
-                                                                    "term": {"application": {"argument": {"variable": "mod_"}, "function": {"variable": "hydra.coq.utils.moduleDependencies"}}},
+                                                                    "term": {"application": {"argument": {"variable": "mod_"}, "function": {"variable": "hydra.coq.utils.moduleDependencyNames"}}},
                                                                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
@@ -7320,9 +7320,7 @@
               "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
-  "namespace": "hydra.coq.generate",
-  "termDependencies": [
+  "dependencies": [
     "hydra.coq.utils",
     "hydra.coq.coder",
     "hydra.coq.serde",
@@ -7330,8 +7328,7 @@
     "hydra.serialization",
     "hydra.coq.language",
     "hydra.coq.environment",
-    "hydra.coq.syntax"],
-  "typeDependencies": [
+    "hydra.coq.syntax",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -7354,4 +7351,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
+  "namespace": "hydra.coq.generate"}

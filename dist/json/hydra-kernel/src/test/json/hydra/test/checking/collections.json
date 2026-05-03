@@ -6743,10 +6743,9 @@
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Collection type checking test cases: lists, sets, maps",
-  "namespace": "hydra.test.checking.collections",
-  "termDependencies": ["hydra.test.testGraph", "hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.testGraph",
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -6769,4 +6768,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Collection type checking test cases: lists, sets, maps",
+  "namespace": "hydra.test.checking.collections"}

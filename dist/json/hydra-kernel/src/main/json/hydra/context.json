@@ -65,7 +65,6 @@
                             "body": {"variable": "hydra.context.Context"}}}}]},
                   "parameter": "e"}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "Execution context for tracing and diagnostics",
-  "namespace": "hydra.context",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.context"}

@@ -2116,10 +2116,10 @@
           "body": {
             "function": {"codomain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}, "domain": {"variable": "hydra.graphviz.dot.Id"}}},
           "variables": []}}}],
-  "description": "Functions for converting Hydra terms to Graphviz DOT graphs",
-  "namespace": "hydra.graphviz.coder",
-  "termDependencies": ["hydra.show.paths", "hydra.names", "hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.paths",
+    "hydra.names",
+    "hydra.rewriting",
     "hydra.graphviz.dot",
     "hydra.paths",
     "hydra.ast",
@@ -2143,4 +2143,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for converting Hydra terms to Graphviz DOT graphs",
+  "namespace": "hydra.graphviz.coder"}

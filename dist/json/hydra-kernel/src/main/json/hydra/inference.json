@@ -13140,9 +13140,7 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}}],
-  "description": "Type inference following Algorithm W, extended for nominal terms and types",
-  "namespace": "hydra.inference",
-  "termDependencies": [
+  "dependencies": [
     "hydra.annotations",
     "hydra.checking",
     "hydra.extract.core",
@@ -13157,8 +13155,7 @@
     "hydra.sorting",
     "hydra.substitution",
     "hydra.variables",
-    "hydra.unification"],
-  "typeDependencies": [
+    "hydra.unification",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -13181,4 +13178,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Type inference following Algorithm W, extended for nominal terms and types",
+  "namespace": "hydra.inference"}

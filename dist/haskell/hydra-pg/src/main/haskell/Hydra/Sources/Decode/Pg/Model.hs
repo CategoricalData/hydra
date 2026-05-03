@@ -2968,12 +2968,11 @@ module_ =
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.pg.model.VertexWithAdjacentEdges")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.extract.core",
         (Packaging.Namespace "hydra.lexical"),
         (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.decode.core")],
-      Packaging.moduleTypeDependencies = [
+        (Packaging.Namespace "hydra.decode.core"),
         Packaging.Namespace "hydra.pg.model",
         (Packaging.Namespace "hydra.util")],
       Packaging.moduleDescription = (Just "Term decoders for hydra.pg.model")}

@@ -1104,7 +1104,6 @@
                   "argument": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.context.InContext"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["e"]}}}],
+  "dependencies": ["hydra.context", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.context",
-  "namespace": "hydra.dsl.context",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.context", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.context"}

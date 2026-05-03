@@ -900,10 +900,9 @@ module_ =
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.pg.mapping.VertexSpec")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.encode.core",
         (Packaging.Namespace "hydra.encode.pg.model"),
-        (Packaging.Namespace "hydra.encode.coders")],
-      Packaging.moduleTypeDependencies = [
+        (Packaging.Namespace "hydra.encode.coders"),
         Packaging.Namespace "hydra.pg.mapping"],
       Packaging.moduleDescription = (Just "Term encoders for hydra.pg.mapping")}

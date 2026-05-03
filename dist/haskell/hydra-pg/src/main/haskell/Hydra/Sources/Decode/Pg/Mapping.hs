@@ -1770,14 +1770,13 @@ module_ =
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.pg.mapping.VertexSpec"))}))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.extract.core",
         (Packaging.Namespace "hydra.lexical"),
         (Packaging.Namespace "hydra.rewriting"),
         (Packaging.Namespace "hydra.decode.core"),
         (Packaging.Namespace "hydra.decode.pg.model"),
-        (Packaging.Namespace "hydra.decode.coders")],
-      Packaging.moduleTypeDependencies = [
+        (Packaging.Namespace "hydra.decode.coders"),
         Packaging.Namespace "hydra.pg.mapping",
         (Packaging.Namespace "hydra.util")],
       Packaging.moduleDescription = (Just "Term decoders for hydra.pg.mapping")}

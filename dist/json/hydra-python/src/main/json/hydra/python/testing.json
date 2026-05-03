@@ -648,10 +648,12 @@
                   "domain": {"variable": "hydra.testing.TestGroup"}}},
               "domain": {"variable": "hydra.packaging.Module"}}},
           "variables": ["t0"]}}}],
-  "description": "Python test code generation codec for pytest-based generation tests",
-  "namespace": "hydra.python.testing",
-  "termDependencies": ["hydra.serialization", "hydra.formatting", "hydra.names", "hydra.test.utils", "hydra.constants"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
+    "hydra.formatting",
+    "hydra.names",
+    "hydra.test.utils",
+    "hydra.constants",
     "hydra.python.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -675,4 +677,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Python test code generation codec for pytest-based generation tests",
+  "namespace": "hydra.python.testing"}

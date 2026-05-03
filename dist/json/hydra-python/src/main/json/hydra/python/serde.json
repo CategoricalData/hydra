@@ -5190,10 +5190,9 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "Python serializer: converts Python AST to concrete syntax",
-  "namespace": "hydra.python.serde",
-  "termDependencies": ["hydra.constants", "hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.serialization",
     "hydra.python.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -5217,4 +5216,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Python serializer: converts Python AST to concrete syntax",
+  "namespace": "hydra.python.serde"}

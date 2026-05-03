@@ -6403,10 +6403,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.cpp.syntax.WhileStatement"}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting C++ AST to abstract expressions",
-  "namespace": "hydra.cpp.serde",
-  "termDependencies": ["hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
     "hydra.cpp.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -6430,4 +6428,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting C++ AST to abstract expressions",
+  "namespace": "hydra.cpp.serde"}

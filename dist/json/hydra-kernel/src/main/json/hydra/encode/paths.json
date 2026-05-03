@@ -1955,7 +1955,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypeStep"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.paths"],
   "description": "Term encoders for hydra.paths",
-  "namespace": "hydra.encode.paths",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.paths"]}
+  "namespace": "hydra.encode.paths"}

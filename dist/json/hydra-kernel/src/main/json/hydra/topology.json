@@ -107,7 +107,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A graph vertex, represented as a 32-bit integer identifier"}}}],
               "body": {"literal": {"integer": {"int32": {}}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core"],
   "description": "A model for simple graphs as adjacency lists",
-  "namespace": "hydra.topology",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.topology"}

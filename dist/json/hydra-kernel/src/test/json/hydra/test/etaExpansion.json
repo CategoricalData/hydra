@@ -14995,10 +14995,8 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for eta expansion of terms",
-  "namespace": "hydra.test.etaExpansion",
-  "termDependencies": ["hydra.test.testGraph"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.testGraph",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -15021,4 +15019,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for eta expansion of terms",
+  "namespace": "hydra.test.etaExpansion"}

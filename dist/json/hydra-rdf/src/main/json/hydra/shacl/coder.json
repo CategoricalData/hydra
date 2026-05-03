@@ -3319,9 +3319,7 @@
                 "function": {"codomain": {"variable": "hydra.rdf.syntax.Description"}, "domain": {"variable": "hydra.rdf.syntax.Description"}}},
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}}],
-  "description": "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions",
-  "namespace": "hydra.shacl.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.names",
     "hydra.strip",
     "hydra.annotations",
@@ -3329,8 +3327,7 @@
     "hydra.extract.core",
     "hydra.formatting",
     "hydra.lexical",
-    "hydra.rdf.utils"],
-  "typeDependencies": [
+    "hydra.rdf.utils",
     "hydra.shacl.model",
     "hydra.rdf.syntax",
     "hydra.paths",
@@ -3355,4 +3352,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions",
+  "namespace": "hydra.shacl.coder"}

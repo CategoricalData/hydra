@@ -83,7 +83,6 @@
                   {"name": "name", "type": {"variable": "hydra.relational.RelationName"}},
                   {"name": "columns", "type": {"list": {"variable": "hydra.tabular.ColumnType"}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.relational", "hydra.core"],
   "description": "A simple, untyped tabular data model, suitable for CSVs and TSVs",
-  "namespace": "hydra.tabular",
-  "termDependencies": ["hydra.core", "hydra.relational"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.tabular"}

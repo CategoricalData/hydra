@@ -8291,13 +8291,14 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "Term decoders for hydra.error.core",
-  "namespace": "hydra.decode.error.core",
-  "termDependencies": [
+  "dependencies": [
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.paths",
     "hydra.decode.core",
-    "hydra.decode.variants"],
-  "typeDependencies": ["hydra.error.core", "hydra.util"]}
+    "hydra.decode.variants",
+    "hydra.error.core",
+    "hydra.util"],
+  "description": "Term decoders for hydra.error.core",
+  "namespace": "hydra.decode.error.core"}

@@ -3182,10 +3182,9 @@
                 "function": {"codomain": {"maybe": {"variable": "hydra.error.core.InvalidTypeError"}}, "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"set": {"variable": "hydra.core.Name"}}}},
           "variables": []}}}],
-  "description": "Validation functions for core terms and types",
-  "namespace": "hydra.validate.core",
-  "termDependencies": ["hydra.rewriting", "hydra.variables"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.rewriting",
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -3208,4 +3207,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Validation functions for core terms and types",
+  "namespace": "hydra.validate.core"}

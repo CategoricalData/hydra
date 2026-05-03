@@ -54,9 +54,7 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
-  "namespace": "hydra.test.testSuite",
-  "termDependencies": [
+  "dependencies": [
     "hydra.test.lib.chars",
     "hydra.test.lib.eithers",
     "hydra.test.lib.equality",
@@ -90,8 +88,7 @@
     "hydra.test.substitution",
     "hydra.test.unification",
     "hydra.test.validate.all",
-    "hydra.test.variables"],
-  "typeDependencies": [
+    "hydra.test.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -114,4 +111,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
+  "namespace": "hydra.test.testSuite"}

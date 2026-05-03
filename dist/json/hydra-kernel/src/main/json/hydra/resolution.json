@@ -2221,17 +2221,14 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.TypeScheme"}, "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Type dereference, lookup, requirements, and instantiation",
-  "namespace": "hydra.resolution",
-  "termDependencies": [
+  "dependencies": [
     "hydra.lexical",
     "hydra.names",
     "hydra.scoping",
     "hydra.show.core",
     "hydra.strip",
     "hydra.substitution",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2254,4 +2251,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Type dereference, lookup, requirements, and instantiation",
+  "namespace": "hydra.resolution"}

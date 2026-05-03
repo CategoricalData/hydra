@@ -78,8 +78,7 @@ transformModule m =
     Packaging.Module {
       Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleNamespace = (addGenerationPrefix (Packaging.moduleNamespace m)),
-      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
-      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
+      Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Packaging.moduleDefinitions m)}
 -- | Pass through test cases unchanged
 transformTestCase :: t0 -> Maybe t0

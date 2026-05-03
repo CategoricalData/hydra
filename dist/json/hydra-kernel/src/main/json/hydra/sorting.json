@@ -2370,10 +2370,8 @@
               "domain": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}}},
           "constraints": [{"key": "t1", "value": {"classes": ["ordering"]}}],
           "variables": ["t0", "t1"]}}}],
-  "description": "Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC.",
-  "namespace": "hydra.sorting",
-  "termDependencies": ["hydra.constants"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2396,4 +2394,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC.",
+  "namespace": "hydra.sorting"}

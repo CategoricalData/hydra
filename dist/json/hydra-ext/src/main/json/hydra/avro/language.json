@@ -154,10 +154,9 @@
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
-  "description": "Language constraints for Apache Avro",
-  "namespace": "hydra.avro.language",
-  "termDependencies": ["hydra.lexical", "hydra.strip"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.lexical",
+    "hydra.strip",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -180,4 +179,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints for Apache Avro",
+  "namespace": "hydra.avro.language"}
