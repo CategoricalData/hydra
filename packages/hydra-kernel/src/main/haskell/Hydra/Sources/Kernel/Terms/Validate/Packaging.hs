@@ -25,6 +25,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
+import qualified Data.List                       as L
 import           Prelude hiding ((++))
 import qualified Data.Set                        as S
 
@@ -36,8 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, Constants.ns, Formatting.ns, Names.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [

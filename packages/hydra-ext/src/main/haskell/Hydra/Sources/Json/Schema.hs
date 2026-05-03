@@ -23,8 +23,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [JsonModel.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")}
   where
     def = datatype ns

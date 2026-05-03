@@ -89,9 +89,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Simple, one-way adapters for types and terms"}
   where
     definitions = [

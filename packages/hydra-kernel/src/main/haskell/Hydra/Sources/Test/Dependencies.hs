@@ -34,8 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, DependenciesModule.ns, TestGraph.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, DependenciesModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for dependency analysis and let-term transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]

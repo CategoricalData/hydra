@@ -150,11 +150,8 @@ def make_resolvers(modules):
             })
         return result
 
-    def resolve_term_deps(obj, info):
-        return obj.get("termDependencies", [])
-
-    def resolve_type_deps(obj, info):
-        return obj.get("typeDependencies", [])
+    def resolve_deps(obj, info):
+        return obj.get("dependencies", [])
 
     return {
         "Query": {
@@ -163,7 +160,7 @@ def make_resolvers(modules):
                 (m for m in modules if m.get("namespace") == namespace), None
             ),
             "dependentsOf": lambda obj, info, namespace: [
-                m for m in modules if namespace in m.get("termDependencies", [])
+                m for m in modules if namespace in m.get("dependencies", [])
             ],
             "search": lambda obj, info, query: [
                 m for m in modules
@@ -174,8 +171,7 @@ def make_resolvers(modules):
             "namespace": resolve_namespace,
             "description": resolve_description,
             "elements": resolve_elements,
-            "termDependencies": resolve_term_deps,
-            "typeDependencies": resolve_type_deps,
+            "dependencies": resolve_deps,
         },
         "Namespace": {
             "value": lambda obj, info: obj if isinstance(obj, str) else obj.get("value", ""),

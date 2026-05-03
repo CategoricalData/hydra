@@ -94,8 +94,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Serialization.ns, JavaSerdeSource.ns],
-            moduleTypeDependencies = (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Serialization.ns, JavaSerdeSource.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting Scala AST to abstract expressions"}
   where
     definitions = [

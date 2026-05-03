@@ -27,8 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, SubstitutionModule.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, SubstitutionModule.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for type and term substitution operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

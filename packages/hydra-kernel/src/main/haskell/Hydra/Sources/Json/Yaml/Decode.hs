@@ -96,8 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [JsonDecode.ns, YamlModel.ns],
-            moduleTypeDependencies = (YamlModel.ns : KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [JsonDecode.ns, YamlModel.ns] L.++ (YamlModel.ns : KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON."}
   where
     definitions = [

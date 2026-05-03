@@ -48,6 +48,7 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Dsl.Meta.Graph                       as Graph
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -88,9 +89,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns],
-            moduleTypeDependencies = (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Java code generator: converts Hydra modules to Java source code"}
   where
     definitions = [

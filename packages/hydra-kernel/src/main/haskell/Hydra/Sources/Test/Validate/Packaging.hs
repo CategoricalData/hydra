@@ -25,10 +25,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [
-              Namespace "hydra.validate.packaging",
-              Namespace "hydra.show.error.packaging"],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Namespace "hydra.validate.packaging",
+              Namespace "hydra.show.error.packaging"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for module and package validation")}
   where
     definitions = [
@@ -70,7 +68,6 @@ mkModule :: String -> [TTerm Definition] -> TTerm Module
 mkModule nsStr defs = Packaging.module_
   (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (nsLit nsStr)
-  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list defs)
 

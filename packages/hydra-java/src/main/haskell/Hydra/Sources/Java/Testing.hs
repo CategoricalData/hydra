@@ -105,8 +105,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns],
-            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Java test code generation codec for JUnit-based generation tests"}
   where
     definitions = [

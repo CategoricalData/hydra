@@ -45,8 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Formatting.ns, Serialization.ns],
-            moduleTypeDependencies = (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Formatting.ns, Serialization.ns] DL.++ (CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Coq serializer: converts Coq AST to concrete Coq source code"}
   where
     definitions = [
