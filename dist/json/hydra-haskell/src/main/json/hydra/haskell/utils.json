@@ -2258,10 +2258,11 @@
               "codomain": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Utilities for working with Haskell syntax trees",
-  "namespace": "hydra.haskell.utils",
-  "termDependencies": ["hydra.analysis", "hydra.formatting", "hydra.haskell.language", "hydra.names"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.analysis",
+    "hydra.formatting",
+    "hydra.haskell.language",
+    "hydra.names",
     "hydra.haskell.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -2285,4 +2286,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for working with Haskell syntax trees",
+  "namespace": "hydra.haskell.utils"}

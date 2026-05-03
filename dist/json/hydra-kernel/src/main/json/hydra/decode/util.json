@@ -1052,7 +1052,6 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.util", "hydra.util"],
   "description": "Term decoders for hydra.util",
-  "namespace": "hydra.decode.util",
-  "termDependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core"],
-  "typeDependencies": ["hydra.util", "hydra.util"]}
+  "namespace": "hydra.decode.util"}

@@ -61,10 +61,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.util.Comparison"}}},
           "variables": []}}}],
-  "description": "String representations of hydra.util types",
-  "namespace": "hydra.show.util",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -87,4 +84,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.util types",
+  "namespace": "hydra.show.util"}

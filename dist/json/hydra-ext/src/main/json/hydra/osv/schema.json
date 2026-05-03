@@ -225,7 +225,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
+  "dependencies": [],
   "description": "See https://ossf.github.io/osv-schema",
-  "namespace": "hydra.osv.schema",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.osv.schema"}

@@ -2530,10 +2530,9 @@
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for core term and type validation",
-  "namespace": "hydra.test.validate.core",
-  "termDependencies": ["hydra.validate.core", "hydra.show.error.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.validate.core",
+    "hydra.show.error.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2556,4 +2555,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for core term and type validation",
+  "namespace": "hydra.test.validate.core"}

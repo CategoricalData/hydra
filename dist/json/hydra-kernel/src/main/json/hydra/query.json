@@ -429,7 +429,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A query variable"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A model for language-agnostic graph pattern queries",
-  "namespace": "hydra.query",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.query"}

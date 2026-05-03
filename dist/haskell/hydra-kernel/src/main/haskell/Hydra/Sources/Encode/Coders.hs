@@ -12,14 +12,13 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.coders"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.coders"),
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.context"),
+      Packaging.moduleDependencies = [
+        Packaging.Namespace "hydra.encode.context",
         (Packaging.Namespace "hydra.encode.errors"),
         (Packaging.Namespace "hydra.encode.graph"),
-        (Packaging.Namespace "hydra.encode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.coders"],
+        (Packaging.Namespace "hydra.encode.variants"),
+        (Packaging.Namespace "hydra.encode.core"),
+        (Packaging.Namespace "hydra.coders")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.coders.coderDirection"),

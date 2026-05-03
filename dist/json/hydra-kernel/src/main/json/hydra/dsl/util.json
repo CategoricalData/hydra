@@ -337,7 +337,6 @@
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.util", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.util",
-  "namespace": "hydra.dsl.util",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.util", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.util"}

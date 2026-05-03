@@ -1391,10 +1391,9 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.protobuf.proto3.Value"}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions",
-  "namespace": "hydra.protobuf.serde",
-  "termDependencies": ["hydra.formatting", "hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.formatting",
+    "hydra.serialization",
     "hydra.protobuf.proto3",
     "hydra.paths",
     "hydra.ast",
@@ -1418,4 +1417,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions",
+  "namespace": "hydra.protobuf.serde"}

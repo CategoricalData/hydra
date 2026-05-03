@@ -2563,10 +2563,9 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.scala.syntax.Type_Param"}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting Scala AST to abstract expressions",
-  "namespace": "hydra.scala.serde",
-  "termDependencies": ["hydra.serialization", "hydra.java.serde"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
+    "hydra.java.serde",
     "hydra.scala.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -2590,4 +2589,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting Scala AST to abstract expressions",
+  "namespace": "hydra.scala.serde"}

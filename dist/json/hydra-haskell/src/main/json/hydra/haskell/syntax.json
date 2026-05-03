@@ -1596,7 +1596,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type variable"}}}],
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Name"}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST",
-  "namespace": "hydra.haskell.syntax",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.haskell.syntax"}

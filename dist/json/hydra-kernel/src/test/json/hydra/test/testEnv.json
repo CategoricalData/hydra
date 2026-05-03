@@ -15,10 +15,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
-  "namespace": "hydra.test.testEnv",
-  "termDependencies": ["hydra.lexical"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.lexical",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -41,4 +39,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+  "namespace": "hydra.test.testEnv"}

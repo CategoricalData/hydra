@@ -1173,10 +1173,9 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.paths.SubtermGraph"}, "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"literal": {"string": {}}}}}}},
           "variables": []}}}],
-  "description": "Utilities for working with subterm steps and paths.",
-  "namespace": "hydra.show.paths",
-  "termDependencies": ["hydra.names", "hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.names",
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1199,4 +1198,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for working with subterm steps and paths.",
+  "namespace": "hydra.show.paths"}

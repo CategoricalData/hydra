@@ -1989,21 +1989,11 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A common prefix for all element names in the module")))])}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "termDependencies"),
+              Core.fieldTypeName = (Core.Name "dependencies"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.packaging.Namespace"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "Any modules which the term expressions of this module directly depend upon")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "typeDependencies"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.packaging.Namespace"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "Any modules which the type expressions of this module directly depend upon")))])}))},
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any modules which this module directly depends on")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "definitions"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {

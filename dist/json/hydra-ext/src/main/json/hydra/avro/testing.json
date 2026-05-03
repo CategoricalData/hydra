@@ -545,7 +545,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Schema serialization to and from JSON"}}}],
                         "body": {"variable": "hydra.avro.testing.SchemaSerializationTestCase"}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.avro.schema", "hydra.json.model"],
   "description": "Test case types for the bidirectional Avro coder",
-  "namespace": "hydra.avro.testing",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core", "hydra.avro.schema", "hydra.json.model"]}
+  "namespace": "hydra.avro.testing"}

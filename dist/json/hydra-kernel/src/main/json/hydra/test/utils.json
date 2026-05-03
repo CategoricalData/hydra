@@ -297,10 +297,10 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "Shared utility functions for test code generation codecs",
-  "namespace": "hydra.test.utils",
-  "termDependencies": ["hydra.inference", "hydra.show.errors", "hydra.lexical"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.inference",
+    "hydra.show.errors",
+    "hydra.lexical",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -323,4 +323,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Shared utility functions for test code generation codecs",
+  "namespace": "hydra.test.utils"}

@@ -133,10 +133,8 @@
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
-  "description": "Language constraints for W3C SHACL",
-  "namespace": "hydra.shacl.language",
-  "termDependencies": ["hydra.lexical"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.lexical",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -159,4 +157,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints for W3C SHACL",
+  "namespace": "hydra.shacl.language"}

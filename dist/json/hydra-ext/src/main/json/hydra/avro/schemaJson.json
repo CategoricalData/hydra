@@ -4109,10 +4109,9 @@
               "codomain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}},
               "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}}}},
           "variables": ["t0"]}}}],
-  "description": "JSON serialization and deserialization for Avro schemas",
-  "namespace": "hydra.avro.schemaJson",
-  "termDependencies": ["hydra.json.writer", "hydra.json.parser"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.json.writer",
+    "hydra.json.parser",
     "hydra.avro.schema",
     "hydra.json.model",
     "hydra.parsing",
@@ -4138,4 +4137,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "JSON serialization and deserialization for Avro schemas",
+  "namespace": "hydra.avro.schemaJson"}

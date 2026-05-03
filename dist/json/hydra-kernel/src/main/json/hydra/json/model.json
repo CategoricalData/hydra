@@ -44,7 +44,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core"],
   "description": "A JSON syntax model. See the BNF at https://www.json.org",
-  "namespace": "hydra.json.model",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.json.model"}

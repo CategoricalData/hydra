@@ -2728,9 +2728,7 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
-  "namespace": "hydra.json.schema.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.annotations",
     "hydra.constants",
     "hydra.dependencies",
@@ -2742,8 +2740,7 @@
     "hydra.show.variants",
     "hydra.strip",
     "hydra.variables",
-    "hydra.json.schema.serde"],
-  "typeDependencies": [
+    "hydra.json.schema.serde",
     "hydra.json.schema",
     "hydra.json.model",
     "hydra.paths",
@@ -2768,4 +2765,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
+  "namespace": "hydra.json.schema.coder"}

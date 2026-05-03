@@ -1415,24 +1415,15 @@
                                                                         "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                                                       "function": {"variable": "hydra.encoding.encodeNamespace"}}}},
                                                                 {
-                                                                  "name": "termDependencies",
+                                                                  "name": "dependencies",
                                                                   "term": {
                                                                     "application": {
                                                                       "argument": {
                                                                         "application": {
                                                                           "argument": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "mod"},
-                                                                                  "function": {"project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.encoding.encodeNamespace"},
-                                                                                  "function": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
+                                                                            "list": [
+                                                                              {
+                                                                                "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}]},
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {
@@ -1440,7 +1431,7 @@
                                                                                   "argument": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "mod"},
-                                                                                      "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}},
+                                                                                      "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}},
                                                                                   "function": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "hydra.encoding.encodeNamespace"},
@@ -1451,12 +1442,6 @@
                                                                               "function": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                       "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}},
-                                                                {
-                                                                  "name": "typeDependencies",
-                                                                  "term": {
-                                                                    "list": [
-                                                                      {
-                                                                        "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}]}},
                                                                 {
                                                                   "name": "definitions",
                                                                   "term": {
@@ -4830,10 +4815,13 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Functions for generating term encoders from type modules",
-  "namespace": "hydra.encoding",
-  "termDependencies": ["hydra.annotations", "hydra.decode.core", "hydra.formatting", "hydra.names", "hydra.predicates", "hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.decode.core",
+    "hydra.formatting",
+    "hydra.names",
+    "hydra.predicates",
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -4856,4 +4844,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for generating term encoders from type modules",
+  "namespace": "hydra.encoding"}

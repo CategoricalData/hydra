@@ -233,10 +233,9 @@
                   "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}},
           "variables": []}}}],
-  "description": "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON.",
-  "namespace": "hydra.json.yaml.encode",
-  "termDependencies": ["hydra.json.encode", "hydra.yaml.model"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.json.encode",
+    "hydra.yaml.model",
     "hydra.yaml.model",
     "hydra.paths",
     "hydra.ast",
@@ -260,4 +259,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON.",
+  "namespace": "hydra.json.yaml.encode"}

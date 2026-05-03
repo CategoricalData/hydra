@@ -6835,10 +6835,11 @@
                   "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Extraction and validation for hydra.core types",
-  "namespace": "hydra.extract.core",
-  "termDependencies": ["hydra.lexical", "hydra.strip", "hydra.show.core", "hydra.show.errors"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.lexical",
+    "hydra.strip",
+    "hydra.show.core",
+    "hydra.show.errors",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -6861,4 +6862,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Extraction and validation for hydra.core types",
+  "namespace": "hydra.extract.core"}

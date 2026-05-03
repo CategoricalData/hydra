@@ -1780,7 +1780,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.variants.TypeVariant"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.variants"],
   "description": "Term encoders for hydra.variants",
-  "namespace": "hydra.encode.variants",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.variants"]}
+  "namespace": "hydra.encode.variants"}

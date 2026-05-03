@@ -5299,9 +5299,7 @@
                   "domain": {"pair": {"first": {"literal": {"boolean": {}}}, "second": {"literal": {"boolean": {}}}}}}},
               "domain": {"variable": "hydra.paths.SubtermStep"}}},
           "variables": []}}}],
-  "description": "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.",
-  "namespace": "hydra.hoisting",
-  "termDependencies": [
+  "dependencies": [
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.environment",
@@ -5310,8 +5308,7 @@
     "hydra.sorting",
     "hydra.strip",
     "hydra.substitution",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -5334,4 +5331,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.",
+  "namespace": "hydra.hoisting"}

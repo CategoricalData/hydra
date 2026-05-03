@@ -856,10 +856,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "Utility functions for working with RDF graphs and descriptions",
-  "namespace": "hydra.rdf.utils",
-  "termDependencies": ["hydra.formatting", "hydra.names", "hydra.annotations"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.formatting",
+    "hydra.names",
+    "hydra.annotations",
     "hydra.rdf.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -883,4 +883,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utility functions for working with RDF graphs and descriptions",
+  "namespace": "hydra.rdf.utils"}

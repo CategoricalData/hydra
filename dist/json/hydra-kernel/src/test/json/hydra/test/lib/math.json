@@ -36005,7 +36005,6 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+  "dependencies": ["hydra.reduction", "hydra.show.core"],
   "description": "Test cases for hydra.lib.math primitives",
-  "namespace": "hydra.test.lib.math",
-  "termDependencies": ["hydra.reduction", "hydra.show.core"],
-  "typeDependencies": []}
+  "namespace": "hydra.test.lib.math"}

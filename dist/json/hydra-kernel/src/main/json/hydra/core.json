@@ -1091,7 +1091,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The wrapped term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core"],
   "description": "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.",
-  "namespace": "hydra.core",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.core"}

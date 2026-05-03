@@ -1316,7 +1316,6 @@
         "name": "hydra.scala.syntax.Source",
         "typeScheme": {"body": {"record": [{"name": "stats", "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]}, "variables": []}}},
     {"type": {"name": "hydra.scala.syntax.Quasi", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A Scala syntax model based on Scalameta (https://scalameta.org)",
-  "namespace": "hydra.scala.syntax",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.scala.syntax"}

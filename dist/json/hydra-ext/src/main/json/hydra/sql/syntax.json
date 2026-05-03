@@ -754,7 +754,6 @@
               {"name": "noparens", "type": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}]},
           "variables": []}}},
     {"type": {"name": "hydra.sql.syntax.WindowFunction", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
+  "dependencies": [],
   "description": "A subset of ANSI SQL:2003, capturing selected productions of the BNF grammar provided at https://ronsavage.github.io/SQL/sql-2003-2.bnf.html, which is based on the Final Committee Draft (FCD) of ISO/IEC 9075-2:2003",
-  "namespace": "hydra.sql.syntax",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.sql.syntax"}

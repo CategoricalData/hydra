@@ -2138,10 +2138,11 @@
               "codomain": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}},
               "domain": {"variable": "hydra.packaging.Package"}}},
           "variables": []}}}],
-  "description": "Validation functions for modules and packages",
-  "namespace": "hydra.validate.packaging",
-  "termDependencies": ["hydra.annotations", "hydra.constants", "hydra.formatting", "hydra.names"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.constants",
+    "hydra.formatting",
+    "hydra.names",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2164,4 +2165,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Validation functions for modules and packages",
+  "namespace": "hydra.validate.packaging"}

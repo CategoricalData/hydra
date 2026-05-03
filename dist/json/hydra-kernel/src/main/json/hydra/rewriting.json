@@ -13186,10 +13186,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Type"}}, "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Core rewrite and fold combinators for terms and types",
-  "namespace": "hydra.rewriting",
-  "termDependencies": ["hydra.scoping"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.scoping",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -13212,4 +13210,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Core rewrite and fold combinators for terms and types",
+  "namespace": "hydra.rewriting"}

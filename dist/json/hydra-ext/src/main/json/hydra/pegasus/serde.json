@@ -812,10 +812,9 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.ast.Expr"}}},
               "domain": {"variable": "hydra.pegasus.pdl.Annotations"}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting Pegasus PDL AST to abstract expressions",
-  "namespace": "hydra.pegasus.serde",
-  "termDependencies": ["hydra.formatting", "hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.formatting",
+    "hydra.serialization",
     "hydra.pegasus.pdl",
     "hydra.paths",
     "hydra.ast",
@@ -839,4 +838,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting Pegasus PDL AST to abstract expressions",
+  "namespace": "hydra.pegasus.serde"}

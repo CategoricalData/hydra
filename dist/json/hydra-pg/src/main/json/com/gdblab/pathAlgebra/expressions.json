@@ -486,10 +486,7 @@
                   {"name": "startNode", "type": {"unit": {}}},
                   {"name": "endNode", "type": {"unit": {}}}]}}},
           "variables": []}}}],
-  "description": "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support",
-  "namespace": "com.gdblab.pathAlgebra.expressions",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -512,4 +509,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support",
+  "namespace": "com.gdblab.pathAlgebra.expressions"}

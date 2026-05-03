@@ -45,7 +45,7 @@ buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_ =
                                 Core.forallTypeParameter = v,
                                 Core.forallTypeBody = t})) schemeTy tvars
                       in (Just (Coder.encodeAxiomDefinitionPair env (name, wrapped)))) mty)) termDefs)
-          deps = Utils.moduleDependencies mod_
+          deps = Utils.moduleDependencyNames mod_
           depSentences = dependencyImports deps
           allSentences = Lists.cons Coder.standardImports (Lists.concat2 depSentences (Lists.concat2 typeAxioms termAxioms))
           doc_ = Syntax.Document {

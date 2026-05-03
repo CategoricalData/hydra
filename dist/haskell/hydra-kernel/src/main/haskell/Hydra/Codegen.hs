@@ -91,8 +91,7 @@ generateCoderModules :: (t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Gra
 generateCoderModules codec bsGraph universeModules typeModules cx =
 
       let universe = Maps.fromList (Lists.map (\m -> (Packaging.moduleNamespace m, m)) (Lists.concat2 universeModules universeModules))
-          schemaModules = moduleTypeDepsTransitive universe universeModules
-          dataModules = moduleTermDepsTransitive universe universeModules
+          closureModules = moduleDepsTransitive universe universeModules
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -109,14 +108,14 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
                           Core.typeSchemeVariables = [],
                           Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) dataModules)
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           allElements = Lists.concat2 schemaElements dataElements
@@ -169,7 +168,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
                     _ -> Nothing) (Packaging.moduleDefinitions mod))))) modsToGenerate
-          schemaMods = moduleTypeDepsTransitive namespaceMap modsToGenerate
+          closureMods = moduleDepsTransitive namespaceMap modsToGenerate
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -186,15 +185,14 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                           Core.typeSchemeVariables = [],
                           Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaMods typeModulesToGenerate))
-          dataMods = moduleTermDepsTransitive namespaceMap modsToGenerate
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) closureMods)
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) dataMods)
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) closureMods)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes2 = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           dataGraph = Lexical.elementsToGraph bsGraph schemaTypes2 dataElements
@@ -231,8 +229,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                       \els -> \m -> Packaging.Module {
                         Packaging.moduleDescription = (Packaging.moduleDescription m),
                         Packaging.moduleNamespace = (Packaging.moduleNamespace m),
-                        Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
-                        Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
+                        Packaging.moduleDependencies = (Packaging.moduleDependencies m),
                         Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
                           Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
                           Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -284,7 +281,7 @@ inferModulesGiven cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
           nsMap = Maps.fromList (Lists.map (\m -> (Packaging.moduleNamespace m, m)) universeMods)
-          closureMods = moduleTermDepsTransitive nsMap targetMods
+          closureMods = moduleDepsTransitive nsMap targetMods
           targetNamespaces = Sets.fromList (Lists.map Packaging.moduleNamespace targetMods)
           bindingsToInfer =
                   Lists.concat (Lists.map (\m ->
@@ -313,12 +310,12 @@ inferModulesGiven cx bsGraph universeMods targetMods =
             newlyInferredBindings = Pairs.second inferResult
             allInferredBindings = Lists.concat2 newlyInferredBindings untouchedTypedBindings
         in (Right (Lists.map (refreshModule allInferredBindings) targetMods))))
--- | Compute transitive closure of term dependencies for a set of modules
-moduleTermDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
-moduleTermDepsTransitive nsMap modules =
+-- | Compute transitive closure of dependencies for a set of modules
+moduleDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
+moduleDepsTransitive nsMap modules =
 
       let closure =
-              Sets.union (transitiveDeps (\m -> Packaging.moduleTermDependencies m) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleNamespace m) modules))
+              Sets.union (transitiveDeps (\m -> Packaging.moduleDependencies m) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleNamespace m) modules))
       in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
 -- | Convert a Module to a JSON string
 moduleToJson :: M.Map Core.Name Core.Type -> Packaging.Module -> Either Errors.Error String
@@ -342,26 +339,16 @@ moduleToSourceModule m =
       in Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unNamespace (Packaging.moduleNamespace m)))),
         Packaging.moduleNamespace = sourceNs,
-        Packaging.moduleTermDependencies = [
-          modTypeNs],
-        Packaging.moduleTypeDependencies = [
+        Packaging.moduleDependencies = [
           modTypeNs],
         Packaging.moduleDefinitions = [
           moduleDef]}
--- | Compute transitive closure of type dependencies for a set of modules
-moduleTypeDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
-moduleTypeDepsTransitive nsMap modules =
-
-      let termMods = moduleTermDepsTransitive nsMap modules
-          typeNamespaces = Sets.toList (transitiveDeps (\m -> Packaging.moduleTypeDependencies m) nsMap termMods)
-      in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) typeNamespaces))
 -- | Build a graph from universe modules and working modules, using an explicit bootstrap graph
 modulesToGraph :: Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Graph.Graph
 modulesToGraph bsGraph universeModules modules =
 
       let universe = Maps.fromList (Lists.map (\m -> (Packaging.moduleNamespace m, m)) (Lists.concat2 universeModules modules))
-          schemaModules = moduleTypeDepsTransitive universe modules
-          dataModules = moduleTermDepsTransitive universe modules
+          closureModules = moduleDepsTransitive universe modules
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -378,14 +365,14 @@ modulesToGraph bsGraph universeModules modules =
                           Core.typeSchemeVariables = [],
                           Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) dataModules)
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           baseGraph = Lexical.elementsToGraph bsGraph schemaTypes dataElements
@@ -421,8 +408,7 @@ refreshModule inferredElements m =
       _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
       Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleNamespace = (Packaging.moduleNamespace m),
-      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
-      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
+      Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
         Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
         Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {

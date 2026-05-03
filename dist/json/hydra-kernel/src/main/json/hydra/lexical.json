@@ -2559,10 +2559,10 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "A module for lexical operations over graphs.",
-  "namespace": "hydra.lexical",
-  "termDependencies": ["hydra.strip", "hydra.show.core", "hydra.show.errors"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.strip",
+    "hydra.show.core",
+    "hydra.show.errors",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2585,4 +2585,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "A module for lexical operations over graphs.",
+  "namespace": "hydra.lexical"}

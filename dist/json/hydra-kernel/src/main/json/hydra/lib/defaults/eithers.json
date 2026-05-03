@@ -2627,10 +2627,9 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Default term-level implementations of Either functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.eithers",
-  "termDependencies": ["hydra.extract.core", "hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2653,4 +2652,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Default term-level implementations of Either functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.defaults.eithers"}

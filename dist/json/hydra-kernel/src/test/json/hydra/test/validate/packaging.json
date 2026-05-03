@@ -156,10 +156,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -248,10 +245,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -265,10 +259,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -357,10 +348,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.fooBar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -374,10 +362,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foobar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -488,10 +473,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -582,10 +564,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -659,10 +638,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -795,10 +771,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -924,10 +897,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1001,10 +971,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1139,10 +1106,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1275,10 +1239,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1431,10 +1392,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1604,10 +1562,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1681,10 +1636,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1817,10 +1769,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -1983,10 +1932,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -2060,10 +2006,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -2196,10 +2139,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -2390,10 +2330,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -2602,10 +2539,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -2835,10 +2769,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -2912,10 +2843,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -3106,10 +3034,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -3412,10 +3337,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -3429,10 +3351,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -3521,10 +3440,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -3538,10 +3454,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -3649,10 +3562,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -3726,10 +3636,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo.bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -3803,10 +3710,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.test.testGraph"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -3880,10 +3784,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.Foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -3969,10 +3870,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo_bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -4488,10 +4386,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -4624,10 +4519,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -4736,10 +4628,7 @@
                                                           "name": "namespace",
                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                         {
-                                                          "name": "termDependencies",
-                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                        {
-                                                          "name": "typeDependencies",
+                                                          "name": "dependencies",
                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                         {
                                                           "name": "definitions",
@@ -4975,10 +4864,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -5126,10 +5012,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -5289,10 +5172,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -5306,10 +5186,7 @@
                                                                       "name": "namespace",
                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                     {
-                                                                      "name": "termDependencies",
-                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
                                                                     {
                                                                       "name": "definitions",
@@ -5378,10 +5255,9 @@
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for module and package validation",
-  "namespace": "hydra.test.validate.packaging",
-  "termDependencies": ["hydra.validate.packaging", "hydra.show.error.packaging"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.validate.packaging",
+    "hydra.show.error.packaging",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -5404,4 +5280,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for module and package validation",
+  "namespace": "hydra.test.validate.packaging"}
