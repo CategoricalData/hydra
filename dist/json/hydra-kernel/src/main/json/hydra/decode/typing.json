@@ -1208,9 +1208,9 @@
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.decode.core",
-    "hydra.decode.context",
     "hydra.typing",
-    "hydra.util"],
+    "hydra.util",
+    "hydra.decode.core",
+    "hydra.decode.context"],
   "description": "Term decoders for hydra.typing",
   "namespace": "hydra.decode.typing"}
