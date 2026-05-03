@@ -22,9 +22,9 @@ them can be cross-checked against the others.
 | `modern_graph.json` | Hydra-PG JSON: 6 vertices, 6 edges | HydraPop's Java side (`GenerateExampleData`) |
 | `schema.json` | Hydra-PG JSON: vertex types `person`, `software` and edge types `knows`, `created` | HydraPop's Java side |
 | `modern_graph.graphson.jsonl` | GraphSON 3.0, one JSON object per vertex with adjacency | Hydra-Haskell GraphSON coder |
-| `Graph.schema.json` | JSON Schema for `hydra.pg.model.Graph` (root + transitive `$defs`) | Hydra-Haskell, via the JSON Schema shim (see below) |
-| `GraphSchema.schema.json` | JSON Schema for `hydra.pg.model.GraphSchema` | Hydra-Haskell, via the JSON Schema shim |
-| `GraphsonVertex.schema.json` | JSON Schema for `hydra.pg.graphson.syntax.Vertex` (one GraphSON document = one Vertex object) | Hydra-Haskell, via the JSON Schema shim |
+| `Graph.schema.json` | JSON Schema for `hydra.pg.model.Graph` (root + transitive `$defs`) | Hydra-Haskell `writeJsonSchema` |
+| `GraphSchema.schema.json` | JSON Schema for `hydra.pg.model.GraphSchema` | Hydra-Haskell `writeJsonSchema` |
+| `GraphsonVertex.schema.json` | JSON Schema for `hydra.pg.graphson.syntax.Vertex` (one GraphSON document = one Vertex object) | Hydra-Haskell `writeJsonSchema` |
 | `pg-model.proto` | Protobuf v3 definitions for the entire `hydra.pg.model` namespace | Hydra-Haskell `writeProtobuf` (after demo-local monomorphization) |
 | `Graph.avsc` | Avro schema for `hydra.pg.model.Graph` | Hydra-Haskell `Hydra.Avro.Encoder.encodeType` (after monomorphization + string-newtype inlining) |
 | `GraphSchema.avsc` | Avro schema for `hydra.pg.model.GraphSchema` | Hydra-Haskell `Hydra.Avro.Encoder.encodeType` |
@@ -58,26 +58,25 @@ stack ghci --main-is hydra:lib \
 
 ## Caveats
 
-The JSON Schema generation goes through a hand-written shim
-(`Hydra.Demos.PgFormats.JsonSchemaShim`) rather than
-`Hydra.ExtGeneration.writeJsonSchema`. The Sources DSL spec for the JSON
-Schema coder is in place but its host-language implementation has not
-landed, so `writeJsonSchema` currently diverges. The shim is a partial
-re-port of the previous hand-written coder (commit `58e198a71`); see the
-file header for known divergences and tracking issue
-[#350](https://github.com/CategoricalData/hydra/issues/350).
+The JSON Schema files are produced by the promoted DSL coder
+(`Hydra.ExtGeneration.writeJsonSchema`), staged into a temporary
+directory and promoted to flat output names by `generatePgFormats`.
+Two limitations of the current coder are visible in the output:
 
-Once #350 lands, the shim should be deleted and the driver switched to
-`writeJsonSchema`.
+* **Polymorphic types ship with an open `v` reference.** `Graph<v>`,
+  `Vertex<v>`, and `Edge<v>` are encoded with `{"$ref": "#/$defs/v"}`
+  for the type-variable position; `$defs/v` is `{"title": "v"}` (i.e.
+  effectively "any value"). A faithful encoder would either
+  monomorphize the type before encoding or fill `$defs/v` with the
+  intended union of permitted JSON values.
+* **Unions encode every variant as `required`.** The coder emits the
+  full property list as `required` even though only one variant can be
+  present at a time. The `min/maxProperties=1` envelope ensures
+  exactly-one-variant semantics, so the schema is sound under that
+  envelope, but the `required` array is misleading. A future fix
+  should drop `required` from the union encoding entirely.
 
-The most visible divergence shows up in `GraphsonVertex.schema.json`:
-GraphSON's `Value` type is a 21-variant union including unit-typed
-variants like `null`, which the shim encodes as `{"type": "object"}`
-inside a `min/maxProperties=1` envelope. A faithful encoder would split
-those out into a `oneOf` with a string-enum branch (matching the
-GraphSON wire form for unit-typed cases). The schema is therefore best
-read as a structural sketch of the GraphSON document type, not a strict
-validator.
+Both items are tracked as follow-ups to #350.
 
 The Protobuf emission (`pg-model.proto`) goes through a demo-local
 monomorphization pass (`monomorphizeModuleAllString`) that substitutes
