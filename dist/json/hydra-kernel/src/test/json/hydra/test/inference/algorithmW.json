@@ -3386,10 +3386,8 @@
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Algorithm W inference tests",
-  "namespace": "hydra.test.inference.algorithmW",
-  "termDependencies": ["hydra.test.testGraph"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.testGraph",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -3412,4 +3410,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Algorithm W inference tests",
+  "namespace": "hydra.test.inference.algorithmW"}

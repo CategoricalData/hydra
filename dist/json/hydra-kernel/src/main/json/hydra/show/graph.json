@@ -40,10 +40,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"list": {"variable": "hydra.core.Binding"}}}},
           "variables": []}}}],
-  "description": "String representations of hydra.graph types",
-  "namespace": "hydra.show.graph",
-  "termDependencies": ["hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -66,4 +64,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.graph types",
+  "namespace": "hydra.show.graph"}

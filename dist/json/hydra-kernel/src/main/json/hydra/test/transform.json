@@ -563,17 +563,11 @@
                               "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
                       {
-                        "name": "termDependencies",
+                        "name": "dependencies",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}}},
-                      {
-                        "name": "typeDependencies",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "m"},
-                            "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}}},
+                            "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}}},
                       {
                         "name": "definitions",
                         "term": {
@@ -718,10 +712,9 @@
           "body": {
             "function": {"codomain": {"maybe": {"variable": "hydra.testing.TestGroup"}}, "domain": {"variable": "hydra.testing.TestGroup"}}},
           "variables": []}}}],
-  "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
-  "namespace": "hydra.test.transform",
-  "termDependencies": ["hydra.formatting", "hydra.sorting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.formatting",
+    "hydra.sorting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -744,4 +737,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
+  "namespace": "hydra.test.transform"}

@@ -6997,16 +6997,13 @@
         "term": {
           "application": {"argument": {"literal": {"string": "r"}}, "function": {"variable": "hydra.java.utils.javaTypeVariable"}}},
         "typeScheme": {"body": {"variable": "hydra.java.syntax.ReferenceType"}, "variables": []}}}],
-  "description": "Java utilities for constructing Java syntax trees",
-  "namespace": "hydra.java.utils",
-  "termDependencies": [
+  "dependencies": [
     "hydra.java.language",
     "hydra.java.names",
     "hydra.java.serde",
     "hydra.formatting",
     "hydra.names",
-    "hydra.serialization"],
-  "typeDependencies": [
+    "hydra.serialization",
     "hydra.java.environment",
     "hydra.java.syntax",
     "hydra.paths",
@@ -7031,4 +7028,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Java utilities for constructing Java syntax trees",
+  "namespace": "hydra.java.utils"}

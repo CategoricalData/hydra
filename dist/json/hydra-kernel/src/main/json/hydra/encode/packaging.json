@@ -185,7 +185,7 @@
                                   {
                                     "record": {
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "termDependencies"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "dependencies"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -193,39 +193,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}},
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "list",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "xs"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.encode.packaging.namespace"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
-                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {"list": {"variable": "hydra.packaging.Namespace"}},
-                                                  "parameter": "xs"}}}}}],
-                                      "typeName": "hydra.core.Field"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeDependencies"}}, "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}},
+                                                  "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -863,7 +831,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.packaging.TypeDefinition"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.encode.graph", "hydra.packaging"],
   "description": "Term encoders for hydra.packaging",
-  "namespace": "hydra.encode.packaging",
-  "termDependencies": ["hydra.encode.core", "hydra.encode.graph"],
-  "typeDependencies": ["hydra.packaging"]}
+  "namespace": "hydra.encode.packaging"}

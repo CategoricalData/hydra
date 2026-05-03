@@ -745,10 +745,8 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.ast.Expr"}}},
               "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting GraphQL AST to abstract expressions",
-  "namespace": "hydra.graphql.serde",
-  "termDependencies": ["hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
     "hydra.graphql.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -772,4 +770,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting GraphQL AST to abstract expressions",
+  "namespace": "hydra.graphql.serde"}

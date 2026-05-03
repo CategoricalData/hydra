@@ -859,7 +859,6 @@
               {"name": "source", "type": {"variable": "hydra.owl.syntax.Individual"}},
               {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.rdf.syntax", "hydra.xml.schema", "hydra.core"],
   "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax",
-  "namespace": "hydra.owl.syntax",
-  "termDependencies": ["hydra.core", "hydra.rdf.syntax", "hydra.xml.schema"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.owl.syntax"}

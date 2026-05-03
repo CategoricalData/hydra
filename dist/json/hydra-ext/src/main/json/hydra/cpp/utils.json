@@ -1509,10 +1509,7 @@
                 "function": {"codomain": {"variable": "hydra.cpp.syntax.Parameter"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "C++ utilities for constructing C++ syntax trees",
-  "namespace": "hydra.cpp.utils",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.cpp.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -1536,4 +1533,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "C++ utilities for constructing C++ syntax trees",
+  "namespace": "hydra.cpp.utils"}

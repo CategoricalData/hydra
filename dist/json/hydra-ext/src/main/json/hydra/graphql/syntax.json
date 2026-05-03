@@ -838,7 +838,6 @@
               {"name": "INPUT_OBJECT", "type": {"unit": {}}},
               {"name": "INPUT_FIELD_DEFINITION", "type": {"unit": {}}}]},
           "variables": []}}}],
+  "dependencies": [],
   "description": "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary",
-  "namespace": "hydra.graphql.syntax",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.graphql.syntax"}

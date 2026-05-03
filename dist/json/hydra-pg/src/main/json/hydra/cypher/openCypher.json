@@ -886,7 +886,6 @@
               {"name": "symbolic", "type": {"literal": {"string": {}}}},
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}}]},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/",
-  "namespace": "hydra.cypher.openCypher",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.cypher.openCypher"}

@@ -1185,10 +1185,8 @@
                           "typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                         "type": {"unit": {}}}}}}}}}},
         "typeScheme": {"body": {"application": {"argument": {"unit": {}}, "function": {"variable": "hydra.parsing.Parser"}}}, "variables": []}}}],
-  "description": "JSON parser using Hydra parser combinators",
-  "namespace": "hydra.json.parser",
-  "termDependencies": ["hydra.parsers"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.parsers",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1211,4 +1209,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "JSON parser using Hydra parser combinators",
+  "namespace": "hydra.json.parser"}

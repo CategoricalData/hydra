@@ -290,10 +290,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Type"}}, "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Functions dealing with arguments and arity.",
-  "namespace": "hydra.arity",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -316,4 +313,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions dealing with arguments and arity.",
+  "namespace": "hydra.arity"}

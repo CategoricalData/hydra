@@ -7028,7 +7028,18 @@
           "body": {
             "application": {"argument": {"variable": "hydra.coders.TraversalOrder"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.coders",
+    "hydra.phantoms",
+    "hydra.context",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.variants",
+    "hydra.core",
+    "hydra.dsl.context",
+    "hydra.dsl.errors",
+    "hydra.dsl.graph",
+    "hydra.dsl.variants",
+    "hydra.dsl.core"],
   "description": "DSL functions for hydra.coders",
-  "namespace": "hydra.dsl.coders",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.coders", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.coders"}

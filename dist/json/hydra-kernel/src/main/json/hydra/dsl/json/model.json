@@ -313,7 +313,6 @@
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.json.model", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.json.model",
-  "namespace": "hydra.dsl.json.model",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.json.model", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.json.model"}

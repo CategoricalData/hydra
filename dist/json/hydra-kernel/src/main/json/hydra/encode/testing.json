@@ -448,7 +448,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.testing.UniversalTestCase"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.testing"],
   "description": "Term encoders for hydra.testing",
-  "namespace": "hydra.encode.testing",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.testing"]}
+  "namespace": "hydra.encode.testing"}

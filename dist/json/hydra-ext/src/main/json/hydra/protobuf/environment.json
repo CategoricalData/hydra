@@ -25,7 +25,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A Pair type with first and second component types"}}}],
                         "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core"],
   "description": "Type definitions for the Protobuf code generation environment",
-  "namespace": "hydra.protobuf.environment",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.protobuf.environment"}

@@ -3180,14 +3180,15 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "Term decoders for hydra.error.checking",
-  "namespace": "hydra.decode.error.checking",
-  "termDependencies": [
+  "dependencies": [
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.core",
     "hydra.decode.paths",
     "hydra.decode.typing",
-    "hydra.decode.variants"],
-  "typeDependencies": ["hydra.error.checking", "hydra.util"]}
+    "hydra.decode.variants",
+    "hydra.error.checking",
+    "hydra.util"],
+  "description": "Term decoders for hydra.error.checking",
+  "namespace": "hydra.decode.error.checking"}

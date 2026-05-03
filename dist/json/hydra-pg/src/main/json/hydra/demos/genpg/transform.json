@@ -4197,10 +4197,11 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}}],
-  "description": "Functions for transforming property graph mappings into property graph elements.",
-  "namespace": "hydra.demos.genpg.transform",
-  "termDependencies": ["hydra.reduction", "hydra.rewriting", "hydra.strip", "hydra.extract.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.reduction",
+    "hydra.rewriting",
+    "hydra.strip",
+    "hydra.extract.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -4226,4 +4227,6 @@
     "hydra.variants",
     "hydra.pg.model",
     "hydra.tabular",
-    "hydra.relational"]}
+    "hydra.relational"],
+  "description": "Functions for transforming property graph mappings into property graph elements.",
+  "namespace": "hydra.demos.genpg.transform"}

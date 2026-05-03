@@ -123,10 +123,8 @@
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
-  "description": "Language constraints for JSON Schema",
-  "namespace": "hydra.json.schema.language",
-  "termDependencies": ["hydra.reflect"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.reflect",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -149,4 +147,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints for JSON Schema",
+  "namespace": "hydra.json.schema.language"}

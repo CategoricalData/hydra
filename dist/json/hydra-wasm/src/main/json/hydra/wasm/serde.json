@@ -2805,10 +2805,9 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
-  "namespace": "hydra.wasm.serde",
-  "termDependencies": ["hydra.constants", "hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.serialization",
     "hydra.wasm.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -2832,4 +2831,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
+  "namespace": "hydra.wasm.serde"}

@@ -403,7 +403,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.packaging", "hydra.util", "hydra.core", "hydra.packaging", "hydra.util"],
   "description": "Error types for module and package validation",
-  "namespace": "hydra.error.packaging",
-  "termDependencies": ["hydra.core", "hydra.packaging", "hydra.util"],
-  "typeDependencies": ["hydra.core", "hydra.packaging", "hydra.util"]}
+  "namespace": "hydra.error.packaging"}

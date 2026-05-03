@@ -12,12 +12,11 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.error.core"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.error.core"),
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.encode.paths",
         (Packaging.Namespace "hydra.encode.core"),
-        (Packaging.Namespace "hydra.encode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.error.core"],
+        (Packaging.Namespace "hydra.encode.variants"),
+        (Packaging.Namespace "hydra.error.core")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.constantConditionError"),

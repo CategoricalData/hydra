@@ -1316,7 +1316,6 @@
                   "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t1"}}},
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}}}],
+  "dependencies": ["hydra.pg.model", "hydra.error.pg"],
   "description": "Validation functions for property graphs",
-  "namespace": "hydra.validate.pg",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.pg.model", "hydra.error.pg"]}
+  "namespace": "hydra.validate.pg"}

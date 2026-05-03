@@ -857,10 +857,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.TypeScheme"}}},
           "variables": []}}}],
-  "description": "Graph context extension and type scheme conversion",
-  "namespace": "hydra.scoping",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -883,4 +880,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Graph context extension and type scheme conversion",
+  "namespace": "hydra.scoping"}

@@ -4844,10 +4844,9 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}}],
-  "description": "Coq code generator: converts Hydra modules to Coq source",
-  "namespace": "hydra.coq.coder",
-  "termDependencies": ["hydra.formatting", "hydra.coq.language"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.formatting",
+    "hydra.coq.language",
     "hydra.coq.environment",
     "hydra.coq.syntax",
     "hydra.paths",
@@ -4872,4 +4871,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Coq code generator: converts Hydra modules to Coq source",
+  "namespace": "hydra.coq.coder"}

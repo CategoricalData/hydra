@@ -1626,10 +1626,9 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.typing.TermSubst"}}},
           "variables": []}}}],
-  "description": "Variable substitution in type and term expressions.",
-  "namespace": "hydra.substitution",
-  "termDependencies": ["hydra.rewriting", "hydra.variables"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.rewriting",
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1652,4 +1651,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Variable substitution in type and term expressions.",
+  "namespace": "hydra.substitution"}

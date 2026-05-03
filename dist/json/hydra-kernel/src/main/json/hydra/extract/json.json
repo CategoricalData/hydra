@@ -684,10 +684,7 @@
                   "lambda": {"body": {"literal": {"string": "TODO: implement showValue"}}, "domain": {"variable": "t0"}, "parameter": "value"}}}},
             "parameter": "t0"}},
         "typeScheme": {"body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}, "variables": ["t0"]}}}],
-  "description": "Utilities for extracting values from JSON objects",
-  "namespace": "hydra.extract.json",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -710,4 +707,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for extracting values from JSON objects",
+  "namespace": "hydra.extract.json"}

@@ -9127,9 +9127,7 @@
                   "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference",
-  "namespace": "hydra.checking",
-  "termDependencies": [
+  "dependencies": [
     "hydra.constants",
     "hydra.dependencies",
     "hydra.extract.core",
@@ -9145,8 +9143,7 @@
     "hydra.show.variants",
     "hydra.strip",
     "hydra.substitution",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -9169,4 +9166,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference",
+  "namespace": "hydra.checking"}

@@ -15306,7 +15306,6 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+  "dependencies": ["hydra.annotations", "hydra.lexical", "hydra.reduction", "hydra.show.core"],
   "description": "Test cases for hydra.annotations functions",
-  "namespace": "hydra.test.annotations",
-  "termDependencies": ["hydra.annotations", "hydra.lexical", "hydra.reduction", "hydra.show.core"],
-  "typeDependencies": []}
+  "namespace": "hydra.test.annotations"}

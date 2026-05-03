@@ -4135,10 +4135,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.ast.Expr"}}},
           "variables": []}}}],
-  "description": "Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.",
-  "namespace": "hydra.serialization",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -4161,4 +4158,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.",
+  "namespace": "hydra.serialization"}

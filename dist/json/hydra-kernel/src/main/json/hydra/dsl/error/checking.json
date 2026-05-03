@@ -5654,7 +5654,16 @@
                   "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.error.checking",
+    "hydra.phantoms",
+    "hydra.core",
+    "hydra.paths",
+    "hydra.typing",
+    "hydra.variants",
+    "hydra.dsl.core",
+    "hydra.dsl.paths",
+    "hydra.dsl.typing",
+    "hydra.dsl.variants"],
   "description": "DSL functions for hydra.error.checking",
-  "namespace": "hydra.dsl.error.checking",
-  "termDependencies": ["hydra.dsl.core", "hydra.dsl.paths", "hydra.dsl.typing", "hydra.dsl.variants"],
-  "typeDependencies": ["hydra.error.checking", "hydra.phantoms", "hydra.core", "hydra.paths", "hydra.typing", "hydra.variants"]}
+  "namespace": "hydra.dsl.error.checking"}

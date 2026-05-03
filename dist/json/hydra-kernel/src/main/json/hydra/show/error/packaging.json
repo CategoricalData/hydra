@@ -436,10 +436,8 @@
           "body": {
             "function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.packaging.MissingDocumentationError"}}},
           "variables": []}}}],
-  "description": "String representations of hydra.error.packaging types",
-  "namespace": "hydra.show.error.packaging",
-  "termDependencies": ["hydra.show.util"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.util",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -462,4 +460,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.error.packaging types",
+  "namespace": "hydra.show.error.packaging"}

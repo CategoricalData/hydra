@@ -1535,14 +1535,14 @@
           "body": {
             "function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.errors.UnificationInferenceError"}}},
           "variables": []}}}],
-  "description": "Term encoders for hydra.errors",
-  "namespace": "hydra.encode.errors",
-  "termDependencies": [
+  "dependencies": [
     "hydra.encode.context",
     "hydra.encode.core",
     "hydra.encode.error.checking",
     "hydra.encode.error.core",
     "hydra.encode.paths",
     "hydra.encode.typing",
-    "hydra.encode.variants"],
-  "typeDependencies": ["hydra.errors"]}
+    "hydra.encode.variants",
+    "hydra.errors"],
+  "description": "Term encoders for hydra.errors",
+  "namespace": "hydra.encode.errors"}

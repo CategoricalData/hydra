@@ -611,10 +611,8 @@
                   "domain": {"variable": "hydra.tinkerpop.features.Features"}}},
               "domain": {"variable": "hydra.coders.LanguageName"}}},
           "variables": ["t0"]}}}],
-  "description": "Language constraints based on TinkerPop Graph.Features",
-  "namespace": "hydra.tinkerpop.language",
-  "termDependencies": ["hydra.strip"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.strip",
     "hydra.tinkerpop.features",
     "hydra.paths",
     "hydra.ast",
@@ -638,4 +636,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints based on TinkerPop Graph.Features",
+  "namespace": "hydra.tinkerpop.language"}

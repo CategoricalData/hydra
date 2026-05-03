@@ -2,8 +2,8 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.wasm.coder": "dafef0702b295508191c384e772b33c82295a202bfb01ad61b19fa7c3785878d",
-    "hydra.wasm.serde": "a2166109525eacf71eaf773f51a10044f0157c1163d2a1fa5b444ca4a4eaf73a",
-    "hydra.wasm.syntax": "4088474135c8b49451a32f766252f7530cbef6561cd590b70eb6190c3acd0427"
+    "hydra.wasm.coder": "711f717c3bbd9dae06d5f12753ae98af5093f308e52f1af0aaadae624700056f",
+    "hydra.wasm.serde": "2e7f0cdeabfb611c62ac99942b53b06babe2f4aa82a89e247fa8e349e84ee712",
+    "hydra.wasm.syntax": "0c67415941e248bb40c547064a3bf06074363179de4917687da034bd7ea22c7c"
   }
 }

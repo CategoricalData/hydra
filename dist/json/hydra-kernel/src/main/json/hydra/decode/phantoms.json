@@ -506,7 +506,6 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
+  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.phantoms", "hydra.util"],
   "description": "Term decoders for hydra.phantoms",
-  "namespace": "hydra.decode.phantoms",
-  "termDependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core"],
-  "typeDependencies": ["hydra.phantoms", "hydra.util"]}
+  "namespace": "hydra.decode.phantoms"}

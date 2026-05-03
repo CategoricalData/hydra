@@ -844,10 +844,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"variable": "hydra.packaging.QualifiedName"}}},
           "variables": []}}}],
-  "description": "Functions for working with qualified names.",
-  "namespace": "hydra.names",
-  "termDependencies": ["hydra.annotations", "hydra.constants", "hydra.formatting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.constants",
+    "hydra.formatting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -870,4 +870,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for working with qualified names.",
+  "namespace": "hydra.names"}

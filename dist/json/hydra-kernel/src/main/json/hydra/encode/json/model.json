@@ -284,7 +284,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.json.model.Value"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.json.model"],
   "description": "Term encoders for hydra.json.model",
-  "namespace": "hydra.encode.json.model",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.json.model"]}
+  "namespace": "hydra.encode.json.model"}

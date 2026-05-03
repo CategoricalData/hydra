@@ -1571,17 +1571,14 @@
                       "domain": {"variable": "hydra.graph.Graph"}}}}},
               "domain": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1", "t2"]}}}],
-  "description": "Graph to type environment conversions",
-  "namespace": "hydra.environment",
-  "termDependencies": [
+  "dependencies": [
     "hydra.lexical",
     "hydra.decode.core",
     "hydra.encode.core",
     "hydra.scoping",
     "hydra.sorting",
     "hydra.strip",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1604,4 +1601,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Graph to type environment conversions",
+  "namespace": "hydra.environment"}

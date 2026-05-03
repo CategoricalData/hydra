@@ -4311,7 +4311,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.WrappedTerm"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.core"],
   "description": "Term encoders for hydra.core",
-  "namespace": "hydra.encode.core",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.encode.core"}

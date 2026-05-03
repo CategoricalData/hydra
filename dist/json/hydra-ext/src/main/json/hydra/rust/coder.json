@@ -4941,9 +4941,7 @@
             {"literal": {"string": "PartialOrd"}},
             {"literal": {"string": "Ord"}}]},
         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}}],
-  "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
-  "namespace": "hydra.rust.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.rust.serde",
     "hydra.rust.language",
     "hydra.formatting",
@@ -4952,8 +4950,7 @@
     "hydra.variables",
     "hydra.environment",
     "hydra.lexical",
-    "hydra.serialization"],
-  "typeDependencies": [
+    "hydra.serialization",
     "hydra.rust.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -4977,4 +4974,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
+  "namespace": "hydra.rust.coder"}

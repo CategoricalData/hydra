@@ -7748,9 +7748,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"list": {"variable": "hydra.core.Type"}}, "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}}}],
-  "description": "Simple, one-way adapters for types and terms",
-  "namespace": "hydra.adapt",
-  "termDependencies": [
+  "dependencies": [
     "hydra.dependencies",
     "hydra.hoisting",
     "hydra.inference",
@@ -7767,8 +7765,7 @@
     "hydra.show.errors",
     "hydra.show.graph",
     "hydra.strip",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -7791,4 +7788,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Simple, one-way adapters for types and terms",
+  "namespace": "hydra.adapt"}

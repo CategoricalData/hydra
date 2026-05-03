@@ -1684,10 +1684,7 @@
               "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
           "variables": []}}}],
-  "description": "String formatting types and functions.",
-  "namespace": "hydra.formatting",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1710,4 +1707,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String formatting types and functions.",
+  "namespace": "hydra.formatting"}

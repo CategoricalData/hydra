@@ -8638,10 +8638,9 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.ast.Expr"}}},
               "domain": {"maybe": {"literal": {"string": {}}}}}},
           "variables": []}}}],
-  "description": "Java serializer: converts Java AST to concrete syntax",
-  "namespace": "hydra.java.serde",
-  "termDependencies": ["hydra.constants", "hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.serialization",
     "hydra.java.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -8665,4 +8664,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Java serializer: converts Java AST to concrete syntax",
+  "namespace": "hydra.java.serde"}

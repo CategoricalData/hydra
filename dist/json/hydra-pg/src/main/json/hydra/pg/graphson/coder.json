@@ -1302,10 +1302,7 @@
           "body": {
             "function": {"codomain": {"variable": "hydra.json.model.Value"}, "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
           "variables": []}}}],
-  "description": "Encoding functions for converting GraphSON syntax to JSON.",
-  "namespace": "hydra.pg.graphson.coder",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1330,4 +1327,6 @@
     "hydra.util",
     "hydra.variants",
     "hydra.pg.graphson.syntax",
-    "hydra.json.model"]}
+    "hydra.json.model"],
+  "description": "Encoding functions for converting GraphSON syntax to JSON.",
+  "namespace": "hydra.pg.graphson.coder"}

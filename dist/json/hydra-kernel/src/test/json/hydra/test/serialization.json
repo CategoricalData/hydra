@@ -877,10 +877,8 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for AST serialization",
-  "namespace": "hydra.test.serialization",
-  "termDependencies": ["hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -903,4 +901,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for AST serialization",
+  "namespace": "hydra.test.serialization"}

@@ -5102,7 +5102,6 @@
               "codomain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.query", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.query",
-  "namespace": "hydra.dsl.query",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.query", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.query"}

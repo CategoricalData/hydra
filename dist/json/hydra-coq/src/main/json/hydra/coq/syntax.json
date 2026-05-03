@@ -1081,7 +1081,6 @@
                   {"name": "corollary", "type": {"unit": {}}},
                   {"name": "example", "type": {"unit": {}}}]}}},
           "variables": []}}}],
+  "dependencies": [],
   "description": "A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary\n  Extended with Vernacular commands for complete .v file generation.",
-  "namespace": "hydra.coq.syntax",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.coq.syntax"}

@@ -1603,7 +1603,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.query.Variable"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.query"],
   "description": "Term encoders for hydra.query",
-  "namespace": "hydra.encode.query",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.query"]}
+  "namespace": "hydra.encode.query"}

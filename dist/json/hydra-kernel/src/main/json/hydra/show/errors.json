@@ -676,10 +676,12 @@
           "body": {
             "function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
           "variables": []}}}],
-  "description": "String representations of hydra.error types",
-  "namespace": "hydra.show.errors",
-  "termDependencies": ["hydra.show.core", "hydra.show.error.core", "hydra.show.variants", "hydra.show.typing", "hydra.formatting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
+    "hydra.show.error.core",
+    "hydra.show.variants",
+    "hydra.show.typing",
+    "hydra.formatting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -702,4 +704,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.error types",
+  "namespace": "hydra.show.errors"}
