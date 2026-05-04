@@ -321,6 +321,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints for Coq code generation",
   "namespace": "hydra.coq.language"}

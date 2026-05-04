@@ -39,6 +39,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
   "namespace": "hydra.test.testEnv"}

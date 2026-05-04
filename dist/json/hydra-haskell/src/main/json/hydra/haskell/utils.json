@@ -2286,6 +2286,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utilities for working with Haskell syntax trees",
   "namespace": "hydra.haskell.utils"}

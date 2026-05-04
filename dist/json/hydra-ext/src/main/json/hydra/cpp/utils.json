@@ -1533,6 +1533,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "C++ utilities for constructing C++ syntax trees",
   "namespace": "hydra.cpp.utils"}

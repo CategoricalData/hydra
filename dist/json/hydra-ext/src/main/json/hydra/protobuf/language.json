@@ -258,6 +258,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints for Protobuf v3",
   "namespace": "hydra.protobuf.language"}

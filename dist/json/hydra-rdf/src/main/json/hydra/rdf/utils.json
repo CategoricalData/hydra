@@ -883,6 +883,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utility functions for working with RDF graphs and descriptions",
   "namespace": "hydra.rdf.utils"}

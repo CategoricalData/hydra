@@ -2831,6 +2831,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
   "namespace": "hydra.wasm.serde"}

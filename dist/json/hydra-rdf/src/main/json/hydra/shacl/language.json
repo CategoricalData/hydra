@@ -157,6 +157,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints for W3C SHACL",
   "namespace": "hydra.shacl.language"}

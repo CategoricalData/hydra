@@ -7788,6 +7788,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Simple, one-way adapters for types and terms",
   "namespace": "hydra.adapt"}

@@ -901,6 +901,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for AST serialization",
   "namespace": "hydra.test.serialization"}

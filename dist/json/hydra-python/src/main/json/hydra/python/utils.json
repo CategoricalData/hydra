@@ -4195,6 +4195,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Python utilities for constructing Python syntax trees",
   "namespace": "hydra.python.utils"}

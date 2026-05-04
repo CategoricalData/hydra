@@ -2933,6 +2933,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for topological sorting algorithms",
   "namespace": "hydra.test.sorting"}

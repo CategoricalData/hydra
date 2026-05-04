@@ -72,6 +72,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type checking failure test cases",
   "namespace": "hydra.test.checking.failures"}

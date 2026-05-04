@@ -1430,6 +1430,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "General-purpose parser combinators",
   "namespace": "hydra.parsers"}

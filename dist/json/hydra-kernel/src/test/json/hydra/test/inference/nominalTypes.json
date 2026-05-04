@@ -4775,6 +4775,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Inference tests for nominal types",
   "namespace": "hydra.test.inference.nominalTypes"}

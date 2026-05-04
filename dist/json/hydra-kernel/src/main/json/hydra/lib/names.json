@@ -2135,6 +2135,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Namespaces and primitive names for the Hydra standard library",
   "namespace": "hydra.lib.names"}

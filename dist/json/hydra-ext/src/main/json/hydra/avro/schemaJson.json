@@ -4137,6 +4137,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "JSON serialization and deserialization for Avro schemas",
   "namespace": "hydra.avro.schemaJson"}

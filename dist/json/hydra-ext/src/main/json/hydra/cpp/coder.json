@@ -5443,6 +5443,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "C++ code generator: converts Hydra modules to C++ header files",
   "namespace": "hydra.cpp.coder"}

@@ -21309,6 +21309,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Inference tests for fundamental language features",
   "namespace": "hydra.test.inference.fundamentals"}

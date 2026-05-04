@@ -18,8 +18,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Core.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds."}
   where
     definitions = [

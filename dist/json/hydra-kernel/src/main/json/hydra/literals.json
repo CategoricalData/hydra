@@ -322,6 +322,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Conversion functions for literal values.",
   "namespace": "hydra.literals"}

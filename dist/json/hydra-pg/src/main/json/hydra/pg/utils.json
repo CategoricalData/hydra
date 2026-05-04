@@ -1872,6 +1872,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utility functions for property graph operations",
   "namespace": "hydra.pg.utils"}

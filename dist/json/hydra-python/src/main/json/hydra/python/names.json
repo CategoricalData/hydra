@@ -1095,6 +1095,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Python naming utilities: encoding Hydra names as Python names",
   "namespace": "hydra.python.names"}

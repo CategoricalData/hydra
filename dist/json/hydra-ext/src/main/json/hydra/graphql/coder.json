@@ -2960,6 +2960,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "GraphQL code generator: converts Hydra modules to GraphQL schema definitions",
   "namespace": "hydra.graphql.coder"}

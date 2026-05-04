@@ -1625,6 +1625,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type and term classification predicates",
   "namespace": "hydra.predicates"}

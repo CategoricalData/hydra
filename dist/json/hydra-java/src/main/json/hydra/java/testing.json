@@ -859,6 +859,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Java test code generation codec for JUnit-based generation tests",
   "namespace": "hydra.java.testing"}

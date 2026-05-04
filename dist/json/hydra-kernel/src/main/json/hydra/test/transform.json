@@ -737,6 +737,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
   "namespace": "hydra.test.transform"}

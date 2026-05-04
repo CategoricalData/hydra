@@ -9166,6 +9166,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference",
   "namespace": "hydra.checking"}
