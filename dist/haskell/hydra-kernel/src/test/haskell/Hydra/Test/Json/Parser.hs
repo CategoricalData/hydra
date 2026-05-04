@@ -511,9 +511,11 @@ allTests =
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
                   Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
-                    ("items", (Model.ValueArray [
-                      Model.ValueNumber (Literals.stringToDecimal "1.0"),
-                      (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))])),
+                    (
+                      "items",
+                      (Model.ValueArray [
+                        Model.ValueNumber (Literals.stringToDecimal "1.0"),
+                        (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))])),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
