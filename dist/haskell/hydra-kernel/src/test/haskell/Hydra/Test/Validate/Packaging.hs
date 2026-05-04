@@ -4,13 +4,17 @@
 module Hydra.Test.Validate.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Show.Error.Packaging as ShowErrorPackaging
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import qualified Hydra.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | All test cases for hydra.validate.packaging
@@ -31,7 +35,8 @@ allTests =
         checkModuleNamespaceConventionTests,
         checkPackageNameConventionTests,
         kernelModuleTests,
-        kernelPackageTests],
+        kernelPackageTests,
+        profileBehaviourTests],
       Testing.testGroupCases = []}
 checkConflictingModuleNamespacesTests :: Testing.TestGroup
 checkConflictingModuleNamespacesTests =
@@ -897,5 +902,258 @@ kernelPackageTests =
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleNamespace (ErrorPackaging.ConflictingModuleNamespaceError {
               ErrorPackaging.conflictingModuleNamespaceErrorFirst = (Packaging.Namespace "hydra.foo"),
               ErrorPackaging.conflictingModuleNamespaceErrorSecond = (Packaging.Namespace "hydra.foo")}))))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]}
+profileBehaviourTests :: Testing.TestGroup
+profileBehaviourTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "profile-aware behaviour",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "multi-error accumulation: two distinct rules produce two findings",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+                (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+                (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")}),
+                (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
+                  ErrorPackaging.duplicateDefinitionNameErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))],
+              Validation.validationResultWarnings = []})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")}),
+                (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
+                  ErrorPackaging.duplicateDefinitionNameErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))],
+              Validation.validationResultWarnings = []})))) "]")))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "warning classification: both rules demoted to warnings",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList []),
+              Validation.validationProfileWarningRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+                (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList []),
+              Validation.validationProfileWarningRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+                (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")}),
+                (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
+                  ErrorPackaging.duplicateDefinitionNameErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))]})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")}),
+                (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
+                  ErrorPackaging.duplicateDefinitionNameErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))]})))) "]")))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "rule disabling: duplicate-name rule omitted from profile",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")})],
+              Validation.validationResultWarnings = []})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")})],
+              Validation.validationResultWarnings = []})))) "]")))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "maxErrors bound: only first rule collected when maxErrors=1",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+                (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 1,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (ValidatePackaging.module_ (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+                (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 1,
+              Validation.validationProfileMaxWarnings = 5}) (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []}) (Packaging.Module {
+              Packaging.moduleDescription = (Just "Test module hydra.foo"),
+              Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
+              Packaging.moduleTermDependencies = [],
+              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
+                  Packaging.termDefinitionTerm = (Core.TermLiteral (Core.LiteralString "value")),
+                  Packaging.termDefinitionTypeScheme = Nothing}))]}))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidModuleError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")})],
+              Validation.validationResultWarnings = []})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorPackaging.invalidModuleError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  ErrorPackaging.missingDocumentationErrorNamespace = (Packaging.Namespace "hydra.foo"),
+                  ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.aaa")})],
+              Validation.validationResultWarnings = []})))) "]")))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
