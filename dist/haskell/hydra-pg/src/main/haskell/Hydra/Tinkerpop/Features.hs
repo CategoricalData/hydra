@@ -1,5 +1,4 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | A model derived from TinkerPop's Graph.Features. See
 -- |   https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html
 -- |
@@ -9,11 +8,9 @@
 -- | For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 
 module Hydra.Tinkerpop.Features where
-
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Base interface for features that relate to supporting different data types.
 data DataTypeFeatures =
   DataTypeFeatures {
@@ -54,45 +51,25 @@ data DataTypeFeatures =
     -- | Supports setting of a List value.
     dataTypeFeaturesSupportsUniformListValues :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _DataTypeFeatures = Core.Name "hydra.tinkerpop.features.DataTypeFeatures"
-
 _DataTypeFeatures_supportsBooleanArrayValues = Core.Name "supportsBooleanArrayValues"
-
 _DataTypeFeatures_supportsBooleanValues = Core.Name "supportsBooleanValues"
-
 _DataTypeFeatures_supportsByteArrayValues = Core.Name "supportsByteArrayValues"
-
 _DataTypeFeatures_supportsByteValues = Core.Name "supportsByteValues"
-
 _DataTypeFeatures_supportsDoubleArrayValues = Core.Name "supportsDoubleArrayValues"
-
 _DataTypeFeatures_supportsDoubleValues = Core.Name "supportsDoubleValues"
-
 _DataTypeFeatures_supportsFloatArrayValues = Core.Name "supportsFloatArrayValues"
-
 _DataTypeFeatures_supportsFloatValues = Core.Name "supportsFloatValues"
-
 _DataTypeFeatures_supportsIntegerArrayValues = Core.Name "supportsIntegerArrayValues"
-
 _DataTypeFeatures_supportsIntegerValues = Core.Name "supportsIntegerValues"
-
 _DataTypeFeatures_supportsLongArrayValues = Core.Name "supportsLongArrayValues"
-
 _DataTypeFeatures_supportsLongValues = Core.Name "supportsLongValues"
-
 _DataTypeFeatures_supportsMapValues = Core.Name "supportsMapValues"
-
 _DataTypeFeatures_supportsMixedListValues = Core.Name "supportsMixedListValues"
-
 _DataTypeFeatures_supportsSerializableValues = Core.Name "supportsSerializableValues"
-
 _DataTypeFeatures_supportsStringArrayValues = Core.Name "supportsStringArrayValues"
-
 _DataTypeFeatures_supportsStringValues = Core.Name "supportsStringValues"
-
 _DataTypeFeatures_supportsUniformListValues = Core.Name "supportsUniformListValues"
-
 -- | Features that are related to Edge operations.
 data EdgeFeatures =
   EdgeFeatures {
@@ -105,29 +82,19 @@ data EdgeFeatures =
     -- | Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Vertex.addEdge(String, Vertex, Object...).
     edgeFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _EdgeFeatures = Core.Name "hydra.tinkerpop.features.EdgeFeatures"
-
 _EdgeFeatures_elementFeatures = Core.Name "elementFeatures"
-
 _EdgeFeatures_properties = Core.Name "properties"
-
 _EdgeFeatures_supportsAddEdges = Core.Name "supportsAddEdges"
-
 _EdgeFeatures_supportsRemoveEdges = Core.Name "supportsRemoveEdges"
-
 _EdgeFeatures_supportsUpsert = Core.Name "supportsUpsert"
-
 -- | Features that are related to Edge Property objects.
 data EdgePropertyFeatures =
   EdgePropertyFeatures {
     edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
   deriving (Eq, Ord, Read, Show)
-
 _EdgePropertyFeatures = Core.Name "hydra.tinkerpop.features.EdgePropertyFeatures"
-
 _EdgePropertyFeatures_propertyFeatures = Core.Name "propertyFeatures"
-
 -- | Features that are related to Element objects.
 data ElementFeatures =
   ElementFeatures {
@@ -148,34 +115,21 @@ data ElementFeatures =
     -- | Determines if an Element has UUID identifiers as their internal representation.
     elementFeaturesSupportsUuidIds :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _ElementFeatures = Core.Name "hydra.tinkerpop.features.ElementFeatures"
-
 _ElementFeatures_supportsAddProperty = Core.Name "supportsAddProperty"
-
 _ElementFeatures_supportsAnyIds = Core.Name "supportsAnyIds"
-
 _ElementFeatures_supportsCustomIds = Core.Name "supportsCustomIds"
-
 _ElementFeatures_supportsNumericIds = Core.Name "supportsNumericIds"
-
 _ElementFeatures_supportsRemoveProperty = Core.Name "supportsRemoveProperty"
-
 _ElementFeatures_supportsStringIds = Core.Name "supportsStringIds"
-
 _ElementFeatures_supportsUserSuppliedIds = Core.Name "supportsUserSuppliedIds"
-
 _ElementFeatures_supportsUuidIds = Core.Name "supportsUuidIds"
-
 -- | Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
 data ExtraFeatures a =
   ExtraFeatures {
     extraFeaturesSupportsMapKey :: (Core.Type -> Bool)}
-
 _ExtraFeatures = Core.Name "hydra.tinkerpop.features.ExtraFeatures"
-
 _ExtraFeatures_supportsMapKey = Core.Name "supportsMapKey"
-
 -- | An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 -- |
 -- | As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
@@ -188,15 +142,10 @@ data Features =
     -- | Gets the features related to vertex operation.
     featuresVertex :: VertexFeatures}
   deriving (Eq, Ord, Read, Show)
-
 _Features = Core.Name "hydra.tinkerpop.features.Features"
-
 _Features_edge = Core.Name "edge"
-
 _Features_graph = Core.Name "graph"
-
 _Features_vertex = Core.Name "vertex"
-
 -- | Features specific to a operations of a graph.
 data GraphFeatures =
   GraphFeatures {
@@ -217,25 +166,15 @@ data GraphFeatures =
     -- | Gets the features related to graph sideEffects operation.
     graphFeaturesVariables :: VariableFeatures}
   deriving (Eq, Ord, Read, Show)
-
 _GraphFeatures = Core.Name "hydra.tinkerpop.features.GraphFeatures"
-
 _GraphFeatures_supportsComputer = Core.Name "supportsComputer"
-
 _GraphFeatures_supportsConcurrentAccess = Core.Name "supportsConcurrentAccess"
-
 _GraphFeatures_supportsIoRead = Core.Name "supportsIoRead"
-
 _GraphFeatures_supportsIoWrite = Core.Name "supportsIoWrite"
-
 _GraphFeatures_supportsPersistence = Core.Name "supportsPersistence"
-
 _GraphFeatures_supportsThreadedTransactions = Core.Name "supportsThreadedTransactions"
-
 _GraphFeatures_supportsTransactions = Core.Name "supportsTransactions"
-
 _GraphFeatures_variables = Core.Name "variables"
-
 -- | A base interface for Edge or Vertex Property features.
 data PropertyFeatures =
   PropertyFeatures {
@@ -243,13 +182,9 @@ data PropertyFeatures =
     -- | Determines if an Element allows for the processing of at least one data type defined by the features.
     propertyFeaturesSupportsProperties :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _PropertyFeatures = Core.Name "hydra.tinkerpop.features.PropertyFeatures"
-
 _PropertyFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
-
 _PropertyFeatures_supportsProperties = Core.Name "supportsProperties"
-
 -- | Features for Graph.Variables.
 data VariableFeatures =
   VariableFeatures {
@@ -257,13 +192,9 @@ data VariableFeatures =
     -- | If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
     variableFeaturesSupportsVariables :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _VariableFeatures = Core.Name "hydra.tinkerpop.features.VariableFeatures"
-
 _VariableFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
-
 _VariableFeatures_supportsVariables = Core.Name "supportsVariables"
-
 -- | Features that are related to Vertex operations.
 data VertexFeatures =
   VertexFeatures {
@@ -282,25 +213,15 @@ data VertexFeatures =
     -- | Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Graph.addVertex(String).
     vertexFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _VertexFeatures = Core.Name "hydra.tinkerpop.features.VertexFeatures"
-
 _VertexFeatures_elementFeatures = Core.Name "elementFeatures"
-
 _VertexFeatures_properties = Core.Name "properties"
-
 _VertexFeatures_supportsAddVertices = Core.Name "supportsAddVertices"
-
 _VertexFeatures_supportsDuplicateMultiProperties = Core.Name "supportsDuplicateMultiProperties"
-
 _VertexFeatures_supportsMetaProperties = Core.Name "supportsMetaProperties"
-
 _VertexFeatures_supportsMultiProperties = Core.Name "supportsMultiProperties"
-
 _VertexFeatures_supportsRemoveVertices = Core.Name "supportsRemoveVertices"
-
 _VertexFeatures_supportsUpsert = Core.Name "supportsUpsert"
-
 -- | Features that are related to Vertex Property objects.
 data VertexPropertyFeatures =
   VertexPropertyFeatures {
@@ -310,13 +231,8 @@ data VertexPropertyFeatures =
     -- | Determines if a VertexProperty allows properties to be removed.
     vertexPropertyFeaturesSupportsRemove :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _VertexPropertyFeatures = Core.Name "hydra.tinkerpop.features.VertexPropertyFeatures"
-
 _VertexPropertyFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
-
 _VertexPropertyFeatures_propertyFeatures = Core.Name "propertyFeatures"
-
 _VertexPropertyFeatures_elementFeatures = Core.Name "elementFeatures"
-
 _VertexPropertyFeatures_supportsRemove = Core.Name "supportsRemove"

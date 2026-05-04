@@ -31,6 +31,7 @@
     "hydra.dsl.topology",
     "hydra.dsl.typing",
     "hydra.dsl.util",
+    "hydra.dsl.validation",
     "hydra.dsl.variants",
     "hydra.dsl.yaml.model"],
   "mainModules": [
@@ -165,6 +166,7 @@
     "hydra.util",
     "hydra.validate.core",
     "hydra.validate.packaging",
+    "hydra.validation",
     "hydra.variables",
     "hydra.variants",
     "hydra.yaml.model"],
