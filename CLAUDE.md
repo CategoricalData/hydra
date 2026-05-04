@@ -308,6 +308,18 @@ single language, the per-language wrappers (`bin/sync-java.sh`,
 `bin/sync-python.sh`, etc.) cover host == target.
 See [code-generation.md](docs/recipes/code-generation.md) for details.
 
+**Watch out for stale dist/haskell artifacts.** `bin/sync-haskell.sh`
+regenerates the JSON and the *baseline* Haskell packages (`hydra-kernel`,
+`hydra-haskell`), but does not by default re-run the per-package
+`assemble-distribution.sh` for non-baseline packages like `hydra-pg`,
+`hydra-rdf`, `hydra-coq`, etc. If you've edited a DSL source under one
+of those packages and the corresponding `dist/haskell/<pkg>/` file
+hasn't picked up your change, run
+`heads/haskell/bin/assemble-distribution.sh <pkg>` directly (or use
+`bin/sync-packages.sh <pkg>`). Cache hits can also mask edits; deleting
+`dist/haskell/<pkg>/src/main/digest.json` and the relevant
+`dist/json/<pkg>/src/main/digest.json` forces a full regen.
+
 ---
 
 ## Document index
