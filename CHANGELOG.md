@@ -48,6 +48,11 @@ homogenization of writer conventions, and a unified `Module.dependencies` field.
 ### Bug fixes
 
 - Satisfied or suppressed warnings in generated Java (#349).
+- Restored JSON parser test cases (#336):
+  fixed polymorphic case-statement handling in the eta-expander
+  (`Reduction.etaExpandTerm`) and the Java coder (`encodeElimination`),
+  added a structural fallback to Python's `hydra.lib.equality.compare`
+  for term values that lack a native `<` ordering.
 
 ---
 
