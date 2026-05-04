@@ -159,10 +159,9 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Extraction and validation for hydra.util types",
-  "namespace": "hydra.extract.util",
-  "termDependencies": ["hydra.extract.core", "hydra.show.errors"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.show.errors",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -185,5 +184,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Extraction and validation for hydra.util types",
+  "namespace": "hydra.extract.util"}

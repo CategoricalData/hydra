@@ -3547,10 +3547,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"maybe": {"literal": {"float": {"float32": {}}}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.",
-  "namespace": "hydra.json.decode",
-  "termDependencies": ["hydra.strip", "hydra.literals", "hydra.extract.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.strip",
+    "hydra.literals",
+    "hydra.extract.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -3573,5 +3573,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.",
+  "namespace": "hydra.json.decode"}

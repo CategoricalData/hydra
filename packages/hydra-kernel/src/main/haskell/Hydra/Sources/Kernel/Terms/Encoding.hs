@@ -73,8 +73,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
@@ -363,19 +362,15 @@ encodeModule = define "encodeModule" $
           ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        -- The encoder module depends on encoder modules for both the type and term dependencies
-        -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
+        -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "Term encoders for ",
             Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          -- Transform both type and term dependency namespaces to their encoder namespaces
           (Lists.nub (Lists.concat2
-            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTypeDependencies (var "mod")))
-            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTermDependencies (var "mod")))))
-          -- The encoder module depends on the original type module
-          (list [Packaging.moduleNamespace (var "mod")])
+            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleDependencies (var "mod")))
+            (list [Packaging.moduleNamespace (var "mod")])))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))

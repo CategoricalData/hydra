@@ -4166,10 +4166,11 @@
               "codomain": {"list": {"variable": "hydra.python.syntax.Statement"}},
               "domain": {"variable": "hydra.python.syntax.Name"}}},
           "variables": []}}}],
-  "description": "Python utilities for constructing Python syntax trees",
-  "namespace": "hydra.python.utils",
-  "termDependencies": ["hydra.python.names", "hydra.python.serde", "hydra.serialization", "hydra.analysis"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.python.names",
+    "hydra.python.serde",
+    "hydra.serialization",
+    "hydra.analysis",
     "hydra.python.environment",
     "hydra.python.syntax",
     "hydra.paths",
@@ -4194,5 +4195,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Python utilities for constructing Python syntax trees",
+  "namespace": "hydra.python.utils"}

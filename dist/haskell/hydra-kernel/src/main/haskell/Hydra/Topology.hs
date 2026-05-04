@@ -10,6 +10,7 @@ import qualified Data.Set as S
 -- | A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors
 type Graph = (M.Map Vertex [Vertex])
 _Graph = Core.Name "hydra.topology.Graph"
+-- | A pair of inverse permutations on lists, used to relate two orderings of the same elements
 data OrderingIsomorphism a =
   OrderingIsomorphism {
     -- | Mapping from source ordering to target ordering
@@ -19,6 +20,7 @@ data OrderingIsomorphism a =
 _OrderingIsomorphism = Core.Name "hydra.topology.OrderingIsomorphism"
 _OrderingIsomorphism_encode = Core.Name "encode"
 _OrderingIsomorphism_decode = Core.Name "decode"
+-- | State carried by Tarjan's strongly connected components algorithm during a depth-first traversal
 data TarjanState =
   TarjanState {
     -- | Next available index for vertices in the DFS traversal

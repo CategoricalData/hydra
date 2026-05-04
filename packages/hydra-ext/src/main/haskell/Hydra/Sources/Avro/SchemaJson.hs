@@ -111,8 +111,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [jsonWriterNs, jsonParserNs],
-            moduleTypeDependencies = (AvroSchema.ns:jsonModelNs:Namespace "hydra.parsing":KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [jsonWriterNs, jsonParserNs] L.++ (AvroSchema.ns:jsonModelNs:Namespace "hydra.parsing":KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "JSON serialization and deserialization for Avro schemas"}
   where
     definitions = [

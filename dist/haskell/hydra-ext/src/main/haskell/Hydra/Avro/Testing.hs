@@ -1,15 +1,12 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test case types for the bidirectional Avro coder
 
 module Hydra.Avro.Testing where
-
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | A test case which maps an Avro schema to a Hydra type and compares the result
 data TypeLevelForwardTestCase =
   TypeLevelForwardTestCase {
@@ -20,15 +17,10 @@ data TypeLevelForwardTestCase =
     -- | The expected Hydra type
     typeLevelForwardTestCaseType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
-
 _TypeLevelForwardTestCase = Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"
-
 _TypeLevelForwardTestCase_description = Core.Name "description"
-
 _TypeLevelForwardTestCase_schema = Core.Name "schema"
-
 _TypeLevelForwardTestCase_type = Core.Name "type"
-
 -- | A test case which maps a Hydra type to an Avro schema and compares the result
 data TypeLevelReverseTestCase =
   TypeLevelReverseTestCase {
@@ -39,15 +31,10 @@ data TypeLevelReverseTestCase =
     -- | The expected Avro schema
     typeLevelReverseTestCaseSchema :: Schema.Schema}
   deriving (Eq, Ord, Read, Show)
-
 _TypeLevelReverseTestCase = Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"
-
 _TypeLevelReverseTestCase_description = Core.Name "description"
-
 _TypeLevelReverseTestCase_type = Core.Name "type"
-
 _TypeLevelReverseTestCase_schema = Core.Name "schema"
-
 -- | A test case which maps an Avro schema to a Hydra type and back, verifying the result
 data TypeLevelRoundTripAvroTestCase =
   TypeLevelRoundTripAvroTestCase {
@@ -58,15 +45,10 @@ data TypeLevelRoundTripAvroTestCase =
     -- | The expected Avro schema after the round-trip, which may differ from the original due to normalization or information loss
     typeLevelRoundTripAvroTestCaseExpectedSchema :: Schema.Schema}
   deriving (Eq, Ord, Read, Show)
-
 _TypeLevelRoundTripAvroTestCase = Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"
-
 _TypeLevelRoundTripAvroTestCase_description = Core.Name "description"
-
 _TypeLevelRoundTripAvroTestCase_schema = Core.Name "schema"
-
 _TypeLevelRoundTripAvroTestCase_expectedSchema = Core.Name "expectedSchema"
-
 -- | A test case which maps a Hydra type to an Avro schema and back, verifying the result
 data TypeLevelRoundTripHydraTestCase =
   TypeLevelRoundTripHydraTestCase {
@@ -77,15 +59,10 @@ data TypeLevelRoundTripHydraTestCase =
     -- | The expected Hydra type after the round-trip, which may differ from the original due to normalization or information loss
     typeLevelRoundTripHydraTestCaseExpectedType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
-
 _TypeLevelRoundTripHydraTestCase = Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"
-
 _TypeLevelRoundTripHydraTestCase_description = Core.Name "description"
-
 _TypeLevelRoundTripHydraTestCase_type = Core.Name "type"
-
 _TypeLevelRoundTripHydraTestCase_expectedType = Core.Name "expectedType"
-
 -- | A test case which encodes a JSON value as a Hydra term using an Avro schema
 data TermLevelForwardTestCase =
   TermLevelForwardTestCase {
@@ -98,17 +75,11 @@ data TermLevelForwardTestCase =
     -- | The expected Hydra term
     termLevelForwardTestCaseTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)
-
 _TermLevelForwardTestCase = Core.Name "hydra.avro.testing.TermLevelForwardTestCase"
-
 _TermLevelForwardTestCase_description = Core.Name "description"
-
 _TermLevelForwardTestCase_schema = Core.Name "schema"
-
 _TermLevelForwardTestCase_json = Core.Name "json"
-
 _TermLevelForwardTestCase_term = Core.Name "term"
-
 -- | A test case which decodes a Hydra term to a JSON value using an Avro schema
 data TermLevelReverseTestCase =
   TermLevelReverseTestCase {
@@ -121,17 +92,11 @@ data TermLevelReverseTestCase =
     -- | The expected JSON value
     termLevelReverseTestCaseJson :: Model.Value}
   deriving (Eq, Ord, Read, Show)
-
 _TermLevelReverseTestCase = Core.Name "hydra.avro.testing.TermLevelReverseTestCase"
-
 _TermLevelReverseTestCase_description = Core.Name "description"
-
 _TermLevelReverseTestCase_schema = Core.Name "schema"
-
 _TermLevelReverseTestCase_term = Core.Name "term"
-
 _TermLevelReverseTestCase_json = Core.Name "json"
-
 -- | A test case which encodes a JSON value as a Hydra term and decodes it back, verifying the result
 data TermLevelRoundTripJsonTestCase =
   TermLevelRoundTripJsonTestCase {
@@ -144,17 +109,11 @@ data TermLevelRoundTripJsonTestCase =
     -- | The expected JSON value after the round-trip, which may differ from the original due to normalization
     termLevelRoundTripJsonTestCaseExpectedJson :: Model.Value}
   deriving (Eq, Ord, Read, Show)
-
 _TermLevelRoundTripJsonTestCase = Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"
-
 _TermLevelRoundTripJsonTestCase_description = Core.Name "description"
-
 _TermLevelRoundTripJsonTestCase_schema = Core.Name "schema"
-
 _TermLevelRoundTripJsonTestCase_json = Core.Name "json"
-
 _TermLevelRoundTripJsonTestCase_expectedJson = Core.Name "expectedJson"
-
 -- | A test case which decodes a Hydra term to JSON and encodes it back, verifying the result
 data TermLevelRoundTripTermTestCase =
   TermLevelRoundTripTermTestCase {
@@ -167,17 +126,11 @@ data TermLevelRoundTripTermTestCase =
     -- | The expected Hydra term after the round-trip, which may differ from the original due to normalization
     termLevelRoundTripTermTestCaseExpectedTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)
-
 _TermLevelRoundTripTermTestCase = Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"
-
 _TermLevelRoundTripTermTestCase_description = Core.Name "description"
-
 _TermLevelRoundTripTermTestCase_type = Core.Name "type"
-
 _TermLevelRoundTripTermTestCase_term = Core.Name "term"
-
 _TermLevelRoundTripTermTestCase_expectedTerm = Core.Name "expectedTerm"
-
 -- | A test case for union type encoding and decoding, covering the various strategies for representing unions in Avro
 data UnionTestCase =
   UnionTestCase {
@@ -190,17 +143,11 @@ data UnionTestCase =
     -- | Pairs of corresponding Hydra terms and JSON values for this union
     unionTestCaseTermPairs :: [(Core.Term, Model.Value)]}
   deriving (Eq, Ord, Read, Show)
-
 _UnionTestCase = Core.Name "hydra.avro.testing.UnionTestCase"
-
 _UnionTestCase_description = Core.Name "description"
-
 _UnionTestCase_hydraType = Core.Name "hydraType"
-
 _UnionTestCase_avroSchema = Core.Name "avroSchema"
-
 _UnionTestCase_termPairs = Core.Name "termPairs"
-
 -- | A test case for bidirectional name mapping between Hydra and Avro
 data NameMappingTestCase =
   NameMappingTestCase {
@@ -213,17 +160,11 @@ data NameMappingTestCase =
     -- | The expected Avro namespace, if any
     nameMappingTestCaseAvroNamespace :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
-
 _NameMappingTestCase = Core.Name "hydra.avro.testing.NameMappingTestCase"
-
 _NameMappingTestCase_description = Core.Name "description"
-
 _NameMappingTestCase_hydraName = Core.Name "hydraName"
-
 _NameMappingTestCase_avroName = Core.Name "avroName"
-
 _NameMappingTestCase_avroNamespace = Core.Name "avroNamespace"
-
 -- | A test case which verifies that lossy conversions stash original information in annotations
 data LossinessTestCase =
   LossinessTestCase {
@@ -238,19 +179,12 @@ data LossinessTestCase =
     -- | Whether the adapter reports this conversion as lossy
     lossinessTestCaseIsLossy :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _LossinessTestCase = Core.Name "hydra.avro.testing.LossinessTestCase"
-
 _LossinessTestCase_description = Core.Name "description"
-
 _LossinessTestCase_originalSchema = Core.Name "originalSchema"
-
 _LossinessTestCase_hydraType = Core.Name "hydraType"
-
 _LossinessTestCase_recoveredSchema = Core.Name "recoveredSchema"
-
 _LossinessTestCase_isLossy = Core.Name "isLossy"
-
 -- | A test case for Avro schema serialization to and from JSON
 data SchemaSerializationTestCase =
   SchemaSerializationTestCase {
@@ -261,15 +195,10 @@ data SchemaSerializationTestCase =
     -- | The expected JSON representation of the schema
     schemaSerializationTestCaseJson :: Model.Value}
   deriving (Eq, Ord, Read, Show)
-
 _SchemaSerializationTestCase = Core.Name "hydra.avro.testing.SchemaSerializationTestCase"
-
 _SchemaSerializationTestCase_description = Core.Name "description"
-
 _SchemaSerializationTestCase_schema = Core.Name "schema"
-
 _SchemaSerializationTestCase_json = Core.Name "json"
-
 -- | A test case for the bidirectional Avro coder
 data AvroTestCase =
   -- | Type-level forward mapping (Avro Schema -> Hydra Type)
@@ -297,29 +226,16 @@ data AvroTestCase =
   -- | Schema serialization to and from JSON
   AvroTestCaseSchemaSerialization SchemaSerializationTestCase
   deriving (Eq, Ord, Read, Show)
-
 _AvroTestCase = Core.Name "hydra.avro.testing.AvroTestCase"
-
 _AvroTestCase_typeLevelForward = Core.Name "typeLevelForward"
-
 _AvroTestCase_typeLevelReverse = Core.Name "typeLevelReverse"
-
 _AvroTestCase_typeLevelRoundTripAvro = Core.Name "typeLevelRoundTripAvro"
-
 _AvroTestCase_typeLevelRoundTripHydra = Core.Name "typeLevelRoundTripHydra"
-
 _AvroTestCase_termLevelForward = Core.Name "termLevelForward"
-
 _AvroTestCase_termLevelReverse = Core.Name "termLevelReverse"
-
 _AvroTestCase_termLevelRoundTripJson = Core.Name "termLevelRoundTripJson"
-
 _AvroTestCase_termLevelRoundTripTerm = Core.Name "termLevelRoundTripTerm"
-
 _AvroTestCase_union = Core.Name "union"
-
 _AvroTestCase_nameMapping = Core.Name "nameMapping"
-
 _AvroTestCase_lossiness = Core.Name "lossiness"
-
 _AvroTestCase_schemaSerialization = Core.Name "schemaSerialization"

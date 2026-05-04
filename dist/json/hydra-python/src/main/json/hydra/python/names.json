@@ -1066,10 +1066,11 @@
                   "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
               "domain": {"literal": {"boolean": {}}}}},
           "variables": []}}}],
-  "description": "Python naming utilities: encoding Hydra names as Python names",
-  "namespace": "hydra.python.names",
-  "termDependencies": ["hydra.names", "hydra.formatting", "hydra.python.serde", "hydra.python.language"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.names",
+    "hydra.formatting",
+    "hydra.python.serde",
+    "hydra.python.language",
     "hydra.python.environment",
     "hydra.python.syntax",
     "hydra.paths",
@@ -1094,5 +1095,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Python naming utilities: encoding Hydra names as Python names",
+  "namespace": "hydra.python.names"}

@@ -872,7 +872,13 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.lexical",
+    "hydra.rewriting",
+    "hydra.tabular",
+    "hydra.util",
+    "hydra.decode.core",
+    "hydra.decode.relational"],
   "description": "Term decoders for hydra.tabular",
-  "namespace": "hydra.decode.tabular",
-  "termDependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.decode.relational"],
-  "typeDependencies": ["hydra.tabular", "hydra.util"]}
+  "namespace": "hydra.decode.tabular"}

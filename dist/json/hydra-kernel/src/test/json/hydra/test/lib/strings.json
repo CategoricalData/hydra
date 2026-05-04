@@ -5505,10 +5505,10 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for hydra.lib.strings primitives",
-  "namespace": "hydra.test.lib.strings",
-  "termDependencies": ["hydra.test.testGraph", "hydra.reduction", "hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.testGraph",
+    "hydra.reduction",
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -5531,5 +5531,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for hydra.lib.strings primitives",
+  "namespace": "hydra.test.lib.strings"}

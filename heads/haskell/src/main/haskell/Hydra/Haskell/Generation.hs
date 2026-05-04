@@ -59,7 +59,7 @@ writeCoderHaskell generate basePath universeModules typeModules = do
     _ <- writeHaskell basePath universeModules withCoreDeps
     return ()
   where
-    addCoreDep m = m { moduleTypeDependencies = CoreTypes.ns : moduleTypeDependencies m }
+    addCoreDep m = m { moduleDependencies = CoreTypes.ns : moduleDependencies m }
 
 writeDecoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeDecoderHaskell = writeCoderHaskell generateDecoderModules
@@ -88,7 +88,7 @@ writeDslHaskell basePath universeModules typeModules = do
     _ <- generateSources moduleToHaskell haskellLanguage False False False False basePath universeModules withCoreDeps
     return ()
   where
-    addCoreDep m = m { moduleTypeDependencies = CoreTypes.ns : moduleTypeDependencies m }
+    addCoreDep m = m { moduleDependencies = CoreTypes.ns : moduleDependencies m }
 
 ----------------------------------------
 -- Lexicon

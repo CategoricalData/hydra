@@ -26495,9 +26495,7 @@
                   "domain": {"list": {"variable": "hydra.python.syntax.Expression"}}}},
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}}],
-  "description": "Python code generator: converts Hydra modules to Python source code",
-  "namespace": "hydra.python.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.python.utils",
     "hydra.python.names",
     "hydra.python.serde",
@@ -26516,8 +26514,7 @@
     "hydra.show.core",
     "hydra.reduction",
     "hydra.sorting",
-    "hydra.inference"],
-  "typeDependencies": [
+    "hydra.inference",
     "hydra.python.environment",
     "hydra.python.syntax",
     "hydra.paths",
@@ -26542,5 +26539,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Python code generator: converts Hydra modules to Python source code",
+  "namespace": "hydra.python.coder"}

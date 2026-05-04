@@ -9157,9 +9157,7 @@
               "domain": {"maybe": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}},
           "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}}],
-  "description": "Functions for encoding Hydra modules as Haskell modules",
-  "namespace": "hydra.haskell.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.haskell.serde",
     "hydra.haskell.utils",
     "hydra.adapt",
@@ -9171,8 +9169,7 @@
     "hydra.serialization",
     "hydra.show.errors",
     "hydra.strip",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.haskell.environment",
     "hydra.haskell.syntax",
     "hydra.paths",
@@ -9197,5 +9194,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for encoding Hydra modules as Haskell modules",
+  "namespace": "hydra.haskell.coder"}

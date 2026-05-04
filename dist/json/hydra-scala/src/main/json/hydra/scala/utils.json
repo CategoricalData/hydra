@@ -990,10 +990,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.scala.syntax.Type"}}},
           "variables": []}}}],
-  "description": "Utility functions for constructing Scala AST nodes",
-  "namespace": "hydra.scala.utils",
-  "termDependencies": ["hydra.scala.language", "hydra.names", "hydra.formatting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.scala.language",
+    "hydra.names",
+    "hydra.formatting",
     "hydra.scala.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -1017,5 +1017,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utility functions for constructing Scala AST nodes",
+  "namespace": "hydra.scala.utils"}

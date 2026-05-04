@@ -107,8 +107,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns],
-            moduleTypeDependencies = (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Python test code generation codec for pytest-based generation tests"}
   where
     definitions = [

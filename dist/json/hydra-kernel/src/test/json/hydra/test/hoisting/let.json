@@ -17043,10 +17043,9 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for let-binding hoisting transformations",
-  "namespace": "hydra.test.hoisting.let",
-  "termDependencies": ["hydra.show.core", "hydra.hoisting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
+    "hydra.hoisting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -17069,5 +17068,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for let-binding hoisting transformations",
+  "namespace": "hydra.test.hoisting.let"}

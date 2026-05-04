@@ -100,8 +100,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [GraphsonConstruct.ns, Strip.ns],
-            moduleTypeDependencies = (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]),
+            moduleDependencies = ([GraphsonConstruct.ns, Strip.ns] L.++ (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns])),
             moduleDescription = Just "Utility functions for GraphSON encoding and property graph conversion."}
   where
     definitions = [

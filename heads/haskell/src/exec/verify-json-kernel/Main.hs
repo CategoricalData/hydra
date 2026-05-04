@@ -247,10 +247,8 @@ findDifference orig decoded
       "namespace differs: " ++ unNamespace (moduleNamespace orig) ++ " vs " ++ unNamespace (moduleNamespace decoded)
   | length (moduleDefinitions orig) /= length (moduleDefinitions decoded) =
       "element count differs: " ++ show (length (moduleDefinitions orig)) ++ " vs " ++ show (length (moduleDefinitions decoded))
-  | moduleTermDependencies orig /= moduleTermDependencies decoded =
-      "termDependencies differ"
-  | moduleTypeDependencies orig /= moduleTypeDependencies decoded =
-      "typeDependencies differ"
+  | moduleDependencies orig /= moduleDependencies decoded =
+      "dependencies differ"
   | moduleDescription orig /= moduleDescription decoded =
       "description differs"
   | otherwise =

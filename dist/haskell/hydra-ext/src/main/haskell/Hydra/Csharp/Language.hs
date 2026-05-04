@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints and reserved words for C Sharp (C#)
 
 module Hydra.Csharp.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for C Sharp (C#)
 csharpLanguage :: Coders.Language
 csharpLanguage =
@@ -93,7 +90,6 @@ csharpLanguage =
           Variants.TypeVariantVariable,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
-
 -- | A set of reserved words in C#. Both the "keywords" and "contextual keywords" are drawn from section 6.4.4 of the C# documentation:
 -- | https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens
 csharpReservedWords :: S.Set String

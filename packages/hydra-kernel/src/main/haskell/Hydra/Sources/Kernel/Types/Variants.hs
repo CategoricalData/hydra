@@ -19,8 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Core.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns, Core.ns],
             moduleDescription = Just "Variant types which describe the structure of Hydra core types and terms."}
   where
     definitions = [

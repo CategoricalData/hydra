@@ -95,8 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Serialization.ns],
-            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Java serializer: converts Java AST to concrete syntax"}
   where
     definitions = [

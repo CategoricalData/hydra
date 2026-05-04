@@ -130,10 +130,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.variants.TypeVariant"}}},
           "variables": []}}}],
-  "description": "String representations of hydra.variants types",
-  "namespace": "hydra.show.variants",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -156,5 +153,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.variants types",
+  "namespace": "hydra.show.variants"}

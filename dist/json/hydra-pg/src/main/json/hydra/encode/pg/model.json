@@ -2167,7 +2167,6 @@
                   "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
               "domain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}}}},
           "variables": ["t0"]}}}],
+  "dependencies": ["hydra.encode.core", "hydra.pg.model"],
   "description": "Term encoders for hydra.pg.model",
-  "namespace": "hydra.encode.pg.model",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.pg.model"]}
+  "namespace": "hydra.encode.pg.model"}

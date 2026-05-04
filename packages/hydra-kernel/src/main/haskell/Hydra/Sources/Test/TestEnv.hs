@@ -30,8 +30,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] Prelude.++ kernelTypesNamespaces,
             moduleDescription = Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")}
   where
    definitions = [

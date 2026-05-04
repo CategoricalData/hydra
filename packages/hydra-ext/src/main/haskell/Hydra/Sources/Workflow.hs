@@ -21,8 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Graph.ns, Module.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Graph.ns, Module.ns, Core.ns],
             moduleDescription = Just "A model for Hydra transformation workflows"}
   where
     definitions = [

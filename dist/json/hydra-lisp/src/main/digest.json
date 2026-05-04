@@ -2,8 +2,8 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.lisp.coder": "e24f8355ee8ff046c21261afc27b8b0851b4a81842037c8909b5b1e47adae3dd",
-    "hydra.lisp.serde": "78ebd340f7f6728950cae7d4fb5efefcf35a309dcd6dd4f06b27a4d40d7b838f",
-    "hydra.lisp.syntax": "9e9c304c7b89d3d9d87c9143f6cb32e39a38399e36f965b517398622fa141579"
+    "hydra.lisp.coder": "88b407c3f4a77f5d49cbfd954f8527dca1db9bddc6884ebfad606f454c5cadb1",
+    "hydra.lisp.serde": "0096c5a533c26c6533243c2dc064613e07aaa4d3cb8b2d77ed7f3bd8d372dbc1",
+    "hydra.lisp.syntax": "90fb2608e2a76641ad986941d7aee3d6e4f6719fe2cdf8982f0bb82596265ceb"
   }
 }

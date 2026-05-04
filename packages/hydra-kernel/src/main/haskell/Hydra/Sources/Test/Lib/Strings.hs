@@ -29,8 +29,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for hydra.lib.strings primitives")}
   where
     definitions = [

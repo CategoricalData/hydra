@@ -286,10 +286,8 @@
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
         "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
-  "description": "Language constraints and reserved words for Go 1.22+",
-  "namespace": "hydra.go.language",
-  "termDependencies": ["hydra.lexical"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.lexical",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -312,5 +310,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints and reserved words for Go 1.22+",
+  "namespace": "hydra.go.language"}

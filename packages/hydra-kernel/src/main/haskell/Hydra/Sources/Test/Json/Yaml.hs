@@ -39,8 +39,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.json.writer", Namespace "hydra.json.yaml.encode", Namespace "hydra.json.yaml.decode"],
-            moduleTypeDependencies = (Namespace "hydra.yaml.model" : kernelTypesNamespaces),
+            moduleDependencies = [Namespace "hydra.json.writer", Namespace "hydra.json.yaml.encode", Namespace "hydra.json.yaml.decode"] ++ (Namespace "hydra.yaml.model" : kernelTypesNamespaces),
             moduleDescription = (Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision")}
   where
     definitions = [

@@ -1926,10 +1926,8 @@
               "codomain": {"variable": "hydra.json.model.Value"},
               "domain": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting JSON Schema documents to JSON values",
-  "namespace": "hydra.json.schema.serde",
-  "termDependencies": ["hydra.json.writer"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.json.writer",
     "hydra.json.schema",
     "hydra.paths",
     "hydra.ast",
@@ -1953,5 +1951,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting JSON Schema documents to JSON values",
+  "namespace": "hydra.json.schema.serde"}

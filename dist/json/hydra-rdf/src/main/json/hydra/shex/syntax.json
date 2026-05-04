@@ -1102,7 +1102,6 @@
       "type": {"name": "hydra.shex.syntax.Hex", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {"name": "hydra.shex.syntax.PnLocalEsc", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+  "dependencies": [],
   "description": "A Shex model. Based on the BNF at:\n  https://github.com/shexSpec/grammar/blob/master/bnf",
-  "namespace": "hydra.shex.syntax",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.shex.syntax"}

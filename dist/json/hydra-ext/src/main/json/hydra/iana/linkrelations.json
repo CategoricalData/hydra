@@ -1201,7 +1201,6 @@
                             "value": {"literal": {"string": "Points to the versioned resource from which this working copy was obtained. [RFC5829]"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
+  "dependencies": [],
   "description": "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml",
-  "namespace": "hydra.iana.linkrelations",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.iana.linkrelations"}

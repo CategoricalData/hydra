@@ -188,10 +188,7 @@
             "annotation": [{"key": "description", "value": {"literal": {"string": "A standard warning message for auto-generated files"}}}],
             "body": {"literal": {"string": "Note: this is an automatically generated file. Do not edit."}}}},
         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}}],
-  "description": "A module for tier-0 constants.",
-  "namespace": "hydra.constants",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -214,5 +211,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "A module for tier-0 constants.",
+  "namespace": "hydra.constants"}

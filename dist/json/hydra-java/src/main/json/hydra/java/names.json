@@ -166,10 +166,7 @@
         "name": "hydra.java.names.visitorReturnParameter",
         "term": {"literal": {"string": "R"}},
         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}}],
-  "description": "Java naming constants and package name utilities",
-  "namespace": "hydra.java.names",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.java.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -193,5 +190,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Java naming constants and package name utilities",
+  "namespace": "hydra.java.names"}

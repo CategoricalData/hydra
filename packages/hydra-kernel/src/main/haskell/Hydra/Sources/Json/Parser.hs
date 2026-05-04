@@ -92,8 +92,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Parsers.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Parsers.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "JSON parser using Hydra parser combinators"}
   where
     ns = Namespace "hydra.json.parser"

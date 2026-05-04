@@ -69,8 +69,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Strip.ns, ShowCore.ns, ShowError.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("A module for lexical operations over graphs.")}
   where
     definitions = [

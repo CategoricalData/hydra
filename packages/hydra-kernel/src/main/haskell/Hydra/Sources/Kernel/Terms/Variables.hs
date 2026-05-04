@@ -81,8 +81,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Names.ns, Rewriting.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
   where
    definitions = [

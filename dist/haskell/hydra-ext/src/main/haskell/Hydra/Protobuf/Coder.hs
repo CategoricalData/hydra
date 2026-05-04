@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions
 
 module Hydra.Protobuf.Coder where
-
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
@@ -44,12 +42,10 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Collect all structural type references (Either, Pair) from a list of types
 collectStructuralTypes :: [Core.Type] -> S.Set ProtobufEnvironment.StructuralTypeRef
 collectStructuralTypes types =
     Lists.foldl (\acc -> \t -> Sets.union acc (collectStructuralTypes_collectFromType t)) Sets.empty types
-
 -- | Collect structural type references from a single type
 collectStructuralTypes_collectFromType :: Core.Type -> S.Set ProtobufEnvironment.StructuralTypeRef
 collectStructuralTypes_collectFromType typ =
@@ -59,7 +55,6 @@ collectStructuralTypes_collectFromType typ =
         Core.TypeEither v0 -> Sets.insert (ProtobufEnvironment.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))) acc
         Core.TypePair v0 -> Sets.insert (ProtobufEnvironment.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))) acc
         _ -> acc) Sets.empty typ
-
 -- | Construct a Protobuf file from a Hydra module and its type definitions
 constructModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.TypeDefinition] -> Either Errors.Error Proto3.ProtoFile
 constructModule cx g mod typeDefs =
@@ -125,7 +120,6 @@ constructModule cx g mod typeDefs =
               helperDefs,
               definitions]),
             Proto3.protoFileOptions = (Lists.cons descOption javaOptions)})))))))
-
 -- | Encode a Hydra type as a Protobuf definition
 encodeDefinition :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.Name -> Core.Type -> Either Errors.Error Proto3.Definition
 encodeDefinition cx g localNs name typ =
@@ -144,7 +138,6 @@ encodeDefinition cx g localNs name typ =
                     Core.TypeUnion v0 -> Logic.ifElse (isEnumDefinition t) (Eithers.map (\ed -> Proto3.DefinitionEnum ed) (toEitherString (encodeEnumDefinition cx0 g options name v0))) (encode cx0 options (wrapAsRecordType (Core.TypeUnion v0)))
                     _ -> encode cx0 options (wrapAsRecordType t)
       in (Eithers.bind (toEitherString (findOptions cx g typ)) (\options -> encode cx2 options typ))
-
 -- | Encode a Hydra union type as a Protobuf enum definition
 encodeEnumDefinition :: t0 -> Graph.Graph -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either Errors.Error Proto3.EnumDefinition
 encodeEnumDefinition cx g options tname fts =
@@ -167,7 +160,6 @@ encodeEnumDefinition cx g options tname fts =
         Proto3.enumDefinitionName = (encodeTypeName tname),
         Proto3.enumDefinitionValues = (Lists.cons unspecifiedField values),
         Proto3.enumDefinitionOptions = options})))
-
 -- | Encode an enum value name from type name and field name
 encodeEnumValueName :: Core.Name -> Core.Name -> Proto3.EnumValueName
 encodeEnumValueName tname fname =
@@ -178,12 +170,10 @@ encodeEnumValueName tname fname =
         prefix,
         "_",
         suffix]))
-
 -- | Encode a field name, optionally preserving the original case
 encodeFieldName :: Bool -> Core.Name -> Proto3.FieldName
 encodeFieldName preserve name =
     Proto3.FieldName (Logic.ifElse preserve (Core.unName name) (Formatting.convertCaseCamelToLowerSnake (Core.unName name)))
-
 -- | Encode a Hydra field type as a Protobuf field
 encodeFieldType :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.FieldType -> Either Errors.Error (Proto3.Field, Context.Context)
 encodeFieldType cx g localNs ft =
@@ -226,13 +216,14 @@ encodeFieldType cx g localNs ft =
         let idxPair = Annotations.nextCount key_proto_field_index cx
             idx = Pairs.first idxPair
             cx1 = Pairs.second idxPair
-        in (Eithers.bind (readBooleanAnnotation cx g Constants.keyPreserveFieldName ftype) (\preserve -> Right (Proto3.Field {
-          Proto3.fieldName = (encodeFieldName preserve fname),
-          Proto3.fieldJsonName = Nothing,
-          Proto3.fieldType = ft_,
-          Proto3.fieldNumber = idx,
-          Proto3.fieldOptions = options}, cx1))))))
-
+        in (Eithers.bind (readBooleanAnnotation cx g Constants.keyPreserveFieldName ftype) (\preserve -> Right (
+          Proto3.Field {
+            Proto3.fieldName = (encodeFieldName preserve fname),
+            Proto3.fieldJsonName = Nothing,
+            Proto3.fieldType = ft_,
+            Proto3.fieldNumber = idx,
+            Proto3.fieldOptions = options},
+          cx1))))))
 -- | Encode a Hydra record type as a Protobuf message definition
 encodeRecordType :: Context.Context -> Graph.Graph -> Packaging.Namespace -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either Errors.Error Proto3.MessageDefinition
 encodeRecordType cx g localNs options tname fts =
@@ -242,7 +233,6 @@ encodeRecordType cx g localNs options tname fts =
         Proto3.messageDefinitionName = (encodeTypeName tname),
         Proto3.messageDefinitionFields = pfields,
         Proto3.messageDefinitionOptions = options})))
-
 -- | Encode a Hydra literal type as a Protobuf scalar type
 encodeScalarType :: t0 -> Core.LiteralType -> Either Errors.Error Proto3.ScalarType
 encodeScalarType cx lt =
@@ -261,7 +251,6 @@ encodeScalarType cx lt =
         _ -> unexpectedE cx "32-bit or 64-bit integer type" (ShowCore.integerType v0)
       Core.LiteralTypeString -> Right Proto3.ScalarTypeString
       _ -> unexpectedE cx "supported literal type" (ShowCore.literalType lt)
-
 -- | Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)
 encodeScalarTypeWrapped :: t0 -> Core.LiteralType -> Either Errors.Error Proto3.SimpleType
 encodeScalarTypeWrapped cx lt =
@@ -286,7 +275,6 @@ encodeScalarTypeWrapped cx lt =
           _ -> unexpectedE cx "32-bit or 64-bit integer type" (ShowCore.integerType v0)
         Core.LiteralTypeString -> toType "String"
         _ -> unexpectedE cx "supported literal type" (ShowCore.literalType lt)
-
 -- | Encode a simple type for helper message fields
 encodeSimpleTypeForHelper :: t0 -> Packaging.Namespace -> Core.Type -> Either Errors.Error Proto3.SimpleType
 encodeSimpleTypeForHelper cx localNs typ =
@@ -299,11 +287,9 @@ encodeSimpleTypeForHelper cx localNs typ =
         Core.TypeUnit -> Right (Proto3.SimpleTypeReference (Proto3.TypeName "google.protobuf.Empty"))
         Core.TypeVariable v0 -> forNominal v0
         _ -> unexpectedE cx "simple type in structural type helper" (ShowCore.type_ (Strip.removeTypeAnnotations typ))
-
 -- | Encode a Hydra type name as a Protobuf type name
 encodeTypeName :: Core.Name -> Proto3.TypeName
 encodeTypeName name = Proto3.TypeName (Names.localNameOf name)
-
 -- | Encode a Hydra name as a Protobuf type reference
 encodeTypeReference :: Packaging.Namespace -> Core.Name -> Proto3.TypeName
 encodeTypeReference localNs name =
@@ -318,10 +304,8 @@ encodeTypeReference localNs name =
           nsParts,
           [
             local]])))) ns_))
-
 err :: t0 -> String -> Either Errors.Error t1
 err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
-
 -- | Find Protobuf options for a type (description and deprecated)
 findOptions :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error [Proto3.Option]
 findOptions cx g typ =
@@ -337,7 +321,6 @@ findOptions cx g typ =
       in (Right (Maybes.cat [
         mdescAnn,
         mdepAnn]))))
-
 -- | Eliminate type lambdas and type applications, replacing type variables with the string type
 flattenType :: Core.Type -> Core.Type
 flattenType typ =
@@ -345,10 +328,8 @@ flattenType typ =
       Core.TypeForall v0 -> recurse (Variables.replaceFreeTypeVariable (Core.forallTypeParameter v0) (Core.TypeLiteral Core.LiteralTypeString) (Core.forallTypeBody v0))
       Core.TypeApplication v0 -> recurse (Core.applicationTypeFunction v0)
       _ -> recurse t) typ
-
 fromEitherString :: t0 -> Either String t1 -> Either Errors.Error t1
 fromEitherString cx e = Eithers.bimap (\msg -> Errors.ErrorOther (Errors.OtherError msg)) (\a -> a) e
-
 -- | Generate a helper message definition for a structural type
 generateStructuralTypeMessage :: Context.Context -> t0 -> Packaging.Namespace -> ProtobufEnvironment.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Context.Context)
 generateStructuralTypeMessage cx g localNs ref =
@@ -360,12 +341,14 @@ generateStructuralTypeMessage cx g localNs ref =
                     let idxPair = Annotations.nextCount key_proto_field_index cx0
                         idx = Pairs.first idxPair
                         cx1_ = Pairs.second idxPair
-                    in (Right (Proto3.Field {
-                      Proto3.fieldName = (Proto3.FieldName fname),
-                      Proto3.fieldJsonName = Nothing,
-                      Proto3.fieldType = (Proto3.FieldTypeSimple ft),
-                      Proto3.fieldNumber = idx,
-                      Proto3.fieldOptions = []}, cx1_)))
+                    in (Right (
+                      Proto3.Field {
+                        Proto3.fieldName = (Proto3.FieldName fname),
+                        Proto3.fieldJsonName = Nothing,
+                        Proto3.fieldType = (Proto3.FieldTypeSimple ft),
+                        Proto3.fieldNumber = idx,
+                        Proto3.fieldOptions = []},
+                      cx1_)))
       in case ref of
         ProtobufEnvironment.StructuralTypeRefEither v0 ->
           let lt = Pairs.first v0
@@ -376,12 +359,14 @@ generateStructuralTypeMessage cx g localNs ref =
             in (Eithers.bind (makeField cx3 "right" rt) (\rightResult ->
               let rightField = Pairs.first rightResult
                   cx4 = Pairs.second rightResult
-              in (Right (Proto3.DefinitionMessage (Proto3.MessageDefinition {
-                Proto3.messageDefinitionName = (structuralTypeName localNs ref),
-                Proto3.messageDefinitionFields = [
-                  leftField,
-                  rightField],
-                Proto3.messageDefinitionOptions = []}), cx4))))))
+              in (Right (
+                Proto3.DefinitionMessage (Proto3.MessageDefinition {
+                  Proto3.messageDefinitionName = (structuralTypeName localNs ref),
+                  Proto3.messageDefinitionFields = [
+                    leftField,
+                    rightField],
+                  Proto3.messageDefinitionOptions = []}),
+                cx4))))))
         ProtobufEnvironment.StructuralTypeRefPair v0 ->
           let ft = Pairs.first v0
               st = Pairs.second v0
@@ -391,45 +376,42 @@ generateStructuralTypeMessage cx g localNs ref =
             in (Eithers.bind (makeField cx3 "second" st) (\secondResult ->
               let secondField = Pairs.first secondResult
                   cx4 = Pairs.second secondResult
-              in (Right (Proto3.DefinitionMessage (Proto3.MessageDefinition {
-                Proto3.messageDefinitionName = (structuralTypeName localNs ref),
-                Proto3.messageDefinitionFields = [
-                  firstField,
-                  secondField],
-                Proto3.messageDefinitionOptions = []}), cx4))))))
-
+              in (Right (
+                Proto3.DefinitionMessage (Proto3.MessageDefinition {
+                  Proto3.messageDefinitionName = (structuralTypeName localNs ref),
+                  Proto3.messageDefinitionFields = [
+                    firstField,
+                    secondField],
+                  Proto3.messageDefinitionOptions = []}),
+                cx4))))))
 -- | Check if a type is an enum definition
 isEnumDefinition :: Core.Type -> Bool
 isEnumDefinition typ =
     case (simplifyType typ) of
       Core.TypeUnion v0 -> isEnumFields v0
       _ -> False
-
 -- | Check if all fields are unit types (i.e., this is an enum)
 isEnumFields :: [Core.FieldType] -> Bool
 isEnumFields fts =
     Lists.foldl (\b -> \f -> Logic.and b (Predicates.isUnitType (simplifyType (Core.fieldTypeType f)))) True fts
-
 javaMultipleFilesOptionName :: String
 javaMultipleFilesOptionName = "java_multiple_files"
-
 javaPackageOptionName :: String
 javaPackageOptionName = "java_package"
-
 key_proto_field_index :: Core.Name
 key_proto_field_index = Core.Name "proto_field_index"
-
 -- | Thread context through a list, accumulating results
 mapAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
 mapAccumResult f cx0 xs =
     Lists.foldl (\accE -> \x -> Eithers.bind accE (\accPair ->
       let bs = Pairs.first accPair
           cxN = Pairs.second accPair
-      in (Eithers.map (\resultPair -> (Lists.concat [
-        bs,
-        [
-          Pairs.first resultPair]], (Pairs.second resultPair))) (f cxN x)))) (Right ([], cx0)) xs
-
+      in (Eithers.map (\resultPair -> (
+        Lists.concat [
+          bs,
+          [
+            Pairs.first resultPair]],
+        (Pairs.second resultPair))) (f cxN x)))) (Right ([], cx0)) xs
 -- | Convert a Hydra module to Protocol Buffers v3 source files
 moduleToProtobuf :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToProtobuf mod defs cx g =
@@ -438,10 +420,9 @@ moduleToProtobuf mod defs cx g =
           partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
       in (Eithers.bind (constructModule cx g mod typeDefs) (\pfile ->
-        let content = Serialization.printExpr (Serialization.parenthesize (Serde.writeProtoFile pfile))
+        let content = Serialization.printExpr (Serialization.parenthesize (Serde.protoFileToExpr pfile))
             path = Proto3.unFileReference (namespaceToFileReference ns_)
         in (Right (Maps.singleton path content))))
-
 -- | Convert a Hydra namespace to a Protobuf file reference
 namespaceToFileReference :: Packaging.Namespace -> Proto3.FileReference
 namespaceToFileReference ns_ =
@@ -449,24 +430,20 @@ namespaceToFileReference ns_ =
       let pns =
               Strings.intercalate "/" (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Strings.splitOn "." (Packaging.unNamespace ns_)))
       in (Proto3.FileReference (Strings.cat2 pns ".proto"))
-
 -- | Convert a Hydra namespace to a Protobuf package name
 namespaceToPackageName :: Packaging.Namespace -> Proto3.PackageName
 namespaceToPackageName ns_ =
     Proto3.PackageName (Strings.intercalate "." (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace ns_))))))
-
 -- | Read a boolean annotation from a type
 readBooleanAnnotation :: t0 -> Graph.Graph -> Core.Name -> Core.Type -> Either Errors.Error Bool
 readBooleanAnnotation cx g key typ =
     Maybes.maybe (Right False) (\term -> ExtractCore.boolean g term) (Maps.lookup key (Annotations.typeAnnotationInternal typ))
-
 -- | Simplify a type by removing annotations and unwrapping newtypes
 simplifyType :: Core.Type -> Core.Type
 simplifyType typ =
     case (Strip.deannotateType typ) of
       Core.TypeWrap v0 -> simplifyType v0
       _ -> Strip.deannotateType typ
-
 -- | Generate a message name for a structural type reference
 structuralTypeName :: t0 -> ProtobufEnvironment.StructuralTypeRef -> Proto3.TypeName
 structuralTypeName localNs ref =
@@ -510,7 +487,6 @@ structuralTypeName localNs ref =
           (typeSuffix (Pairs.first v0)),
           "_",
           (typeSuffix (Pairs.second v0))]))
-
 unexpectedE :: t0 -> String -> String -> Either Errors.Error t1
 unexpectedE cx expected found =
     err cx (Strings.cat [

@@ -1247,10 +1247,8 @@
                   "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.VertexLabel"}}}}},
               "domain": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "t0"}}}}},
           "variables": ["t0"]}}}],
-  "description": "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs",
-  "namespace": "hydra.pg.rdf.mappings",
-  "termDependencies": ["hydra.rdf.utils"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.rdf.utils",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1278,4 +1276,6 @@
     "hydra.pg.model",
     "hydra.pg.rdf.environment",
     "hydra.rdf.syntax",
-    "hydra.shacl.model"]}
+    "hydra.shacl.model"],
+  "description": "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs",
+  "namespace": "hydra.pg.rdf.mappings"}

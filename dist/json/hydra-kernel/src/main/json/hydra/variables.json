@@ -2857,10 +2857,9 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}}],
-  "description": "Free variable analysis, term-level substitution, and unshadowing",
-  "namespace": "hydra.variables",
-  "termDependencies": ["hydra.names", "hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.names",
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2883,5 +2882,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Free variable analysis, term-level substitution, and unshadowing",
+  "namespace": "hydra.variables"}

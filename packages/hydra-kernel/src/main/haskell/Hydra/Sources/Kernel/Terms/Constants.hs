@@ -64,8 +64,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = kernelTypesNamespaces,
             moduleDescription = Just ("A module for tier-0 constants.")}
   where
    definitions = [

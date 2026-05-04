@@ -5391,7 +5391,6 @@
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}}}},
           "variables": ["t0"]}}}],
+  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.pg.model", "hydra.util"],
   "description": "Term decoders for hydra.pg.model",
-  "namespace": "hydra.decode.pg.model",
-  "termDependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core"],
-  "typeDependencies": ["hydra.pg.model", "hydra.util"]}
+  "namespace": "hydra.decode.pg.model"}

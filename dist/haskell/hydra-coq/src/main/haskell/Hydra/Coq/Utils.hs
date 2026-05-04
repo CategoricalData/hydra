@@ -362,13 +362,11 @@ localNameRaw s =
       in (Maybes.fromMaybe s (Lists.maybeLast parts))
 
 -- | Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace
-moduleDependencies :: Packaging.Module -> [String]
-moduleDependencies m =
+moduleDependencyNames :: Packaging.Module -> [String]
+moduleDependencyNames m =
 
-      let typeDeps = Lists.map (\ns -> Packaging.unNamespace ns) (Packaging.moduleTypeDependencies m)
-          termDeps = Lists.map (\ns -> Packaging.unNamespace ns) (Packaging.moduleTermDependencies m)
+      let allDeps = Lists.map (\ns -> Packaging.unNamespace ns) (Packaging.moduleDependencies m)
           ownNs = Packaging.unNamespace (Packaging.moduleNamespace m)
-          allDeps = Lists.concat2 typeDeps termDeps
           filtered = Lists.filter (\s -> Logic.not (Equality.equal s ownNs)) allDeps
       in (Lists.nub filtered)
 

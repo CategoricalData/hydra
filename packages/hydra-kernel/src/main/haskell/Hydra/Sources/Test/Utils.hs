@@ -98,8 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Inference.ns, ShowError.ns, Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Inference.ns, ShowError.ns, Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Shared utility functions for test code generation codecs"}
   where
     definitions = [

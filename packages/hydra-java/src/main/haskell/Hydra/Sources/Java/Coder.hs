@@ -48,6 +48,7 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Dsl.Meta.Graph                       as Graph
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -88,9 +89,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns],
-            moduleTypeDependencies = (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Java code generator: converts Hydra modules to Java source code"}
   where
     definitions = [
@@ -1335,7 +1335,7 @@ constantDeclForTypeName = def "constantDeclForTypeName" $
     constantDecl @@ var "comment" @@ string "TYPE_" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Construct an elements interface for a module's data definitions
-constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit))
+constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclarationWithComments] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
     "ns">: Packaging.moduleNamespace (var "mod"),
@@ -1346,7 +1346,7 @@ constructElementsInterface = def "constructElementsInterface" $
     "mods">: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
     "className">: elementsClassName @@ var "ns",
     "elName">: elementsQualifiedName @@ var "ns",
-    "body">: wrap Java._InterfaceBody (Lists.map (lambda "m" $ noInterfaceComment @@ var "m") (var "members")),
+    "body">: wrap Java._InterfaceBody (var "members"),
     "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
         (record Java._NormalInterfaceDeclaration [
@@ -2071,7 +2071,11 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
                       (var "rt")
                       (var "dom"))))) $
             encodeElimination @@ var "env" @@ just (var "jarg") @@ var "enrichedDom" @@ var "cod" @@ (Strip.deannotateTerm @@ var "lhs") @@ var "cx" @@ var "g") $
-        cases _Term (Strip.deannotateTerm @@ var "lhs")
+        -- Peel TypeApp wrappers in the dispatch so `TypeApp (Cases ...) Value`
+        -- routes to elimBranch instead of falling through to defaultExpr (which
+        -- would re-encode the wrapped form and recurse infinitely through the
+        -- `_Term_typeApplication` handler in encodeTermInternal).
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "lhs")
           (Just $ var "defaultExpr") [
           _Term_project>>: lambda "_p" $ var "elimBranch",
           _Term_cases>>: lambda "_c" $ var "elimBranch",
@@ -2109,7 +2113,9 @@ encodeElimination = def "encodeElimination" $
   lambda "env" $ lambda "marg" $ lambda "dom" $ lambda "cod" $ lambda "elimTerm" $
     "cx" ~> "g" ~>
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    cases _Term (Strip.deannotateTerm @@ var "elimTerm")
+    -- Peel TypeApp wrappers (in addition to annotations) so callers can pass
+    -- in `TypeApp (Cases ...) Value` and we still dispatch to the right branch.
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "elimTerm")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "elimination case") (Strings.cat2 (string " in ") (string "encodeElimination")))) (var "cx")) [
 
       -- Projection: field projection
@@ -2138,13 +2144,38 @@ encodeElimination = def "encodeElimination" $
         "def_" <~ (project _CaseStatement _CaseStatement_default @@ var "cs") $
         "fields" <~ (project _CaseStatement _CaseStatement_cases @@ var "cs") $
         Maybes.cases (var "marg")
-          -- No arg: wrap elimination in a lambda
+          -- No arg: wrap elimination in a lambda. We need the inner application
+          -- `App elimTerm u` to typecheck: elimTerm's case-statement domain (the
+          -- bare nominal `tname`) must match the wrapper lambda's parameter `u`,
+          -- whose type is `dom`. When `dom` is a polymorphic instantiation like
+          -- `ParseResult @ Value`, we wrap `elimTerm` with matching TypeApps so
+          -- the case-statement is type-applied to `[Value]`, making its inferred
+          -- function-type domain match `dom`.
           ("uVar" <~ wrap _Name (string "u") $
+            "domTypeArgs0" <~ (lambda "ty" $ lambda "acc" $
+              cases _Type (Strip.deannotateType @@ var "ty")
+                (Just $ var "acc") [
+                _Type_application>>: lambda "atyp" $
+                  var "domTypeArgs0"
+                    @@ Core.applicationTypeFunction (var "atyp")
+                    @@ Lists.cons (Core.applicationTypeArgument (var "atyp")) (var "acc")]) $
+            "domTypeArgs" <~ (var "domTypeArgs0" @@ var "dom" @@ list ([] :: [TTerm Type])) $
+            -- Use the deannotated-and-detyped form of elimTerm as the base, then wrap with
+            -- typeApps derived from dom. This handles both bare-Cases and already-wrapped
+            -- TypeApp(Cases) inputs uniformly.
+            "bareElim" <~ Strip.deannotateAndDetypeTerm @@ var "elimTerm" $
+            "wrappedElimTerm" <~ Lists.foldl
+              (lambda "trm" $ lambda "t" $
+                inject _Term _Term_typeApplication (record _TypeApplicationTerm [
+                  _TypeApplicationTerm_body>>: var "trm",
+                  _TypeApplicationTerm_type>>: var "t"]))
+              (var "bareElim")
+              (var "domTypeArgs") $
             "typedLambda" <~ (inject _Term _Term_lambda (record _Lambda [
               _Lambda_parameter>>: var "uVar",
               _Lambda_domain>>: just (var "dom"),
               _Lambda_body>>: inject _Term _Term_application (record _Application [
-                _Application_function>>: var "elimTerm",
+                _Application_function>>: var "wrappedElimTerm",
                 _Application_argument>>: inject _Term _Term_variable (var "uVar")])])) $
             encodeTerm @@ var "env" @@ var "typedLambda" @@ var "cx" @@ var "g")
           -- With arg: apply elimination to visitor
@@ -2602,12 +2633,13 @@ encodeTerm = def "encodeTerm" $
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
 -- type variable substitution, accumulator unification, and body annotation.
-encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either Error Java.InterfaceMemberDeclaration)
+encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either Error Java.InterfaceMemberDeclarationWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "env" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TermDefinition _TermDefinition_name @@ var "tdef") $
     "term0" <~ (project _TermDefinition _TermDefinition_term @@ var "tdef") $
+    "mDoc" <<~ (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term0") $
     "ts" <~ Maybes.maybe
       (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
       ("x" ~> var "x")
@@ -2753,9 +2785,13 @@ encodeTermDefinition = def "encodeTermDefinition" $
         ("jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody" @@ var "cx" @@ var "g") $
           "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
           right $ Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
-      right (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
+      "imdMember" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
         @@ var "jname" @@ var "jformalParams" @@ var "result"
-        @@ just (var "methodBody")))
+        @@ just (var "methodBody")) $
+      right (Maybes.maybe
+        (noInterfaceComment @@ var "imdMember")
+        (lambda "doc" $ withInterfaceCommentString @@ var "doc" @@ var "imdMember")
+        (var "mDoc")))
 
 -- | Internal term encoder with annotation and type-application accumulators.
 encodeTermInternal :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> Context -> Graph -> Either Error Java.Expression)

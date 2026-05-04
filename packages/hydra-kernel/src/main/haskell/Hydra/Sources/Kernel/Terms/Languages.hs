@@ -61,8 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [toDefinition hydraLanguage],
-            moduleTermDependencies = [Reflect.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Reflect.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for Hydra Core"}
 hydraLanguage :: TTermDefinition Language
 hydraLanguage = definitionInModule module_ "hydraLanguage" $

@@ -87,8 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.javaScript.language"),
             moduleDefinitions = [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"}
 javaScriptLanguage :: TTermDefinition Language
 javaScriptLanguage = define "javaScriptLanguage" $

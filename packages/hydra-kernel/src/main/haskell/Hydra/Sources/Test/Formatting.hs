@@ -27,8 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [TestGraph.ns, FormattingModule.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns, FormattingModule.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for string formatting and case conversion")}
   where
     definitions = [

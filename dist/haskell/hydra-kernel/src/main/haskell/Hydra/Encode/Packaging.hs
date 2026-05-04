@@ -44,11 +44,8 @@ module_ x =
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (namespace (Packaging.moduleNamespace x))},
         Core.Field {
-          Core.fieldName = (Core.Name "termDependencies"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Packaging.moduleTermDependencies x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "typeDependencies"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Packaging.moduleTypeDependencies x))},
+          Core.fieldName = (Core.Name "dependencies"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Packaging.moduleDependencies x))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Packaging.moduleDefinitions x))}]})

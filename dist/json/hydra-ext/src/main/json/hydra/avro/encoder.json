@@ -9245,10 +9245,9 @@
                   "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values",
-  "namespace": "hydra.avro.encoder",
-  "termDependencies": ["hydra.extract.core", "hydra.strip"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.strip",
     "hydra.avro.environment",
     "hydra.avro.schema",
     "hydra.json.model",
@@ -9274,5 +9273,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values",
+  "namespace": "hydra.avro.encoder"}

@@ -93,7 +93,7 @@ The demo generates three intentionally invalid RDF instances:
 
 | Instance | Type | Violation |
 |----------|------|-----------|
-| `urn:invalid:module1` | `hydra.packaging.Module` | Missing required fields: `namespace`, `elements`, `termDependencies`, `typeDependencies` |
+| `urn:invalid:module1` | `hydra.packaging.Module` | Missing required fields: `namespace`, `elements`, `dependencies` |
 | `urn:invalid:ns1` | `hydra.packaging.Namespace` | Integer value where string is expected |
 | `urn:invalid:qn1` | `hydra.packaging.QualifiedName` | Missing required field: `local` |
 

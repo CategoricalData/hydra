@@ -26,17 +26,14 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Hydra's type checking test suite",
-  "namespace": "hydra.test.checking.all",
-  "termDependencies": [
+  "dependencies": [
     "hydra.test.checking.advanced",
     "hydra.test.checking.algebraicTypes",
     "hydra.test.checking.collections",
     "hydra.test.checking.failures",
     "hydra.test.checking.fundamentals",
     "hydra.test.checking.nominalTypes",
-    "hydra.rewriting"],
-  "typeDependencies": [
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -59,5 +56,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Hydra's type checking test suite",
+  "namespace": "hydra.test.checking.all"}

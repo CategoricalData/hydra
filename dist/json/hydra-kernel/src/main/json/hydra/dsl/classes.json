@@ -70,7 +70,6 @@
         "typeScheme": {
           "body": {"application": {"argument": {"variable": "hydra.classes.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.classes", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.classes",
-  "namespace": "hydra.dsl.classes",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.classes", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.classes"}

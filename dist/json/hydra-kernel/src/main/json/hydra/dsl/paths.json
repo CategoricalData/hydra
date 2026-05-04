@@ -5126,7 +5126,6 @@
         "typeScheme": {
           "body": {"application": {"argument": {"variable": "hydra.paths.SubtypeStep"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
+  "dependencies": ["hydra.paths", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.paths",
-  "namespace": "hydra.dsl.paths",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.paths", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.paths"}

@@ -68,8 +68,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, Sorting.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"}
   where
     definitions = [
@@ -214,8 +213,7 @@ transformModule = define "transformModule" $
     Packaging.module_
       (project _Module _Module_description @@ var "m")
       (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
-      (project _Module _Module_termDependencies @@ var "m")
-      (project _Module _Module_typeDependencies @@ var "m")
+      (project _Module _Module_dependencies @@ var "m")
       (project _Module _Module_definitions @@ var "m")
 
 

@@ -1,5 +1,5 @@
 // A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types
-// 
+//
 // Note: this is an automatically generated file. Do not edit.
 syntax = "proto3";
 package hydra.pg;

@@ -4985,7 +4985,6 @@
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {"application": {"argument": {"variable": "hydra.typing.TypeSubst"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.typing", "hydra.phantoms", "hydra.core", "hydra.context", "hydra.dsl.core", "hydra.dsl.context"],
   "description": "DSL functions for hydra.typing",
-  "namespace": "hydra.dsl.typing",
-  "termDependencies": ["hydra.dsl.core", "hydra.dsl.context"],
-  "typeDependencies": ["hydra.typing", "hydra.phantoms", "hydra.core", "hydra.context"]}
+  "namespace": "hydra.dsl.typing"}
