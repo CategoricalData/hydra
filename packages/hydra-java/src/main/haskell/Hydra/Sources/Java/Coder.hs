@@ -2071,7 +2071,11 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
                       (var "rt")
                       (var "dom"))))) $
             encodeElimination @@ var "env" @@ just (var "jarg") @@ var "enrichedDom" @@ var "cod" @@ (Strip.deannotateTerm @@ var "lhs") @@ var "cx" @@ var "g") $
-        cases _Term (Strip.deannotateTerm @@ var "lhs")
+        -- Peel TypeApp wrappers in the dispatch so `TypeApp (Cases ...) Value`
+        -- routes to elimBranch instead of falling through to defaultExpr (which
+        -- would re-encode the wrapped form and recurse infinitely through the
+        -- `_Term_typeApplication` handler in encodeTermInternal).
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "lhs")
           (Just $ var "defaultExpr") [
           _Term_project>>: lambda "_p" $ var "elimBranch",
           _Term_cases>>: lambda "_c" $ var "elimBranch",
@@ -2109,7 +2113,9 @@ encodeElimination = def "encodeElimination" $
   lambda "env" $ lambda "marg" $ lambda "dom" $ lambda "cod" $ lambda "elimTerm" $
     "cx" ~> "g" ~>
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    cases _Term (Strip.deannotateTerm @@ var "elimTerm")
+    -- Peel TypeApp wrappers (in addition to annotations) so callers can pass
+    -- in `TypeApp (Cases ...) Value` and we still dispatch to the right branch.
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "elimTerm")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "elimination case") (Strings.cat2 (string " in ") (string "encodeElimination")))) (var "cx")) [
 
       -- Projection: field projection
@@ -2138,13 +2144,38 @@ encodeElimination = def "encodeElimination" $
         "def_" <~ (project _CaseStatement _CaseStatement_default @@ var "cs") $
         "fields" <~ (project _CaseStatement _CaseStatement_cases @@ var "cs") $
         Maybes.cases (var "marg")
-          -- No arg: wrap elimination in a lambda
+          -- No arg: wrap elimination in a lambda. We need the inner application
+          -- `App elimTerm u` to typecheck: elimTerm's case-statement domain (the
+          -- bare nominal `tname`) must match the wrapper lambda's parameter `u`,
+          -- whose type is `dom`. When `dom` is a polymorphic instantiation like
+          -- `ParseResult @ Value`, we wrap `elimTerm` with matching TypeApps so
+          -- the case-statement is type-applied to `[Value]`, making its inferred
+          -- function-type domain match `dom`.
           ("uVar" <~ wrap _Name (string "u") $
+            "domTypeArgs0" <~ (lambda "ty" $ lambda "acc" $
+              cases _Type (Strip.deannotateType @@ var "ty")
+                (Just $ var "acc") [
+                _Type_application>>: lambda "atyp" $
+                  var "domTypeArgs0"
+                    @@ Core.applicationTypeFunction (var "atyp")
+                    @@ Lists.cons (Core.applicationTypeArgument (var "atyp")) (var "acc")]) $
+            "domTypeArgs" <~ (var "domTypeArgs0" @@ var "dom" @@ list ([] :: [TTerm Type])) $
+            -- Use the deannotated-and-detyped form of elimTerm as the base, then wrap with
+            -- typeApps derived from dom. This handles both bare-Cases and already-wrapped
+            -- TypeApp(Cases) inputs uniformly.
+            "bareElim" <~ Strip.deannotateAndDetypeTerm @@ var "elimTerm" $
+            "wrappedElimTerm" <~ Lists.foldl
+              (lambda "trm" $ lambda "t" $
+                inject _Term _Term_typeApplication (record _TypeApplicationTerm [
+                  _TypeApplicationTerm_body>>: var "trm",
+                  _TypeApplicationTerm_type>>: var "t"]))
+              (var "bareElim")
+              (var "domTypeArgs") $
             "typedLambda" <~ (inject _Term _Term_lambda (record _Lambda [
               _Lambda_parameter>>: var "uVar",
               _Lambda_domain>>: just (var "dom"),
               _Lambda_body>>: inject _Term _Term_application (record _Application [
-                _Application_function>>: var "elimTerm",
+                _Application_function>>: var "wrappedElimTerm",
                 _Application_argument>>: inject _Term _Term_variable (var "uVar")])])) $
             encodeTerm @@ var "env" @@ var "typedLambda" @@ var "cx" @@ var "g")
           -- With arg: apply elimination to visitor
