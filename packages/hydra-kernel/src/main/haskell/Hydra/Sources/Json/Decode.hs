@@ -94,8 +94,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."}
   where
     definitions = [

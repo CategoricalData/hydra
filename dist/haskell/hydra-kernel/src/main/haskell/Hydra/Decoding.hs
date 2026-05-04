@@ -1122,21 +1122,18 @@ decodeModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
-      let decodedTypeDeps = Lists.map decodeNamespace (Packaging.moduleTypeDependencies mod)
-          decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
-          allDecodedDeps = Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps)
+      let allDecodedDeps = Lists.nub (Lists.map decodeNamespace (Packaging.moduleDependencies mod))
       in (Right (Just (Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
           (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
         Packaging.moduleNamespace = (decodeNamespace (Packaging.moduleNamespace mod)),
-        Packaging.moduleTermDependencies = (Lists.concat2 [
+        Packaging.moduleDependencies = (Lists.concat2 [
           Packaging.Namespace "hydra.extract.core",
           (Packaging.Namespace "hydra.lexical"),
-          (Packaging.Namespace "hydra.rewriting")] allDecodedDeps),
-        Packaging.moduleTypeDependencies = [
-          Packaging.moduleNamespace mod,
-          (Packaging.Namespace "hydra.util")],
+          (Packaging.Namespace "hydra.rewriting"),
+          (Packaging.moduleNamespace mod),
+          (Packaging.Namespace "hydra.util")] allDecodedDeps),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),

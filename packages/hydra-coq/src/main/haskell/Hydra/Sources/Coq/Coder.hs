@@ -54,8 +54,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, CoqLanguage.ns],
-            moduleTypeDependencies = (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Formatting.ns, CoqLanguage.ns] DL.++ (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Coq code generator: converts Hydra modules to Coq source"}
   where
     definitions = [

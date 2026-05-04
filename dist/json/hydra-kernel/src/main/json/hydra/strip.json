@@ -861,10 +861,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}}],
-  "description": "Annotation and type stripping and normalization",
-  "namespace": "hydra.strip",
-  "termDependencies": ["hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -887,5 +885,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Annotation and type stripping and normalization",
+  "namespace": "hydra.strip"}

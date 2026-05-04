@@ -93,22 +93,10 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A common prefix for all element names in the module"}}}],
                         "body": {"variable": "hydra.packaging.Namespace"}}}},
                   {
-                    "name": "termDependencies",
+                    "name": "dependencies",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Any modules which the term expressions of this module directly depend upon"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
-                  {
-                    "name": "typeDependencies",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Any modules which the type expressions of this module directly depend upon"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
                   {
                     "name": "definitions",
@@ -285,7 +273,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.graph"],
   "description": "A model for Hydra namespaces, modules, and packages",
-  "namespace": "hydra.packaging",
-  "termDependencies": ["hydra.graph"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.packaging"}

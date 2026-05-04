@@ -1979,7 +1979,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional JSDoc comment"}}}],
                         "body": {"maybe": {"variable": "hydra.javaScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A JavaScript/ECMAScript syntax model for code generation",
-  "namespace": "hydra.javaScript.syntax",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.javaScript.syntax"}

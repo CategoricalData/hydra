@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | C++ code generator: converts Hydra modules to C++ header files
 
 module Hydra.Cpp.Coder where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Cpp.Language as Language
 import qualified Hydra.Cpp.Serde as Serde
@@ -32,14 +30,11 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
     Names.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (Packaging.FileExtension "h") name
-
 className :: Core.Name -> String
 className name = sanitizeCppName (Names.localNameOf name)
-
 constParameter :: String -> Syntax.TypeExpression -> Syntax.Parameter
 constParameter name typ =
     Syntax.Parameter {
@@ -51,7 +46,6 @@ constParameter name typ =
       Syntax.parameterName = name,
       Syntax.parameterUnnamed = False,
       Syntax.parameterDefaultValue = Nothing}
-
 cppClassDeclaration :: String -> [Syntax.BaseSpecifier] -> Maybe Syntax.ClassBody -> Syntax.Declaration
 cppClassDeclaration name baseSpecs mbody =
     Syntax.DeclarationClass (Syntax.ClassDeclaration {
@@ -60,7 +54,6 @@ cppClassDeclaration name baseSpecs mbody =
         Syntax.classSpecifierName = name,
         Syntax.classSpecifierInheritance = baseSpecs},
       Syntax.classDeclarationBody = mbody})
-
 cppEnumDeclaration :: String -> Maybe Syntax.ClassBody -> Syntax.Declaration
 cppEnumDeclaration name mbody =
     Syntax.DeclarationClass (Syntax.ClassDeclaration {
@@ -69,24 +62,18 @@ cppEnumDeclaration name mbody =
         Syntax.classSpecifierName = name,
         Syntax.classSpecifierInheritance = []},
       Syntax.classDeclarationBody = mbody})
-
 cppEnumForwardDeclaration :: String -> Syntax.Declaration
 cppEnumForwardDeclaration name = cppEnumDeclaration name Nothing
-
 cppPostfixExpressionToCppExpression :: Syntax.PostfixExpression -> Syntax.Expression
 cppPostfixExpressionToCppExpression pe = cppUnaryExpressionToCppExpression (Syntax.UnaryExpressionPostfix pe)
-
 cppPrimaryExpressionToCppExpression :: Syntax.PrimaryExpression -> Syntax.Expression
 cppPrimaryExpressionToCppExpression prim = cppPostfixExpressionToCppExpression (Syntax.PostfixExpressionPrimary prim)
-
 cppUnaryExpressionToCppExpression :: Syntax.UnaryExpression -> Syntax.Expression
 cppUnaryExpressionToCppExpression ue =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionLogicalOr (cppUnaryExpressionToCppLogicalOrExpression ue)))
-
 cppUnaryExpressionToCppLogicalOrExpression :: Syntax.UnaryExpression -> Syntax.LogicalOrExpression
 cppUnaryExpressionToCppLogicalOrExpression ue =
     Syntax.LogicalOrExpressionLogicalAnd (Syntax.LogicalAndExpressionInclusiveOr (Syntax.InclusiveOrExpressionExclusiveOr (Syntax.ExclusiveOrExpressionAnd (Syntax.AndExpressionEquality (Syntax.EqualityExpressionRelational (Syntax.RelationalExpressionShift (Syntax.ShiftExpressionAdditive (Syntax.AdditiveExpressionMultiplicative (Syntax.MultiplicativeExpressionUnary ue)))))))))
-
 createAcceptImplementation :: Core.Name -> [Core.FieldType] -> Syntax.Declaration
 createAcceptImplementation tname variants =
     Syntax.DeclarationTemplate (Syntax.TemplateDeclaration {
@@ -127,17 +114,14 @@ createAcceptImplementation tname variants =
                     Syntax.unaryOperationOperator = Syntax.UnaryOperatorDereference,
                     Syntax.unaryOperationOperand = (Syntax.UnaryExpressionPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryExpressionIdentifier "ptr")))}))]}))))])),
             Syntax.selectionStatementElseBranch = (Just (createThrowStmt "std::runtime_error" createTypeIdNameCall))}))) variants)))}))})
-
 createConstructorBody :: [t0] -> Syntax.FunctionBody
 createConstructorBody params =
     Logic.ifElse (Lists.null params) Syntax.FunctionBodyDefault (Syntax.FunctionBodyCompound (Syntax.CompoundStatement []))
-
 createFunctionCallExpr :: String -> [Syntax.Expression] -> Syntax.Expression
 createFunctionCallExpr funcName args =
     cppPostfixExpressionToCppExpression (Syntax.PostfixExpressionFunctionCall (Syntax.FunctionCallOperation {
       Syntax.functionCallOperationFunction = (Syntax.PostfixExpressionPrimary (Syntax.PrimaryExpressionIdentifier funcName)),
       Syntax.functionCallOperationArguments = args}))
-
 createHeaderFile :: [Syntax.IncludeDirective] -> [Syntax.Declaration] -> Syntax.Program
 createHeaderFile includes decls =
     Syntax.Program {
@@ -146,10 +130,8 @@ createHeaderFile includes decls =
           Syntax.pragmaDirectiveContent = "once"})],
       Syntax.programIncludes = includes,
       Syntax.programDeclarations = decls}
-
 createIdentifierExpr :: String -> Syntax.Expression
 createIdentifierExpr name = cppPrimaryExpressionToCppExpression (Syntax.PrimaryExpressionIdentifier name)
-
 createLessThanOperator :: Core.Name -> t0 -> Syntax.Declaration
 createLessThanOperator typeName fields =
     Syntax.DeclarationFunction (Syntax.FunctionDeclaration {
@@ -163,15 +145,12 @@ createLessThanOperator typeName fields =
       Syntax.functionDeclarationSuffixSpecifiers = [],
       Syntax.functionDeclarationBody = (Syntax.FunctionBodyCompound (Syntax.CompoundStatement [
         Syntax.StatementJump (Syntax.JumpStatementReturnValue (createLiteralBoolExpr False))]))})
-
 createLiteralBoolExpr :: Bool -> Syntax.Expression
 createLiteralBoolExpr val =
     cppPrimaryExpressionToCppExpression (Syntax.PrimaryExpressionLiteral (Syntax.LiteralBoolean (Syntax.BooleanLiteral val)))
-
 createLiteralIntExpr :: Integer -> Syntax.Expression
 createLiteralIntExpr val =
     cppPrimaryExpressionToCppExpression (Syntax.PrimaryExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteralDecimal val)))
-
 createPartialVisitorInterface :: Core.Name -> [Core.FieldType] -> Syntax.Declaration
 createPartialVisitorInterface tname variants =
     Syntax.DeclarationTemplate (Syntax.TemplateDeclaration {
@@ -208,18 +187,15 @@ createPartialVisitorInterface tname variants =
             Syntax.functionDeclarationBody = (Syntax.FunctionBodyCompound (Syntax.CompoundStatement [
               Syntax.StatementJump (Syntax.JumpStatementReturnValue (createFunctionCallExpr "otherwise" [
                 createIdentifierExpr "value"]))]))})))) variants)]))))})
-
 createTemplateType :: String -> [Syntax.TypeExpression] -> Syntax.TypeExpression
 createTemplateType name args =
     Syntax.TypeExpressionTemplate (Syntax.TemplateType {
       Syntax.templateTypeName = name,
       Syntax.templateTypeArguments = (Lists.map (\a -> Syntax.TemplateArgumentType a) args)})
-
 createThrowStmt :: String -> Syntax.Expression -> Syntax.Statement
 createThrowStmt exceptionType arg =
     Syntax.StatementJump (Syntax.JumpStatementThrow (createFunctionCallExpr exceptionType [
       arg]))
-
 createTypeIdNameCall :: Syntax.Expression
 createTypeIdNameCall =
     cppPostfixExpressionToCppExpression (Syntax.PostfixExpressionFunctionCall (Syntax.FunctionCallOperation {
@@ -230,12 +206,10 @@ createTypeIdNameCall =
             cppPrimaryExpressionToCppExpression (Syntax.PrimaryExpressionParenthesized (cppPostfixExpressionToCppExpression (Syntax.PostfixExpressionPrimary (Syntax.PrimaryExpressionIdentifier "*this"))))]})),
         Syntax.memberAccessOperationMember = "name"})),
       Syntax.functionCallOperationArguments = []}))
-
 createTypeReference :: Bool -> Core.Name -> Syntax.TypeExpression
 createTypeReference isPointer name =
     Logic.ifElse isPointer (createTemplateType "std::shared_ptr" [
       toConstType (Syntax.TypeExpressionBasic (Syntax.BasicTypeNamed (sanitizeCppName (Names.localNameOf name))))]) (Syntax.TypeExpressionBasic (Syntax.BasicTypeNamed (sanitizeCppName (Names.localNameOf name))))
-
 createUnionBaseClass :: Core.Name -> t0 -> Syntax.Declaration
 createUnionBaseClass name variants =
     cppClassDeclaration (className name) [] (Just (Syntax.ClassBody [
@@ -271,7 +245,6 @@ createUnionBaseClass name variants =
           Syntax.functionDeclarationSuffixSpecifiers = [
             Syntax.FunctionSpecifierSuffixConst],
           Syntax.functionDeclarationBody = Syntax.FunctionBodyDeclaration}))})))]))
-
 createVariantClass :: t0 -> t1 -> Core.Name -> Core.Name -> Core.FieldType -> Either Errors.Error Syntax.Declaration
 createVariantClass cx g tname parentClass ft =
 
@@ -312,7 +285,6 @@ createVariantClass cx g tname parentClass ft =
               Syntax.constructorDeclarationParameters = vParams,
               Syntax.constructorDeclarationInitializers = initList,
               Syntax.constructorDeclarationBody = (createConstructorBody vParams)}))]]))))))))
-
 createVisitorInterface :: Core.Name -> [Core.FieldType] -> Syntax.Declaration
 createVisitorInterface tname variants =
     Syntax.DeclarationTemplate (Syntax.TemplateDeclaration {
@@ -348,13 +320,11 @@ createVisitorInterface tname variants =
             Syntax.destructorDeclarationName = (visitorName tname),
             Syntax.destructorDeclarationSuffixSpecifiers = [],
             Syntax.destructorDeclarationBody = Syntax.FunctionBodyDefault}))]]))))})
-
 encodeApplicationType :: t0 -> t1 -> Core.ApplicationType -> Either Errors.Error Syntax.TypeExpression
 encodeApplicationType cx g at =
     Eithers.bind (encodeType cx g (Core.applicationTypeFunction at)) (\body -> Eithers.bind (encodeType cx g (Core.applicationTypeArgument at)) (\arg -> Right (createTemplateType "TODO_template" [
       body,
       arg])))
-
 encodeEnumType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either t3 [Syntax.Declaration]
 encodeEnumType cx g name tfields comment =
     Right [
@@ -363,13 +333,10 @@ encodeEnumType cx g name tfields comment =
         Syntax.variableDeclarationName = (encodeEnumValue (Core.fieldTypeName ft)),
         Syntax.variableDeclarationInitializer = Nothing,
         Syntax.variableDeclarationIsAuto = False}))) tfields)))]
-
 encodeEnumValue :: Core.Name -> String
 encodeEnumValue fname = sanitizeCppName (Formatting.convertCaseCamelToUpperSnake (Core.unName fname))
-
 encodeFieldName :: Core.Name -> String
 encodeFieldName fname = sanitizeCppName (Formatting.convertCaseCamelToLowerSnake (Core.unName fname))
-
 encodeFieldType :: t0 -> Core.FieldType -> t1 -> t2 -> Either Errors.Error Syntax.VariableDeclaration
 encodeFieldType isParameter ft cx g =
 
@@ -380,10 +347,8 @@ encodeFieldType isParameter ft cx g =
         Syntax.variableDeclarationName = (encodeFieldName fname),
         Syntax.variableDeclarationInitializer = Nothing,
         Syntax.variableDeclarationIsAuto = False})))
-
 encodeForallType :: t0 -> t1 -> Core.ForallType -> Either Errors.Error Syntax.TypeExpression
 encodeForallType cx g lt = encodeType cx g (Core.forallTypeBody lt)
-
 encodeFunctionType :: t0 -> t1 -> Core.FunctionType -> Either Errors.Error Syntax.TypeExpression
 encodeFunctionType cx g ft =
     Eithers.bind (encodeType cx g (Core.functionTypeDomain ft)) (\dom -> Eithers.bind (encodeType cx g (Core.functionTypeCodomain ft)) (\cod -> Right (Syntax.TypeExpressionFunction (Syntax.FunctionType {
@@ -394,7 +359,6 @@ encodeFunctionType cx g ft =
           Syntax.parameterName = "",
           Syntax.parameterUnnamed = False,
           Syntax.parameterDefaultValue = Nothing}]}))))
-
 encodeLiteralType :: Core.LiteralType -> Syntax.TypeExpression
 encodeLiteralType lt =
     Syntax.TypeExpressionBasic (case lt of
@@ -412,15 +376,12 @@ encodeLiteralType lt =
         Core.IntegerTypeInt64 -> Syntax.BasicTypeNamed "int64_t"
         _ -> Syntax.BasicTypeInt
       Core.LiteralTypeString -> Syntax.BasicTypeString)
-
 -- | Encode a name with a specified case convention, optionally qualified
 encodeName :: t0 -> t1 -> t2 -> Core.Name -> String
 encodeName isQualified conv env name = sanitizeCppName (Names.localNameOf name)
-
 encodeNamespace :: Packaging.Namespace -> String
 encodeNamespace ns =
     Strings.intercalate "::" (Lists.map (\seg -> Formatting.convertCaseCamelToLowerSnake seg) (Strings.splitOn "." (Packaging.unNamespace ns)))
-
 encodeRecordType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeRecordType cx g name rt comment =
     Eithers.bind (Eithers.mapList (\f -> encodeFieldType False f cx g) rt) (\cppFields -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType True f cx g) rt) (\constructorParams -> Right [
@@ -442,7 +403,6 @@ encodeRecordType cx g name rt comment =
                 createIdentifierExpr (Syntax.variableDeclarationName field)]}) cppFields),
             Syntax.constructorDeclarationBody = (createConstructorBody constructorParams)}))]]))),
       (createLessThanOperator name rt)]))
-
 encodeType :: t0 -> t1 -> Core.Type -> Either Errors.Error Syntax.TypeExpression
 encodeType cx g typ =
 
@@ -473,14 +433,12 @@ encodeType cx g typ =
         Core.TypeWrap _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrapped type"))
         Core.TypeUnit -> Right (createTemplateType "std::tuple" [])
         _ -> Left (Errors.ErrorOther (Errors.OtherError "Unsupported type"))
-
 encodeTypeAlias :: t0 -> t1 -> Core.Name -> Core.Type -> t2 -> Either Errors.Error Syntax.Declaration
 encodeTypeAlias cx g name typ comment =
     Eithers.bind (encodeType cx g typ) (\cppType -> Right (Syntax.DeclarationTypedef (Syntax.TypedefDeclaration {
       Syntax.typedefDeclarationName = (className name),
       Syntax.typedefDeclarationType = cppType,
       Syntax.typedefDeclarationIsUsing = True})))
-
 encodeTypeDefinition :: t0 -> t1 -> Core.Name -> Core.Type -> Either Errors.Error [Syntax.Declaration]
 encodeTypeDefinition cx g name typ =
 
@@ -491,11 +449,9 @@ encodeTypeDefinition cx g name typ =
         Core.TypeUnion v0 -> encodeUnionType cx g name v0 Nothing
         Core.TypeWrap v0 -> encodeWrappedType cx g name v0 Nothing
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type in definition: " (ShowCore.type_ typ))))
-
 encodeUnionType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeUnionType cx g name rt comment =
     Logic.ifElse (Predicates.isEnumRowType rt) (encodeEnumType cx g name rt comment) (encodeVariantType cx g name rt comment)
-
 encodeVariantType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeVariantType cx g name variants comment =
     Eithers.bind (Eithers.mapList (\v -> createVariantClass cx g name name v) variants) (\variantClasses -> Right (Lists.concat [
@@ -509,14 +465,12 @@ encodeVariantType cx g name variants comment =
         createPartialVisitorInterface name variants],
       [
         createAcceptImplementation name variants]]))
-
 encodeWrappedType :: t0 -> t1 -> Core.Name -> Core.Type -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeWrappedType cx g name typ comment =
     encodeRecordType cx g name [
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "value"),
         Core.fieldTypeType = typ}] comment
-
 findIncludes :: Bool -> Packaging.Namespace -> [Packaging.TypeDefinition] -> [Syntax.IncludeDirective]
 findIncludes withFwd ns defs =
     Lists.concat [
@@ -534,24 +488,19 @@ findIncludes withFwd ns defs =
         Syntax.IncludeDirective {
           Syntax.includeDirectiveName = (bindingNameToFilePath (fwdHeaderName ns)),
           Syntax.includeDirectiveIsSystem = False}] [])]
-
 findTypeDependencies :: Packaging.Namespace -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
     Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unNamespace (Names.namespaceOf n)) (Just (Packaging.unNamespace ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
-
 fwdHeaderName :: Packaging.Namespace -> Core.Name
 fwdHeaderName ns =
     Names.unqualifyName (Packaging.QualifiedName {
       Packaging.qualifiedNameNamespace = (Just ns),
       Packaging.qualifiedNameLocal = "Fwd"})
-
 gatherMetadata :: t0 -> Bool
 gatherMetadata defs = True
-
 generateForwardDeclarations :: Core.Name -> [Core.FieldType] -> [Syntax.Declaration]
 generateForwardDeclarations tname fields =
     Lists.map (\ft -> cppClassDeclaration (variantName tname (Core.fieldTypeName ft)) [] Nothing) fields
-
 generateTypeFile :: Packaging.Namespace -> Packaging.TypeDefinition -> t0 -> t1 -> Either Errors.Error (String, String)
 generateTypeFile ns def_ cx g =
 
@@ -562,11 +511,9 @@ generateTypeFile ns def_ cx g =
               def_]
         in (Right (serializeHeaderFile name includes [
           namespaceDecl ns decls]))))
-
 generateTypeFiles :: Packaging.Namespace -> [Packaging.TypeDefinition] -> t0 -> t1 -> Either Errors.Error [(String, String)]
 generateTypeFiles ns defs cx g =
     Eithers.bind (Eithers.mapList (\d -> generateTypeFile ns d cx g) defs) (\classFiles -> Right classFiles)
-
 isStdContainerType :: Core.Type -> Bool
 isStdContainerType typ =
 
@@ -578,7 +525,6 @@ isStdContainerType typ =
         Core.TypeMaybe _ -> True
         Core.TypeSet _ -> True
         _ -> False
-
 isStructType :: Core.Type -> Bool
 isStructType rawType =
 
@@ -588,7 +534,6 @@ isStructType rawType =
                     Core.TypeLiteral _ -> True
                     _ -> False
       in (Logic.and (Logic.not isLiteral) (Logic.not (Predicates.isEnumType rawType)))
-
 isTemplateType :: Core.Type -> Bool
 isTemplateType typ =
 
@@ -598,42 +543,35 @@ isTemplateType typ =
           Core.LiteralTypeString -> True
           _ -> False
         _ -> False) (isStdContainerType typ))
-
 memberSpecificationProtected :: Syntax.MemberSpecification
 memberSpecificationProtected = Syntax.MemberSpecificationAccessLabel Syntax.AccessSpecifierProtected
-
 memberSpecificationPublic :: Syntax.MemberSpecification
 memberSpecificationPublic = Syntax.MemberSpecificationAccessLabel Syntax.AccessSpecifierPublic
-
 moduleToCpp :: Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either Errors.Error (M.Map String String)
 moduleToCpp mod defs cx g =
 
       let ns = Packaging.moduleNamespace mod
           typeDefs = Pairs.first (Environment.partitionDefinitions defs)
       in (Eithers.bind (generateTypeFiles ns typeDefs cx g) (\typeFiles -> Right (Maps.fromList typeFiles)))
-
 namespaceDecl :: Packaging.Namespace -> [Syntax.Declaration] -> Syntax.Declaration
 namespaceDecl ns decls =
     Syntax.DeclarationNamespace (Syntax.NamespaceDeclaration {
       Syntax.namespaceDeclarationName = (encodeNamespace ns),
       Syntax.namespaceDeclarationDeclarations = decls})
-
 partialVisitorName :: Core.Name -> String
 partialVisitorName name = sanitizeCppName (Strings.cat2 (Names.localNameOf name) "PartialVisitor")
-
 sanitizeCppName :: String -> String
 sanitizeCppName name = Formatting.sanitizeWithUnderscores Language.cppReservedWords name
-
 serializeHeaderFile :: Core.Name -> [Syntax.IncludeDirective] -> [Syntax.Declaration] -> (String, String)
 serializeHeaderFile name includes decls =
-    (bindingNameToFilePath name, (Serialization.printExpr (Serialization.parenthesize (Serde.encodeProgram (createHeaderFile includes decls)))))
-
+    (
+      bindingNameToFilePath name,
+      (Serialization.printExpr (Serialization.parenthesize (Serde.programToExpr (createHeaderFile includes decls)))))
 toConstType :: Syntax.TypeExpression -> Syntax.TypeExpression
 toConstType baseType =
     Syntax.TypeExpressionQualified (Syntax.QualifiedType {
       Syntax.qualifiedTypeBaseType = baseType,
       Syntax.qualifiedTypeQualifier = Syntax.TypeQualifierConst})
-
 unnamedParameter :: String -> Syntax.TypeExpression -> Syntax.Parameter
 unnamedParameter name typ =
     Syntax.Parameter {
@@ -641,9 +579,7 @@ unnamedParameter name typ =
       Syntax.parameterName = name,
       Syntax.parameterUnnamed = True,
       Syntax.parameterDefaultValue = Nothing}
-
 variantName :: Core.Name -> Core.Name -> String
 variantName tname fname = sanitizeCppName (Strings.cat2 (Names.localNameOf tname) (Formatting.capitalize (Core.unName fname)))
-
 visitorName :: Core.Name -> String
 visitorName name = sanitizeCppName (Strings.cat2 (Names.localNameOf name) "Visitor")

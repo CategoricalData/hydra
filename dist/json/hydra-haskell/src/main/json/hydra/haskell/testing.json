@@ -244,17 +244,11 @@
                                         "term": {
                                           "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}},
                                       {
-                                        "name": "termDependencies",
+                                        "name": "dependencies",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "mod"},
-                                            "function": {"project": {"field": "termDependencies", "typeName": "hydra.packaging.Module"}}}}},
-                                      {
-                                        "name": "typeDependencies",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "mod"},
-                                            "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}}},
+                                            "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}}},
                                       {
                                         "name": "definitions",
                                         "term": {
@@ -1518,9 +1512,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.packaging.Namespace"}}},
           "variables": []}}}],
-  "description": "Haskell test code generation for HSpec-based generation tests",
-  "namespace": "hydra.haskell.testing",
-  "termDependencies": [
+  "dependencies": [
     "hydra.haskell.utils",
     "hydra.formatting",
     "hydra.names",
@@ -1530,8 +1522,7 @@
     "hydra.rewriting",
     "hydra.show.errors",
     "hydra.lexical",
-    "hydra.strip"],
-  "typeDependencies": [
+    "hydra.strip",
     "hydra.haskell.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -1555,5 +1546,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Haskell test code generation for HSpec-based generation tests",
+  "namespace": "hydra.haskell.testing"}

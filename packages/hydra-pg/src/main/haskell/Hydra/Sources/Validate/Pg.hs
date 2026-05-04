@@ -33,8 +33,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.validate.pg"),
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [PgModel.ns, ErrorPg.ns, Namespace "hydra.validation"],
+            moduleDependencies = [PgModel.ns, ErrorPg.ns, Namespace "hydra.validation"],
             moduleDescription = Just "Validation functions for property graphs"}
   where
    definitions = [

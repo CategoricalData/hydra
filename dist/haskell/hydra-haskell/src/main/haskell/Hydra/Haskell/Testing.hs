@@ -60,8 +60,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                   Packaging.Module {
                     Packaging.moduleDescription = (Packaging.moduleDescription mod),
                     Packaging.moduleNamespace = (Packaging.moduleNamespace mod),
-                    Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies mod),
-                    Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies mod),
+                    Packaging.moduleDependencies = (Packaging.moduleDependencies mod),
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
                       Packaging.termDefinitionTerm = (Core.bindingTerm b),

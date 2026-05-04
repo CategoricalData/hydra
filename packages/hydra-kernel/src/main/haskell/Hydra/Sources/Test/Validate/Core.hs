@@ -30,8 +30,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.validate.core", Namespace "hydra.show.error.core", Namespace "hydra.validation"],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for core term and type validation")}
   where
     definitions = [

@@ -4091,12 +4091,12 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "Term decoders for hydra.errors",
-  "namespace": "hydra.decode.errors",
-  "termDependencies": [
+  "dependencies": [
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
+    "hydra.errors",
+    "hydra.util",
     "hydra.decode.context",
     "hydra.decode.core",
     "hydra.decode.error.checking",
@@ -4104,4 +4104,5 @@
     "hydra.decode.paths",
     "hydra.decode.typing",
     "hydra.decode.variants"],
-  "typeDependencies": ["hydra.errors", "hydra.util"]}
+  "description": "Term decoders for hydra.errors",
+  "namespace": "hydra.decode.errors"}

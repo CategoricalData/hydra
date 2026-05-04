@@ -485,10 +485,7 @@
                   "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
               "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}}},
           "variables": ["t0"]}}}],
-  "description": "Printing functions for property graph elements",
-  "namespace": "hydra.pg.printing",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.pg.model",
     "hydra.paths",
     "hydra.ast",
@@ -512,5 +509,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Printing functions for property graph elements",
+  "namespace": "hydra.pg.printing"}

@@ -98,10 +98,8 @@
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
-  "description": "Language constraints for Hydra Core",
-  "namespace": "hydra.languages",
-  "termDependencies": ["hydra.reflect"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.reflect",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -124,5 +122,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints for Hydra Core",
+  "namespace": "hydra.languages"}

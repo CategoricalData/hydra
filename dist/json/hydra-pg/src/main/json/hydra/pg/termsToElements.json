@@ -5710,10 +5710,12 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}}],
-  "description": "Functions for mapping Hydra terms to property graph elements using mapping specifications",
-  "namespace": "hydra.pg.termsToElements",
-  "termDependencies": ["hydra.annotations", "hydra.extract.core", "hydra.strip", "hydra.resolution", "hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.extract.core",
+    "hydra.strip",
+    "hydra.resolution",
+    "hydra.show.core",
     "hydra.pg.model",
     "hydra.pg.mapping",
     "hydra.paths",
@@ -5738,5 +5740,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for mapping Hydra terms to property graph elements using mapping specifications",
+  "namespace": "hydra.pg.termsToElements"}

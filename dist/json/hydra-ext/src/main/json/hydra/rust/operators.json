@@ -712,10 +712,8 @@
                     "argument": {"literal": {"integer": {"int32": 0}}},
                     "function": {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}}],
-  "description": "AST operators for Rust serialization",
-  "namespace": "hydra.rust.operators",
-  "termDependencies": ["hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -738,5 +736,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "AST operators for Rust serialization",
+  "namespace": "hydra.rust.operators"}

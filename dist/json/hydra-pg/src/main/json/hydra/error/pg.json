@@ -293,7 +293,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The actual vertex label"}}}],
                         "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.pg.model"],
   "description": "Error types for property graph validation",
-  "namespace": "hydra.error.pg",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.pg.model"]}
+  "namespace": "hydra.error.pg"}

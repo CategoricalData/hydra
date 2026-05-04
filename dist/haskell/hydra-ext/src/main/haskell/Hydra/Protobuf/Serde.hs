@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Serialization functions for converting Protocol Buffers v3 AST to abstract expressions
 
 module Hydra.Protobuf.Serde where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -15,20 +13,145 @@ import qualified Hydra.Protobuf.Proto3 as Proto3
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
+-- | Convert a definition to an expression
+definitionToExpr :: Proto3.Definition -> Ast.Expr
+definitionToExpr def =
+    case def of
+      Proto3.DefinitionEnum v0 -> enumDefinitionToExpr v0
+      Proto3.DefinitionMessage v0 -> messageDefinitionToExpr v0
 -- | The name of the deprecated option
 deprecatedOptionName :: String
 deprecatedOptionName = "deprecated"
-
 -- | A special Protobuf option name for descriptions (documentation)
 descriptionOptionName :: String
 descriptionOptionName = "_description"
+-- | Convert an enum definition to an expression
+enumDefinitionToExpr :: Proto3.EnumDefinition -> Ast.Expr
+enumDefinitionToExpr ed =
 
+      let name = Proto3.enumDefinitionName ed
+          values = Proto3.enumDefinitionValues ed
+          options = Proto3.enumDefinitionOptions ed
+      in (optDesc False options (Serialization.spaceSep [
+        Serialization.cst "enum",
+        (Serialization.cst (Proto3.unTypeName name)),
+        (protoBlock (Lists.map enumValueToExpr values))]))
+-- | Convert an enum value to an expression
+enumValueToExpr :: Proto3.EnumValue -> Ast.Expr
+enumValueToExpr ev =
+
+      let name = Proto3.enumValueName ev
+          number = Proto3.enumValueNumber ev
+          options = Proto3.enumValueOptions ev
+      in (optDesc False options (semi (Serialization.spaceSep [
+        Serialization.cst (Proto3.unEnumValueName name),
+        (Serialization.cst "="),
+        (Serialization.cst (Literals.showInt32 number))])))
 -- | Filter out internal options (those whose names start with underscore)
 excludeInternalOptions :: [Proto3.Option] -> [Proto3.Option]
 excludeInternalOptions opts =
     Lists.filter (\opt -> Logic.not (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 (Proto3.optionName opt))) 95)) opts
+-- | Convert a field option to an expression
+fieldOptionToExpr :: Proto3.Option -> Ast.Expr
+fieldOptionToExpr opt =
 
+      let name = Proto3.optionName opt
+          value = Proto3.optionValue opt
+      in (Serialization.spaceSep [
+        Serialization.cst name,
+        (Serialization.cst "="),
+        (valueToExpr value)])
+-- | Convert field options to an optional bracket-enclosed expression
+fieldOptionsToExpr :: [Proto3.Option] -> Maybe Ast.Expr
+fieldOptionsToExpr opts0 =
+
+      let opts = excludeInternalOptions opts0
+      in (Logic.ifElse (Lists.null opts) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map fieldOptionToExpr opts))))
+-- | Convert a field to an expression
+fieldToExpr :: Proto3.Field -> Ast.Expr
+fieldToExpr f =
+
+      let name = Proto3.fieldName f
+          typ = Proto3.fieldType f
+          num = Proto3.fieldNumber f
+          options = Proto3.fieldOptions f
+      in (optDesc False options (case typ of
+        Proto3.FieldTypeOneof v0 -> Serialization.spaceSep [
+          Serialization.cst "oneof",
+          (Serialization.cst (Proto3.unFieldName name)),
+          (protoBlock (Lists.map fieldToExpr v0))]
+        Proto3.FieldTypeMap v0 ->
+          let kt = Proto3.mapTypeKeys v0
+              vt = Proto3.mapTypeValues v0
+          in (semi (Serialization.spaceSep (Maybes.cat [
+            Maybes.pure (fieldTypeToExpr typ),
+            (Maybes.pure (Serialization.cst (Proto3.unFieldName name))),
+            (Maybes.pure (Serialization.cst "=")),
+            (Maybes.pure (Serialization.cst (Literals.showInt32 num))),
+            (fieldOptionsToExpr options)])))
+        Proto3.FieldTypeRepeated _ -> semi (Serialization.spaceSep (Maybes.cat [
+          Maybes.pure (fieldTypeToExpr typ),
+          (Maybes.pure (Serialization.cst (Proto3.unFieldName name))),
+          (Maybes.pure (Serialization.cst "=")),
+          (Maybes.pure (Serialization.cst (Literals.showInt32 num))),
+          (fieldOptionsToExpr options)]))
+        Proto3.FieldTypeSimple _ -> semi (Serialization.spaceSep (Maybes.cat [
+          Maybes.pure (fieldTypeToExpr typ),
+          (Maybes.pure (Serialization.cst (Proto3.unFieldName name))),
+          (Maybes.pure (Serialization.cst "=")),
+          (Maybes.pure (Serialization.cst (Literals.showInt32 num))),
+          (fieldOptionsToExpr options)]))))
+-- | Convert a field type to an expression
+fieldTypeToExpr :: Proto3.FieldType -> Ast.Expr
+fieldTypeToExpr ftyp =
+    case ftyp of
+      Proto3.FieldTypeMap v0 ->
+        let kt = Proto3.mapTypeKeys v0
+            vt = Proto3.mapTypeValues v0
+        in (Serialization.noSep [
+          Serialization.cst "map",
+          (Serialization.angleBracesList Serialization.inlineStyle [
+            simpleTypeToExpr kt,
+            (simpleTypeToExpr vt)])])
+      Proto3.FieldTypeRepeated v0 -> Serialization.spaceSep [
+        Serialization.cst "repeated",
+        (simpleTypeToExpr v0)]
+      Proto3.FieldTypeSimple v0 -> simpleTypeToExpr v0
+      Proto3.FieldTypeOneof _ -> Serialization.cst "oneof"
+-- | Convert a file-level option to an expression
+fileOptionToExpr :: Proto3.Option -> Ast.Expr
+fileOptionToExpr opt =
+
+      let name = Proto3.optionName opt
+          value = Proto3.optionValue opt
+      in (semi (Serialization.spaceSep [
+        Serialization.cst "option",
+        (Serialization.cst name),
+        (Serialization.cst "="),
+        (valueToExpr value)]))
+-- | Convert file-level options to an optional newline-separated expression
+fileOptionsToExpr :: [Proto3.Option] -> Maybe Ast.Expr
+fileOptionsToExpr opts0 =
+
+      let opts = excludeInternalOptions opts0
+      in (Logic.ifElse (Lists.null opts) Nothing (Maybes.pure (Serialization.newlineSep (Lists.map fileOptionToExpr opts))))
+-- | Convert a file reference to an import expression
+importToExpr :: Proto3.FileReference -> Ast.Expr
+importToExpr ref =
+    semi (Serialization.spaceSep [
+      Serialization.cst "import",
+      (Serialization.cst (Literals.showString (Proto3.unFileReference ref)))])
+-- | Convert a message definition to an expression
+messageDefinitionToExpr :: Proto3.MessageDefinition -> Ast.Expr
+messageDefinitionToExpr md =
+
+      let name = Proto3.messageDefinitionName md
+          fields = Proto3.messageDefinitionFields md
+          options = Proto3.messageDefinitionOptions md
+      in (optDesc False options (Serialization.spaceSep [
+        Serialization.cst "message",
+        (Serialization.cst (Proto3.unTypeName name)),
+        (protoBlock (Lists.map fieldToExpr fields))]))
 -- | Prepend an optional description comment to an expression
 optDesc :: Bool -> [Proto3.Option] -> Ast.Expr -> Ast.Expr
 optDesc doubleNewline opts expr =
@@ -40,7 +163,8 @@ optDesc doubleNewline opts expr =
                     case descValue of
                       Proto3.ValueBoolean v0 -> Logic.ifElse v0 "true" "false"
                       Proto3.ValueString v0 -> v0
-            commentLines = Lists.map (\line -> Strings.cat2 "// " line) (Strings.lines descStr)
+            commentLines =
+                    Lists.map (\line -> Logic.ifElse (Equality.equal line "") "//" (Strings.cat2 "// " line)) (Strings.lines descStr)
             comment = Serialization.cst (Strings.intercalate "\n" commentLines)
             sep =
                     Logic.ifElse doubleNewline (Serialization.doubleNewlineSep [
@@ -49,162 +173,13 @@ optDesc doubleNewline opts expr =
                       comment,
                       expr])
         in sep) (Lists.maybeHead descs))
-
 -- | Wrap expressions in a curly-braced block with double-newline separation
 protoBlock :: [Ast.Expr] -> Ast.Expr
 protoBlock exprs =
     Serialization.brackets Serialization.curlyBraces Serialization.fullBlockStyle (Serialization.doubleNewlineSep exprs)
-
--- | Append a semicolon to an expression
-semi :: Ast.Expr -> Ast.Expr
-semi e =
-    Serialization.noSep [
-      e,
-      (Serialization.cst ";")]
-
--- | Convert a definition to an expression
-writeDefinition :: Proto3.Definition -> Ast.Expr
-writeDefinition def =
-    case def of
-      Proto3.DefinitionEnum v0 -> writeEnumDefinition v0
-      Proto3.DefinitionMessage v0 -> writeMessageDefinition v0
-
--- | Convert an enum definition to an expression
-writeEnumDefinition :: Proto3.EnumDefinition -> Ast.Expr
-writeEnumDefinition ed =
-
-      let name = Proto3.enumDefinitionName ed
-          values = Proto3.enumDefinitionValues ed
-          options = Proto3.enumDefinitionOptions ed
-      in (optDesc False options (Serialization.spaceSep [
-        Serialization.cst "enum",
-        (Serialization.cst (Proto3.unTypeName name)),
-        (protoBlock (Lists.map writeEnumValue values))]))
-
--- | Convert an enum value to an expression
-writeEnumValue :: Proto3.EnumValue -> Ast.Expr
-writeEnumValue ev =
-
-      let name = Proto3.enumValueName ev
-          number = Proto3.enumValueNumber ev
-          options = Proto3.enumValueOptions ev
-      in (optDesc False options (semi (Serialization.spaceSep [
-        Serialization.cst (Proto3.unEnumValueName name),
-        (Serialization.cst "="),
-        (Serialization.cst (Literals.showInt32 number))])))
-
--- | Convert a field to an expression
-writeField :: Proto3.Field -> Ast.Expr
-writeField f =
-
-      let name = Proto3.fieldName f
-          typ = Proto3.fieldType f
-          num = Proto3.fieldNumber f
-          options = Proto3.fieldOptions f
-      in (optDesc False options (case typ of
-        Proto3.FieldTypeOneof v0 -> Serialization.spaceSep [
-          Serialization.cst "oneof",
-          (Serialization.cst (Proto3.unFieldName name)),
-          (protoBlock (Lists.map writeField v0))]
-        Proto3.FieldTypeMap v0 ->
-          let kt = Proto3.mapTypeKeys v0
-              vt = Proto3.mapTypeValues v0
-          in (semi (Serialization.spaceSep (Maybes.cat [
-            Maybes.pure (writeFieldType typ),
-            (Maybes.pure (Serialization.cst (Proto3.unFieldName name))),
-            (Maybes.pure (Serialization.cst "=")),
-            (Maybes.pure (Serialization.cst (Literals.showInt32 num))),
-            (writeFieldOptions options)])))
-        Proto3.FieldTypeRepeated _ -> semi (Serialization.spaceSep (Maybes.cat [
-          Maybes.pure (writeFieldType typ),
-          (Maybes.pure (Serialization.cst (Proto3.unFieldName name))),
-          (Maybes.pure (Serialization.cst "=")),
-          (Maybes.pure (Serialization.cst (Literals.showInt32 num))),
-          (writeFieldOptions options)]))
-        Proto3.FieldTypeSimple _ -> semi (Serialization.spaceSep (Maybes.cat [
-          Maybes.pure (writeFieldType typ),
-          (Maybes.pure (Serialization.cst (Proto3.unFieldName name))),
-          (Maybes.pure (Serialization.cst "=")),
-          (Maybes.pure (Serialization.cst (Literals.showInt32 num))),
-          (writeFieldOptions options)]))))
-
--- | Convert a field option to an expression
-writeFieldOption :: Proto3.Option -> Ast.Expr
-writeFieldOption opt =
-
-      let name = Proto3.optionName opt
-          value = Proto3.optionValue opt
-      in (Serialization.spaceSep [
-        Serialization.cst name,
-        (Serialization.cst "="),
-        (writeValue value)])
-
--- | Convert field options to an optional bracket-enclosed expression
-writeFieldOptions :: [Proto3.Option] -> Maybe Ast.Expr
-writeFieldOptions opts0 =
-
-      let opts = excludeInternalOptions opts0
-      in (Logic.ifElse (Lists.null opts) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map writeFieldOption opts))))
-
--- | Convert a field type to an expression
-writeFieldType :: Proto3.FieldType -> Ast.Expr
-writeFieldType ftyp =
-    case ftyp of
-      Proto3.FieldTypeMap v0 ->
-        let kt = Proto3.mapTypeKeys v0
-            vt = Proto3.mapTypeValues v0
-        in (Serialization.noSep [
-          Serialization.cst "map",
-          (Serialization.angleBracesList Serialization.inlineStyle [
-            writeSimpleType kt,
-            (writeSimpleType vt)])])
-      Proto3.FieldTypeRepeated v0 -> Serialization.spaceSep [
-        Serialization.cst "repeated",
-        (writeSimpleType v0)]
-      Proto3.FieldTypeSimple v0 -> writeSimpleType v0
-      Proto3.FieldTypeOneof _ -> Serialization.cst "oneof"
-
--- | Convert a file-level option to an expression
-writeFileOption :: Proto3.Option -> Ast.Expr
-writeFileOption opt =
-
-      let name = Proto3.optionName opt
-          value = Proto3.optionValue opt
-      in (semi (Serialization.spaceSep [
-        Serialization.cst "option",
-        (Serialization.cst name),
-        (Serialization.cst "="),
-        (writeValue value)]))
-
--- | Convert file-level options to an optional newline-separated expression
-writeFileOptions :: [Proto3.Option] -> Maybe Ast.Expr
-writeFileOptions opts0 =
-
-      let opts = excludeInternalOptions opts0
-      in (Logic.ifElse (Lists.null opts) Nothing (Maybes.pure (Serialization.newlineSep (Lists.map writeFileOption opts))))
-
--- | Convert a file reference to an import expression
-writeImport :: Proto3.FileReference -> Ast.Expr
-writeImport ref =
-    semi (Serialization.spaceSep [
-      Serialization.cst "import",
-      (Serialization.cst (Literals.showString (Proto3.unFileReference ref)))])
-
--- | Convert a message definition to an expression
-writeMessageDefinition :: Proto3.MessageDefinition -> Ast.Expr
-writeMessageDefinition md =
-
-      let name = Proto3.messageDefinitionName md
-          fields = Proto3.messageDefinitionFields md
-          options = Proto3.messageDefinitionOptions md
-      in (optDesc False options (Serialization.spaceSep [
-        Serialization.cst "message",
-        (Serialization.cst (Proto3.unTypeName name)),
-        (protoBlock (Lists.map writeField fields))]))
-
 -- | Convert a proto file to an expression
-writeProtoFile :: Proto3.ProtoFile -> Ast.Expr
-writeProtoFile pf =
+protoFileToExpr :: Proto3.ProtoFile -> Ast.Expr
+protoFileToExpr pf =
 
       let pkg = Proto3.protoFilePackage pf
           imports = Proto3.protoFileImports pf
@@ -216,19 +191,19 @@ writeProtoFile pf =
                     (semi (Serialization.spaceSep [
                       Serialization.cst "package",
                       (Serialization.cst (Proto3.unPackageName pkg))]))])
-          importsSec = Logic.ifElse (Lists.null imports) Nothing (Maybes.pure (Serialization.newlineSep (Lists.map writeImport imports)))
+          importsSec = Logic.ifElse (Lists.null imports) Nothing (Maybes.pure (Serialization.newlineSep (Lists.map importToExpr imports)))
           options1 = Lists.filter (\opt -> Logic.not (Equality.equal (Proto3.optionName opt) "_description")) options
-          optionsSec = writeFileOptions options1
-          defsSec = Logic.ifElse (Lists.null defs) Nothing (Maybes.pure (Serialization.doubleNewlineSep (Lists.map writeDefinition defs)))
+          optionsSec = fileOptionsToExpr options1
+          defsSec =
+                  Logic.ifElse (Lists.null defs) Nothing (Maybes.pure (Serialization.doubleNewlineSep (Lists.map definitionToExpr defs)))
       in (optDesc True options (Serialization.doubleNewlineSep (Maybes.cat [
         headerSec,
         importsSec,
         optionsSec,
         defsSec])))
-
 -- | Convert a scalar type to an expression
-writeScalarType :: Proto3.ScalarType -> Ast.Expr
-writeScalarType sct =
+scalarTypeToExpr :: Proto3.ScalarType -> Ast.Expr
+scalarTypeToExpr sct =
     Serialization.cst (case sct of
       Proto3.ScalarTypeBool -> "bool"
       Proto3.ScalarTypeBytes -> "bytes"
@@ -245,17 +220,21 @@ writeScalarType sct =
       Proto3.ScalarTypeString -> "string"
       Proto3.ScalarTypeUint32 -> "uint32"
       Proto3.ScalarTypeUint64 -> "uint64")
-
+-- | Append a semicolon to an expression
+semi :: Ast.Expr -> Ast.Expr
+semi e =
+    Serialization.noSep [
+      e,
+      (Serialization.cst ";")]
 -- | Convert a simple type to an expression
-writeSimpleType :: Proto3.SimpleType -> Ast.Expr
-writeSimpleType st =
+simpleTypeToExpr :: Proto3.SimpleType -> Ast.Expr
+simpleTypeToExpr st =
     case st of
       Proto3.SimpleTypeReference v0 -> Serialization.cst (Proto3.unTypeName v0)
-      Proto3.SimpleTypeScalar v0 -> writeScalarType v0
-
+      Proto3.SimpleTypeScalar v0 -> scalarTypeToExpr v0
 -- | Convert a value to an expression
-writeValue :: Proto3.Value -> Ast.Expr
-writeValue v =
+valueToExpr :: Proto3.Value -> Ast.Expr
+valueToExpr v =
     Serialization.cst (case v of
       Proto3.ValueBoolean v0 -> Logic.ifElse v0 "true" "false"
       Proto3.ValueString v0 -> Literals.showString v0)

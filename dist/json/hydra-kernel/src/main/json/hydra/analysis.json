@@ -3176,9 +3176,7 @@
                   "domain": {"variable": "hydra.packaging.Namespace"}}},
               "domain": {"function": {"codomain": {"variable": "t0"}, "domain": {"variable": "hydra.packaging.Namespace"}}}}},
           "variables": ["t0"]}}}],
-  "description": "Module dependency namespace analysis",
-  "namespace": "hydra.analysis",
-  "termDependencies": [
+  "dependencies": [
     "hydra.annotations",
     "hydra.arity",
     "hydra.checking",
@@ -3190,8 +3188,7 @@
     "hydra.rewriting",
     "hydra.scoping",
     "hydra.strip",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -3214,5 +3211,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Module dependency namespace analysis",
+  "namespace": "hydra.analysis"}

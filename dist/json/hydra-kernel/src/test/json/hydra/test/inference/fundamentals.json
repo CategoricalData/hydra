@@ -21285,10 +21285,8 @@
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Inference tests for fundamental language features",
-  "namespace": "hydra.test.inference.fundamentals",
-  "termDependencies": ["hydra.test.testGraph"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.testGraph",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -21311,5 +21309,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Inference tests for fundamental language features",
+  "namespace": "hydra.test.inference.fundamentals"}

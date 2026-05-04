@@ -1204,7 +1204,13 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.lexical",
+    "hydra.rewriting",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.decode.core",
+    "hydra.decode.context"],
   "description": "Term decoders for hydra.typing",
-  "namespace": "hydra.decode.typing",
-  "termDependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.decode.core", "hydra.decode.context"],
-  "typeDependencies": ["hydra.typing", "hydra.util"]}
+  "namespace": "hydra.decode.typing"}

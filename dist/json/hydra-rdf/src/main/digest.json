@@ -2,13 +2,13 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.owl.syntax": "d4e56f9cff336176a755a2c27b62cf9a3064cec842816e5fbe3f70043225f9d7",
-    "hydra.rdf.serde": "abdb335bc494c16e672e7b6c3454f5e4462d1a228fb71b21666989b0cf87c1d3",
-    "hydra.rdf.syntax": "71eef5bc764463101c7f35f7715b6f09d79bb45b728726b6287435cd1a83b317",
-    "hydra.rdf.utils": "e139f800be173d4ed2a2dda55bf8ada012e22b7b2526d4bfc6048087c36b33b9",
-    "hydra.shacl.coder": "bd1ac748be5a0d7d1eb7dcbaca7724acbc1ba9df04e86a06d83bc3a2ad33b1d3",
-    "hydra.shacl.model": "85a2d5817d009d2d58630709bb9116d1eacb4b58b93bb74a94ac3066ae0a9784",
-    "hydra.shex.syntax": "520172214ea4f9ee14e00439e5861c7cc8dddf8c8325206bf3a2e93d5d0eadd8",
-    "hydra.xml.schema": "5be013a798804895f94cebfc3aa69fd96dd927d44ca175ec400c82251c9c77d0"
+    "hydra.owl.syntax": "0db0a5421ac331e83da18f38b6b55ba2d98fcdaf01f4b49ff276fe4df4cfccee",
+    "hydra.rdf.serde": "45a815ff949e1947efc520b0f0aa2510e0cabe3deb671c7bf066c6a5aff30660",
+    "hydra.rdf.syntax": "91fea50adfd68b6514e898c799f9e51a862efbb048395853222dc53e428adba4",
+    "hydra.rdf.utils": "082c94957672b21626df825c7da8be3c44576e9cd1c711228b700928e3c3789d",
+    "hydra.shacl.coder": "d5422321bcc6b2482b1ab3bd56401ccd798ff528c17d3652640dc7d123a912db",
+    "hydra.shacl.model": "1f9a96d68c8f0cb34275e57866b7f3d6c3e33aa2652eb461c118319da82e42a6",
+    "hydra.shex.syntax": "134e737cc774752ccdd476c04f2341158c299b603397e7ad4928e6a9f80cb9e2",
+    "hydra.xml.schema": "a50cdff17e93cf43477f517f27a5d7668a86f005cfbe7504db793b254c4ed643"
   }
 }

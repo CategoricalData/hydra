@@ -348,10 +348,7 @@
               "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"literal": {"string": {}}}}},
               "domain": {"variable": "hydra.json.model.Value"}}},
           "variables": []}}}],
-  "description": "Decoding functions for JSON data",
-  "namespace": "hydra.json.decoding",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -374,5 +371,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Decoding functions for JSON data",
+  "namespace": "hydra.json.decoding"}

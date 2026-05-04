@@ -2621,9 +2621,7 @@
                   "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": ["t0"]}}}],
-  "description": "Utilities for reading and writing type and term annotations",
-  "namespace": "hydra.annotations",
-  "termDependencies": [
+  "dependencies": [
     "hydra.constants",
     "hydra.decode.core",
     "hydra.encode.core",
@@ -2631,8 +2629,7 @@
     "hydra.lexical",
     "hydra.strip",
     "hydra.show.core",
-    "hydra.show.errors"],
-  "typeDependencies": [
+    "hydra.show.errors",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2655,5 +2652,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for reading and writing type and term annotations",
+  "namespace": "hydra.annotations"}

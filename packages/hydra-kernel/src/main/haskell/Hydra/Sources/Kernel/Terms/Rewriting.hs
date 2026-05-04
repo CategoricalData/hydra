@@ -83,8 +83,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Scoping.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Scoping.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Core rewrite and fold combinators for terms and types"}
   where
    definitions = [

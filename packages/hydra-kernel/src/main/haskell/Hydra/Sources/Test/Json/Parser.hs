@@ -35,9 +35,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.parsers", Namespace "hydra.json.parser", Namespace "hydra.json.writer",
-     Namespace "hydra.lib.strings", Namespace "hydra.parsing"],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Namespace "hydra.parsers", Namespace "hydra.json.parser", Namespace "hydra.json.writer",
+     Namespace "hydra.lib.strings", Namespace "hydra.parsing"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for JSON parsing")}
   where
     definitions = [

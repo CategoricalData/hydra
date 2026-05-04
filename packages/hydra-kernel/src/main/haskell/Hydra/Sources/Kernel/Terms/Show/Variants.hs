@@ -59,8 +59,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = kernelTypesNamespaces,
             moduleDescription = Just "String representations of hydra.variants types"}
   where
    definitions = [

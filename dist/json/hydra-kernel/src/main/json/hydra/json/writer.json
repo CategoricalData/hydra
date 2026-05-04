@@ -565,10 +565,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.json.model.Value"}}},
           "variables": []}}}],
-  "description": "JSON serialization functions using the Hydra AST",
-  "namespace": "hydra.json.writer",
-  "termDependencies": ["hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -591,5 +589,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "JSON serialization functions using the Hydra AST",
+  "namespace": "hydra.json.writer"}

@@ -86,8 +86,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.avro.language"),
             moduleDefinitions = [toDefinition avroLanguage],
-            moduleTermDependencies = [Lexical.ns, Strip.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for Apache Avro"}
 avroLanguage :: TTermDefinition Language
 avroLanguage = define "avroLanguage" $

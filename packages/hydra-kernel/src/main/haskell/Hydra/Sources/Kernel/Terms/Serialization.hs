@@ -71,8 +71,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = kernelTypesNamespaces,
             moduleDescription = Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")}
   where
    definitions = [
@@ -580,17 +579,17 @@ printExpr = define "printExpr" $
       -- empty lines pick up trailing whitespace and downstream tools
       -- (host writers, byte-identity comparisons in the bootstrap
       -- demo) have to strip it post-hoc.
-      "indentLine" <~ ("idt" ~> "line" ~>
-        Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
+      "indentLine" <~ ("pre" ~> "line" ~>
+        Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "pre" ++ var "line")) $
       "ilns" <~ cases _IndentStyle (var "style") Nothing [
-        _IndentStyle_allLines>>: "idt" ~> Lists.map (var "indentLine" @@ var "idt") (var "lns"),
-        _IndentStyle_subsequentLines>>: "idt" ~>
+        _IndentStyle_allLines>>: "pre" ~> Lists.map (var "indentLine" @@ var "pre") (var "lns"),
+        _IndentStyle_subsequentLines>>: "pre" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
             (var "lns")
             (Maybes.fromMaybe (var "lns") $
               Maybes.map
                 ("uc" ~> Lists.cons (Pairs.first $ var "uc") $
-                  Lists.map (var "indentLine" @@ var "idt") (Pairs.second $ var "uc"))
+                  Lists.map (var "indentLine" @@ var "pre") (Pairs.second $ var "uc"))
                 (Lists.uncons $ var "lns"))] $
       Strings.intercalate (string "\n") (var "ilns"),
     _Expr_seq>>: "seqExpr" ~>
@@ -701,7 +700,7 @@ printExpr = define "printExpr" $
       "doIndent" <~ Ast.blockStyleIndent (var "style") $
       "nlBefore" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
       "nlAfter" <~ Ast.blockStyleNewlineAfterContent (var "style") $
-      "ibody" <~ Maybes.maybe (var "body") ("idt" ~> customIndent @@ var "idt" @@ var "body") (var "doIndent") $
+      "ibody" <~ Maybes.maybe (var "body") ("pre" ~> customIndent @@ var "pre" @@ var "body") (var "doIndent") $
       "pre" <~ Logic.ifElse (var "nlBefore") (string "\n") (string "") $
       "suf" <~ Logic.ifElse (var "nlAfter") (string "\n") (string "") $
       var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]

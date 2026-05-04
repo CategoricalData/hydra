@@ -137,7 +137,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
                         "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.python.syntax", "hydra.util", "hydra.core", "hydra.graph", "hydra.packaging", "hydra.typing"],
   "description": "Environment types for Python code generation",
-  "namespace": "hydra.python.environment",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.python.syntax", "hydra.util", "hydra.core", "hydra.graph", "hydra.packaging", "hydra.typing"]}
+  "namespace": "hydra.python.environment"}

@@ -67,8 +67,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Rewriting.ns, Variables.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Validation functions for core terms and types"}
   where
    definitions = [
@@ -1072,7 +1071,11 @@ validateTypeNode = define "validateTypeNode" $
               record _EmptyUnionTypeError [
                 _EmptyUnionTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
             noTypeError),
-        -- Y3. SingleVariantUnionError
+        -- Y3. SingleVariantUnionError. Profile-aware: kernelDefaultCoreProfile
+        -- classifies this as a warning rather than an error, since
+        -- single-variant unions are sometimes a deliberate design choice
+        -- (an extensible variant kept as a union from the start so that
+        -- adding a second variant is a non-breaking change).
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_singleVariantUnion
           (Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
             (Maybes.maybe

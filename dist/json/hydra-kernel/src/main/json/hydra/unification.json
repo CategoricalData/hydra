@@ -1760,10 +1760,11 @@
               "codomain": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}}],
-  "description": "Utilities for type unification.",
-  "namespace": "hydra.unification",
-  "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.strip", "hydra.substitution"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.rewriting",
+    "hydra.show.core",
+    "hydra.strip",
+    "hydra.substitution",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1786,5 +1787,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utilities for type unification.",
+  "namespace": "hydra.unification"}

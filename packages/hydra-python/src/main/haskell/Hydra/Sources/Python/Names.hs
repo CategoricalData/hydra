@@ -103,8 +103,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs],
-            moduleTypeDependencies = (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Python naming utilities: encoding Hydra names as Python names"}
   where
     definitions = [

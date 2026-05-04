@@ -46,8 +46,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
@@ -298,12 +297,14 @@ dslModule = define "dslModule" $
             string "DSL functions for ",
             Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
-          (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleTypeDependencies (var "mod"))))
-          -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
+          -- DSL modules depend on:
+          -- (1) the original module + its source dependencies + hydra.phantoms (for TTerm), and
+          -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
           (Lists.nub (Lists.concat2
             (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
-            (Packaging.moduleTypeDependencies (var "mod"))))
+            (Lists.concat2
+              (Packaging.moduleDependencies (var "mod"))
+              (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleDependencies (var "mod"))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))

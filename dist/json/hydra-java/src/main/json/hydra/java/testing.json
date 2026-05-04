@@ -830,10 +830,12 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.packaging.Namespace"}}},
           "variables": []}}}],
-  "description": "Java test code generation codec for JUnit-based generation tests",
-  "namespace": "hydra.java.testing",
-  "termDependencies": ["hydra.serialization", "hydra.test.utils", "hydra.formatting", "hydra.names", "hydra.constants"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
+    "hydra.test.utils",
+    "hydra.formatting",
+    "hydra.names",
+    "hydra.constants",
     "hydra.java.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -857,5 +859,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Java test code generation codec for JUnit-based generation tests",
+  "namespace": "hydra.java.testing"}

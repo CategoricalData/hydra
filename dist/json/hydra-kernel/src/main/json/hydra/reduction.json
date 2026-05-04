@@ -2502,32 +2502,279 @@
                                                                                                 "term": {
                                                                                                   "lambda": {
                                                                                                     "body": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "inject": {
-                                                                                                            "field": {
-                                                                                                              "name": "typeApplication",
-                                                                                                              "term": {
-                                                                                                                "record": {
-                                                                                                                  "fields": [
-                                                                                                                    {
-                                                                                                                      "name": "body",
-                                                                                                                      "term": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "tt"},
-                                                                                                                              "function": {"project": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}},
-                                                                                                                          "function": {"application": {"argument": {"variable": "tx"}, "function": {"variable": "recurse"}}}}}},
-                                                                                                                    {
-                                                                                                                      "name": "type",
-                                                                                                                      "term": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "tt"},
-                                                                                                                          "function": {"project": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}}}],
-                                                                                                                  "typeName": "hydra.core.TypeApplicationTerm"}}},
-                                                                                                            "typeName": "hydra.core.Term"}},
-                                                                                                        "function": {"variable": "afterRecursion"}}},
+                                                                                                      "let": {
+                                                                                                        "bindings": [
+                                                                                                          {
+                                                                                                            "name": "gatherTypeApps",
+                                                                                                            "term": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {
+                                                                                                                  "lambda": {
+                                                                                                                    "body": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"application": {"argument": {"variable": "trm"}, "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                                                                                        "function": {
+                                                                                                                          "cases": {
+                                                                                                                            "cases": [
+                                                                                                                              {
+                                                                                                                                "name": "typeApplication",
+                                                                                                                                "term": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "body": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "tt2"},
+                                                                                                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {"variable": "acc"},
+                                                                                                                                                "function": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {"variable": "tt2"},
+                                                                                                                                                        "function": {"project": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}},
+                                                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.core.Type"}}}}}}},
+                                                                                                                                            "function": {"variable": "gatherTypeApps"}}}}},
+                                                                                                                                    "domain": {"variable": "hydra.core.TypeApplicationTerm"},
+                                                                                                                                    "parameter": "tt2"}}}],
+                                                                                                                            "default": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"pair": {"first": {"variable": "trm"}, "second": {"variable": "acc"}}},
+                                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                "type": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                                                                            "typeName": "hydra.core.Term"}}}},
+                                                                                                                    "domain": {"variable": "hydra.core.Term"},
+                                                                                                                    "parameter": "trm"}},
+                                                                                                                "domain": {"list": {"variable": "hydra.core.Type"}},
+                                                                                                                "parameter": "acc"}},
+                                                                                                            "typeScheme": {
+                                                                                                              "body": {
+                                                                                                                "function": {
+                                                                                                                  "codomain": {
+                                                                                                                    "function": {
+                                                                                                                      "codomain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                                                                      "domain": {"variable": "hydra.core.Term"}}},
+                                                                                                                  "domain": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                                                              "variables": []}}],
+                                                                                                        "body": {
+                                                                                                          "let": {
+                                                                                                            "bindings": [
+                                                                                                              {
+                                                                                                                "name": "gathered",
+                                                                                                                "term": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "tt"},
+                                                                                                                        "function": {"project": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "list": [
+                                                                                                                            {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "tt"},
+                                                                                                                                "function": {"project": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}}]},
+                                                                                                                        "function": {"variable": "gatherTypeApps"}}}}},
+                                                                                                                "typeScheme": {
+                                                                                                                  "body": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                                                                  "variables": []}}],
+                                                                                                            "body": {
+                                                                                                              "let": {
+                                                                                                                "bindings": [
+                                                                                                                  {
+                                                                                                                    "name": "innermost",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "gathered"},
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                            "type": {"list": {"variable": "hydra.core.Type"}}}}}},
+                                                                                                                    "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                                                "body": {
+                                                                                                                  "let": {
+                                                                                                                    "bindings": [
+                                                                                                                      {
+                                                                                                                        "name": "tApps",
+                                                                                                                        "term": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "gathered"},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                "type": {"list": {"variable": "hydra.core.Type"}}}}}},
+                                                                                                                        "typeScheme": {"body": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
+                                                                                                                    "body": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"application": {"argument": {"variable": "innermost"}, "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                                                                                        "function": {
+                                                                                                                          "cases": {
+                                                                                                                            "cases": [
+                                                                                                                              {
+                                                                                                                                "name": "cases",
+                                                                                                                                "term": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "body": {
+                                                                                                                                      "let": {
+                                                                                                                                        "bindings": [
+                                                                                                                                          {
+                                                                                                                                            "name": "newCs",
+                                                                                                                                            "term": {
+                                                                                                                                              "record": {
+                                                                                                                                                "fields": [
+                                                                                                                                                  {
+                                                                                                                                                    "name": "typeName",
+                                                                                                                                                    "term": {
+                                                                                                                                                      "application": {"argument": {"variable": "cs"}, "function": {"project": {"field": "typeName", "typeName": "hydra.core.CaseStatement"}}}}},
+                                                                                                                                                  {
+                                                                                                                                                    "name": "default",
+                                                                                                                                                    "term": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {
+                                                                                                                                                          "application": {"argument": {"variable": "cs"}, "function": {"project": {"field": "default", "typeName": "hydra.core.CaseStatement"}}}},
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {
+                                                                                                                                                              "lambda": {
+                                                                                                                                                                "body": {
+                                                                                                                                                                  "application": {
+                                                                                                                                                                    "argument": {"variable": "t1"},
+                                                                                                                                                                    "function": {"application": {"argument": {"variable": "tx"}, "function": {"variable": "recurse"}}}}},
+                                                                                                                                                                "domain": {"variable": "hydra.core.Term"},
+                                                                                                                                                                "parameter": "t1"}},
+                                                                                                                                                            "function": {
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                                                                  {
+                                                                                                                                                    "name": "cases",
+                                                                                                                                                    "term": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {
+                                                                                                                                                          "application": {"argument": {"variable": "cs"}, "function": {"project": {"field": "cases", "typeName": "hydra.core.CaseStatement"}}}},
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {"variable": "forCaseBranch"},
+                                                                                                                                                            "function": {
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                                                                                                "type": {"variable": "hydra.core.Field"}}}}}}}}],
+                                                                                                                                                "typeName": "hydra.core.CaseStatement"}},
+                                                                                                                                            "typeScheme": {"body": {"variable": "hydra.core.CaseStatement"}, "variables": []}}],
+                                                                                                                                        "body": {
+                                                                                                                                          "let": {
+                                                                                                                                            "bindings": [
+                                                                                                                                              {
+                                                                                                                                                "name": "casesWithTypeApps",
+                                                                                                                                                "term": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {"variable": "tApps"},
+                                                                                                                                                    "function": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {"inject": {"field": {"name": "cases", "term": {"variable": "newCs"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {
+                                                                                                                                                              "lambda": {
+                                                                                                                                                                "body": {
+                                                                                                                                                                  "lambda": {
+                                                                                                                                                                    "body": {
+                                                                                                                                                                      "inject": {
+                                                                                                                                                                        "field": {
+                                                                                                                                                                          "name": "typeApplication",
+                                                                                                                                                                          "term": {
+                                                                                                                                                                            "record": {
+                                                                                                                                                                              "fields": [{"name": "body", "term": {"variable": "trm"}}, {"name": "type", "term": {"variable": "t"}}],
+                                                                                                                                                                              "typeName": "hydra.core.TypeApplicationTerm"}}},
+                                                                                                                                                                        "typeName": "hydra.core.Term"}},
+                                                                                                                                                                    "domain": {"variable": "hydra.core.Type"},
+                                                                                                                                                                    "parameter": "t"}},
+                                                                                                                                                                "domain": {"variable": "hydra.core.Term"},
+                                                                                                                                                                "parameter": "trm"}},
+                                                                                                                                                            "function": {
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                                                                                                                                                "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                                                                                            "body": {
+                                                                                                                                              "let": {
+                                                                                                                                                "bindings": [
+                                                                                                                                                  {
+                                                                                                                                                    "name": "elimHeadTypeTyped",
+                                                                                                                                                    "term": {
+                                                                                                                                                      "maybe": {
+                                                                                                                                                        "inject": {
+                                                                                                                                                          "field": {
+                                                                                                                                                            "name": "function",
+                                                                                                                                                            "term": {
+                                                                                                                                                              "record": {
+                                                                                                                                                                "fields": [
+                                                                                                                                                                  {
+                                                                                                                                                                    "name": "domain",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "application": {
+                                                                                                                                                                        "argument": {"variable": "tApps"},
+                                                                                                                                                                        "function": {
+                                                                                                                                                                          "application": {
+                                                                                                                                                                            "argument": {
+                                                                                                                                                                              "application": {"argument": {"variable": "cs"}, "function": {"project": {"field": "typeName", "typeName": "hydra.core.CaseStatement"}}}},
+                                                                                                                                                                            "function": {"variable": "hydra.resolution.nominalApplication"}}}}}},
+                                                                                                                                                                  {
+                                                                                                                                                                    "name": "codomain",
+                                                                                                                                                                    "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}}}],
+                                                                                                                                                                "typeName": "hydra.core.FunctionType"}}},
+                                                                                                                                                          "typeName": "hydra.core.Type"}}},
+                                                                                                                                                    "typeScheme": {"body": {"maybe": {"variable": "hydra.core.Type"}}, "variables": []}}],
+                                                                                                                                                "body": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {"variable": "casesWithTypeApps"},
+                                                                                                                                                    "function": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {"variable": "elimHeadTypeTyped"},
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                                                                            "function": {
+                                                                                                                                                              "application": {
+                                                                                                                                                                "argument": {"variable": "args"},
+                                                                                                                                                                "function": {"application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "expand"}}}}}}}}}}}}}}}}},
+                                                                                                                                    "domain": {"variable": "hydra.core.CaseStatement"},
+                                                                                                                                    "parameter": "cs"}}}],
+                                                                                                                            "default": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "field": {
+                                                                                                                                      "name": "typeApplication",
+                                                                                                                                      "term": {
+                                                                                                                                        "record": {
+                                                                                                                                          "fields": [
+                                                                                                                                            {
+                                                                                                                                              "name": "body",
+                                                                                                                                              "term": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "tt"},
+                                                                                                                                                      "function": {"project": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}},
+                                                                                                                                                  "function": {"application": {"argument": {"variable": "tx"}, "function": {"variable": "recurse"}}}}}},
+                                                                                                                                            {
+                                                                                                                                              "name": "type",
+                                                                                                                                              "term": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {"variable": "tt"},
+                                                                                                                                                  "function": {"project": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}}}],
+                                                                                                                                          "typeName": "hydra.core.TypeApplicationTerm"}}},
+                                                                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                                                                "function": {"variable": "afterRecursion"}}},
+                                                                                                                            "typeName": "hydra.core.Term"}}}}}}}}}}}},
                                                                                                     "domain": {"variable": "hydra.core.TypeApplicationTerm"},
                                                                                                     "parameter": "tt"}}},
                                                                                               {
@@ -6839,9 +7086,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}}],
-  "description": "Functions for reducing terms and types, i.e. performing computations.",
-  "namespace": "hydra.reduction",
-  "termDependencies": [
+  "dependencies": [
     "hydra.arity",
     "hydra.checking",
     "hydra.extract.core",
@@ -6854,8 +7099,7 @@
     "hydra.show.core",
     "hydra.show.errors",
     "hydra.strip",
-    "hydra.variables"],
-  "typeDependencies": [
+    "hydra.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -6878,5 +7122,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for reducing terms and types, i.e. performing computations.",
+  "namespace": "hydra.reduction"}

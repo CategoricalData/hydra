@@ -11,6 +11,7 @@ import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Generation as Generation
 import qualified Hydra.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Test.Inference.All as InferenceAll
+import qualified Hydra.Test.Json.Parser as Parser
 import qualified Hydra.Test.Json.Roundtrip as Roundtrip
 import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Json.Yaml as Yaml
@@ -27,6 +28,7 @@ import qualified Hydra.Test.Lib.Pairs as Pairs
 import qualified Hydra.Test.Lib.Regex as Regex
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
+import qualified Hydra.Test.Ordering as Ordering
 import qualified Hydra.Test.Reduction as Reduction
 import qualified Hydra.Test.Rewriting as Rewriting
 import qualified Hydra.Test.Serialization as Serialization
@@ -68,9 +70,11 @@ allTests =
         Generation.allTests,
         HoistingAll.allTests,
         InferenceAll.allTests,
+        Parser.allTests,
         Roundtrip.allTests,
         Writer.allTests,
         Yaml.allTests,
+        Ordering.allTests,
         Reduction.allTests,
         Rewriting.allTests,
         Serialization.allTests,

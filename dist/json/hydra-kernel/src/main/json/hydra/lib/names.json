@@ -2112,10 +2112,7 @@
             "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the typeclass.Ord primitive"}}}],
             "body": {"wrap": {"body": {"literal": {"string": "hydra.typeclass.Ord"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}}],
-  "description": "Namespaces and primitive names for the Hydra standard library",
-  "namespace": "hydra.lib.names",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2138,5 +2135,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Namespaces and primitive names for the Hydra standard library",
+  "namespace": "hydra.lib.names"}

@@ -4853,10 +4853,10 @@
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.javaScript.syntax.ClassDeclarationWithComments"}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting JavaScript AST to abstract expressions",
-  "namespace": "hydra.javaScript.serde",
-  "termDependencies": ["hydra.constants", "hydra.serialization", "hydra.javaScript.operators"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.serialization",
+    "hydra.javaScript.operators",
     "hydra.javaScript.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -4880,5 +4880,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting JavaScript AST to abstract expressions",
+  "namespace": "hydra.javaScript.serde"}

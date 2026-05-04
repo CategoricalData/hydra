@@ -1014,10 +1014,10 @@
                   "domain": {"literal": {"boolean": {}}}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}}],
-  "description": "A utility which instantiates a nonrecursive type with default values",
-  "namespace": "hydra.templates",
-  "termDependencies": ["hydra.constants", "hydra.decode.core", "hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.decode.core",
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1040,5 +1040,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "A utility which instantiates a nonrecursive type with default values",
+  "namespace": "hydra.templates"}

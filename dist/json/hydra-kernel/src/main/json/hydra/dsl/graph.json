@@ -4663,7 +4663,14 @@
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graph.TermCoder"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["a"]}}}],
+  "dependencies": [
+    "hydra.graph",
+    "hydra.phantoms",
+    "hydra.context",
+    "hydra.core",
+    "hydra.errors",
+    "hydra.dsl.context",
+    "hydra.dsl.core",
+    "hydra.dsl.errors"],
   "description": "DSL functions for hydra.graph",
-  "namespace": "hydra.dsl.graph",
-  "termDependencies": ["hydra.dsl.context", "hydra.dsl.core", "hydra.dsl.errors"],
-  "typeDependencies": ["hydra.graph", "hydra.phantoms", "hydra.context", "hydra.core", "hydra.errors"]}
+  "namespace": "hydra.dsl.graph"}

@@ -206,7 +206,12 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.coders.TraversalOrder"}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.encode.context",
+    "hydra.encode.errors",
+    "hydra.encode.graph",
+    "hydra.encode.variants",
+    "hydra.encode.core",
+    "hydra.coders"],
   "description": "Term encoders for hydra.coders",
-  "namespace": "hydra.encode.coders",
-  "termDependencies": ["hydra.encode.core", "hydra.encode.context", "hydra.encode.errors", "hydra.encode.graph", "hydra.encode.variants"],
-  "typeDependencies": ["hydra.coders"]}
+  "namespace": "hydra.encode.coders"}

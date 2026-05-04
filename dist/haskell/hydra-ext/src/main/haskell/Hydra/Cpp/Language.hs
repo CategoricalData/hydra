@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints and reserved words for C++
 
 module Hydra.Cpp.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for C++
 cppLanguage :: Coders.Language
 cppLanguage =
@@ -93,7 +90,6 @@ cppLanguage =
           Variants.TypeVariantVariable,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
-
 -- | A set of reserved words in C++
 cppReservedWords :: S.Set String
 cppReservedWords =

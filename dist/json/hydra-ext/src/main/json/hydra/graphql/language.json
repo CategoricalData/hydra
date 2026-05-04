@@ -166,10 +166,9 @@
                 "argument": {"list": [{"literal": {"string": "true"}}, {"literal": {"string": "false"}}]},
                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}},
         "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
-  "description": "Language constraints and reserved words for GraphQL",
-  "namespace": "hydra.graphql.language",
-  "termDependencies": ["hydra.lexical", "hydra.strip"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.lexical",
+    "hydra.strip",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -192,5 +191,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints and reserved words for GraphQL",
+  "namespace": "hydra.graphql.language"}

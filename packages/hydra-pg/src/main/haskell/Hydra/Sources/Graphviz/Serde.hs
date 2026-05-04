@@ -93,8 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Serialization.ns],
-            moduleTypeDependencies = (DotSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Serialization.ns] L.++ (DotSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting Graphviz DOT AST to abstract expressions"}
   where
     definitions = [

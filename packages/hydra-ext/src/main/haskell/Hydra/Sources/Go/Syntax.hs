@@ -26,8 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Core.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns, Core.ns],
             moduleDescription = Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
       ++ " from https://go.dev/ref/spec")}
   where

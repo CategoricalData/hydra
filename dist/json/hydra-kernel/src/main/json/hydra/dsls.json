@@ -468,33 +468,34 @@
                                                                             "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                                                           "function": {"variable": "hydra.dsls.dslNamespace"}}}},
                                                                     {
-                                                                      "name": "termDependencies",
+                                                                      "name": "dependencies",
                                                                       "term": {
                                                                         "application": {
                                                                           "argument": {
                                                                             "application": {
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "mod"},
-                                                                                  "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.dsls.dslNamespace"},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "mod"},
+                                                                                          "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "hydra.dsls.dslNamespace"},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
+                                                                                              "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                                   "function": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
-                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
-                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}},
-                                                                    {
-                                                                      "name": "typeDependencies",
-                                                                      "term": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "mod"},
-                                                                                  "function": {"project": {"field": "typeDependencies", "typeName": "hydra.packaging.Module"}}}},
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "mod"},
+                                                                                          "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}},
+                                                                                      "function": {
+                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {
@@ -3830,10 +3831,12 @@
               "codomain": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}}],
-  "description": "Functions for generating domain-specific DSL modules from type modules",
-  "namespace": "hydra.dsls",
-  "termDependencies": ["hydra.annotations", "hydra.formatting", "hydra.lexical", "hydra.names", "hydra.strip"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.formatting",
+    "hydra.lexical",
+    "hydra.names",
+    "hydra.strip",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -3856,5 +3859,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for generating domain-specific DSL modules from type modules",
+  "namespace": "hydra.dsls"}

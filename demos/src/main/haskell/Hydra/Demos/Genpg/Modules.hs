@@ -42,18 +42,13 @@ salesModule = Module {
       termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
-  moduleTermDependencies = [
-    Namespace "hydra.tabular",
+  moduleDependencies = [Namespace "hydra.tabular",
     Namespace "hydra.relational",
     Namespace "hydra.pg.model",
-    Namespace "hydra.core"
-  ],
-  moduleTypeDependencies = [
-    Namespace "hydra.tabular",
+    Namespace "hydra.core", Namespace "hydra.tabular",
     Namespace "hydra.relational",
     Namespace "hydra.pg.model",
-    Namespace "hydra.core"
-  ],
+    Namespace "hydra.core"],
   moduleDescription = Just "GenPG schemas for the sales demo"
 }
 
@@ -87,18 +82,13 @@ healthModule = Module {
       termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
-  moduleTermDependencies = [
-    Namespace "hydra.tabular",
+  moduleDependencies = [Namespace "hydra.tabular",
     Namespace "hydra.relational",
     Namespace "hydra.pg.model",
-    Namespace "hydra.core"
-  ],
-  moduleTypeDependencies = [
-    Namespace "hydra.tabular",
+    Namespace "hydra.core", Namespace "hydra.tabular",
     Namespace "hydra.relational",
     Namespace "hydra.pg.model",
-    Namespace "hydra.core"
-  ],
+    Namespace "hydra.core"],
   moduleDescription = Just "GenPG schemas for the health demo"
 }
 

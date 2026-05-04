@@ -6618,9 +6618,7 @@
           "body": {
             "function": {"codomain": {"variable": "hydra.lisp.syntax.Expression"}, "domain": {"variable": "hydra.lisp.syntax.Expression"}}},
           "variables": []}}}],
-  "description": "Lisp code generator: converts Hydra type and term modules to Lisp AST",
-  "namespace": "hydra.lisp.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.lisp.language",
     "hydra.formatting",
     "hydra.names",
@@ -6630,8 +6628,7 @@
     "hydra.environment",
     "hydra.predicates",
     "hydra.sorting",
-    "hydra.lexical"],
-  "typeDependencies": [
+    "hydra.lexical",
     "hydra.lisp.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -6655,5 +6652,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Lisp code generator: converts Hydra type and term modules to Lisp AST",
+  "namespace": "hydra.lisp.coder"}
