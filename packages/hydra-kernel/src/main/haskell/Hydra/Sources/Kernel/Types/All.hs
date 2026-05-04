@@ -26,6 +26,7 @@ import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
 import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
 import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
 import qualified Hydra.Sources.Kernel.Types.Util        as Util
+import qualified Hydra.Sources.Kernel.Types.Validation  as Validation
 
 
 kernelTypesModules :: [Module]
@@ -52,6 +53,7 @@ kernelTypesModules = [
   Topology.module_,
   Typing.module_,
   Util.module_,
+  Validation.module_,
   Variants.module_]
 
 -- | Namespaces of all kernel type modules
