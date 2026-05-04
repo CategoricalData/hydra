@@ -4844,6 +4844,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for generating term encoders from type modules",
   "namespace": "hydra.encoding"}

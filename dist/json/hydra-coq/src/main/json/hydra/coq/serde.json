@@ -3607,6 +3607,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Coq serializer: converts Coq AST to concrete Coq source code",
   "namespace": "hydra.coq.serde"}

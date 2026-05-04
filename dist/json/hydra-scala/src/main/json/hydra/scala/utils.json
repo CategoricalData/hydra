@@ -1017,6 +1017,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utility functions for constructing Scala AST nodes",
   "namespace": "hydra.scala.utils"}

@@ -26539,6 +26539,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Python code generator: converts Hydra modules to Python source code",
   "namespace": "hydra.python.coder"}

@@ -1086,6 +1086,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for annotation and type stripping operations",
   "namespace": "hydra.test.strip"}

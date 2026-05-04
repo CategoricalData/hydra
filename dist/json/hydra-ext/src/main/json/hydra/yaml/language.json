@@ -172,6 +172,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints for YAML",
   "namespace": "hydra.yaml.language"}

@@ -4158,6 +4158,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.",
   "namespace": "hydra.serialization"}

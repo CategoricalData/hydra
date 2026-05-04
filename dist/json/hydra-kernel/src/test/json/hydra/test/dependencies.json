@@ -6483,6 +6483,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for dependency analysis and let-term transformations",
   "namespace": "hydra.test.dependencies"}

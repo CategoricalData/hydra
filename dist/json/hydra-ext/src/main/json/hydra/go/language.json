@@ -310,6 +310,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints and reserved words for Go 1.22+",
   "namespace": "hydra.go.language"}

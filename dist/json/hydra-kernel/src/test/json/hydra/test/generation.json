@@ -2133,6 +2133,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for code generation operations such as inferModules and inferModulesGiven",
   "namespace": "hydra.test.generation"}

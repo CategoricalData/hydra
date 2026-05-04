@@ -64,6 +64,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "String representations of hydra.graph types",
   "namespace": "hydra.show.graph"}

@@ -8664,6 +8664,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Java serializer: converts Java AST to concrete syntax",
   "namespace": "hydra.java.serde"}

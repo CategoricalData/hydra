@@ -4974,6 +4974,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
   "namespace": "hydra.rust.coder"}

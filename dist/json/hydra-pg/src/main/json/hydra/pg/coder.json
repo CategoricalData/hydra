@@ -10283,6 +10283,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Property graph element coders for mapping Hydra terms to property graph elements",
   "namespace": "hydra.pg.coder"}

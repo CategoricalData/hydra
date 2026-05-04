@@ -712,6 +712,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision",
   "namespace": "hydra.test.json.yaml"}

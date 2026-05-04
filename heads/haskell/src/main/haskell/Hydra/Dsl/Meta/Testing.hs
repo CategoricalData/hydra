@@ -19,11 +19,13 @@ import Hydra.Error.Packaging (InvalidModuleError, InvalidPackageError)
 import Hydra.Testing as Testing
 import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Dsl.Validation as Validation
 
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -99,8 +101,18 @@ alphaConvertRef = TTerm $ TermVariable $ Name "hydra.reduction.alphaConvert"
 betaReduceTypeRef :: TTerm (Context -> Graph -> Type -> Either (InContext Error) Type)
 betaReduceTypeRef = TTerm $ TermVariable $ Name "hydra.reduction.betaReduceType"
 
-validateCoreTermRef :: TTerm (Bool -> Graph -> Term -> Maybe InvalidTermError)
-validateCoreTermRef = TTerm $ TermVariable $ Name "hydra.validate.core.term"
+-- | Reference to the profile-aware core term validator. Used by
+-- 'validateCoreTermCase' (with 'kernelDefaultCoreProfileRef'-applied,
+-- head-extracted to preserve the legacy 'Maybe E' shape) and by
+-- 'validateCoreTermCaseWithProfile' (with an explicit profile).
+validateCoreTermProfiledRef :: TTerm (ValidationProfile -> Bool -> Graph -> Term -> ValidationResult InvalidTermError)
+validateCoreTermProfiledRef = TTerm $ TermVariable $ Name "hydra.validate.core.term"
+
+-- | Reference to the kernel-default core validation profile (term + type
+-- rules; 'singleVariantUnion' classified as a warning, everything else
+-- as an error; maxErrors=1).
+kernelDefaultCoreProfileRef :: TTerm ValidationProfile
+kernelDefaultCoreProfileRef = TTerm $ TermVariable $ Name "hydra.validate.core.kernelDefaultCoreProfile"
 
 showInvalidTermErrorRef :: TTerm (InvalidTermError -> String)
 showInvalidTermErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.core.invalidTermError"
@@ -136,11 +148,32 @@ checkModuleNamespaceConventionRef = TTerm $ TermVariable $ Name "hydra.validate.
 checkPackageNameConventionRef :: TTerm (Package -> Maybe InvalidPackageError)
 checkPackageNameConventionRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.checkPackageNameConvention"
 
+-- | Reference to the kernel-strict 'kernelModule' convenience wrapper
+-- (Maybe-returning, applies 'kernelDefaultPackagingProfile' internally).
+-- Used by the kernelModule orchestrator tests in
+-- 'Sources/Test/Validate/Packaging.hs'.
 kernelModuleRef :: TTerm (Module -> Maybe InvalidModuleError)
 kernelModuleRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.kernelModule"
 
+-- | Reference to the kernel-strict 'kernelPackage' convenience wrapper.
 kernelPackageRef :: TTerm (Package -> Maybe InvalidPackageError)
 kernelPackageRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.kernelPackage"
+
+-- | Reference to the profile-aware packaging module validator. Used by
+-- 'validatePackagingModuleCaseWithProfile' directly.
+validatePackagingModuleProfiledRef :: TTerm (ValidationProfile -> ValidationResult InvalidModuleError -> Module -> ValidationResult InvalidModuleError)
+validatePackagingModuleProfiledRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.module"
+
+-- | Reference to the profile-aware packaging package validator. Returns a
+-- 'ValidationResult InvalidPackageError'; used by
+-- 'validatePackagingPackageCaseWithProfile'.
+validatePackagingPackageProfiledRef :: TTerm (ValidationProfile -> ValidationResult InvalidPackageError -> Package -> ValidationResult InvalidPackageError)
+validatePackagingPackageProfiledRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.package"
+
+-- | Reference to the kernel-default packaging validation profile (every
+-- per-module and per-package check classified as an error; maxErrors=1).
+kernelDefaultPackagingProfileRef :: TTerm ValidationProfile
+kernelDefaultPackagingProfileRef = TTerm $ TermVariable $ Name "hydra.validate.packaging.kernelDefaultPackagingProfile"
 
 showInvalidModuleErrorRef :: TTerm (InvalidModuleError -> String)
 showInvalidModuleErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.packaging.invalidModuleError"
@@ -323,13 +356,20 @@ testGroup name description subgroups cases = Phantoms.record _TestGroup [
   _TestGroup_subgroups>>: subgroups,
   _TestGroup_cases>>: cases]
 
--- | Convenience function for creating validation test cases
+-- | Convenience function for creating validation test cases. Drives the
+-- profile-aware 'hydra.validate.core.term' with the kernel-default core
+-- profile and head-extracts the resulting errors list — preserving the
+-- legacy 'Maybe InvalidTermError' shape that existing test data uses.
+-- Tests that need to assert multi-error accumulation, warning
+-- classification, or rule disabling should use
+-- 'validateCoreTermCaseWithProfile' instead.
 validateCoreTermCase :: String -> TTerm Bool -> TTerm Term -> TTerm (Maybe InvalidTermError) -> TTerm TestCaseWithMetadata
 validateCoreTermCase cname typed input expected = universalCase cname
   (retype $ Maybes.maybe
     (Phantoms.string "valid")
     (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
-    (validateCoreTermRef @@ typed @@ testGraphRef @@ input))
+    (Lists.maybeHead $ Validation.validationResultErrors $
+      validateCoreTermProfiledRef @@ kernelDefaultCoreProfileRef @@ typed @@ testGraphRef @@ input))
   (retype $ Maybes.maybe
     (Phantoms.string "valid")
     (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
@@ -337,6 +377,43 @@ validateCoreTermCase cname typed input expected = universalCase cname
   where
     retype :: TTerm x -> TTerm String
     retype (TTerm t) = TTerm t
+
+-- | Render a 'ValidationResult InvalidTermError' as a string of the form
+-- "errors=[s1;s2] warnings=[w1]". Used to compare actual vs expected
+-- 'ValidationResult' values in profile-aware test cases.
+showValidationResultTerm :: TTerm (ValidationResult InvalidTermError) -> TTerm String
+showValidationResultTerm vr = retype $
+  Strings.cat2
+    (Strings.cat2 (Phantoms.string "errors=[") $
+      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "e" $ showInvalidTermErrorRef @@ Phantoms.var "e")
+          (Validation.validationResultErrors vr))
+        (Phantoms.string "]"))
+    (Strings.cat2 (Phantoms.string " warnings=[") $
+      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "w" $ showInvalidTermErrorRef @@ Phantoms.var "w")
+          (Validation.validationResultWarnings vr))
+        (Phantoms.string "]"))
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Profile-aware variant of 'validateCoreTermCase'. Compares the full
+-- 'ValidationResult' shape — both errors and warnings — against the
+-- expected, allowing the caller to specify any profile (not just the
+-- kernel default). Use for tests that exercise multi-error
+-- accumulation, warning vs error classification, or rule disabling.
+validateCoreTermCaseWithProfile
+  :: String
+  -> TTerm ValidationProfile
+  -> TTerm Bool
+  -> TTerm Term
+  -> TTerm (ValidationResult InvalidTermError)
+  -> TTerm TestCaseWithMetadata
+validateCoreTermCaseWithProfile cname profile typed input expected = universalCase cname
+  (showValidationResultTerm
+    (validateCoreTermProfiledRef @@ profile @@ typed @@ testGraphRef @@ input))
+  (showValidationResultTerm expected)
 
 -- | Convenience function for creating module-validation test cases.
 -- Applies a packaging-level Module validator to an input module and compares
@@ -371,3 +448,79 @@ validatePackagingPackageCase cname validator input expected = universalCase cnam
   where
     retype :: TTerm x -> TTerm String
     retype (TTerm t) = TTerm t
+
+-- | Render a 'ValidationResult InvalidModuleError' as a string of the form
+-- "errors=[s1;s2] warnings=[w1]". Counterpart of 'showValidationResultTerm'
+-- for module-level findings.
+showValidationResultModule :: TTerm (ValidationResult InvalidModuleError) -> TTerm String
+showValidationResultModule vr = retype $
+  Strings.cat2
+    (Strings.cat2 (Phantoms.string "errors=[") $
+      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "e" $ showInvalidModuleErrorRef @@ Phantoms.var "e")
+          (Validation.validationResultErrors vr))
+        (Phantoms.string "]"))
+    (Strings.cat2 (Phantoms.string " warnings=[") $
+      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "w" $ showInvalidModuleErrorRef @@ Phantoms.var "w")
+          (Validation.validationResultWarnings vr))
+        (Phantoms.string "]"))
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Render a 'ValidationResult InvalidPackageError' as a string. Package-level
+-- counterpart of 'showValidationResultTerm'.
+showValidationResultPackage :: TTerm (ValidationResult InvalidPackageError) -> TTerm String
+showValidationResultPackage vr = retype $
+  Strings.cat2
+    (Strings.cat2 (Phantoms.string "errors=[") $
+      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "e" $ showInvalidPackageErrorRef @@ Phantoms.var "e")
+          (Validation.validationResultErrors vr))
+        (Phantoms.string "]"))
+    (Strings.cat2 (Phantoms.string " warnings=[") $
+      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "w" $ showInvalidPackageErrorRef @@ Phantoms.var "w")
+          (Validation.validationResultWarnings vr))
+        (Phantoms.string "]"))
+  where
+    retype :: TTerm x -> TTerm String
+    retype (TTerm t) = TTerm t
+
+-- | Profile-aware variant of 'validatePackagingModuleCase'. Calls
+-- 'hydra.validate.packaging.module'' (the new orchestrator) starting from
+-- an empty 'ValidationResult' and compares the full result shape against
+-- the expected.
+validatePackagingModuleCaseWithProfile
+  :: String
+  -> TTerm ValidationProfile
+  -> TTerm Module
+  -> TTerm (ValidationResult InvalidModuleError)
+  -> TTerm TestCaseWithMetadata
+validatePackagingModuleCaseWithProfile cname profile input expected = universalCase cname
+  (showValidationResultModule
+    (validatePackagingModuleProfiledRef @@ profile @@ emptyResultModule @@ input))
+  (showValidationResultModule expected)
+  where
+    emptyResultModule :: TTerm (ValidationResult InvalidModuleError)
+    emptyResultModule = Validation.validationResult
+      (Phantoms.list ([] :: [TTerm InvalidModuleError]))
+      (Phantoms.list ([] :: [TTerm InvalidModuleError]))
+
+-- | Profile-aware variant of 'validatePackagingPackageCase'.
+validatePackagingPackageCaseWithProfile
+  :: String
+  -> TTerm ValidationProfile
+  -> TTerm Package
+  -> TTerm (ValidationResult InvalidPackageError)
+  -> TTerm TestCaseWithMetadata
+validatePackagingPackageCaseWithProfile cname profile input expected = universalCase cname
+  (showValidationResultPackage
+    (validatePackagingPackageProfiledRef @@ profile @@ emptyResultPackage @@ input))
+  (showValidationResultPackage expected)
+  where
+    emptyResultPackage :: TTerm (ValidationResult InvalidPackageError)
+    emptyResultPackage = Validation.validationResult
+      (Phantoms.list ([] :: [TTerm InvalidPackageError]))
+      (Phantoms.list ([] :: [TTerm InvalidPackageError]))

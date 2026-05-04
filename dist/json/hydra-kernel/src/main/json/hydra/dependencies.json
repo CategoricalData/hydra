@@ -2946,6 +2946,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Dependency extraction, binding sort, and let normalization",
   "namespace": "hydra.dependencies"}

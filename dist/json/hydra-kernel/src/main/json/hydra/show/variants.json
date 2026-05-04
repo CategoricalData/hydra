@@ -153,6 +153,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "String representations of hydra.variants types",
   "namespace": "hydra.show.variants"}

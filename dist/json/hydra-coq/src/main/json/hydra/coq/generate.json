@@ -7351,6 +7351,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
   "namespace": "hydra.coq.generate"}
