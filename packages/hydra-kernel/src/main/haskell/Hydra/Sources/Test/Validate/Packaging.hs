@@ -9,10 +9,13 @@ import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Maps       as Maps
+import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Packaging          as Packaging
 import qualified Hydra.Dsl.Util               as Util
+import qualified Hydra.Dsl.Validation         as Validation
 
 import Hydra.Testing
 import Hydra.Sources.Libraries
@@ -27,7 +30,8 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleTermDependencies = [
               Namespace "hydra.validate.packaging",
-              Namespace "hydra.show.error.packaging"],
+              Namespace "hydra.show.error.packaging",
+              Namespace "hydra.validation"],
             moduleTypeDependencies = kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for module and package validation")}
   where
@@ -44,7 +48,8 @@ module_ = Module {
       Phantoms.toDefinition checkModuleNamespaceConventionTests,
       Phantoms.toDefinition checkPackageNameConventionTests,
       Phantoms.toDefinition kernelModuleTests,
-      Phantoms.toDefinition kernelPackageTests]
+      Phantoms.toDefinition kernelPackageTests,
+      Phantoms.toDefinition profileBehaviourTests]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
@@ -212,7 +217,8 @@ allTests = define "allTests" $
     checkModuleNamespaceConventionTests,
     checkPackageNameConventionTests,
     kernelModuleTests,
-    kernelPackageTests]
+    kernelPackageTests,
+    profileBehaviourTests]
 
 -- | Module-level convenience: run a single module-validator over an input.
 mc :: String -> TTerm (Module -> Maybe InvalidModuleError) -> TTerm Module -> TTerm (Maybe InvalidModuleError) -> TTerm TestCaseWithMetadata
@@ -463,3 +469,130 @@ kernelPackageTests = define "kernelPackageTests" $
       kernelPackageRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.foo" []])
       (conflictingModuleNamespaceErr "hydra.foo" "hydra.foo")]
+
+-- ============================================================================
+-- Profile-aware behaviour tests
+--
+-- These exercise the post-#320 packaging validator API: an explicit
+-- ValidationProfile argument and a ValidationResult return shape. The
+-- legacy 'Maybe E'-shaped tests above only see the first error per pass,
+-- so they can't observe multi-error accumulation, warning vs error
+-- classification, or rule disabling. The cases here drive
+-- validatePackagingModuleProfiledRef directly.
+-- ============================================================================
+
+-- | Build a ValidationProfile from explicit error/warning rule lists and bounds.
+profileWith :: [Name] -> [Name] -> Int -> Int -> TTerm ValidationProfile
+profileWith errs warns mE mW = Validation.validationProfile
+  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> errs)
+  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> warns)
+  (Phantoms.int32 mE)
+  (Phantoms.int32 mW)
+
+-- | Build a ValidationResult of InvalidModuleError from explicit error and warning lists.
+resultWithModule
+  :: [TTerm InvalidModuleError]
+  -> [TTerm InvalidModuleError]
+  -> TTerm (ValidationResult InvalidModuleError)
+resultWithModule errs warns = Validation.validationResult
+  (Phantoms.list errs) (Phantoms.list warns)
+
+-- | Bare InvalidModuleError for a missing-documentation finding. Differs
+-- from 'missingDocumentationErr' in that it returns the bare error (not
+-- Maybe), suitable for inclusion in a ValidationResult's error/warning list.
+missingDocErrAt :: String -> String -> TTerm InvalidModuleError
+missingDocErrAt nsStr nameStr =
+  Phantoms.inject _InvalidModuleError _InvalidModuleError_missingDocumentation $
+    Phantoms.record _MissingDocumentationError [
+      unName _MissingDocumentationError_namespace Phantoms.>: nsLit nsStr,
+      unName _MissingDocumentationError_name Phantoms.>: nm nameStr]
+
+-- | Bare InvalidModuleError for a duplicate-definition-name finding.
+duplicateDefErrAt :: String -> String -> TTerm InvalidModuleError
+duplicateDefErrAt nsStr nameStr =
+  Phantoms.inject _InvalidModuleError _InvalidModuleError_duplicateDefinitionName $
+    Phantoms.record _DuplicateDefinitionNameError [
+      unName _DuplicateDefinitionNameError_namespace Phantoms.>: nsLit nsStr,
+      unName _DuplicateDefinitionNameError_name Phantoms.>: nm nameStr]
+
+-- | Fully qualified rule names used by the profile-aware tests.
+missingDocumentationRule :: Name
+missingDocumentationRule = Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"
+
+duplicateDefinitionNameRule :: Name
+duplicateDefinitionNameRule = Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName"
+
+-- | An empty TTerm-encoded ValidationResult InvalidModuleError, used as the
+-- starting accumulator for the orchestrator.
+emptyVR :: TTerm (ValidationResult InvalidModuleError)
+emptyVR = Validation.validationResult
+  (Phantoms.list ([] :: [TTerm InvalidModuleError]))
+  (Phantoms.list ([] :: [TTerm InvalidModuleError]))
+
+-- | A test fixture module that violates two distinct rules simultaneously:
+-- one undocumented definition (missingDocumentation) and a duplicate
+-- definition name (duplicateDefinitionName). Used by the multi-error
+-- accumulation cases below.
+twoRuleViolationModule :: TTerm Module
+twoRuleViolationModule = mkModule "hydra.foo" [
+  mkUndocumentedTermDef "hydra.foo.aaa",
+  mkUndocumentedTermDef "hydra.foo.aaa"]
+
+profileBehaviourTests :: TTermDefinition TestGroup
+profileBehaviourTests = define "profileBehaviourTests" $
+  subgroup "profile-aware behaviour" [
+    -- Multi-error accumulation: a module with two distinct rule violations
+    -- (undocumented definition + duplicate definition name) produces two
+    -- separate findings when maxErrors is high enough to hold both.
+    -- Each per-rule check (e.g. checkDefinitionDocumentation) still
+    -- short-circuits internally on the first finding it sees, so the way
+    -- to produce multi-error results from the packaging orchestrator is
+    -- to violate two distinct rules.
+    universalCase "multi-error accumulation: two distinct rules produce two findings"
+      (showValidationResultModule
+        (((validatePackagingModuleProfiledRef
+          Phantoms.@@ profileWith [missingDocumentationRule, duplicateDefinitionNameRule] [] 5 5)
+          Phantoms.@@ emptyVR)
+          Phantoms.@@ twoRuleViolationModule))
+      (showValidationResultModule $ resultWithModule
+        [missingDocErrAt "hydra.foo" "hydra.foo.aaa",
+         duplicateDefErrAt "hydra.foo" "hydra.foo.aaa"]
+        []),
+    -- Warning classification: same input, both rules live in warningRules.
+    -- Expect 0 errors, 2 warnings.
+    universalCase "warning classification: both rules demoted to warnings"
+      (showValidationResultModule
+        (((validatePackagingModuleProfiledRef
+          Phantoms.@@ profileWith [] [missingDocumentationRule, duplicateDefinitionNameRule] 5 5)
+          Phantoms.@@ emptyVR)
+          Phantoms.@@ twoRuleViolationModule))
+      (showValidationResultModule $ resultWithModule
+        []
+        [missingDocErrAt "hydra.foo" "hydra.foo.aaa",
+         duplicateDefErrAt "hydra.foo" "hydra.foo.aaa"]),
+    -- Rule disabling: only missingDocumentation in errorRules; the
+    -- duplicate-definition-name rule is absent from both lists, so its
+    -- check is skipped entirely. Expect 1 error (missing-doc), 0 findings
+    -- for the duplicate.
+    universalCase "rule disabling: duplicate-name rule omitted from profile"
+      (showValidationResultModule
+        (((validatePackagingModuleProfiledRef
+          Phantoms.@@ profileWith [missingDocumentationRule] [] 5 5)
+          Phantoms.@@ emptyVR)
+          Phantoms.@@ twoRuleViolationModule))
+      (showValidationResultModule $ resultWithModule
+        [missingDocErrAt "hydra.foo" "hydra.foo.aaa"]
+        []),
+    -- maxErrors bound: both rules active, but maxErrors=1. The fold
+    -- iterates over guarded checks in source order; missingDocumentation
+    -- fires before duplicateDefinitionName, so only the missing-doc
+    -- finding is collected.
+    universalCase "maxErrors bound: only first rule collected when maxErrors=1"
+      (showValidationResultModule
+        (((validatePackagingModuleProfiledRef
+          Phantoms.@@ profileWith [missingDocumentationRule, duplicateDefinitionNameRule] [] 1 5)
+          Phantoms.@@ emptyVR)
+          Phantoms.@@ twoRuleViolationModule))
+      (showValidationResultModule $ resultWithModule
+        [missingDocErrAt "hydra.foo" "hydra.foo.aaa"]
+        [])]
