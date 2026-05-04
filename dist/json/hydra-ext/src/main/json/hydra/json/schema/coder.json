@@ -2765,6 +2765,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
   "namespace": "hydra.json.schema.coder"}

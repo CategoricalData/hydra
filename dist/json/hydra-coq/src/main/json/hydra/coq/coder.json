@@ -4871,6 +4871,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Coq code generator: converts Hydra modules to Coq source",
   "namespace": "hydra.coq.coder"}

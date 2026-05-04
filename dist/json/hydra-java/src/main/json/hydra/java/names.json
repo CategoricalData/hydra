@@ -190,6 +190,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Java naming constants and package name utilities",
   "namespace": "hydra.java.names"}

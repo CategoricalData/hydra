@@ -5216,6 +5216,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Python serializer: converts Python AST to concrete syntax",
   "namespace": "hydra.python.serde"}

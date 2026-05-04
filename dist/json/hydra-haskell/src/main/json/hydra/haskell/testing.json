@@ -1546,6 +1546,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Haskell test code generation for HSpec-based generation tests",
   "namespace": "hydra.haskell.testing"}

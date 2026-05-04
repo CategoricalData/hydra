@@ -3859,6 +3859,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for generating domain-specific DSL modules from type modules",
   "namespace": "hydra.dsls"}

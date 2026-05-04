@@ -512,6 +512,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "AST operators for Haskell",
   "namespace": "hydra.haskell.operators"}

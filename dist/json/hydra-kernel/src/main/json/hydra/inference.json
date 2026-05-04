@@ -13178,6 +13178,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type inference following Algorithm W, extended for nominal terms and types",
   "namespace": "hydra.inference"}

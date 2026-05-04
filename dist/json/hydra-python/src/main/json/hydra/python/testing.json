@@ -677,6 +677,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Python test code generation codec for pytest-based generation tests",
   "namespace": "hydra.python.testing"}

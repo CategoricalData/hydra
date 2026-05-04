@@ -704,6 +704,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "String representations of hydra.error types",
   "namespace": "hydra.show.errors"}

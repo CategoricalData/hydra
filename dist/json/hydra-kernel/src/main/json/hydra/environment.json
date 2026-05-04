@@ -1601,6 +1601,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Graph to type environment conversions",
   "namespace": "hydra.environment"}

@@ -2004,6 +2004,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Inference tests for examples from the Hydra kernel",
   "namespace": "hydra.test.inference.kernelExamples"}

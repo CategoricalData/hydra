@@ -57,6 +57,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Hydra's inference test suite",
   "namespace": "hydra.test.inference.all"}

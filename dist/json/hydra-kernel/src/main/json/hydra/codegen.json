@@ -5231,6 +5231,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Pure code generation pipeline for bootstrapping Hydra across languages.",
   "namespace": "hydra.codegen"}

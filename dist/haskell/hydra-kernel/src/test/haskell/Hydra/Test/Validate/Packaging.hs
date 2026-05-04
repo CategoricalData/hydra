@@ -884,8 +884,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -905,8 +904,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -949,8 +947,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -970,8 +967,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -1013,8 +1009,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -1033,8 +1028,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -1071,8 +1065,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),
@@ -1092,8 +1085,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []}) (Packaging.Module {
               Packaging.moduleDescription = (Just "Test module hydra.foo"),
               Packaging.moduleNamespace = (Packaging.Namespace "hydra.foo"),
-              Packaging.moduleTermDependencies = [],
-              Packaging.moduleTypeDependencies = [],
+              Packaging.moduleDependencies = [],
               Packaging.moduleDefinitions = [
                 Packaging.DefinitionTerm (Packaging.TermDefinition {
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.aaa"),

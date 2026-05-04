@@ -4880,6 +4880,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Serialization functions for converting JavaScript AST to abstract expressions",
   "namespace": "hydra.javaScript.serde"}

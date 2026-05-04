@@ -18108,6 +18108,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Inference tests for expected failures",
   "namespace": "hydra.test.inference.failures"}

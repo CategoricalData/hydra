@@ -736,6 +736,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "AST operators for Rust serialization",
   "namespace": "hydra.rust.operators"}

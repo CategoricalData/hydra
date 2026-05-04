@@ -1198,6 +1198,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utilities for working with subterm steps and paths.",
   "namespace": "hydra.show.paths"}
