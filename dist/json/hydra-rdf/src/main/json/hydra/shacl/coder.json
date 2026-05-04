@@ -3352,6 +3352,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions",
   "namespace": "hydra.shacl.coder"}

@@ -61,6 +61,7 @@ module Hydra.Kernel (
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Util,
+  module Hydra.Validation,
   module Hydra.Variables,
   module Hydra.Variants,
 ) where
@@ -110,5 +111,6 @@ import Hydra.Testing
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Util
+import Hydra.Validation
 import Hydra.Variables
 import Hydra.Variants

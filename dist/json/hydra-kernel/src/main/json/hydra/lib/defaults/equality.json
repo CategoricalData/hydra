@@ -321,6 +321,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Default term-level implementations of Equality functions for the Hydra interpreter.",
   "namespace": "hydra.lib.defaults.equality"}

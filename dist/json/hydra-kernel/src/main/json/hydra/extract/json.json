@@ -707,6 +707,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utilities for extracting values from JSON objects",
   "namespace": "hydra.extract.json"}

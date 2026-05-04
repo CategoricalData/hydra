@@ -880,6 +880,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Graph context extension and type scheme conversion",
   "namespace": "hydra.scoping"}

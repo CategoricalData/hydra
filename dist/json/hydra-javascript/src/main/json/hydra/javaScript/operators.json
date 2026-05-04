@@ -536,6 +536,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "AST operators for JavaScript with precedence and associativity",
   "namespace": "hydra.javaScript.operators"}

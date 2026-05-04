@@ -1209,6 +1209,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "JSON parser using Hydra parser combinators",
   "namespace": "hydra.json.parser"}

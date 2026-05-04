@@ -7028,6 +7028,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Java utilities for constructing Java syntax trees",
   "namespace": "hydra.java.utils"}

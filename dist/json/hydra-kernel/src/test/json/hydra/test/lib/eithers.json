@@ -3675,6 +3675,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for hydra.lib.eithers primitives",
   "namespace": "hydra.test.lib.eithers"}

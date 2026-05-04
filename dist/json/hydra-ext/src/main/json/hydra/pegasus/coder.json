@@ -3811,6 +3811,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Pegasus PDL code generator: converts Hydra modules to PDL schema files",
   "namespace": "hydra.pegasus.coder"}

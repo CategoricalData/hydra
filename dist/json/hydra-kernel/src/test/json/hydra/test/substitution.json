@@ -2262,6 +2262,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for type and term substitution operations",
   "namespace": "hydra.test.substitution"}

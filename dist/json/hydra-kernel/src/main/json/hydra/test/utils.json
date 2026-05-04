@@ -323,6 +323,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Shared utility functions for test code generation codecs",
   "namespace": "hydra.test.utils"}

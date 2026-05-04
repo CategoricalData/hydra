@@ -5331,6 +5331,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.",
   "namespace": "hydra.hoisting"}

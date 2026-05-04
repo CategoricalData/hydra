@@ -1951,6 +1951,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Serialization functions for converting JSON Schema documents to JSON values",
   "namespace": "hydra.json.schema.serde"}

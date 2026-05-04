@@ -460,6 +460,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "String representations of hydra.error.packaging types",
   "namespace": "hydra.show.error.packaging"}

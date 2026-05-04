@@ -1177,6 +1177,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for JSON serialization",
   "namespace": "hydra.test.json.writer"}

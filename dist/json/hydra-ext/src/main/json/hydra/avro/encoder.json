@@ -9273,6 +9273,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values",
   "namespace": "hydra.avro.encoder"}

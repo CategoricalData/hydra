@@ -11145,6 +11145,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Inference tests for algebraic data types",
   "namespace": "hydra.test.inference.algebraicTypes"}

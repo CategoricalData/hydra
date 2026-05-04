@@ -17068,6 +17068,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for let-binding hoisting transformations",
   "namespace": "hydra.test.hoisting.let"}
