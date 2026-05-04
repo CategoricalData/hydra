@@ -8,8 +8,11 @@ import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Dsl.Validation         as Validation
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -27,7 +30,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"],
+            moduleTermDependencies = [Namespace "hydra.validate.core", Namespace "hydra.show.error.core", Namespace "hydra.validation"],
             moduleTypeDependencies = kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for core term and type validation")}
   where
@@ -37,6 +40,7 @@ module_ = Module {
       Phantoms.toDefinition duplicateFieldsTests,
       Phantoms.toDefinition emptyLetBindingsTests,
       Phantoms.toDefinition identityApplicationTests,
+      Phantoms.toDefinition profileBehaviourTests,
       Phantoms.toDefinition variableShadowingTests]
       -- Commented out pending test gen fixes (raw constructors / unresolvable names):
       -- annotationTests, selfApplicationTests, emptyCaseStatementTests,
@@ -218,6 +222,7 @@ allTests = define "allTests" $
     -- unknownPrimitiveTests,      -- primitive refs cause type unification with Term
     -- selfApplicationTests,       -- needs unbound variables
     identityApplicationTests,
+    profileBehaviourTests,
     -- redundantWrapUnwrapTests,   -- uses unresolvable type names TypeA/TypeB/MyType
     variableShadowingTests]
     -- emptyCaseStatementTests,    -- needs unresolvable type name "MyUnion"
@@ -446,3 +451,95 @@ namingConventionTests = define "namingConventionTests" $
       (TTerm $ TermLet $ Let [Binding (Name "") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1) Nothing] (TermVariable $ Name "x"))
       (invalidLetNameErr "")]
 -}
+
+-- ============================================================================
+-- Profile-aware behaviour tests
+--
+-- These exercise the post-#320 validator API: an explicit ValidationProfile
+-- argument and a ValidationResult return shape. The legacy 'Maybe E'-shaped
+-- tests above only see the first error per pass, so they can't observe
+-- multi-error accumulation, warning vs error classification, or rule
+-- disabling. The cases here drive validateCoreTermProfiledRef directly.
+-- ============================================================================
+
+-- | Build a ValidationProfile from explicit error/warning rule lists and bounds.
+profileWith :: [Name] -> [Name] -> Int -> Int -> TTerm ValidationProfile
+profileWith errs warns mE mW = Validation.validationProfile
+  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> errs)
+  (Sets.fromList $ Phantoms.list $ Phantoms.nameLift <$> warns)
+  (Phantoms.int32 mE)
+  (Phantoms.int32 mW)
+
+-- | Build a ValidationResult from explicit error and warning lists.
+resultWith
+  :: [TTerm InvalidTermError]
+  -> [TTerm InvalidTermError]
+  -> TTerm (ValidationResult InvalidTermError)
+resultWith errs warns = Validation.validationResult
+  (Phantoms.list errs) (Phantoms.list warns)
+
+-- | Bare InvalidTermError representing an empty-let-bindings violation at
+-- a given subterm path. Differs from 'emptyLetErr' in two ways: returns
+-- the bare error (not Maybe), and accepts a path so distinct violations
+-- in the same input can be distinguished by location.
+emptyLetErrAt :: [TTerm SubtermStep] -> TTerm InvalidTermError
+emptyLetErrAt path = Phantoms.inject _InvalidTermError _InvalidTermError_emptyLetBindings $
+  Phantoms.record _EmptyLetBindingsError [
+    unName _EmptyLetBindingsError_location Phantoms.>:
+      Phantoms.wrap _SubtermPath (Phantoms.list path)]
+
+-- | The fully qualified rule name for InvalidTermError.emptyLetBindings.
+-- Matches the format produced by 'qualifiedRule' in Validate/Core.hs.
+emptyLetBindingsRule :: Name
+emptyLetBindingsRule = Name "hydra.error.core.InvalidTermError.emptyLetBindings"
+
+profileBehaviourTests :: TTermDefinition TestGroup
+profileBehaviourTests = define "profileBehaviourTests" $
+  subgroup "profile-aware behaviour" [
+    -- Multi-error accumulation: nested empty lets at distinct paths produce
+    -- two separate findings when maxErrors is high enough to hold both.
+    universalCase "multi-error accumulation: two empty-let errors collected"
+      (showValidationResultTerm
+        ((((validateCoreTermProfiledRef
+          Phantoms.@@ profileWith [emptyLetBindingsRule] [] 5 5)
+          Phantoms.@@ Phantoms.boolean False)
+          Phantoms.@@ testGraphRef)
+          Phantoms.@@ (lets [] (lets [] (int32 0)))))
+      (showValidationResultTerm $ resultWith
+        [emptyLetErrAt [], emptyLetErrAt [accLetBody]]
+        []),
+    -- Warning classification: empty-let rule in warningRules.
+    -- Expect 0 errors, 2 warnings (one per nested empty let).
+    universalCase "warning classification: empty-let demoted to warnings"
+      (showValidationResultTerm
+        ((((validateCoreTermProfiledRef
+          Phantoms.@@ profileWith [] [emptyLetBindingsRule] 5 5)
+          Phantoms.@@ Phantoms.boolean False)
+          Phantoms.@@ testGraphRef)
+          Phantoms.@@ (lets [] (lets [] (int32 0)))))
+      (showValidationResultTerm $ resultWith
+        []
+        [emptyLetErrAt [], emptyLetErrAt [accLetBody]]),
+    -- Rule disabling: rule is in neither errorRules nor warningRules, so
+    -- the check is skipped entirely. Expect 0 errors, 0 warnings.
+    universalCase "rule disabling: empty-let omitted from profile"
+      (showValidationResultTerm
+        ((((validateCoreTermProfiledRef
+          Phantoms.@@ profileWith [] [] 5 5)
+          Phantoms.@@ Phantoms.boolean False)
+          Phantoms.@@ testGraphRef)
+          Phantoms.@@ (lets [] (int32 0))))
+      (showValidationResultTerm $ resultWith [] []),
+    -- maxErrors bound: same nested-empty-lets input, but maxErrors=1.
+    -- Expect only the outer error; the recursion is hard-stopped after
+    -- the first error is collected.
+    universalCase "maxErrors bound: only first error collected when maxErrors=1"
+      (showValidationResultTerm
+        ((((validateCoreTermProfiledRef
+          Phantoms.@@ profileWith [emptyLetBindingsRule] [] 1 5)
+          Phantoms.@@ Phantoms.boolean False)
+          Phantoms.@@ testGraphRef)
+          Phantoms.@@ (lets [] (lets [] (int32 0)))))
+      (showValidationResultTerm $ resultWith
+        [emptyLetErrAt []]
+        [])]
