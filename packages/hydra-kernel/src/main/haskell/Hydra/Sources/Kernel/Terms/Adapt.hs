@@ -426,7 +426,8 @@ adaptTerm = define "adaptTerm" $
         optCases (var "mterm")
           (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
           ("term2" ~> right $ var "term2"))
-      [_Term_typeApplication>>: "ta" ~>
+      [_Term_annotated>>:        "_" ~> right $ var "term1",
+       _Term_typeApplication>>: "ta" ~>
          "atyp" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
          right $ Core.termTypeApplication $ Core.typeApplicationTerm
            (Core.typeApplicationTermBody $ var "ta")
@@ -841,6 +842,12 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
   "push">: ("body" ~> "typ" ~> cases _Term (var "body")
     -- Default: keep TypeApp as-is
     (Just $ Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ")) [
+    -- TypeApp(Annotated(b, ann), τ) → Annotated(push(b, τ), ann)
+    -- Annotations are transparent to typing; push the type-app past
+    -- the annotation to whichever shape is underneath. See #353.
+    _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
+      (var "push" @@ (Core.annotatedTermBody $ var "at") @@ var "typ")
+      (Core.annotatedTermAnnotation $ var "at"),
     -- TypeApp(App(f, arg), τ) → go(App(TypeApp(f, τ), arg))
     _Term_application>>: "a" ~> var "go" @@
       (Core.termApplication $ Core.application
