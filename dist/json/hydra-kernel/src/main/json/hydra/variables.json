@@ -2882,6 +2882,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Free variable analysis, term-level substitution, and unshadowing",
   "namespace": "hydra.variables"}

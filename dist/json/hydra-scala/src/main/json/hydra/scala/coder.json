@@ -10682,6 +10682,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Scala code generator: converts Hydra modules to Scala source code",
   "namespace": "hydra.scala.coder"}

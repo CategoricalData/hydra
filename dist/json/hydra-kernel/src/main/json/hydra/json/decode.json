@@ -3573,6 +3573,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.",
   "namespace": "hydra.json.decode"}

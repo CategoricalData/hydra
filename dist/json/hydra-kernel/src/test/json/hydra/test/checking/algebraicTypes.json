@@ -7811,6 +7811,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Algebraic type checking test cases: unit, pairs, eithers, optionals",
   "namespace": "hydra.test.checking.algebraicTypes"}

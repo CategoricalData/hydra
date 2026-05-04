@@ -7570,6 +7570,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for automatic differentiation",
   "namespace": "hydra.test.differentiation"}

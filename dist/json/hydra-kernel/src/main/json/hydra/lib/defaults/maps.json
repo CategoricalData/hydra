@@ -1498,6 +1498,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Default term-level implementations of Map functions for the Hydra interpreter.",
   "namespace": "hydra.lib.defaults.maps"}

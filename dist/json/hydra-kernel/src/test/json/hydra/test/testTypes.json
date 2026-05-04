@@ -1715,6 +1715,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type definitions for the test suite",
   "namespace": "hydra.test.testTypes"}

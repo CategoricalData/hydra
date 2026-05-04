@@ -1651,6 +1651,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Variable substitution in type and term expressions.",
   "namespace": "hydra.substitution"}

@@ -199,15 +199,25 @@ validateKernelModulesOrExit mods = do
     termDefs m =
       [td | Packaging.DefinitionTerm td <- Packaging.moduleDefinitions m
           , not (S.member (Packaging.termDefinitionName td) exemptTermNames)]
+    -- Empty ValidationResult, used as the starting accumulator for the
+    -- profile-aware validators.
+    emptyResult :: Kernel.ValidationResult e
+    emptyResult = Kernel.ValidationResult [] []
     validateTypeDef td =
       let Core.TypeScheme vs body _ = Packaging.typeDefinitionTypeScheme td
           inScope = S.union kernelTypeNames (S.fromList vs)
-      in ValidateCore.type_ inScope body
+          vr = ValidateCore.type_ ValidateCore.kernelDefaultCoreProfile emptyResult inScope body
+      in case Kernel.validationResultErrors vr of
+           []    -> Nothing
+           err:_ -> Just err
     -- typed = False: pre-inference, lambdas have no domain annotations and
     -- term variables don't yet have known types, so type-variable-binding
     -- checks (System F mode) would fire spuriously.
     validateTermDef graph td =
-      ValidateCore.term False graph (Packaging.termDefinitionTerm td)
+      let vr = ValidateCore.term ValidateCore.kernelDefaultCoreProfile False graph (Packaging.termDefinitionTerm td)
+      in case Kernel.validationResultErrors vr of
+           []    -> Nothing
+           err:_ -> Just err
     reportPkgFailure (m, err) = do
       putStrLn $ "  [packaging] " ++ Packaging.unNamespace (Kernel.moduleNamespace m)
                        ++ ": " ++ ShowErrorPackaging.invalidModuleError err

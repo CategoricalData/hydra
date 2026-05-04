@@ -1707,6 +1707,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "String formatting types and functions.",
   "namespace": "hydra.formatting"}

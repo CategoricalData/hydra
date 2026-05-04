@@ -12075,6 +12075,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for generating term decoders from type modules",
   "namespace": "hydra.decoding"}

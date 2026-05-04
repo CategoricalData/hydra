@@ -12,10 +12,9 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.validation"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.validation"),
-      Packaging.moduleTermDependencies = [
-        Packaging.Namespace "hydra.encode.core"],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.validation"],
+      Packaging.moduleDependencies = [
+        Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.validation")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.validation.validationProfile"),

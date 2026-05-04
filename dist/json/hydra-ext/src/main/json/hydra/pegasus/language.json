@@ -163,6 +163,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints for LinkedIn Pegasus (PDL)",
   "namespace": "hydra.pegasus.language"}

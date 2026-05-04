@@ -6992,6 +6992,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Round-trip test cases for JSON encoding and decoding",
   "namespace": "hydra.test.json.roundtrip"}

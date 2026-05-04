@@ -6768,6 +6768,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Collection type checking test cases: lists, sets, maps",
   "namespace": "hydra.test.checking.collections"}

@@ -7122,6 +7122,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for reducing terms and types, i.e. performing computations.",
   "namespace": "hydra.reduction"}

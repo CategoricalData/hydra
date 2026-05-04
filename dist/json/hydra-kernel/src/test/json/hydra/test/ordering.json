@@ -4662,6 +4662,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for Ord instance comparisons on complex Hydra types",
   "namespace": "hydra.test.ordering"}

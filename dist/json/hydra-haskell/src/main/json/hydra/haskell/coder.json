@@ -9194,6 +9194,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for encoding Hydra modules as Haskell modules",
   "namespace": "hydra.haskell.coder"}

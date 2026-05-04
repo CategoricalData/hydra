@@ -589,6 +589,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "JSON serialization functions using the Hydra AST",
   "namespace": "hydra.json.writer"}

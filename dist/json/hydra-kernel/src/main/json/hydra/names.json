@@ -870,6 +870,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for working with qualified names.",
   "namespace": "hydra.names"}

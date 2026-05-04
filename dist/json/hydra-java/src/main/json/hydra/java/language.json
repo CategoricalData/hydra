@@ -395,6 +395,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Language constraints and reserved words for Java",
   "namespace": "hydra.java.language"}

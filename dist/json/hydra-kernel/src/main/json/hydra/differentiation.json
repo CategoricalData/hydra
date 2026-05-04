@@ -4180,6 +4180,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Source-to-source automatic differentiation for Float64 terms.",
   "namespace": "hydra.differentiation"}
