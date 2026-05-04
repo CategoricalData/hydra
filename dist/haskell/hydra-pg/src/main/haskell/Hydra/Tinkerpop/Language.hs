@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints based on TinkerPop Graph.Features
 
 module Hydra.Tinkerpop.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Logic as Logic
@@ -14,7 +12,6 @@ import qualified Hydra.Tinkerpop.Features as Features
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Populate language constraints based on TinkerPop Graph.Features
 tinkerpopLanguage :: Coders.LanguageName -> Features.Features -> Features.ExtraFeatures t0 -> Coders.Language
 tinkerpopLanguage name features extras =

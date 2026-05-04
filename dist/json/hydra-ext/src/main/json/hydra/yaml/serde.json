@@ -1546,6 +1546,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants",
     "hydra.yaml.model"],
   "description": "Native YAML serialization: YAML Node to String",

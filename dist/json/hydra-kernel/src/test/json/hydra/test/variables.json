@@ -9104,6 +9104,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for variable analysis and manipulation",
   "namespace": "hydra.test.variables"}

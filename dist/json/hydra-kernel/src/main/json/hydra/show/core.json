@@ -2670,6 +2670,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "String representations of hydra.core types",
   "namespace": "hydra.show.core"}

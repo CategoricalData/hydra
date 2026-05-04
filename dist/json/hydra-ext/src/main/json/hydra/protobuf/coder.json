@@ -5255,6 +5255,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions",
   "namespace": "hydra.protobuf.coder"}

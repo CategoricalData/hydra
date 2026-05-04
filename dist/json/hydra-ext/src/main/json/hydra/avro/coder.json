@@ -10298,6 +10298,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms",
   "namespace": "hydra.avro.coder"}

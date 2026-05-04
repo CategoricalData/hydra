@@ -2585,6 +2585,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "A module for lexical operations over graphs.",
   "namespace": "hydra.lexical"}

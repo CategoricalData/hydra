@@ -1028,7 +1028,7 @@ encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
                     Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
             elimBranch =
                     Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal rhs))) (\mrt -> Maybes.cases mrt (Eithers.bind (Checking.typeOfTerm cx g rhs) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod (Strip.deannotateTerm lhs) cx g))
-        in case (Strip.deannotateTerm lhs) of
+        in case (Strip.deannotateAndDetypeTerm lhs) of
           Core.TermProject _ -> elimBranch
           Core.TermCases _ -> elimBranch
           Core.TermUnwrap _ -> elimBranch
@@ -1056,7 +1056,7 @@ encodeElimination :: JavaEnvironment.JavaEnvironment -> Maybe Syntax.Expression 
 encodeElimination env marg dom cod elimTerm cx g =
 
       let aliases = JavaEnvironment.javaEnvironmentAliases env
-      in case (Strip.deannotateTerm elimTerm) of
+      in case (Strip.deannotateAndDetypeTerm elimTerm) of
         Core.TermProject v0 ->
           let fname = Core.projectionField v0
           in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\jdomr -> Maybes.cases marg (
@@ -1074,12 +1074,22 @@ encodeElimination env marg dom cod elimTerm cx g =
               fields = Core.caseStatementCases v0
           in (Maybes.cases marg (
             let uVar = Core.Name "u"
+                domTypeArgs0 =
+                        \ty -> \acc -> case (Strip.deannotateType ty) of
+                          Core.TypeApplication v1 -> domTypeArgs0 (Core.applicationTypeFunction v1) (Lists.cons (Core.applicationTypeArgument v1) acc)
+                          _ -> acc
+                domTypeArgs = domTypeArgs0 dom []
+                bareElim = Strip.deannotateAndDetypeTerm elimTerm
+                wrappedElimTerm =
+                        Lists.foldl (\trm -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                          Core.typeApplicationTermBody = trm,
+                          Core.typeApplicationTermType = t})) bareElim domTypeArgs
                 typedLambda =
                         Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = uVar,
                           Core.lambdaDomain = (Just dom),
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = elimTerm,
+                            Core.applicationFunction = wrappedElimTerm,
                             Core.applicationArgument = (Core.TermVariable uVar)}))})
             in (encodeTerm env typedLambda cx g)) (\jarg ->
             let prim = Utils.javaExpressionToJavaPrimary jarg

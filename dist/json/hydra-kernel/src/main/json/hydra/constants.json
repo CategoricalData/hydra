@@ -211,6 +211,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "A module for tier-0 constants.",
   "namespace": "hydra.constants"}

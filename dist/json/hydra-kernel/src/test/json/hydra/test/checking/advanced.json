@@ -1792,6 +1792,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Advanced type checking test cases: annotated terms and flows",
   "namespace": "hydra.test.checking.advanced"}

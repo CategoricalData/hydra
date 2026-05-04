@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Utility functions for property graph operations
 
 module Hydra.Pg.Utils where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
@@ -24,7 +22,6 @@ import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Show.Core as ShowCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Default Tinkerpop annotation schema
 defaultTinkerpopAnnotations :: Mapping.AnnotationSchema
 defaultTinkerpopAnnotations =
@@ -44,7 +41,6 @@ defaultTinkerpopAnnotations =
       Mapping.annotationSchemaInEdge = "inEdge",
       Mapping.annotationSchemaInEdgeLabel = "inEdgeLabel",
       Mapping.annotationSchemaIgnore = "ignore"}
-
 -- | Example property graph schema with string values
 examplePgSchema :: Mapping.Schema t0 () String
 examplePgSchema =
@@ -70,7 +66,6 @@ examplePgSchema =
       Mapping.schemaAnnotations = defaultTinkerpopAnnotations,
       Mapping.schemaDefaultVertexId = "defaultVertexId",
       Mapping.schemaDefaultEdgeId = "defaultEdgeId"}
-
 -- | Extract a string from a term using the empty graph
 expString :: t0 -> Core.Term -> Either Errors.Error String
 expString cx term =
@@ -83,12 +78,10 @@ expString cx term =
       Graph.graphPrimitives = Maps.empty,
       Graph.graphSchemaTypes = Maps.empty,
       Graph.graphTypeVariables = Sets.empty}) term
-
 -- | Get all elements from a lazy graph
 lazyGraphToElements :: PgModel.LazyGraph t0 -> [PgModel.Element t0]
 lazyGraphToElements lg =
     Lists.concat2 (Lists.map (\x -> PgModel.ElementVertex x) (PgModel.lazyGraphVertices lg)) (Lists.map (\x -> PgModel.ElementEdge x) (PgModel.lazyGraphEdges lg))
-
 -- | Convert a property graph element to JSON
 pgElementToJson :: Mapping.Schema t0 t1 t2 -> PgModel.Element t2 -> Context.Context -> Either Errors.Error JsonModel.Value
 pgElementToJson schema el cx =
@@ -113,17 +106,14 @@ pgElementToJson schema el cx =
           let key = Pairs.first pair
               v = Pairs.second pair
           in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (PgModel.unPropertyKey key, (JsonModel.ValueString (ShowCore.term term2)))))) (Maps.toList pairs)))) (PgModel.edgeProperties v0))))))) el
-
 -- | Convert a list of property graph elements to JSON
 pgElementsToJson :: Mapping.Schema t0 t1 t2 -> [PgModel.Element t2] -> Context.Context -> Either Errors.Error JsonModel.Value
 pgElementsToJson schema els cx =
     Eithers.map (\els_ -> JsonModel.ValueArray els_) (Eithers.mapList (\el -> pgElementToJson schema el cx) els)
-
 -- | Get all elements from a property graph
 propertyGraphElements :: Ord t0 => (PgModel.Graph t0 -> [PgModel.Element t0])
 propertyGraphElements g =
     Lists.concat2 (Lists.map (\x -> PgModel.ElementVertex x) (Maps.elems (PgModel.graphVertices g))) (Lists.map (\x -> PgModel.ElementEdge x) (Maps.elems (PgModel.graphEdges g)))
-
 -- | Convert a type-annotated term to property graph elements
 typeApplicationTermToPropertyGraph :: Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either Errors.Error (Core.Term -> Context.Context -> Either Errors.Error [PgModel.Element t2])
 typeApplicationTermToPropertyGraph schema typ vidType eidType cx g =

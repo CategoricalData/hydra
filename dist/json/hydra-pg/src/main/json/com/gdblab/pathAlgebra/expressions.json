@@ -509,6 +509,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support",
   "namespace": "com.gdblab.pathAlgebra.expressions"}

@@ -4,12 +4,16 @@
 module Hydra.Test.Validate.Core where
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Show.Error.Core as ShowErrorCore
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Validate.Core as ValidateCore
+import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Test cases for core term and type validation
@@ -23,6 +27,7 @@ allTests =
         duplicateFieldsTests,
         emptyLetBindingsTests,
         identityApplicationTests,
+        profileBehaviourTests,
         variableShadowingTests],
       Testing.testGroupCases = []}
 duplicateBindingsTests :: Testing.TestGroup
@@ -35,27 +40,27 @@ duplicateBindingsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "no bindings (literal)",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single binding",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+              Core.letBody = (Core.TermVariable (Core.Name "x"))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "distinct bindings",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
@@ -65,14 +70,14 @@ duplicateBindingsTests =
                   Core.bindingName = (Core.Name "y"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+              Core.letBody = (Core.TermVariable (Core.Name "x"))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate bindings at top level",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
@@ -82,7 +87,7 @@ duplicateBindingsTests =
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+              Core.letBody = (Core.TermVariable (Core.Name "x"))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath []),
               ErrorCore.duplicateBindingErrorName = (Core.Name "x")}))))})),
@@ -91,7 +96,7 @@ duplicateBindingsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate bindings in lambda body",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "f"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -104,7 +109,7 @@ duplicateBindingsTests =
                     Core.bindingName = (Core.Name "a"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     Core.bindingTypeScheme = Nothing}],
-                Core.letBody = (Core.TermVariable (Core.Name "a"))}))})))),
+                Core.letBody = (Core.TermVariable (Core.Name "a"))}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath [
                 Paths.SubtermStepLambdaBody]),
@@ -114,7 +119,7 @@ duplicateBindingsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate bindings in let body",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
@@ -130,7 +135,7 @@ duplicateBindingsTests =
                     Core.bindingName = (Core.Name "y"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
                     Core.bindingTypeScheme = Nothing}],
-                Core.letBody = (Core.TermVariable (Core.Name "y"))}))})))),
+                Core.letBody = (Core.TermVariable (Core.Name "y"))}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath [
                 Paths.SubtermStepLetBody]),
@@ -140,7 +145,7 @@ duplicateBindingsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate bindings in let binding value",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
@@ -156,7 +161,7 @@ duplicateBindingsTests =
                         Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermVariable (Core.Name "a"))})),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+              Core.letBody = (Core.TermVariable (Core.Name "x"))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
               ErrorCore.duplicateBindingErrorLocation = (Paths.SubtermPath [
                 Paths.SubtermStepLetBinding (Core.Name "x")]),
@@ -166,7 +171,7 @@ duplicateBindingsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "same name in different scopes is valid",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
@@ -178,7 +183,7 @@ duplicateBindingsTests =
                     Core.bindingName = (Core.Name "x"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     Core.bindingTypeScheme = Nothing}],
-                Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))),
+                Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
@@ -192,14 +197,14 @@ duplicateFieldsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "no fields (literal)",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "distinct record fields",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermRecord (Core.Record {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "Point"),
               Core.recordFields = [
                 Core.Field {
@@ -207,14 +212,14 @@ duplicateFieldsTests =
                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                 Core.Field {
                   Core.fieldName = (Core.Name "y"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})))),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate record fields at top level",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermRecord (Core.Record {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "Point"),
               Core.recordFields = [
                 Core.Field {
@@ -222,7 +227,7 @@ duplicateFieldsTests =
                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                 Core.Field {
                   Core.fieldName = (Core.Name "x"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})))),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
               ErrorCore.duplicateFieldErrorLocation = (Paths.SubtermPath []),
               ErrorCore.duplicateFieldErrorName = (Core.Name "x")}))))})),
@@ -231,7 +236,7 @@ duplicateFieldsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate fields in record inside lambda",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "f"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermRecord (Core.Record {
@@ -242,7 +247,7 @@ duplicateFieldsTests =
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                   Core.Field {
                     Core.fieldName = (Core.Name "x"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))})))),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
               ErrorCore.duplicateFieldErrorLocation = (Paths.SubtermPath [
                 Paths.SubtermStepLambdaBody]),
@@ -252,7 +257,7 @@ duplicateFieldsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate fields in record inside let body",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "r"),
@@ -266,7 +271,7 @@ duplicateFieldsTests =
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                   Core.Field {
                     Core.fieldName = (Core.Name "x"),
-                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))})))),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
               ErrorCore.duplicateFieldErrorLocation = (Paths.SubtermPath [
                 Paths.SubtermStepLetBody]),
@@ -283,22 +288,22 @@ emptyLetBindingsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "let with bindings is valid",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                   Core.bindingTypeScheme = Nothing}],
-              Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
+              Core.letBody = (Core.TermVariable (Core.Name "x"))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty let bindings",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLet (Core.Let {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [],
-              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})))),
+              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
               ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -313,26 +318,167 @@ identityApplicationTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "non-identity lambda application is valid",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermApplication (Core.Application {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "x"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "identity lambda application",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermApplication (Core.Application {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "x"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Just (ErrorCore.InvalidTermErrorUnnecessaryIdentityApplication (ErrorCore.UnnecessaryIdentityApplicationError {
               ErrorCore.unnecessaryIdentityApplicationErrorLocation = (Paths.SubtermPath [])}))))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]}
+profileBehaviourTests :: Testing.TestGroup
+profileBehaviourTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "profile-aware behaviour",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "multi-error accumulation: two empty-let errors collected",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings"]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [],
+                Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings"]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [],
+                Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}),
+                (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [
+                    Paths.SubtermStepLetBody])}))],
+              Validation.validationResultWarnings = []})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}),
+                (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [
+                    Paths.SubtermStepLetBody])}))],
+              Validation.validationResultWarnings = []})))) "]")))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "warning classification: empty-let demoted to warnings",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList []),
+              Validation.validationProfileWarningRules = (Sets.fromList [
+                Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings"]),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [],
+                Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList []),
+              Validation.validationProfileWarningRules = (Sets.fromList [
+                Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings"]),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [],
+                Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = [
+                ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}),
+                (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [
+                    Paths.SubtermStepLetBody])}))]})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = [
+                ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}),
+                (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [
+                    Paths.SubtermStepLetBody])}))]})))) "]")))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "rule disabling: empty-let omitted from profile",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList []),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList []),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 5,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [],
+              Validation.validationResultWarnings = []})))) "]")))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "maxErrors bound: only first error collected when maxErrors=1",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings"]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 1,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [],
+                Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (ValidateCore.term (Validation.ValidationProfile {
+              Validation.validationProfileErrorRules = (Sets.fromList [
+                Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings"]),
+              Validation.validationProfileWarningRules = (Sets.fromList []),
+              Validation.validationProfileMaxErrors = 1,
+              Validation.validationProfileMaxWarnings = 5}) False TestGraph.testGraph (Core.TermLet (Core.Let {
+              Core.letBindings = [],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [],
+                Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))))) "]"))),
+            Testing.universalTestCaseExpected = (Strings.cat2 (Strings.cat2 "errors=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorCore.invalidTermError e) (Validation.validationResultErrors (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])})],
+              Validation.validationResultWarnings = []})))) "]")) (Strings.cat2 " warnings=[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\w -> ShowErrorCore.invalidTermError w) (Validation.validationResultWarnings (Validation.ValidationResult {
+              Validation.validationResultErrors = [
+                ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+                  ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])})],
+              Validation.validationResultWarnings = []})))) "]")))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 variableShadowingTests :: Testing.TestGroup
@@ -345,30 +491,30 @@ variableShadowingTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "lambda with fresh variable is valid",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))),
+              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "lambda shadows outer lambda",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "x"),
                 Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})))),
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "let binding shadows lambda parameter",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (ValidateCore.term False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) (Lists.maybeHead (Validation.validationResultErrors (ValidateCore.term ValidateCore.kernelDefaultCoreProfile False TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -377,7 +523,7 @@ variableShadowingTests =
                     Core.bindingName = (Core.Name "x"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                     Core.bindingTypeScheme = Nothing}],
-                Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))),
+                Core.letBody = (Core.TermVariable (Core.Name "x"))}))})))))),
             Testing.universalTestCaseExpected = (Maybes.maybe "valid" (\e -> ShowErrorCore.invalidTermError e) Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}

@@ -1040,6 +1040,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "A utility which instantiates a nonrecursive type with default values",
   "namespace": "hydra.templates"}

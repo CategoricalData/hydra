@@ -7394,6 +7394,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Rust serializer: converts Rust AST to concrete syntax",
   "namespace": "hydra.rust.serde"}

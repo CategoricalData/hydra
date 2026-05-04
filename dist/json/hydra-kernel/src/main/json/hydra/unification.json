@@ -1787,6 +1787,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Utilities for type unification.",
   "namespace": "hydra.unification"}

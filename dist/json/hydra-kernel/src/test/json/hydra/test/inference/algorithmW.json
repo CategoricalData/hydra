@@ -3410,6 +3410,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Algorithm W inference tests",
   "namespace": "hydra.test.inference.algorithmW"}

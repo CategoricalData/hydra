@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for constructing GraphSON vertices from property graph vertices.
 
 module Hydra.Pg.Graphson.Construct where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Json.Model as JsonModel
@@ -18,7 +16,6 @@ import qualified Hydra.Pg.Model as PgModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Convert a property graph adjacent edge to a GraphSON adjacent edge
 adjacentEdgeToGraphson :: (t0 -> Either t1 Syntax.Value) -> PgModel.AdjacentEdge t0 -> Either t1 (Syntax.EdgeLabel, Syntax.AdjacentEdge)
 adjacentEdgeToGraphson encodeValue edge =
@@ -27,11 +24,12 @@ adjacentEdgeToGraphson encodeValue edge =
           edgeId = PgModel.adjacentEdgeId edge
           vertexId = PgModel.adjacentEdgeVertex edge
           props = PgModel.adjacentEdgeProperties edge
-      in (Eithers.bind (encodeValue edgeId) (\gid -> Eithers.bind (encodeValue vertexId) (\gv -> Eithers.bind (Eithers.mapList (edgePropertyToGraphson encodeValue) (Maps.toList props)) (\propPairs -> Right (Syntax.EdgeLabel (PgModel.unEdgeLabel label), Syntax.AdjacentEdge {
-        Syntax.adjacentEdgeId = gid,
-        Syntax.adjacentEdgeVertexId = gv,
-        Syntax.adjacentEdgeProperties = (Maps.fromList propPairs)})))))
-
+      in (Eithers.bind (encodeValue edgeId) (\gid -> Eithers.bind (encodeValue vertexId) (\gv -> Eithers.bind (Eithers.mapList (edgePropertyToGraphson encodeValue) (Maps.toList props)) (\propPairs -> Right (
+        Syntax.EdgeLabel (PgModel.unEdgeLabel label),
+        Syntax.AdjacentEdge {
+          Syntax.adjacentEdgeId = gid,
+          Syntax.adjacentEdgeVertexId = gv,
+          Syntax.adjacentEdgeProperties = (Maps.fromList propPairs)})))))
 -- | Aggregate a list of key-value pairs into a map where each key maps to a list of values
 aggregateMap :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
 aggregateMap pairs =
@@ -40,19 +38,16 @@ aggregateMap pairs =
           v = Pairs.second p
           existing = Maps.lookup k m
       in (Maps.insert k (Maybes.maybe (Lists.pure v) (\vs -> Lists.cons v vs) existing) m)) Maps.empty pairs
-
 -- | Convert a property graph edge property to a GraphSON property
 edgePropertyToGraphson :: (t0 -> Either t1 t2) -> (PgModel.PropertyKey, t0) -> Either t1 (Syntax.PropertyKey, t2)
 edgePropertyToGraphson encodeValue prop =
     Eithers.map (\gv -> (Syntax.PropertyKey (PgModel.unPropertyKey (Pairs.first prop)), gv)) (encodeValue (Pairs.second prop))
-
 -- | A coder that converts GraphSON vertices to JSON. Decoding is not supported.
 graphsonVertexToJsonCoder :: Coders.Coder Syntax.Vertex JsonModel.Value
 graphsonVertexToJsonCoder =
     Coders.Coder {
       Coders.coderEncode = (\_cx -> \v -> Right (Coder.vertexToJson v)),
       Coders.coderDecode = (\_cx -> \_ -> Left (Errors.ErrorOther (Errors.OtherError "decoding GraphSON JSON is currently unsupported")))}
-
 -- | Convert a property graph vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: (t0 -> Either t1 Syntax.Value) -> PgModel.VertexWithAdjacentEdges t0 -> Either t1 Syntax.Vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vae =
@@ -69,15 +64,15 @@ pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vae =
         Syntax.vertexInEdges = (aggregateMap inPairs),
         Syntax.vertexOutEdges = (aggregateMap outPairs),
         Syntax.vertexProperties = (aggregateMap propPairs)}))))))
-
 -- | Convert a property graph vertex with adjacent edges to JSON
 pgVertexWithAdjacentEdgesToJson :: (t0 -> Either t1 Syntax.Value) -> PgModel.VertexWithAdjacentEdges t0 -> Either t1 JsonModel.Value
 pgVertexWithAdjacentEdgesToJson encodeValue vertex =
     Eithers.bind (pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vertex) (\gVertex -> Right (Coder.vertexToJson gVertex))
-
 -- | Convert a property graph vertex property to a GraphSON vertex property
 vertexPropertyToGraphson :: (t0 -> Either t1 Syntax.Value) -> (PgModel.PropertyKey, t0) -> Either t1 (Syntax.PropertyKey, Syntax.VertexPropertyValue)
 vertexPropertyToGraphson encodeValue prop =
-    Eithers.map (\gv -> (Syntax.PropertyKey (PgModel.unPropertyKey (Pairs.first prop)), Syntax.VertexPropertyValue {
-      Syntax.vertexPropertyValueId = Nothing,
-      Syntax.vertexPropertyValueValue = gv})) (encodeValue (Pairs.second prop))
+    Eithers.map (\gv -> (
+      Syntax.PropertyKey (PgModel.unPropertyKey (Pairs.first prop)),
+      Syntax.VertexPropertyValue {
+        Syntax.vertexPropertyValueId = Nothing,
+        Syntax.vertexPropertyValueValue = gv})) (encodeValue (Pairs.second prop))

@@ -44,6 +44,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Hydra's validation test suite",
   "namespace": "hydra.test.validate.all"}

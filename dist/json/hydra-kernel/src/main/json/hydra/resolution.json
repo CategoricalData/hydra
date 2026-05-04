@@ -2251,6 +2251,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Type dereference, lookup, requirements, and instantiation",
   "namespace": "hydra.resolution"}

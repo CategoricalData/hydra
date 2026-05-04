@@ -7237,6 +7237,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Pure helpers for the Coq code generator",
   "namespace": "hydra.coq.utils"}

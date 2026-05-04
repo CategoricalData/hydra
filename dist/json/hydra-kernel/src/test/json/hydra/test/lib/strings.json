@@ -5531,6 +5531,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Test cases for hydra.lib.strings primitives",
   "namespace": "hydra.test.lib.strings"}

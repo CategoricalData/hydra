@@ -11,8 +11,10 @@ module Hydra.Demos.ValidatePg.Demo where
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Pg
 import qualified Hydra.Validate.Pg as Validation
+import qualified Hydra.Validation as V
 import qualified Hydra.Error.Pg as Err
 import qualified Hydra.Json.Model as Json
+import qualified Data.List as L
 
 import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as AKM
@@ -70,12 +72,13 @@ loadGraph dataDir name = do
 
 printResult :: Pg.GraphSchema Core.LiteralType -> String -> Pg.Graph Core.Literal -> IO ()
 printResult schema name graph = do
-  let result = Validation.validateGraph checkLiteral schema graph
-  case result of
-    Nothing  -> log $ "Graph \"" ++ name ++ "\": VALID"
-    Just err -> log $ "Graph \"" ++ name ++ "\": INVALID - " ++ show err
+  let vr = Validation.validateGraph Validation.defaultPgProfile emptyVR checkLiteral schema graph
+  case V.validationResultErrors vr of
+    []    -> log $ "Graph \"" ++ name ++ "\": VALID"
+    err:_ -> log $ "Graph \"" ++ name ++ "\": INVALID - " ++ show err
   where
     log msg = putStrLn msg >> hFlush stdout
+    emptyVR = V.ValidationResult { V.validationResultErrors = [], V.validationResultWarnings = [] }
 
 graphNames :: [String]
 graphNames =

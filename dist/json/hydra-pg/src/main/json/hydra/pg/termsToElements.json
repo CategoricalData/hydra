@@ -5740,6 +5740,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
+    "hydra.validation",
     "hydra.variants"],
   "description": "Functions for mapping Hydra terms to property graph elements using mapping specifications",
   "namespace": "hydra.pg.termsToElements"}
