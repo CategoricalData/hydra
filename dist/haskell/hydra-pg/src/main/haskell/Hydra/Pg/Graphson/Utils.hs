@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Utility functions for GraphSON encoding and property graph conversion.
 
 module Hydra.Pg.Graphson.Utils where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Json.Model as JsonModel
@@ -19,7 +17,6 @@ import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Convert a list of property graph elements to a list of vertices with their adjacent edges
 elementsToVerticesWithAdjacentEdges :: Ord t0 => ([PgModel.Element t0] -> [PgModel.VertexWithAdjacentEdges t0])
 elementsToVerticesWithAdjacentEdges els =
@@ -31,10 +28,12 @@ elementsToVerticesWithAdjacentEdges els =
           vertices = Lists.reverse (Pairs.first partitioned)
           edges = Lists.reverse (Pairs.second partitioned)
           vertexMap0 =
-                  Maps.fromList (Lists.map (\v -> (PgModel.vertexId v, PgModel.VertexWithAdjacentEdges {
-                    PgModel.vertexWithAdjacentEdgesVertex = v,
-                    PgModel.vertexWithAdjacentEdgesIns = [],
-                    PgModel.vertexWithAdjacentEdgesOuts = []})) vertices)
+                  Maps.fromList (Lists.map (\v -> (
+                    PgModel.vertexId v,
+                    PgModel.VertexWithAdjacentEdges {
+                      PgModel.vertexWithAdjacentEdgesVertex = v,
+                      PgModel.vertexWithAdjacentEdgesIns = [],
+                      PgModel.vertexWithAdjacentEdgesOuts = []})) vertices)
           vertexMap1 =
                   Lists.foldl (\vmap -> \edge ->
                     let label = PgModel.edgeLabel edge
@@ -64,11 +63,9 @@ elementsToVerticesWithAdjacentEdges els =
                       PgModel.vertexWithAdjacentEdgesIns = (Lists.cons adjEdgeIn (PgModel.vertexWithAdjacentEdgesIns vae)),
                       PgModel.vertexWithAdjacentEdgesOuts = (PgModel.vertexWithAdjacentEdgesOuts vae)}) vmap1) (Maps.lookup inV vmap1))) vertexMap0 edges
       in (Maps.elems vertexMap1)
-
 -- | Encode a String value as a GraphSON Value
 encodeStringValue :: String -> Either t0 Syntax.Value
 encodeStringValue s = Right (Syntax.ValueString s)
-
 -- | Encode a Hydra Term as a GraphSON Value. Supports literals and unit values.
 encodeTermValue :: Core.Term -> Either Errors.Error Syntax.Value
 encodeTermValue term =
@@ -90,7 +87,6 @@ encodeTermValue term =
         _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported literal type for GraphSON encoding"))
       Core.TermUnit -> Right Syntax.ValueNull
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported term variant for GraphSON encoding"))
-
 -- | Convert property graph elements to a list of GraphSON JSON values
 pgElementsToGraphson :: Ord t0 => ((t0 -> Either t1 Syntax.Value) -> [PgModel.Element t0] -> Either t1 [JsonModel.Value])
 pgElementsToGraphson encodeValue els =

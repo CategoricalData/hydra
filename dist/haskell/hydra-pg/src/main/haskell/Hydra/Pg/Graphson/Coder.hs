@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Encoding functions for converting GraphSON syntax to JSON.
 
 module Hydra.Pg.Graphson.Coder where
-
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -16,7 +14,6 @@ import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Convert a GraphSON AdjacentEdge to a JSON Value. The Bool indicates whether this is an outgoing edge.
 adjacentEdgeToJson :: Bool -> Syntax.AdjacentEdge -> Model.Value
 adjacentEdgeToJson out ae =
@@ -25,7 +22,6 @@ adjacentEdgeToJson out ae =
       ("inV", (Logic.ifElse out (Just (valueToJson (Syntax.adjacentEdgeVertexId ae))) Nothing)),
       ("outV", (Logic.ifElse out Nothing (Just (valueToJson (Syntax.adjacentEdgeVertexId ae))))),
       ("properties", (edgePropertyMapToJson (Syntax.adjacentEdgeProperties ae)))]
-
 -- | Convert a GraphSON DoubleValue to a JSON Value
 doubleValueToJson :: Syntax.DoubleValue -> Model.Value
 doubleValueToJson x =
@@ -34,17 +30,14 @@ doubleValueToJson x =
       Syntax.DoubleValueInfinity -> Model.ValueString "Infinity"
       Syntax.DoubleValueNegativeInfinity -> Model.ValueString "-Infinity"
       Syntax.DoubleValueNotANumber -> Model.ValueString "NaN"
-
 -- | Convert a map of edges by label to an optional JSON Value
 edgeMapToJson :: Bool -> M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge] -> Maybe Model.Value
 edgeMapToJson out m =
     Logic.ifElse (Maps.null m) Nothing (Just (Model.ValueObject (Maps.fromList (Lists.map (\p -> (Syntax.unEdgeLabel (Pairs.first p), (Model.ValueArray (Lists.map (adjacentEdgeToJson out) (Pairs.second p))))) (Maps.toList m)))))
-
 -- | Convert a map of edge properties to an optional JSON Value
 edgePropertyMapToJson :: M.Map Syntax.PropertyKey Syntax.Value -> Maybe Model.Value
 edgePropertyMapToJson m =
     Logic.ifElse (Maps.null m) Nothing (Just (Model.ValueObject (Maps.fromList (Lists.map (\p -> (Syntax.unPropertyKey (Pairs.first p), (valueToJson (Pairs.second p)))) (Maps.toList m)))))
-
 -- | Convert a GraphSON FloatValue to a JSON Value
 floatValueToJson :: Syntax.FloatValue -> Model.Value
 floatValueToJson x =
@@ -53,26 +46,22 @@ floatValueToJson x =
       Syntax.FloatValueInfinity -> Model.ValueString "Infinity"
       Syntax.FloatValueNegativeInfinity -> Model.ValueString "-Infinity"
       Syntax.FloatValueNotANumber -> Model.ValueString "NaN"
-
 -- | Convert a GraphSON Map to a JSON array of alternating keys and values
 mapToJson :: Syntax.Map -> Model.Value
 mapToJson m =
     Model.ValueArray (Lists.concat (Lists.map (\vp -> [
       valueToJson (Syntax.valuePairFirst vp),
       (valueToJson (Syntax.valuePairSecond vp))]) (Syntax.unMap m)))
-
 -- | Create a JSON object from a list of key-value pairs, filtering out Nothing values
 toJsonObject :: [(String, (Maybe Model.Value))] -> Model.Value
 toJsonObject pairs =
     Model.ValueObject (Maps.fromList (Maybes.cat (Lists.map (\p -> Maybes.map (\v -> (Pairs.first p, v)) (Pairs.second p)) pairs)))
-
 -- | Create a typed JSON object with @type and @value fields
 typedValueToJson :: String -> Model.Value -> Model.Value
 typedValueToJson typeName valueJson =
     toJsonObject [
       ("@type", (Just (Model.ValueString typeName))),
       ("@value", (Just valueJson))]
-
 -- | Convert a GraphSON Value to a JSON Value
 valueToJson :: Syntax.Value -> Model.Value
 valueToJson x =
@@ -98,19 +87,16 @@ valueToJson x =
       Syntax.ValueShort v0 -> typedValueToJson "g:Int16" (Model.ValueNumber (Literals.bigintToDecimal (Literals.int16ToBigint v0)))
       Syntax.ValueString v0 -> Model.ValueString v0
       Syntax.ValueUuid v0 -> typedValueToJson "g:UUID" (Model.ValueString (Syntax.unUuid v0))
-
 -- | Convert a map of vertex properties to an optional JSON Value
 vertexPropertyMapToJson :: M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue] -> Maybe Model.Value
 vertexPropertyMapToJson m =
     Logic.ifElse (Maps.null m) Nothing (Just (Model.ValueObject (Maps.fromList (Lists.map (\p -> (Syntax.unPropertyKey (Pairs.first p), (Model.ValueArray (Lists.map vertexPropertyValueToJson (Pairs.second p))))) (Maps.toList m)))))
-
 -- | Convert a GraphSON VertexPropertyValue to a JSON Value
 vertexPropertyValueToJson :: Syntax.VertexPropertyValue -> Model.Value
 vertexPropertyValueToJson vpv =
     toJsonObject [
       ("id", (Maybes.map valueToJson (Syntax.vertexPropertyValueId vpv))),
       ("value", (Just (valueToJson (Syntax.vertexPropertyValueValue vpv))))]
-
 -- | Convert a GraphSON Vertex to a JSON Value
 vertexToJson :: Syntax.Vertex -> Model.Value
 vertexToJson v =

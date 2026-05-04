@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.packaging.Definition
 definition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Definition
 definition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -30,6 +31,7 @@ definition cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.FileExtension
 fileExtension :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.FileExtension
 fileExtension cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -39,6 +41,7 @@ fileExtension cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.Module
 module_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Module
 module_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -55,6 +58,7 @@ module_ cx raw =
           Packaging.moduleTypeDependencies = field_typeDependencies,
           Packaging.moduleDefinitions = field_definitions})))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.Namespace
 namespace :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Namespace
 namespace cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -64,6 +68,7 @@ namespace cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.Namespaces
 namespaces :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Packaging.Namespaces t0)
 namespaces n cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -73,6 +78,7 @@ namespaces n cx raw =
           Packaging.namespacesFocus = field_focus,
           Packaging.namespacesMapping = field_mapping}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.Package
 package :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Package
 package cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -88,6 +94,7 @@ package cx raw =
           Packaging.packageDependencies = field_dependencies,
           Packaging.packageDescription = field_description}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.PackageName
 packageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PackageName
 packageName cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -97,6 +104,7 @@ packageName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.QualifiedName
 qualifiedName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.QualifiedName
 qualifiedName cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -110,6 +118,7 @@ qualifiedName cx raw =
           Packaging.qualifiedNameNamespace = field_namespace,
           Packaging.qualifiedNameLocal = field_local}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.TermDefinition
 termDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.TermDefinition
 termDefinition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -120,6 +129,7 @@ termDefinition cx raw =
           Packaging.termDefinitionTerm = field_term,
           Packaging.termDefinitionTypeScheme = field_typeScheme})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.TypeDefinition
 typeDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.TypeDefinition
 typeDefinition cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

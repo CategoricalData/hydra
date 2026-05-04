@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs
 
 module Hydra.Pg.Rdf.Mappings where
-
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
@@ -17,7 +15,6 @@ import qualified Hydra.Rdf.Utils as Utils
 import qualified Hydra.Shacl.Model as ShaclModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Convert edge types into property shape constraints for a given vertex label
 edgeTypesToPropertyShapes :: t0 -> (PgModel.EdgeLabel -> Syntax.Iri) -> PgModel.VertexLabel -> [PgModel.EdgeType t1] -> [ShaclModel.CommonConstraint]
 edgeTypesToPropertyShapes encodeVertexLabel encodeEdgeLabel vertexLabel edgeTypes =
@@ -43,7 +40,6 @@ edgeTypesToPropertyShapes encodeVertexLabel encodeEdgeLabel vertexLabel edgeType
                     ShaclModel.propertyShapePath = (encodeEdgeLabel (PgModel.edgeTypeLabel et))})))
       in (Logic.ifElse matchesVertex [
         edgeShape] [])) edgeTypes)
-
 -- | Encode a property graph edge as an RDF description
 encodeEdge :: Environment.PgRdfEnvironment t0 -> PgModel.Edge t0 -> Syntax.Description
 encodeEdge env edge =
@@ -60,7 +56,6 @@ encodeEdge env edge =
           Syntax.tripleSubject = subj,
           Syntax.triplePredicate = pred,
           Syntax.tripleObject = obj})))}
-
 -- | Encode a lazy property graph as an RDF graph
 encodeLazyGraph :: Environment.PgRdfEnvironment t0 -> PgModel.LazyGraph t0 -> Syntax.Graph
 encodeLazyGraph env lg =
@@ -72,7 +67,6 @@ encodeLazyGraph env lg =
                     vertexDescs,
                     edgeDescs]
       in (Utils.descriptionsToGraph allDescs)
-
 -- | Encode a property graph vertex as an RDF description
 encodeVertex :: Environment.PgRdfEnvironment t0 -> PgModel.Vertex t0 -> Syntax.Description
 encodeVertex env vertex =
@@ -101,7 +95,6 @@ encodeVertex env vertex =
       in Syntax.Description {
         Syntax.descriptionSubject = (Utils.resourceToNode subj),
         Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList allTriples))}
-
 -- | Convert a property graph schema to a SHACL shapes graph
 graphSchemaToShapesGraph :: (t0 -> Syntax.Iri) -> (PgModel.VertexLabel -> Syntax.Iri) -> (PgModel.EdgeLabel -> Syntax.Iri) -> (PgModel.PropertyKey -> Syntax.Iri) -> PgModel.GraphSchema t0 -> ShaclModel.ShapesGraph
 graphSchemaToShapesGraph encodeType encodeVertexLabel encodeEdgeLabel encodeKey schema =
@@ -144,7 +137,6 @@ graphSchemaToShapesGraph encodeType encodeVertexLabel encodeEdgeLabel encodeKey 
                       ShaclModel.definitionIri = (ShaclModel.definitionIri baseDef),
                       ShaclModel.definitionTarget = updatedShape}) vertexTypes
       in (ShaclModel.ShapesGraph (Sets.fromList defs))
-
 -- | Convert a property type to a SHACL property shape
 propertyTypeToPropertyShape :: (t0 -> Syntax.Iri) -> (PgModel.PropertyKey -> Syntax.Iri) -> PgModel.PropertyType t0 -> ShaclModel.PropertyShape
 propertyTypeToPropertyShape encodeType encodeKey pt =
@@ -171,7 +163,6 @@ propertyTypeToPropertyShape encodeType encodeKey pt =
         ShaclModel.propertyShapeName = Utils.emptyLangStrings,
         ShaclModel.propertyShapeOrder = Nothing,
         ShaclModel.propertyShapePath = path}
-
 -- | Convert a vertex type to a SHACL node shape definition
 vertexTypeToNodeShape :: (t0 -> Syntax.Iri) -> (PgModel.VertexLabel -> Syntax.Iri) -> (PgModel.PropertyKey -> Syntax.Iri) -> PgModel.VertexType t0 -> ShaclModel.Definition ShaclModel.Shape
 vertexTypeToNodeShape encodeType encodeLabel encodeKey vt =
