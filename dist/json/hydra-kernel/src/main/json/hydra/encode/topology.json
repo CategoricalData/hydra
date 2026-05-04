@@ -354,7 +354,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"literal": {"integer": {"int32": {}}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.encode.core", "hydra.topology"],
   "description": "Term encoders for hydra.topology",
-  "namespace": "hydra.encode.topology",
-  "termDependencies": ["hydra.encode.core"],
-  "typeDependencies": ["hydra.topology"]}
+  "namespace": "hydra.encode.topology"}

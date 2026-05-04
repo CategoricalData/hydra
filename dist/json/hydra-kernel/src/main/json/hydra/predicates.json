@@ -1595,17 +1595,14 @@
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}}],
-  "description": "Type and term classification predicates",
-  "namespace": "hydra.predicates",
-  "termDependencies": [
+  "dependencies": [
     "hydra.arity",
     "hydra.dependencies",
     "hydra.decode.core",
     "hydra.lexical",
     "hydra.reflect",
     "hydra.rewriting",
-    "hydra.strip"],
-  "typeDependencies": [
+    "hydra.strip",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1628,5 +1625,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Type and term classification predicates",
+  "namespace": "hydra.predicates"}

@@ -5211,9 +5211,7 @@
                   "domain": {"literal": {"string": {}}}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions",
-  "namespace": "hydra.protobuf.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.protobuf.serde",
     "hydra.protobuf.language",
     "hydra.formatting",
@@ -5232,8 +5230,7 @@
     "hydra.adapt",
     "hydra.show.core",
     "hydra.show.errors",
-    "hydra.decode.core"],
-  "typeDependencies": [
+    "hydra.decode.core",
     "hydra.protobuf.environment",
     "hydra.protobuf.proto3",
     "hydra.paths",
@@ -5258,5 +5255,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions",
+  "namespace": "hydra.protobuf.coder"}

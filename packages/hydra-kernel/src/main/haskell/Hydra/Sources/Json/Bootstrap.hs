@@ -44,8 +44,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Namespace "hydra.core"],
+            moduleDependencies = [Namespace "hydra.core"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}

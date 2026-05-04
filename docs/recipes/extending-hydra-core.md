@@ -1442,6 +1442,64 @@ layer. Implementing one would require either:
 Both are larger changes than the rename itself. For an in-place schema rename,
 land it as a single transition.
 
+### Merging two fields into one (delta from rename)
+
+Working example in this repo: **`Module.termDependencies` + `Module.typeDependencies`
+→ `Module.dependencies`** (#354, ~750 files touched). Mechanically a
+delete-plus-rename; the dist-tier and source-tier playbooks above still apply.
+The deltas worth knowing:
+
+1. **The DSL constructor's arity drops.** A 5-arg `Packaging.module_` becomes
+   4-arg. Every callsite in `packages/**/Sources/**` and `demos/**` that uses
+   positional args (not record syntax) needs an arg removed. Easy to miss; GHC
+   reports them with the unhelpful "function applied to N visible arguments"
+   error pointing at the open paren rather than the missing position.
+
+2. **List-concat surfaces in source files that hide Prelude `(++)`.** When
+   collapsing two list fields into one, callsites that previously read both
+   lists separately (e.g. `[X.ns] ++ kernelTypesNamespaces` on the
+   non-empty side, or `Lists.concat2 listA listB` semantics from the dist
+   side) now produce host-level Haskell `++`. Many DSL source files import
+   `Prelude hiding ((++))` so the DSL's own polymorphic `(++)` (defined for
+   `TTerm String`) takes precedence. Use `L.++` from `Data.List` (and add the
+   `import qualified Data.List as L` if missing). Some files import Phantoms
+   *unqualified* and don't hide Prelude `(++)`, in which case the operator is
+   ambiguous — qualify as `Prelude.++`. Both cases produce deterministic GHC
+   errors at the merged call sites.
+
+3. **Local function-name clashes with the merged kernel field.** A package
+   may already define a top-level helper using one of the names you're
+   collapsing into. Concrete case: `Hydra.Sources.Coq.Utils.moduleDependencies
+   :: TTermDefinition (Module -> [String])` (a per-element helper) shadowed
+   the new kernel field `moduleDependencies :: [Namespace]`. Renamed to
+   `moduleDependencyNames` and updated 2 callers. Search for top-level
+   `<newField>` definitions across all hosts before declaring the merge done.
+
+4. **Record-construction DSL Term constants need collapsing too.** Files
+   that build Module values via `record _Module [_Module_X >>: ..., ...]`
+   reference the field-name constants `_Module_termDependencies` and
+   `_Module_typeDependencies` directly (not just the accessor function).
+   Both go away in favor of `_Module_dependencies`. Found in
+   `packages/hydra-haskell/.../Haskell/Testing.hs` and
+   `packages/hydra-kernel/.../Test/Transform.hs`; the GHC error is
+   "Found hole: _Module_typeDependencies" with the standard "or perhaps
+   mis-spelled" suggestion.
+
+5. **Old defensive `concat2 closure inputModules` becomes redundant.** Pre-merge,
+   `moduleTypeDepsTransitive` was layered on top of `moduleTermDepsTransitive`
+   in a way that made the closure not always self-inclusive at the codegen
+   call sites; the call sites compensated with explicit
+   `Lists.concat2 schemaModules universeModules`. Post-merge, the unified
+   `moduleDepsTransitive` is self-inclusive (it `Sets.union`s the input modules
+   into the closure directly), so the explicit concat is dead code. Remove it
+   while you're there.
+
+For a tight WIP cadence: land the change in three commits — source side first
+(everything in `packages/`, `heads/`, `demos/src/`), regenerated `dist/` next,
+then docs/lexicon last. The split makes the diff readable for reviewers and
+keeps `git bisect` tractable: a regression in source vs. a regression in regen
+output points at very different layers of the system.
+
 ---
 
 **Questions or Issues?**

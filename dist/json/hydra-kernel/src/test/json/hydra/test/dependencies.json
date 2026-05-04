@@ -6457,10 +6457,10 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for dependency analysis and let-term transformations",
-  "namespace": "hydra.test.dependencies",
-  "termDependencies": ["hydra.show.core", "hydra.dependencies", "hydra.test.testGraph"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
+    "hydra.dependencies",
+    "hydra.test.testGraph",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -6483,5 +6483,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for dependency analysis and let-term transformations",
+  "namespace": "hydra.test.dependencies"}

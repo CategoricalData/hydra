@@ -65,8 +65,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Utilities for type unification.")}
   where
    definitions = [

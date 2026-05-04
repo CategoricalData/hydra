@@ -374,10 +374,9 @@ The sync scripts and execs handle this automatically.
 
 The universe modules are missing a transitive dependency. Ensure the
 universe includes all modules that the generated modules depend on,
-even indirectly. DSL-source-declared `moduleTermDependencies` and
-`moduleTypeDependencies` must list every cross-module reference; missing
-a dep here can cause `untyped term variable` or `no such element`
-failures during generation.
+even indirectly. DSL-source-declared `moduleDependencies` must list
+every cross-module reference; missing a dep here can cause
+`untyped term variable` or `no such element` failures during generation.
 
 ### "file not found" for JSON modules
 

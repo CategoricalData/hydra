@@ -3836,10 +3836,12 @@
                   "domain": {"variable": "t0"}}},
               "domain": {"variable": "hydra.core.Type"}}},
           "variables": ["t0"]}}}],
-  "description": "YAML encoding and decoding for Hydra terms",
-  "namespace": "hydra.yaml.coder",
-  "termDependencies": ["hydra.adapt", "hydra.extract.core", "hydra.literals", "hydra.yaml.language", "hydra.strip"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.adapt",
+    "hydra.extract.core",
+    "hydra.literals",
+    "hydra.yaml.language",
+    "hydra.strip",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -3864,4 +3866,6 @@
     "hydra.util",
     "hydra.validation",
     "hydra.variants",
-    "hydra.yaml.model"]}
+    "hydra.yaml.model"],
+  "description": "YAML encoding and decoding for Hydra terms",
+  "namespace": "hydra.yaml.coder"}

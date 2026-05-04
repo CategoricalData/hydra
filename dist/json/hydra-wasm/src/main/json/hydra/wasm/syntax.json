@@ -1199,7 +1199,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A 64-bit float constant"}}}],
                         "body": {"literal": {"float": {"float64": {}}}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec (https://webassembly.github.io/spec/core/), retrieved 2026-04-06",
-  "namespace": "hydra.wasm.syntax",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.wasm.syntax"}

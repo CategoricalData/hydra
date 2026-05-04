@@ -887,10 +887,7 @@
                 {"inject": {"field": {"name": "variable", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                 {"inject": {"field": {"name": "void", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}}]}}},
         "typeScheme": {"body": {"list": {"variable": "hydra.variants.TypeVariant"}}, "variables": []}}}],
-  "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",
-  "namespace": "hydra.reflect",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -913,5 +910,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",
+  "namespace": "hydra.reflect"}

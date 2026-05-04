@@ -903,10 +903,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
           "variables": []}}}],
-  "description": "Serialization functions for converting Graphviz DOT AST to abstract expressions",
-  "namespace": "hydra.graphviz.serde",
-  "termDependencies": ["hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.serialization",
     "hydra.graphviz.dot",
     "hydra.paths",
     "hydra.ast",
@@ -930,5 +928,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Serialization functions for converting Graphviz DOT AST to abstract expressions",
+  "namespace": "hydra.graphviz.serde"}

@@ -737,10 +737,11 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}}],
-  "description": "C++ naming utilities: encoding Hydra names as C++ names",
-  "namespace": "hydra.cpp.names",
-  "termDependencies": ["hydra.names", "hydra.formatting", "hydra.cpp.language", "hydra.cpp.utils"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.names",
+    "hydra.formatting",
+    "hydra.cpp.language",
+    "hydra.cpp.utils",
     "hydra.cpp.environment",
     "hydra.cpp.syntax",
     "hydra.paths",
@@ -765,5 +766,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "C++ naming utilities: encoding Hydra names as C++ names",
+  "namespace": "hydra.cpp.names"}

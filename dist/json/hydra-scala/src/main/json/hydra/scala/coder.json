@@ -10638,9 +10638,7 @@
           "body": {
             "function": {"codomain": {"variable": "hydra.scala.syntax.Type"}, "domain": {"variable": "hydra.scala.syntax.Type_Param"}}},
           "variables": []}}}],
-  "description": "Scala code generator: converts Hydra modules to Scala source code",
-  "namespace": "hydra.scala.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.scala.utils",
     "hydra.scala.serde",
     "hydra.formatting",
@@ -10659,8 +10657,7 @@
     "hydra.sorting",
     "hydra.arity",
     "hydra.serialization",
-    "hydra.reduction"],
-  "typeDependencies": [
+    "hydra.reduction",
     "hydra.scala.syntax",
     "hydra.scala.language",
     "hydra.paths",
@@ -10685,5 +10682,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Scala code generator: converts Hydra modules to Scala source code",
+  "namespace": "hydra.scala.coder"}

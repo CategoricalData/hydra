@@ -167,8 +167,7 @@ runSubset nsStr defSpec = do
       let syntheticDirty = Module {
             moduleNamespace = bisectNs,
             moduleDefinitions = cloned,
-            moduleTermDependencies = [ns],
-            moduleTypeDependencies = [ns],
+            moduleDependencies = [ns],
             moduleDescription = Just "Bisection dummy module" }
       putStrLn $ "Universe: " ++ show (length universe) ++ " kept intact; dirty is new hydra.bisect with " ++ show (length picked) ++ " cloned defs:"
       mapM_ (\d -> putStrLn $ "  " ++ defName d ++ " → " ++ cloneName d) picked

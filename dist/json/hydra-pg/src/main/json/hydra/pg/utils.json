@@ -1844,10 +1844,9 @@
                       "argument": {"variable": "t1"},
                       "function": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.mapping.Schema"}}}}}}}}},
           "variables": ["t0", "t1", "t2"]}}}],
-  "description": "Utility functions for property graph operations",
-  "namespace": "hydra.pg.utils",
-  "termDependencies": ["hydra.extract.core", "hydra.pg.coder"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.pg.coder",
     "hydra.pg.model",
     "hydra.pg.mapping",
     "hydra.json.model",
@@ -1873,5 +1872,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Utility functions for property graph operations",
+  "namespace": "hydra.pg.utils"}

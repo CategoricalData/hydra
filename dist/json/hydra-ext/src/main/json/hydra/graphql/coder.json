@@ -2927,9 +2927,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "GraphQL code generator: converts Hydra modules to GraphQL schema definitions",
-  "namespace": "hydra.graphql.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.formatting",
     "hydra.names",
     "hydra.strip",
@@ -2938,8 +2936,7 @@
     "hydra.annotations",
     "hydra.serialization",
     "hydra.graphql.language",
-    "hydra.graphql.serde"],
-  "typeDependencies": [
+    "hydra.graphql.serde",
     "hydra.graphql.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -2963,5 +2960,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "GraphQL code generator: converts Hydra modules to GraphQL schema definitions",
+  "namespace": "hydra.graphql.coder"}

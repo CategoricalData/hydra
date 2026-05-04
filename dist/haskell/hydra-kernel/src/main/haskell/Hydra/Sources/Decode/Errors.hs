@@ -12,10 +12,12 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term decoders for hydra.errors"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.errors"),
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.extract.core",
         (Packaging.Namespace "hydra.lexical"),
         (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.errors"),
+        (Packaging.Namespace "hydra.util"),
         (Packaging.Namespace "hydra.decode.context"),
         (Packaging.Namespace "hydra.decode.core"),
         (Packaging.Namespace "hydra.decode.error.checking"),
@@ -23,9 +25,6 @@ module_ =
         (Packaging.Namespace "hydra.decode.paths"),
         (Packaging.Namespace "hydra.decode.typing"),
         (Packaging.Namespace "hydra.decode.variants")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.errors",
-        (Packaging.Namespace "hydra.util")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.errors.decodingError"),

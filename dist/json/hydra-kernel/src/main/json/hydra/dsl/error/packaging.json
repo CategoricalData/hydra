@@ -5773,7 +5773,14 @@
                   "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.error.packaging",
+    "hydra.phantoms",
+    "hydra.core",
+    "hydra.packaging",
+    "hydra.util",
+    "hydra.dsl.core",
+    "hydra.dsl.packaging",
+    "hydra.dsl.util"],
   "description": "DSL functions for hydra.error.packaging",
-  "namespace": "hydra.dsl.error.packaging",
-  "termDependencies": ["hydra.dsl.core", "hydra.dsl.packaging", "hydra.dsl.util"],
-  "typeDependencies": ["hydra.error.packaging", "hydra.phantoms", "hydra.core", "hydra.packaging", "hydra.util"]}
+  "namespace": "hydra.dsl.error.packaging"}

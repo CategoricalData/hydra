@@ -1035,10 +1035,8 @@
                   "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "Functions for constructing GraphSON vertices from property graph vertices.",
-  "namespace": "hydra.pg.graphson.construct",
-  "termDependencies": ["hydra.pg.graphson.coder"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.pg.graphson.coder",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1065,4 +1063,6 @@
     "hydra.variants",
     "hydra.pg.graphson.syntax",
     "hydra.pg.model",
-    "hydra.json.model"]}
+    "hydra.json.model"],
+  "description": "Functions for constructing GraphSON vertices from property graph vertices.",
+  "namespace": "hydra.pg.graphson.construct"}

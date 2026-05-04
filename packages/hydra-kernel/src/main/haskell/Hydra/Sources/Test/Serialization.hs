@@ -35,8 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Serialization.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Serialization.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for AST serialization")}
   where
     definitions = [

@@ -16472,7 +16472,14 @@
                   "argument": {"variable": "hydra.error.core.VoidInNonBottomPositionError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": [
+    "hydra.error.core",
+    "hydra.phantoms",
+    "hydra.paths",
+    "hydra.core",
+    "hydra.variants",
+    "hydra.dsl.paths",
+    "hydra.dsl.core",
+    "hydra.dsl.variants"],
   "description": "DSL functions for hydra.error.core",
-  "namespace": "hydra.dsl.error.core",
-  "termDependencies": ["hydra.dsl.paths", "hydra.dsl.core", "hydra.dsl.variants"],
-  "typeDependencies": ["hydra.error.core", "hydra.phantoms", "hydra.paths", "hydra.core", "hydra.variants"]}
+  "namespace": "hydra.dsl.error.core"}

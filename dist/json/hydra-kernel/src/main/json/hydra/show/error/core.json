@@ -1149,10 +1149,9 @@
                     "parameter": "e"}}}},
             "parameter": "t0"}},
         "typeScheme": {"body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}, "variables": ["t0"]}}}],
-  "description": "String representations of hydra.error.core types",
-  "namespace": "hydra.show.error.core",
-  "termDependencies": ["hydra.show.core", "hydra.show.variants"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
+    "hydra.show.variants",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -1175,5 +1174,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.error.core types",
+  "namespace": "hydra.show.error.core"}

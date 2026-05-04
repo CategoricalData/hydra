@@ -378,7 +378,7 @@
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                                "argument": {"application": {"argument": {"variable": "nsArg"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
                                                                 "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                                             "function": {
                                                               "application": {
@@ -402,7 +402,7 @@
                                                                     "type": {"literal": {"string": {}}}}}}}}},
                                                         "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                                     "domain": {"variable": "hydra.packaging.Namespace"},
-                                                    "parameter": "ns"}},
+                                                    "parameter": "nsArg"}},
                                                 "typeScheme": {
                                                   "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.packaging.Namespace"}}},
                                                   "variables": []}}],
@@ -844,10 +844,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"variable": "hydra.packaging.QualifiedName"}}},
           "variables": []}}}],
-  "description": "Functions for working with qualified names.",
-  "namespace": "hydra.names",
-  "termDependencies": ["hydra.annotations", "hydra.constants", "hydra.formatting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.constants",
+    "hydra.formatting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -870,5 +870,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Functions for working with qualified names.",
+  "namespace": "hydra.names"}

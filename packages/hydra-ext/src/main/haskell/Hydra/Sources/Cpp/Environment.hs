@@ -27,8 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [CoreTypes.ns, ModuleTypes.ns],
+            moduleDependencies = [CoreTypes.ns, ModuleTypes.ns],
             moduleDescription = Just "Type definitions for C++ code generation environment"}
   where
     definitions = [

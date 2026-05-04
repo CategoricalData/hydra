@@ -18506,10 +18506,10 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Test cases for subterm hoisting and case statement hoisting",
-  "namespace": "hydra.test.hoisting.cases",
-  "termDependencies": ["hydra.show.core", "hydra.hoisting", "hydra.lexical"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
+    "hydra.hoisting",
+    "hydra.lexical",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -18532,5 +18532,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Test cases for subterm hoisting and case statement hoisting",
+  "namespace": "hydra.test.hoisting.cases"}

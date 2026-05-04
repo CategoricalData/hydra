@@ -484,9 +484,14 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying unification error"}}}],
                         "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
           "variables": []}}}],
-  "description": "Top-level error types for the Hydra kernel",
-  "namespace": "hydra.errors",
-  "termDependencies": [
+  "dependencies": [
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.paths",
+    "hydra.typing",
+    "hydra.variants",
     "hydra.context",
     "hydra.core",
     "hydra.error.checking",
@@ -494,11 +499,5 @@
     "hydra.paths",
     "hydra.typing",
     "hydra.variants"],
-  "typeDependencies": [
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.paths",
-    "hydra.typing",
-    "hydra.variants"]}
+  "description": "Top-level error types for the Hydra kernel",
+  "namespace": "hydra.errors"}

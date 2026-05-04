@@ -31,8 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [TestGraph.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for eta expansion of terms")}
   where
     definitions = [

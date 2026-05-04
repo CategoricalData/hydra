@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Rust code generator: converts Hydra type and term modules to Rust source code
 
 module Hydra.Rust.Coder where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
@@ -30,7 +28,6 @@ import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 encodeEnumVariant :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.EnumVariant
 encodeEnumVariant cx g ft =
 
@@ -55,7 +52,6 @@ encodeEnumVariant cx g ft =
           Syntax.enumVariantBody = (Syntax.EnumVariantBodyTuple [
             sftyp]),
           Syntax.enumVariantDoc = Nothing}))))
-
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
     case lit of
@@ -99,7 +95,6 @@ encodeLiteral lit =
         Core.IntegerValueBigint v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
           Syntax.integerLiteralValue = v1,
           Syntax.integerLiteralSuffix = Nothing}))
-
 encodeLiteralType :: Core.LiteralType -> Syntax.Type
 encodeLiteralType lt =
     case lt of
@@ -122,7 +117,6 @@ encodeLiteralType lt =
         Core.IntegerTypeUint32 -> rustPath "u32"
         Core.IntegerTypeUint64 -> rustPath "u64"
       Core.LiteralTypeString -> rustPath "String"
-
 encodeProjectionElim :: t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
 encodeProjectionElim cx g proj marg =
 
@@ -133,7 +127,6 @@ encodeProjectionElim cx g proj marg =
         Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
         Syntax.fieldAccessExprObject = sarg,
         Syntax.fieldAccessExprField = fname})))))
-
 encodeStructField :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.StructField
 encodeStructField cx g ft =
 
@@ -144,7 +137,6 @@ encodeStructField cx g ft =
         Syntax.structFieldType = sftyp,
         Syntax.structFieldPublic = True,
         Syntax.structFieldDoc = Nothing})))
-
 encodeTerm :: t0 -> t1 -> Core.Term -> Either Errors.Error Syntax.Expression
 encodeTerm cx g term =
     case term of
@@ -217,14 +209,14 @@ encodeTerm cx g term =
         in (Eithers.bind (encodeTerm cx g (Core.wrappedTermBody v0)) (\inner -> Right (rustCall (rustExprPath tname) [
           inner])))
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected term variant"))
-
 encodeTermDefinition :: t0 -> t1 -> Packaging.TermDefinition -> Either Errors.Error Syntax.ItemWithComments
 encodeTermDefinition cx g tdef =
 
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
+          typ =
+                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
@@ -242,7 +234,6 @@ encodeTermDefinition cx g tdef =
           Syntax.fnDefConst = False,
           Syntax.fnDefUnsafe = False,
           Syntax.fnDefDoc = Nothing}))}))))
-
 encodeType :: t0 -> t1 -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g t =
 
@@ -276,7 +267,6 @@ encodeType cx g t =
         Core.TypeWrap _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type"))
         Core.TypeVariable v0 -> Right (rustPath (Formatting.capitalize (Core.unName v0)))
         Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
-
 encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Error Syntax.ItemWithComments
 encodeTypeDefinition cx g tdef =
 
@@ -327,7 +317,6 @@ encodeTypeDefinition cx g tdef =
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
         Syntax.itemWithCommentsItem = item})))
-
 encodeUnionElim :: t0 -> t1 -> Core.CaseStatement -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
 encodeUnionElim cx g cs marg =
 
@@ -365,7 +354,6 @@ encodeUnionElim cx g cs marg =
         Syntax.matchExprArms = allArms})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionMatch (Syntax.MatchExpr {
         Syntax.matchExprScrutinee = sarg,
         Syntax.matchExprArms = allArms})))))))
-
 encodeUnwrapElim :: t0 -> t1 -> Core.Name -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
 encodeUnwrapElim cx g name marg =
     Maybes.cases marg (Right (rustClosure [
@@ -374,7 +362,6 @@ encodeUnwrapElim cx g name marg =
       Syntax.tupleIndexExprIndex = 0})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
       Syntax.tupleIndexExprTuple = sarg,
       Syntax.tupleIndexExprIndex = 0}))))
-
 moduleToRust :: Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either Errors.Error (M.Map String String)
 moduleToRust mod defs cx g =
 
@@ -389,7 +376,6 @@ moduleToRust mod defs cx g =
             filePath =
                     Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleNamespace mod)
         in (Right (Maps.singleton filePath code)))))
-
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =
     Syntax.TypePath_ (Syntax.TypePath {
@@ -400,7 +386,6 @@ rustApply1 name arg =
           Syntax.pathSegmentArguments = (Syntax.GenericArgumentsAngleBracketed (Syntax.AngleBracketedArgs {
             Syntax.angleBracketedArgsArgs = [
               Syntax.GenericArgType arg]}))}]})
-
 rustApply2 :: String -> Syntax.Type -> Syntax.Type -> Syntax.Type
 rustApply2 name arg1 arg2 =
     Syntax.TypePath_ (Syntax.TypePath {
@@ -412,19 +397,16 @@ rustApply2 name arg1 arg2 =
             Syntax.angleBracketedArgsArgs = [
               Syntax.GenericArgType arg1,
               (Syntax.GenericArgType arg2)]}))}]})
-
 rustBlock :: [Syntax.Statement] -> Syntax.Expression -> Syntax.Expression
 rustBlock stmts expr =
     Syntax.ExpressionBlock (Syntax.Block {
       Syntax.blockStatements = stmts,
       Syntax.blockExpression = (Just expr)})
-
 rustCall :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
 rustCall fun args =
     Syntax.ExpressionCall (Syntax.CallExpr {
       Syntax.callExprFunction = fun,
       Syntax.callExprArgs = args})
-
 rustClosure :: [String] -> Syntax.Expression -> Syntax.Expression
 rustClosure params body =
     Syntax.ExpressionClosure (Syntax.ClosureExpr {
@@ -437,7 +419,6 @@ rustClosure params body =
         Syntax.closureParamType = Nothing}) params),
       Syntax.closureExprReturnType = Nothing,
       Syntax.closureExprBody = body})
-
 rustExprPath :: String -> Syntax.Expression
 rustExprPath name =
     Syntax.ExpressionPath (Syntax.ExprPath {
@@ -446,7 +427,6 @@ rustExprPath name =
         Syntax.PathSegment {
           Syntax.pathSegmentName = name,
           Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]})
-
 rustLetStmt :: String -> Syntax.Expression -> Syntax.Statement
 rustLetStmt name expr =
     Syntax.StatementLet (Syntax.LetStatement {
@@ -457,7 +437,6 @@ rustLetStmt name expr =
       Syntax.letStatementMutable = False,
       Syntax.letStatementType = Nothing,
       Syntax.letStatementInit = (Just expr)})
-
 rustPath :: String -> Syntax.Type
 rustPath name =
     Syntax.TypePath_ (Syntax.TypePath {
@@ -466,7 +445,6 @@ rustPath name =
         Syntax.PathSegment {
           Syntax.pathSegmentName = name,
           Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]})
-
 rustPathSegmented :: [String] -> Syntax.Type
 rustPathSegmented segs =
     Syntax.TypePath_ (Syntax.TypePath {
@@ -474,10 +452,8 @@ rustPathSegmented segs =
       Syntax.typePathSegments = (Lists.map (\s -> Syntax.PathSegment {
         Syntax.pathSegmentName = s,
         Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}) segs)})
-
 rustUnit :: Syntax.Type
 rustUnit = Syntax.TypeUnit
-
 standardDerives :: [String]
 standardDerives =
     [

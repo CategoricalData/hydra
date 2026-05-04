@@ -96,7 +96,6 @@
                   {"name": "void", "type": {"unit": {}}},
                   {"name": "wrap", "type": {"unit": {}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "Variant types which describe the structure of Hydra core types and terms.",
-  "namespace": "hydra.variants",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.variants"}

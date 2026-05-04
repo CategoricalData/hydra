@@ -24939,7 +24939,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.haskell.syntax.Variable"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.haskell.syntax", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.haskell.syntax",
-  "namespace": "hydra.dsl.haskell.syntax",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.haskell.syntax", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.haskell.syntax"}

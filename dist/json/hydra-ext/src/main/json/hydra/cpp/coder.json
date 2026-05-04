@@ -5403,9 +5403,7 @@
                   "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
               "domain": {"variable": "hydra.packaging.Module"}}},
           "variables": ["t0", "t1"]}}}],
-  "description": "C++ code generator: converts Hydra modules to C++ header files",
-  "namespace": "hydra.cpp.coder",
-  "termDependencies": [
+  "dependencies": [
     "hydra.cpp.language",
     "hydra.cpp.serde",
     "hydra.formatting",
@@ -5421,8 +5419,7 @@
     "hydra.sorting",
     "hydra.serialization",
     "hydra.decode.core",
-    "hydra.encode.core"],
-  "typeDependencies": [
+    "hydra.encode.core",
     "hydra.cpp.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -5446,5 +5443,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "C++ code generator: converts Hydra modules to C++ header files",
+  "namespace": "hydra.cpp.coder"}

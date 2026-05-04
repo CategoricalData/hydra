@@ -2997,10 +2997,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.haskell.syntax.QualifiedName"}}},
           "variables": []}}}],
-  "description": "Haskell operator precendence and associativity are drawn from:\nhttps://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\nOther operators were investigated using GHCi, e.g. \":info (->)\"\nOperator names are drawn (loosely) from:\nhttps://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators",
-  "namespace": "hydra.haskell.serde",
-  "termDependencies": ["hydra.constants", "hydra.serialization", "hydra.haskell.operators"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.serialization",
+    "hydra.haskell.operators",
     "hydra.haskell.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -3024,5 +3024,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Haskell operator precendence and associativity are drawn from:\nhttps://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\nOther operators were investigated using GHCi, e.g. \":info (->)\"\nOperator names are drawn (loosely) from:\nhttps://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators",
+  "namespace": "hydra.haskell.serde"}

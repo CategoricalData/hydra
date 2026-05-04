@@ -120,7 +120,6 @@
                     "annotation": [{"key": "description", "value": {"literal": {"string": "for functions with no documented return value"}}}],
                     "body": {"unit": {}}}}}]},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation",
-  "namespace": "hydra.typeScript.model",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.typeScript.model"}

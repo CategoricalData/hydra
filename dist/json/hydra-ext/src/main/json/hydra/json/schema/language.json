@@ -71,7 +71,9 @@
                         "argument": {
                           "list": [
                             {"inject": {"field": {"name": "annotated", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                            {"inject": {"field": {"name": "application", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                             {"inject": {"field": {"name": "either", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                            {"inject": {"field": {"name": "forall", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                             {"inject": {"field": {"name": "list", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                             {"inject": {"field": {"name": "literal", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                             {"inject": {"field": {"name": "map", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
@@ -121,10 +123,8 @@
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
-  "description": "Language constraints for JSON Schema",
-  "namespace": "hydra.json.schema.language",
-  "termDependencies": ["hydra.reflect"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.reflect",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -147,5 +147,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Language constraints for JSON Schema",
+  "namespace": "hydra.json.schema.language"}

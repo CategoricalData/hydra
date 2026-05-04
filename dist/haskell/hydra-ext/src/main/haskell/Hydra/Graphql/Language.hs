@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints and reserved words for GraphQL
 
 module Hydra.Graphql.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
@@ -12,7 +10,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for GraphQL
 graphqlLanguage :: Coders.Language
 graphqlLanguage =
@@ -70,7 +67,6 @@ graphqlLanguage =
             Core.TypeMaybe _ -> False
             _ -> True
           _ -> True
-
 -- | A set of reserved words in GraphQL
 graphqlReservedWords :: S.Set String
 graphqlReservedWords =

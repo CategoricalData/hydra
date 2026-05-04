@@ -98,8 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns],
-            moduleTypeDependencies = (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns]),
+            moduleDependencies = ([Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns] L.++ (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns])),
             moduleDescription = Just "Functions for transforming property graph mappings into property graph elements."}
   where
     definitions = [

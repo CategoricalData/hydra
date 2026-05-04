@@ -309,10 +309,7 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1", "t2"]}}}],
-  "description": "Default term-level implementations of Logic functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.logic",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -335,5 +332,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Default term-level implementations of Logic functions for the Hydra interpreter.",
+  "namespace": "hydra.lib.defaults.logic"}

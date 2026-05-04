@@ -333,8 +333,9 @@ main = do
   --                    individually with --package <pkg>.
   let allExtPackages = extPackages ++ extDemoPackages
   let packageDeps p = case p of
-        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
-        _          -> [p]
+        "hydra-pg"  -> ["hydra-pg", "hydra-rdf"]
+        "hydra-ext" -> ["hydra-ext", "hydra-rdf"]
+        _           -> [p]
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
         | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
@@ -607,7 +608,7 @@ main = do
       -- so test code can reference them.
       when (optKernelOnly opts) $ do
         let testExtraDeps = Prelude.filter (\ns -> unNamespace ns `notElem` kernelNsStrings)
-              $ concatMap moduleTermDependencies testMods
+              $ concatMap moduleDependencies testMods
             extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtraDeps) allMods
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."

@@ -24,8 +24,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [TestGraph.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Inference tests for nominal types")}
   where
     definitions = [

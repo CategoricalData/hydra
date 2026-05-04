@@ -8,6 +8,7 @@ import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 
 
 ns :: Namespace
@@ -17,8 +18,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = kernelTypesNamespaces,
             moduleDescription = Just "Namespaces and primitive names for the Hydra standard library"}
   where
     definitions = [

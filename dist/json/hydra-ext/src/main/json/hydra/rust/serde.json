@@ -7367,10 +7367,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "Rust serializer: converts Rust AST to concrete syntax",
-  "namespace": "hydra.rust.serde",
-  "termDependencies": ["hydra.constants", "hydra.serialization", "hydra.rust.operators"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.serialization",
+    "hydra.rust.operators",
     "hydra.rust.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -7394,5 +7394,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Rust serializer: converts Rust AST to concrete syntax",
+  "namespace": "hydra.rust.serde"}

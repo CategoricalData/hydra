@@ -54,11 +54,6 @@ import qualified System.FilePath as FP
 import qualified System.IO as SIO
 
 
--- | Options for JSON Schema code generation (was previously in Staging module)
-data JsonSchemaOptions = JsonSchemaOptions {
-  jsonSchemaOptionsShortNames :: Bool
-}
-
 -- | Generate C++ source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
@@ -92,7 +87,7 @@ writeJava = generateSources moduleToJava javaLanguage True True False True
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO Int
-writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage True False False False
+writeJsonSchema = generateSources moduleToJsonSchema jsonSchemaLanguage True False False False
 
 -- | Generate PDL (Pegasus) source files from modules.
 -- First argument: output directory

@@ -283,7 +283,7 @@ def main():
         if args.kernel_only:
             test_ext_deps = set()
             for m in test_mods:
-                for ns in m.term_dependencies:
+                for ns in m.dependencies:
                     if ns.value.startswith("hydra."):
                         test_ext_deps.add(ns.value)
             if test_ext_deps:

@@ -20,8 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [Core.ns, Relational.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns, Relational.ns, Core.ns],
             moduleDescription = Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"}
   where
     definitions = [

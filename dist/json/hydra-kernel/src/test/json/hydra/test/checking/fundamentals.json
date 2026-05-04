@@ -19151,10 +19151,9 @@
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives",
-  "namespace": "hydra.test.checking.fundamentals",
-  "termDependencies": ["hydra.test.testGraph", "hydra.rewriting"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.testGraph",
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -19177,5 +19176,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives",
+  "namespace": "hydra.test.checking.fundamentals"}

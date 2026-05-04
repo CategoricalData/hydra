@@ -3580,10 +3580,10 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.coq.syntax.Type"}}},
           "variables": []}}}],
-  "description": "Coq serializer: converts Coq AST to concrete Coq source code",
-  "namespace": "hydra.coq.serde",
-  "termDependencies": ["hydra.constants", "hydra.formatting", "hydra.serialization"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.constants",
+    "hydra.formatting",
+    "hydra.serialization",
     "hydra.coq.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -3607,5 +3607,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Coq serializer: converts Coq AST to concrete Coq source code",
+  "namespace": "hydra.coq.serde"}

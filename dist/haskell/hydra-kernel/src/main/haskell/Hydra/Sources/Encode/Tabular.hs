@@ -12,11 +12,10 @@ module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.tabular"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.tabular"),
-      Packaging.moduleTermDependencies = [
+      Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.relational")],
-      Packaging.moduleTypeDependencies = [
-        Packaging.Namespace "hydra.tabular"],
+        (Packaging.Namespace "hydra.encode.relational"),
+        (Packaging.Namespace "hydra.tabular")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.tabular.columnType"),

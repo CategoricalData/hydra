@@ -528,7 +528,7 @@
   ;; dependencies of mods-to-generate to build the data graph, and test
   ;; modules contain undeclared cross-references (e.g.
   ;; hydra.test.lib.chars references hydra.test.testGraph.testContext but
-  ;; doesn't declare hydra.test.testGraph in termDependencies). With the
+  ;; doesn't declare hydra.test.testGraph in dependencies). With the
   ;; vhash maps fix, single-call codegen is fast enough.
   (let* ((bs-graph (bootstrap-graph))
          ;; Use hydra_context_context (3 fields: trace, messages, other),

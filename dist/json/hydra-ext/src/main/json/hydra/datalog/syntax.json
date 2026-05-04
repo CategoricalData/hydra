@@ -115,7 +115,6 @@
               {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
               {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
           "variables": []}}}],
+  "dependencies": [],
   "description": "A basic Datalog model",
-  "namespace": "hydra.datalog.syntax",
-  "termDependencies": [],
-  "typeDependencies": []}
+  "namespace": "hydra.datalog.syntax"}

@@ -10254,10 +10254,11 @@
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1", "t2", "t3", "t4", "t5"]}}}],
-  "description": "Property graph element coders for mapping Hydra terms to property graph elements",
-  "namespace": "hydra.pg.coder",
-  "termDependencies": ["hydra.annotations", "hydra.extract.core", "hydra.resolution", "hydra.pg.termsToElements"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.annotations",
+    "hydra.extract.core",
+    "hydra.resolution",
+    "hydra.pg.termsToElements",
     "hydra.pg.model",
     "hydra.pg.mapping",
     "hydra.paths",
@@ -10282,5 +10283,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "Property graph element coders for mapping Hydra terms to property graph elements",
+  "namespace": "hydra.pg.coder"}

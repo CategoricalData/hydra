@@ -3189,13 +3189,14 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "description": "Term decoders for hydra.pg.mapping",
-  "namespace": "hydra.decode.pg.mapping",
-  "termDependencies": [
+  "dependencies": [
     "hydra.extract.core",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.core",
     "hydra.decode.pg.model",
-    "hydra.decode.coders"],
-  "typeDependencies": ["hydra.pg.mapping", "hydra.util"]}
+    "hydra.decode.coders",
+    "hydra.pg.mapping",
+    "hydra.util"],
+  "description": "Term decoders for hydra.pg.mapping",
+  "namespace": "hydra.decode.pg.mapping"}

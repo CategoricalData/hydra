@@ -139,10 +139,8 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.typing.TypeSubst"}}},
           "variables": []}}}],
-  "description": "String representations of hydra.typing types",
-  "namespace": "hydra.show.typing",
-  "termDependencies": ["hydra.show.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -165,5 +163,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.typing types",
+  "namespace": "hydra.show.typing"}

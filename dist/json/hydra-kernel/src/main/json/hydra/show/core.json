@@ -2647,10 +2647,7 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.core.TypeScheme"}}},
           "variables": []}}}],
-  "description": "String representations of hydra.core types",
-  "namespace": "hydra.show.core",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -2673,5 +2670,6 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.validation",
-    "hydra.variants"]}
+    "hydra.variants"],
+  "description": "String representations of hydra.core types",
+  "namespace": "hydra.show.core"}
