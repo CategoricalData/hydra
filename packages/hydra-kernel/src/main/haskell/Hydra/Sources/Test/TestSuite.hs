@@ -119,12 +119,11 @@ otherPairs = [
   (Generation.ns, Generation.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
-  -- TODO #336: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
-  -- (JsonParser.ns, JsonParser.allTests),
+  (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
   (JsonYaml.ns, JsonYaml.allTests),
-  -- TODO #336: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
+  (Ordering.ns, Ordering.allTests),
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
@@ -150,10 +149,9 @@ testSuiteModules =
    -- Other tests
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
-   JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
+   JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
-   Strip.module_, Variables.module_,
-   -- TODO #336: Ordering.module_ temporarily removed - needs investigation
+   Strip.module_, Variables.module_, Ordering.module_,
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,
