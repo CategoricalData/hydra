@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for transforming property graph mappings into property graph elements.
 
 module Hydra.Demos.Genpg.Transform where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
@@ -31,11 +29,9 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Concatenate two pairs of lists
 concatPairs :: ([t0], [t1]) -> ([t0], [t1]) -> ([t0], [t1])
 concatPairs acc p = (Lists.concat2 (Pairs.first acc) (Pairs.first p), (Lists.concat2 (Pairs.second acc) (Pairs.second p)))
-
 -- | Decode a single cell value based on its column type
 decodeCell :: Tabular.ColumnType -> Maybe String -> Either String (Maybe Core.Term)
 decodeCell colType mvalue =
@@ -74,7 +70,6 @@ decodeCell colType mvalue =
                         "Unsupported type for column ",
                         cname])
       in (Maybes.maybe (Right Nothing) decodeValue mvalue)
-
 -- | Decode a single data row based on column types
 decodeRow :: [Tabular.ColumnType] -> Tabular.DataRow String -> Either String (Tabular.DataRow Core.Term)
 decodeRow colTypes row =
@@ -84,7 +79,6 @@ decodeRow colTypes row =
         let colType = Pairs.first pair
             mvalue = Pairs.second pair
         in (decodeCell colType mvalue)) (Lists.zip colTypes cells)))
-
 -- | Decode a table of strings into a table of terms based on column type specifications
 decodeTable :: Tabular.TableType -> Tabular.Table String -> Either String (Tabular.Table Core.Term)
 decodeTable tableType table =
@@ -95,21 +89,18 @@ decodeTable tableType table =
       in (Eithers.map (\decodedRows -> Tabular.Table {
         Tabular.tableHeader = header,
         Tabular.tableData = decodedRows}) (Eithers.mapList (\row -> decodeRow colTypes row) rows))
-
 -- | Check if an element is an edge
 elementIsEdge :: Model.Element t0 -> Bool
 elementIsEdge el =
     (\x -> case x of
       Model.ElementEdge _ -> True
       _ -> False) el
-
 -- | Check if an element is a vertex
 elementIsVertex :: Model.Element t0 -> Bool
 elementIsVertex el =
     (\x -> case x of
       Model.ElementVertex _ -> True
       _ -> False) el
-
 -- | Group element specifications by their source table
 elementSpecsByTable :: Model.LazyGraph Core.Term -> Either String (M.Map String ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
 elementSpecsByTable graph =
@@ -133,7 +124,6 @@ elementSpecsByTable graph =
                       in (Maps.insert table (Pairs.first current, (Lists.cons e (Pairs.second current))) m)
             vertexMap = Lists.foldl addVertex Maps.empty vertexPairs
         in (Right (Lists.foldl addEdge vertexMap edgePairs)))))
-
 -- | Evaluate an edge specification against a record term to produce an optional edge
 evaluateEdge :: Context.Context -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Edge Core.Term))
 evaluateEdge cx g edgeSpec record =
@@ -155,7 +145,6 @@ evaluateEdge cx g edgeSpec record =
         Model.edgeOut = outId,
         Model.edgeIn = inId,
         Model.edgeProperties = props}) mInId)))))))
-
 -- | Evaluate property specifications against a record term
 evaluateProperties :: Ord t0 => (Context.Context -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either Errors.Error (M.Map t0 Core.Term))
 evaluateProperties cx g specs record =
@@ -169,7 +158,6 @@ evaluateProperties cx g specs record =
         in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
           Core.applicationFunction = spec,
           Core.applicationArgument = record}))) (\value -> extractMaybe k (Strip.deannotateTerm value)))) (Maps.toList specs)))
-
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
 evaluateVertex :: Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Vertex Core.Term))
 evaluateVertex cx g vertexSpec record =
@@ -183,33 +171,27 @@ evaluateVertex cx g vertexSpec record =
         Model.vertexLabel = label,
         Model.vertexId = id,
         Model.vertexProperties = props}) mId))))
-
 -- | Find table names referenced in a term by looking for record projections
 findTablesInTerm :: Core.Term -> S.Set String
 findTablesInTerm term =
     Rewriting.foldOverTerm Coders.TraversalOrderPre (\names -> \t -> case t of
       Core.TermProject v0 -> Sets.insert (Core.unName (Core.projectionTypeName v0)) names
       _ -> names) Sets.empty term
-
 -- | Find table names referenced in multiple terms
 findTablesInTerms :: [Core.Term] -> S.Set String
 findTablesInTerms terms = Sets.unions (Lists.map findTablesInTerm terms)
-
 -- | Check if any element in a list satisfies a predicate
 listAny :: (t0 -> Bool) -> [t0] -> Bool
 listAny pred xs = Logic.not (Lists.null (Lists.filter pred xs))
-
 -- | Construct a LazyGraph from vertices and edges
 makeLazyGraph :: [Model.Vertex t0] -> [Model.Edge t0] -> Model.LazyGraph t0
 makeLazyGraph vertices edges =
     Model.LazyGraph {
       Model.lazyGraphVertices = vertices,
       Model.lazyGraphEdges = edges}
-
 -- | Normalize a CSV field value - empty becomes Nothing
 normalizeField :: String -> Maybe String
 normalizeField s = Logic.ifElse (Strings.null s) Nothing (Just s)
-
 -- | Process a single character during CSV parsing
 parseCsvChar :: (([Maybe String], String), Bool) -> Int -> (([Maybe String], String), Bool)
 parseCsvChar state c =
@@ -219,7 +201,6 @@ parseCsvChar state c =
           inQuotes = Pairs.second state
       in (Logic.ifElse (Equality.equal c 34) (Logic.ifElse inQuotes ((acc, field), False) (Logic.ifElse (Strings.null field) ((acc, field), True) ((acc, (Strings.cat2 field "\"")), inQuotes))) (Logic.ifElse (Logic.and (Equality.equal c 44) (Logic.not inQuotes)) ((Lists.cons (normalizeField field) acc, ""), False) ((acc, (Strings.cat2 field (Strings.fromList [
         c]))), inQuotes)))
-
 -- | Parse a CSV line into fields. Empty fields become Nothing.
 parseCsvLine :: String -> Either String [Maybe String]
 parseCsvLine line =
@@ -231,14 +212,12 @@ parseCsvLine line =
           field = Pairs.second (Pairs.first finalState)
           inQuotes = Pairs.second finalState
       in (Logic.ifElse inQuotes (Left "Unclosed quoted field") (Right (Lists.reverse (Lists.cons (normalizeField field) acc))))
-
 -- | Parse a single CSV line, returning Nothing for empty lines
 parseSingleLine :: String -> Either String (Maybe [Maybe String])
 parseSingleLine line =
 
       let trimmed = stripWhitespace line
       in (Logic.ifElse (Strings.null trimmed) (Right Nothing) (Eithers.map (\x -> Just x) (parseCsvLine trimmed)))
-
 -- | Parse raw CSV lines into a Table of strings
 parseTableLines :: Bool -> [String] -> Either String (Tabular.Table String)
 parseTableLines hasHeader rawLines =
@@ -252,7 +231,6 @@ parseTableLines hasHeader rawLines =
           Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) dataRows)})))) (Lists.uncons rows)) (Right (Tabular.Table {
         Tabular.tableHeader = Nothing,
         Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) rows)}))))
-
 -- | Strip leading and trailing whitespace from a string
 stripWhitespace :: String -> String
 stripWhitespace s =
@@ -262,7 +240,6 @@ stripWhitespace s =
           trimLeft = Lists.dropWhile isSpaceChar chars
           trimRight = Lists.reverse (Lists.dropWhile isSpaceChar (Lists.reverse trimLeft))
       in (Strings.fromList trimRight)
-
 -- | Get the table name for an edge specification. Returns an error if not exactly one table is referenced.
 tableForEdge :: Model.Edge Core.Term -> Either String String
 tableForEdge edge =
@@ -281,7 +258,6 @@ tableForEdge edge =
         "Specification for ",
         (Model.unEdgeLabel label),
         " edges has wrong number of tables"])))
-
 -- | Get the table name for a vertex specification. Returns an error if not exactly one table is referenced.
 tableForVertex :: Model.Vertex Core.Term -> Either String String
 tableForVertex vertex =
@@ -294,11 +270,9 @@ tableForVertex vertex =
         "Specification for ",
         (Model.unVertexLabel label),
         " vertices has wrong number of tables"])))
-
 -- | Build a map from table name to table type
 tableTypesByName :: [Tabular.TableType] -> M.Map Relational.RelationName Tabular.TableType
 tableTypesByName tableTypes = Maps.fromList (Lists.map (\t -> (Tabular.tableTypeName t, t)) tableTypes)
-
 -- | Convert a data row to a record term given a table type
 termRowToRecord :: Tabular.TableType -> Tabular.DataRow Core.Term -> Core.Term
 termRowToRecord tableType row =
@@ -313,12 +287,10 @@ termRowToRecord tableType row =
           in Core.Field {
             Core.fieldName = (Core.Name cname),
             Core.fieldTerm = (Core.TermMaybe mvalue)}) colTypes cells)}))
-
 -- | Transform a record through vertex and edge specifications to produce vertices and edges
 transformRecord :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
 transformRecord cx g vspecs especs record =
     Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Maybes.cat mVertices, (Maybes.cat mEdges))))
-
 -- | Transform all rows from a table through vertex/edge specifications
 transformTableRows :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
 transformTableRows cx g vspecs especs tableType rows =

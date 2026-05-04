@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.classes.TypeClass
 typeClass :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Classes.TypeClass
 typeClass cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

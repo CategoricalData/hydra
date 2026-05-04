@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.typing.FunctionStructure
 functionStructure :: (t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term
 functionStructure env x =
     Core.TermRecord (Core.Record {
@@ -37,6 +38,7 @@ functionStructure env x =
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]})
+-- | Encoder for hydra.typing.InferenceResult
 inferenceResult :: Typing.InferenceResult -> Core.Term
 inferenceResult x =
     Core.TermRecord (Core.Record {
@@ -57,11 +59,13 @@ inferenceResult x =
         Core.Field {
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Context.context (Typing.inferenceResultContext x))}]})
+-- | Encoder for hydra.typing.TermSubst
 termSubst :: Typing.TermSubst -> Core.Term
 termSubst x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
       Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.term m)) (Typing.unTermSubst x))})
+-- | Encoder for hydra.typing.TypeConstraint
 typeConstraint :: Typing.TypeConstraint -> Core.Term
 typeConstraint x =
     Core.TermRecord (Core.Record {
@@ -76,6 +80,7 @@ typeConstraint x =
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeConstraintComment x))}]})
+-- | Encoder for hydra.typing.TypeSubst
 typeSubst :: Typing.TypeSubst -> Core.Term
 typeSubst x =
     Core.TermWrap (Core.WrappedTerm {
