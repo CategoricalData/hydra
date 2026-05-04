@@ -5,7 +5,7 @@
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027",
     "com.gdblab.pathAlgebra.syntax": "1c2941b9707e3d48899e5e8805c96a62bbe522dfd06bb6422fdc592844608874",
-    "hydra.adapt": "08b4e8c0c17bf3d59b5a2b679f8cf04ea9d8188a05b9b129f849a678ff96c480",
+    "hydra.adapt": "95af20d100bd55b978d41315b4f9027ee6453211ac6483060cdf8acfcfad540e",
     "hydra.analysis": "b20544a9d6f2e03bde8427b36cf02c8b99520f4b5b6dbd87d860c022ad3d1604",
     "hydra.annotations": "ebc6e04cb95fdb3d89bf792f0f022b8a3170b1dd101a9c766c291f5c58b1a89c",
     "hydra.arity": "391535da0f1586c61347280a1c067205f2f8b8956e5988bee9bd82bf60977c4c",
