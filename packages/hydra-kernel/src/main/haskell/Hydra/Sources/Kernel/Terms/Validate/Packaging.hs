@@ -2,7 +2,20 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import Hydra.Error.Packaging (InvalidModuleError, InvalidPackageError)
+import Hydra.Error.Packaging (
+  InvalidModuleError, InvalidPackageError,
+  _InvalidModuleError,
+  _InvalidModuleError_conflictingVariantName,
+  _InvalidModuleError_definitionNotInModuleNamespace,
+  _InvalidModuleError_definitionsOutOfOrder,
+  _InvalidModuleError_duplicateDefinitionName,
+  _InvalidModuleError_invalidDefinitionName,
+  _InvalidModuleError_invalidNamespaceConvention,
+  _InvalidModuleError_missingDocumentation,
+  _InvalidPackageError,
+  _InvalidPackageError_conflictingModuleNamespace,
+  _InvalidPackageError_duplicateModuleNamespace,
+  _InvalidPackageError_invalidPackageName)
 import Hydra.Packaging (Package)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
@@ -19,6 +32,7 @@ import qualified Hydra.Dsl.Meta.Lib.Strings      as Strings
 import qualified Hydra.Dsl.Packaging                as Packaging
 import qualified Hydra.Dsl.Packaging             as Packaging
 import qualified Hydra.Dsl.Util                  as Util
+import qualified Hydra.Dsl.Validation            as Validation
 import           Hydra.Dsl.Meta.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
@@ -26,6 +40,7 @@ import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
 import           Prelude hiding ((++))
+import qualified Data.List                       as L
 import qualified Data.Set                        as S
 
 
@@ -41,6 +56,8 @@ module_ = Module {
             moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [
+      toDefinition appendFindingModule,
+      toDefinition appendFindingPackage,
       toDefinition checkConflictingModuleNamespaces,
       toDefinition checkConflictingVariantNames,
       toDefinition checkDefinitionDocumentation,
@@ -52,6 +69,8 @@ module_ = Module {
       toDefinition checkModuleNamespaceConvention,
       toDefinition checkPackageNameConvention,
       toDefinition definitionName,
+      toDefinition enabledPackaging,
+      toDefinition kernelDefaultPackagingProfile,
       toDefinition kernelModule,
       toDefinition kernelPackage,
       toDefinition module',
@@ -59,6 +78,130 @@ module_ = Module {
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
+
+-- ============================================================================
+-- Profile helpers (host-side)
+-- ============================================================================
+
+-- | Compose a fully qualified rule identifier from a union-type qualified
+-- name and a variant local name, joined with '.'. Mirrors the
+-- 'qualifiedRule' helper in Validate/Core.hs. Used at profile-construction
+-- time to derive rule IDs like
+-- 'hydra.error.packaging.InvalidModuleError.duplicateDefinitionName' from
+-- the generated _InvalidModuleError and _InvalidModuleError_duplicateDefinitionName
+-- constants.
+qualifiedRule :: Name -> Name -> Name
+qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
+
+-- | Wrap a leaf-shaped 'Maybe InvalidModuleError' finding with the rule that
+-- produced it, gated by the active profile. If the rule's qualified name is
+-- not in either errorRules or warningRules, the inner finding expression is
+-- never evaluated. When the rule is enabled and the inner finding is Just,
+-- returns 'Just (ruleName, payload)'; otherwise 'Nothing'.
+guardedModuleRule
+  :: TTerm ValidationProfile
+  -> Name -- ^ Union-type qualified name (e.g. _InvalidModuleError).
+  -> Name -- ^ Variant local name (e.g. _InvalidModuleError_duplicateDefinitionName).
+  -> TTerm (Maybe InvalidModuleError) -- ^ The leaf-shaped finding term.
+  -> TTerm (Maybe (Name, InvalidModuleError))
+guardedModuleRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | Package-side counterpart of 'guardedModuleRule'.
+guardedPackageRule
+  :: TTerm ValidationProfile
+  -> Name
+  -> Name
+  -> TTerm (Maybe InvalidPackageError)
+  -> TTerm (Maybe (Name, InvalidPackageError))
+guardedPackageRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
+-- Used as the initial accumulator. Defined locally to avoid a cross-module
+-- term dependency on hydra.validate.core.
+emptyResult :: TTerm (ValidationResult e)
+emptyResult = Validation.validationResult
+  (list ([] :: [TTerm e]))
+  (list ([] :: [TTerm e]))
+
+-- ============================================================================
+-- Profile-aware helpers (DSL definitions)
+-- ============================================================================
+
+-- | Classify a rule-tagged 'Maybe (Name, InvalidModuleError)' finding against
+-- the active profile and append the payload (without its rule tag) to the
+-- appropriate list in the accumulator. Findings whose rule appears in
+-- 'errorRules' go to the errors list; findings whose rule appears in
+-- 'warningRules' go to the warnings list. Each list respects its bound
+-- ('maxErrors' / 'maxWarnings'); attempting to append past a bound is a
+-- silent drop. A 'Nothing' input leaves the accumulator unchanged.
+appendFindingModule :: TTermDefinition (
+  ValidationProfile
+  -> ValidationResult InvalidModuleError
+  -> Maybe (Name, InvalidModuleError)
+  -> ValidationResult InvalidModuleError)
+appendFindingModule = define "appendFindingModule" $
+  doc "Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
+  "p" ~> "acc" ~> "finding" ~>
+  Maybes.cases (var "finding")
+    (var "acc")
+    ("rp" ~>
+      "ruleName" <~ Pairs.first (var "rp") $
+      "payload" <~ Pairs.second (var "rp") $
+      "errs" <~ Validation.validationResultErrors (var "acc") $
+      "wrns" <~ Validation.validationResultWarnings (var "acc") $
+      Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
+        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+          (Validation.validationResult
+            (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
+            (var "wrns"))
+          (var "acc"))
+        (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
+          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+            (Validation.validationResult
+              (var "errs")
+              (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
+            (var "acc"))
+          (var "acc")))
+
+-- | Package-side counterpart of 'appendFindingModule'.
+appendFindingPackage :: TTermDefinition (
+  ValidationProfile
+  -> ValidationResult InvalidPackageError
+  -> Maybe (Name, InvalidPackageError)
+  -> ValidationResult InvalidPackageError)
+appendFindingPackage = define "appendFindingPackage" $
+  doc "Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
+  "p" ~> "acc" ~> "finding" ~>
+  Maybes.cases (var "finding")
+    (var "acc")
+    ("rp" ~>
+      "ruleName" <~ Pairs.first (var "rp") $
+      "payload" <~ Pairs.second (var "rp") $
+      "errs" <~ Validation.validationResultErrors (var "acc") $
+      "wrns" <~ Validation.validationResultWarnings (var "acc") $
+      Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
+        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+          (Validation.validationResult
+            (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
+            (var "wrns"))
+          (var "acc"))
+        (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
+          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+            (Validation.validationResult
+              (var "errs")
+              (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
+            (var "acc"))
+          (var "acc")))
 
 -- | Extract the name from a Definition (term or type)
 definitionName :: TTermDefinition (Definition -> Name)
@@ -355,117 +498,205 @@ checkPackageNameConvention = define "checkPackageNameConvention" $
     (just $ ErrorPackaging.invalidPackageErrorInvalidPackageName $
       ErrorPackaging.invalidPackageNameError (var "pname"))
 
--- | Validate a kernel module against the strict kernel rules.
--- Runs every per-module check and returns the first error found, or nothing if valid.
--- The kernel-strict checks include naming conventions, documentation completeness,
--- alphabetical ordering, and the existing structural checks. Use this for kernel
--- and kernel-quality modules; non-kernel modules can use 'module'' which only runs
--- the structural checks.
+-- ============================================================================
+-- ValidationProfile-aware orchestrators
+-- ============================================================================
+
+-- | Test whether a rule is active in a profile (in either errorRules or
+-- warningRules). Rules that are inactive are skipped entirely. Local
+-- counterpart of 'enabled' in Validate/Core.hs; named 'enabledPackaging'
+-- to avoid name clash if both modules are imported into the same scope
+-- through 'Hydra.Validate.Packaging' / 'Hydra.Validate.Core'.
+enabledPackaging :: TTermDefinition (ValidationProfile -> Name -> Bool)
+enabledPackaging = define "enabledPackaging" $
+  doc "True iff the given rule name appears in the profile's errorRules or warningRules." $
+  "p" ~> "ruleName" ~>
+  Logic.or
+    (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
+    (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
+
+-- | The default validation profile for hydra.validate.packaging — i.e. the
+-- kernel-strict packaging profile. Every per-module and per-package check
+-- shipped by this module is classified as an error; no warnings;
+-- 'maxErrors = 1' preserves the legacy 'first error wins' behaviour;
+-- 'maxWarnings = 20' is a deliberately small starting cap.
 --
--- Intended for hand-written Source modules only (the ones that contribute to
--- 'Sources.kernelModules'). Do not apply to generator-derived modules such as
--- the 'hydra.dsl.*', 'hydra.encode.*', or 'hydra.decode.*' families: their
--- 'definitions' lists follow a semantic grouping (e.g. constructor, then field
--- accessors, then with-updaters per record type) which is more readable than
--- alphabetical order.
+-- Callers who want a less strict profile (e.g. non-kernel modules where
+-- naming-convention or alphabetical-ordering violations should not block)
+-- should construct their own profile by removing rules from this one.
+kernelDefaultPackagingProfile :: TTermDefinition ValidationProfile
+kernelDefaultPackagingProfile = define "kernelDefaultPackagingProfile" $
+  doc "The default validation profile for module/package validation. Every kernel-shipped check classified as an error; no warnings; maxErrors=1, maxWarnings=20." $
+  Validation.validationProfile
+    (Sets.fromList $ list $ nameLift <$> kernelPackagingRuleNames)
+    Sets.empty
+    (int32 1)
+    (int32 20)
+
+-- | The full set of rule names classified as errors in
+-- 'kernelDefaultPackagingProfile'. Single source of truth: any rule
+-- wired into 'module'' or 'package' must appear here.
+--
+-- Note: the 'InvalidPackageError.invalidModule' variant is deliberately
+-- excluded. It is not a per-rule check; it is the wrapper used by
+-- 'package' to lift module-level findings into package-level findings.
+-- That lift is unconditional: module errors are always promoted, governed
+-- only by the same profile via the per-module rules. Including
+-- 'invalidModule' in a profile would have no effect on validator
+-- behaviour and would be misleading to callers.
+kernelPackagingRuleNames :: [Name]
+kernelPackagingRuleNames = L.concat
+  [ fmap (qualifiedRule _InvalidModuleError)
+      [ _InvalidModuleError_conflictingVariantName
+      , _InvalidModuleError_definitionNotInModuleNamespace
+      , _InvalidModuleError_definitionsOutOfOrder
+      , _InvalidModuleError_duplicateDefinitionName
+      , _InvalidModuleError_invalidDefinitionName
+      , _InvalidModuleError_invalidNamespaceConvention
+      , _InvalidModuleError_missingDocumentation]
+  , fmap (qualifiedRule _InvalidPackageError)
+      [ _InvalidPackageError_conflictingModuleNamespace
+      , _InvalidPackageError_duplicateModuleNamespace
+      , _InvalidPackageError_invalidPackageName]]
+
+-- | Validate a module against the given ValidationProfile, threading a
+-- 'ValidationResult InvalidModuleError' accumulator. Each per-rule check
+-- is wrapped with 'guardedModuleRule', so checks whose rule is absent
+-- from both 'errorRules' and 'warningRules' are skipped entirely.
+-- Findings are classified into errors vs warnings per the profile and
+-- bounded by 'maxErrors' / 'maxWarnings'. Errors hard-stop the rule
+-- sequence once the cap is reached; warnings continue accumulating up to
+-- 'maxWarnings' but never cause termination.
+module' :: TTermDefinition (
+  ValidationProfile
+  -> ValidationResult InvalidModuleError
+  -> Module
+  -> ValidationResult InvalidModuleError)
+module' = define "module" $
+  doc "Validate a module against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop the rule sequence once maxErrors is reached." $
+  "p" ~> "acc0" ~> "mod" ~>
+  -- Each rule check is run in turn; appendFindingModule classifies the
+  -- finding (if any) and re-checks the cap. The cap is also re-checked
+  -- explicitly between rules via 'foldl' over a list of guarded checks
+  -- so we don't waste work running a rule whose finding would be dropped.
+  Lists.foldl
+    ("acc" ~> "guarded" ~>
+      Logic.ifElse
+        (Equality.gte
+          (Lists.length $ Validation.validationResultErrors $ var "acc")
+          (Validation.validationProfileMaxErrors $ var "p"))
+        (var "acc")
+        (appendFindingModule @@ var "p" @@ var "acc" @@ var "guarded"))
+    (var "acc0")
+    (list [
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_conflictingVariantName
+        (checkConflictingVariantNames @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_missingDocumentation
+        (checkDefinitionDocumentation @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_invalidDefinitionName
+        (checkDefinitionNameConvention @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_definitionNotInModuleNamespace
+        (checkDefinitionNamespaces @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_definitionsOutOfOrder
+        (checkDefinitionOrdering @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_duplicateDefinitionName
+        (checkDuplicateDefinitionNames @@ var "mod"),
+      guardedModuleRule (var "p") _InvalidModuleError _InvalidModuleError_invalidNamespaceConvention
+        (checkModuleNamespaceConvention @@ var "mod")])
+
+-- | Validate a package against the given ValidationProfile, threading a
+-- 'ValidationResult InvalidPackageError' accumulator. Runs the
+-- package-level rules first, then walks the package's modules, lifting
+-- each module-level error/warning into an InvalidPackageError via
+-- 'invalidModule'. Hard-stops once the errors list reaches 'maxErrors'.
+package :: TTermDefinition (
+  ValidationProfile
+  -> ValidationResult InvalidPackageError
+  -> Package
+  -> ValidationResult InvalidPackageError)
+package = define "package" $
+  doc "Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached." $
+  "p" ~> "acc0" ~> "pkg" ~>
+  -- First: run the package-level rules sequentially through appendFindingPackage.
+  "accPkg" <~ Lists.foldl
+    ("acc" ~> "guarded" ~>
+      Logic.ifElse
+        (Equality.gte
+          (Lists.length $ Validation.validationResultErrors $ var "acc")
+          (Validation.validationProfileMaxErrors $ var "p"))
+        (var "acc")
+        (appendFindingPackage @@ var "p" @@ var "acc" @@ var "guarded"))
+    (var "acc0")
+    (list [
+      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_conflictingModuleNamespace
+        (checkConflictingModuleNamespaces @@ var "pkg"),
+      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_duplicateModuleNamespace
+        (checkDuplicateModuleNamespaces @@ var "pkg"),
+      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_invalidPackageName
+        (checkPackageNameConvention @@ var "pkg")]) $
+  -- Second: walk each module, lifting module-level findings into
+  -- package-level findings via invalidModule. Each step produces a fresh
+  -- ValidationResult InvalidModuleError starting from emptyResult,
+  -- whose contents we then re-append to the running package-level
+  -- accumulator. 'invalidModule' is the InvalidPackageError wrapper.
+  Lists.foldl
+    ("acc" ~> "mod" ~>
+      Logic.ifElse
+        (Equality.gte
+          (Lists.length $ Validation.validationResultErrors $ var "acc")
+          (Validation.validationProfileMaxErrors $ var "p"))
+        (var "acc")
+        ("mr" <~ (module' @@ var "p" @@ emptyResult @@ var "mod") $
+          -- Lift module-level errors (and warnings) into package-level
+          -- findings. The resulting list is appended in order to 'acc'
+          -- subject to the profile bounds.
+          "liftedErrs" <~ Lists.map
+            ("e" ~> ErrorPackaging.invalidPackageErrorInvalidModule (var "e"))
+            (Validation.validationResultErrors $ var "mr") $
+          "liftedWrns" <~ Lists.map
+            ("w" ~> ErrorPackaging.invalidPackageErrorInvalidModule (var "w"))
+            (Validation.validationResultWarnings $ var "mr") $
+          -- Concat lists and re-bound to maxErrors / maxWarnings via Lists.take.
+          "newErrs" <~ Lists.take
+            (Validation.validationProfileMaxErrors $ var "p")
+            (Lists.concat2 (Validation.validationResultErrors $ var "acc") (var "liftedErrs")) $
+          "newWrns" <~ Lists.take
+            (Validation.validationProfileMaxWarnings $ var "p")
+            (Lists.concat2 (Validation.validationResultWarnings $ var "acc") (var "liftedWrns")) $
+          Validation.validationResult (var "newErrs") (var "newWrns")))
+    (var "accPkg")
+    (Packaging.packageModules $ var "pkg")
+
+-- ============================================================================
+-- Convenience entry points (kernel-strict)
+-- ============================================================================
+
+-- | Validate a module against the kernel-default packaging profile,
+-- returning the first error found or 'Nothing' if valid. Equivalent to
+-- 'module'' applied to 'kernelDefaultPackagingProfile' with an empty
+-- accumulator, then head-extracted; provided as a named entry point for
+-- the common case of validating a kernel module under the strict
+-- kernel-shipped rule set.
+--
+-- Intended for hand-written Source modules only (the ones that contribute
+-- to 'Sources.kernelModules'). Do not apply to generator-derived modules
+-- such as the 'hydra.dsl.*', 'hydra.encode.*', or 'hydra.decode.*'
+-- families: their 'definitions' lists follow a semantic grouping which
+-- would fail 'checkDefinitionOrdering'. Callers wanting custom rule
+-- sets, multi-error accumulation, or warnings should use 'module'' with
+-- an explicit 'ValidationProfile'.
 kernelModule :: TTermDefinition (Module -> Maybe InvalidModuleError)
 kernelModule = define "kernelModule" $
-  doc "Validate a kernel module against all packaging rules; returns the first error found or nothing if valid" $
+  doc "Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'." $
   "mod" ~>
-  Lists.foldl
-    ("acc" ~> "check" ~>
-      Maybes.cases (var "acc")
-        (var "check" @@ var "mod")
-        (constant $ var "acc"))
-    nothing
-    (list [
-      checkConflictingVariantNames,
-      checkDefinitionDocumentation,
-      checkDefinitionNameConvention,
-      checkDefinitionNamespaces,
-      checkDefinitionOrdering,
-      checkDuplicateDefinitionNames,
-      checkModuleNamespaceConvention])
+  Lists.maybeHead $ Validation.validationResultErrors $
+    module' @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "mod"
 
--- | Validate a kernel package against the strict kernel rules.
--- Runs every package-level check, then validates each module with 'kernelModule'.
--- Stops at the first failure. Use this for kernel and kernel-quality packages;
--- non-kernel packages can use 'package' which only runs the structural checks.
---
--- The package's modules should be hand-written Source modules only. Generator
--- output (such as 'hydra.dsl.*', 'hydra.encode.*', 'hydra.decode.*') must not
--- be passed in: those modules use a semantic grouping in their 'definitions'
--- list which would fail 'checkDefinitionOrdering'.
+-- | Validate a package against the kernel-default packaging profile.
+-- See 'kernelModule' for the rationale and applicability constraints.
 kernelPackage :: TTermDefinition (Package -> Maybe InvalidPackageError)
 kernelPackage = define "kernelPackage" $
-  doc "Validate a kernel package against all packaging rules; returns the first error found or nothing if valid" $
+  doc "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'." $
   "pkg" ~>
-  "pkgErr" <~ Lists.foldl
-    ("acc" ~> "check" ~>
-      Maybes.cases (var "acc")
-        (var "check" @@ var "pkg")
-        (constant $ var "acc"))
-    nothing
-    (list [
-      checkConflictingModuleNamespaces,
-      checkDuplicateModuleNamespaces,
-      checkPackageNameConvention]) $
-  Maybes.cases (var "pkgErr")
-    -- No package-level error: validate each module with the strict kernel rules
-    (Lists.foldl
-      ("acc" ~> "mod" ~>
-        Maybes.cases (var "acc")
-          (Maybes.map
-            ("err" ~> ErrorPackaging.invalidPackageErrorInvalidModule (var "err"))
-            (kernelModule @@ var "mod"))
-          (constant $ var "acc"))
-      nothing
-      (Packaging.packageModules $ var "pkg"))
-    (constant $ var "pkgErr")
-
--- | Validate a module, returning the first error found or nothing if valid.
--- Checks are run in order; stops at the first failure. This orchestrator runs
--- only the structural checks (definition namespaces, duplicate names, conflicting
--- variant names) suitable for non-kernel modules. Kernel modules should use
--- 'kernelModule' instead, which adds naming convention, documentation, and
--- ordering checks.
-module' :: TTermDefinition (Module -> Maybe InvalidModuleError)
-module' = define "module" $
-  doc "Validate a module against the structural rules; returns the first error found or nothing if valid" $
-  "mod" ~>
-  "r1" <~ (checkDefinitionNamespaces @@ var "mod") $
-  Maybes.cases (var "r1")
-    ("r2" <~ (checkDuplicateDefinitionNames @@ var "mod") $
-      Maybes.cases (var "r2")
-        (checkConflictingVariantNames @@ var "mod")
-        (constant $ var "r2"))
-    (constant $ var "r1")
-
--- | Validate a package, returning the first error found or nothing if valid.
--- Package-level checks run first, then each module is validated in order.
--- Stops at the first failure. This orchestrator runs only the structural checks
--- suitable for non-kernel packages. Kernel packages should use 'kernelPackage'
--- instead, which adds the package-name convention check and uses 'kernelModule'
--- for per-module validation.
-package :: TTermDefinition (Package -> Maybe InvalidPackageError)
-package = define "package" $
-  doc "Validate a package against the structural rules; returns the first error found or nothing if valid" $
-  "pkg" ~>
-  "r1" <~ (checkDuplicateModuleNamespaces @@ var "pkg") $
-  Maybes.cases (var "r1")
-    ("r2" <~ (checkConflictingModuleNamespaces @@ var "pkg") $
-      Maybes.cases (var "r2")
-        -- No package-level errors: validate each module
-        (Lists.foldl
-      ("acc" ~> "mod" ~>
-        Maybes.cases (var "acc")
-          (Maybes.map
-            ("err" ~> ErrorPackaging.invalidPackageErrorInvalidModule (var "err"))
-            (module' @@ var "mod"))
-          (constant $ var "acc"))
-          nothing
-          (Packaging.packageModules $ var "pkg"))
-        -- Conflicting namespace error found: stop
-        (constant $ var "r2"))
-    -- Duplicate namespace error found: stop
-    (constant $ var "r1")
+  Lists.maybeHead $ Validation.validationResultErrors $
+    package @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "pkg"
