@@ -168,7 +168,6 @@ bigint_type = T.bigint()
 # Float types
 float32_type = T.float32()
 float64_type = T.float64()
-bigfloat_type = T.bigfloat()
 
 # Arbitrary-precision decimal (Python Decimal)
 decimal_type = T.decimal()
