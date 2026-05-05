@@ -2,7 +2,7 @@
 --
 -- This module provides functions for converting Go AST nodes to source code text,
 -- using Hydra's Ast.Expr representation as an intermediate form.
-module Hydra.Sources.Go.Serde where
+module Hydra.Go.Serde where
 
 import Hydra.Constants
 import Hydra.Kernel
