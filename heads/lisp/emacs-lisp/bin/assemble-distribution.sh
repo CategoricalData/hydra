@@ -87,28 +87,19 @@ case "$PACKAGE" in
         # both directories as load-path entries, so a copy could shadow or
         # double-load symbols.)
 
-        EL_TESTGRAPH="$OUT_DIR/src/test/emacs-lisp/hydra/test/test_graph.el"
-        if [ -f "$EL_TESTGRAPH" ]; then
+        # Copy hand-written test_env.el into dist tree. The kernel
+        # filters hydra.test.testEnv from emitted output (via
+        # testSkipEmitNamespaces), so the generated test_graph.el's
+        # (require 'hydra.test.testEnv) resolves against this
+        # hand-written counterpart. Mirrors the role of
+        # heads/python/.../test_env.py and heads/lisp/clojure/.../testEnv.clj.
+        TEST_ENV_SRC="$HYDRA_EL_HEAD/src/test/emacs-lisp/hydra/test/test_env.el"
+        TEST_ENV_DST="$OUT_DIR/src/test/emacs-lisp/hydra/test/test_env.el"
+        if [ -f "$TEST_ENV_SRC" ]; then
             echo ""
-            echo "Step 3: Patching test_graph.el..."
-            sed -i.bak '/^(setq hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$EL_TESTGRAPH"
-            sed -i.bak '/^(setq hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$EL_TESTGRAPH"
-            rm -f "$EL_TESTGRAPH.bak"
-            cat >> "$EL_TESTGRAPH" << 'ELEOF'
-
-(setq hydra_test_test_graph_test_context (list (cons :functions nil) (cons :annotations nil) (cons :variable_types nil)))
-
-(setq hydra_test_test_graph_test_graph
-  (let* ((std-prims (standard-library))
-         (type-to-ts (lambda (t) (funcall hydra_scoping_f_type_to_type_scheme t)))
-         (boot-types-raw hydra_json_bootstrap_types_by_name)
-         (kernel-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cdr entry)))) (hydra_lib_maps_to_list boot-types-raw)))
-         (test-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
-         (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
-         (prim-map (hydra_lib_maps_from_list (mapcar (lambda (p) (list (car p) (cdr p))) std-prims)))
-         (bound-terms (hydra_lib_maps_from_list (append (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
-    (list (cons :bound_terms bound-terms) (cons :bound_types nil) (cons :class_constraints nil) (cons :lambda_variables nil) (cons :metadata nil) (cons :primitives prim-map) (cons :schema_types schema-types) (cons :type_variables nil))))
-ELEOF
+            echo "Step 3: Copying test_env.el from heads/lisp/emacs-lisp..."
+            mkdir -p "$(dirname "$TEST_ENV_DST")"
+            cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
         fi
         ;;
     *)
