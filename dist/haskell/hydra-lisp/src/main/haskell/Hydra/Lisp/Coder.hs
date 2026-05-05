@@ -163,17 +163,14 @@ encodeLiteral lit =
     case lit of
       Core.LiteralBoolean v0 -> Syntax.ExpressionLiteral (Syntax.LiteralBoolean v0)
       Core.LiteralDecimal v0 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-        Syntax.floatLiteralValue = (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0)),
+        Syntax.floatLiteralValue = (Literals.decimalToFloat64 v0),
         Syntax.floatLiteralPrecision = Nothing}))
       Core.LiteralString v0 -> Syntax.ExpressionLiteral (Syntax.LiteralString v0)
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueFloat32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = (Literals.float32ToBigfloat v1),
+          Syntax.floatLiteralValue = (Literals.float32ToFloat64 v1),
           Syntax.floatLiteralPrecision = Nothing}))
         Core.FloatValueFloat64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = (Literals.float64ToBigfloat v1),
-          Syntax.floatLiteralPrecision = Nothing}))
-        Core.FloatValueBigfloat v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
           Syntax.floatLiteralValue = v1,
           Syntax.floatLiteralPrecision = Nothing}))
       Core.LiteralInteger v0 -> case v0 of

@@ -349,7 +349,6 @@ encodeLiteralType lt =
       Core.LiteralTypeBinary -> Syntax.ValTypeI32
       Core.LiteralTypeBoolean -> Syntax.ValTypeI32
       Core.LiteralTypeFloat v0 -> case v0 of
-        Core.FloatTypeBigfloat -> Syntax.ValTypeF64
         Core.FloatTypeFloat32 -> Syntax.ValTypeF32
         Core.FloatTypeFloat64 -> Syntax.ValTypeF64
       Core.LiteralTypeInteger v0 -> case v0 of

@@ -32,7 +32,7 @@ jsonSchemaLanguage =
           Variants.LiteralVariantInteger,
           Variants.LiteralVariantString]
     floatTypes = Sets.fromList [
-      Core.FloatTypeBigfloat]
+      Core.FloatTypeFloat64]
     functionVariants = Sets.empty
     integerTypes = Sets.fromList [
       Core.IntegerTypeBigint]

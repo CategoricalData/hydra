@@ -869,14 +869,11 @@
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "decimal",
-                                                                              "term": {
-                                                                                "application": {
-                                                                                  "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                                                  "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
+                                                                              "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
                                                                             "typeName": "hydra.core.Literal"}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"variable": "hydra.core.Literal"}}},
-                                                            "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                            "domain": {"literal": {"float": {"float64": {}}}},
                                                             "parameter": "f"}}},
                                                       {
                                                         "name": "int",
@@ -967,11 +964,8 @@
                                                                                   "term": {
                                                                                     "inject": {
                                                                                       "field": {
-                                                                                        "name": "bigfloat",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}},
-                                                                                            "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                                                        "name": "float64",
+                                                                                        "term": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}}},
                                                                                       "typeName": "hydra.core.FloatValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -992,11 +986,11 @@
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "float",
-                                                                                  "term": {"inject": {"field": {"name": "bigfloat", "term": {"variable": "f"}}, "typeName": "hydra.core.FloatValue"}}},
+                                                                                  "term": {"inject": {"field": {"name": "float64", "term": {"variable": "f"}}, "typeName": "hydra.core.FloatValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.core.Literal"}}},
-                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                                "domain": {"literal": {"float": {"float64": {}}}},
                                                                 "parameter": "f"}}}],
                                                         "default": {
                                                           "typeApplication": {
@@ -1310,68 +1304,75 @@
                                                                                             "argument": {
                                                                                               "lambda": {
                                                                                                 "body": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "lambda": {
+                                                                                                  "let": {
+                                                                                                    "bindings": [
+                                                                                                      {
+                                                                                                        "name": "bf",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "f"},
+                                                                                                            "function": {
+                                                                                                              "cases": {
+                                                                                                                "cases": [
+                                                                                                                  {
+                                                                                                                    "name": "float32",
+                                                                                                                    "term": {
+                                                                                                                      "lambda": {
+                                                                                                                        "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.float32ToFloat64"}}},
+                                                                                                                        "domain": {"literal": {"float": {"float32": {}}}},
+                                                                                                                        "parameter": "v"}}},
+                                                                                                                  {
+                                                                                                                    "name": "float64",
+                                                                                                                    "term": {"lambda": {"body": {"variable": "v"}, "domain": {"literal": {"float": {"float64": {}}}}, "parameter": "v"}}}],
+                                                                                                                "typeName": "hydra.core.FloatValue"}}}},
+                                                                                                        "typeScheme": {"body": {"literal": {"float": {"float64": {}}}}, "variables": []}}],
+                                                                                                    "body": {
+                                                                                                      "let": {
+                                                                                                        "bindings": [
+                                                                                                          {
+                                                                                                            "name": "shown",
+                                                                                                            "term": {"application": {"argument": {"variable": "bf"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
+                                                                                                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                                                                         "body": {
-                                                                                                          "let": {
-                                                                                                            "bindings": [
-                                                                                                              {
-                                                                                                                "name": "shown",
-                                                                                                                "term": {"application": {"argument": {"variable": "bf"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                                                                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                                                                                            "body": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "either": {"right": {"inject": {"field": {"name": "float", "term": {"variable": "bf"}}, "typeName": "hydra.yaml.model.Scalar"}}}},
+                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                "type": {"variable": "hydra.yaml.model.Scalar"}}},
+                                                                                                            "function": {
                                                                                                               "application": {
                                                                                                                 "argument": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
-                                                                                                                          "either": {"right": {"inject": {"field": {"name": "float", "term": {"variable": "bf"}}, "typeName": "hydra.yaml.model.Scalar"}}}},
+                                                                                                                          "either": {
+                                                                                                                            "left": {
+                                                                                                                              "inject": {
+                                                                                                                                "field": {
+                                                                                                                                  "name": "other",
+                                                                                                                                  "term": {
+                                                                                                                                    "wrap": {
+                                                                                                                                      "body": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"list": [{"literal": {"string": "YAML cannot represent float value: "}}, {"variable": "shown"}]},
+                                                                                                                                          "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                                                                                      "typeName": "hydra.errors.OtherError"}}},
+                                                                                                                                "typeName": "hydra.errors.Error"}}}},
                                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                     "type": {"variable": "hydra.yaml.model.Scalar"}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {
-                                                                                                                              "either": {
-                                                                                                                                "left": {
-                                                                                                                                  "inject": {
-                                                                                                                                    "field": {
-                                                                                                                                      "name": "other",
-                                                                                                                                      "term": {
-                                                                                                                                        "wrap": {
-                                                                                                                                          "body": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"list": [{"literal": {"string": "YAML cannot represent bigfloat value: "}}, {"variable": "shown"}]},
-                                                                                                                                              "function": {"variable": "hydra.lib.strings.cat"}}},
-                                                                                                                                          "typeName": "hydra.errors.OtherError"}}},
-                                                                                                                                    "typeName": "hydra.errors.Error"}}}},
-                                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                                        "type": {"variable": "hydra.yaml.model.Scalar"}}},
+                                                                                                                      "application": {"argument": {"variable": "shown"}, "function": {"variable": "hydra.yaml.coder.requiresYamlStringSentinel"}}},
                                                                                                                     "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {
-                                                                                                                          "application": {"argument": {"variable": "shown"}, "function": {"variable": "hydra.yaml.coder.requiresYamlStringSentinel"}}},
-                                                                                                                        "function": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.yaml.model.Scalar"}}}}}}}}}}}}},
-                                                                                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                                                        "parameter": "bf"}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.extract.core.bigfloatValue"}}},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                                "type": {"literal": {"float": {"bigfloat": {}}}}}},
-                                                                                                            "type": {"variable": "hydra.yaml.model.Scalar"}}}}}}},
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                        "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.yaml.model.Scalar"}}}}}}}}}}}}}}},
                                                                                                 "domain": {"variable": "hydra.core.FloatValue"},
                                                                                                 "parameter": "f"}},
                                                                                             "function": {

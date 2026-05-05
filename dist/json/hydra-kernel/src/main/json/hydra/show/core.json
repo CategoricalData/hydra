@@ -378,19 +378,6 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "bigfloat",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"literal": {"string": ":bigfloat"}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                "parameter": "v"}}},
-                          {
                             "name": "float32",
                             "term": {
                               "lambda": {
@@ -436,9 +423,6 @@
                     "function": {
                       "cases": {
                         "cases": [
-                          {
-                            "name": "bigfloat",
-                            "term": {"lambda": {"body": {"literal": {"string": "bigfloat"}}, "domain": {"unit": {}}, "parameter": "_"}}},
                           {
                             "name": "float32",
                             "term": {"lambda": {"body": {"literal": {"string": "float32"}}, "domain": {"unit": {}}, "parameter": "_"}}},

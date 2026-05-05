@@ -1908,29 +1908,6 @@
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.haskell.syntax.Expression"}}},
                                                         "domain": {"literal": {"float": {"float64": {}}}},
-                                                        "parameter": "f"}}},
-                                                  {
-                                                    "name": "bigfloat",
-                                                    "term": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "either": {
-                                                                    "right": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "inject": {
-                                                                            "field": {
-                                                                              "name": "double",
-                                                                              "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}}},
-                                                                            "typeName": "hydra.haskell.syntax.Literal"}},
-                                                                        "function": {"variable": "hydra.haskell.utils.hslit"}}}}},
-                                                                "type": {"variable": "hydra.errors.Error"}}},
-                                                            "type": {"variable": "hydra.haskell.syntax.Expression"}}},
-                                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
                                                         "parameter": "f"}}}],
                                                 "typeName": "hydra.core.FloatValue"}}}},
                                         "domain": {"variable": "hydra.core.FloatValue"},
@@ -4433,27 +4410,6 @@
                                                                                         "parameter": "_"}}},
                                                                                   {
                                                                                     "name": "float64",
-                                                                                    "term": {
-                                                                                      "lambda": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "either": {
-                                                                                                    "right": {
-                                                                                                      "inject": {
-                                                                                                        "field": {
-                                                                                                          "name": "variable",
-                                                                                                          "term": {
-                                                                                                            "application": {"argument": {"literal": {"string": "Double"}}, "function": {"variable": "hydra.haskell.utils.rawName"}}}},
-                                                                                                        "typeName": "hydra.haskell.syntax.Type"}}}},
-                                                                                                "type": {"variable": "hydra.errors.Error"}}},
-                                                                                            "type": {"variable": "hydra.haskell.syntax.Type"}}},
-                                                                                        "domain": {"unit": {}},
-                                                                                        "parameter": "_"}}},
-                                                                                  {
-                                                                                    "name": "bigfloat",
                                                                                     "term": {
                                                                                       "lambda": {
                                                                                         "body": {
