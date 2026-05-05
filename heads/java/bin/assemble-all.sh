@@ -33,6 +33,7 @@ echo ""
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 # Warm-cache short-circuit: skip BEFORE any stack invocation or digest wipe.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
 if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     echo "  Cache hit: every per-package digest fresh; skipping batch."
@@ -69,9 +70,8 @@ cd "$HYDRA_ROOT_DIR"
 LISPCODER="$DIST_ROOT/hydra-lisp/src/main/java/hydra/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
     echo "Step 3b: Patching hydra-lisp Coder.java (PartialVisitor type inference)..."
-    sed -i.bak 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
-    sed -i.bak 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
-    rm -f "$LISPCODER.bak"
+    sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
+    sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
 fi
 
 # Refresh per-source-set digests for fresh-check cache. Each package
