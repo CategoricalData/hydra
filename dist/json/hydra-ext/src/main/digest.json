@@ -23,8 +23,6 @@
     "hydra.datalog.syntax": "2b8dc302a4d55a6c3939095bd893aee678b0ba22ee67bfcda29da273b537ce1e",
     "hydra.delta.parquet": "a4242d7a211bed81ac83255d000e3192efdeaf15165439e486d96893e26e2dee",
     "hydra.geojson.model": "d7c02a17a426f366873e717a43adf76dee943587608322c8b0ed2968cbd801c8",
-    "hydra.go.language": "856c2f68a1245df8f4568888be57cf44f78bd7932567275188a28faa544dadee",
-    "hydra.go.syntax": "cdfefec504c824609bcf2227b3fc2bc74d9519f8df7941ee36517e19d11e9ddc",
     "hydra.graphql.coder": "cb13a6883221b1e42348a1c30eb83610197de7cdbd4adec1386838d75ce427df",
     "hydra.graphql.language": "2b647409be5e3bd2f1913d77227751b1a97fd2987bb3786bbeb9bfac97154ed1",
     "hydra.graphql.serde": "874c00ac2faf6c997a982c8d9d8d5003f188cf504005f8c0c04fd83aa04142e8",
