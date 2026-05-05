@@ -13,7 +13,7 @@
 --   hydra-ext/../../dist/json/hydra-ext/src/main/json/      — ext coder modules (Java/Python coders)
 --
 -- Usage:
---   bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]
+--   bootstrap-from-json --target <haskell|java|python|scala|go|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]
 --
 -- Options:
 --   --output <dir>         Output base directory (default: repo target dir)
@@ -35,6 +35,7 @@ import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform)
 import Hydra.Haskell.Coder (moduleToHaskell)
 import Hydra.Haskell.Language (haskellLanguage)
+import Hydra.Go.Coder (moduleToGo, goLanguage)
 import Hydra.Java.Coder (moduleToJava)
 import Hydra.Java.Language (javaLanguage)
 import Hydra.Python.Coder (moduleToPython)
@@ -62,6 +63,16 @@ import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 import qualified System.FilePath as FP
 
+
+-- | Adapter: 'moduleToGo' returns 'Either (InContext Error) ...' (the older
+-- coder-internal error shape), but 'generateSources' expects 'Either Error ...'.
+-- Strip the InContext wrapper, preserving only the underlying Error so that
+-- Go fits the same generation pipeline as Java, Python, Scala, etc.
+moduleToGoAdapted :: Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String)
+moduleToGoAdapted m defs cx g =
+  case moduleToGo m defs cx g of
+    Left ic   -> Left (inContextObject ic)
+    Right out -> Right out
 
 -- | True if the module contains at least one type definition.
 moduleHasTypeDefinition :: Module -> Bool
@@ -149,7 +160,7 @@ parseArgs = go defaultOptions
 
 usage :: String
 usage = unlines
-  [ "Usage: bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]"
+  [ "Usage: bootstrap-from-json --target <haskell|java|python|scala|go|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]"
   , ""
   , "Options:"
   , "  --output <dir>           Output base directory"
@@ -190,6 +201,7 @@ main = do
         "java"        -> ".java"
         "python"      -> ".py"
         "scala"       -> ".scala"
+        "go"          -> ".go"
         "clojure"     -> ".clj"
         "scheme"      -> ".scm"
         "common-lisp" -> ".lisp"
@@ -202,6 +214,7 @@ main = do
         "java"        -> "../../dist/java/hydra-kernel"
         "python"      -> "../../dist/python/hydra-kernel"
         "scala"       -> "../../dist/scala/hydra-kernel"
+        "go"          -> "../../dist/go/hydra-kernel"
         "clojure"     -> "../../dist/clojure/hydra-kernel"
         "scheme"      -> "../../dist/scheme/hydra-kernel"
         "common-lisp" -> "../../dist/common-lisp/hydra-kernel"
@@ -231,7 +244,7 @@ main = do
   -- --include-coders. Ext demo packages are loaded with --ext-only. Other
   -- non-baseline non-coder packages (extPackages and extDemoPackages) are
   -- auto-loaded based on --package or --all-packages — see Step 2c.
-  let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
+  let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-go"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
   let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm"]
 
@@ -240,6 +253,7 @@ main = do
         "java"        -> "Java"
         "python"      -> "Python"
         "scala"       -> "Scala"
+        "go"          -> "Go"
         "clojure"     -> "Clojure"
         "scheme"      -> "Scheme"
         "common-lisp" -> "Common Lisp"
@@ -531,6 +545,7 @@ main = do
         "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
         "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
+        "go"      -> generateSources moduleToGoAdapted goLanguage    False False False False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
               generateSources g lispLanguage True False False False dir allModsFinal' mods
         _ -> do
@@ -616,6 +631,7 @@ main = do
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests >> return ()
             "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests >> return ()
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests >> return ()
+            "go"      -> generateSources moduleToGoAdapted goLanguage    False False False False outMain allUniverse extModsForTests >> return ()
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
@@ -629,6 +645,7 @@ main = do
             "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allUniverse mods
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allUniverse mods
             "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
+            "go"      -> generateSources moduleToGoAdapted goLanguage    False False False False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
             _ -> return 0
 

@@ -36,6 +36,7 @@ import Hydra.Sources.All
 
 import qualified Hydra.Sources.Coq.Manifest as CoqManifest
 import qualified Hydra.Sources.Ext.Manifest as ExtManifest
+import qualified Hydra.Sources.Go.Manifest as GoManifest
 import qualified Hydra.Sources.Java.Manifest as JavaManifest
 import qualified Hydra.Sources.JavaScript.Manifest as JavaScriptManifest
 import qualified Hydra.Sources.Lisp.Manifest as LispManifest
@@ -88,6 +89,9 @@ hydraCoqModules = CoqManifest.mainModules
 
 hydraExtPackageModules :: [Module]
 hydraExtPackageModules = ExtManifest.mainModules
+
+hydraGoModules :: [Module]
+hydraGoModules = GoManifest.mainModules
 
 hydraJavaModules :: [Module]
 hydraJavaModules = JavaManifest.mainModules
@@ -194,6 +198,7 @@ hydraExtModules :: [Module]
 hydraExtModules =
      hydraCoqModules
   ++ hydraExtPackageModules
+  ++ hydraGoModules
   ++ hydraJavaModules
   ++ hydraJavaScriptModules
   ++ hydraLispModules

@@ -10,7 +10,7 @@
 # (so cross-package type references resolve), but only <pkg>'s modules are
 # actually written to <output>.
 #
-# Target must be one of: haskell, java, python, scala, clojure, scheme,
+# Target must be one of: haskell, java, python, scala, go, clojure, scheme,
 #                        common-lisp, emacs-lisp.
 #
 # Per-target convenience wrappers (transform-json-to-{haskell,java,...}.sh)
@@ -24,10 +24,10 @@ set -euo pipefail
 if [ $# -lt 2 ]; then
     echo "Usage: $0 <target> <package> [main|test] [OPTIONS]" >&2
     echo "" >&2
-    echo "Targets:  haskell, java, python, scala, clojure, scheme," >&2
+    echo "Targets:  haskell, java, python, scala, go, clojure, scheme," >&2
     echo "          common-lisp, emacs-lisp" >&2
     echo "Packages: hydra-kernel, hydra-haskell, hydra-java, hydra-python," >&2
-    echo "          hydra-scala, hydra-lisp, hydra-pg, hydra-rdf" >&2
+    echo "          hydra-scala, hydra-go, hydra-lisp, hydra-pg, hydra-rdf" >&2
     echo "" >&2
     echo "Extra args (e.g. --output, --include-tests) are forwarded to" >&2
     echo "bootstrap-from-json." >&2
@@ -69,7 +69,7 @@ case "$PACKAGE" in
     hydra-kernel|hydra-haskell)
         LOAD_FLAGS=""
         ;;
-    hydra-java|hydra-python|hydra-scala|hydra-lisp)
+    hydra-java|hydra-python|hydra-scala|hydra-lisp|hydra-go)
         LOAD_FLAGS="--include-coders"
         ;;
     hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext|hydra-wasm)

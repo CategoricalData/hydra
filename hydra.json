@@ -10,6 +10,7 @@
     "hydra-java",
     "hydra-python",
     "hydra-scala",
+    "hydra-go",
     "hydra-lisp",
     "hydra-coq",
     "hydra-javascript",
