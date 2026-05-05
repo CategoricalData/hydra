@@ -40,6 +40,26 @@ if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     exit 0
 fi
 
+BATCH_PACKAGES=$(batch_emit_packages)
+
+# Wipe per-package generated source dirs before regenerating, so that
+# stale modules left behind by deleted/renamed sources don't survive.
+# bootstrap-from-json writes only the modules currently in the
+# dist/json universe; without this wipe, an older generated file with
+# no upstream JSON source would persist, get hashed into the digest,
+# and silently become part of the build. See follow-up #N for the
+# generator-side fix that would make this redundant.
+#
+# This wipes only src/{main,test}/java/. Per-package build.gradle and
+# settings.gradle (in $DIST_ROOT/<pkg>/) are preserved; the kernel's
+# hand-written runtime files copied in by copy-kernel-runtime.sh are
+# under src/main/java/ and so DO get wiped here, but Step 3 re-copies
+# them after generation.
+echo "Wiping per-package generated source dirs..."
+for pkg in $BATCH_PACKAGES; do
+    rm -rf "$DIST_ROOT/$pkg/src/main/java" "$DIST_ROOT/$pkg/src/test/java"
+done
+
 # Invalidate per-target digests so Stage 7 per-module freshness filter
 # cannot trust records against potentially-missing output files.
 rm -f "$DIST_ROOT"/*/src/main/digest.json "$DIST_ROOT"/*/src/test/digest.json
@@ -79,12 +99,12 @@ echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
 # src/<set>/java tree the digest tracks — so ordering with digest
 # refresh is moot.
 #
-# Package list is the batch emit set (baseline + coders): the same
-# packages bootstrap-from-json wrote source for above. The ext and
-# ext-demo packages (hydra-pg, hydra-rdf, hydra-ext, ...) get their
-# build files from the per-package assemble-distribution.sh path,
-# which CI runs separately after this batch.
-BATCH_PACKAGES=$(batch_emit_packages)
+# Package list ($BATCH_PACKAGES) is the batch emit set (baseline +
+# coders): the same packages bootstrap-from-json wrote source for
+# above. The ext and ext-demo packages (hydra-pg, hydra-rdf,
+# hydra-ext, ...) get their build files from the per-package
+# assemble-distribution.sh path, which CI runs separately after this
+# batch.
 echo ""
 echo "Step 4: Generating per-package build.gradle for every batch-emitted package..."
 for pkg in $BATCH_PACKAGES; do

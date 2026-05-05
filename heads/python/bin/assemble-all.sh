@@ -35,6 +35,25 @@ if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     exit 0
 fi
 
+BATCH_PACKAGES=$(batch_emit_packages)
+
+# Wipe per-package generated source dirs before regenerating, so that
+# stale modules left behind by deleted/renamed sources don't survive.
+# bootstrap-from-json writes only the modules currently in the
+# dist/json universe; without this wipe, an older generated file with
+# no upstream JSON source would persist, get hashed into the digest,
+# and silently become part of the build.
+#
+# This wipes only src/{main,test}/python/. Per-package pyproject.toml
+# (in $DIST_ROOT/<pkg>/) is preserved; the kernel's hand-written
+# runtime files copied in by copy-kernel-runtime.sh are under
+# src/main/python/ and so DO get wiped here, but Step 3b re-copies
+# them after generation.
+echo "Wiping per-package generated source dirs..."
+for pkg in $BATCH_PACKAGES; do
+    rm -rf "$DIST_ROOT/$pkg/src/main/python" "$DIST_ROOT/$pkg/src/test/python"
+done
+
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 
@@ -84,10 +103,9 @@ echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
 # dist/python/<pkg>/pyproject.toml — outside the src/<set>/python tree
 # the digest tracks — so ordering with digest refresh is moot.
 #
-# Package list is the batch emit set (baseline + coders). Ext / ext-demo
-# packages get their build files from the per-package
-# assemble-distribution.sh path.
-BATCH_PACKAGES=$(batch_emit_packages)
+# Package list ($BATCH_PACKAGES) is the batch emit set (baseline +
+# coders). Ext / ext-demo packages get their build files from the
+# per-package assemble-distribution.sh path.
 echo ""
 echo "Step 4: Generating per-package pyproject.toml for every batch-emitted package..."
 for pkg in $BATCH_PACKAGES; do
