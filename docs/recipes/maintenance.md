@@ -389,61 +389,51 @@ Fix it at the generator level.
 
 ### Known accepted patches
 
-The following post-generation `sed` patches are currently applied in
-per-language `assemble-distribution.sh` scripts.
-Each is tech debt against the corresponding generator and should be tracked
-toward removal.
-
-- **Java Lisp `Coder.java` PartialVisitor type parameter**
-  (`heads/java/bin/assemble-distribution.sh` lines ~111-113;
-  `heads/java/bin/assemble-all.sh` lines ~71-73):
-  rewrites two `Either<lisp.syntax.TopLevelFormWithComments, ...>`
-  occurrences to `Either<T2, ...>`.
-  The Java coder mis-infers the `PartialVisitor` type parameter for
-  `hydra-lisp`'s `Coder` when generating Java.
-- **Scala `TestGraph` `emptyGraph` rewrite**
-  (`heads/scala/bin/assemble-all.sh` line ~61):
-  rewrites `hydra.lexical.emptyGraph` to `hydra.TestSuiteRunner.buildTestGraph()`.
-  The DSL emits `emptyGraph`, but the Scala test runner needs the populated
-  bootstrap graph at evaluation time.
-- **Clojure `TestGraph` import injection**
-  (`heads/lisp/clojure/bin/assemble-distribution.sh` line ~102):
-  appends additional `:refer :all` clauses
-  (`hydra.lib.libraries`, `hydra.rewriting`, `hydra.scoping`,
-  `hydra.json.bootstrap`, `hydra.graph`, `hydra.context`,
-  `hydra.annotation-bindings`) to the generated `test_graph.clj`.
-  The DSL doesn't emit these imports, but the Clojure runtime needs them
-  resolved when the file loads.
-- **Scheme `TestGraph` trailing-paren strip**
-  (`heads/lisp/scheme/bin/assemble-distribution.sh` line ~149):
-  removes a trailing `))` that the Scheme code generator emits
-  one too many of for `test_graph.scm`.
+**None.** All post-generation `sed` patches were eliminated as part of #307
+(commits up through 845089add). Most were dead code matching pre-fix output;
+two required real changes (Python lazy thunk emission already worked once
+test_env exposed `test_context` as a value; Clojure/EL needed a DSL
+signature extension so `testEnv.testGraph` receives both `testTypes` and
+`testTerms`). One uncovered a latent bug — the EL regex primitives didn't
+bind `case-fold-search` to nil, so `[a-z]` was matching uppercase letters
+(commit c9835dccd).
 
 When adding a new accepted patch, document it here and open an issue against
-the generator.
-When removing a patch (because the generator was fixed), update this list too.
+the generator. The bar is high: prefer fixing the generator, and exhaust
+that path before introducing a patch.
 
 ### Hand-written files under `dist/`
 
-These files are checked in under `dist/` despite principle 2 ("no hand-written
-files under `dist/`"). Each is tolerated because moving it to `heads/` and
-copying it in via the sync script is more work than the bridge is worth.
-Treat as tech debt, not precedent.
+The hard rule is "no hand-written files under `dist/`." One bridge file
+remains:
 
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
-  the Haskell test harness imports `Hydra.Test.TestEnv` from this path
-  and `bootstrap-from-json` does not target it, so the file is left alone
-  by regeneration.
-- `dist/python/hydra-kernel/src/test/python/hydra/test/test_env.py` —
-  same role for Python tests; the kernel filters `hydra.test.testEnv` from
-  emitted output (per the `testSkipEmit` set in each host's bootstrap),
-  and the Python runtime needs the symbols this file provides.
+  the Haskell-level runtime counterpart of the DSL stub
+  `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
+  from emitted output (via `testSkipEmitNamespaces` in
+  `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
+  Tolerated for now because the Haskell test build's source set spans
+  `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`
+  would require restructuring the Haskell test build's source layout.
 
-The corresponding `test_env` files for the lisp dialects live under
-`heads/`, not `dist/`:
+For every other target, the hand-written `test_env` runtime lives in
+`heads/<target>/src/test/...` and is copied into `dist/` at assemble time
+by the per-target `assemble-distribution.sh`. The pattern, target by target:
 
-- `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
-- `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
+- Java: `heads/java/src/test/java/hydra/test/TestEnv.java`
+- Python: `heads/python/src/test/python/hydra/test/test_env.py`
+- Scala: `heads/scala/src/test/scala/hydra/test/testEnv.scala`
+- Clojure: `heads/lisp/clojure/src/test/clojure/hydra/test/testEnv.clj`
+- Common Lisp: `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
+- Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
+- Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
+
+Each provides `hydra_test_test_env_test_context` (a `Context` value) and
+`hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
+matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Lisp dialects
+(Scala, CL, Scheme, Clojure, Emacs Lisp) curry the function as
+`((f types) terms)` to match their coders' multi-arg emission; Java and
+Python use the flat `f(types, terms)` form.
 
 ---
 
