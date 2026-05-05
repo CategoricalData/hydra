@@ -472,7 +472,6 @@ encodeLiteral = def "encodeLiteral" $
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
       _Literal_decimal>>: ("d" ~> right (inject _Lit _Lit_string (Literals.showDecimal (var "d")))),
       _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected float value"))) [
-        _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),
         _FloatValue_float32>>: ("f" ~> right (inject _Lit _Lit_float (var "f"))),
         _FloatValue_float64>>: ("f" ~> right (inject _Lit _Lit_double (var "f")))]),
       _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected integer value"))) [
@@ -685,9 +684,7 @@ encodeTerm = def "encodeTerm" $
               _Literal_decimal>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"])),
               _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ right (var "litData")) [
                 _IntegerValue_bigint>>: ("bi" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (var "bi")))])),
-                _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))]),
-              _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ right (var "litData")) [
-                _FloatValue_bigfloat>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"]))])])),
+                _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))])])),
       _Term_map>>: ("m" ~>
         Eithers.bind
           (Eithers.mapList ("kv" ~>
@@ -887,7 +884,6 @@ encodeType = def "encodeType" $
         _LiteralType_boolean>>: (constant $ right (stref (string "Boolean"))),
         _LiteralType_decimal>>: (constant $ right (stref (string "BigDecimal"))),
         _LiteralType_float>>: ("ft" ~> cases _FloatType (var "ft") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
-          _FloatType_bigfloat>>: (constant $ right (stref (string "BigDecimal"))),
           _FloatType_float32>>: (constant $ right (stref (string "Float"))),
           _FloatType_float64>>: (constant $ right (stref (string "Double")))]),
         _LiteralType_integer>>: ("it" ~> cases _IntegerType (var "it") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [

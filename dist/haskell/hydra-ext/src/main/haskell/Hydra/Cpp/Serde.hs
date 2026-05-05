@@ -618,7 +618,7 @@ literalToExpr :: Syntax.Literal -> Ast.Expr
 literalToExpr l =
     case l of
       Syntax.LiteralInteger v0 -> integerLiteralToExpr v0
-      Syntax.LiteralFloating v0 -> Serialization.cst (Literals.showBigfloat (Syntax.unFloatingLiteral v0))
+      Syntax.LiteralFloating v0 -> Serialization.cst (Literals.showFloat64 (Syntax.unFloatingLiteral v0))
       Syntax.LiteralCharacter v0 -> Serialization.cst (Strings.cat [
         "'",
         (Syntax.unCharacterLiteral v0),

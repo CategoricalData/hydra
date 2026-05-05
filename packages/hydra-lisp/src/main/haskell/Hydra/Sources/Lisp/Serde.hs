@@ -681,12 +681,12 @@ listLiteralToExpr = define "listLiteralToExpr" $
         (list [Serialization.cst @@ (listKeyword @@ var "d")])
         (var "elems")))
 
--- | Format a bigfloat value as a dialect-specific literal string.
+-- | Format a float64 value as a dialect-specific literal string.
 -- Special values (NaN, ±Infinity) use dialect-specific syntax.
 formatLispFloat :: TTermDefinition (L.Dialect -> Double -> String)
 formatLispFloat = define "formatLispFloat" $
   lambda "d" $ lambda "v" $
-    "s" <~ Literals.showBigfloat (var "v") $
+    "s" <~ Literals.showFloat64 (var "v") $
     Logic.ifElse (Equality.equal (var "s") (string "NaN"))
       (cases L._Dialect (var "d") Nothing [
         L._Dialect_clojure>>: constant $ string "Double/NaN",

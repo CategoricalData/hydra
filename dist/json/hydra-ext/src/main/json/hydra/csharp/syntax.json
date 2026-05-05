@@ -14,7 +14,7 @@
             "union": [
               {"name": "boolean", "type": {"literal": {"boolean": {}}}},
               {"name": "integer", "type": {"variable": "hydra.csharp.syntax.IntegerLiteral"}},
-              {"name": "real", "type": {"literal": {"float": {"bigfloat": {}}}}},
+              {"name": "real", "type": {"literal": {"float": {"float64": {}}}}},
               {"name": "character", "type": {"literal": {"string": {}}}},
               {"name": "string", "type": {"literal": {"string": {}}}},
               {"name": "null", "type": {"unit": {}}}]},

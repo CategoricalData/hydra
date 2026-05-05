@@ -1891,7 +1891,7 @@
                     "bindings": [
                       {
                         "name": "s",
-                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1993,14 +1993,14 @@
                                         "argument": {"variable": "s"},
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
-                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                "domain": {"literal": {"float": {"float64": {}}}},
                 "parameter": "v"}},
             "domain": {"variable": "hydra.lisp.syntax.Dialect"},
             "parameter": "d"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"float": {"bigfloat": {}}}}}},
+              "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"float": {"float64": {}}}}}},
               "domain": {"variable": "hydra.lisp.syntax.Dialect"}}},
           "variables": []}}},
     {

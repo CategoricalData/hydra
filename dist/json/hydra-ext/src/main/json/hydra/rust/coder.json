@@ -294,10 +294,7 @@
                                                             "fields": [
                                                               {
                                                                 "name": "value",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}},
-                                                                    "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}}},
+                                                                "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float32ToFloat64"}}}},
                                                               {"name": "suffix", "term": {"maybe": {"literal": {"string": "f32"}}}}],
                                                             "typeName": "hydra.rust.syntax.FloatLiteral"}}},
                                                       "typeName": "hydra.rust.syntax.Literal"}}},
@@ -325,30 +322,6 @@
                                                       "typeName": "hydra.rust.syntax.Literal"}}},
                                                 "typeName": "hydra.rust.syntax.Expression"}},
                                             "domain": {"literal": {"float": {"float64": {}}}},
-                                            "parameter": "f"}}},
-                                      {
-                                        "name": "bigfloat",
-                                        "term": {
-                                          "lambda": {
-                                            "body": {
-                                              "inject": {
-                                                "field": {
-                                                  "name": "literal",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "float",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "value",
-                                                                "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}}},
-                                                              {"name": "suffix", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
-                                                            "typeName": "hydra.rust.syntax.FloatLiteral"}}},
-                                                      "typeName": "hydra.rust.syntax.Literal"}}},
-                                                "typeName": "hydra.rust.syntax.Expression"}},
-                                            "domain": {"literal": {"float": {"bigfloat": {}}}},
                                             "parameter": "f"}}}],
                                     "typeName": "hydra.core.FloatValue"}}}},
                             "domain": {"variable": "hydra.core.FloatValue"},
@@ -624,13 +597,6 @@
                                 "function": {
                                   "cases": {
                                     "cases": [
-                                      {
-                                        "name": "bigfloat",
-                                        "term": {
-                                          "lambda": {
-                                            "body": {"application": {"argument": {"literal": {"string": "f64"}}, "function": {"variable": "hydra.rust.coder.rustPath"}}},
-                                            "domain": {"unit": {}},
-                                            "parameter": "_"}}},
                                       {
                                         "name": "float32",
                                         "term": {

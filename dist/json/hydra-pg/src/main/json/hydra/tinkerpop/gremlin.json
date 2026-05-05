@@ -1482,7 +1482,7 @@
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.FloatLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.NumericLiteral",

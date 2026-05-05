@@ -260,7 +260,6 @@ encodeLiteral cx g av =
       Core.LiteralBoolean v0 -> Right (Syntax.LitBoolean v0)
       Core.LiteralDecimal v0 -> Right (Syntax.LitString (Literals.showDecimal v0))
       Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueBigfloat v1 -> Right (Syntax.LitDouble (Literals.bigfloatToFloat64 v1))
         Core.FloatValueFloat32 v1 -> Right (Syntax.LitFloat v1)
         Core.FloatValueFloat64 v1 -> Right (Syntax.LitDouble v1)
         _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected float value"))
@@ -399,10 +398,6 @@ encodeTerm cx g term0 =
               Core.IntegerValueUint64 v2 -> Right (Utils.sapply (Utils.sname "BigInt") [
                 Syntax.DataLit (Syntax.LitString (Literals.showBigint (Literals.uint64ToBigint v2)))])
               _ -> Right litData
-            Core.LiteralFloat v1 -> case v1 of
-              Core.FloatValueBigfloat _ -> Right (Utils.sapply (Utils.sname "BigDecimal") [
-                litData])
-              _ -> Right litData
             _ -> Right litData)
         Core.TermMap v0 -> Eithers.bind (Eithers.mapList (\kv -> Eithers.bind (encodeTerm cx g (Pairs.first kv)) (\sk -> Eithers.bind (encodeTerm cx g (Pairs.second kv)) (\sv -> Right (Utils.sassign sk sv)))) (Maps.toList v0)) (\spairs -> Right (Utils.sapply (Utils.sname "Map") spairs))
         Core.TermWrap v0 -> encodeTerm cx g (Core.wrappedTermBody v0)
@@ -521,8 +516,6 @@ encodeType cx g t =
         Core.LiteralTypeDecimal -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
           Syntax.type_NameValue = "BigDecimal"})))
         Core.LiteralTypeFloat v1 -> case v1 of
-          Core.FloatTypeBigfloat -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
-            Syntax.type_NameValue = "BigDecimal"})))
           Core.FloatTypeFloat32 -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
             Syntax.type_NameValue = "Float"})))
           Core.FloatTypeFloat64 -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {

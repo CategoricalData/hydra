@@ -2,12 +2,7 @@
   (import (scheme base) (scheme inexact)
           (scheme bytevector)
           (srfi 151))         ;; Bitwise operations (chibi-compatible)
-  (export hydra_lib_literals_bigfloat_to_bigint
-          hydra_lib_literals_bigfloat_to_float
-          hydra_lib_literals_bigfloat_to_float32
-          hydra_lib_literals_bigfloat_to_float64
-          hydra_lib_literals_bigint_to_bigfloat
-          hydra_lib_literals_bigint_to_decimal
+  (export hydra_lib_literals_bigint_to_decimal
           hydra_lib_literals_bigint_to_int
           hydra_lib_literals_bigint_to_int8
           hydra_lib_literals_bigint_to_int16
@@ -23,16 +18,15 @@
           hydra_lib_literals_decimal_to_float32
           hydra_lib_literals_decimal_to_float64
           hydra_lib_literals_float
-          hydra_lib_literals_float32_to_bigfloat
           hydra_lib_literals_float32_to_decimal
-          hydra_lib_literals_float64_to_bigfloat
+          hydra_lib_literals_float32_to_float64
           hydra_lib_literals_float64_to_decimal
+          hydra_lib_literals_float64_to_float32
           hydra_lib_literals_int
           hydra_lib_literals_int8_to_bigint
           hydra_lib_literals_int16_to_bigint
           hydra_lib_literals_int32_to_bigint
           hydra_lib_literals_int64_to_bigint
-          hydra_lib_literals_read_bigfloat
           hydra_lib_literals_read_bigint
           hydra_lib_literals_read_decimal
           hydra_lib_literals_read_float
@@ -42,7 +36,6 @@
           hydra_lib_literals_read_uint
           hydra_lib_literals_read_uint32
           hydra_lib_literals_read_uint64
-          hydra_lib_literals_show_bigfloat
           hydra_lib_literals_show_bigint
           hydra_lib_literals_show_decimal
           hydra_lib_literals_show_float
@@ -81,34 +74,9 @@
     (define (safe-abs x)
       (if (real? x) (abs x) (magnitude x)))
 
-    ;; bigfloat_to_bigint :: Double -> BigInteger
-    ;; Uses round (banker's rounding / round-half-even) matching Haskell's behavior
-    (define hydra_lib_literals_bigfloat_to_bigint
-      (lambda (x)
-        (exact (round x))))
-
-    ;; bigfloat_to_float :: Double -> Double  (identity in Scheme)
-    (define hydra_lib_literals_bigfloat_to_float
-      (lambda (x)
-        (inexact x)))
-
     ;; Approximate IEEE 754 float32 by rounding to ~7 significant digits
     ;; Snap to IEEE 754 float32 precision
     (define (float32-approx x) (snap-to-float32 x))
-
-    ;; bigfloat_to_float32 :: Double -> Float
-    (define hydra_lib_literals_bigfloat_to_float32
-      (lambda (x) (float32-approx x)))
-
-    ;; bigfloat_to_float64 :: Double -> Double
-    (define hydra_lib_literals_bigfloat_to_float64
-      (lambda (x)
-        (inexact x)))
-
-    ;; bigint_to_bigfloat :: BigInteger -> Double
-    (define hydra_lib_literals_bigint_to_bigfloat
-      (lambda (x)
-        (inexact x)))
 
     ;; bigint_to_decimal :: BigInteger -> Decimal
     ;; Scheme has no native decimal; adapter fallback uses inexact double.
@@ -218,18 +186,14 @@
         (lambda (x)
           (inexact x))))
 
-    ;; float32_to_bigfloat :: Float -> Double
-    (define hydra_lib_literals_float32_to_bigfloat
-      (lambda (x)
-        (inexact x)))
-
     ;; float32_to_decimal :: Float -> Decimal
     (define hydra_lib_literals_float32_to_decimal
       (lambda (x)
         (inexact x)))
 
-    ;; float64_to_bigfloat :: Double -> Double
-    (define hydra_lib_literals_float64_to_bigfloat
+    ;; float32_to_float64 :: Float -> Double
+    ;; Scheme has a single inexact float type; widening is identity.
+    (define hydra_lib_literals_float32_to_float64
       (lambda (x)
         (inexact x)))
 
@@ -237,6 +201,12 @@
     (define hydra_lib_literals_float64_to_decimal
       (lambda (x)
         (inexact x)))
+
+    ;; float64_to_float32 :: Double -> Float
+    ;; Snap to IEEE 754 single-precision (lossy narrowing).
+    (define hydra_lib_literals_float64_to_float32
+      (lambda (x)
+        (float32-approx x)))
 
     ;; int :: IntPrecision -> Int -> Int
     (define hydra_lib_literals_int
@@ -263,14 +233,6 @@
     (define hydra_lib_literals_int64_to_bigint
       (lambda (x)
         x))
-
-    ;; read_bigfloat :: String -> Maybe Double
-    (define hydra_lib_literals_read_bigfloat
-      (lambda (s)
-        (let ((n (string->number s)))
-          (if n
-              (list 'just (inexact n))
-              (list 'nothing)))))
 
     ;; read_decimal :: String -> Maybe Decimal
     (define hydra_lib_literals_read_decimal
@@ -431,11 +393,6 @@
                   (sign (if (< f32 0) "-" "")))
              (string-append sign (number->string adj-m) "e" (number->string adj-e))))
           (else (try-digits 1)))))))
-
-    ;; show_bigfloat :: Double -> String
-    (define hydra_lib_literals_show_bigfloat
-      (lambda (x)
-        (haskell-show-float x)))
 
     ;; show_decimal :: Decimal -> String
     (define hydra_lib_literals_show_decimal

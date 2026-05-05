@@ -141,26 +141,6 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "bigfloat",
-                                            "term": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "decimal"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                "parameter": "v"}}},
-                                          {
                                             "name": "float32",
                                             "term": {
                                               "lambda": {

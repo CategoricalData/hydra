@@ -55,7 +55,6 @@
                       "application": {
                         "argument": {
                           "list": [
-                            {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
                             {"inject": {"field": {"name": "float32", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
                             {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}}}},

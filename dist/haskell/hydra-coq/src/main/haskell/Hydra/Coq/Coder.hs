@@ -113,9 +113,8 @@ encodeLiteral lit =
         (Literals.showDecimal v0),
         ")"])
       Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueBigfloat v1 -> encodeFloatLiteral (Literals.showBigfloat v1)
-        Core.FloatValueFloat32 v1 -> encodeFloatLiteral (Literals.showBigfloat (Literals.float32ToBigfloat v1))
-        Core.FloatValueFloat64 v1 -> encodeFloatLiteral (Literals.showBigfloat (Literals.float64ToBigfloat v1))
+        Core.FloatValueFloat32 v1 -> encodeFloatLiteral (Literals.showFloat32 v1)
+        Core.FloatValueFloat64 v1 -> encodeFloatLiteral (Literals.showFloat64 v1)
       Core.LiteralInteger v0 -> case v0 of
         Core.IntegerValueBigint v1 -> coqTermQualid (Strings.cat [
           "(",

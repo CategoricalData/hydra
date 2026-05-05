@@ -2817,26 +2817,6 @@
                                                       "cases": {
                                                         "cases": [
                                                           {
-                                                            "name": "bigfloat",
-                                                            "term": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "either": {
-                                                                            "right": {
-                                                                              "inject": {
-                                                                                "field": {
-                                                                                  "name": "double",
-                                                                                  "term": {"application": {"argument": {"variable": "bf"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}}},
-                                                                                "typeName": "hydra.scala.syntax.Lit"}}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"variable": "hydra.scala.syntax.Lit"}}},
-                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                "parameter": "bf"}}},
-                                                          {
                                                             "name": "float32",
                                                             "term": {
                                                               "lambda": {
@@ -4827,47 +4807,7 @@
                                                                                         "type": {"variable": "hydra.scala.syntax.Data"}}},
                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                            "parameter": "iv"}}},
-                                                                      {
-                                                                        "name": "float",
-                                                                        "term": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "fv"},
-                                                                                "function": {
-                                                                                  "cases": {
-                                                                                    "cases": [
-                                                                                      {
-                                                                                        "name": "bigfloat",
-                                                                                        "term": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "either": {
-                                                                                                        "right": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"list": [{"variable": "litData"}]},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {"argument": {"literal": {"string": "BigDecimal"}}, "function": {"variable": "hydra.scala.utils.sname"}}},
-                                                                                                                "function": {"variable": "hydra.scala.utils.sapply"}}}}}}},
-                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                "type": {"variable": "hydra.scala.syntax.Data"}}},
-                                                                                            "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                                            "parameter": "_"}}}],
-                                                                                    "default": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {"body": {"either": {"right": {"variable": "litData"}}}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "type": {"variable": "hydra.scala.syntax.Data"}}},
-                                                                                    "typeName": "hydra.core.FloatValue"}}}},
-                                                                            "domain": {"variable": "hydra.core.FloatValue"},
-                                                                            "parameter": "fv"}}}],
+                                                                            "parameter": "iv"}}}],
                                                                     "default": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -6869,34 +6809,6 @@
                                                                     "function": {
                                                                       "cases": {
                                                                         "cases": [
-                                                                          {
-                                                                            "name": "bigfloat",
-                                                                            "term": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "either": {
-                                                                                            "right": {
-                                                                                              "inject": {
-                                                                                                "field": {
-                                                                                                  "name": "ref",
-                                                                                                  "term": {
-                                                                                                    "inject": {
-                                                                                                      "field": {
-                                                                                                        "name": "name",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "fields": [{"name": "value", "term": {"literal": {"string": "BigDecimal"}}}],
-                                                                                                            "typeName": "hydra.scala.syntax.Type_Name"}}},
-                                                                                                      "typeName": "hydra.scala.syntax.Type_Ref"}}},
-                                                                                                "typeName": "hydra.scala.syntax.Type"}}}},
-                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                    "type": {"variable": "hydra.scala.syntax.Type"}}},
-                                                                                "domain": {"unit": {}},
-                                                                                "parameter": "_"}}},
                                                                           {
                                                                             "name": "float32",
                                                                             "term": {

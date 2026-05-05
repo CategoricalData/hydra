@@ -115,28 +115,22 @@ _FieldType_name = Name "name"
 _FieldType_type = Name "type"
 -- | A floating-point type
 data FloatType =
-  -- | An arbitrary-precision floating-point type
-  FloatTypeBigfloat |
   -- | A 32-bit floating-point type
   FloatTypeFloat32 |
   -- | A 64-bit floating-point type
   FloatTypeFloat64
   deriving (Eq, Ord, Read, Show)
 _FloatType = Name "hydra.core.FloatType"
-_FloatType_bigfloat = Name "bigfloat"
 _FloatType_float32 = Name "float32"
 _FloatType_float64 = Name "float64"
 -- | A floating-point literal value
 data FloatValue =
-  -- | An arbitrary-precision floating-point value
-  FloatValueBigfloat Double |
   -- | A 32-bit floating-point value
   FloatValueFloat32 Float |
   -- | A 64-bit floating-point value
   FloatValueFloat64 Double
   deriving (Eq, Ord, Read, Show)
 _FloatValue = Name "hydra.core.FloatValue"
-_FloatValue_bigfloat = Name "bigfloat"
 _FloatValue_float32 = Name "float32"
 _FloatValue_float64 = Name "float64"
 -- | A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.

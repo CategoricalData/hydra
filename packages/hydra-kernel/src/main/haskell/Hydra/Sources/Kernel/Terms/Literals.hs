@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Literals where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  bigfloatToFloatValue, bigintToIntegerValue, floatValueToBigfloat, integerValueToBigint)
+  bigintToIntegerValue, integerValueToBigint)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -63,22 +63,11 @@ module_ = Module {
             moduleDescription = Just "Conversion functions for literal values."}
   where
    definitions = [
-     toDefinition bigfloatToFloatValue,
      toDefinition bigintToIntegerValue,
-     toDefinition floatValueToBigfloat,
      toDefinition integerValueToBigint]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
-
-bigfloatToFloatValue :: TTermDefinition (FloatType -> Bigfloat -> FloatValue)
-bigfloatToFloatValue = define "bigfloatToFloatValue" $
-  doc "Convert a bigfloat to a floating-point value of a given type (note: lossy)" $
-  "ft" ~> "bf" ~> cases _FloatType (var "ft")
-    Nothing [
-    _FloatType_bigfloat>>: constant $ Core.floatValueBigfloat $ var "bf",
-    _FloatType_float32>>: constant $ Core.floatValueFloat32 $ Literals.bigfloatToFloat32 $ var "bf",
-    _FloatType_float64>>: constant $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "bf"]
 
 bigintToIntegerValue :: TTermDefinition (IntegerType -> Integer -> IntegerValue)
 bigintToIntegerValue = define "bigintToIntegerValue" $
@@ -94,15 +83,6 @@ bigintToIntegerValue = define "bigintToIntegerValue" $
     _IntegerType_uint16>>: constant $ Core.integerValueUint16 $ Literals.bigintToUint16 $ var "bi",
     _IntegerType_uint32>>: constant $ Core.integerValueUint32 $ Literals.bigintToUint32 $ var "bi",
     _IntegerType_uint64>>: constant $ Core.integerValueUint64 $ Literals.bigintToUint64 $ var "bi"]
-
-floatValueToBigfloat :: TTermDefinition (FloatValue -> Bigfloat)
-floatValueToBigfloat = define "floatValueToBigfloat" $
-  doc "Convert a floating-point value of any precision to a bigfloat" $
-  match _FloatValue
-    Nothing [
-    _FloatValue_bigfloat>>: "bf" ~> var "bf",
-    _FloatValue_float32>>: "f32" ~> Literals.float32ToBigfloat $ var "f32",
-    _FloatValue_float64>>: "f64" ~> Literals.float64ToBigfloat $ var "f64"]
 
 integerValueToBigint :: TTermDefinition (IntegerValue -> Integer)
 integerValueToBigint = define "integerValueToBigint" $
