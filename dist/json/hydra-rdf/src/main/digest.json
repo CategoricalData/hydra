@@ -7,6 +7,7 @@
     "hydra.rdf.syntax": "91fea50adfd68b6514e898c799f9e51a862efbb048395853222dc53e428adba4",
     "hydra.rdf.utils": "072b5b88914c675c83f21143ce0c0341476c9d519e9d898a19540391fa590df8",
     "hydra.shacl.coder": "4692b8a9cf5a4b63820d3b1ddfc21c4316ac392ae1989ff636faf50bf2963d3f",
+    "hydra.shacl.language": "7d310a080faf83d2aae6a3bb0d0a8ef7b032563f1247b4e4afb62b5d6e0d693e",
     "hydra.shacl.model": "1f9a96d68c8f0cb34275e57866b7f3d6c3e33aa2652eb461c118319da82e42a6",
     "hydra.shex.syntax": "134e737cc774752ccdd476c04f2341158c299b603397e7ad4928e6a9f80cb9e2",
     "hydra.xml.schema": "a50cdff17e93cf43477f517f27a5d7668a86f005cfbe7504db793b254c4ed643"
