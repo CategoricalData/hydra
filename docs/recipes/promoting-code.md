@@ -517,8 +517,8 @@ pair (var "a") (var "b")
 Pairs.first (var "p")
 Pairs.second (var "p")
 
--- Type conversions (compose primitives; there's no direct int32ToBigfloat)
-Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i"
+-- Type conversions (compose primitives; there's no direct int32ToFloat64)
+Literals.float32ToFloat64 $ Literals.decimalToFloat32 $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i"
 ```
 
 ### Mutual recursion
@@ -541,7 +541,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 4. **Check DSL exports**: If a function isn't found in a DSL module, check what's actually exported (e.g.,
    `Maybes.cat` not `Maybes.catMaybes`).
 
-5. **Compose type conversions**: There's no direct `int32ToBigfloat`; compose `int32ToBigint` with `bigintToBigfloat`.
+5. **Compose type conversions**: Some conversions are not direct; compose existing primitives. For example, `int32ToBigint` then `bigintToDecimal`, then `decimalToFloat64` to go from int32 to float64.
 
 6. **Avoid custom state types**: If your Haskell code uses a custom record type for state (e.g., in a fold),
    consider using nested tuples instead. Custom types require schema definitions, while tuples work directly:

@@ -4,26 +4,6 @@ from hydra.phantoms import TTerm
 from hydra.dsl.meta.phantoms import lib_primitive1 as primitive1
 
 
-def bigfloat_to_bigint(x: TTerm) -> TTerm:
-    """Convert a Decimal to an int."""
-    return primitive1(x)
-
-
-def bigfloat_to_float32(x: TTerm) -> TTerm:
-    """Convert a Decimal to a float."""
-    return primitive1(x)
-
-
-def bigfloat_to_float64(x: TTerm) -> TTerm:
-    """Convert a Decimal to a float."""
-    return primitive1(x)
-
-
-def bigint_to_bigfloat(x: TTerm) -> TTerm:
-    """Convert an int to a Decimal."""
-    return primitive1(x)
-
-
 def bigint_to_decimal(x: TTerm) -> TTerm:
     """Convert an int to a decimal (arbitrary-precision exact decimal)."""
     return primitive1(x)
@@ -89,23 +69,23 @@ def decimal_to_float64(x: TTerm) -> TTerm:
     return primitive1(x)
 
 
-def float32_to_bigfloat(x: TTerm) -> TTerm:
-    """Convert a float to a Decimal."""
-    return primitive1(x)
-
-
 def float32_to_decimal(x: TTerm) -> TTerm:
     """Convert a float32 to a decimal."""
     return primitive1(x)
 
 
-def float64_to_bigfloat(x: TTerm) -> TTerm:
-    """Convert a float to a Decimal."""
+def float32_to_float64(x: TTerm) -> TTerm:
+    """Convert a float32 to a float64 (lossless widening)."""
     return primitive1(x)
 
 
 def float64_to_decimal(x: TTerm) -> TTerm:
     """Convert a float64 to a decimal."""
+    return primitive1(x)
+
+
+def float64_to_float32(x: TTerm) -> TTerm:
+    """Convert a float64 to a float32 (lossy narrowing)."""
     return primitive1(x)
 
 
@@ -127,11 +107,6 @@ def int32_to_bigint(x: TTerm) -> TTerm:
 def int64_to_bigint(x: TTerm) -> TTerm:
     """Convert int64 to int."""
     return primitive1(x)
-
-
-def read_bigfloat(s: TTerm) -> TTerm:
-    """Parse a string to a Decimal."""
-    return primitive1(s)
 
 
 def read_boolean(s: TTerm) -> TTerm:
@@ -167,11 +142,6 @@ def read_int64(s: TTerm) -> TTerm:
 def read_string(s: TTerm) -> TTerm:
     """Parse a string literal."""
     return primitive1(s)
-
-
-def show_bigfloat(x: TTerm) -> TTerm:
-    """Convert a Decimal to string."""
-    return primitive1(x)
 
 
 def show_bigint(x: TTerm) -> TTerm:

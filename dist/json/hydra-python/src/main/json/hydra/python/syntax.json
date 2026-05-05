@@ -32,7 +32,7 @@
           "body": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}},
-              {"name": "float", "type": {"literal": {"float": {"bigfloat": {}}}}}]},
+              {"name": "float", "type": {"literal": {"float": {"float64": {}}}}}]},
           "variables": []}}},
     {
       "type": {

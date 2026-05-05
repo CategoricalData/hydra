@@ -2,16 +2,17 @@
   "version": 2,
   "generator": "v0-unstamped",
   "inputs": {
-    "hydra.scala.coder": { "kind": "Other", "hash": "f7e102e8ba327c5b1c30fc5f59c0576781e74d8da8cca1136fe03e98880565e3" },
+    "hydra.scala.coder": { "kind": "Other", "hash": "a4a53c2a66bdd5c09c80b62ecafe82ef553b6910b33ac02c4973480476633ab9" },
+    "hydra.scala.language": { "kind": "Other", "hash": "4112bd41ed4a202a50a6c59a39bd0ddfe2699108c4345724d5abf34d46a8619e" },
     "hydra.scala.serde": { "kind": "Other", "hash": "1e1bce0fb249f7321222aba12b2f3cdc51d43552c6929edc86c7a97c41757d1b" },
     "hydra.scala.syntax": { "kind": "Other", "hash": "9df2fe60a19e3362db2a841c9f53e68590cf2461b943a70e8ff659426517c750" },
     "hydra.scala.utils": { "kind": "Other", "hash": "16bc5caed032e250ec59f16c2fe87ef04800c4319d98c8f0a1e194bc0a795e74" }
   },
   "outputs": {
     "Hydra/Dsl/Scala/Syntax.hs": { "kind": "TargetFile", "hash": "686e450acae3161b9e4daff875d4a56687deb38b80fc2a10f86f6ca394df4133" },
-    "Hydra/Scala/Coder.hs": { "kind": "TargetFile", "hash": "e919c92b2fb1d135bd7f2788244cd43c7ee93a302bc67346b73b6364c1ab39c3" },
-    "Hydra/Scala/Language.hs": { "kind": "TargetFile", "hash": "78c1eba9411028d6bc06da6af0e3128bd92aa1d6f7caaf1a481b25ed4982fc1c" },
-    "Hydra/Scala/Prepare.hs": { "kind": "TargetFile", "hash": "33d3e6a4d7621d81a614919bd6c3b6c008fade73058e279012009608ac8c0b23" },
+    "Hydra/Scala/Coder.hs": { "kind": "TargetFile", "hash": "c3d5a2694c72bdc1583588b864e89a7c13e6895556bbcd702942bc35627d773b" },
+    "Hydra/Scala/Language.hs": { "kind": "TargetFile", "hash": "3a35e238bbfc9ef7f7888f1066ebba4be1bcfbee6b0c6729635512993750d045" },
+    "Hydra/Scala/Prepare.hs": { "kind": "TargetFile", "hash": "8437e572b4b5e67309a8ddc3ef2c9e86c460e433787665c54ae20b168de60f92" },
     "Hydra/Scala/Serde.hs": { "kind": "TargetFile", "hash": "3d56369260a95a04f323911d4d1d010bb4c58d6b89f191f1241f3aef33edb485" },
     "Hydra/Scala/Syntax.hs": { "kind": "TargetFile", "hash": "6b80e5103624f10526c2d41342b6870063f2e5a1e3a4899af1cde822cd808920" },
     "Hydra/Scala/Utils.hs": { "kind": "TargetFile", "hash": "dd4cf3a9cc1513dddeeac71e602be47ecd4b866fe98951b5ecc43d27d9d4f652" }

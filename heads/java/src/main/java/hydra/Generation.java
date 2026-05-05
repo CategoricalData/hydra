@@ -511,7 +511,7 @@ public class Generation {
      * Uses removeTypesFromTerm which strips TypeApplication, TypeLambda,
      * lambda domain types, and let-binding TypeSchemes from terms.
      * Module-level TypeSchemes are stripped from term bindings (to avoid
-     * bigfloat/float64 conflicts) but preserved on type-defining bindings
+     * type conflicts) but preserved on type-defining bindings
      * (needed by isNativeType for schema graph construction).
      */
     public static Module stripTermTypes(Module m) {

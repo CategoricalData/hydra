@@ -19,21 +19,18 @@ eliminationVariants =
 floatTypePrecision :: Core.FloatType -> Util.Precision
 floatTypePrecision x =
     case x of
-      Core.FloatTypeBigfloat -> Util.PrecisionArbitrary
       Core.FloatTypeFloat32 -> Util.PrecisionBits 32
       Core.FloatTypeFloat64 -> Util.PrecisionBits 64
 -- | All floating-point types in a canonical order
 floatTypes :: [Core.FloatType]
 floatTypes =
     [
-      Core.FloatTypeBigfloat,
       Core.FloatTypeFloat32,
       Core.FloatTypeFloat64]
 -- | Find the float type for a given floating-point value
 floatValueType :: Core.FloatValue -> Core.FloatType
 floatValueType x =
     case x of
-      Core.FloatValueBigfloat _ -> Core.FloatTypeBigfloat
       Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
       Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 -- | All function variants (constructors), in a canonical order (legacy)

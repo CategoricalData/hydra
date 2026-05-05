@@ -246,14 +246,6 @@
                                                               "cases": {
                                                                 "cases": [
                                                                   {
-                                                                    "name": "bigfloat",
-                                                                    "term": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "inject": {"field": {"name": "bigfloat", "term": {"literal": {"float": {"bigfloat": 0}}}}, "typeName": "hydra.core.FloatValue"}},
-                                                                        "domain": {"unit": {}},
-                                                                        "parameter": "_"}}},
-                                                                  {
                                                                     "name": "float32",
                                                                     "term": {
                                                                       "lambda": {

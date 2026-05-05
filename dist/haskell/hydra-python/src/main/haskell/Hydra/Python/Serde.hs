@@ -530,7 +530,7 @@ namedExpressionToExpr ne =
 numberToExpr :: Syntax.Number -> Ast.Expr
 numberToExpr num =
     case num of
-      Syntax.NumberFloat v0 -> Serialization.cst (pythonFloatLiteralText (Literals.showBigfloat v0))
+      Syntax.NumberFloat v0 -> Serialization.cst (pythonFloatLiteralText (Literals.showFloat64 v0))
       Syntax.NumberInteger v0 -> Serialization.cst (Literals.showBigint v0)
 -- | Serialize an or pattern
 orPatternToExpr :: Syntax.OrPattern -> Ast.Expr

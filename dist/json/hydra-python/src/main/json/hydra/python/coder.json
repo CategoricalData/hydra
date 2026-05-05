@@ -6689,35 +6689,6 @@
                           "cases": {
                             "cases": [
                               {
-                                "name": "bigfloat",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "either": {
-                                                "right": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "list": [
-                                                        {
-                                                          "application": {
-                                                            "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                                            "function": {"variable": "hydra.python.utils.singleQuotedString"}}}]},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"wrap": {"body": {"literal": {"string": "Decimal"}}, "typeName": "hydra.python.syntax.Name"}},
-                                                            "function": {"variable": "hydra.python.utils.pyNameToPyPrimary"}}},
-                                                        "function": {"variable": "hydra.python.utils.functionCall"}}}}}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
-                                    "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                    "parameter": "f"}}},
-                              {
                                 "name": "float32",
                                 "term": {
                                   "lambda": {
@@ -6785,7 +6756,7 @@
                                                         "inject": {
                                                           "field": {
                                                             "name": "float",
-                                                            "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
+                                                            "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.float32ToFloat64"}}}},
                                                           "typeName": "hydra.python.syntax.Number"}}},
                                                     "typeName": "hydra.python.syntax.Atom"}},
                                                 "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"}}}}},
@@ -6915,12 +6886,7 @@
                                                       "inject": {
                                                         "field": {
                                                           "name": "number",
-                                                          "term": {
-                                                            "inject": {
-                                                              "field": {
-                                                                "name": "float",
-                                                                "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
-                                                              "typeName": "hydra.python.syntax.Number"}}},
+                                                          "term": {"inject": {"field": {"name": "float", "term": {"variable": "v"}}, "typeName": "hydra.python.syntax.Number"}}},
                                                         "typeName": "hydra.python.syntax.Atom"}},
                                                     "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"}}}}},
                                             "type": {"variable": "t0"}}},
@@ -9290,9 +9256,6 @@
                                                 "function": {
                                                   "cases": {
                                                     "cases": [
-                                                      {
-                                                        "name": "bigfloat",
-                                                        "term": {"lambda": {"body": {"literal": {"string": "Decimal"}}, "domain": {"unit": {}}, "parameter": "_"}}},
                                                       {
                                                         "name": "float32",
                                                         "term": {"lambda": {"body": {"literal": {"string": "float"}}, "domain": {"unit": {}}, "parameter": "_"}}},
@@ -18473,31 +18436,7 @@
                                                                             "argument": {"literal": {"boolean": true}},
                                                                             "function": {"application": {"argument": {"variable": "meta"}, "function": {"variable": "hydra.python.coder.setMetaUsesDecimal"}}}}},
                                                                         "domain": {"literal": {"decimal": {}}},
-                                                                        "parameter": "_"}}},
-                                                                  {
-                                                                    "name": "float",
-                                                                    "term": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "fv"},
-                                                                            "function": {
-                                                                              "cases": {
-                                                                                "cases": [
-                                                                                  {
-                                                                                    "name": "bigfloat",
-                                                                                    "term": {
-                                                                                      "lambda": {
-                                                                                        "body": {
-                                                                                          "application": {
-                                                                                            "argument": {"literal": {"boolean": true}},
-                                                                                            "function": {"application": {"argument": {"variable": "meta"}, "function": {"variable": "hydra.python.coder.setMetaUsesDecimal"}}}}},
-                                                                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                                        "parameter": "_"}}}],
-                                                                                "default": {"variable": "meta"},
-                                                                                "typeName": "hydra.core.FloatValue"}}}},
-                                                                        "domain": {"variable": "hydra.core.FloatValue"},
-                                                                        "parameter": "fv"}}}],
+                                                                        "parameter": "_"}}}],
                                                                 "default": {"variable": "meta"},
                                                                 "typeName": "hydra.core.Literal"}}}},
                                                         "domain": {"variable": "hydra.core.Literal"},
@@ -18828,32 +18767,7 @@
                                                                                 "function": {
                                                                                   "application": {"argument": {"variable": "metaWithSubtypes"}, "function": {"variable": "hydra.python.coder.setMetaUsesDecimal"}}}}},
                                                                             "domain": {"unit": {}},
-                                                                            "parameter": "_"}}},
-                                                                      {
-                                                                        "name": "float",
-                                                                        "term": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "ft"},
-                                                                                "function": {
-                                                                                  "cases": {
-                                                                                    "cases": [
-                                                                                      {
-                                                                                        "name": "bigfloat",
-                                                                                        "term": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {"literal": {"boolean": true}},
-                                                                                                "function": {
-                                                                                                  "application": {"argument": {"variable": "metaWithSubtypes"}, "function": {"variable": "hydra.python.coder.setMetaUsesDecimal"}}}}},
-                                                                                            "domain": {"unit": {}},
-                                                                                            "parameter": "_"}}}],
-                                                                                    "default": {"variable": "metaWithSubtypes"},
-                                                                                    "typeName": "hydra.core.FloatType"}}}},
-                                                                            "domain": {"variable": "hydra.core.FloatType"},
-                                                                            "parameter": "ft"}}}],
+                                                                            "parameter": "_"}}}],
                                                                     "default": {"variable": "metaWithSubtypes"},
                                                                     "typeName": "hydra.core.LiteralType"}}}},
                                                             "domain": {"variable": "hydra.core.LiteralType"},

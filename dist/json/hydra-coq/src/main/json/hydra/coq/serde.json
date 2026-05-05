@@ -1631,10 +1631,10 @@
                                   {
                                     "name": "v",
                                     "term": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Number"}}},
-                                    "typeScheme": {"body": {"literal": {"float": {"bigfloat": {}}}}, "variables": []}}],
+                                    "typeScheme": {"body": {"literal": {"float": {"float64": {}}}}, "variables": []}}],
                                 "body": {
                                   "application": {
-                                    "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                    "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                                     "function": {"variable": "hydra.serialization.cst"}}}}},
                             "domain": {"variable": "hydra.coq.syntax.Number"},
                             "parameter": "n"}}},
@@ -3209,10 +3209,10 @@
                                                   {
                                                     "name": "v",
                                                     "term": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Number"}}},
-                                                    "typeScheme": {"body": {"literal": {"float": {"bigfloat": {}}}}, "variables": []}}],
+                                                    "typeScheme": {"body": {"literal": {"float": {"float64": {}}}}, "variables": []}}],
                                                 "body": {
                                                   "application": {
-                                                    "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                                    "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                                                     "function": {"variable": "hydra.serialization.cst"}}}}},
                                             "domain": {"variable": "hydra.coq.syntax.Number"},
                                             "parameter": "n"}}},

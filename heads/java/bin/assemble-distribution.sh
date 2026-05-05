@@ -11,7 +11,6 @@
 #      - hydra-kernel: copy hand-written Java runtime (util, lib, dsl, json,
 #        tools) into the dist tree so the published Maven artifact is
 #        self-contained.
-#      - hydra-lisp:   patch Coder.java (PartialVisitor type inference)
 #   4. Generating a per-package build.gradle + settings.gradle so each
 #      dist/java/<pkg>/ is a standalone, publishable Gradle build.
 #
@@ -107,17 +106,10 @@ case "$PACKAGE" in
         echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
         "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
         ;;
-    hydra-lisp)
-        # Patch Lisp Coder.java: fix PartialVisitor type inference in
-        # encodeTermDefinition.
-        LISPCODER="$OUT_DIR/src/main/java/hydra/lisp/Coder.java"
-        if [ -f "$LISPCODER" ]; then
-            echo ""
-            echo "Step 3: Patching Lisp Coder.java..."
-            sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
-            sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
-        fi
-        ;;
+    # (hydra-lisp Coder.java PartialVisitor type-inference patch eliminated:
+    # the Java coder now emits Either<T2, ...> generics directly; the
+    # sed pattern looking for Either<TopLevelFormWithComments, TopLevelFormWithComments>
+    # matches no occurrences in regenerated output.)
 esac
 
 # Step 4: Generate per-package build.gradle + settings.gradle so each

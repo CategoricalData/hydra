@@ -3916,13 +3916,6 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "bigfloat",
-                                        "term": {
-                                          "lambda": {
-                                            "body": {"inject": {"field": {"name": "f64", "term": {"unit": {}}}, "typeName": "hydra.wasm.syntax.ValType"}},
-                                            "domain": {"unit": {}},
-                                            "parameter": "_"}}},
-                                      {
                                         "name": "float32",
                                         "term": {
                                           "lambda": {

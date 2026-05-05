@@ -95,9 +95,8 @@ adaptFloatType constraints ft =
           alt = adaptFloatType constraints
           forUnsupported =
                   \ft2 -> case ft2 of
-                    Core.FloatTypeBigfloat -> alt Core.FloatTypeFloat64
                     Core.FloatTypeFloat32 -> alt Core.FloatTypeFloat64
-                    Core.FloatTypeFloat64 -> alt Core.FloatTypeBigfloat
+                    Core.FloatTypeFloat64 -> alt Core.FloatTypeFloat32
       in (Logic.ifElse supported (Just ft) (forUnsupported ft))
 -- | Adapt a schema graph to the given language constraints
 adaptGraphSchema :: Ord t0 => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Either Errors.Error (M.Map t0 Core.Type))
@@ -148,7 +147,13 @@ adaptLiteral lt l =
         Core.LiteralTypeFloat _ -> Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v0))
         Core.LiteralTypeString -> Core.LiteralString (LibLiterals.showDecimal v0)
       Core.LiteralFloat v0 -> case lt of
-        Core.LiteralTypeFloat v1 -> Core.LiteralFloat (Literals.bigfloatToFloatValue v1 (Literals.floatValueToBigfloat v0))
+        Core.LiteralTypeFloat v1 -> Core.LiteralFloat (case v1 of
+          Core.FloatTypeFloat32 -> Core.FloatValueFloat32 (case v0 of
+            Core.FloatValueFloat32 v3 -> v3
+            Core.FloatValueFloat64 v3 -> LibLiterals.float64ToFloat32 v3)
+          Core.FloatTypeFloat64 -> Core.FloatValueFloat64 (case v0 of
+            Core.FloatValueFloat32 v3 -> LibLiterals.float32ToFloat64 v3
+            Core.FloatValueFloat64 v3 -> v3))
       Core.LiteralInteger v0 -> case lt of
         Core.LiteralTypeInteger v1 -> Core.LiteralInteger (Literals.bigintToIntegerValue v1 (Literals.integerValueToBigint v0))
 -- | Attempt to adapt a literal type using the given language constraints
@@ -219,6 +224,7 @@ adaptTerm constraints litmap cx graph term0 =
                               let supportedVariant = Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints)
                               in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term))
                 in (Eithers.bind (recurse term02) (\term1 -> case term1 of
+                  Core.TermAnnotated _ -> Right term1
                   Core.TermTypeApplication v0 -> Eithers.bind (adaptType constraints litmap (Core.typeApplicationTermType v0)) (\atyp -> Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
@@ -410,18 +416,23 @@ literalTypeSupported constraints lt =
                 _ -> True
       in (Logic.ifElse (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
 -- | Prepare a float type, substituting unsupported types
-prepareFloatType :: Core.FloatType -> (Core.FloatType, ((Core.FloatValue -> Core.FloatValue), (S.Set String)))
+prepareFloatType :: Ord t0 => (Core.FloatType -> (Core.FloatType, ((Core.FloatValue -> Core.FloatValue), (S.Set t0))))
 prepareFloatType ft =
     case ft of
-      Core.FloatTypeBigfloat -> (
+      Core.FloatTypeFloat32 -> (
+        Core.FloatTypeFloat32,
+        (
+          (\v -> case v of
+            Core.FloatValueFloat32 v1 -> Core.FloatValueFloat32 v1
+            _ -> v),
+          Sets.empty))
+      Core.FloatTypeFloat64 -> (
         Core.FloatTypeFloat64,
         (
           (\v -> case v of
-            Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (LibLiterals.bigfloatToFloat64 v1)
+            Core.FloatValueFloat64 v1 -> Core.FloatValueFloat64 v1
             _ -> v),
-          (Sets.fromList [
-            "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"])))
-      _ -> prepareSame ft
+          Sets.empty))
 -- | Prepare an integer type, substituting unsupported types
 prepareIntegerType :: Core.IntegerType -> (Core.IntegerType, ((Core.IntegerValue -> Core.IntegerValue), (S.Set String)))
 prepareIntegerType it =
@@ -530,6 +541,9 @@ pushTypeAppsInward term =
 
       let push =
               \body -> \typ -> case body of
+                Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermBody = (push (Core.annotatedTermBody v0) typ),
+                  Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
                 Core.TermApplication v0 -> go (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.applicationFunction v0),

@@ -125,63 +125,19 @@ case "$PACKAGE" in
 EOF
         done
 
-        # Step 3c: Copy annotation_bindings.scm next to test_graph.scm so the
-        # test graph's (include ...) directive resolves.
-        cp "$HYDRA_SCHEME_HEAD/src/test/scheme/hydra/annotation_bindings.scm" \
-           "$OUT_DIR/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null || true
-
-        # Step 3d: Patch test_graph.scm — replace the generated test_env
-        # references with a full graph built inline from primitives + schema
-        # types + annotation bindings. R7RS Scheme's lack of dynamic loading
-        # makes a clean handoff to a separate test_env.scm awkward (the inline
-        # build relies on annotation_bindings.scm, hydra_test_test_graph_terms,
-        # etc. — all in test_graph's scope). So Scheme keeps an inline patch
-        # while Haskell/Java/Python use the cleaner DSL→runtime handoff.
-        SCHEME_TESTGRAPH="$OUT_DIR/src/test/scheme/hydra/test/test_graph.scm"
-        if [ -f "$SCHEME_TESTGRAPH" ]; then
-            echo "Step 3d: Patching test_graph.scm..."
-            # Replace the (hydra test test_env) import line with the imports
-            # the inline build needs. The Serde writer lays out each import on
-            # its own line, so this is a single-line substitution.
-            sed_inplace 's|^(hydra test test_env)$|(hydra context)\
-(hydra graph)\
-(hydra lexical)\
-(hydra lib libraries)\
-(hydra rewriting)\
-(hydra scoping)\
-(hydra json bootstrap)|' "$SCHEME_TESTGRAPH"
-            # Drop the generator's test_env-based defines; they'll be replaced.
-            sed_inplace '/^(define hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$SCHEME_TESTGRAPH"
-            sed_inplace '/^(define hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$SCHEME_TESTGRAPH"
-            # Remove trailing )) that closes begin and define-library; we'll re-add after appending.
-            sed_inplace '$ s/))$//' "$SCHEME_TESTGRAPH"
-            cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
-;; Include annotation term-level bindings (shared with test runner).
-SCMEOF
-            echo '(include "annotation_bindings.scm")' >> "$SCHEME_TESTGRAPH"
-            cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
-
-(define hydra_test_test_graph_test_context (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
-(define hydra_test_test_graph_test_graph
-  (let* ((all-prims (standard-library))
-         (type-to-ts hydra_scoping_f_type_to_type_scheme)
-         (kernel-schemas (map (lambda (entry) (list (car entry) (type-to-ts (cdr entry)))) hydra_json_bootstrap_types_by_name))
-         (test-schemas (map (lambda (entry) (list (car entry) (type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
-         (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
-         (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))
-         (bound-terms (append
-           ;; Primitives are resolved via graphPrimitives, not boundTerms.
-           (annotation-bindings)
-           (list (list "hydra.monads.emptyContext" (list (quote unit) (list)))
-                 (list "hydra.lexical.emptyGraph" (list (quote unit) (list))))
-           test-terms)))
-    (make-hydra_graph_graph
-      (hydra_lib_maps_from_list bound-terms)
-      hydra_lib_maps_empty (list) (list) hydra_lib_maps_empty
-      (hydra_lib_maps_from_list (map (lambda (p) (list (car p) (cdr p))) all-prims))
-      schema-types (list))))
-))
-SCMEOF
+        # Step 3c: Copy hand-written test_env.scm into dist/scheme tree.
+        # The kernel filters hydra.test.testEnv from emitted output (via
+        # testSkipEmitNamespaces); the hand-written counterpart provides
+        # hydra_test_test_env_test_{context,graph} for the generated
+        # test_graph.scm to resolve via (import (hydra test test_env)).
+        # Mirrors the role of heads/python/.../test_env.py and
+        # heads/lisp/common-lisp/.../test_env.lisp.
+        echo "Step 3c: Copying test_env.scm from heads/lisp/scheme..."
+        TEST_ENV_SRC="$HYDRA_SCHEME_HEAD/src/test/scheme/hydra/test/test_env.scm"
+        TEST_ENV_DST="$OUT_DIR/src/test/scheme/hydra/test/test_env.scm"
+        if [ -f "$TEST_ENV_SRC" ]; then
+            mkdir -p "$(dirname "$TEST_ENV_DST")"
+            cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
         fi
         ;;
 esac

@@ -47,16 +47,22 @@
            (cl:cons :messages cl:nil)
            (cl:cons :other hydra_lib_maps_empty)))
 
-;; Build a test graph parametrized by a map of test-types.
-;; Delegates to the test runner's build-test-graph + schema-type
-;; enrichment so we don't duplicate the annotation-bindings logic.
+;; Build a test graph parametrized by a map of test-types and a map of
+;; test-terms. Delegates to the test runner's build-test-graph +
+;; schema-type enrichment so we don't duplicate the annotation-bindings
+;; logic. The test-terms argument is accepted for signature parity with
+;; the DSL (Map Name Type -> Map Name Term -> Graph) but ignored — the
+;; CL test runner reads test terms directly from
+;; hydra_test_test_graph_test_terms after load.
 ;;
 ;; The defvar holds a lambda; loader.lisp's hydra-set-function-bindings
 ;; will set the symbol-function cell so it can be called in function
 ;; position from the generated test_graph.lisp.
 (cl:defvar hydra_test_test_env_test_graph
   (cl:lambda (test-types)
-    (build-test-graph-with-types test-types)))
+    (cl:lambda (test-terms)
+      (cl:declare (cl:ignore test-terms))
+      (build-test-graph-with-types test-types))))
 
 ;; Helper for the lambda above. Builds the runtime graph with
 ;; primitives + annotation primitives, then enriches :schema_types

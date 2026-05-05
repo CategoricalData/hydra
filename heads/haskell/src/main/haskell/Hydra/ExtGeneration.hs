@@ -147,8 +147,7 @@ writeCoq basePath universeModules modulesToGenerate =
 coqLibPrimitiveNames :: Set.Set String
 coqLibPrimitiveNames = Set.fromList [
   "abs","acos","acosh","add","addFloat64","alter","and","apply","asin",
-  "asinh","at","atan","atan2","atanh","bigfloatToBigint","bigfloatToFloat32",
-  "bigfloatToFloat64","bigintToBigfloat","bigintToDecimal","bigintToInt16",
+  "asinh","at","atan","atan2","atanh","bigintToDecimal","bigintToInt16",
   "bigintToInt32","bigintToInt64","bigintToInt8","bigintToUint16",
   "bigintToUint32","bigintToUint64","bigintToUint8","bimap","binaryToBytes",
   "binaryToString","bind","cases","cat","cat2","ceiling","charAt","compare",
@@ -156,8 +155,8 @@ coqLibPrimitiveNames = Set.fromList [
   "decimalToBigint","decimalToFloat32","decimalToFloat64","delete",
   "difference","div","drop","dropWhile","e","either","elem","elems","empty",
   "equal","even","exp","filter","filterWithKey","find","findAll",
-  "findWithDefault","first","float32ToBigfloat","float32ToDecimal",
-  "float64ToBigfloat","float64ToDecimal","floor","foldl","foldr","fromJust",
+  "findWithDefault","first","float32ToDecimal","float32ToFloat64",
+  "float64ToDecimal","float64ToFloat32","floor","foldl","foldr","fromJust",
   "fromLeft","fromList","fromMaybe","fromRight","group","gt","gte","head",
   "identity","ifElse","init","insert","int16ToBigint","int32ToBigint",
   "int64ToBigint","int8ToBigint","intercalate","intersection","intersperse",
@@ -168,12 +167,12 @@ coqLibPrimitiveNames = Set.fromList [
   "maybeLast","maybeMod","maybePred","maybeRem","maybeSucc","maybeTail",
   "member","min","mod","mul","mulFloat64","negate","negateFloat64","not",
   "nub","null","odd","or","partition","partitionEithers","pi","pow","pred",
-  "pure","range","readBigfloat","readBigint","readBoolean","readDecimal",
+  "pure","range","readBigint","readBoolean","readDecimal",
   "readFloat32","readFloat64","readInt16","readInt32","readInt64","readInt8",
   "readString","readUint16","readUint32","readUint64","readUint8","rem",
   "replace","replaceAll","replicate","reverse","rights","round",
-  "roundBigfloat","roundFloat32","roundFloat64","safeHead","second",
-  "showBigfloat","showBigint","showBoolean","showDecimal","showFloat32",
+  "roundFloat32","roundFloat64","safeHead","second",
+  "showBigint","showBoolean","showDecimal","showFloat32",
   "showFloat64","showInt16","showInt32","showInt64","showInt8","showString",
   "showUint16","showUint32","showUint64","showUint8","signum","sin",
   "singleton","sinh","size","sort","sortOn","span","split","splitOn","sqrt",
@@ -215,15 +214,15 @@ writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLis
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 --
--- After generation, walks the output directory and wraps long lines in each
--- generated .scala file via 'wrapLongScalaLines'. This avoids the Scala
--- compiler's memory issues on extremely long single-line expressions, and
--- replaces the previously-external break-long-lines.py post-processor.
+-- The Scala compiler hits stack/memory limits on extremely long
+-- single-line expressions; 'wrapLongScalaText' breaks long lines at safe
+-- points (commas / arrow-after-paren outside string literals). Applied
+-- as part of the generation pipeline (via the per-file content
+-- transform in 'generateSourcesWithTransform'), not as a read-back
+-- post-pass on disk.
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
-writeScala basePath universeMods mods = do
-  n <- generateSources moduleToScala scalaLanguage True True False False basePath universeMods mods
-  wrapLongLinesInScalaTree basePath
-  return n
+writeScala = generateSourcesWithTransform wrapLongScalaText
+  moduleToScala scalaLanguage True True False False
 
 -- | Generate WebAssembly text format (WAT) files from modules.
 -- First argument: output directory
@@ -252,26 +251,11 @@ commaBreakThreshold = 80
 arrowBreakThreshold :: Int
 arrowBreakThreshold = 60
 
--- | Walk a directory tree and wrap long lines in every .scala file.
-wrapLongLinesInScalaTree :: FP.FilePath -> IO ()
-wrapLongLinesInScalaTree dir = do
-    exists <- SD.doesDirectoryExist dir
-    when exists $ do
-      entries <- SD.listDirectory dir
-      mapM_ visit entries
-  where
-    visit name = do
-      let path = dir FP.</> name
-      isDir <- SD.doesDirectoryExist path
-      if isDir
-        then wrapLongLinesInScalaTree path
-        else when (FP.takeExtension path == ".scala") $ do
-          -- Read strictly to release the file handle before writing back.
-          contents <- SIO.withFile path SIO.ReadMode $ \h -> do
-            cs <- SIO.hGetContents h
-            length cs `seq` return cs
-          let wrapped = wrapLongScalaText contents
-          when (wrapped /= contents) (writeFile path wrapped)
+-- (The previous wrapLongLinesInScalaTree post-pass — which walked
+-- the output directory and rewrote each .scala file in place — has
+-- been retired. wrapLongScalaText is now applied during emission via
+-- generateSourcesWithTransform; see writeScala above and the scala
+-- dispatch in heads/haskell/src/exec/bootstrap-from-json/Main.hs.)
 
 -- | Apply line-wrapping to every line in a Scala source file. Lines under
 --   the max length pass through unchanged; long lines are broken at safe
