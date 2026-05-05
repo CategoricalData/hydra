@@ -33,10 +33,6 @@ Definition showString (s : string) : string :=
   let quote := Ascii.Ascii false true false false false true false false in
   String quote (s ++ String quote "")%string.
 
-Axiom bigfloatToBigint : Q -> Z.
-Axiom bigfloatToFloat32 : Q -> Q.
-Axiom bigfloatToFloat64 : Q -> Q.
-Axiom bigintToBigfloat : Z -> Q.
 Axiom bigintToDecimal : Z -> Q.
 Axiom bigintToInt8 : Z -> Z.
 Axiom bigintToInt16 : Z -> Z.
@@ -51,15 +47,14 @@ Axiom binaryToString : string -> string.
 Axiom decimalToBigint : Q -> Z.
 Axiom decimalToFloat32 : Q -> Q.
 Axiom decimalToFloat64 : Q -> Q.
-Axiom float32ToBigfloat : Q -> Q.
 Axiom float32ToDecimal : Q -> Q.
-Axiom float64ToBigfloat : Q -> Q.
+Axiom float32ToFloat64 : Q -> Q.
 Axiom float64ToDecimal : Q -> Q.
+Axiom float64ToFloat32 : Q -> Q.
 Axiom int8ToBigint : Z -> Z.
 Axiom int16ToBigint : Z -> Z.
 Axiom int32ToBigint : Z -> Z.
 Axiom int64ToBigint : Z -> Z.
-Axiom readBigfloat : string -> option Q.
 Axiom readBigint : string -> option Z.
 Axiom readBoolean : string -> option bool.
 Axiom readDecimal : string -> option Q.
@@ -74,7 +69,6 @@ Axiom readUint8 : string -> option Z.
 Axiom readUint16 : string -> option Z.
 Axiom readUint32 : string -> option Z.
 Axiom readUint64 : string -> option Z.
-Axiom showBigfloat : Q -> string.
 Axiom showDecimal : Q -> string.
 Axiom showFloat32 : Q -> string.
 Axiom showFloat64 : Q -> string.

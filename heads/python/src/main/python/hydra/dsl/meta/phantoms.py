@@ -45,7 +45,6 @@ Enum.__rshift__ = _enum_rshift
 
 # Re-export phantom literals
 from hydra.dsl.meta.phantom_literals import (
-    bigfloat,
     bigint,
     binary,
     boolean,
