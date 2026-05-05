@@ -23,7 +23,7 @@ echo "  Output root: $DIST_ROOT"
 echo ""
 
 # Warm-cache short-circuit: skip BEFORE any stack invocation.
-source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
+source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
 if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     echo "  Cache hit: every per-package digest fresh; skipping batch."
@@ -59,22 +59,47 @@ cd "$HYDRA_ROOT_DIR"
 # hand-written heads/scala testEnv.scala resolves the call to
 # TestSuiteRunner.buildTestGraph. Mirrors heads/scala/bin/assemble-distribution.sh.)
 
-# Refresh per-source-set digests for fresh-check cache.
-for pkg_dir in "$DIST_ROOT"/*/; do
-    pkg=$(basename "$pkg_dir")
-    pkg_dir_trim="${pkg_dir%/}"
-    for set_name in main test; do
-        input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/$set_name/digest.json"
-        out_set_dir="$pkg_dir_trim/src/$set_name/scala"
-        out_digest="$pkg_dir_trim/src/$set_name/digest.json"
-        if [ -f "$input_digest" ] && [ -d "$out_set_dir" ]; then
-            (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-             stack exec digest-check -- refresh \
-                --inputs "$input_digest" \
-                --output-dir "$out_set_dir" \
-                --output-digest "$out_digest")
+# Refresh per-source-set digests for fresh-check cache. Driven by the
+# batch emit set, not by walking dist: every package the batch generator
+# emitted must have a main source set on disk, so a missing
+# dist/scala/<pkg>/src/main/scala/ is an error rather than something to
+# silently skip. Test source set is optional, gated on input test
+# digest presence.
+BATCH_PACKAGES=$(batch_emit_packages)
+for pkg in $BATCH_PACKAGES; do
+    pkg_dir="$DIST_ROOT/$pkg"
+    # Main set: required.
+    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/main/digest.json"
+    out_set_dir="$pkg_dir/src/main/scala"
+    out_digest="$pkg_dir/src/main/digest.json"
+    if [ ! -f "$input_digest" ]; then
+        echo "ERROR: missing input digest for $pkg main: $input_digest" >&2
+        exit 1
+    fi
+    if [ ! -d "$out_set_dir" ]; then
+        echo "ERROR: missing generated output for $pkg main: $out_set_dir" >&2
+        exit 1
+    fi
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$input_digest" \
+        --output-dir "$out_set_dir" \
+        --output-digest "$out_digest")
+    # Test set: optional, gated on input test digest presence.
+    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/test/digest.json"
+    if [ -f "$test_input_digest" ]; then
+        test_out_set_dir="$pkg_dir/src/test/scala"
+        test_out_digest="$pkg_dir/src/test/digest.json"
+        if [ ! -d "$test_out_set_dir" ]; then
+            echo "ERROR: missing generated test output for $pkg: $test_out_set_dir" >&2
+            exit 1
         fi
-    done
+        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+         stack exec digest-check -- refresh \
+            --inputs "$test_input_digest" \
+            --output-dir "$test_out_set_dir" \
+            --output-digest "$test_out_digest")
+    fi
 done
 
 echo ""

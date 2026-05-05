@@ -27,6 +27,7 @@ echo "  Output root: $DIST_ROOT"
 echo ""
 
 # Warm-cache short-circuit: skip BEFORE any stack invocation.
+source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
 if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     echo "  Cache hit: every per-package digest fresh; skipping batch."
@@ -83,44 +84,58 @@ echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
 # dist/python/<pkg>/pyproject.toml — outside the src/<set>/python tree
 # the digest tracks — so ordering with digest refresh is moot.
 #
-# Package list comes from hydra.json (the authoritative registry),
-# filtered by each package's package.json targetLanguages declaration.
+# Package list is the batch emit set (baseline + coders). Ext / ext-demo
+# packages get their build files from the per-package
+# assemble-distribution.sh path.
+BATCH_PACKAGES=$(batch_emit_packages)
 echo ""
-echo "Step 4: Generating per-package pyproject.toml for every Python-targeted package..."
-PYTHON_PACKAGES=$(python3 -c "
-import json, sys
-with open('$HYDRA_ROOT_DIR/hydra.json') as f:
-    pkgs = json.load(f)['packages']
-out = []
-for p in pkgs:
-    with open('$HYDRA_ROOT_DIR/packages/' + p + '/package.json') as f:
-        meta = json.load(f)
-    tls = meta.get('targetLanguages')
-    if tls is None or 'python' in tls:
-        out.append(p)
-print(' '.join(out))
-")
-for pkg in $PYTHON_PACKAGES; do
+echo "Step 4: Generating per-package pyproject.toml for every batch-emitted package..."
+for pkg in $BATCH_PACKAGES; do
     HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-python-package-build.py" \
         "$pkg" --out-dir "$DIST_ROOT/$pkg"
 done
 
-# Refresh per-source-set digests for fresh-check cache.
-for pkg_dir in "$DIST_ROOT"/*/; do
-    pkg=$(basename "$pkg_dir")
-    pkg_dir_trim="${pkg_dir%/}"
-    for set_name in main test; do
-        input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/$set_name/digest.json"
-        out_set_dir="$pkg_dir_trim/src/$set_name/python"
-        out_digest="$pkg_dir_trim/src/$set_name/digest.json"
-        if [ -f "$input_digest" ] && [ -d "$out_set_dir" ]; then
-            (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-             stack exec digest-check -- refresh \
-                --inputs "$input_digest" \
-                --output-dir "$out_set_dir" \
-                --output-digest "$out_digest")
+# Refresh per-source-set digests for fresh-check cache. Driven by the
+# batch emit set above, not by walking dist: every package the batch
+# generator emitted must have a main source set on disk, so a missing
+# dist/python/<pkg>/src/main/python/ is an error (signal of a broken
+# bootstrap-from-json pass) rather than something to silently skip.
+# The test source set is optional — gated on whether the input test
+# digest at dist/json/<pkg>/src/test/digest.json exists.
+for pkg in $BATCH_PACKAGES; do
+    pkg_dir="$DIST_ROOT/$pkg"
+    # Main set: required.
+    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/main/digest.json"
+    out_set_dir="$pkg_dir/src/main/python"
+    out_digest="$pkg_dir/src/main/digest.json"
+    if [ ! -f "$input_digest" ]; then
+        echo "ERROR: missing input digest for $pkg main: $input_digest" >&2
+        exit 1
+    fi
+    if [ ! -d "$out_set_dir" ]; then
+        echo "ERROR: missing generated output for $pkg main: $out_set_dir" >&2
+        exit 1
+    fi
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$input_digest" \
+        --output-dir "$out_set_dir" \
+        --output-digest "$out_digest")
+    # Test set: optional, gated on input test digest presence.
+    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/test/digest.json"
+    if [ -f "$test_input_digest" ]; then
+        test_out_set_dir="$pkg_dir/src/test/python"
+        test_out_digest="$pkg_dir/src/test/digest.json"
+        if [ ! -d "$test_out_set_dir" ]; then
+            echo "ERROR: missing generated test output for $pkg: $test_out_set_dir" >&2
+            exit 1
         fi
-    done
+        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+         stack exec digest-check -- refresh \
+            --inputs "$test_input_digest" \
+            --output-dir "$test_out_set_dir" \
+            --output-digest "$test_out_digest")
+    fi
 done
 
 echo ""
