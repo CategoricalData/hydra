@@ -23,6 +23,7 @@ echo "  Output root: $DIST_ROOT"
 echo ""
 
 # Warm-cache short-circuit: skip BEFORE any stack invocation.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
 if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     echo "  Cache hit: every per-package digest fresh; skipping batch."
@@ -58,8 +59,7 @@ TESTGRAPH="$DIST_ROOT/hydra-kernel/src/test/scala/hydra/test/testGraph.scala"
 if [ -f "$TESTGRAPH" ]; then
     echo ""
     echo "Step 3: Patching hydra-kernel testGraph.scala..."
-    sed -i.bak 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH"
-    rm -f "$TESTGRAPH.bak"
+    sed_inplace 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH"
 fi
 
 # Refresh per-source-set digests for fresh-check cache.
