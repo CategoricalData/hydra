@@ -2854,10 +2854,10 @@
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                        "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                                         "function": {"variable": "hydra.python.serde.pythonFloatLiteralText"}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "domain": {"literal": {"float": {"float64": {}}}},
                                 "parameter": "f"}}},
                           {
                             "name": "integer",

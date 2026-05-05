@@ -35,7 +35,7 @@
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}],
-              "body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}}}},
+              "body": {"wrap": {"literal": {"float": {"float64": {}}}}}}},
           "variables": []}}},
     {
       "type": {

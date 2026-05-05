@@ -218,7 +218,6 @@ encodeLiteral l cx =
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueFloat32 v1 -> Right (Utils.hslit (Syntax.LiteralFloat v1))
         Core.FloatValueFloat64 v1 -> Right (Utils.hslit (Syntax.LiteralDouble v1))
-        Core.FloatValueBigfloat v1 -> Right (Utils.hslit (Syntax.LiteralDouble (Literals.bigfloatToFloat64 v1)))
       Core.LiteralInteger v0 -> case v0 of
         Core.IntegerValueBigint v1 -> Right (Utils.hslit (Syntax.LiteralInteger v1))
         Core.IntegerValueInt8 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.int8ToBigint v1)))
@@ -388,7 +387,6 @@ encodeType namespaces typ cx g =
           Core.LiteralTypeFloat v1 -> case v1 of
             Core.FloatTypeFloat32 -> Right (Syntax.TypeVariable (Utils.rawName "Float"))
             Core.FloatTypeFloat64 -> Right (Syntax.TypeVariable (Utils.rawName "Double"))
-            Core.FloatTypeBigfloat -> Right (Syntax.TypeVariable (Utils.rawName "Double"))
           Core.LiteralTypeInteger v1 -> case v1 of
             Core.IntegerTypeBigint -> Right (Syntax.TypeVariable (Utils.rawName "Integer"))
             Core.IntegerTypeInt8 -> Right (Syntax.TypeVariable (Utils.rawName "I.Int8"))
