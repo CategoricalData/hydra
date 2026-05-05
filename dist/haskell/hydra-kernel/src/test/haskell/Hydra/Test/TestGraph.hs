@@ -16,7 +16,7 @@ import qualified Data.Map as M
 testContext :: Context.Context
 testContext = TestEnv.testContext
 testGraph :: Graph.Graph
-testGraph = TestEnv.testGraph testTypes
+testGraph = TestEnv.testGraph testTypes testTerms
 testNamespace :: Packaging.Namespace
 testNamespace = Packaging.Namespace "testGraph"
 testSchemaNamespace :: Packaging.Namespace
