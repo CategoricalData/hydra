@@ -28,17 +28,18 @@ For Java and Python DSL usage, see:
 2. [Quick start](#quick-start)
 3. [The four DSL variants](#the-four-dsl-variants)
 4. [When to use each variant](#when-to-use-each-variant)
-5. [Untyped DSL](#untyped-dsl)
-6. [Phantom-typed DSL](#phantom-typed-dsl)
-7. [Meta DSL](#meta-dsl)
-8. [Operator reference](#operator-reference)
-9. [Common patterns](#common-patterns)
-10. [Working with types](#working-with-types)
-11. [Working with terms](#working-with-terms)
-12. [Flow operations](#flow-operations)
-13. [Primitive functions](#primitive-functions)
-14. [Troubleshooting](#troubleshooting)
-15. [Advanced topics](#advanced-topics)
+5. [What belongs under `Sources/`](#what-belongs-under-sources)
+6. [Untyped DSL](#untyped-dsl)
+7. [Phantom-typed DSL](#phantom-typed-dsl)
+8. [Meta DSL](#meta-dsl)
+9. [Operator reference](#operator-reference)
+10. [Common patterns](#common-patterns)
+11. [Working with types](#working-with-types)
+12. [Working with terms](#working-with-terms)
+13. [Flow operations](#flow-operations)
+14. [Primitive functions](#primitive-functions)
+15. [Troubleshooting](#troubleshooting)
+16. [Advanced topics](#advanced-topics)
 
 ## Introduction
 
@@ -268,6 +269,60 @@ in classes under `hydra.dsl.*`; in Python, as functions in `hydra.dsl.*` modules
 - [Implementation](implementation.md#dsl-system) - Detailed DSL architecture and module organization
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) -
   Understanding Types, Terms, and the Hydra type system
+
+## What belongs under `Sources/`
+
+Files under `packages/<pkg>/src/main/haskell/Hydra/Sources/` are part of the DSL pipeline:
+they are read by the `hydra-haskell` host, translated to JSON, then regenerated into all
+target languages. Not every file under `Sources/` is itself a DSL module, though, and
+mistaking the categories below for each other leads to confused issues and unnecessary
+refactors. Four kinds of file are legitimate:
+
+1. **DSL source modules.** A type-level or term-level module defining `module_ :: Module`,
+   importing `Hydra.Kernel` and the relevant `Hydra.Dsl.*` modules. The artifact emitted by
+   the file is what flows downstream into all eight target languages. This is the dominant
+   case — most files under `Sources/` look like this.
+
+2. **DSL infrastructure.** Manifests (`Hydra/Sources/<Pkg>/Manifest.hs`), aggregator modules
+   (`*All.hs`), and the per-package `Libraries.hs`. These coordinate which DSL modules are
+   shipped together; they don't themselves define a `Module`, but they wire up the ones that
+   do.
+
+3. **Meta-level emission helpers.** Plain Haskell files — sometimes without any Hydra
+   imports — whose values exist purely to be walked at module-construction time by a
+   sibling DSL source. The plain-Haskell shape is *convenience syntax for defining the
+   spec*; the artifact that reaches the DSL pipeline is whatever the sibling emits when it
+   walks the helper. The canonical examples are the inline `data FeatureSet` inside
+   `Hydra/Sources/Cypher/Features.hs` (a DSL source that walks its own helper data) and
+   `Hydra/Sources/Cypher/Functions.hs` (a sibling-only helper consumed by `Features.hs`).
+   Both look like rule violations on a quick scan and are not.
+
+   Helpers should always carry a header comment explaining what they feed into and what
+   the emitted artifact is, so future readers don't mistake them for unpromoted sources.
+
+4. **Generated DSL modules** under `Sources/<lang>/` (e.g. `Hydra/Sources/Python/...`).
+   These are read-back outputs from `hydra-haskell`, written out for downstream packages
+   to consume. They carry the standard "automatically generated file" header.
+
+**What does *not* belong under `Sources/`:**
+
+- **Plain-Haskell runtime code** — serializers, helpers, anything that runs inside the
+  Haskell host rather than describing a Hydra module. Runtime code lives under `heads/`
+  (when it is part of the Haskell runtime) or under a non-`Sources/` path within the
+  package (when it is package-scoped support code).
+- **Stale stubs.** A plain-Haskell file under `Sources/` that is excluded from its
+  package's manifest because it's incomplete is still misleading: structurally it looks
+  like an unpromoted source, and the manifest's "WIP" comment is easy to miss. Stage WIP
+  outside `Sources/` (or on a feature branch) until ready to commit to promotion.
+
+**Promotion vs. relocation.** When a file under `Sources/` matches none of (1)–(4), the
+question is which kind it *should* be:
+- Data or types that should be available across all eight target languages → promote to
+  a real DSL source (see [docs/recipes/promoting-code.md](recipes/promoting-code.md)).
+- Logic that only the Haskell host needs → relocate to `heads/haskell/` or a
+  non-`Sources/` path within the package.
+- Genuine meta-level scaffold → leave in place, but add a header comment so the role is
+  obvious from the file alone.
 
 ## Direct DSLs (untyped)
 
