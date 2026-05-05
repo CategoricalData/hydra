@@ -77,6 +77,22 @@ echo ""
 echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
 "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
 
+# Step 4: Generate per-package pyproject.toml so each dist/python/<pkg>/
+# is a standalone publishable wheel build. Mirrors
+# assemble-distribution.sh Step 4. The pyproject.toml lives at
+# dist/python/<pkg>/pyproject.toml — outside the src/<set>/python tree
+# the digest tracks — so ordering with digest refresh is moot.
+echo ""
+echo "Step 4: Generating per-package pyproject.toml for every package..."
+for pkg_dir in "$DIST_ROOT"/*/; do
+    pkg=$(basename "$pkg_dir")
+    pkg_dir_trim="${pkg_dir%/}"
+    if [ -f "$HYDRA_ROOT_DIR/packages/$pkg/package.json" ]; then
+        HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-python-package-build.py" \
+            "$pkg" --out-dir "$pkg_dir_trim"
+    fi
+done
+
 # Refresh per-source-set digests for fresh-check cache.
 for pkg_dir in "$DIST_ROOT"/*/; do
     pkg=$(basename "$pkg_dir")
