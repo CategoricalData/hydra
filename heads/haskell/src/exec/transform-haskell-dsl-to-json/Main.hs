@@ -28,7 +28,7 @@ import Hydra.PackageRouting (defaultDistJsonRoot, namespaceToPackage)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   kernelModules, haskellModules, jsonModules, otherModules,
-  hydraCoqModules, hydraJavaModules, hydraJavaScriptModules,
+  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
@@ -69,6 +69,7 @@ fullMainUniverse = dedupByNamespace $ L.concat
   , defaultLibModules
   , dslSourceModules
   , hydraCoqModules
+  , hydraGoModules
   , hydraJavaModules
   , hydraJavaScriptModules
   , hydraPythonModules
@@ -140,6 +141,7 @@ allPackages =
   , "hydra-java"
   , "hydra-python"
   , "hydra-scala"
+  , "hydra-go"
   , "hydra-lisp"
   , "hydra-coq"
   , "hydra-javascript"
