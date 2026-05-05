@@ -306,8 +306,9 @@ dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/    # Generated DSLs (from 
 heads/haskell/src/main/haskell/Hydra/                    # Generation drivers and sources
 dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/         # Generated per-package coder modules
                                                           #   (hydra-haskell, hydra-java, hydra-python,
-                                                          #    hydra-scala, hydra-lisp, hydra-pg, hydra-rdf,
-                                                          #    hydra-ext for the long-tail, hydra-coq, ...)
+                                                          #    hydra-scala, hydra-lisp, hydra-go (head bud),
+                                                          #    hydra-pg, hydra-rdf, hydra-ext for the long-tail,
+                                                          #    hydra-coq, ...)
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
