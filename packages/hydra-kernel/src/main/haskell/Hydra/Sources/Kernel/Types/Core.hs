@@ -180,9 +180,6 @@ floatType :: Binding
 floatType = define "FloatType" $
   doc "A floating-point type" $
   T.union [
-    "bigfloat">:
-      doc "An arbitrary-precision floating-point type" $
-      T.unit,
     "float32">:
       doc "A 32-bit floating-point type" $
       T.unit,
@@ -194,8 +191,6 @@ floatValue :: Binding
 floatValue = define "FloatValue" $
   doc "A floating-point literal value" $
   T.union [
-    "bigfloat">:
-      doc "An arbitrary-precision floating-point value" T.bigfloat,
     "float32">:
       doc "A 32-bit floating-point value" T.float32,
     "float64">:

@@ -927,7 +927,7 @@ literalToExpr = define "literalToExpr" $
   lambda "l" $
     cases Cpp._Literal (var "l") Nothing [
       Cpp._Literal_integer>>: lambda "i" $ integerLiteralToExpr @@ var "i",
-      Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showBigfloat (unwrap Cpp._FloatingLiteral @@ var "f")),
+      Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (unwrap Cpp._FloatingLiteral @@ var "f")),
       Cpp._Literal_character>>: lambda "c" $
         Serialization.cst @@ (Strings.cat $ list [string "'", unwrap Cpp._CharacterLiteral @@ var "c", string "'"]),
       Cpp._Literal_string>>: lambda "s" $

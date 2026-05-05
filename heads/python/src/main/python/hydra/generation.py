@@ -205,7 +205,7 @@ def strip_term_types(m):
     Uses remove_types_from_term which strips TypeApplication, TypeLambda,
     lambda domain types, and let-binding TypeSchemes from terms.
     Module-level TypeSchemes are stripped from term bindings (to avoid
-    bigfloat/float64 conflicts) but preserved on type-defining bindings
+    type conflicts) but preserved on type-defining bindings
     (needed by is_native_type for schema graph construction).
     """
     from hydra.packaging import TermDefinition, DefinitionTerm, DefinitionType

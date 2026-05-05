@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms hiding (
-  bigfloat, bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
+  bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -87,8 +87,6 @@ module_ = Module {
             moduleDescription = Just ("Extraction and validation for hydra.core types")}
   where
    definitions = [
-     toDefinition bigfloat,
-     toDefinition bigfloatValue,
      toDefinition bigint,
      toDefinition bigintValue,
      toDefinition binary,
@@ -170,21 +168,6 @@ module_ = Module {
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
-
-bigfloat :: TTermDefinition (Graph -> Term -> Prelude.Either Error Double)
-bigfloat = define "bigfloat" $
-  doc "Extract an arbitrary-precision floating-point value from a term" $
-  "graph" ~> "t" ~>
-  "l" <<~ literal @@ var "graph" @@ var "t" $
-  "f" <<~ floatLiteral @@ var "l" $
-  bigfloatValue @@ var "f"
-
-bigfloatValue :: TTermDefinition (FloatValue -> Prelude.Either Error Double)
-bigfloatValue = define "bigfloatValue" $
-  doc "Extract a bigfloat value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
-    (Just (unexpected(Phantoms.string "bigfloat") (ShowCore.floatValue @@ var "v"))) [
-    _FloatValue_bigfloat>>: "f" ~> right (var "f")]
 
 bigint :: TTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
 bigint = define "bigint" $

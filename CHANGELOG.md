@@ -54,6 +54,19 @@ homogenization of writer conventions, and a unified `Module.dependencies` field.
   added a structural fallback to Python's `hydra.lib.equality.compare`
   for term values that lack a native `<` ordering.
 
+### Removed
+
+- Removed the `bigfloat` literal type from `FloatType` and `FloatValue` (#330).
+  Arbitrary-precision floating-point values were inconsistently supported
+  across host languages (Java/Scala in particular lacked a true IEEE 754
+  arbitrary-precision implementation), and nothing in the codebase relied on
+  them. `FloatType` and `FloatValue` now have only `float32` and `float64`
+  variants. Removed library primitives: `bigfloatToBigint`, `bigfloatToFloat32`,
+  `bigfloatToFloat64`, `bigintToBigfloat`, `float32ToBigfloat`,
+  `float64ToBigfloat`, `readBigfloat`, `showBigfloat`, `roundBigfloat`. New
+  primitives `float32ToFloat64` and `float64ToFloat32` (the latter lossy)
+  replace the removed bigfloat-routed conversions.
+
 ---
 
 ## [0.15.0] - 2026-04-29

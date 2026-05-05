@@ -91,12 +91,6 @@
 
 ;; TermCoder constructors -- each returns a TermCoder record with :type, :encode, :decode
 
-(defn tc-bigfloat []
-  (->hydra_graph_term_coder
-   (list :literal (list :float (list :bigfloat nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_bigfloat) g) t))
-   (fn [cx v] (list :right (list :literal (list :float (list :bigfloat (double v))))))))
-
 (defn tc-bigint []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :bigint nil)))

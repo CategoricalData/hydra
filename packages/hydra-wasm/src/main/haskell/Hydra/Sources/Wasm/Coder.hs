@@ -132,7 +132,6 @@ encodeLiteralType = def "encodeLiteralType" $
       inject W._ValType W._ValType_i32 unit, -- 0 or 1
     _LiteralType_float>>: lambda "ft" $
       cases _FloatType (var "ft") Nothing [
-        _FloatType_bigfloat>>: constant $ inject W._ValType W._ValType_f64 unit,
         _FloatType_float32>>: constant $ inject W._ValType W._ValType_f32 unit,
         _FloatType_float64>>: constant $ inject W._ValType W._ValType_f64 unit],
     _LiteralType_integer>>: lambda "it" $

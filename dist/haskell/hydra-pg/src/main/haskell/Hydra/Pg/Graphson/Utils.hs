@@ -74,10 +74,8 @@ encodeTermValue term =
         Core.LiteralBinary v1 -> Right (Syntax.ValueBinary (Literals.binaryToString v1))
         Core.LiteralBoolean v1 -> Right (Syntax.ValueBoolean v1)
         Core.LiteralFloat v1 -> case v1 of
-          Core.FloatValueBigfloat v2 -> Right (Syntax.ValueBigDecimal (Syntax.BigDecimalValue (Literals.showBigfloat v2)))
           Core.FloatValueFloat32 v2 -> Right (Syntax.ValueFloat (Syntax.FloatValueFinite v2))
           Core.FloatValueFloat64 v2 -> Right (Syntax.ValueDouble (Syntax.DoubleValueFinite v2))
-          _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported float type"))
         Core.LiteralInteger v1 -> case v1 of
           Core.IntegerValueBigint v2 -> Right (Syntax.ValueBigInteger v2)
           Core.IntegerValueInt32 v2 -> Right (Syntax.ValueInteger v2)

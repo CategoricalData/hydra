@@ -101,3 +101,38 @@ previously-hidden failure (e.g. by loading tests that were silently
 skipped before) registers as a regression at the
 `bin/sync-packages.sh` exit-code level, even when the underlying bug
 is older.
+
+### Bootstrap "Could not find module" early in compile is usually transient
+
+When `/bootstrap()` reports a path failing at module 1-of-N with
+`Could not find module 'Hydra.Core'` or similar dep-not-built errors
+on generated files that clearly exist on disk, the cause is almost
+always transient: parallel stack lock contention or OOM from
+concurrent host syncs (Java/Python/Haskell building at once). Re-run
+that single path with
+`bin/run-bootstrapping-demo.sh --hosts <H> --targets <T> --tag retry`.
+Don't dig into the generated source first.
+
+### Adapter `cases` over a removed variant: keep remaining cases concrete
+
+When removing a variant from a union (e.g., dropping `bigfloat` from
+`FloatType`/`FloatValue`), an adapter like `prepareFloatType` that uses
+`prepareSame` as a default needs explicit concrete cases for the
+*remaining* variants — not `Nothing`. Without concrete arms, DSL
+inference makes the rep function polymorphic (`forall t. t -> t`),
+and Java codegen emits `Function<T0, T0>` which doesn't unify with
+concrete `FloatValue` callsites. Symptom:
+`incompatible types: Object cannot be converted to FloatValue` at the
+adapter callsite. Fix: list each remaining variant with an explicit
+`inject _Variant _variant_name` identity arm.
+
+### Digest conflicts on staging merges
+
+When merging staging into a feature branch, all `dist/**/digest.json`
+and `dist/json/digest.main.json` files conflict if both branches
+touched DSL sources. Both sides' hashes are wrong post-merge — the
+correct hashes depend on the merged source state. Resolution: take
+`--ours` to satisfy git, complete the merge commit, run `/sync()` to
+regenerate, then commit the digest deltas as a follow-up
+"Regenerate digests after staging merge" commit. Don't try to merge
+hash maps by hand.

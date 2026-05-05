@@ -578,38 +578,6 @@
         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsBigfloatToBigint",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.bigfloatToBigint primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.bigfloatToBigint"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.lib.names.literalsBigfloatToFloat32",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.bigfloatToFloat32 primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.bigfloatToFloat32"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.lib.names.literalsBigfloatToFloat64",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.bigfloatToFloat64 primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.bigfloatToFloat64"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.lib.names.literalsBigintToBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.bigintToBigfloat primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.bigintToBigfloat"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
         "name": "hydra.lib.names.literalsBigintToDecimal",
         "term": {
           "annotated": {
@@ -722,14 +690,6 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsFloat32ToBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.float32ToBigfloat primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.float32ToBigfloat"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
         "name": "hydra.lib.names.literalsFloat32ToDecimal",
         "term": {
           "annotated": {
@@ -738,11 +698,11 @@
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.lib.names.literalsFloat64ToBigfloat",
+        "name": "hydra.lib.names.literalsFloat32ToFloat64",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.float64ToBigfloat primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.float64ToBigfloat"}}, "typeName": "hydra.core.Name"}}}},
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.float32ToFloat64 primitive"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.float32ToFloat64"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
@@ -751,6 +711,14 @@
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.float64ToDecimal primitive"}}}],
             "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.float64ToDecimal"}}, "typeName": "hydra.core.Name"}}}},
+        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsFloat64ToFloat32",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.float64ToFloat32 primitive"}}}],
+            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.float64ToFloat32"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
@@ -783,14 +751,6 @@
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.int8ToBigint primitive"}}}],
             "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.int8ToBigint"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.lib.names.literalsReadBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.readBigfloat primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.readBigfloat"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
@@ -903,14 +863,6 @@
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.readUint8 primitive"}}}],
             "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.readUint8"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.lib.names.literalsShowBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the literals.showBigfloat primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.literals.showBigfloat"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
@@ -1559,14 +1511,6 @@
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the math.round primitive"}}}],
             "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.round"}}, "typeName": "hydra.core.Name"}}}},
-        "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.lib.names.mathRoundBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Name of the math.roundBigfloat primitive"}}}],
-            "body": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.roundBigfloat"}}, "typeName": "hydra.core.Name"}}}},
         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {

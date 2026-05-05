@@ -3260,7 +3260,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"application": {"argument": {"variable": "f"}, "function": {"unwrap": "hydra.cpp.syntax.FloatingLiteral"}}},
-                                        "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                        "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.cpp.syntax.FloatingLiteral"},
                                 "parameter": "f"}}},
