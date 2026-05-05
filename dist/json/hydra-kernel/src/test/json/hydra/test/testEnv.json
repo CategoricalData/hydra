@@ -10,11 +10,21 @@
         "name": "hydra.test.testEnv.testGraph",
         "term": {
           "typeLambda": {
-            "body": {"lambda": {"body": {"variable": "hydra.lexical.emptyGraph"}, "domain": {"variable": "t0"}, "parameter": "tys"}},
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "lambda": {
+                    "body": {"lambda": {"body": {"variable": "hydra.lexical.emptyGraph"}, "domain": {"variable": "t1"}, "parameter": "tms"}},
+                    "domain": {"variable": "t0"},
+                    "parameter": "tys"}},
+                "parameter": "t1"}},
             "parameter": "t0"}},
         "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}}],
+          "body": {
+            "function": {
+              "codomain": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}}}],
   "dependencies": [
     "hydra.lexical",
     "hydra.paths",
