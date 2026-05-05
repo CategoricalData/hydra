@@ -42,23 +42,9 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
-# Wipe per-package generated source dirs before regenerating, so that
-# stale modules left behind by deleted/renamed sources don't survive.
-# bootstrap-from-json writes only the modules currently in the
-# dist/json universe; without this wipe, an older generated file with
-# no upstream JSON source would persist, get hashed into the digest,
-# and silently become part of the build. See #357 for the generator-side
-# fix that would make this wipe redundant.
-#
-# This wipes only src/{main,test}/java/. Per-package build.gradle and
-# settings.gradle (in $DIST_ROOT/<pkg>/) are preserved; the kernel's
-# hand-written runtime files copied in by copy-kernel-runtime.sh are
-# under src/main/java/ and so DO get wiped here, but Step 3 re-copies
-# them after generation.
-echo "Wiping per-package generated source dirs..."
-for pkg in $BATCH_PACKAGES; do
-    rm -rf "$DIST_ROOT/$pkg/src/main/java" "$DIST_ROOT/$pkg/src/test/java"
-done
+# Stale-file warning: see #357. bootstrap-from-json writes only the
+# modules currently in dist/json; deleted/renamed source modules leave
+# stale .java files behind that are silently picked up by the build.
 
 # Invalidate per-target digests so Stage 7 per-module freshness filter
 # cannot trust records against potentially-missing output files.
