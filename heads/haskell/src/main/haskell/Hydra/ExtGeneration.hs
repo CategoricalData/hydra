@@ -215,15 +215,15 @@ writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLis
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 --
--- After generation, walks the output directory and wraps long lines in each
--- generated .scala file via 'wrapLongScalaLines'. This avoids the Scala
--- compiler's memory issues on extremely long single-line expressions, and
--- replaces the previously-external break-long-lines.py post-processor.
+-- The Scala compiler hits stack/memory limits on extremely long
+-- single-line expressions; 'wrapLongScalaText' breaks long lines at safe
+-- points (commas / arrow-after-paren outside string literals). Applied
+-- as part of the generation pipeline (via the per-file content
+-- transform in 'generateSourcesWithTransform'), not as a read-back
+-- post-pass on disk.
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
-writeScala basePath universeMods mods = do
-  n <- generateSources moduleToScala scalaLanguage True True False False basePath universeMods mods
-  wrapLongLinesInScalaTree basePath
-  return n
+writeScala = generateSourcesWithTransform wrapLongScalaText
+  moduleToScala scalaLanguage True True False False
 
 -- | Generate WebAssembly text format (WAT) files from modules.
 -- First argument: output directory
@@ -252,26 +252,11 @@ commaBreakThreshold = 80
 arrowBreakThreshold :: Int
 arrowBreakThreshold = 60
 
--- | Walk a directory tree and wrap long lines in every .scala file.
-wrapLongLinesInScalaTree :: FP.FilePath -> IO ()
-wrapLongLinesInScalaTree dir = do
-    exists <- SD.doesDirectoryExist dir
-    when exists $ do
-      entries <- SD.listDirectory dir
-      mapM_ visit entries
-  where
-    visit name = do
-      let path = dir FP.</> name
-      isDir <- SD.doesDirectoryExist path
-      if isDir
-        then wrapLongLinesInScalaTree path
-        else when (FP.takeExtension path == ".scala") $ do
-          -- Read strictly to release the file handle before writing back.
-          contents <- SIO.withFile path SIO.ReadMode $ \h -> do
-            cs <- SIO.hGetContents h
-            length cs `seq` return cs
-          let wrapped = wrapLongScalaText contents
-          when (wrapped /= contents) (writeFile path wrapped)
+-- (The previous wrapLongLinesInScalaTree post-pass — which walked
+-- the output directory and rewrote each .scala file in place — has
+-- been retired. wrapLongScalaText is now applied during emission via
+-- generateSourcesWithTransform; see writeScala above and the scala
+-- dispatch in heads/haskell/src/exec/bootstrap-from-json/Main.hs.)
 
 -- | Apply line-wrapping to every line in a Scala source file. Lines under
 --   the max length pass through unchanged; long lines are broken at safe
