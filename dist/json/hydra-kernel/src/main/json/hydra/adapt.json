@@ -2636,6 +2636,16 @@
                                                                           "cases": {
                                                                             "cases": [
                                                                               {
+                                                                                "name": "annotated",
+                                                                                "term": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "term1"}}}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                                                                    "parameter": "_"}}},
+                                                                              {
                                                                                 "name": "typeApplication",
                                                                                 "term": {
                                                                                   "lambda": {
@@ -6116,6 +6126,37 @@
                                     "function": {
                                       "cases": {
                                         "cases": [
+                                          {
+                                            "name": "annotated",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {
+                                                  "inject": {
+                                                    "field": {
+                                                      "name": "annotated",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "body",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "typ"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {"argument": {"variable": "at"}, "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                      "function": {"variable": "push"}}}}}},
+                                                            {
+                                                              "name": "annotation",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "at"},
+                                                                  "function": {"project": {"field": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
+                                                          "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                                "parameter": "at"}}},
                                           {
                                             "name": "application",
                                             "term": {

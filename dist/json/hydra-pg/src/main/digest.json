@@ -26,6 +26,7 @@
     "hydra.tinkerpop.features": "ae6bd5376af9c9cfff2e0c0423d8a842f833debf6cee8b570e1846908428b5e9",
     "hydra.tinkerpop.gremlin": "0e481ac7ee42a2f4a652d802a2beb97cb6a2a77c6c07aa5e04c64494279ebe99",
     "hydra.tinkerpop.language": "91a5a0ea42d94a17688416910f5421226cac3ac515827ba8eb447b31d8140f9a",
+    "hydra.validate.pg": "af2a6b6170827b4dd0c307d2bebadcc7d75036e6fd201e6c2887b848922ff98f",
     "openGql.grammar": "0e131aa3a5427dbb74379b60a2cf7a99c324cccee4e2caf81e7d863ed64cecaa"
   }
 }

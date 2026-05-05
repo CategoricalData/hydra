@@ -2636,4 +2636,38 @@
 (setf (symbol-function 'copy-type_subst) #'copy-hydra_typing_type_subst)
 (setf (symbol-function 'type_subst-p) #'hydra_typing_type_subst-p)
 
+;; hydra_validation_validation_profile -> hydra_validation_validation_profile
+(defun make-hydra_validation_validation_profile (&rest args)
+  (if (and args (keywordp (first args)))
+    (loop for (k v) on args by #'cddr collect (cons k v))
+    (mapcar #'cons '( :error_rules :warning_rules :max_errors :max_warnings) args)))
+(defun hydra_validation_validation_profile-error_rules (rec) (cdr (assoc :error_rules rec)))
+(defun hydra_validation_validation_profile-warning_rules (rec) (cdr (assoc :warning_rules rec)))
+(defun hydra_validation_validation_profile-max_errors (rec) (cdr (assoc :max_errors rec)))
+(defun hydra_validation_validation_profile-max_warnings (rec) (cdr (assoc :max_warnings rec)))
+(defun copy-hydra_validation_validation_profile (x) (copy-alist x))
+(defun hydra_validation_validation_profile-p (x) (listp x))
+(setf (symbol-function 'make-validation_profile) #'make-hydra_validation_validation_profile)
+(setf (symbol-function 'validation_profile-error_rules) #'hydra_validation_validation_profile-error_rules)
+(setf (symbol-function 'validation_profile-warning_rules) #'hydra_validation_validation_profile-warning_rules)
+(setf (symbol-function 'validation_profile-max_errors) #'hydra_validation_validation_profile-max_errors)
+(setf (symbol-function 'validation_profile-max_warnings) #'hydra_validation_validation_profile-max_warnings)
+(setf (symbol-function 'copy-validation_profile) #'copy-hydra_validation_validation_profile)
+(setf (symbol-function 'validation_profile-p) #'hydra_validation_validation_profile-p)
+
+;; hydra_validation_validation_result -> hydra_validation_validation_result
+(defun make-hydra_validation_validation_result (&rest args)
+  (if (and args (keywordp (first args)))
+    (loop for (k v) on args by #'cddr collect (cons k v))
+    (mapcar #'cons '( :errors :warnings) args)))
+(defun hydra_validation_validation_result-errors (rec) (cdr (assoc :errors rec)))
+(defun hydra_validation_validation_result-warnings (rec) (cdr (assoc :warnings rec)))
+(defun copy-hydra_validation_validation_result (x) (copy-alist x))
+(defun hydra_validation_validation_result-p (x) (listp x))
+(setf (symbol-function 'make-validation_result) #'make-hydra_validation_validation_result)
+(setf (symbol-function 'validation_result-errors) #'hydra_validation_validation_result-errors)
+(setf (symbol-function 'validation_result-warnings) #'hydra_validation_validation_result-warnings)
+(setf (symbol-function 'copy-validation_result) #'copy-hydra_validation_validation_result)
+(setf (symbol-function 'validation_result-p) #'hydra_validation_validation_result-p)
+
 ;;; End of generated compatibility definitions
