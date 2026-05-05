@@ -98,11 +98,22 @@ discoverNamespaceFiles = do
       case content of
         Left _ -> return Nothing
         Right s ->
-          let pattern = "^ns = Namespace \"([^\"]+)\"" :: String
-              matches = s RE.=~ pattern :: [[String]]
-          in case matches of
-               ([_, nsName]:_) -> return $ Just (Namespace nsName, fp)
-               _               -> return Nothing
+          -- Two namespace declaration idioms appear across the source tree:
+          --   1. Top-level `ns = Namespace "..."` (kernel + most term-level sources).
+          --   2. Inline `moduleNamespace = (Namespace "...")` inside a Module
+          --      record (~half of non-kernel sources, e.g. hydra-pg, hydra-ext).
+          -- We accept both. Without case 2, files like
+          -- packages/hydra-pg/.../Validate/Pg.hs are absent from the per-package
+          -- digest, which causes silent cache hits in Phase 3 when those
+          -- sources change.
+          let pat1 = "^ns = Namespace \"([^\"]+)\"" :: String
+              pat2 = "moduleNamespace = .Namespace \"([^\"]+)\"" :: String
+              try1 = (s RE.=~ pat1 :: [[String]])
+              try2 = (s RE.=~ pat2 :: [[String]])
+          in case (try1, try2) of
+               (([_, nsName]:_), _) -> return $ Just (Namespace nsName, fp)
+               (_, ([_, nsName]:_)) -> return $ Just (Namespace nsName, fp)
+               _                    -> return Nothing
 
 
 -- | SHA-256 hex digest of the raw bytes of a file. Fails loudly if the file
