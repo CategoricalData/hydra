@@ -87,51 +87,19 @@ fi
 # on :paths, so a copy would create namespace conflicts at load time.)
 case "$PACKAGE" in
     hydra-kernel)
-        # Patch testGraph.clj: replace empty graph/context with a full test
-        # graph (primitives + schema types + annotation bindings). The graph
-        # must be defined AFTER test_terms/test_types to avoid forward
-        # reference; we delete the empty defs and append full defs at the end.
-        CLJ_TESTGRAPH="$OUT_DIR/src/test/clojure/hydra/test/testGraph.clj"
-        if [ -f "$CLJ_TESTGRAPH" ]; then
+        # Copy hand-written testEnv.clj into dist tree. The kernel
+        # filters hydra.test.testEnv from emitted output (via
+        # testSkipEmitNamespaces), so the generated testGraph.clj's
+        # (hydra.test.testEnv :refer :all) require resolves against
+        # this hand-written counterpart. Mirrors the role of
+        # heads/python/.../test_env.py and heads/lisp/scheme/.../test_env.scm.
+        TEST_ENV_SRC="$HYDRA_CLOJURE_HEAD/src/test/clojure/hydra/test/testEnv.clj"
+        TEST_ENV_DST="$OUT_DIR/src/test/clojure/hydra/test/testEnv.clj"
+        if [ -f "$TEST_ENV_SRC" ]; then
             echo ""
-            echo "Step 3: Patching testGraph.clj..."
-            # Drop the generator-emitted (hydra.test.testEnv :refer :all) entry
-            # — no testEnv.clj is emitted for Clojure; the inline rebuild below
-            # replaces its role. Then add imports needed by the inline rebuild.
-            sed -i.bak 's| \[hydra.test.testEnv :refer :all\]||' "$CLJ_TESTGRAPH"
-            sed -i.bak 's|\[hydra.packaging :refer :all\]|[hydra.packaging :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
-            # Delete the generator's test_env-based defs; they'll be replaced
-            # by the inline rebuild appended below.
-            sed -i.bak '/^(def hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$CLJ_TESTGRAPH"
-            sed -i.bak '/^(def hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$CLJ_TESTGRAPH"
-            # Also drop test_env symbols from the (declare ...) form.
-            sed -i.bak 's| hydra_test_test_env_test_context||g; s| hydra_test_test_env_test_graph||g' "$CLJ_TESTGRAPH"
-            rm -f "$CLJ_TESTGRAPH.bak"
-            cat >> "$CLJ_TESTGRAPH" << 'CLJEOF'
-
-(def hydra_test_test_graph_test_context {:functions () :annotations () :variable_types {}})
-
-(def hydra_test_test_graph_test_graph
-  (let [std-prims (standard-library)
-        type-to-ts hydra_scoping_f_type_to_type_scheme
-        boot-types-raw hydra_json_bootstrap_types_by_name
-        kernel-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) boot-types-raw))
-        test-types-list (seq hydra_test_test_graph_test_types)
-        test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))
-        schema-types (merge kernel-schemas test-schemas)
-        bound-terms (merge
-          ;; Primitives are resolved via graphPrimitives, not boundTerms.
-          (into {} (annotation-bindings))
-          (into {} (seq hydra_test_test_graph_test_terms)))]
-    {:bound_terms bound-terms
-     :bound_types {}
-     :class_constraints {}
-     :lambda_variables #{}
-     :metadata {}
-     :primitives std-prims
-     :schema_types schema-types
-     :type_variables #{}}))
-CLJEOF
+            echo "Step 3: Copying testEnv.clj from heads/lisp/clojure..."
+            mkdir -p "$(dirname "$TEST_ENV_DST")"
+            cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
         fi
         ;;
     *)
