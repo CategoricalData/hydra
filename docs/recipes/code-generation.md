@@ -130,8 +130,8 @@ of orchestrators above them:
 | 2 (assemble) | `heads/<lang>/bin/assemble-all.sh` | Batch: produce every `dist/<lang>/<pkg>/` in one universe load |
 | 2.5 (test) | `heads/<lang>/bin/test-distribution.sh` | Run the target's test suite |
 | 3 (orchestrate) | `bin/sync-packages.sh` | Phase 1 → Phase 2 → Phase 3 for one or more packages |
-| 3 (orchestrate) | `bin/sync.sh` | Matrix tool (`--hosts H,...`, `--targets T,...`) |
-| 3 (orchestrate) | `bin/sync-all.sh` | Exhaustive run (every package × every target, with tests) |
+| 3 (orchestrate) | `bin/sync.sh` | Matrix tool (`--hosts H,...`, `--targets T,...`); Phase 1 + 2 only, **no tests** |
+| 3 (orchestrate) | `bin/sync-all.sh` | Exhaustive run (every package × every target); runs tests via `sync-packages.sh` |
 
 Every-day tasks:
 

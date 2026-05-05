@@ -74,3 +74,30 @@ re-run `heads/lisp/common-lisp/src/main/common-lisp/hydra/gen-compat.sh`,
 or the loader's `hydra-defstruct` macro will short-circuit on the old constructor's
 `fboundp` and skip defining the new accessor — leading to "function FOO undefined"
 errors at test time.
+
+### Emacs Lisp regex needs `case-fold-search` bound to nil
+
+Emacs' default `case-fold-search` is `t` in batch mode, which makes
+character classes like `[a-z]` case-insensitive — `[a-z]` then matches `H`.
+Hydra follows POSIX-ERE case-sensitive semantics. Every regex primitive
+in `heads/lisp/emacs-lisp/src/main/emacs-lisp/hydra/lib/regex.el` binds
+`case-fold-search` to `nil` in its `let*`. New EL regex primitives must
+do the same.
+
+### `bin/sync.sh` does not run target-language tests
+
+`bin/sync.sh` runs Phase 1 + 2 only (DSL → JSON → assemble). It exits 0
+even if a target's tests would fail. To run tests, use
+`bin/sync-packages.sh` (single target) or `bin/sync-all.sh` (everything).
+When asked "does sync pass?", check which entrypoint the user means.
+
+### Verify "pre-existing" claims against the fork point
+
+When a change surfaces a test failure, do not call it pre-existing
+without reproducing it on the fork point. The test for pre-existing
+is *can the unchanged baseline reproduce the failure?* — not *does
+the failure look unrelated to my changes?*. A change that exposes a
+previously-hidden failure (e.g. by loading tests that were silently
+skipped before) registers as a regression at the
+`bin/sync-packages.sh` exit-code level, even when the underlying bug
+is older.
