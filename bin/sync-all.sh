@@ -77,9 +77,9 @@ ALL_TARGETS="haskell java python scala clojure scheme common-lisp emacs-lisp"
 # product. fail-fast is implicit via 'set -euo pipefail' inside that
 # script.
 
-NO_TEST_FLAG=""
+NO_TESTS_FLAG=""
 if [ "$NO_TESTS" = true ]; then
-    NO_TEST_FLAG="--no-test"
+    NO_TESTS_FLAG="--no-tests"
 fi
 
 START_TIME=$SECONDS
@@ -92,6 +92,6 @@ echo "  Tests:    $([ "$NO_TESTS" = true ] && echo "skipped (--no-tests)" || ech
 echo ""
 
 # Hand off to the per-package layered tool.
-"$SCRIPT_DIR/sync-packages.sh" $NO_TEST_FLAG
+"$SCRIPT_DIR/sync-packages.sh" $NO_TESTS_FLAG
 
 banner1_done "sync-all.sh complete!"
