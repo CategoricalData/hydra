@@ -11,42 +11,18 @@ if [ -z "$OUTPUT_DIR" ]; then
     exit 1
 fi
 
-# Patch testGraph.clj to build a full graph with primitives and schema types
-# instead of using the empty graph. Same patching that the Clojure assembler applies.
-echo "Patching testGraph.clj..."
-CLJ_TESTGRAPH="$OUTPUT_DIR/src/test/clojure/hydra/test/testGraph.clj"
-if [ -f "$CLJ_TESTGRAPH" ]; then
-    # Add required imports
-    sed -i '' 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
-    # Delete the empty context and empty graph defs (they'll be re-added at the end)
-    sed -i '' '/^(def hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CLJ_TESTGRAPH"
-    sed -i '' '/^(def hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CLJ_TESTGRAPH"
-    # Append full graph and context defs at end of file
-    cat >> "$CLJ_TESTGRAPH" << 'CLJEOF'
-
-(def hydra_test_test_graph_test_context {:functions () :annotations () :variable_types {}})
-
-(def hydra_test_test_graph_test_graph
-  (let [std-prims (standard-library)
-        type-to-ts hydra_rewriting_f_type_to_type_scheme
-        boot-types-raw hydra_json_bootstrap_types_by_name
-        kernel-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) boot-types-raw))
-        test-types-list (seq hydra_test_test_graph_test_types)
-        test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))
-        schema-types (merge kernel-schemas test-schemas)
-        bound-terms (merge
-          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) std-prims))
-          (into {} (annotation-bindings))
-          (into {} (seq hydra_test_test_graph_test_terms)))]
-    {:bound_terms bound-terms
-     :bound_types {}
-     :class_constraints {}
-     :lambda_variables #{}
-     :metadata {}
-     :primitives std-prims
-     :schema_types schema-types
-     :type_variables #{}}))
-CLJEOF
+# testGraph.clj post-generation patch removed. The DSL emits
+# (hydra.test.testEnv :refer :all) and references
+# hydra_test_test_env_test_{context,graph} directly. Copy the
+# hand-written testEnv.clj into the dist tree so the generated require
+# resolves.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
+TEST_ENV_SRC="$HYDRA_ROOT/heads/lisp/clojure/src/test/clojure/hydra/test/testEnv.clj"
+TEST_ENV_DST="$OUTPUT_DIR/src/test/clojure/hydra/test/testEnv.clj"
+if [ -f "$TEST_ENV_SRC" ]; then
+    mkdir -p "$(dirname "$TEST_ENV_DST")"
+    cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
 fi
 
 echo "Running Clojure tests..."
