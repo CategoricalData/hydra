@@ -31,6 +31,19 @@ if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     exit 0
 fi
 
+BATCH_PACKAGES=$(batch_emit_packages)
+
+# Wipe per-package generated source dirs before regenerating, so that
+# stale modules left behind by deleted/renamed sources don't survive.
+# bootstrap-from-json writes only the modules currently in the
+# dist/json universe; without this wipe, an older generated file with
+# no upstream JSON source would persist, get hashed into the digest,
+# and silently become part of the build.
+echo "Wiping per-package generated source dirs..."
+for pkg in $BATCH_PACKAGES; do
+    rm -rf "$DIST_ROOT/$pkg/src/main/scala" "$DIST_ROOT/$pkg/src/test/scala"
+done
+
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 
@@ -59,13 +72,12 @@ cd "$HYDRA_ROOT_DIR"
 # hand-written heads/scala testEnv.scala resolves the call to
 # TestSuiteRunner.buildTestGraph. Mirrors heads/scala/bin/assemble-distribution.sh.)
 
-# Refresh per-source-set digests for fresh-check cache. Driven by the
-# batch emit set, not by walking dist: every package the batch generator
-# emitted must have a main source set on disk, so a missing
+# Refresh per-source-set digests for fresh-check cache. Driven by
+# $BATCH_PACKAGES, not by walking dist: every package the batch
+# generator emitted must have a main source set on disk, so a missing
 # dist/scala/<pkg>/src/main/scala/ is an error rather than something to
 # silently skip. Test source set is optional, gated on input test
 # digest presence.
-BATCH_PACKAGES=$(batch_emit_packages)
 for pkg in $BATCH_PACKAGES; do
     pkg_dir="$DIST_ROOT/$pkg"
     # Main set: required.
