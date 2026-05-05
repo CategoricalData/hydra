@@ -12,7 +12,7 @@ import Hydra.Kernel hiding (pure)
 import qualified Hydra.Core as Core
 import qualified Hydra.Go.Language as GoLang
 import qualified Hydra.Go.Syntax as Go
-import Hydra.Sources.Go.Serde (writeModule)
+import Hydra.Sources.Go.Serde (moduleToExpr)
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.Char as C
@@ -67,7 +67,7 @@ initState mod_ = GoState {
 buildNsMap :: Module -> M.Map Namespace String
 buildNsMap mod_ = M.fromList $ fmap toEntry allNs
   where
-    allNs = moduleNamespace mod_ : moduleTermDependencies mod_ ++ moduleTypeDependencies mod_
+    allNs = moduleNamespace mod_ : moduleDependencies mod_
     toEntry ns@(Namespace name) = (ns, namespaceToGoPath name)
 
 -- | Go module path. Must contain a dot to avoid confusion with the Go standard library.
@@ -654,7 +654,7 @@ encodeTermInner cx g term st = case term of
           Core.TermEither _ -> pure (funExpr, st1)
           Core.TermPair _ -> pure (funExpr, st1)
           Core.TermRecord _ -> pure (funExpr, st1)
-          Core.TermUnion _ -> pure (funExpr, st1)
+          Core.TermInject _ -> pure (funExpr, st1)
           Core.TermMap _ -> pure (funExpr, st1)
           Core.TermSet _ -> pure (funExpr, st1)
           Core.TermUnit -> pure (funExpr, st1)
@@ -705,7 +705,7 @@ encodeTermInner cx g term st = case term of
             calledParamTypes0 = lookupFunctionParamTypes g funTerm
             calledRetType0 = case stripTermWrappers funTerm of
               Core.TermVariable fn -> case M.lookup fn (graphBoundTypes g) of
-                Just ts -> let (_, it) = unpackForallType (Core.typeSchemeType ts)
+                Just ts -> let (_, it) = unpackForallType (Core.typeSchemeBody ts)
                                (_, rt) = unpackFunctionType it
                            in rt
                 Nothing -> Core.TypeVariable (Core.Name "_")
@@ -852,7 +852,7 @@ encodeTermInner cx g term st = case term of
     -- Sets are represented as map[T]struct{}, but for simplicity we use a slice here
     -- TODO: proper set representation
     pure (goSliceLit goAnyType goEls, st')
-  Core.TermUnion inj -> do
+  Core.TermInject inj -> do
     let tname = Core.injectionTypeName inj
         field = Core.injectionField inj
         fname = Core.fieldName field
@@ -942,7 +942,7 @@ encodeTermInner cx g term st = case term of
         -- Build substitution by matching type args against the inner term's type name
         innerTypeName = case deannotateTerm innerTerm of
           Core.TermRecord rec -> Just (Core.recordTypeName rec)
-          Core.TermUnion inj -> Just (Core.injectionTypeName inj)
+          Core.TermInject inj -> Just (Core.injectionTypeName inj)
           Core.TermWrap wt -> Just (Core.wrappedTermTypeName wt)
           _ -> Nothing
     case innerTypeName of
@@ -1308,8 +1308,8 @@ encodeBindings cx g (b:bs) st = do
       -- Check if the binding has a function type (from the type annotation).
       -- Function-typed bindings keep := to preserve callability.
       -- Non-function bindings use var any for assertability.
-      let isFuncBinding = case Core.bindingType b of
-            Just tscheme -> isFunctionType (Core.typeSchemeType tscheme)
+      let isFuncBinding = case Core.bindingTypeScheme b of
+            Just tscheme -> isFunctionType (Core.typeSchemeBody tscheme)
             Nothing -> case stripTermWrappers (Core.bindingTerm b) of
               Core.TermLambda _ -> True
               _ -> False
@@ -1319,9 +1319,9 @@ encodeBindings cx g (b:bs) st = do
       let firstParamType = case stripTermWrappers (Core.bindingTerm b) of
             Core.TermLambda lam -> case Core.lambdaDomain lam of
               Just d -> Just d
-              Nothing -> case Core.bindingType b of
+              Nothing -> case Core.bindingTypeScheme b of
                 Just tscheme ->
-                  let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+                  let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
                       (paramTypes, _) = unpackFunctionType innerTyp
                   in case paramTypes of
                     (pt:_) -> Just pt
@@ -1394,7 +1394,7 @@ isConcreteNamedType :: Graph -> Core.Name -> Bool
 isConcreteNamedType g name =
   case M.lookup name (graphSchemaTypes g) of
     Just tscheme ->
-      let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+      let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
       in case deannotateType innerTyp of
         Core.TypeUnion _ -> False  -- Interface
         _ -> True                  -- Struct/wrap/other = concrete
@@ -1407,7 +1407,7 @@ producesAny :: GoState -> Core.Term -> Bool
 producesAny st t = case deannotateTerm t of
   Core.TermLiteral _ -> False
   Core.TermRecord _ -> False
-  Core.TermUnion _ -> False
+  Core.TermInject _ -> False
   Core.TermWrap _ -> False
   Core.TermList _ -> False
   Core.TermSet _ -> False
@@ -1463,7 +1463,7 @@ isUnionType :: Graph -> Core.Name -> Bool
 isUnionType g name =
   case M.lookup name (graphSchemaTypes g) of
     Just tscheme ->
-      let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+      let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
       in case deannotateType innerTyp of
         Core.TypeUnion _ -> True
         _ -> False
@@ -1474,7 +1474,7 @@ lookupRecordFieldTypes :: Graph -> Core.Name -> M.Map Core.Name Core.Type
 lookupRecordFieldTypes g tname =
   case M.lookup tname (graphSchemaTypes g) of
     Just tscheme ->
-      let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+      let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
       in case deannotateType innerTyp of
         Core.TypeRecord fts -> M.fromList [(Core.fieldTypeName ft, Core.fieldTypeType ft) | ft <- fts]
         _ -> M.empty
@@ -1485,7 +1485,7 @@ lookupUnionVariantType :: Graph -> Core.Name -> Core.Name -> Maybe Core.Type
 lookupUnionVariantType g unionName variantName =
   case M.lookup unionName (graphSchemaTypes g) of
     Just tscheme ->
-      let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+      let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
       in case deannotateType innerTyp of
         Core.TypeUnion fts ->
           case [Core.fieldTypeType ft | ft <- fts, Core.fieldTypeName ft == variantName] of
@@ -1500,7 +1500,7 @@ lookupWrapUnderlyingType :: Graph -> Core.Name -> Maybe Core.Type
 lookupWrapUnderlyingType g name =
   case M.lookup name (graphSchemaTypes g) of
     Just tscheme ->
-      let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+      let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
       in Just innerTyp  -- The schema type IS the underlying type for wraps
     Nothing -> Nothing
 
@@ -1510,7 +1510,7 @@ lookupForallVars g name =
   case M.lookup name (graphSchemaTypes g) of
     Just tscheme ->
       let schemeVars = Core.typeSchemeVariables tscheme
-          (forallVars, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+          (forallVars, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
           allVars = if null forallVars then schemeVars else forallVars
           -- Filter out phantom type vars (not used in the inner type body)
           innerFreeVars = freeVariablesInType innerTyp
@@ -1559,7 +1559,7 @@ extractSubstFromType g typ = go 5 typ  -- Limit expansion depth to prevent loops
         -- Check if this is a type alias that expands to a type application
         case M.lookup tname (graphSchemaTypes g) of
           Just tscheme ->
-            let (vars, body) = unpackForallType (Core.typeSchemeType tscheme)
+            let (vars, body) = unpackForallType (Core.typeSchemeBody tscheme)
             in if null vars && null (Core.typeSchemeVariables tscheme)
                then go (depth - 1) body  -- Expand non-parametric alias
                else M.empty
@@ -1572,7 +1572,7 @@ lookupTypeParamCount g name =
   case M.lookup name (graphSchemaTypes g) of
     Just tscheme ->
       let schemeVars = length (Core.typeSchemeVariables tscheme)
-          (forallVars, _) = unpackForallType (Core.typeSchemeType tscheme)
+          (forallVars, _) = unpackForallType (Core.typeSchemeBody tscheme)
       in max schemeVars (length forallVars)
     Nothing -> 0
 
@@ -1784,7 +1784,7 @@ isCurriedRef t = case deannotateTerm t of
   Core.TermEither _ -> True    -- [2]any literal, not callable
   Core.TermPair _ -> True      -- [2]any literal, not callable
   Core.TermRecord _ -> True    -- Struct literal, not callable
-  Core.TermUnion _ -> True     -- Struct literal, not callable
+  Core.TermInject _ -> True     -- Struct literal, not callable
   Core.TermMap _ -> True       -- Collection, not callable
   Core.TermSet _ -> True       -- Collection, not callable
   Core.TermTypeApplication ta -> isCurriedRef (Core.typeApplicationTermBody ta)
@@ -1860,7 +1860,7 @@ encodeTypeDefinition :: Context -> Graph -> TypeDefinition -> GoState
   -> GoResult Go.TopLevelDecl
 encodeTypeDefinition cx g tdef st = do
   let name = typeDefinitionName tdef
-      typ = typeDefinitionType tdef
+      typ = Core.typeSchemeBody (typeDefinitionTypeScheme tdef)
       goName = toGoExported (goLocalName name)
       (forallVars, innerTyp) = unpackForallType typ
       freeVars = filter isLocalVar $ S.toList (freeVariablesInType typ)
@@ -2142,12 +2142,17 @@ unpackForallType t = case deannotateType t of
 -- Unpacks lambda chains into proper func declarations with typed parameters.
 encodeTermDefinition :: Context -> Graph -> TermDefinition -> GoState
   -> GoResult Go.TopLevelDecl
-encodeTermDefinition cx g tdef st = do
+encodeTermDefinition cx g tdef st = case termDefinitionTypeScheme tdef of
+  Nothing -> failGo cx $ "Go coder requires inferred type schemes; missing on " ++ show (termDefinitionName tdef)
+  Just tscheme -> encodeTermDefinitionWithScheme cx g tdef tscheme st
+
+encodeTermDefinitionWithScheme :: Context -> Graph -> TermDefinition -> Core.TypeScheme -> GoState
+  -> GoResult Go.TopLevelDecl
+encodeTermDefinitionWithScheme cx g tdef tscheme st = do
   let name = termDefinitionName tdef
       term = termDefinitionTerm tdef
-      tscheme = termDefinitionType tdef
       goName = toGoExported (goLocalName name)
-      typ = Core.typeSchemeType tscheme
+      typ = Core.typeSchemeBody tscheme
       -- Unpack forall type variables
       (forallVars, innerTyp) = unpackForallType typ
       -- Unpack function type into parameter types and return type
@@ -2360,7 +2365,7 @@ lookupFunctionParamTypes g term =
     Core.TermVariable name ->
       case M.lookup name (graphBoundTypes g) of
         Just tscheme ->
-          let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+          let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
               (paramTypes, _) = unpackFunctionType innerTyp
           in paramTypes
         Nothing -> []
@@ -2380,7 +2385,7 @@ inferCallSiteSubst g funTerm paramTypes currentSubst =
       case M.lookup funName (graphBoundTypes g) of
         Just tscheme ->
           let schemeVars = case Core.typeSchemeVariables tscheme of
-                [] -> let (fv, _) = unpackForallType (Core.typeSchemeType tscheme) in fv
+                [] -> let (fv, _) = unpackForallType (Core.typeSchemeBody tscheme) in fv
                 vs -> vs
               -- For each param type, collect type variable occurrences
               -- and try to resolve them from the current substitution
@@ -2461,7 +2466,7 @@ inferTermType g term st = case deannotateTerm term of
     case M.lookup name (goStateTermParamTypes st) of
       Just pt -> Just pt
       Nothing -> case M.lookup name (graphBoundTypes g) of
-        Just tscheme -> Just (Core.typeSchemeType tscheme)
+        Just tscheme -> Just (Core.typeSchemeBody tscheme)
         Nothing -> Nothing
   _ -> Nothing
 
@@ -2497,9 +2502,9 @@ inferArgTypeSubst g funTerm argTerms st =
       case M.lookup funName (graphBoundTypes g) of
         Just tscheme ->
           let schemeVars = case Core.typeSchemeVariables tscheme of
-                [] -> let (fv, _) = unpackForallType (Core.typeSchemeType tscheme) in fv
+                [] -> let (fv, _) = unpackForallType (Core.typeSchemeBody tscheme) in fv
                 vs -> vs
-              (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+              (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
               (paramTypes, _) = unpackFunctionType innerTyp
               -- For each arg, try to infer its type and unify with the param type
               argTypes = fmap (\arg -> inferTermType g arg st) argTerms
@@ -2562,7 +2567,7 @@ inferRetTypeSubst g funTerm schemeVars expectedRet =
     Core.TermVariable funName ->
       case M.lookup funName (graphBoundTypes g) of
         Just tscheme ->
-          let (_, innerTyp) = unpackForallType (Core.typeSchemeType tscheme)
+          let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
               (_, retTyp) = unpackFunctionType innerTyp
           in M.fromList $ matchTypes g schemeVars retTyp expectedRet
         Nothing -> M.empty
@@ -2575,7 +2580,7 @@ lookupCalledSchemeVars g term =
     Core.TermVariable funName ->
       case M.lookup funName (graphBoundTypes g) of
         Just tscheme -> case Core.typeSchemeVariables tscheme of
-          [] -> let (fv, _) = unpackForallType (Core.typeSchemeType tscheme) in fv
+          [] -> let (fv, _) = unpackForallType (Core.typeSchemeBody tscheme) in fv
           vs -> vs
         Nothing -> []
     _ -> []
@@ -2626,7 +2631,7 @@ moduleToGo mod_ defs cx g = do
         (Go.PackageClause $ goIdent pkgName)
         imports
         allDecls
-      code = printExpr $ parenthesize $ writeModule goModule
+      code = printExpr $ parenthesize $ moduleToExpr goModule
       filePath = goNamespaceToFilePath (moduleNamespace mod_)
   Right $ M.singleton filePath code
 
@@ -2635,7 +2640,7 @@ encodeTypeDefs :: Context -> Graph -> [TypeDefinition] -> GoState
 encodeTypeDefs _ _ [] st = pure ([], st)
 encodeTypeDefs cx g (td:tds) st = do
   -- For union types, a single type definition may produce multiple Go declarations
-  let typ = typeDefinitionType td
+  let typ = Core.typeSchemeBody (typeDefinitionTypeScheme td)
       (forallVars, innerTyp) = unpackForallType typ
   case deannotateType innerTyp of
     Core.TypeUnion rt -> do
