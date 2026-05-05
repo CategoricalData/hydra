@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.java.language"),
             moduleDefinitions = [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for Java"}
 javaMaxTupleLength :: TTermDefinition Int
 javaMaxTupleLength = define "javaMaxTupleLength" $
@@ -169,8 +168,8 @@ javaLanguage = define "javaLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.java")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.java")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

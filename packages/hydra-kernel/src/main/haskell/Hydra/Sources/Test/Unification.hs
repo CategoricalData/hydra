@@ -38,8 +38,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [UnificationModule.ns, LexicalModule.ns, ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [UnificationModule.ns, LexicalModule.ns, ShowCore.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for type unification operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

@@ -20,8 +20,9 @@ import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
 import qualified Hydra.Show.Errors as ShowError
-import qualified Hydra.Sources.Eval.Lib.All as EvalLib
+import qualified Hydra.Sources.Kernel.Lib.Defaults.All as DefaultAll
 import qualified Hydra.Codegen as CodeGeneration
+import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Control.Exception as E
 import qualified Control.Monad as CM
@@ -66,7 +67,27 @@ generateSources
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
   -> IO Int  -- ^ Number of files written
-generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
+generateSources = generateSourcesWithTransform id
+
+-- | Like 'generateSources' but applies a 'String -> String' transform to
+-- each generated file's content before writing. The transform is part of
+-- the generation pipeline (not a post-pass that reads back from disk),
+-- which is the appropriate place for whole-file textual passes such as
+-- the Scala line-wrap that 'writeScala' uses to keep individual lines
+-- within scalac's stack-friendly threshold.
+generateSourcesWithTransform
+  :: (String -> String)  -- ^ Per-file content transform (id for no-op)
+  -> (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  -> Language
+  -> Bool
+  -> Bool
+  -> Bool
+  -> Bool
+  -> FilePath
+  -> [Module]
+  -> [Module]
+  -> IO Int
+generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
@@ -74,7 +95,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
         mapM_ writePair files
         return $ length files
   where
-    writePair (path, s) = do
+    writePair (path, raw) = do
         let fullPath = FP.combine basePath path
         SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
         -- Skip writes when content is byte-identical. Rewriting the file with
@@ -94,6 +115,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
                   else return False
         CM.unless skip $ writeFile fullPath withNewline
       where
+        s = transform raw
         -- Trailing whitespace is the coder's responsibility. The Hydra
         -- serialization layer in `hydra.serialization` and per-coder
         -- writers (e.g. the Haskell `toHaskellComments` formatter)
@@ -105,6 +127,29 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
 -- Thin wrapper around modulesToGraphWith.
 modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
+
+-- | Convert a Definition to the Binding shape that elementsToGraph (and other
+-- Binding-based kernel APIs) expects. A DefinitionTerm carries directly across;
+-- a DefinitionType has its body re-encoded as a term and tagged with the
+-- "type -> hydra.core.Type" annotation that downstream code uses to recognise
+-- native types.
+definitionAsBinding :: Definition -> Binding
+definitionAsBinding (DefinitionTerm td) = Binding {
+    bindingName = termDefinitionName td,
+    bindingTerm = termDefinitionTerm td,
+    bindingTypeScheme = termDefinitionTypeScheme td}
+definitionAsBinding (DefinitionType td) = Binding {
+    bindingName = typeDefinitionName td,
+    bindingTerm = TermAnnotated $ AnnotatedTerm {
+      annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td)),
+      annotatedTermAnnotation = M.fromList [
+        (Name "type", TermVariable (Name "hydra.core.Type"))]},
+    bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
+
+-- | Extract a module's definitions in the legacy Binding view, suitable for
+-- feeding elementsToGraph or any other API that still operates on Bindings.
+moduleAsBindings :: Module -> [Binding]
+moduleAsBindings = map definitionAsBinding . moduleDefinitions
 
 
 -- | Generate and write the lexicon file (IO wrapper).
@@ -375,16 +420,30 @@ refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
       putStrLn $ "  Per-package digest: " ++ dpath
         ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
--- | Ensure per-package digest files exist on disk. Called on cache
--- hit so that Stage 3+ tooling has digests to read even when no
--- regen ran. Compared to refreshPerPackageDigests, this is a no-op
--- if every per-package digest already exists; cheap to call.
+-- | Ensure per-package digest files exist on disk AND match current DSL source
+-- content. Called on cache hit so that Stage 3+ tooling has correct digests to
+-- read even when no full regen ran.
+--
+-- For each package, compute the current input hash from packages/<pkg>/.../*.hs
+-- and compare against the on-disk per-package digest. Rewrite if missing or
+-- stale. Without this, a universe-wide cache hit on top of an out-of-date
+-- per-package digest leaves Phase 3 to silently believe its inputs haven't
+-- changed when in fact they have — causing per-target dist regeneration to be
+-- skipped.
 ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
 ensurePerPackageDigests distJsonRoot mods = do
+  nsFiles <- Digest.discoverNamespaceFiles
   let groups = groupByPackage mods
-      paths  = [ perPackageDigestPath distJsonRoot pkg | (pkg, _) <- groups ]
-  allExist <- fmap and (mapM SD.doesFileExist paths)
-  CM.unless allExist $ refreshPerPackageDigests distJsonRoot [] mods
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
+      exists <- SD.doesFileExist dpath
+      stored <- if exists then Digest.readDigest dpath else return M.empty
+      CM.when (stored /= pkgDigest) $ do
+        Digest.writeDigest dpath pkgDigest
+        putStrLn $ "  Per-package digest refreshed: " ++ dpath
+          ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
 -- | Try the incremental inference path: partition universeMods into
 --   * cleanMods — DSL hash matches recorded digest AND existing JSON
@@ -589,7 +648,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
     let jsonVal = Json.ValueObject $ M.fromList [
             ("dslModules", namespacesJson nonEmptyDsls),
-            ("evalLibModules", namespacesJson EvalLib.evalLibModules),
+            ("defaultLibModules", namespacesJson DefaultAll.defaultLibModules),
             ("kernelModules", namespacesJson kernelModules),
             ("mainModules", namespacesJson mainModules),
             ("testModules", namespacesJson testModules)]
@@ -628,21 +687,21 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
     let mainByPkg = groupByPackage mainModules
     let dslByPkg  = M.fromList (groupByPackage nonEmptyDsls)
     let testByPkg = M.fromList (groupByPackage testModules)
-    let evalLibSet = M.fromList (groupByPackage EvalLib.evalLibModules)
+    let defaultLibSet = M.fromList (groupByPackage DefaultAll.defaultLibModules)
     let packages = L.nub
           $ fmap fst mainByPkg
           ++ M.keys dslByPkg
           ++ M.keys testByPkg
-          ++ M.keys evalLibSet
+          ++ M.keys defaultLibSet
     CM.forM_ (L.sort packages) $ \pkg -> do
       let mainForPkg   = Y.fromMaybe [] (lookup pkg mainByPkg)
           dslForPkg    = M.findWithDefault [] pkg dslByPkg
           testForPkg   = M.findWithDefault [] pkg testByPkg
-          evalForPkg   = M.findWithDefault [] pkg evalLibSet
+          defaultForPkg   = M.findWithDefault [] pkg defaultLibSet
           jsonVal = Json.ValueObject $ M.fromList [
               ("package",        Json.ValueString pkg),
               ("dslModules",     namespacesJson dslForPkg),
-              ("evalLibModules", namespacesJson evalForPkg),
+              ("defaultLibModules", namespacesJson defaultForPkg),
               ("mainModules",    namespacesJson mainForPkg),
               ("testModules",    namespacesJson testForPkg)]
           jsonStr = JsonWriter.printJson jsonVal

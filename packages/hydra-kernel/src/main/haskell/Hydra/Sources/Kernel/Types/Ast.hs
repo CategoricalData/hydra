@@ -19,8 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "A model which provides a common syntax tree for Hydra serializers"}
   where
     definitions = [
@@ -29,8 +28,8 @@ module_ = Module {
       bracketExpr,
       brackets,
       expr,
-      indentedExpression,
       indentStyle,
+      indentedExpression,
       op,
       opExpr,
       padding,
@@ -103,16 +102,16 @@ expr = define "Expr" $
       doc "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"
       seqExpr]
 
-seqExpr :: Binding
-seqExpr = define "SeqExpr" $
-  doc "A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries." $
-  T.record [
-    "op">:
-      doc "The separator operator"
-      op,
-    "elements">:
-      doc "The expressions to join" $
-      T.list expr]
+indentStyle :: Binding
+indentStyle = define "IndentStyle" $
+  doc "Any of several indentation styles" $
+  T.union [
+    "allLines">:
+      doc "Indent all lines with the given string" $
+      T.string,
+    "subsequentLines">:
+      doc "Indent only lines after the first with the given string" $
+      T.string]
 
 indentedExpression :: Binding
 indentedExpression = define "IndentedExpression" $
@@ -124,17 +123,6 @@ indentedExpression = define "IndentedExpression" $
     "expr">:
       doc "The expression to be indented"
       expr]
-
-indentStyle :: Binding
-indentStyle = define "IndentStyle" $
-  doc "Any of several indentation styles" $
-  T.union [
-    "allLines">:
-      doc "Indent all lines with the given string" $
-      T.string,
-    "subsequentLines">:
-      doc "Indent only lines after the first with the given string" $
-      T.string]
 
 op :: Binding
 op = define "Op" $
@@ -182,6 +170,17 @@ precedence :: Binding
 precedence = define "Precedence" $
   doc "Operator precedence" $
   T.wrap T.int32
+
+seqExpr :: Binding
+seqExpr = define "SeqExpr" $
+  doc "A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries." $
+  T.record [
+    "op">:
+      doc "The separator operator"
+      op,
+    "elements">:
+      doc "The expressions to join" $
+      T.list expr]
 
 symbol :: Binding
 symbol = define "Symbol" $

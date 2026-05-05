@@ -1,15 +1,12 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Type definitions for C++ code generation environment
 
 module Hydra.Cpp.Environment where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Environment for C++ code generation
 data CppEnvironment =
   CppEnvironment {
@@ -18,9 +15,6 @@ data CppEnvironment =
     -- | Type variables in scope, with their C++ names
     cppEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name String))}
   deriving (Eq, Ord, Read, Show)
-
 _CppEnvironment = Core.Name "hydra.cpp.environment.CppEnvironment"
-
 _CppEnvironment_namespaces = Core.Name "namespaces"
-
 _CppEnvironment_boundTypeVariables = Core.Name "boundTypeVariables"

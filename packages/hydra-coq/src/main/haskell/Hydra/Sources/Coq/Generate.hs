@@ -35,6 +35,7 @@ import qualified Hydra.Sources.Coq.Serde                   as CoqSerdeSource
 import qualified Hydra.Sources.Coq.Utils                   as CoqUtils
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 import qualified Data.Int                                  as I
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
@@ -54,9 +55,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
-     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
+     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline"}
   where
     definitions = [
@@ -604,7 +604,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
             pair (var "name") (var "wrapped"))
         (var "mty"))
     (var "termDefs")) $
-  "deps" <~ (CoqUtils.moduleDependencies @@ var "mod_") $
+  "deps" <~ (CoqUtils.moduleDependencyNames @@ var "mod_") $
   "depSentences" <~ (dependencyImports @@ var "deps") $
   "allSentences" <~ (Lists.cons (asTerm CoqCoderSource.standardImports)
     (Lists.concat2 (var "depSentences")

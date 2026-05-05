@@ -1,6 +1,6 @@
 {
+  "defaultLibModules": [],
   "dslModules": [],
-  "evalLibModules": [],
   "mainModules": [
     "hydra.java.coder",
     "hydra.java.environment",

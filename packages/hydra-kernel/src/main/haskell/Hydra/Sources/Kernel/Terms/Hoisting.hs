@@ -78,8 +78,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."}
   where
    definitions = [
@@ -660,6 +659,7 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
 -- | Check if an accessor is applicationFunction
 isApplicationFunction :: TTermDefinition (SubtermStep -> Bool)
 isApplicationFunction = define "isApplicationFunction" $
+  doc "Check whether a SubtermStep is the applicationFunction step" $
   "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_applicationFunction>>: constant true]
@@ -667,6 +667,7 @@ isApplicationFunction = define "isApplicationFunction" $
 -- | Check if an accessor is lambdaBody
 isLambdaBody :: TTermDefinition (SubtermStep -> Bool)
 isLambdaBody = define "isLambdaBody" $
+  doc "Check whether a SubtermStep is the lambdaBody step" $
   "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_lambdaBody>>: constant true]

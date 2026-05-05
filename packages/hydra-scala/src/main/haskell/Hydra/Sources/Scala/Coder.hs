@@ -47,6 +47,7 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -76,9 +77,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns],
-            moduleTypeDependencies = (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+      Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns] L.++ (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Scala code generator: converts Hydra modules to Scala source code"}
   where
     definitions = [
@@ -1294,7 +1294,7 @@ moduleToScala = def "moduleToScala" $
     Eithers.bind
       (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs")
       ("pkg" ~> lets [
-        "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.scala.serde.writePkg")) @@ var "pkg"))] $
+        "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.scala.serde.pkgToExpr")) @@ var "pkg"))] $
         right (Maps.singleton
           (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleNamespace (var "mod"))
           (var "s")))

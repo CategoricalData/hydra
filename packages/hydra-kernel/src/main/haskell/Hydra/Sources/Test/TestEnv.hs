@@ -30,8 +30,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] Prelude.++ kernelTypesNamespaces,
             moduleDescription = Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")}
   where
    definitions = [
@@ -46,9 +45,14 @@ testContext :: TTermDefinition Context
 testContext = define "testContext" $ asTerm Lexical.emptyContext
 
 -- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
--- The hand-written runtime takes a test-types map; the DSL stub has the
--- matching signature so the generator emits calls of the form
--- `TestEnv.testGraph testTypes` rather than a bare value reference.
-testGraph :: TTermDefinition (M.Map Name Type -> Graph)
+-- The hand-written runtime takes a test-types map and a test-terms map;
+-- the DSL stub has the matching signature so the generator emits calls
+-- of the form `TestEnv.testGraph testTypes testTerms` rather than a
+-- bare value reference. Most runtimes ignore the arguments (primitives
+-- and kernel term bindings are host-language specific and can't be
+-- expressed at the DSL level), but languages like Clojure and Emacs
+-- Lisp, where the generated testGraph value drives tests directly,
+-- need both maps to populate schema_types and bound_terms.
+testGraph :: TTermDefinition (M.Map Name Type -> M.Map Name Term -> Graph)
 testGraph = define "testGraph" $
-  "tys" ~> asTerm Lexical.emptyGraph
+  "tys" ~> "tms" ~> asTerm Lexical.emptyGraph

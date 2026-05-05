@@ -7,6 +7,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | DSL injection for the equality variant of hydra.classes.TypeClass
 typeClassEquality :: Phantoms.TTerm Classes.TypeClass
 typeClassEquality =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -14,6 +15,7 @@ typeClassEquality =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equality"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the ordering variant of hydra.classes.TypeClass
 typeClassOrdering :: Phantoms.TTerm Classes.TypeClass
 typeClassOrdering =
     Phantoms.TTerm (Core.TermInject (Core.Injection {

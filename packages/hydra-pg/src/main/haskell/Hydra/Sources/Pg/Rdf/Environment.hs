@@ -41,8 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [RdfSyntax.ns, PgModel.ns, Core.ns],
+            moduleDependencies = [RdfSyntax.ns, PgModel.ns, Core.ns],
             moduleDescription = Just "Environment types for property graph to RDF mapping"}
   where
     definitions = [

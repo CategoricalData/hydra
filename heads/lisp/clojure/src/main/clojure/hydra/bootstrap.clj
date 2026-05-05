@@ -196,8 +196,8 @@
         (flush)
         (let [step-start (System/currentTimeMillis)
               main-ns (read-manifest json-dir "mainModules")
-              eval-ns (read-manifest json-dir "evalLibModules")
-              all-kernel-ns (into (vec main-ns) eval-ns)
+              default-ns (read-manifest json-dir "defaultLibModules")
+              all-kernel-ns (into (vec main-ns) default-ns)
               main-mods (load-mods json-dir all-kernel-ns)
               step-time (- (System/currentTimeMillis) step-start)
               total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]

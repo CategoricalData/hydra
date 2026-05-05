@@ -86,8 +86,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.graphql.language"),
             moduleDefinitions = [toDefinition graphqlLanguage, toDefinition graphqlReservedWords],
-            moduleTermDependencies = [Lexical.ns, Strip.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for GraphQL"}
 graphqlLanguage :: TTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $
@@ -131,8 +130,8 @@ graphqlLanguage = define "graphqlLanguage" $
       (Just true) [
       _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.graphql")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.graphql")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

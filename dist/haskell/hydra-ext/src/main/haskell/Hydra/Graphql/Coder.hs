@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | GraphQL code generator: converts Hydra modules to GraphQL schema definitions
 
 module Hydra.Graphql.Coder where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
@@ -32,24 +30,19 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 descriptionFromType :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Maybe Syntax.Description)
 descriptionFromType cx g typ =
     Eithers.map (\mval -> Maybes.map (\s -> Syntax.Description (Syntax.StringValue s)) mval) (Annotations.getTypeDescription cx g typ)
-
 encodeEnumFieldName :: Core.Name -> Syntax.EnumValue
 encodeEnumFieldName name = Syntax.EnumValue (Syntax.Name (sanitize (Core.unName name)))
-
 encodeEnumFieldType :: t0 -> Graph.Graph -> Core.FieldType -> Either Errors.Error Syntax.EnumValueDefinition
 encodeEnumFieldType cx g ft =
     Eithers.bind (descriptionFromType cx g (Core.fieldTypeType ft)) (\desc -> Right (Syntax.EnumValueDefinition {
       Syntax.enumValueDefinitionDescription = desc,
       Syntax.enumValueDefinitionEnumValue = (encodeEnumFieldName (Core.fieldTypeName ft)),
       Syntax.enumValueDefinitionDirectives = Nothing}))
-
 encodeFieldName :: Core.Name -> Syntax.Name
 encodeFieldName name = Syntax.Name (sanitize (Core.unName name))
-
 encodeFieldType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
 encodeFieldType cx g prefixes ft =
     Eithers.bind (encodeType cx g prefixes (Core.fieldTypeType ft)) (\gtype -> Eithers.bind (descriptionFromType cx g (Core.fieldTypeType ft)) (\desc -> Right (Syntax.FieldDefinition {
@@ -58,7 +51,6 @@ encodeFieldType cx g prefixes ft =
       Syntax.fieldDefinitionArgumentsDefinition = Nothing,
       Syntax.fieldDefinitionType = gtype,
       Syntax.fieldDefinitionDirectives = Nothing})))
-
 encodeLiteralType :: t0 -> Core.LiteralType -> Either Errors.Error Syntax.NamedType
 encodeLiteralType cx lt =
     case lt of
@@ -71,7 +63,6 @@ encodeLiteralType cx lt =
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected 32-bit signed integer type, found: " (ShowCore.integerType v0))))
       Core.LiteralTypeString -> Right (Syntax.NamedType (Syntax.Name "String"))
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible literal type, found: " (ShowCore.literalType lt))))
-
 encodeNamedType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.Name -> Core.Type -> Either Errors.Error Syntax.TypeDefinition
 encodeNamedType cx g prefixes name typ =
     case (Strip.deannotateType typ) of
@@ -146,7 +137,6 @@ encodeNamedType cx g prefixes name typ =
           Core.fieldTypeName = (Core.Name "codomain"),
           Core.fieldTypeType = (Core.functionTypeCodomain v0)}])
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected record or union type, found: " (ShowCore.type_ typ))))
-
 encodeType :: t0 -> t1 -> M.Map Packaging.Namespace String -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g prefixes typ =
     case (Strip.deannotateType typ) of
@@ -181,11 +171,9 @@ encodeType cx g prefixes typ =
       Core.TypeFunction _ -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (Syntax.Name "String"))))
       Core.TypeUnit -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (Syntax.Name "Boolean"))))
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (ShowCore.type_ typ))))
-
 encodeTypeDefinition :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Packaging.TypeDefinition -> Either Errors.Error Syntax.TypeDefinition
 encodeTypeDefinition cx g prefixes tdef =
     encodeNamedType cx g prefixes (Packaging.typeDefinitionName tdef) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef))
-
 encodeTypeName :: M.Map Packaging.Namespace String -> Core.Name -> Syntax.Name
 encodeTypeName prefixes name =
 
@@ -194,7 +182,6 @@ encodeTypeName prefixes name =
           mns = Packaging.qualifiedNameNamespace qualName
           prefix = Maybes.maybe "" (\ns_ -> Maybes.maybe "" (\p -> p) (Maps.lookup ns_ prefixes)) mns
       in (Syntax.Name (Strings.cat2 prefix (sanitize local)))
-
 encodeUnionFieldType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
 encodeUnionFieldType cx g prefixes ft =
 
@@ -207,7 +194,6 @@ encodeUnionFieldType cx g prefixes ft =
         Syntax.fieldDefinitionArgumentsDefinition = Nothing,
         Syntax.fieldDefinitionType = gtype,
         Syntax.fieldDefinitionDirectives = Nothing}))))
-
 moduleToGraphql :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToGraphql mod defs cx g =
 
@@ -216,10 +202,13 @@ moduleToGraphql mod defs cx g =
           prefixes =
                   (\modNs -> \tdefs ->
                     let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.namespaceOf (Packaging.typeDefinitionName td)) tdefs))
-                    in (Maps.fromList (Lists.map (\ns_ -> (ns_, (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unNamespace ns_)) "_")))) namespaces))) (Packaging.moduleNamespace mod) typeDefs
+                    in (Maps.fromList (Lists.map (\ns_ -> (
+                      ns_,
+                      (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unNamespace ns_)) "_")))) namespaces))) (Packaging.moduleNamespace mod) typeDefs
           filePath =
                   Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleNamespace mod)
-      in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (filePath, (Serialization.printExpr (Serialization.parenthesize (Serde.exprDocument (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))
-
+      in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (
+        filePath,
+        (Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))
 sanitize :: String -> String
 sanitize s = Formatting.sanitizeWithUnderscores Language.graphqlReservedWords s

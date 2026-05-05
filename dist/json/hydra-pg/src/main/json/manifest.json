@@ -1,6 +1,6 @@
 {
+  "defaultLibModules": [],
   "dslModules": [],
-  "evalLibModules": [],
   "mainModules": [
     "com.gdblab.pathAlgebra.expressions",
     "com.gdblab.pathAlgebra.syntax",

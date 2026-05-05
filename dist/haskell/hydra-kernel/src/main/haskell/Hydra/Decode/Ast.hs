@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.ast.Associativity
 associativity :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Associativity
 associativity cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -31,6 +32,7 @@ associativity cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.BlockStyle
 blockStyle :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.BlockStyle
 blockStyle cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -53,6 +55,7 @@ blockStyle cx raw =
           Ast.blockStyleNewlineBeforeContent = field_newlineBeforeContent,
           Ast.blockStyleNewlineAfterContent = field_newlineAfterContent})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.BracketExpr
 bracketExpr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.BracketExpr
 bracketExpr cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -63,6 +66,7 @@ bracketExpr cx raw =
           Ast.bracketExprEnclosed = field_enclosed,
           Ast.bracketExprStyle = field_style})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Brackets
 brackets :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Brackets
 brackets cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -72,6 +76,7 @@ brackets cx raw =
           Ast.bracketsOpen = field_open,
           Ast.bracketsClose = field_close}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Expr
 expr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Expr
 expr cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -91,6 +96,7 @@ expr cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.IndentStyle
 indentStyle :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.IndentStyle
 indentStyle cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -100,21 +106,26 @@ indentStyle cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "allLines", (\input -> Eithers.map (\t -> Ast.IndentStyleAllLines t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "subsequentLines", (\input -> Eithers.map (\t -> Ast.IndentStyleSubsequentLines t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "allLines",
+                        (\input -> Eithers.map (\t -> Ast.IndentStyleAllLines t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "subsequentLines",
+                        (\input -> Eithers.map (\t -> Ast.IndentStyleSubsequentLines t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.IndentedExpression
 indentedExpression :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.IndentedExpression
 indentedExpression cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -124,6 +135,7 @@ indentedExpression cx raw =
           Ast.indentedExpressionStyle = field_style,
           Ast.indentedExpressionExpr = field_expr}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Op
 op :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Op
 op cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -135,6 +147,7 @@ op cx raw =
           Ast.opPrecedence = field_precedence,
           Ast.opAssociativity = field_associativity}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.OpExpr
 opExpr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.OpExpr
 opExpr cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -145,6 +158,7 @@ opExpr cx raw =
           Ast.opExprLhs = field_lhs,
           Ast.opExprRhs = field_rhs})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Padding
 padding :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Padding
 padding cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -154,6 +168,7 @@ padding cx raw =
           Ast.paddingLeft = field_left,
           Ast.paddingRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Precedence
 precedence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Precedence
 precedence cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -165,6 +180,7 @@ precedence cx raw =
           _ -> Left (Errors.DecodingError "expected int32 literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.SeqExpr
 seqExpr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.SeqExpr
 seqExpr cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -174,6 +190,7 @@ seqExpr cx raw =
           Ast.seqExprOp = field_op,
           Ast.seqExprElements = field_elements}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Symbol
 symbol :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Symbol
 symbol cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -183,6 +200,7 @@ symbol cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.ast.Ws
 ws :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Ws
 ws cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -195,11 +213,13 @@ ws cx raw =
                       (Core.Name "none", (\input -> Eithers.map (\t -> Ast.WsNone) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "space", (\input -> Eithers.map (\t -> Ast.WsSpace) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "break", (\input -> Eithers.map (\t -> Ast.WsBreak) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "breakAndIndent", (\input -> Eithers.map (\t -> Ast.WsBreakAndIndent t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "breakAndIndent",
+                        (\input -> Eithers.map (\t -> Ast.WsBreakAndIndent t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "doubleBreak", (\input -> Eithers.map (\t -> Ast.WsDoubleBreak) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",

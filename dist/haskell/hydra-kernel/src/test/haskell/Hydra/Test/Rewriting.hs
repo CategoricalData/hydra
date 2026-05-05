@@ -53,10 +53,14 @@ allTests =
                       Core.TermLiteral v1 -> [
                         v1]
                       _ -> []
-                    _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
-                  Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermList [])),
-                  (Core.TermPair (Core.TermLiteral (Core.LiteralString "c"), (Core.TermList [
-                    Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
+                    _ -> []]) [] (Core.TermPair (
+                  Core.TermLiteral (Core.LiteralString "a"),
+                  (Core.TermList [
+                    Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermList [])),
+                    (Core.TermPair (
+                      Core.TermLiteral (Core.LiteralString "c"),
+                      (Core.TermList [
+                        Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "a"),
                   (Core.TermLiteral (Core.LiteralString "b")),
@@ -89,10 +93,14 @@ allTests =
                       Core.TermLiteral v1 -> [
                         v1]
                       _ -> []
-                    _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList [
-                  Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermList [])),
-                  (Core.TermPair (Core.TermLiteral (Core.LiteralString "c"), (Core.TermList [
-                    Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
+                    _ -> []]) [] (Core.TermPair (
+                  Core.TermLiteral (Core.LiteralString "a"),
+                  (Core.TermList [
+                    Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermList [])),
+                    (Core.TermPair (
+                      Core.TermLiteral (Core.LiteralString "c"),
+                      (Core.TermList [
+                        Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "b"),
                   (Core.TermLiteral (Core.LiteralString "d")),
@@ -920,7 +928,9 @@ allTests =
                       Core.IntegerValueInt32 v2 -> v2
                       _ -> 0
                     _ -> 0
-                  _ -> 0)) 0 (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))))))))),
+                  _ -> 0)) 0 (Core.TermPair (
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))))))))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},

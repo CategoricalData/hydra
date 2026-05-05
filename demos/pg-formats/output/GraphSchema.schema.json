@@ -1,0 +1,58 @@
+{
+  "$defs": {
+    "EdgeLabel": {"title": "EdgeLabel", "type": "string"},
+    "EdgeType": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {"$ref": "#/$defs/t", "description": "The type of the id of any edge of this edge type"},
+        "in": {"$ref": "#/$defs/VertexLabel", "description": "The label of the in-vertex (head) of any edge of this edge type"},
+        "label": {"$ref": "#/$defs/EdgeLabel", "description": "The label of any edge of this edge type"},
+        "out": {"$ref": "#/$defs/VertexLabel", "description": "The label of the out-vertex (tail) of any edge of this edge type"},
+        "properties": {
+          "description": "A list of property types. The types are ordered for the sake of applications in which property order is significant.",
+          "items": {"$ref": "#/$defs/PropertyType"},
+          "type": "array"}},
+      "required": ["label", "id", "out", "in", "properties"],
+      "title": "EdgeType",
+      "type": "object"},
+    "GraphSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "edges": {
+          "additionalProperties": {"$ref": "#/$defs/EdgeType"},
+          "description": "A unique edge type for each edge label which may occur in a graph",
+          "type": "object"},
+        "vertices": {
+          "additionalProperties": {"$ref": "#/$defs/VertexType"},
+          "description": "A unique vertex type for each vertex label which may occur in a graph",
+          "type": "object"}},
+      "required": ["vertices", "edges"],
+      "title": "GraphSchema",
+      "type": "object"},
+    "PropertyKey": {"title": "PropertyKey", "type": "string"},
+    "PropertyType": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {"$ref": "#/$defs/PropertyKey", "description": "A property's key"},
+        "required": {
+          "description": "Whether the property is required; values may be omitted from a property map otherwise",
+          "type": "boolean"},
+        "value": {"$ref": "#/$defs/t", "description": "The type of a property's value"}},
+      "required": ["key", "value", "required"],
+      "title": "PropertyType",
+      "type": "object"},
+    "VertexLabel": {"title": "VertexLabel", "type": "string"},
+    "VertexType": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {"$ref": "#/$defs/t", "description": "The type of the id of any vertex of this vertex type"},
+        "label": {"$ref": "#/$defs/VertexLabel", "description": "The label of any vertex of this vertex type"},
+        "properties": {
+          "description": "A list of property types. The types are ordered for the sake of applications in which property order is significant.",
+          "items": {"$ref": "#/$defs/PropertyType"},
+          "type": "array"}},
+      "required": ["label", "id", "properties"],
+      "title": "VertexType",
+      "type": "object"}},
+  "$ref": "#/$defs/GraphSchema",
+  "$schema": "http://json-schema.org/2020-12/schema"}

@@ -96,8 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Java naming constants and package name utilities"}
   where
     definitions = [

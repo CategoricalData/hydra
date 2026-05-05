@@ -10,13 +10,16 @@ import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Errors as Errors
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.errors.DecodingError
 decodingError :: Errors.DecodingError -> Core.Term
 decodingError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unDecodingError x))})
+-- | Encoder for hydra.errors.EmptyListError
 emptyListError :: t0 -> Core.Term
 emptyListError _ = Core.TermUnit
+-- | Encoder for hydra.errors.Error
 error :: Errors.Error -> Core.Term
 error x =
     case x of
@@ -90,6 +93,7 @@ error x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unification"),
           Core.fieldTerm = (unificationError v0)}})
+-- | Encoder for hydra.errors.ExtractionError
 extractionError :: Errors.ExtractionError -> Core.Term
 extractionError x =
     case x of
@@ -128,6 +132,7 @@ extractionError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedShape"),
           Core.fieldTerm = (unexpectedShapeError v0)}})
+-- | Encoder for hydra.errors.InferenceError
 inferenceError :: Errors.InferenceError -> Core.Term
 inferenceError x =
     case x of
@@ -146,6 +151,7 @@ inferenceError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unification"),
           Core.fieldTerm = (unificationInferenceError v0)}})
+-- | Encoder for hydra.errors.MultipleBindingsError
 multipleBindingsError :: Errors.MultipleBindingsError -> Core.Term
 multipleBindingsError x =
     Core.TermRecord (Core.Record {
@@ -154,6 +160,7 @@ multipleBindingsError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.multipleBindingsErrorName x))}]})
+-- | Encoder for hydra.errors.MultipleFieldsError
 multipleFieldsError :: Errors.MultipleFieldsError -> Core.Term
 multipleFieldsError x =
     Core.TermRecord (Core.Record {
@@ -162,6 +169,7 @@ multipleFieldsError x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (EncodeCore.name (Errors.multipleFieldsErrorFieldName x))}]})
+-- | Encoder for hydra.errors.NoMatchingFieldError
 noMatchingFieldError :: Errors.NoMatchingFieldError -> Core.Term
 noMatchingFieldError x =
     Core.TermRecord (Core.Record {
@@ -170,6 +178,7 @@ noMatchingFieldError x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (EncodeCore.name (Errors.noMatchingFieldErrorFieldName x))}]})
+-- | Encoder for hydra.errors.NoSuchBindingError
 noSuchBindingError :: Errors.NoSuchBindingError -> Core.Term
 noSuchBindingError x =
     Core.TermRecord (Core.Record {
@@ -178,6 +187,7 @@ noSuchBindingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.noSuchBindingErrorName x))}]})
+-- | Encoder for hydra.errors.NoSuchPrimitiveError
 noSuchPrimitiveError :: Errors.NoSuchPrimitiveError -> Core.Term
 noSuchPrimitiveError x =
     Core.TermRecord (Core.Record {
@@ -186,13 +196,16 @@ noSuchPrimitiveError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.noSuchPrimitiveErrorName x))}]})
+-- | Encoder for hydra.errors.NotEnoughCasesError
 notEnoughCasesError :: t0 -> Core.Term
 notEnoughCasesError _ = Core.TermUnit
+-- | Encoder for hydra.errors.OtherError
 otherError :: Errors.OtherError -> Core.Term
 otherError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unOtherError x))})
+-- | Encoder for hydra.errors.OtherInferenceError
 otherInferenceError :: Errors.OtherInferenceError -> Core.Term
 otherInferenceError x =
     Core.TermRecord (Core.Record {
@@ -204,11 +217,13 @@ otherInferenceError x =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.otherInferenceErrorMessage x))}]})
+-- | Encoder for hydra.errors.OtherResolutionError
 otherResolutionError :: Errors.OtherResolutionError -> Core.Term
 otherResolutionError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherResolutionError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unOtherResolutionError x))})
+-- | Encoder for hydra.errors.ResolutionError
 resolutionError :: Errors.ResolutionError -> Core.Term
 resolutionError x =
     case x of
@@ -237,6 +252,7 @@ resolutionError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedShape"),
           Core.fieldTerm = (unexpectedShapeError v0)}})
+-- | Encoder for hydra.errors.UnexpectedShapeError
 unexpectedShapeError :: Errors.UnexpectedShapeError -> Core.Term
 unexpectedShapeError x =
     Core.TermRecord (Core.Record {
@@ -248,6 +264,7 @@ unexpectedShapeError x =
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unexpectedShapeErrorActual x))}]})
+-- | Encoder for hydra.errors.UnificationError
 unificationError :: Errors.UnificationError -> Core.Term
 unificationError x =
     Core.TermRecord (Core.Record {
@@ -262,6 +279,7 @@ unificationError x =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unificationErrorMessage x))}]})
+-- | Encoder for hydra.errors.UnificationInferenceError
 unificationInferenceError :: Errors.UnificationInferenceError -> Core.Term
 unificationInferenceError x =
     Core.TermRecord (Core.Record {

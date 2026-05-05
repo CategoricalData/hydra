@@ -39,7 +39,6 @@ module Hydra.Kernel (
   module Hydra.Lexical,
   module Hydra.Literals,
   module Hydra.Packaging,
-  module Hydra.Module.Compat,
   module Hydra.Parsing,
   module Hydra.Phantoms,
   module Hydra.Names,
@@ -62,6 +61,7 @@ module Hydra.Kernel (
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Util,
+  module Hydra.Validation,
   module Hydra.Variables,
   module Hydra.Variants,
 ) where
@@ -89,7 +89,6 @@ import Hydra.Inference
 import Hydra.Lexical
 import Hydra.Literals
 import Hydra.Packaging
-import Hydra.Module.Compat
 import Hydra.Parsing
 import Hydra.Phantoms
 import Hydra.Names
@@ -112,5 +111,6 @@ import Hydra.Testing
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Util
+import Hydra.Validation
 import Hydra.Variables
 import Hydra.Variants

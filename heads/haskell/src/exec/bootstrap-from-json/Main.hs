@@ -8,7 +8,7 @@
 --   - haskell-to-*.sh (bootstrapping demo, writes to /tmp)
 --
 -- JSON sources:
---   dist/json/hydra-kernel/src/main/json/  — kernel, eval lib, and other modules
+--   dist/json/hydra-kernel/src/main/json/  — kernel, default lib, and other modules
 --   dist/json/hydra-kernel/src/test/json/  — test modules
 --   hydra-ext/../../dist/json/hydra-ext/src/main/json/      — ext coder modules (Java/Python coders)
 --
@@ -32,7 +32,7 @@ import Hydra.Generation
 import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
 import qualified Hydra.Digest as Digest
 import Hydra.Sources.All (kernelModules)
-import Hydra.ExtGeneration (moduleToLispDialect, wrapLongLinesInScalaTree)
+import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform)
 import Hydra.Haskell.Coder (moduleToHaskell)
 import Hydra.Haskell.Language (haskellLanguage)
 import Hydra.Java.Coder (moduleToJava)
@@ -62,6 +62,13 @@ import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 import qualified System.FilePath as FP
 
+
+-- | True if the module contains at least one type definition.
+moduleHasTypeDefinition :: Module -> Bool
+moduleHasTypeDefinition m = any isType (moduleDefinitions m)
+  where
+    isType (DefinitionType _) = True
+    isType _ = False
 
 -- | Format elapsed time for display.
 formatTime :: Double -> String
@@ -250,15 +257,15 @@ main = do
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn ""
 
-  -- Load a single package's mainModules + evalLibModules from its per-package
+  -- Load a single package's mainModules + defaultLibModules from its per-package
   -- manifest. Returns the accumulated Modules; missing fields are treated as
   -- empty.
   let loadPackageMain :: String -> IO [Module]
       loadPackageMain pkg = do
         let pkgDir = pkgMainDir pkg
         mainNs <- readManifestFieldOrEmpty pkgDir "mainModules"
-        evalNs <- readManifestFieldOrEmpty pkgDir "evalLibModules"
-        let allNs = mainNs ++ evalNs
+        defaultNs <- readManifestFieldOrEmpty pkgDir "defaultLibModules"
+        let allNs = mainNs ++ defaultNs
         if Prelude.null allNs
           then return []
           else do
@@ -326,8 +333,9 @@ main = do
   --                    individually with --package <pkg>.
   let allExtPackages = extPackages ++ extDemoPackages
   let packageDeps p = case p of
-        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
-        _          -> [p]
+        "hydra-pg"  -> ["hydra-pg", "hydra-rdf"]
+        "hydra-ext" -> ["hydra-ext", "hydra-rdf"]
+        _           -> [p]
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
         | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
@@ -375,7 +383,7 @@ main = do
         then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods
         else allMods
   let filtered2 = if optTypesOnly opts
-        then Prelude.filter (\m -> any isNativeType (moduleBindings m)) filtered1
+        then Prelude.filter moduleHasTypeDefinition filtered1
         else filtered1
   let allMainMods = filtered2
 
@@ -411,7 +419,7 @@ main = do
                 isCoder = any (\(pfx, _) -> pfx `isPrefixOf` nsStr) packagePrefixes
                 isYaml  = "hydra.yaml." `isPrefixOf` nsStr
                 isPgSynthInput = nsStr `elem` pgSynthNs
-                hasType = any isNativeType (moduleBindings m)
+                hasType = moduleHasTypeDefinition m
                 isKernel = (nsStr `elem` kernelNsList) && not isCoder && not isYaml
             in hasType && (isKernel || isPgSynthInput)
       let typeMods = Prelude.filter isSynthInput allMainMods
@@ -522,7 +530,7 @@ main = do
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
         "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
-        "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' mods
+        "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
               generateSources g lispLanguage True False False False dir allModsFinal' mods
         _ -> do
@@ -600,7 +608,7 @@ main = do
       -- so test code can reference them.
       when (optKernelOnly opts) $ do
         let testExtraDeps = Prelude.filter (\ns -> unNamespace ns `notElem` kernelNsStrings)
-              $ concatMap moduleTermDependencies testMods
+              $ concatMap moduleDependencies testMods
             extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtraDeps) allMods
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
@@ -620,7 +628,7 @@ main = do
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allUniverse mods
             "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allUniverse mods
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allUniverse mods
-            "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allUniverse mods
+            "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
             _ -> return 0
 
@@ -654,14 +662,10 @@ main = do
 
   let genTestSuccess = True
 
-  -- Scala post-processing: wrap long lines in every generated .scala file.
-  -- The Scala compiler hits stack/memory limits on extremely long single-line
-  -- expressions; wrapping is the same pass that writeScala applies in the
-  -- DSL-direct path, lifted here so the JSON pipeline produces identical output.
-  when (target == "scala") $ do
-    putStrLn "Post-processing: wrapping long Scala lines..."
-    wrapLongLinesInScalaTree outBase
-    putStrLn ""
+  -- (Scala line-wrap moved into the generation pipeline as a content
+  -- transform on each file before write. See generateSourcesWithTransform
+  -- in Hydra.Generation; the scala dispatch in genForDir/genTestForDir
+  -- above passes wrapLongScalaText.)
 
   putStrLn "=========================================="
   putStrLn $ "Done: " ++ show mainFileCount ++ " main"

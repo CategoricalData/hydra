@@ -63,7 +63,7 @@ This will update `docs/hydra-lexicon.txt` with the current kernel API.
 The `/lexicon()` shorthand also runs this script. Lexicon regeneration is
 deliberately decoupled from the regular sync flow (it takes ~4 minutes and
 is not consumed by any build step); run it on demand or as part of the
-pre-release verification flow (`bin/verify-release.sh`).
+pre-release preparation flow (`bin/prepare-release.sh`).
 
 ### Using the lexicon with LLMs
 
@@ -99,17 +99,17 @@ which shows how to:
 
 **Source code:**
 
-- **[GenPG Demo directory](https://github.com/CategoricalData/hydra/tree/main/demos/src/main/haskell/Hydra/Demos/GenPG)** -
+- **[GenPG Demo directory](https://github.com/CategoricalData/hydra/tree/main/demos/src/main/haskell/Hydra/Demos/Genpg)** -
   Complete implementation of the property graph generation demo
-  - [Demo.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/GenPG/Demo.hs) -
+  - [Demo.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/Genpg/Demo.hs) -
     Main entry point for running the demo
-  - [ExampleGraphSchema.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/GenPG/ExampleGraphSchema.hs) -
+  - [ExampleGraphSchema.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/Genpg/ExampleGraphSchema.hs) -
     Property graph schema definition
-  - [ExampleDatabaseSchema.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/GenPG/ExampleDatabaseSchema.hs) -
+  - [ExampleDatabaseSchema.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/Genpg/ExampleDatabaseSchema.hs) -
     Tabular source schema
-  - [ExampleMapping.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/GenPG/ExampleMapping.hs) -
+  - [ExampleMapping.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/Genpg/ExampleMapping.hs) -
     Mappings from tables to graph
-  - [Transform.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/GenPG/Transform.hs) -
+  - [Transform.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Demos/Genpg/Transform.hs) -
     Data transformation logic
 
 ### See also

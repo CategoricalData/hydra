@@ -463,9 +463,11 @@ monomorphicWrappedTermsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "wrapped in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
-              Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
-              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "first"))}), (Core.TermLiteral (Core.LiteralString "second")))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermWrap (Core.WrappedTerm {
+                Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
+                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "first"))}),
+              (Core.TermLiteral (Core.LiteralString "second")))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeVariable TestTypes.testTypeStringAliasName),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -766,30 +768,32 @@ multiParameterPolymorphicInjectionsTests =
                   Core.lambdaParameter = (Core.Name "x2"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermMap (M.fromList [
-                    (Core.TermLiteral (Core.LiteralString "key"), (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = TestTypes.testTypeTripleName,
-                      Core.recordFields = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "first"),
-                          Core.fieldTerm = (Core.TermInject (Core.Injection {
-                            Core.injectionTypeName = TestTypes.testTypeEitherName,
-                            Core.injectionField = Core.Field {
-                              Core.fieldName = (Core.Name "left"),
-                              Core.fieldTerm = (Core.TermVariable (Core.Name "x0"))}}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "second"),
-                          Core.fieldTerm = (Core.TermInject (Core.Injection {
-                            Core.injectionTypeName = TestTypes.testTypeEitherName,
-                            Core.injectionField = Core.Field {
-                              Core.fieldName = (Core.Name "left"),
-                              Core.fieldTerm = (Core.TermVariable (Core.Name "x0"))}}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "third"),
-                          Core.fieldTerm = (Core.TermInject (Core.Injection {
-                            Core.injectionTypeName = TestTypes.testTypeEitherName,
-                            Core.injectionField = Core.Field {
-                              Core.fieldName = (Core.Name "right"),
-                              Core.fieldTerm = (Core.TermVariable (Core.Name "x1"))}}))}]})))]))}))}))})))),
+                    (
+                      Core.TermLiteral (Core.LiteralString "key"),
+                      (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = TestTypes.testTypeTripleName,
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "first"),
+                            Core.fieldTerm = (Core.TermInject (Core.Injection {
+                              Core.injectionTypeName = TestTypes.testTypeEitherName,
+                              Core.injectionField = Core.Field {
+                                Core.fieldName = (Core.Name "left"),
+                                Core.fieldTerm = (Core.TermVariable (Core.Name "x0"))}}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "second"),
+                            Core.fieldTerm = (Core.TermInject (Core.Injection {
+                              Core.injectionTypeName = TestTypes.testTypeEitherName,
+                              Core.injectionField = Core.Field {
+                                Core.fieldName = (Core.Name "left"),
+                                Core.fieldTerm = (Core.TermVariable (Core.Name "x0"))}}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "third"),
+                            Core.fieldTerm = (Core.TermInject (Core.Injection {
+                              Core.injectionTypeName = TestTypes.testTypeEitherName,
+                              Core.injectionField = Core.Field {
+                                Core.fieldName = (Core.Name "right"),
+                                Core.fieldTerm = (Core.TermVariable (Core.Name "x1"))}}))}]})))]))}))}))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -1034,19 +1038,21 @@ multiParameterPolymorphicUnwrappersTests =
             Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "st"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermProject (Core.Projection {
-                  Core.projectionTypeName = TestTypes.testTypeTripleName,
-                  Core.projectionField = (Core.Name "first")})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypeSymmetricTripleName),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "st"))}))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermProject (Core.Projection {
-                  Core.projectionTypeName = TestTypes.testTypeTripleName,
-                  Core.projectionField = (Core.Name "third")})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypeSymmetricTripleName),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "st"))}))}))))})))),
+              Core.lambdaBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                    Core.projectionTypeName = TestTypes.testTypeTripleName,
+                    Core.projectionField = (Core.Name "first")})),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypeSymmetricTripleName),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "st"))}))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                    Core.projectionTypeName = TestTypes.testTypeTripleName,
+                    Core.projectionField = (Core.Name "third")})),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypeSymmetricTripleName),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "st"))}))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -1291,11 +1297,13 @@ multipleUnwrapOperationsTests =
               Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "listWrapped"),
                 Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypeStringAliasName),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "stringWrapped"))}), (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypePolymorphicWrapperName),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "listWrapped"))}))))}))})))),
+                Core.lambdaBody = (Core.TermPair (
+                  Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypeStringAliasName),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "stringWrapped"))}),
+                  (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermUnwrap TestTypes.testTypePolymorphicWrapperName),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "listWrapped"))}))))}))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -1403,28 +1411,30 @@ nestedUnionEliminationsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "match in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermCases (Core.CaseStatement {
-              Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
-              Core.caseStatementDefault = Nothing,
-              Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "lessThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "x"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "equalTo"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "x"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "greaterThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "x"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))}))}]}), (Core.TermLiteral (Core.LiteralString "context")))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermCases (Core.CaseStatement {
+                Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
+                Core.caseStatementDefault = Nothing,
+                Core.caseStatementCases = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lessThan"),
+                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "equalTo"),
+                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "greaterThan"),
+                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))}))}]}),
+              (Core.TermLiteral (Core.LiteralString "context")))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeComparisonName),
@@ -2004,15 +2014,17 @@ projectionsWithVariablesTests =
             Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "person"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermProject (Core.Projection {
-                  Core.projectionTypeName = TestTypes.testTypePersonName,
-                  Core.projectionField = (Core.Name "firstName")})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermProject (Core.Projection {
-                  Core.projectionTypeName = TestTypes.testTypePersonName,
-                  Core.projectionField = (Core.Name "lastName")})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}))))})))),
+              Core.lambdaBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                    Core.projectionTypeName = TestTypes.testTypePersonName,
+                    Core.projectionField = (Core.Name "firstName")})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                    Core.projectionTypeName = TestTypes.testTypePersonName,
+                    Core.projectionField = (Core.Name "lastName")})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "Person")),
               Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
@@ -2150,11 +2162,13 @@ recordProjectionsInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "projection in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = TestTypes.testTypePersonName,
-              Core.projectionField = (Core.Name "firstName")}), (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = TestTypes.testTypePersonName,
-              Core.projectionField = (Core.Name "age")})))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermProject (Core.Projection {
+                Core.projectionTypeName = TestTypes.testTypePersonName,
+                Core.projectionField = (Core.Name "firstName")}),
+              (Core.TermProject (Core.Projection {
+                Core.projectionTypeName = TestTypes.testTypePersonName,
+                Core.projectionField = (Core.Name "age")})))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "Person")),
@@ -2310,15 +2324,17 @@ recordProjectionsWithVariablesTests =
             Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "person"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermProject (Core.Projection {
-                  Core.projectionTypeName = TestTypes.testTypePersonName,
-                  Core.projectionField = (Core.Name "firstName")})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}), (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermProject (Core.Projection {
-                  Core.projectionTypeName = TestTypes.testTypePersonName,
-                  Core.projectionField = (Core.Name "lastName")})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}))))})))),
+              Core.lambdaBody = (Core.TermPair (
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                    Core.projectionTypeName = TestTypes.testTypePersonName,
+                    Core.projectionField = (Core.Name "firstName")})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}),
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermProject (Core.Projection {
+                    Core.projectionTypeName = TestTypes.testTypePersonName,
+                    Core.projectionField = (Core.Name "lastName")})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "person"))}))))})))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "Person")),
               Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
@@ -2336,26 +2352,28 @@ recordsInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "records in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "Person"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "firstName"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Bob"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "lastName"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Jones"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "age"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]}), (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "LatLon"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "lat"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 1.0)))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "lon"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.0)))}]})))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "Person"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "firstName"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Bob"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lastName"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Jones"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "age"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]}),
+              (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "LatLon"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lat"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 1.0)))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lon"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.0)))}]})))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeVariable (Core.Name "Person")),
               Core.pairTypeSecond = (Core.TypeVariable (Core.Name "LatLon"))})))})),
@@ -2364,23 +2382,25 @@ recordsInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "poly records in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "LatLonPoly"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "lat"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "lon"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}), (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "BuddyListA"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "head"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "tail"),
-                  Core.fieldTerm = (Core.TermMaybe Nothing)}]})))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "LatLonPoly"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lat"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lon"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}),
+              (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "BuddyListA"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "head"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "tail"),
+                    Core.fieldTerm = (Core.TermMaybe Nothing)}]})))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "LatLonPoly")),
@@ -3166,11 +3186,13 @@ unionsInComplexContextsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "union in tuple",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermInject (Core.Injection {
-              Core.injectionTypeName = TestTypes.testTypeNumberName,
-              Core.injectionField = Core.Field {
-                Core.fieldName = (Core.Name "int"),
-                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}}), (Core.TermLiteral (Core.LiteralString "context")))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermInject (Core.Injection {
+                Core.injectionTypeName = TestTypes.testTypeNumberName,
+                Core.injectionField = Core.Field {
+                  Core.fieldName = (Core.Name "int"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}}),
+              (Core.TermLiteral (Core.LiteralString "context")))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeVariable TestTypes.testTypeNumberName),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),

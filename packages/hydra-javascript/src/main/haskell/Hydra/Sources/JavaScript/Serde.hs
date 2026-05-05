@@ -99,8 +99,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Serialization.ns, JavaScriptOperators.ns],
-            moduleTypeDependencies = (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Serialization.ns, JavaScriptOperators.ns] L.++ (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Serialization functions for converting JavaScript AST to abstract expressions"}
   where
     definitions = [
@@ -279,7 +278,7 @@ expressionToExpr = define "expressionToExpr" $
       JS._Expression_unary>>: lambda "un" $ unaryExpressionToExpr @@ var "un",
       JS._Expression_assignment>>: lambda "assign" $ assignmentExpressionToExpr @@ var "assign",
       JS._Expression_sequence>>: lambda "exprs" $
-        Serialization.parenList @@ false @@ (Lists.map (expressionToExpr) (var "exprs")),
+        Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "exprs")),
       JS._Expression_this>>: constant $ Serialization.cst @@ string "this",
       JS._Expression_new>>: lambda "call" $
         Serialization.spaceSep @@ list [
@@ -357,7 +356,7 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
       (list ([] :: [TTerm Expr]))
       (lambda "id" $ list [identifierToExpr @@ var "id"])
       (var "mid"),
-    "paramsExpr">: Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "params"))] $
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
       list [var "funcKw"],
@@ -376,7 +375,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       (list ([] :: [TTerm Expr])),
     "paramsExpr">: Logic.ifElse (Equality.equal (Lists.length $ var "params") (int32 1))
       (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map patternToExpr (Lists.maybeHead $ var "params")))
-      (Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "params"))),
+      (Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))),
     "bodyExpr">: cases JS._ArrowFunctionBody (var "body") Nothing [
       JS._ArrowFunctionBody_expression>>: lambda "e" $ expressionToExpr @@ var "e",
       JS._ArrowFunctionBody_block>>: lambda "b" $ blockStatementToExpr @@ var "b"]] $
@@ -392,7 +391,7 @@ callExpressionToExpr = define "callExpressionToExpr" $
     "args">: project JS._CallExpression JS._CallExpression_arguments @@ var "call",
     "optional">: project JS._CallExpression JS._CallExpression_optional @@ var "call",
     "calleeExpr">: expressionToExpr @@ var "callee",
-    "argsExpr">: Serialization.parenList @@ false @@ (Lists.map (expressionToExpr) (var "args")),
+    "argsExpr">: Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "args")),
     "optionalDot">: Logic.ifElse (var "optional") (string "?.") (string "")] $
     Serialization.spaceSep @@ list [
       var "calleeExpr",
@@ -765,7 +764,7 @@ forStatementToExpr = define "forStatementToExpr" $
     "updateExpr">: Maybes.maybe (Serialization.cst @@ string "") (expressionToExpr) (var "update")] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "for",
-      Serialization.parenList @@ false @@ list [var "initExpr", var "testExpr", var "updateExpr"],
+      Serialization.parenListAdaptive @@ list [var "initExpr", var "testExpr", var "updateExpr"],
       statementToExpr @@ var "body"]
 
 forInStatementToExpr :: TTermDefinition (JS.ForInStatement -> Expr)
@@ -836,7 +835,7 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
-    "paramsExpr">: Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "params"))] $
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
       list [var "funcKw", identifierToExpr @@ var "id", var "paramsExpr", blockStatementToExpr @@ var "body"]])
@@ -879,7 +878,7 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
       (expressionToExpr @@ var "key"),
     "params">: project JS._FunctionExpression JS._FunctionExpression_params @@ var "value",
     "body">: project JS._FunctionExpression JS._FunctionExpression_body @@ var "value",
-    "paramsExpr">: Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "params"))] $
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "staticKw",
       var "kindKw",

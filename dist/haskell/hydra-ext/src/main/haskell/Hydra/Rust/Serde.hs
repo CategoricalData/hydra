@@ -1,10 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Rust serializer: converts Rust AST to concrete syntax
 
 module Hydra.Rust.Serde where
-
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -14,7 +13,6 @@ import qualified Hydra.Rust.Syntax as Syntax
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Serialize an array expression
 arrayExprToExpr :: Syntax.ArrayExpr -> Ast.Expr
 arrayExprToExpr a =
@@ -29,7 +27,6 @@ arrayExprToExpr a =
           "; ",
           (Serialization.printExpr (expressionToExpr len)),
           "]"]))
-
 -- | Serialize an assignment expression
 assignExprToExpr :: Syntax.AssignExpr -> Ast.Expr
 assignExprToExpr a =
@@ -40,7 +37,6 @@ assignExprToExpr a =
         expressionToExpr target,
         (Serialization.cst "="),
         (expressionToExpr val)])
-
 -- | Serialize an attribute
 attributeToExpr :: Syntax.Attribute -> Ast.Expr
 attributeToExpr attr =
@@ -60,7 +56,6 @@ attributeToExpr attr =
         pathStr,
         tokensPart,
         "]"]))
-
 -- | Serialize a binary expression
 binaryExprToExpr :: Syntax.BinaryExpr -> Ast.Expr
 binaryExprToExpr b =
@@ -72,7 +67,6 @@ binaryExprToExpr b =
         expressionToExpr left,
         (binaryOpToExpr op),
         (expressionToExpr right)])
-
 -- | Serialize a binary operator
 binaryOpToExpr :: Syntax.BinaryOp -> Ast.Expr
 binaryOpToExpr op =
@@ -95,7 +89,6 @@ binaryOpToExpr op =
       Syntax.BinaryOpLe -> "<="
       Syntax.BinaryOpGt -> ">"
       Syntax.BinaryOpGe -> ">=")
-
 -- | Serialize a block
 blockToExpr :: Syntax.Block -> Ast.Expr
 blockToExpr b =
@@ -107,7 +100,6 @@ blockToExpr b =
                 expressionToExpr e]) expr
           allParts = Lists.concat2 stmtExprs exprPart
       in (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle allParts)
-
 -- | Serialize a function call expression
 callExprToExpr :: Syntax.CallExpr -> Ast.Expr
 callExprToExpr c =
@@ -116,8 +108,7 @@ callExprToExpr c =
           args = Syntax.callExprArgs c
       in (Serialization.spaceSep [
         expressionToExpr func,
-        (Serialization.parenList False (Lists.map expressionToExpr args))])
-
+        (Serialization.parenListAdaptive (Lists.map expressionToExpr args))])
 -- | Serialize a cast expression
 castExprToExpr :: Syntax.CastExpr -> Ast.Expr
 castExprToExpr c =
@@ -128,7 +119,6 @@ castExprToExpr c =
         expressionToExpr expr,
         (Serialization.cst "as"),
         (typeToExpr typ)])
-
 -- | Serialize a closure expression
 closureExprToExpr :: Syntax.ClosureExpr -> Ast.Expr
 closureExprToExpr c =
@@ -152,7 +142,6 @@ closureExprToExpr c =
         (Just (Serialization.cst paramsStr)),
         retPart,
         (Just (expressionToExpr body))]))
-
 -- | Serialize a closure parameter to string
 closureParamToStr :: Syntax.ClosureParam -> String
 closureParamToStr cp =
@@ -164,7 +153,6 @@ closureParamToStr cp =
         patStr,
         ": ",
         (Serialization.printExpr (typeToExpr t))]) typ)
-
 -- | Serialize a compound assignment expression
 compoundAssignExprToExpr :: Syntax.CompoundAssignExpr -> Ast.Expr
 compoundAssignExprToExpr c =
@@ -188,7 +176,6 @@ compoundAssignExprToExpr c =
         expressionToExpr target,
         (Serialization.cst opStr),
         (expressionToExpr val)])
-
 -- | Serialize a const definition
 constDefToExpr :: Syntax.ConstDef -> Ast.Expr
 constDefToExpr c =
@@ -203,11 +190,9 @@ constDefToExpr c =
         (Serialization.cst "="),
         (expressionToExpr val),
         (Serialization.cst ";")])
-
 -- | Serialize a Rust crate to an AST expression
 crateToExpr :: Syntax.Crate -> Ast.Expr
 crateToExpr crate = Serialization.doubleNewlineSep (Lists.map itemWithCommentsToExpr (Syntax.crateItems crate))
-
 -- | Serialize derive macros to an attribute expression
 derivesToExpr :: [String] -> Maybe Ast.Expr
 derivesToExpr derives =
@@ -215,7 +200,6 @@ derivesToExpr derives =
       "#[derive(",
       (Strings.intercalate ", " derives),
       ")]"])))
-
 -- | Serialize an enum definition
 enumDefToExpr :: Syntax.EnumDef -> Ast.Expr
 enumDefToExpr e =
@@ -245,15 +229,13 @@ enumDefToExpr e =
             Just header,
             wherePart,
             (Just body)])]]))
-
 -- | Serialize an enum variant body
 enumVariantBodyToExpr :: Syntax.EnumVariantBody -> Ast.Expr
 enumVariantBodyToExpr body =
     case body of
       Syntax.EnumVariantBodyUnit -> Serialization.cst ""
-      Syntax.EnumVariantBodyTuple v0 -> Serialization.parenList False (Lists.map typeToExpr v0)
+      Syntax.EnumVariantBodyTuple v0 -> Serialization.parenListAdaptive (Lists.map typeToExpr v0)
       Syntax.EnumVariantBodyStruct v0 -> Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map structFieldToExpr v0)
-
 -- | Serialize an enum variant
 enumVariantToExpr :: Syntax.EnumVariant -> Ast.Expr
 enumVariantToExpr v =
@@ -269,7 +251,6 @@ enumVariantToExpr v =
           Serialization.spaceSep [
             Serialization.cst name,
             (enumVariantBodyToExpr body)]]]))
-
 -- | Serialize an expression path
 exprPathToExpr :: Syntax.ExprPath -> Ast.Expr
 exprPathToExpr ep =
@@ -279,7 +260,6 @@ exprPathToExpr ep =
           prefix = Logic.ifElse global "::" ""
           segStrs = Lists.map (\s -> Serialization.printExpr (pathSegmentToExpr s)) segs
       in (Serialization.cst (Strings.cat2 prefix (Strings.intercalate "::" segStrs)))
-
 -- | Serialize a Rust expression
 expressionToExpr :: Syntax.Expression -> Ast.Expr
 expressionToExpr expr =
@@ -302,7 +282,7 @@ expressionToExpr expr =
       Syntax.ExpressionReference v0 -> refExprToExpr v0
       Syntax.ExpressionDereference v0 -> Serialization.prefix "*" (expressionToExpr v0)
       Syntax.ExpressionStruct v0 -> structExprToExpr v0
-      Syntax.ExpressionTuple v0 -> Serialization.parenList False (Lists.map expressionToExpr v0)
+      Syntax.ExpressionTuple v0 -> Serialization.parenListAdaptive (Lists.map expressionToExpr v0)
       Syntax.ExpressionArray v0 -> arrayExprToExpr v0
       Syntax.ExpressionIndex v0 -> indexExprToExpr v0
       Syntax.ExpressionRange v0 -> rangeExprToExpr v0
@@ -321,7 +301,6 @@ expressionToExpr expr =
       Syntax.ExpressionCompoundAssign v0 -> compoundAssignExprToExpr v0
       Syntax.ExpressionMacro v0 -> macroInvocationToExpr v0
       Syntax.ExpressionParen v0 -> Serialization.parenthesize (expressionToExpr v0)
-
 -- | Serialize a field access expression
 fieldAccessExprToExpr :: Syntax.FieldAccessExpr -> Ast.Expr
 fieldAccessExprToExpr f =
@@ -332,7 +311,6 @@ fieldAccessExprToExpr f =
         Serialization.printExpr (expressionToExpr obj),
         ".",
         field]))
-
 -- | Serialize a field pattern
 fieldPatternToExpr :: Syntax.FieldPattern -> Ast.Expr
 fieldPatternToExpr fp =
@@ -342,7 +320,6 @@ fieldPatternToExpr fp =
       in (Maybes.maybe (Serialization.cst name) (\p -> Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
         (patternToExpr p)]) pat)
-
 -- | Serialize a field-value pair
 fieldValueToExpr :: Syntax.FieldValue -> Ast.Expr
 fieldValueToExpr fv =
@@ -352,7 +329,6 @@ fieldValueToExpr fv =
       in (Maybes.maybe (Serialization.cst name) (\v -> Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
         (expressionToExpr v)]) val)
-
 -- | Serialize a float literal
 floatLiteralToExpr :: Syntax.FloatLiteral -> Ast.Expr
 floatLiteralToExpr fl =
@@ -362,7 +338,6 @@ floatLiteralToExpr fl =
           valStr = Literals.showFloat64 val
           sufStr = Maybes.maybe "" (\s -> s) suf
       in (Serialization.cst (Strings.cat2 valStr sufStr))
-
 -- | Serialize a function definition
 fnDefToExpr :: Syntax.FnDef -> Ast.Expr
 fnDefToExpr f =
@@ -385,7 +360,7 @@ fnDefToExpr f =
           fnKw = Serialization.cst "fn"
           nameExpr = Serialization.cst name
           genericsExpr = genericParamsToExpr generics
-          paramsExpr = Serialization.parenList False (Lists.map fnParamToExpr params)
+          paramsExpr = Serialization.parenListAdaptive (Lists.map fnParamToExpr params)
           retTypeExpr =
                   Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
@@ -408,7 +383,6 @@ fnDefToExpr f =
           Serialization.spaceSep [
             header,
             (blockToExpr body)]]]))
-
 -- | Serialize a function parameter
 fnParamToExpr :: Syntax.FnParam -> Ast.Expr
 fnParamToExpr param =
@@ -418,7 +392,6 @@ fnParamToExpr param =
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 (Serialization.printExpr (patternToExpr pat)) ":"),
         (typeToExpr typ)])
-
 -- | Serialize a for expression
 forExprToExpr :: Syntax.ForExpr -> Ast.Expr
 forExprToExpr f =
@@ -435,7 +408,6 @@ forExprToExpr f =
         (Just (Serialization.cst "in")),
         (Just (expressionToExpr iter)),
         (Just (blockToExpr body))]))
-
 -- | Serialize a generic argument
 genericArgToExpr :: Syntax.GenericArg -> Ast.Expr
 genericArgToExpr arg =
@@ -450,7 +422,6 @@ genericArgToExpr arg =
           Serialization.cst name,
           (Serialization.cst "="),
           (typeToExpr typ)])
-
 -- | Serialize generic arguments
 genericArgumentsToExpr :: Syntax.GenericArguments -> Maybe Ast.Expr
 genericArgumentsToExpr args =
@@ -462,7 +433,7 @@ genericArgumentsToExpr args =
       Syntax.GenericArgumentsParenthesized v0 ->
         let inputs = Syntax.parenthesizedArgsInputs v0
             output = Syntax.parenthesizedArgsOutput v0
-            inputPart = Serialization.parenList False (Lists.map typeToExpr inputs)
+            inputPart = Serialization.parenListAdaptive (Lists.map typeToExpr inputs)
             outputPart =
                     Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
                       Serialization.cst "->",
@@ -470,7 +441,6 @@ genericArgumentsToExpr args =
         in (Just (Serialization.spaceSep (Maybes.cat [
           Just inputPart,
           outputPart])))
-
 -- | Serialize a generic parameter
 genericParamToExpr :: Syntax.GenericParam -> Ast.Expr
 genericParamToExpr gp =
@@ -480,12 +450,10 @@ genericParamToExpr gp =
       in (Logic.ifElse (Lists.null bounds) (Serialization.cst name) (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
         (Serialization.cst (Strings.intercalate " + " (Lists.map (\b -> Serialization.printExpr (typeParamBoundToExpr b)) bounds)))]))
-
 -- | Serialize a list of generic parameters
 genericParamsToExpr :: [Syntax.GenericParam] -> Maybe Ast.Expr
 genericParamsToExpr gps =
     Logic.ifElse (Lists.null gps) Nothing (Just (Serialization.angleBracesList Serialization.inlineStyle (Lists.map genericParamToExpr gps)))
-
 -- | Serialize an identifier pattern
 identifierPatternToExpr :: Syntax.IdentifierPattern -> Ast.Expr
 identifierPatternToExpr ip =
@@ -502,7 +470,6 @@ identifierPatternToExpr ip =
         mutKw,
         (Just (Serialization.cst name)),
         atPart]))
-
 -- | Serialize an if expression
 ifExprToExpr :: Syntax.IfExpr -> Ast.Expr
 ifExprToExpr i =
@@ -530,7 +497,6 @@ ifExprToExpr i =
         (Just condExpr),
         (Just (blockToExpr thenB)),
         elsePart]))
-
 -- | Serialize an impl block
 implBlockToExpr :: Syntax.ImplBlock -> Ast.Expr
 implBlockToExpr i =
@@ -557,7 +523,6 @@ implBlockToExpr i =
       in (Serialization.spaceSep [
         header,
         body])
-
 -- | Serialize an impl item
 implItemToExpr :: Syntax.ImplItem -> Ast.Expr
 implItemToExpr item =
@@ -565,7 +530,6 @@ implItemToExpr item =
       Syntax.ImplItemMethod v0 -> implMethodToExpr v0
       Syntax.ImplItemType v0 -> typeAliasToExpr v0
       Syntax.ImplItemConst v0 -> constDefToExpr v0
-
 -- | Serialize an impl method
 implMethodToExpr :: Syntax.ImplMethod -> Ast.Expr
 implMethodToExpr m =
@@ -582,7 +546,7 @@ implMethodToExpr m =
                 Serialization.cst (toRustDocComment d)]) docC
           pubKw = Logic.ifElse pub (Just (Serialization.cst "pub")) Nothing
           genericsExpr = genericParamsToExpr generics
-          paramsExpr = Serialization.parenList False (Lists.map methodParamToExpr params)
+          paramsExpr = Serialization.parenListAdaptive (Lists.map methodParamToExpr params)
           retTypeExpr =
                   Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
@@ -603,7 +567,6 @@ implMethodToExpr m =
           Serialization.spaceSep [
             header,
             (blockToExpr body)]]]))
-
 -- | Serialize an index expression
 indexExprToExpr :: Syntax.IndexExpr -> Ast.Expr
 indexExprToExpr i =
@@ -615,7 +578,6 @@ indexExprToExpr i =
         "[",
         (Serialization.printExpr (expressionToExpr idx)),
         "]"]))
-
 -- | Serialize an integer literal
 integerLiteralToExpr :: Syntax.IntegerLiteral -> Ast.Expr
 integerLiteralToExpr il =
@@ -625,7 +587,6 @@ integerLiteralToExpr il =
           valStr = Literals.showBigint val
           sufStr = Maybes.maybe "" (\s -> s) suf
       in (Serialization.cst (Strings.cat2 valStr sufStr))
-
 -- | Serialize a Rust item to an AST expression
 itemToExpr :: Syntax.Item -> Ast.Expr
 itemToExpr item =
@@ -641,7 +602,6 @@ itemToExpr item =
       Syntax.ItemConst v0 -> constDefToExpr v0
       Syntax.ItemStatic v0 -> staticDefToExpr v0
       Syntax.ItemMacro v0 -> macroInvocationToExpr v0
-
 -- | Serialize an item with optional doc comments and visibility
 itemWithCommentsToExpr :: Syntax.ItemWithComments -> Ast.Expr
 itemWithCommentsToExpr iwc =
@@ -659,7 +619,6 @@ itemWithCommentsToExpr iwc =
           Serialization.spaceSep (Maybes.cat [
             visPart,
             (Just itemPart)])]]))
-
 -- | Serialize a let statement
 letStatementToExpr :: Syntax.LetStatement -> Ast.Expr
 letStatementToExpr l =
@@ -684,7 +643,6 @@ letStatementToExpr l =
         typPart,
         initPart,
         (Just (Serialization.cst ";"))]))
-
 -- | Serialize a literal
 literalToExpr :: Syntax.Literal -> Ast.Expr
 literalToExpr lit =
@@ -706,7 +664,6 @@ literalToExpr lit =
         (Literals.showUint8 v0),
         "'"])
       Syntax.LiteralBool v0 -> Serialization.cst (Logic.ifElse v0 "true" "false")
-
 -- | Serialize a loop expression
 loopExprToExpr :: Syntax.LoopExpr -> Ast.Expr
 loopExprToExpr l =
@@ -718,7 +675,6 @@ loopExprToExpr l =
         labelPart,
         (Just (Serialization.cst "loop")),
         (Just (blockToExpr body))]))
-
 -- | Serialize a macro invocation
 macroInvocationToExpr :: Syntax.MacroInvocation -> Ast.Expr
 macroInvocationToExpr m =
@@ -743,7 +699,6 @@ macroInvocationToExpr m =
         open,
         tokens,
         close]))
-
 -- | Serialize a match arm
 matchArmToExpr :: Syntax.MatchArm -> Ast.Expr
 matchArmToExpr arm =
@@ -761,7 +716,6 @@ matchArmToExpr arm =
         (Just (Serialization.cst "=>")),
         (Just (expressionToExpr body)),
         (Just (Serialization.cst ","))]))
-
 -- | Serialize a match expression
 matchExprToExpr :: Syntax.MatchExpr -> Ast.Expr
 matchExprToExpr m =
@@ -772,7 +726,6 @@ matchExprToExpr m =
         Serialization.cst "match",
         (expressionToExpr scrut),
         (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map matchArmToExpr arms))])
-
 -- | Serialize a method call expression
 methodCallExprToExpr :: Syntax.MethodCallExpr -> Ast.Expr
 methodCallExprToExpr m =
@@ -794,7 +747,6 @@ methodCallExprToExpr m =
         "(",
         (Strings.intercalate ", " (Lists.map (\a -> Serialization.printExpr (expressionToExpr a)) args)),
         ")"]))
-
 -- | Serialize a method parameter
 methodParamToExpr :: Syntax.MethodParam -> Ast.Expr
 methodParamToExpr param =
@@ -804,7 +756,6 @@ methodParamToExpr param =
         Syntax.SelfParamRef -> Serialization.cst "&self"
         Syntax.SelfParamRefMut -> Serialization.cst "&mut self"
       Syntax.MethodParamRegular v0 -> fnParamToExpr v0
-
 -- | Serialize a module definition
 modDefToExpr :: Syntax.ModDef -> Ast.Expr
 modDefToExpr m =
@@ -818,7 +769,6 @@ modDefToExpr m =
         Serialization.cst "mod",
         (Serialization.cst name),
         (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map itemToExpr items))]) body)
-
 -- | Serialize a path segment
 pathSegmentToExpr :: Syntax.PathSegment -> Ast.Expr
 pathSegmentToExpr seg =
@@ -828,7 +778,6 @@ pathSegmentToExpr seg =
       in (Serialization.spaceSep (Maybes.cat [
         Just (Serialization.cst name),
         (genericArgumentsToExpr args)]))
-
 -- | Serialize a pattern
 patternToExpr :: Syntax.Pattern -> Ast.Expr
 patternToExpr pat =
@@ -839,14 +788,13 @@ patternToExpr pat =
       Syntax.PatternReference v0 -> refPatternToExpr v0
       Syntax.PatternStruct v0 -> structPatternToExpr v0
       Syntax.PatternTupleStruct v0 -> tupleStructPatternToExpr v0
-      Syntax.PatternTuple v0 -> Serialization.parenList False (Lists.map patternToExpr v0)
+      Syntax.PatternTuple v0 -> Serialization.parenListAdaptive (Lists.map patternToExpr v0)
       Syntax.PatternSlice v0 -> Serialization.bracketList Serialization.halfBlockStyle (Lists.map patternToExpr v0)
       Syntax.PatternOr v0 -> Serialization.cst (Strings.intercalate " | " (Lists.map (\p -> Serialization.printExpr (patternToExpr p)) v0))
       Syntax.PatternPath v0 -> exprPathToExpr v0
       Syntax.PatternRange v0 -> rangePatternToExpr v0
       Syntax.PatternRest -> Serialization.cst ".."
       Syntax.PatternParen v0 -> Serialization.parenthesize (patternToExpr v0)
-
 -- | Serialize a range expression
 rangeExprToExpr :: Syntax.RangeExpr -> Ast.Expr
 rangeExprToExpr r =
@@ -861,7 +809,6 @@ rangeExprToExpr r =
         fromStr,
         op,
         toStr]))
-
 -- | Serialize a range pattern
 rangePatternToExpr :: Syntax.RangePattern -> Ast.Expr
 rangePatternToExpr rp =
@@ -876,7 +823,6 @@ rangePatternToExpr rp =
         fromStr,
         op,
         toStr]))
-
 -- | Serialize a reference expression
 refExprToExpr :: Syntax.RefExpr -> Ast.Expr
 refExprToExpr r =
@@ -885,7 +831,6 @@ refExprToExpr r =
           expr = Syntax.refExprExpr r
           prefix = Logic.ifElse mut "&mut " "&"
       in (Serialization.cst (Strings.cat2 prefix (Serialization.printExpr (expressionToExpr expr))))
-
 -- | Serialize a reference pattern
 refPatternToExpr :: Syntax.RefPattern -> Ast.Expr
 refPatternToExpr rp =
@@ -894,7 +839,6 @@ refPatternToExpr rp =
           pat = Syntax.refPatternPattern rp
           prefix = Logic.ifElse mut "&mut " "&"
       in (Serialization.cst (Strings.cat2 prefix (Serialization.printExpr (patternToExpr pat))))
-
 -- | Serialize a reference type
 referenceTypeToExpr :: Syntax.ReferenceType -> Ast.Expr
 referenceTypeToExpr rt =
@@ -909,7 +853,6 @@ referenceTypeToExpr rt =
         ltPart,
         mutPart,
         (Serialization.printExpr (typeToExpr t))]))
-
 -- | Serialize a statement
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr stmt =
@@ -920,7 +863,6 @@ statementToExpr stmt =
         (Serialization.cst ";")]
       Syntax.StatementItem v0 -> itemToExpr v0
       Syntax.StatementEmpty -> Serialization.cst ";"
-
 -- | Serialize a static definition
 staticDefToExpr :: Syntax.StaticDef -> Ast.Expr
 staticDefToExpr s =
@@ -938,17 +880,15 @@ staticDefToExpr s =
         (Just (Serialization.cst "=")),
         (Just (expressionToExpr val)),
         (Just (Serialization.cst ";"))]))
-
 -- | Serialize a struct body
 structBodyToExpr :: Syntax.StructBody -> Ast.Expr
 structBodyToExpr body =
     case body of
       Syntax.StructBodyNamed v0 -> Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map structFieldToExpr v0)
       Syntax.StructBodyTuple v0 -> Serialization.spaceSep [
-        Serialization.parenList False (Lists.map (\f -> typeToExpr (Syntax.tupleFieldType f)) v0),
+        Serialization.parenListAdaptive (Lists.map (\f -> typeToExpr (Syntax.tupleFieldType f)) v0),
         (Serialization.cst ";")]
       Syntax.StructBodyUnit -> Serialization.cst ";"
-
 -- | Serialize a struct definition
 structDefToExpr :: Syntax.StructDef -> Ast.Expr
 structDefToExpr s =
@@ -977,7 +917,6 @@ structDefToExpr s =
             Just header,
             wherePart,
             (Just (structBodyToExpr body))])]]))
-
 -- | Serialize a struct literal expression
 structExprToExpr :: Syntax.StructExpr -> Ast.Expr
 structExprToExpr s =
@@ -995,7 +934,6 @@ structExprToExpr s =
       in (Serialization.spaceSep [
         exprPathToExpr path,
         (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle allFields)])
-
 -- | Serialize a struct field
 structFieldToExpr :: Syntax.StructField -> Ast.Expr
 structFieldToExpr field =
@@ -1014,7 +952,6 @@ structFieldToExpr field =
             pubKw,
             (Just (Serialization.cst (Strings.cat2 name ":"))),
             (Just (typeToExpr typ))])]]))
-
 -- | Serialize a struct pattern
 structPatternToExpr :: Syntax.StructPattern -> Ast.Expr
 structPatternToExpr sp =
@@ -1029,15 +966,14 @@ structPatternToExpr sp =
       in (Serialization.spaceSep [
         exprPathToExpr path,
         (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle allFields)])
-
--- | Convert a string to Rust line comments
+-- | Convert a string to Rust line comments. Empty source lines emit `//` (no trailing space).
 toRustComment :: String -> String
-toRustComment c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "// " s) (Strings.lines c))
-
--- | Convert a string to Rust doc comments
+toRustComment c =
+    Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "//" (Strings.cat2 "// " s)) (Strings.lines c))
+-- | Convert a string to Rust doc comments. Empty source lines emit `///` (no trailing space) so blank doc lines don't carry trailing whitespace.
 toRustDocComment :: String -> String
-toRustDocComment c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "/// " s) (Strings.lines c))
-
+toRustDocComment c =
+    Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "///" (Strings.cat2 "/// " s)) (Strings.lines c))
 -- | Serialize a trait associated constant
 traitConstToExpr :: Syntax.TraitConst -> Ast.Expr
 traitConstToExpr c =
@@ -1055,7 +991,6 @@ traitConstToExpr c =
         (Just (typeToExpr typ)),
         defPart,
         (Just (Serialization.cst ";"))]))
-
 -- | Serialize a trait definition
 traitDefToExpr :: Syntax.TraitDef -> Ast.Expr
 traitDefToExpr t =
@@ -1091,7 +1026,6 @@ traitDefToExpr t =
           Serialization.spaceSep [
             header,
             body]]]))
-
 -- | Serialize a trait item
 traitItemToExpr :: Syntax.TraitItem -> Ast.Expr
 traitItemToExpr item =
@@ -1099,7 +1033,6 @@ traitItemToExpr item =
       Syntax.TraitItemMethod v0 -> traitMethodToExpr v0
       Syntax.TraitItemType v0 -> traitTypeToExpr v0
       Syntax.TraitItemConst v0 -> traitConstToExpr v0
-
 -- | Serialize a trait method
 traitMethodToExpr :: Syntax.TraitMethod -> Ast.Expr
 traitMethodToExpr m =
@@ -1110,7 +1043,7 @@ traitMethodToExpr m =
           retType = Syntax.traitMethodReturnType m
           defBody = Syntax.traitMethodDefaultBody m
           genericsExpr = genericParamsToExpr generics
-          paramsExpr = Serialization.parenList False (Lists.map methodParamToExpr params)
+          paramsExpr = Serialization.parenListAdaptive (Lists.map methodParamToExpr params)
           retTypeExpr =
                   Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
@@ -1127,7 +1060,6 @@ traitMethodToExpr m =
         (Serialization.cst ";")]) (\body -> Serialization.spaceSep [
         header,
         (blockToExpr body)]) defBody)
-
 -- | Serialize a trait associated type
 traitTypeToExpr :: Syntax.TraitType -> Ast.Expr
 traitTypeToExpr t =
@@ -1149,7 +1081,6 @@ traitTypeToExpr t =
         boundsPart,
         defPart,
         (Just (Serialization.cst ";"))]))
-
 -- | Serialize a tuple index expression
 tupleIndexExprToExpr :: Syntax.TupleIndexExpr -> Ast.Expr
 tupleIndexExprToExpr t =
@@ -1160,7 +1091,6 @@ tupleIndexExprToExpr t =
         Serialization.printExpr (expressionToExpr tuple),
         ".",
         (Literals.showInt32 idx)]))
-
 -- | Serialize a tuple struct pattern
 tupleStructPatternToExpr :: Syntax.TupleStructPattern -> Ast.Expr
 tupleStructPatternToExpr tsp =
@@ -1169,8 +1099,7 @@ tupleStructPatternToExpr tsp =
           elems = Syntax.tupleStructPatternElements tsp
       in (Serialization.spaceSep [
         exprPathToExpr path,
-        (Serialization.parenList False (Lists.map patternToExpr elems))])
-
+        (Serialization.parenListAdaptive (Lists.map patternToExpr elems))])
 -- | Serialize a type alias
 typeAliasToExpr :: Syntax.TypeAlias -> Ast.Expr
 typeAliasToExpr ta =
@@ -1191,7 +1120,6 @@ typeAliasToExpr ta =
             (Just (Serialization.cst "=")),
             (Just (typeToExpr typ)),
             (Just (Serialization.cst ";"))])]]))
-
 -- | Serialize a type ascription expression
 typeAscriptionExprToExpr :: Syntax.TypeAscriptionExpr -> Ast.Expr
 typeAscriptionExprToExpr t =
@@ -1202,14 +1130,12 @@ typeAscriptionExprToExpr t =
         expressionToExpr expr,
         (Serialization.cst ":"),
         (typeToExpr typ)])
-
 -- | Serialize a type parameter bound
 typeParamBoundToExpr :: Syntax.TypeParamBound -> Ast.Expr
 typeParamBoundToExpr bound =
     case bound of
       Syntax.TypeParamBoundTrait v0 -> typePathToExpr v0
       Syntax.TypeParamBoundLifetime v0 -> Serialization.cst (Strings.cat2 "'" (Syntax.lifetimeName v0))
-
 -- | Serialize a type path
 typePathToExpr :: Syntax.TypePath -> Ast.Expr
 typePathToExpr tp =
@@ -1219,7 +1145,6 @@ typePathToExpr tp =
           prefix = Logic.ifElse global "::" ""
           segStrs = Lists.map (\s -> Serialization.printExpr (pathSegmentToExpr s)) segs
       in (Serialization.cst (Strings.cat2 prefix (Strings.intercalate "::" segStrs)))
-
 -- | Serialize a Rust type
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr typ =
@@ -1237,13 +1162,13 @@ typeToExpr typ =
           "; ",
           (Serialization.printExpr (expressionToExpr len)),
           "]"]))
-      Syntax.TypeTuple v0 -> Serialization.parenList False (Lists.map typeToExpr v0)
+      Syntax.TypeTuple v0 -> Serialization.parenListAdaptive (Lists.map typeToExpr v0)
       Syntax.TypeFnPointer v0 ->
         let params = Syntax.fnPointerTypeParams v0
             ret = Syntax.fnPointerTypeReturnType v0
         in (Serialization.spaceSep [
           Serialization.cst "fn",
-          (Serialization.parenList False (Lists.map typeToExpr params)),
+          (Serialization.parenListAdaptive (Lists.map typeToExpr params)),
           (Serialization.cst "->"),
           (typeToExpr ret)])
       Syntax.TypeImplTrait v0 -> Serialization.spaceSep [
@@ -1263,7 +1188,6 @@ typeToExpr typ =
           Serialization.cst kw,
           (typeToExpr t)])
       Syntax.TypeMacro v0 -> macroInvocationToExpr v0
-
 -- | Serialize a unary expression
 unaryExprToExpr :: Syntax.UnaryExpr -> Ast.Expr
 unaryExprToExpr u =
@@ -1275,7 +1199,6 @@ unaryExprToExpr u =
                     Syntax.UnaryOpNeg -> "-"
                     Syntax.UnaryOpNot -> "!"
       in (Serialization.cst (Strings.cat2 opStr (Serialization.printExpr (expressionToExpr operand))))
-
 -- | Serialize a use declaration
 useDeclarationToExpr :: Syntax.UseDeclaration -> Ast.Expr
 useDeclarationToExpr use =
@@ -1288,7 +1211,6 @@ useDeclarationToExpr use =
         (Just (Serialization.cst "use")),
         (Just (useTreeToExpr tree)),
         (Just (Serialization.cst ";"))]))
-
 -- | Serialize a use tree
 useTreeToExpr :: Syntax.UseTree -> Ast.Expr
 useTreeToExpr tree =
@@ -1311,7 +1233,6 @@ useTreeToExpr tree =
           "{",
           (Strings.intercalate ", " (Lists.map (\t -> Serialization.printExpr (useTreeToExpr t)) trees)),
           "}"]))
-
 -- | Serialize visibility to an optional expression
 visibilityToExpr :: Syntax.Visibility -> Maybe Ast.Expr
 visibilityToExpr vis =
@@ -1323,7 +1244,6 @@ visibilityToExpr vis =
         (Strings.intercalate "::" v0),
         ")"]))
       Syntax.VisibilityPrivate -> Nothing
-
 -- | Serialize a where clause
 whereClauseToExpr :: Syntax.WhereClause -> Ast.Expr
 whereClauseToExpr wc =
@@ -1340,7 +1260,6 @@ whereClauseToExpr wc =
       in (Serialization.spaceSep [
         Serialization.cst "where",
         (Serialization.commaSep Serialization.inlineStyle predExprs)])
-
 -- | Serialize a while expression
 whileExprToExpr :: Syntax.WhileExpr -> Ast.Expr
 whileExprToExpr w =

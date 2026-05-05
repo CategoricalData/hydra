@@ -1,6 +1,6 @@
 {
+  "defaultLibModules": [],
   "dslModules": [],
-  "evalLibModules": [],
   "mainModules": [
     "hydra.owl.syntax",
     "hydra.rdf.serde",

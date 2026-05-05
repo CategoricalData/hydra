@@ -130,8 +130,8 @@ of orchestrators above them:
 | 2 (assemble) | `heads/<lang>/bin/assemble-all.sh` | Batch: produce every `dist/<lang>/<pkg>/` in one universe load |
 | 2.5 (test) | `heads/<lang>/bin/test-distribution.sh` | Run the target's test suite |
 | 3 (orchestrate) | `bin/sync-packages.sh` | Phase 1 → Phase 2 → Phase 3 for one or more packages |
-| 3 (orchestrate) | `bin/sync.sh` | Matrix tool (`--hosts H,...`, `--targets T,...`) |
-| 3 (orchestrate) | `bin/sync-all.sh` | Exhaustive run (every package × every target, with tests) |
+| 3 (orchestrate) | `bin/sync.sh` | Matrix tool (`--hosts H,...`, `--targets T,...`); Phase 1 + 2 only, **no tests** |
+| 3 (orchestrate) | `bin/sync-all.sh` | Exhaustive run (every package × every target); runs tests via `sync-packages.sh` |
 
 Every-day tasks:
 
@@ -374,10 +374,9 @@ The sync scripts and execs handle this automatically.
 
 The universe modules are missing a transitive dependency. Ensure the
 universe includes all modules that the generated modules depend on,
-even indirectly. DSL-source-declared `moduleTermDependencies` and
-`moduleTypeDependencies` must list every cross-module reference; missing
-a dep here can cause `untyped term variable` or `no such element`
-failures during generation.
+even indirectly. DSL-source-declared `moduleDependencies` must list
+every cross-module reference; missing a dep here can cause
+`untyped term variable` or `no such element` failures during generation.
 
 ### "file not found" for JSON modules
 
@@ -400,6 +399,63 @@ universe must include main modules as dependencies. If generating
 tests, the universe must include both main and test dependencies.
 Also check that `--include-coders` / `--include-ext` / `--include-dsls`
 flags match what the target generation actually references.
+
+### Editing the synthesizer itself (Dsls.hs, the Haskell coder, etc.)
+
+When a kernel source change alters the *behavior of a synthesizer that
+produces JSON output* — e.g., editing
+`Hydra/Sources/Kernel/Terms/Dsls.hs` (the DSL-wrapper synthesizer) or
+`Hydra/Sources/Haskell/Coder.hs` — one `/sync-haskell()` is not enough.
+Phase 1 builds a new binary with your change, but Phase 2 runs that
+binary against the existing JSON inputs to regenerate downstream JSON.
+Outputs that depend on the *new* synthesizer behavior (the DSL-wrapper
+JSONs, dist Haskell, etc.) need a *second* sync to fully propagate:
+the first sync rebuilds the binary, the second runs the new binary
+against the now-updated source state.
+
+If you edit a synthesizer and only see partial propagation, run
+`/sync-haskell()` a second time before debugging.
+
+This is a known limitation of the current cache key, which hashes the
+*input source* but not the *transform binary*. The fix is tracked in
+[#347 (Merkle trees for cache invalidation)](https://github.com/CategoricalData/hydra/issues/347):
+once the cache key incorporates a hash of the synthesizer binary
+itself, edits to the synthesizer will invalidate downstream outputs
+correctly and a single sync will suffice.
+
+### Renaming a generated namespace leaves orphan files in `dist/`
+
+Sync writes new generated files but does not delete files that no
+longer correspond to any source. If a DSL module's namespace changes
+from `hydra.foo.x` to `hydra.bar.x`, the next sync will write
+`dist/json/.../hydra/bar/x.json` and `dist/haskell/.../Hydra/Bar/X.hs`
+but the old `hydra/foo/x.json` and `Hydra/Foo/X.hs` will remain on
+disk and stay tracked in git. The "Checking for new files..." block at
+the end of sync only flags additions, never removals.
+
+After any namespace rename, manually `git rm` the orphaned dist files
+and verify with `git status` before committing. A regen commit that
+ships both the new and the old files inflates the diff and leaves the
+old modules as "phantom" code that still gets compiled by Stack but is
+never referenced.
+
+### Hand-written test adapters that import generated modules
+
+`heads/<lang>/src/test/...` files that import a generated module
+(e.g., `Hydra.Lib.Default.*`) cannot be built by `stack test` until
+the generated modules exist on disk. After renaming the namespace of
+such a module, the build sequence is:
+
+1. `stack build` -- verifies the library and execs compile against
+   the renamed source. The test target is *not* configured at this
+   step, so it cannot fail on the missing generated module.
+2. `/sync-haskell()` -- regenerates the dist files under the new
+   namespace, then runs `stack test` itself as part of its final
+   verification phase.
+
+Running `stack test` between steps 1 and 2 will fail at the test
+adapter with `Could not find module 'Hydra.Lib.Default.X'`. This is
+expected; defer the test run until after sync.
 
 ## Related documentation
 

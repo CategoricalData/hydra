@@ -5,10 +5,7 @@
         "name": "hydra.cpp.utils.constParameter",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a const reference parameter"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a const reference parameter"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -37,28 +34,19 @@
                                                       {"name": "baseType", "term": {"variable": "typ"}},
                                                       {
                                                         "name": "qualifier",
-                                                        "term": {
-                                                          "inject": {
-                                                            "field": {"name": "const", "term": {"unit": {}}},
-                                                            "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
+                                                        "term": {"inject": {"field": {"name": "const", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                                     "typeName": "hydra.cpp.syntax.QualifiedType"}}},
                                               "typeName": "hydra.cpp.syntax.TypeExpression"}}},
                                         {
                                           "name": "qualifier",
-                                          "term": {
-                                            "inject": {
-                                              "field": {"name": "lvalueRef", "term": {"unit": {}}},
-                                              "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
+                                          "term": {"inject": {"field": {"name": "lvalueRef", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                       "typeName": "hydra.cpp.syntax.QualifiedType"}}},
                                 "typeName": "hydra.cpp.syntax.TypeExpression"}}},
                           {"name": "name", "term": {"variable": "name"}},
                           {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                           {
                             "name": "defaultValue",
-                            "term": {
-                              "typeApplication": {
-                                "body": {"maybe": null},
-                                "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                         "typeName": "hydra.cpp.syntax.Parameter"}},
                     "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                     "parameter": "typ"}},
@@ -68,9 +56,7 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Parameter"},
-                  "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.Parameter"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
@@ -78,10 +64,7 @@
         "name": "hydra.cpp.utils.cppClassDeclaration",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a C++ class declaration"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a C++ class declaration"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -102,10 +85,7 @@
                                           "fields": [
                                             {
                                               "name": "key",
-                                              "term": {
-                                                "inject": {
-                                                  "field": {"name": "class", "term": {"unit": {}}},
-                                                  "typeName": "hydra.cpp.syntax.ClassKey"}}},
+                                              "term": {"inject": {"field": {"name": "class", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.ClassKey"}}},
                                             {"name": "name", "term": {"variable": "name"}},
                                             {"name": "inheritance", "term": {"variable": "baseSpecs"}}],
                                           "typeName": "hydra.cpp.syntax.ClassSpecifier"}}},
@@ -135,10 +115,7 @@
         "name": "hydra.cpp.utils.cppEnumDeclaration",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a C++ enum class declaration"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a C++ enum class declaration"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -157,17 +134,11 @@
                                       "fields": [
                                         {
                                           "name": "key",
-                                          "term": {
-                                            "inject": {
-                                              "field": {"name": "enumClass", "term": {"unit": {}}},
-                                              "typeName": "hydra.cpp.syntax.ClassKey"}}},
+                                          "term": {"inject": {"field": {"name": "enumClass", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.ClassKey"}}},
                                         {"name": "name", "term": {"variable": "name"}},
                                         {
                                           "name": "inheritance",
-                                          "term": {
-                                            "typeApplication": {
-                                              "body": {"list": []},
-                                              "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}}}],
+                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}}}],
                                       "typeName": "hydra.cpp.syntax.ClassSpecifier"}}},
                                 {"name": "body", "term": {"variable": "mbody"}}],
                               "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
@@ -190,10 +161,7 @@
         "name": "hydra.cpp.utils.cppEnumForwardDeclaration",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a C++ enum class forward declaration"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a C++ enum class forward declaration"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -210,97 +178,65 @@
                                   "fields": [
                                     {
                                       "name": "key",
-                                      "term": {
-                                        "inject": {
-                                          "field": {"name": "enumClass", "term": {"unit": {}}},
-                                          "typeName": "hydra.cpp.syntax.ClassKey"}}},
+                                      "term": {"inject": {"field": {"name": "enumClass", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.ClassKey"}}},
                                     {"name": "name", "term": {"variable": "name"}},
                                     {
                                       "name": "inheritance",
-                                      "term": {
-                                        "typeApplication": {
-                                          "body": {"list": []},
-                                          "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}}}],
+                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}}}],
                                   "typeName": "hydra.cpp.syntax.ClassSpecifier"}}},
                             {
                               "name": "body",
-                              "term": {
-                                "typeApplication": {
-                                  "body": {"maybe": null},
-                                  "type": {"variable": "hydra.cpp.syntax.ClassBody"}}}}],
+                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}}}],
                           "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
                     "typeName": "hydra.cpp.syntax.Declaration"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Declaration"},
-              "domain": {"literal": {"string": {}}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Declaration"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.cppPostfixExpressionToCppExpression",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Convert a PostfixExpression to an Expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a PostfixExpression to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
-                    "argument": {
-                      "inject": {
-                        "field": {"name": "postfix", "term": {"variable": "pf"}},
-                        "typeName": "hydra.cpp.syntax.UnaryExpression"}},
+                    "argument": {"inject": {"field": {"name": "postfix", "term": {"variable": "pf"}}, "typeName": "hydra.cpp.syntax.UnaryExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppUnaryExpressionToCppExpression"}}},
                 "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"},
                 "parameter": "pf"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Convert a PrimaryExpression to an Expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a PrimaryExpression to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
                     "argument": {
-                      "inject": {
-                        "field": {"name": "primary", "term": {"variable": "prim"}},
-                        "typeName": "hydra.cpp.syntax.PostfixExpression"}},
+                      "inject": {"field": {"name": "primary", "term": {"variable": "prim"}}, "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}},
                 "domain": {"variable": "hydra.cpp.syntax.PrimaryExpression"},
                 "parameter": "prim"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"variable": "hydra.cpp.syntax.PrimaryExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"variable": "hydra.cpp.syntax.PrimaryExpression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.cppUnaryExpressionToCppExpression",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a UnaryExpression to an Expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a UnaryExpression to an Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -316,10 +252,7 @@
                                 "field": {
                                   "name": "logicalOr",
                                   "term": {
-                                    "application": {
-                                      "argument": {"variable": "ue"},
-                                      "function": {
-                                        "variable": "hydra.cpp.utils.cppUnaryExpressionToCppLogicalOrExpression"}}}},
+                                    "application": {"argument": {"variable": "ue"}, "function": {"variable": "hydra.cpp.utils.cppUnaryExpressionToCppLogicalOrExpression"}}}},
                                 "typeName": "hydra.cpp.syntax.ConditionalExpression"}}},
                           "typeName": "hydra.cpp.syntax.AssignmentExpression"}}},
                     "typeName": "hydra.cpp.syntax.Expression"}},
@@ -327,20 +260,14 @@
                 "parameter": "ue"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"variable": "hydra.cpp.syntax.UnaryExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"variable": "hydra.cpp.syntax.UnaryExpression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.cppUnaryExpressionToCppLogicalOrExpression",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Convert a UnaryExpression to a LogicalOrExpression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a UnaryExpression to a LogicalOrExpression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -380,9 +307,7 @@
                                                                     "field": {
                                                                       "name": "multiplicative",
                                                                       "term": {
-                                                                        "inject": {
-                                                                          "field": {"name": "unary", "term": {"variable": "ue"}},
-                                                                          "typeName": "hydra.cpp.syntax.MultiplicativeExpression"}}},
+                                                                        "inject": {"field": {"name": "unary", "term": {"variable": "ue"}}, "typeName": "hydra.cpp.syntax.MultiplicativeExpression"}}},
                                                                     "typeName": "hydra.cpp.syntax.AdditiveExpression"}}},
                                                               "typeName": "hydra.cpp.syntax.ShiftExpression"}}},
                                                         "typeName": "hydra.cpp.syntax.RelationalExpression"}}},
@@ -407,10 +332,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Create a cast expression"}}}],
+                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a cast expression"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -424,9 +346,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {
-                                        "inject": {
-                                          "field": {"name": "parenthesized", "term": {"variable": "expr"}},
-                                          "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
+                                        "inject": {"field": {"name": "parenthesized", "term": {"variable": "expr"}}, "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                                       "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}}},
                                 "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                             "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
@@ -439,9 +359,7 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-                  "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}}},
     {
@@ -449,16 +367,10 @@
         "name": "hydra.cpp.utils.createCompoundStmt",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a compound statement"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a compound statement"}}}],
             "body": {
               "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {"variable": "stmts"},
-                    "typeName": "hydra.cpp.syntax.CompoundStatement"}},
+                "body": {"wrap": {"body": {"variable": "stmts"}, "typeName": "hydra.cpp.syntax.CompoundStatement"}},
                 "domain": {"list": {"variable": "hydra.cpp.syntax.Statement"}},
                 "parameter": "stmts"}}}},
         "typeScheme": {
@@ -472,55 +384,36 @@
         "name": "hydra.cpp.utils.createConstRefType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a const reference type"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a const reference type"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "baseType"},
-                        "function": {"variable": "hydra.cpp.utils.createConstType"}}},
+                    "argument": {"application": {"argument": {"variable": "baseType"}, "function": {"variable": "hydra.cpp.utils.createConstType"}}},
                     "function": {"variable": "hydra.cpp.utils.createReferenceType"}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
-              "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.TypeExpression"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createConstType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a const-qualified type"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a const-qualified type"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
-                    "argument": {
-                      "inject": {
-                        "field": {"name": "const", "term": {"unit": {}}},
-                        "typeName": "hydra.cpp.syntax.TypeQualifier"}},
-                    "function": {
-                      "application": {
-                        "argument": {"variable": "baseType"},
-                        "function": {"variable": "hydra.cpp.utils.createQualifiedType"}}}}},
+                    "argument": {"inject": {"field": {"name": "const", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.TypeQualifier"}},
+                    "function": {"application": {"argument": {"variable": "baseType"}, "function": {"variable": "hydra.cpp.utils.createQualifiedType"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
-              "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.TypeExpression"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
           "variables": []}}},
     {
       "term": {
@@ -532,9 +425,7 @@
                 "annotation": [
                   {
                     "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Create a constructor body (default if no params, empty otherwise)"}}}],
+                    "value": {"literal": {"string": "Create a constructor body (default if no params, empty otherwise)"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -542,41 +433,27 @@
                         "argument": {"variable": "hydra.cpp.utils.emptyFunctionBody"},
                         "function": {
                           "application": {
-                            "argument": {
-                              "inject": {
-                                "field": {"name": "default", "term": {"unit": {}}},
-                                "typeName": "hydra.cpp.syntax.FunctionBody"}},
+                            "argument": {"inject": {"field": {"name": "default", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.FunctionBody"}},
                             "function": {
                               "application": {
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "params"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.null"},
-                                        "type": {"variable": "t0"}}}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "t0"}}}}},
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"variable": "hydra.cpp.syntax.FunctionBody"}}}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.cpp.syntax.FunctionBody"}}}}}}}}},
                     "domain": {"list": {"variable": "t0"}},
                     "parameter": "params"}}}},
             "parameter": "t0"}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.FunctionBody"},
-              "domain": {"list": {"variable": "t0"}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.FunctionBody"}, "domain": {"list": {"variable": "t0"}}}},
           "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createEnumAccessExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an enum access expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an enum access expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -597,9 +474,7 @@
                                           "field": {
                                             "name": "primary",
                                             "term": {
-                                              "inject": {
-                                                "field": {"name": "identifier", "term": {"variable": "enumName"}},
-                                                "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
+                                              "inject": {"field": {"name": "identifier", "term": {"variable": "enumName"}}, "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                           "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
                                     {"name": "member", "term": {"variable": "valueName"}}],
                                   "typeName": "hydra.cpp.syntax.MemberAccessOperation"}}},
@@ -612,10 +487,7 @@
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-                  "domain": {"literal": {"string": {}}}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
@@ -623,10 +495,7 @@
         "name": "hydra.cpp.utils.createFunctionCallExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a function call expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a function call expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -647,9 +516,7 @@
                                           "field": {
                                             "name": "primary",
                                             "term": {
-                                              "inject": {
-                                                "field": {"name": "identifier", "term": {"variable": "funcName"}},
-                                                "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
+                                              "inject": {"field": {"name": "identifier", "term": {"variable": "funcName"}}, "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                           "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
                                     {"name": "arguments", "term": {"variable": "args"}}],
                                   "typeName": "hydra.cpp.syntax.FunctionCallOperation"}}},
@@ -673,10 +540,7 @@
         "name": "hydra.cpp.utils.createHeaderFile",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a header file with pragma once"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a header file with pragma once"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -708,9 +572,7 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Program"},
-                  "domain": {"list": {"variable": "hydra.cpp.syntax.Declaration"}}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.Program"}, "domain": {"list": {"variable": "hydra.cpp.syntax.Declaration"}}}},
               "domain": {"list": {"variable": "hydra.cpp.syntax.IncludeDirective"}}}},
           "variables": []}}},
     {
@@ -718,36 +580,25 @@
         "name": "hydra.cpp.utils.createIdentifierExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an identifier expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an identifier expression"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
                     "argument": {
-                      "inject": {
-                        "field": {"name": "identifier", "term": {"variable": "name"}},
-                        "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
+                      "inject": {"field": {"name": "identifier", "term": {"variable": "name"}}, "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"literal": {"string": {}}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createLambdaExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a lambda expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a lambda expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -771,28 +622,18 @@
                                               "inject": {
                                                 "field": {
                                                   "name": "captures",
-                                                  "term": {
-                                                    "typeApplication": {
-                                                      "body": {"list": []},
-                                                      "type": {"variable": "hydra.cpp.syntax.Capture"}}}},
+                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.cpp.syntax.Capture"}}}},
                                                 "typeName": "hydra.cpp.syntax.CaptureList"}}},
                                           {"name": "parameters", "term": {"variable": "params"}},
                                           {
                                             "name": "returnType",
-                                            "term": {
-                                              "typeApplication": {
-                                                "body": {"maybe": null},
-                                                "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
+                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
                                           {
                                             "name": "body",
                                             "term": {
                                               "wrap": {
                                                 "body": {
-                                                  "list": [
-                                                    {
-                                                      "inject": {
-                                                        "field": {"name": "expression", "term": {"variable": "body"}},
-                                                        "typeName": "hydra.cpp.syntax.Statement"}}]},
+                                                  "list": [{"inject": {"field": {"name": "expression", "term": {"variable": "body"}}, "typeName": "hydra.cpp.syntax.Statement"}}]},
                                                 "typeName": "hydra.cpp.syntax.CompoundStatement"}}}],
                                         "typeName": "hydra.cpp.syntax.LambdaExpression"}}},
                                   "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
@@ -806,9 +647,7 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-                  "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
               "domain": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}}},
           "variables": []}}},
     {
@@ -816,10 +655,7 @@
         "name": "hydra.cpp.utils.createLiteralBoolExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a boolean literal expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a boolean literal expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -830,32 +666,21 @@
                           "name": "literal",
                           "term": {
                             "inject": {
-                              "field": {
-                                "name": "boolean",
-                                "term": {
-                                  "wrap": {
-                                    "body": {"variable": "val"},
-                                    "typeName": "hydra.cpp.syntax.BooleanLiteral"}}},
+                              "field": {"name": "boolean", "term": {"wrap": {"body": {"variable": "val"}, "typeName": "hydra.cpp.syntax.BooleanLiteral"}}},
                               "typeName": "hydra.cpp.syntax.Literal"}}},
                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"boolean": {}}},
                 "parameter": "val"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"literal": {"boolean": {}}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"boolean": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createLiteralIntExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an integer literal expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an integer literal expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -868,10 +693,7 @@
                             "inject": {
                               "field": {
                                 "name": "integer",
-                                "term": {
-                                  "inject": {
-                                    "field": {"name": "decimal", "term": {"variable": "val"}},
-                                    "typeName": "hydra.cpp.syntax.IntegerLiteral"}}},
+                                "term": {"inject": {"field": {"name": "decimal", "term": {"variable": "val"}}, "typeName": "hydra.cpp.syntax.IntegerLiteral"}}},
                               "typeName": "hydra.cpp.syntax.Literal"}}},
                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
@@ -879,19 +701,14 @@
                 "parameter": "val"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"literal": {"integer": {"bigint": {}}}}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"integer": {"bigint": {}}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createLiteralStringExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a string literal expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a string literal expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -902,32 +719,21 @@
                           "name": "literal",
                           "term": {
                             "inject": {
-                              "field": {
-                                "name": "string",
-                                "term": {
-                                  "wrap": {
-                                    "body": {"variable": "val"},
-                                    "typeName": "hydra.cpp.syntax.StringLiteral"}}},
+                              "field": {"name": "string", "term": {"wrap": {"body": {"variable": "val"}, "typeName": "hydra.cpp.syntax.StringLiteral"}}},
                               "typeName": "hydra.cpp.syntax.Literal"}}},
                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "val"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"literal": {"string": {}}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createMemberAccessExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a member access expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a member access expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -944,9 +750,7 @@
                                     {
                                       "name": "object",
                                       "term": {
-                                        "application": {
-                                          "argument": {"variable": "objExpr"},
-                                          "function": {"variable": "hydra.cpp.utils.extractPostfixExpression"}}}},
+                                        "application": {"argument": {"variable": "objExpr"}, "function": {"variable": "hydra.cpp.utils.extractPostfixExpression"}}}},
                                     {"name": "member", "term": {"variable": "member"}}],
                                   "typeName": "hydra.cpp.syntax.MemberAccessOperation"}}},
                             "typeName": "hydra.cpp.syntax.PostfixExpression"}},
@@ -958,10 +762,7 @@
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-                  "domain": {"literal": {"string": {}}}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
               "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
           "variables": []}}},
     {
@@ -969,10 +770,7 @@
         "name": "hydra.cpp.utils.createQualifiedType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a qualified type with a qualifier"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a qualified type with a qualifier"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -983,9 +781,7 @@
                           "name": "qualified",
                           "term": {
                             "record": {
-                              "fields": [
-                                {"name": "baseType", "term": {"variable": "baseType"}},
-                                {"name": "qualifier", "term": {"variable": "qualifier"}}],
+                              "fields": [{"name": "baseType", "term": {"variable": "baseType"}}, {"name": "qualifier", "term": {"variable": "qualifier"}}],
                               "typeName": "hydra.cpp.syntax.QualifiedType"}}},
                         "typeName": "hydra.cpp.syntax.TypeExpression"}},
                     "domain": {"variable": "hydra.cpp.syntax.TypeQualifier"},
@@ -996,9 +792,7 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
-                  "domain": {"variable": "hydra.cpp.syntax.TypeQualifier"}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.TypeExpression"}, "domain": {"variable": "hydra.cpp.syntax.TypeQualifier"}}},
               "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
           "variables": []}}},
     {
@@ -1006,39 +800,25 @@
         "name": "hydra.cpp.utils.createReferenceType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a reference type"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a reference type"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
-                    "argument": {
-                      "inject": {
-                        "field": {"name": "lvalueRef", "term": {"unit": {}}},
-                        "typeName": "hydra.cpp.syntax.TypeQualifier"}},
-                    "function": {
-                      "application": {
-                        "argument": {"variable": "baseType"},
-                        "function": {"variable": "hydra.cpp.utils.createQualifiedType"}}}}},
+                    "argument": {"inject": {"field": {"name": "lvalueRef", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.TypeQualifier"}},
+                    "function": {"application": {"argument": {"variable": "baseType"}, "function": {"variable": "hydra.cpp.utils.createQualifiedType"}}}}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
-              "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.TypeExpression"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createReturnStmt",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a return statement with a value"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a return statement with a value"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1046,35 +826,25 @@
                     "field": {
                       "name": "jump",
                       "term": {
-                        "inject": {
-                          "field": {"name": "returnValue", "term": {"variable": "expr"}},
-                          "typeName": "hydra.cpp.syntax.JumpStatement"}}},
+                        "inject": {"field": {"name": "returnValue", "term": {"variable": "expr"}}, "typeName": "hydra.cpp.syntax.JumpStatement"}}},
                     "typeName": "hydra.cpp.syntax.Statement"}},
                 "domain": {"variable": "hydra.cpp.syntax.Expression"},
                 "parameter": "expr"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Statement"},
-              "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.Statement"}, "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createReturnVoidStmt",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a void return statement"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a void return statement"}}}],
             "body": {
               "inject": {
                 "field": {
                   "name": "jump",
-                  "term": {
-                    "inject": {
-                      "field": {"name": "returnVoid", "term": {"unit": {}}},
-                      "typeName": "hydra.cpp.syntax.JumpStatement"}}},
+                  "term": {"inject": {"field": {"name": "returnVoid", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.JumpStatement"}}},
                 "typeName": "hydra.cpp.syntax.Statement"}}}},
         "typeScheme": {"body": {"variable": "hydra.cpp.syntax.Statement"}, "variables": []}}},
     {
@@ -1082,10 +852,7 @@
         "name": "hydra.cpp.utils.createTemplateType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a template type"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a template type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1107,18 +874,13 @@
                                         "application": {
                                           "argument": {
                                             "lambda": {
-                                              "body": {
-                                                "inject": {
-                                                  "field": {"name": "type", "term": {"variable": "a"}},
-                                                  "typeName": "hydra.cpp.syntax.TemplateArgument"}},
+                                              "body": {"inject": {"field": {"name": "type", "term": {"variable": "a"}}, "typeName": "hydra.cpp.syntax.TemplateArgument"}},
                                               "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                                               "parameter": "a"}},
                                           "function": {
                                             "typeApplication": {
                                               "body": {
-                                                "typeApplication": {
-                                                  "body": {"variable": "hydra.lib.lists.map"},
-                                                  "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                                                "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
                                               "type": {"variable": "hydra.cpp.syntax.TemplateArgument"}}}}}}}}],
                               "typeName": "hydra.cpp.syntax.TemplateType"}}},
                         "typeName": "hydra.cpp.syntax.TypeExpression"}},
@@ -1140,10 +902,7 @@
         "name": "hydra.cpp.utils.createThisExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a *this expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a *this expression"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1162,10 +921,7 @@
         "name": "hydra.cpp.utils.createThrowStmt",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a throw statement"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a throw statement"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1182,9 +938,7 @@
                                   "application": {
                                     "argument": {"list": [{"variable": "arg"}]},
                                     "function": {
-                                      "application": {
-                                        "argument": {"variable": "exceptionType"},
-                                        "function": {"variable": "hydra.cpp.utils.createFunctionCallExpr"}}}}}},
+                                      "application": {"argument": {"variable": "exceptionType"}, "function": {"variable": "hydra.cpp.utils.createFunctionCallExpr"}}}}}},
                               "typeName": "hydra.cpp.syntax.JumpStatement"}}},
                         "typeName": "hydra.cpp.syntax.Statement"}},
                     "domain": {"variable": "hydra.cpp.syntax.Expression"},
@@ -1195,9 +949,7 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Statement"},
-                  "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.Statement"}, "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
@@ -1205,10 +957,7 @@
         "name": "hydra.cpp.utils.createTypeIdNameCall",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a typeid(...).name() call expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a typeid(...).name() call expression"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1255,9 +1004,7 @@
                                                                 "application": {
                                                                   "argument": {
                                                                     "inject": {
-                                                                      "field": {
-                                                                        "name": "parenthesized",
-                                                                        "term": {"variable": "hydra.cpp.utils.createThisExpr"}},
+                                                                      "field": {"name": "parenthesized", "term": {"variable": "hydra.cpp.utils.createThisExpr"}},
                                                                       "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                                                                   "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}}]}}],
                                                       "typeName": "hydra.cpp.syntax.FunctionCallOperation"}}},
@@ -1267,10 +1014,7 @@
                                   "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
                             {
                               "name": "arguments",
-                              "term": {
-                                "typeApplication": {
-                                  "body": {"list": []},
-                                  "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                           "typeName": "hydra.cpp.syntax.FunctionCallOperation"}}},
                     "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                 "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
@@ -1280,10 +1024,7 @@
         "name": "hydra.cpp.utils.createTypeNameExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a type name expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a type name expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1293,28 +1034,20 @@
                         "field": {
                           "name": "primary",
                           "term": {
-                            "inject": {
-                              "field": {"name": "identifier", "term": {"variable": "typeName"}},
-                              "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
+                            "inject": {"field": {"name": "identifier", "term": {"variable": "typeName"}}, "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                         "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPostfixExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "typeName"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"literal": {"string": {}}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.createVariantExpr",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a variant expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a variant expression"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -1333,25 +1066,17 @@
         "name": "hydra.cpp.utils.emptyFunctionBody",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "An empty function body"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "An empty function body"}}}],
             "body": {
               "inject": {
                 "field": {
                   "name": "compound",
                   "term": {
                     "wrap": {
-                      "body": {
-                        "typeApplication": {
-                          "body": {"list": []},
-                          "type": {"variable": "hydra.cpp.syntax.Statement"}}},
+                      "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.cpp.syntax.Statement"}}},
                       "typeName": "hydra.cpp.syntax.CompoundStatement"}}},
                 "typeName": "hydra.cpp.syntax.FunctionBody"}}}},
-        "typeScheme": {
-          "body": {"variable": "hydra.cpp.syntax.FunctionBody"},
-          "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.FunctionBody"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.extractPostfixExpression",
@@ -1360,9 +1085,7 @@
             "annotation": [
               {
                 "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Extract the PostfixExpression from a fully-wrapped Expression"}}}],
+                "value": {"literal": {"string": "Extract the PostfixExpression from a fully-wrapped Expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1504,10 +1227,7 @@
                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                             "name": "postfix",
                                                                                                                                                                                                                                             "term": {
-                                                                                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                                                                                "body": {"variable": "pf"},
-                                                                                                                                                                                                                                                "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"},
-                                                                                                                                                                                                                                                "parameter": "pf"}}}],
+                                                                                                                                                                                                                                              "lambda": {"body": {"variable": "pf"}, "domain": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "parameter": "pf"}}}],
                                                                                                                                                                                                                                         "default": {
                                                                                                                                                                                                                                           "inject": {
                                                                                                                                                                                                                                             "field": {
@@ -1678,63 +1398,40 @@
                 "parameter": "expr"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.PostfixExpression"},
-              "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "domain": {"variable": "hydra.cpp.syntax.Expression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.memberSpecificationProtected",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Protected access specifier member specification"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Protected access specifier member specification"}}}],
             "body": {
               "inject": {
                 "field": {
                   "name": "accessLabel",
-                  "term": {
-                    "inject": {
-                      "field": {"name": "protected", "term": {"unit": {}}},
-                      "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
+                  "term": {"inject": {"field": {"name": "protected", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
                 "typeName": "hydra.cpp.syntax.MemberSpecification"}}}},
-        "typeScheme": {
-          "body": {"variable": "hydra.cpp.syntax.MemberSpecification"},
-          "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.MemberSpecification"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.memberSpecificationPublic",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Public access specifier member specification"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Public access specifier member specification"}}}],
             "body": {
               "inject": {
                 "field": {
                   "name": "accessLabel",
-                  "term": {
-                    "inject": {
-                      "field": {"name": "public", "term": {"unit": {}}},
-                      "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
+                  "term": {"inject": {"field": {"name": "public", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
                 "typeName": "hydra.cpp.syntax.MemberSpecification"}}}},
-        "typeScheme": {
-          "body": {"variable": "hydra.cpp.syntax.MemberSpecification"},
-          "variables": []}}},
+        "typeScheme": {"body": {"variable": "hydra.cpp.syntax.MemberSpecification"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.stringExpression",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a string expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a string expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1745,32 +1442,21 @@
                           "name": "literal",
                           "term": {
                             "inject": {
-                              "field": {
-                                "name": "string",
-                                "term": {
-                                  "wrap": {
-                                    "body": {"variable": "s"},
-                                    "typeName": "hydra.cpp.syntax.StringLiteral"}}},
+                              "field": {"name": "string", "term": {"wrap": {"body": {"variable": "s"}, "typeName": "hydra.cpp.syntax.StringLiteral"}}},
                               "typeName": "hydra.cpp.syntax.Literal"}}},
                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                     "function": {"variable": "hydra.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "s"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.Expression"},
-              "domain": {"literal": {"string": {}}}}},
+          "body": {"function": {"codomain": {"variable": "hydra.cpp.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.toConstType",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Add const qualifier to a type"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Add const qualifier to a type"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1783,29 +1469,21 @@
                             {"name": "baseType", "term": {"variable": "baseType"}},
                             {
                               "name": "qualifier",
-                              "term": {
-                                "inject": {
-                                  "field": {"name": "const", "term": {"unit": {}}},
-                                  "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
+                              "term": {"inject": {"field": {"name": "const", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                           "typeName": "hydra.cpp.syntax.QualifiedType"}}},
                     "typeName": "hydra.cpp.syntax.TypeExpression"}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "baseType"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.cpp.syntax.TypeExpression"},
-              "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+            "function": {"codomain": {"variable": "hydra.cpp.syntax.TypeExpression"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.cpp.utils.unnamedParameter",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an unnamed parameter"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an unnamed parameter"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1818,10 +1496,7 @@
                           {"name": "unnamed", "term": {"literal": {"boolean": true}}},
                           {
                             "name": "defaultValue",
-                            "term": {
-                              "typeApplication": {
-                                "body": {"maybe": null},
-                                "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                         "typeName": "hydra.cpp.syntax.Parameter"}},
                     "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                     "parameter": "typ"}},
@@ -1831,15 +1506,10 @@
           "body": {
             "function": {
               "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.cpp.syntax.Parameter"},
-                  "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                "function": {"codomain": {"variable": "hydra.cpp.syntax.Parameter"}, "domain": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
-  "description": "C++ utilities for constructing C++ syntax trees",
-  "namespace": "hydra.cpp.utils",
-  "termDependencies": [],
-  "typeDependencies": [
+  "dependencies": [
     "hydra.cpp.syntax",
     "hydra.paths",
     "hydra.ast",
@@ -1863,4 +1533,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.validation",
+    "hydra.variants"],
+  "description": "C++ utilities for constructing C++ syntax trees",
+  "namespace": "hydra.cpp.utils"}

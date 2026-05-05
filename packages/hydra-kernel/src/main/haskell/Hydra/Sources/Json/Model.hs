@@ -21,8 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "A JSON syntax model. See the BNF at https://www.json.org"}
   where
     definitions = [

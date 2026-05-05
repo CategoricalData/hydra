@@ -81,9 +81,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
-      Strip.ns, ShowCore.ns, ShowError.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
+      Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Utilities for reading and writing type and term annotations"}
   where
    definitions = [
@@ -203,7 +202,7 @@ getDebugId = define "getDebugId" $
   Maybes.maybe
     (right nothing)
     ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ Graph.emptyGraph @@ var "term"))
-    (getAttr @@ Constants.key_debugId @@ var "cx")
+    (getAttr @@ Constants.keyDebugId @@ var "cx")
 
 getDescription :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Prelude.Either Error (Maybe String))
 getDescription = define "getDescription" $
@@ -212,7 +211,7 @@ getDescription = define "getDescription" $
   Maybes.maybe
     (right nothing)
     ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ var "graph" @@ var "term"))
-    (Maps.lookup (Core.nameLift key_description) (var "anns"))
+    (Maps.lookup (Core.nameLift keyDescription) (var "anns"))
 
 getTermAnnotation :: TTermDefinition (Name -> Term -> Maybe Term)
 getTermAnnotation = define "getTermAnnotation" $
@@ -236,7 +235,7 @@ getType = define "getType" $
   Maybes.maybe
     (right nothing)
     ("dat" ~> Eithers.map (unaryFunction just) (decoderFor _Type @@ var "graph" @@ var "dat"))
-    (Maps.lookup (Constants.key_type) (var "anns"))
+    (Maps.lookup (Constants.keyType) (var "anns"))
 
 getTypeAnnotation :: TTermDefinition (Name -> Type -> Maybe Term)
 getTypeAnnotation = define "getTypeAnnotation" $
@@ -267,7 +266,7 @@ getTypeClasses = define "getTypeClasses" $
         @@ (ExtractCore.setOf @@ var "decodeClass" @@ var "graph")
         @@ var "graph"
         @@ (var "term"))
-    (getTermAnnotation @@ Constants.key_classes @@ var "term")
+    (getTermAnnotation @@ Constants.keyClasses @@ var "term")
 
 getTypeDescription :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either Error (Maybe String))
 getTypeDescription = define "getTypeDescription" $
@@ -278,7 +277,7 @@ getTypeDescription = define "getTypeDescription" $
 hasDescription :: TTermDefinition (M.Map Name Term -> Bool)
 hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
-  "anns" ~> Maybes.isJust (Maps.lookup (Constants.key_description) (var "anns"))
+  "anns" ~> Maybes.isJust (Maps.lookup (Constants.keyDescription) (var "anns"))
 
 hasFlag :: TTermDefinition (Context -> Name -> Prelude.Either Error Bool)
 hasFlag = define "hasFlag" $
@@ -300,7 +299,7 @@ isNativeType = define "isNativeType" $
   "isFlaggedAsFirstClassType" <~ Maybes.fromMaybe false (
     Maybes.map
       (constant true)
-      (getTermAnnotation @@ Constants.key_firstClassType @@ (Core.bindingTerm (var "el")))) $
+      (getTermAnnotation @@ Constants.keyFirstClassType @@ (Core.bindingTerm (var "el")))) $
   Maybes.maybe false
     ("ts" ~> Logic.and
       (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
@@ -360,7 +359,7 @@ setDescription :: TTermDefinition (Maybe String -> M.Map Name Term -> M.Map Name
 setDescription = define "setDescription" $
   doc "Set description in annotations" $
   "d" ~> setAnnotation
-    @@ Constants.key_description
+    @@ Constants.keyDescription
     @@ Maybes.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 setTermAnnotation :: TTermDefinition (Name -> Maybe Term -> Term -> Term)
@@ -377,13 +376,13 @@ setTermDescription :: TTermDefinition (Maybe String -> Term -> Term)
 setTermDescription = define "setTermDescription" $
   doc "Set term description" $
   "d" ~> setTermAnnotation
-    @@ Constants.key_description
+    @@ Constants.keyDescription
     @@ Maybes.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
 
 setType :: TTermDefinition (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setType = define "setType" $
   doc "Set type in annotations" $
-  "mt" ~> setAnnotation @@ Constants.key_type @@ Maybes.map (encoderFor _Type) (var "mt")
+  "mt" ~> setAnnotation @@ Constants.keyType @@ Maybes.map (encoderFor _Type) (var "mt")
 
 setTypeAnnotation :: TTermDefinition (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotation = define "setTypeAnnotation" $
@@ -412,13 +411,13 @@ setTypeClasses = define "setTypeClasses" $
   "encoded" <~ Logic.ifElse (Maps.null (var "m"))
     nothing
     (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m")))))) $
-  setTermAnnotation @@ Constants.key_classes @@ var "encoded" @@ var "term"
+  setTermAnnotation @@ Constants.keyClasses @@ var "encoded" @@ var "term"
 
 setTypeDescription :: TTermDefinition (Maybe String -> Type -> Type)
 setTypeDescription = define "setTypeDescription" $
   doc "Set type description" $
   "d" ~> setTypeAnnotation
-    @@ Constants.key_description
+    @@ Constants.keyDescription
     @@ Maybes.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 termAnnotationInternal :: TTermDefinition (Term -> M.Map Name Term)
@@ -462,5 +461,5 @@ typeBinding =
   "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
   "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
     (encoderFor _Type @@ var "typ")
-    (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
+    (Maps.fromList (list [pair (Constants.keyType) (var "schemaTerm")])))) $
   Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))

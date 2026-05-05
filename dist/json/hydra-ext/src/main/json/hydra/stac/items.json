@@ -21,18 +21,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "URI to the asset object. Relative and absolute URI are both allowed."}}}],
+                            "value": {"literal": {"string": "URI to the asset object. Relative and absolute URI are both allowed."}}}],
                         "body": {"variable": "hydra.stac.items.Uri"}}}},
                   {
                     "name": "title",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The displayed title for clients and users."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The displayed title for clients and users."}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "description",
@@ -63,9 +58,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The semantic roles of the asset, similar to the use of rel in links."}}}],
+                            "value": {"literal": {"string": "The semantic roles of the asset, similar to the use of rel in links."}}}],
                         "body": {"list": {"variable": "hydra.stac.items.Role"}}}}}]}}},
           "variables": []}}},
     {
@@ -82,26 +75,18 @@
                       "string": "This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited from GeoJSON."}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "feature",
-                    "type": {"variable": "hydra.geojson.model.Feature"}},
+                  {"name": "feature", "type": {"variable": "hydra.geojson.model.Feature"}},
                   {
                     "name": "stacVersion",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The STAC version the Item implements"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The STAC version the Item implements"}}}],
                         "body": {"variable": "hydra.stac.items.StacVersion"}}}},
                   {
                     "name": "stacExtensions",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A list of extensions the Item implements"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A list of extensions the Item implements"}}}],
                         "body": {"list": {"variable": "hydra.stac.items.Url"}}}}},
                   {
                     "name": "links",
@@ -121,13 +106,8 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Dictionary of asset objects that can be downloaded, each with a unique key."}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"literal": {"string": {}}},
-                            "values": {"variable": "hydra.stac.items.Asset"}}}}}},
+                            "value": {"literal": {"string": "Dictionary of asset objects that can be downloaded, each with a unique key."}}}],
+                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.stac.items.Asset"}}}}}},
                   {
                     "name": "collection",
                     "type": {
@@ -161,9 +141,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The actual link in the format of an URL. Relative and absolute links are both allowed."}}}],
+                            "value": {"literal": {"string": "The actual link in the format of an URL. Relative and absolute links are both allowed."}}}],
                         "body": {"variable": "hydra.stac.items.Url"}}}},
                   {
                     "name": "rel",
@@ -180,10 +158,7 @@
                     "name": "type",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Media type of the referenced entity."}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Media type of the referenced entity."}}}],
                         "body": {"maybe": {"variable": "hydra.stac.items.MediaType"}}}}},
                   {
                     "name": "title",
@@ -192,15 +167,11 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A human readable title to be used in rendered displays of the link."}}}],
+                            "value": {"literal": {"string": "A human readable title to be used in rendered displays of the link."}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
-      "type": {
-        "name": "hydra.stac.items.MediaType",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"name": "hydra.stac.items.MediaType", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.stac.items.RelationType",
@@ -215,12 +186,8 @@
                       "string": "STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context."}}}],
               "body": {
                 "union": [
-                  {
-                    "name": "iana",
-                    "type": {"variable": "hydra.iana.linkrelations.LinkRelationType"}},
-                  {
-                    "name": "stac",
-                    "type": {"variable": "hydra.stac.items.StacRelationType"}},
+                  {"name": "iana", "type": {"variable": "hydra.iana.linkrelations.LinkRelationType"}},
+                  {"name": "stac", "type": {"variable": "hydra.stac.items.StacRelationType"}},
                   {"name": "other", "type": {"literal": {"string": {}}}}]}}},
           "variables": []}}},
     {
@@ -277,9 +244,7 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A metadata sidecar file describing the data in this Item, for example the Landsat-8 MTL file."}}}],
+                            "value": {"literal": {"string": "A metadata sidecar file describing the data in this Item, for example the Landsat-8 MTL file."}}}],
                         "body": {"unit": {}}}}},
                   {"name": "other", "type": {"literal": {"string": {}}}}]}}},
           "variables": []}}},
@@ -304,21 +269,13 @@
                 "name": "root",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "URL to the root STAC entity (Catalog or Collection)."}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "URL to the root STAC entity (Catalog or Collection)."}}}],
                     "body": {"unit": {}}}}},
               {
                 "name": "parent",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "URL to the parent STAC entity (Catalog or Collection)."}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "URL to the parent STAC entity (Catalog or Collection)."}}}],
                     "body": {"unit": {}}}}},
               {
                 "name": "collection",
@@ -338,24 +295,15 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "URL to a STAC Item that was used as input data in the creation of this Item."}}}],
+                        "value": {"literal": {"string": "URL to a STAC Item that was used as input data in the creation of this Item."}}}],
                     "body": {"unit": {}}}}}]},
           "variables": []}}},
     {
-      "type": {
-        "name": "hydra.stac.items.StacVersion",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"name": "hydra.stac.items.StacVersion", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
-      "type": {
-        "name": "hydra.stac.items.Uri",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"name": "hydra.stac.items.Uri", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
-      "type": {
-        "name": "hydra.stac.items.Url",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+      "type": {"name": "hydra.stac.items.Url", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+  "dependencies": ["hydra.geojson.model", "hydra.iana.linkrelations", "hydra.core"],
   "description": "A model for SpatioTemporal Asset Catalog (STAC) Items. See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md",
-  "namespace": "hydra.stac.items",
-  "termDependencies": ["hydra.geojson.model", "hydra.iana.linkrelations"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.stac.items"}

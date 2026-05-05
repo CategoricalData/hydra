@@ -53,6 +53,40 @@ import qualified Data.Set as S
 analyzePythonFunction :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure PythonEnvironment.PythonEnvironment)
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
+-- | Encode a single case (Field) into a CaseBlock for a match statement
+caseBlockToExpr :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock
+caseBlockToExpr cx env tname rowType isEnum encodeBody field =
+
+      let fname = Core.fieldName field
+          fterm = Core.fieldTerm field
+          stripped = Strip.deannotateAndDetypeTerm fterm
+          effectiveLambda =
+                  case stripped of
+                    Core.TermLambda v0 -> v0
+                    _ ->
+                      let syntheticVar = Core.Name "_matchValue"
+                      in Core.Lambda {
+                        Core.lambdaParameter = syntheticVar,
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = stripped,
+                          Core.applicationArgument = (Core.TermVariable syntheticVar)}))}
+          v = Core.lambdaParameter effectiveLambda
+          rawBody = Core.lambdaBody effectiveLambda
+          isUnitVariant = isVariantUnitType rowType fname
+          effectiveBody = Logic.ifElse isUnitVariant (eliminateUnitVar v rawBody) rawBody
+          shouldCapture =
+                  Logic.not (Logic.or isUnitVariant (Logic.or (Variables.isFreeVariableInTerm v rawBody) (Predicates.isUnitTerm rawBody)))
+          env2 = pythonEnvironmentSetGraph (Scoping.extendGraphForLambda (pythonEnvironmentGetGraph env) effectiveLambda) env
+          pyVariantName = deconflictVariantName True env2 tname fname (PythonEnvironment.pythonEnvironmentGraph env2)
+          pattern = variantClosedPattern env2 tname fname pyVariantName rowType isEnum v shouldCapture
+      in (Eithers.bind (encodeBody env2 effectiveBody) (\stmts ->
+        let pyBody = Utils.indentedBlock Nothing [
+              stmts]
+        in (Right (Syntax.CaseBlock {
+          Syntax.caseBlockPatterns = (Utils.pyClosedPatternToPyPatterns pattern),
+          Syntax.caseBlockGuard = Nothing,
+          Syntax.caseBlockBody = pyBody}))))
 -- | Create a class pattern for a unit variant (no value captured)
 classVariantPatternUnit :: Syntax.Name -> Syntax.ClosedPattern
 classVariantPatternUnit pyVariantName =
@@ -285,7 +319,9 @@ encodeApplicationInner cx env fun hargs rargs =
                 consumeCount = Math.min elArity (Lists.length allArgs)
                 consumedArgs = Lists.take consumeCount allArgs
                 remainingArgs = Lists.drop consumeCount allArgs
-            in (Logic.ifElse (Lists.null consumedArgs) (Eithers.bind (encodeVariable cx env v0 []) (\expr -> Right (expr, rargs))) (Right (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs, remainingArgs)))) (Core.bindingTypeScheme el)) (Lexical.lookupBinding g v0)) (\_prim ->
+            in (Logic.ifElse (Lists.null consumedArgs) (Eithers.bind (encodeVariable cx env v0 []) (\expr -> Right (expr, rargs))) (Right (
+              Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs,
+              remainingArgs)))) (Core.bindingTypeScheme el)) (Lexical.lookupBinding g v0)) (\_prim ->
             let wrappedArgs = wrapLazyArguments v0 hargs
             in (Eithers.bind (encodeVariable cx env v0 wrappedArgs) (\expr -> Right (expr, rargs)))))
         _ -> defaultCase
@@ -352,7 +388,7 @@ encodeBindingAs cx env binding =
                               param],
                             Syntax.paramNoDefaultParametersParamWithDefault = [],
                             Syntax.paramNoDefaultParametersStarEtc = Nothing})
-              in (Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) cases_) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
+              in (Eithers.bind (Eithers.mapList (caseBlockToExpr cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) cases_) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
                 let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple (Utils.pyNameToPyExpression (Syntax.Name "x")))
                     allCases = Lists.concat2 pyCases pyDflt
                     matchStmt =
@@ -396,7 +432,7 @@ encodeBindingAs cx env binding =
                               param],
                             Syntax.paramNoDefaultParametersParamWithDefault = [],
                             Syntax.paramNoDefaultParametersStarEtc = Nothing})
-              in (Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) cases_) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
+              in (Eithers.bind (Eithers.mapList (caseBlockToExpr cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) cases_) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
                 let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple (Utils.pyNameToPyExpression (Syntax.Name "x")))
                     allCases = Lists.concat2 pyCases pyDflt
                     matchStmt =
@@ -449,7 +485,7 @@ encodeBindingAs cx env binding =
                           Syntax.paramNoDefaultParametersParamWithDefault = [],
                           Syntax.paramNoDefaultParametersStarEtc = Nothing})
                 envWithParams = extendEnvWithLambdaParams env term1
-            in (Eithers.bind (Eithers.mapList (encodeCaseBlock cx envWithParams tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) cases_) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx envWithParams False t) isFull dflt tname) (\pyDflt ->
+            in (Eithers.bind (Eithers.mapList (caseBlockToExpr cx envWithParams tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) cases_) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx envWithParams False t) isFull dflt tname) (\pyDflt ->
               let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple (Utils.pyNameToPyExpression matchArgName))
                   allCases = Lists.concat2 pyCases pyDflt
                   matchStmt =
@@ -495,44 +531,10 @@ encodeBindingAsAssignment cx allowThunking env binding =
 -- | Encode bindings as function definitions
 encodeBindingsAsDefs :: t0 -> (t0 -> t1 -> Either t2 t3) -> [t1] -> Either t2 [t3]
 encodeBindingsAsDefs env encodeBinding bindings = Eithers.mapList (encodeBinding env) bindings
--- | Encode a single case (Field) into a CaseBlock for a match statement
-encodeCaseBlock :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock
-encodeCaseBlock cx env tname rowType isEnum encodeBody field =
-
-      let fname = Core.fieldName field
-          fterm = Core.fieldTerm field
-          stripped = Strip.deannotateAndDetypeTerm fterm
-          effectiveLambda =
-                  case stripped of
-                    Core.TermLambda v0 -> v0
-                    _ ->
-                      let syntheticVar = Core.Name "_matchValue"
-                      in Core.Lambda {
-                        Core.lambdaParameter = syntheticVar,
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = stripped,
-                          Core.applicationArgument = (Core.TermVariable syntheticVar)}))}
-          v = Core.lambdaParameter effectiveLambda
-          rawBody = Core.lambdaBody effectiveLambda
-          isUnitVariant = isVariantUnitType rowType fname
-          effectiveBody = Logic.ifElse isUnitVariant (eliminateUnitVar v rawBody) rawBody
-          shouldCapture =
-                  Logic.not (Logic.or isUnitVariant (Logic.or (Variables.isFreeVariableInTerm v rawBody) (Predicates.isUnitTerm rawBody)))
-          env2 = pythonEnvironmentSetGraph (Scoping.extendGraphForLambda (pythonEnvironmentGetGraph env) effectiveLambda) env
-          pyVariantName = deconflictVariantName True env2 tname fname (PythonEnvironment.pythonEnvironmentGraph env2)
-          pattern = variantClosedPattern env2 tname fname pyVariantName rowType isEnum v shouldCapture
-      in (Eithers.bind (encodeBody env2 effectiveBody) (\stmts ->
-        let pyBody = Utils.indentedBlock Nothing [
-              stmts]
-        in (Right (Syntax.CaseBlock {
-          Syntax.caseBlockPatterns = (Utils.pyClosedPatternToPyPatterns pattern),
-          Syntax.caseBlockGuard = Nothing,
-          Syntax.caseBlockBody = pyBody}))))
 -- | Encode the default (wildcard) case block for a match statement
 encodeDefaultCaseBlock :: (t0 -> Either t1 Syntax.Expression) -> Bool -> Maybe t0 -> Core.Name -> Either t1 [Syntax.CaseBlock]
-encodeDefaultCaseBlock encodeTerm isFull mdflt tname =
-    Eithers.bind (Maybes.maybe (Right (Logic.ifElse isFull (Utils.raiseAssertionError "Unreachable: all variants handled") (Utils.raiseTypeError (Strings.cat2 "Unsupported " (Names.localNameOf tname))))) (\d -> Eithers.bind (encodeTerm d) (\pyexpr -> Right (Utils.returnSingle pyexpr))) mdflt) (\stmt ->
+encodeDefaultCaseBlock termToExpr isFull mdflt tname =
+    Eithers.bind (Maybes.maybe (Right (Logic.ifElse isFull (Utils.raiseAssertionError "Unreachable: all variants handled") (Utils.raiseTypeError (Strings.cat2 "Unsupported " (Names.localNameOf tname))))) (\d -> Eithers.bind (termToExpr d) (\pyexpr -> Right (Utils.returnSingle pyexpr))) mdflt) (\stmt ->
       let patterns = Utils.pyClosedPatternToPyPatterns Syntax.ClosedPatternWildcard
           body = Utils.indentedBlock Nothing [
                 [
@@ -584,11 +586,11 @@ encodeEnumValueAssignment cx env fieldType =
           (Utils.pyExpressionToPyStatement (Utils.tripleQuotedString c))]) mcomment))))
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
 encodeField :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Field -> (Core.Term -> Either t1 t2) -> Either t1 (Syntax.Name, t2)
-encodeField cx env field encodeTerm =
+encodeField cx env field termToExpr =
 
       let fname = Core.fieldName field
           fterm = Core.fieldTerm field
-      in (Eithers.bind (encodeTerm fterm) (\pterm -> Right (PythonNames.encodeFieldName env fname, pterm)))
+      in (Eithers.bind (termToExpr fterm) (\pterm -> Right (PythonNames.encodeFieldName env fname, pterm)))
 -- | Encode a field type for record definitions (field: type annotation)
 encodeFieldType :: t0 -> PythonEnvironment.PythonEnvironment -> Core.FieldType -> Either Errors.Error Syntax.Statement
 encodeFieldType cx env fieldType =
@@ -672,52 +674,6 @@ encodeForallType env lt =
                             Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name (Core.unName n))))},
                           Syntax.powerRhs = Nothing}))}}}}}},
             Syntax.comparisonRhs = []})]])) params))))
--- | Encode a function definition with parameters and body
-encodeFunctionDefinition :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
-encodeFunctionDefinition cx env name tparams args body doms mcod comment prefixes =
-    Eithers.bind (Eithers.mapList (\pair ->
-      let argName = Pairs.first pair
-          typ = Pairs.second pair
-      in (Eithers.bind (encodeType env typ) (\pyTyp -> Right (Syntax.ParamNoDefault {
-        Syntax.paramNoDefaultParam = Syntax.Param {
-          Syntax.paramName = (PythonNames.encodeName False Util.CaseConventionLowerSnake env argName),
-          Syntax.paramAnnotation = (Just (Syntax.Annotation pyTyp))},
-        Syntax.paramNoDefaultTypeComment = Nothing})))) (Lists.zip args doms)) (\pyArgs ->
-      let pyParams =
-              Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
-                Syntax.paramNoDefaultParametersParamNoDefault = pyArgs,
-                Syntax.paramNoDefaultParametersParamWithDefault = [],
-                Syntax.paramNoDefaultParametersStarEtc = Nothing})
-          isTCO = Logic.and (Logic.not (Lists.null args)) (Analysis.isSelfTailRecursive name body)
-      in (Eithers.bind (Logic.ifElse isTCO (Eithers.bind (encodeTermMultilineTCO cx env name args body) (\tcoStmts ->
-        let trueExpr = Syntax.NamedExpressionSimple (Utils.pyAtomToPyExpression Syntax.AtomTrue)
-            whileBody = Utils.indentedBlock Nothing [
-                  Lists.concat2 prefixes tcoStmts]
-            whileStmt =
-                    Syntax.StatementCompound (Syntax.CompoundStatementWhile (Syntax.WhileStatement {
-                      Syntax.whileStatementCondition = trueExpr,
-                      Syntax.whileStatementBody = whileBody,
-                      Syntax.whileStatementElse = Nothing}))
-        in (Right (Utils.indentedBlock comment [
-          [
-            whileStmt]])))) (Eithers.bind (encodeTermMultiline cx env body) (\stmts -> Right (Utils.indentedBlock comment [
-        Lists.concat2 prefixes stmts])))) (\block -> Eithers.bind (Maybes.maybe (Right Nothing) (\cod -> Eithers.bind (encodeType env cod) (\pytyp -> Right (Just pytyp))) mcod) (\mreturnType ->
-        let pyTparams =
-                Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (PythonNames.encodeTypeVariable arg_)) tparams) []
-            isThunk = Lists.null args
-            mDecorators = Logic.ifElse isThunk (Just (Syntax.Decorators [
-                  lruCacheDecorator])) Nothing
-            pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env name
-        in (Right (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
-          Syntax.functionDefinitionDecorators = mDecorators,
-          Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
-            Syntax.functionDefRawAsync = False,
-            Syntax.functionDefRawName = pyName,
-            Syntax.functionDefRawTypeParams = pyTparams,
-            Syntax.functionDefRawParams = (Just pyParams),
-            Syntax.functionDefRawReturnType = mreturnType,
-            Syntax.functionDefRawFuncTypeComment = Nothing,
-            Syntax.functionDefRawBlock = block}}))))))))
 -- | Encode a function type to Python Callable expression
 encodeFunctionType :: PythonEnvironment.PythonEnvironment -> Core.FunctionType -> Either t0 Syntax.Expression
 encodeFunctionType env ft =
@@ -897,7 +853,7 @@ encodeTermAssignment cx env name term ts comment =
                     Core.bindingTypeScheme = (Just ts)}
           isComplex = Predicates.isComplexBinding tc binding
           isTrivial = Predicates.isTrivialTerm term
-      in (Logic.ifElse (Logic.and isComplex (Logic.not isTrivial)) (Eithers.bind (Eithers.mapList (encodeBindingAs cx env2) bindings) (\bindingStmts -> encodeFunctionDefinition cx env2 name tparams params body doms mcod comment bindingStmts)) (Eithers.bind (encodeTermInline cx env2 False body) (\bodyExpr ->
+      in (Logic.ifElse (Logic.and isComplex (Logic.not isTrivial)) (Eithers.bind (Eithers.mapList (encodeBindingAs cx env2) bindings) (\bindingStmts -> functionDefinitionToExpr cx env2 name tparams params body doms mcod comment bindingStmts)) (Eithers.bind (encodeTermInline cx env2 False body) (\bodyExpr ->
         let pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env2 name
         in (Right (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr)))))))
 -- | Encode a term to a Python expression (inline form)
@@ -1081,7 +1037,7 @@ encodeTermMultiline cx env term =
             in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
               let isEnum = Predicates.isEnumRowType rt
                   isFull = isCasesFull rt cases_
-              in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
+              in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (caseBlockToExpr cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
                 let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
                     matchStmt =
                             Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
@@ -1126,7 +1082,7 @@ encodeTermMultilineTCO cx env funcName paramNames term =
               in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
                 let isEnum = Predicates.isEnumRowType rt
                     isFull = isCasesFull rt cases_
-                in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e2 -> \t2 -> encodeTermMultilineTCO cx e2 funcName paramNames t2)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t2 -> encodeTermInline cx env False t2) isFull dflt tname) (\pyDflt ->
+                in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (caseBlockToExpr cx env tname rt isEnum (\e2 -> \t2 -> encodeTermMultilineTCO cx e2 funcName paramNames t2)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t2 -> encodeTermInline cx env False t2) isFull dflt tname) (\pyDflt ->
                   let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
                       matchStmt =
                               Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
@@ -1202,7 +1158,7 @@ encodeTypeDefSingle env name comment typeExpr =
 -- | Encode a type to a Python expression, quoting if the type has free variables
 encodeTypeQuoted :: PythonEnvironment.PythonEnvironment -> Core.Type -> Either t0 Syntax.Expression
 encodeTypeQuoted env typ =
-    Eithers.bind (encodeType env typ) (\pytype -> Right (Logic.ifElse (Sets.null (Variables.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.encodeExpression pytype)))))
+    Eithers.bind (encodeType env typ) (\pytype -> Right (Logic.ifElse (Sets.null (Variables.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.expressionToExpr pytype)))))
 -- | Encode a union elimination as an inline conditional chain (isinstance-based ternary)
 encodeUnionEliminationInline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either Errors.Error Syntax.Expression
 encodeUnionEliminationInline cx env cs pyArg =
@@ -1531,6 +1487,52 @@ findTypeParams env typ =
       let boundVars = Pairs.second (PythonEnvironment.pythonEnvironmentBoundTypeVariables env)
           isBound = \v -> Maybes.isJust (Maps.lookup v boundVars)
       in (Lists.filter isBound (Sets.toList (Variables.freeVariablesInType typ)))
+-- | Encode a function definition with parameters and body
+functionDefinitionToExpr :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
+functionDefinitionToExpr cx env name tparams args body doms mcod comment prefixes =
+    Eithers.bind (Eithers.mapList (\pair ->
+      let argName = Pairs.first pair
+          typ = Pairs.second pair
+      in (Eithers.bind (encodeType env typ) (\pyTyp -> Right (Syntax.ParamNoDefault {
+        Syntax.paramNoDefaultParam = Syntax.Param {
+          Syntax.paramName = (PythonNames.encodeName False Util.CaseConventionLowerSnake env argName),
+          Syntax.paramAnnotation = (Just (Syntax.Annotation pyTyp))},
+        Syntax.paramNoDefaultTypeComment = Nothing})))) (Lists.zip args doms)) (\pyArgs ->
+      let pyParams =
+              Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
+                Syntax.paramNoDefaultParametersParamNoDefault = pyArgs,
+                Syntax.paramNoDefaultParametersParamWithDefault = [],
+                Syntax.paramNoDefaultParametersStarEtc = Nothing})
+          isTCO = Logic.and (Logic.not (Lists.null args)) (Analysis.isSelfTailRecursive name body)
+      in (Eithers.bind (Logic.ifElse isTCO (Eithers.bind (encodeTermMultilineTCO cx env name args body) (\tcoStmts ->
+        let trueExpr = Syntax.NamedExpressionSimple (Utils.pyAtomToPyExpression Syntax.AtomTrue)
+            whileBody = Utils.indentedBlock Nothing [
+                  Lists.concat2 prefixes tcoStmts]
+            whileStmt =
+                    Syntax.StatementCompound (Syntax.CompoundStatementWhile (Syntax.WhileStatement {
+                      Syntax.whileStatementCondition = trueExpr,
+                      Syntax.whileStatementBody = whileBody,
+                      Syntax.whileStatementElse = Nothing}))
+        in (Right (Utils.indentedBlock comment [
+          [
+            whileStmt]])))) (Eithers.bind (encodeTermMultiline cx env body) (\stmts -> Right (Utils.indentedBlock comment [
+        Lists.concat2 prefixes stmts])))) (\block -> Eithers.bind (Maybes.maybe (Right Nothing) (\cod -> Eithers.bind (encodeType env cod) (\pytyp -> Right (Just pytyp))) mcod) (\mreturnType ->
+        let pyTparams =
+                Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (PythonNames.encodeTypeVariable arg_)) tparams) []
+            isThunk = Lists.null args
+            mDecorators = Logic.ifElse isThunk (Just (Syntax.Decorators [
+                  lruCacheDecorator])) Nothing
+            pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env name
+        in (Right (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
+          Syntax.functionDefinitionDecorators = mDecorators,
+          Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
+            Syntax.functionDefRawAsync = False,
+            Syntax.functionDefRawName = pyName,
+            Syntax.functionDefRawTypeParams = pyTparams,
+            Syntax.functionDefRawParams = (Just pyParams),
+            Syntax.functionDefRawReturnType = mreturnType,
+            Syntax.functionDefRawFuncTypeComment = Nothing,
+            Syntax.functionDefRawBlock = block}}))))))))
 -- | Extract lambdas and their bodies from a term
 gatherLambdas :: Core.Term -> ([Core.Name], Core.Term)
 gatherLambdas term =
@@ -1766,22 +1768,26 @@ moduleStandardImports meta =
                   condImportSymbol "Enum" (PythonEnvironment.pythonModuleMetadataUsesEnum meta)]),
                 ("functools", [
                   condImportSymbol "lru_cache" (PythonEnvironment.pythonModuleMetadataUsesLruCache meta)]),
-                ("hydra.dsl.python", [
-                  condImportSymbol "Either" (PythonEnvironment.pythonModuleMetadataUsesEither meta),
-                  (condImportSymbol "FrozenDict" (PythonEnvironment.pythonModuleMetadataUsesFrozenDict meta)),
-                  (condImportSymbol "Just" (PythonEnvironment.pythonModuleMetadataUsesJust meta)),
-                  (condImportSymbol "Left" (PythonEnvironment.pythonModuleMetadataUsesLeft meta)),
-                  (condImportSymbol "Maybe" (PythonEnvironment.pythonModuleMetadataUsesMaybe meta)),
-                  (condImportSymbol "Node" (PythonEnvironment.pythonModuleMetadataUsesNode meta)),
-                  (condImportSymbol "Nothing" (PythonEnvironment.pythonModuleMetadataUsesNothing meta)),
-                  (condImportSymbol "Right" (PythonEnvironment.pythonModuleMetadataUsesRight meta)),
-                  (condImportSymbol "frozenlist" (PythonEnvironment.pythonModuleMetadataUsesFrozenList meta))]),
-                ("typing", [
-                  condImportSymbol "Annotated" (PythonEnvironment.pythonModuleMetadataUsesAnnotated meta),
-                  (condImportSymbol "Generic" (PythonEnvironment.pythonModuleMetadataUsesGeneric meta)),
-                  (condImportSymbol "TypeAlias" (PythonEnvironment.pythonModuleMetadataUsesTypeAlias meta)),
-                  (condImportSymbol "TypeVar" (PythonEnvironment.pythonModuleMetadataUsesTypeVar meta)),
-                  (condImportSymbol "cast" (PythonEnvironment.pythonModuleMetadataUsesCast meta))])]
+                (
+                  "hydra.dsl.python",
+                  [
+                    condImportSymbol "Either" (PythonEnvironment.pythonModuleMetadataUsesEither meta),
+                    (condImportSymbol "FrozenDict" (PythonEnvironment.pythonModuleMetadataUsesFrozenDict meta)),
+                    (condImportSymbol "Just" (PythonEnvironment.pythonModuleMetadataUsesJust meta)),
+                    (condImportSymbol "Left" (PythonEnvironment.pythonModuleMetadataUsesLeft meta)),
+                    (condImportSymbol "Maybe" (PythonEnvironment.pythonModuleMetadataUsesMaybe meta)),
+                    (condImportSymbol "Node" (PythonEnvironment.pythonModuleMetadataUsesNode meta)),
+                    (condImportSymbol "Nothing" (PythonEnvironment.pythonModuleMetadataUsesNothing meta)),
+                    (condImportSymbol "Right" (PythonEnvironment.pythonModuleMetadataUsesRight meta)),
+                    (condImportSymbol "frozenlist" (PythonEnvironment.pythonModuleMetadataUsesFrozenList meta))]),
+                (
+                  "typing",
+                  [
+                    condImportSymbol "Annotated" (PythonEnvironment.pythonModuleMetadataUsesAnnotated meta),
+                    (condImportSymbol "Generic" (PythonEnvironment.pythonModuleMetadataUsesGeneric meta)),
+                    (condImportSymbol "TypeAlias" (PythonEnvironment.pythonModuleMetadataUsesTypeAlias meta)),
+                    (condImportSymbol "TypeVar" (PythonEnvironment.pythonModuleMetadataUsesTypeVar meta)),
+                    (condImportSymbol "cast" (PythonEnvironment.pythonModuleMetadataUsesCast meta))])]
           simplified =
                   Maybes.cat (Lists.map (\p ->
                     let modName = Pairs.first p
@@ -1792,7 +1798,7 @@ moduleStandardImports meta =
 moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
-      let s = Serialization.printExpr (Serialization.parenthesize (Serde.encodeModule file))
+      let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
           path =
                   Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleNamespace mod)
       in (Right (Maps.singleton path s)))

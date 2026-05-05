@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.core.AnnotatedTerm
 annotatedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedTerm
 annotatedTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -21,6 +22,7 @@ annotatedTerm cx raw =
           Core.annotatedTermBody = field_body,
           Core.annotatedTermAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.AnnotatedType
 annotatedType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedType
 annotatedType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -30,6 +32,7 @@ annotatedType cx raw =
           Core.annotatedTypeBody = field_body,
           Core.annotatedTypeAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Application
 application :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Application
 application cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -39,6 +42,7 @@ application cx raw =
           Core.applicationFunction = field_function,
           Core.applicationArgument = field_argument}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.ApplicationType
 applicationType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ApplicationType
 applicationType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -48,6 +52,7 @@ applicationType cx raw =
           Core.applicationTypeFunction = field_function,
           Core.applicationTypeArgument = field_argument}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Binding
 binding :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Binding
 binding cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -58,6 +63,7 @@ binding cx raw =
           Core.bindingTerm = field_term,
           Core.bindingTypeScheme = field_typeScheme})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.CaseStatement
 caseStatement :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseStatement
 caseStatement cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -68,6 +74,7 @@ caseStatement cx raw =
           Core.caseStatementDefault = field_default,
           Core.caseStatementCases = field_cases})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.EitherType
 eitherType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.EitherType
 eitherType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -77,6 +84,7 @@ eitherType cx raw =
           Core.eitherTypeLeft = field_left,
           Core.eitherTypeRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Field
 field :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Field
 field cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -86,6 +94,7 @@ field cx raw =
           Core.fieldName = field_name,
           Core.fieldTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.FieldType
 fieldType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FieldType
 fieldType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -95,6 +104,7 @@ fieldType cx raw =
           Core.fieldTypeName = field_name,
           Core.fieldTypeType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.FloatType
 floatType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatType
 floatType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -112,6 +122,7 @@ floatType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.FloatValue
 floatValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatValue
 floatValue cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -121,32 +132,39 @@ floatValue cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "bigfloat", (\input -> Eithers.map (\t -> Core.FloatValueBigfloat t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueBigfloat v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected bigfloat value")
-                          _ -> Left (Errors.DecodingError "expected bigfloat literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "float32", (\input -> Eithers.map (\t -> Core.FloatValueFloat32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueFloat32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected float32 value")
-                          _ -> Left (Errors.DecodingError "expected float32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "float64", (\input -> Eithers.map (\t -> Core.FloatValueFloat64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueFloat64 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected float64 value")
-                          _ -> Left (Errors.DecodingError "expected float64 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "bigfloat",
+                        (\input -> Eithers.map (\t -> Core.FloatValueBigfloat t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralFloat v2 -> case v2 of
+                              Core.FloatValueBigfloat v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected bigfloat value")
+                            _ -> Left (Errors.DecodingError "expected bigfloat literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "float32",
+                        (\input -> Eithers.map (\t -> Core.FloatValueFloat32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralFloat v2 -> case v2 of
+                              Core.FloatValueFloat32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected float32 value")
+                            _ -> Left (Errors.DecodingError "expected float32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "float64",
+                        (\input -> Eithers.map (\t -> Core.FloatValueFloat64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralFloat v2 -> case v2 of
+                              Core.FloatValueFloat64 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected float64 value")
+                            _ -> Left (Errors.DecodingError "expected float64 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.ForallType
 forallType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ForallType
 forallType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -156,6 +174,7 @@ forallType cx raw =
           Core.forallTypeParameter = field_parameter,
           Core.forallTypeBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.FunctionType
 functionType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FunctionType
 functionType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -165,6 +184,7 @@ functionType cx raw =
           Core.functionTypeDomain = field_domain,
           Core.functionTypeCodomain = field_codomain}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Injection
 injection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Injection
 injection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -174,6 +194,7 @@ injection cx raw =
           Core.injectionTypeName = field_typeName,
           Core.injectionField = field_field}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.IntegerType
 integerType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerType
 integerType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -197,6 +218,7 @@ integerType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.IntegerValue
 integerValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerValue
 integerValue cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -206,74 +228,93 @@ integerValue cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "bigint", (\input -> Eithers.map (\t -> Core.IntegerValueBigint t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueBigint v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected bigint value")
-                          _ -> Left (Errors.DecodingError "expected bigint literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int8", (\input -> Eithers.map (\t -> Core.IntegerValueInt8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt8 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int8 value")
-                          _ -> Left (Errors.DecodingError "expected int8 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int16", (\input -> Eithers.map (\t -> Core.IntegerValueInt16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt16 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int16 value")
-                          _ -> Left (Errors.DecodingError "expected int16 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int32", (\input -> Eithers.map (\t -> Core.IntegerValueInt32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int32 value")
-                          _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "int64", (\input -> Eithers.map (\t -> Core.IntegerValueInt64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt64 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int64 value")
-                          _ -> Left (Errors.DecodingError "expected int64 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint8", (\input -> Eithers.map (\t -> Core.IntegerValueUint8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint8 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint8 value")
-                          _ -> Left (Errors.DecodingError "expected uint8 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint16", (\input -> Eithers.map (\t -> Core.IntegerValueUint16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint16 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint16 value")
-                          _ -> Left (Errors.DecodingError "expected uint16 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint32", (\input -> Eithers.map (\t -> Core.IntegerValueUint32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint32 value")
-                          _ -> Left (Errors.DecodingError "expected uint32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "uint64", (\input -> Eithers.map (\t -> Core.IntegerValueUint64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueUint64 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected uint64 value")
-                          _ -> Left (Errors.DecodingError "expected uint64 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "bigint",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueBigint t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueBigint v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected bigint value")
+                            _ -> Left (Errors.DecodingError "expected bigint literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int8",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt8 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int8 value")
+                            _ -> Left (Errors.DecodingError "expected int8 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int16",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt16 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int16 value")
+                            _ -> Left (Errors.DecodingError "expected int16 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int32",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int32 value")
+                            _ -> Left (Errors.DecodingError "expected int32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "int64",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueInt64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt64 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int64 value")
+                            _ -> Left (Errors.DecodingError "expected int64 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint8",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint8 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint8 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint8 value")
+                            _ -> Left (Errors.DecodingError "expected uint8 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint16",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint16 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint16 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint16 value")
+                            _ -> Left (Errors.DecodingError "expected uint16 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint32",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint32 value")
+                            _ -> Left (Errors.DecodingError "expected uint32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "uint64",
+                        (\input -> Eithers.map (\t -> Core.IntegerValueUint64 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueUint64 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected uint64 value")
+                            _ -> Left (Errors.DecodingError "expected uint64 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Lambda
 lambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Lambda
 lambda cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -284,6 +325,7 @@ lambda cx raw =
           Core.lambdaDomain = field_domain,
           Core.lambdaBody = field_body})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Let
 let_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Let
 let_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -293,6 +335,7 @@ let_ cx raw =
           Core.letBindings = field_bindings,
           Core.letBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Literal
 literal :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Literal
 literal cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -302,33 +345,42 @@ literal cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "binary", (\input -> Eithers.map (\t -> Core.LiteralBinary t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralBinary v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected binary literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Core.LiteralBoolean t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralBoolean v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected boolean literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "decimal", (\input -> Eithers.map (\t -> Core.LiteralDecimal t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralDecimal v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected decimal literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "binary",
+                        (\input -> Eithers.map (\t -> Core.LiteralBinary t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralBinary v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected binary literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "boolean",
+                        (\input -> Eithers.map (\t -> Core.LiteralBoolean t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralBoolean v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected boolean literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "decimal",
+                        (\input -> Eithers.map (\t -> Core.LiteralDecimal t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralDecimal v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected decimal literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "float", (\input -> Eithers.map (\t -> Core.LiteralFloat t) (floatValue cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Core.LiteralInteger t) (integerValue cx input))),
-                      (Core.Name "string", (\input -> Eithers.map (\t -> Core.LiteralString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "string",
+                        (\input -> Eithers.map (\t -> Core.LiteralString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.LiteralType
 literalType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.LiteralType
 literalType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -349,6 +401,7 @@ literalType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.MapType
 mapType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.MapType
 mapType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -358,6 +411,7 @@ mapType cx raw =
           Core.mapTypeKeys = field_keys,
           Core.mapTypeValues = field_values}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Name
 name :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Name
 name cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -367,6 +421,7 @@ name cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.PairType
 pairType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.PairType
 pairType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -376,6 +431,7 @@ pairType cx raw =
           Core.pairTypeFirst = field_first,
           Core.pairTypeSecond = field_second}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Projection
 projection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Projection
 projection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -385,6 +441,7 @@ projection cx raw =
           Core.projectionTypeName = field_typeName,
           Core.projectionField = field_field}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Record
 record :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Record
 record cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -394,6 +451,7 @@ record cx raw =
           Core.recordTypeName = field_typeName,
           Core.recordFields = field_fields}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Term
 term :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Term
 term cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -429,6 +487,7 @@ term cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.Type
 type_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Type
 type_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -460,6 +519,7 @@ type_ cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.TypeApplicationTerm
 typeApplicationTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeApplicationTerm
 typeApplicationTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -469,6 +529,7 @@ typeApplicationTerm cx raw =
           Core.typeApplicationTermBody = field_body,
           Core.typeApplicationTermType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.TypeLambda
 typeLambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeLambda
 typeLambda cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -478,6 +539,7 @@ typeLambda cx raw =
           Core.typeLambdaParameter = field_parameter,
           Core.typeLambdaBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.TypeScheme
 typeScheme :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeScheme
 typeScheme cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -488,6 +550,7 @@ typeScheme cx raw =
           Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.TypeVariableMetadata
 typeVariableMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableMetadata
 typeVariableMetadata cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -496,6 +559,7 @@ typeVariableMetadata cx raw =
         in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeSet name) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
           Core.typeVariableMetadataClasses = field_classes})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.WrappedTerm
 wrappedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.WrappedTerm
 wrappedTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

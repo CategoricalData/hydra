@@ -5,18 +5,12 @@
         "name": "hydra.test.testSuite.allTests",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The group of all common tests"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "The group of all common tests"}}}],
             "body": {
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "common"}}},
-                  {
-                    "name": "description",
-                    "term": {
-                      "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                   {
                     "name": "subgroups",
                     "term": {
@@ -43,9 +37,11 @@
                         {"variable": "hydra.test.generation.allTests"},
                         {"variable": "hydra.test.hoisting.all.allTests"},
                         {"variable": "hydra.test.inference.all.allTests"},
+                        {"variable": "hydra.test.json.parser.allTests"},
                         {"variable": "hydra.test.json.roundtrip.allTests"},
                         {"variable": "hydra.test.json.writer.allTests"},
                         {"variable": "hydra.test.json.yaml.allTests"},
+                        {"variable": "hydra.test.ordering.allTests"},
                         {"variable": "hydra.test.reduction.allTests"},
                         {"variable": "hydra.test.rewriting.allTests"},
                         {"variable": "hydra.test.serialization.allTests"},
@@ -57,15 +53,10 @@
                         {"variable": "hydra.test.variables.allTests"}]}},
                   {
                     "name": "cases",
-                    "term": {
-                      "typeApplication": {
-                        "body": {"list": []},
-                        "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
-  "namespace": "hydra.test.testSuite",
-  "termDependencies": [
+  "dependencies": [
     "hydra.test.lib.chars",
     "hydra.test.lib.eithers",
     "hydra.test.lib.equality",
@@ -88,9 +79,11 @@
     "hydra.test.generation",
     "hydra.test.hoisting.all",
     "hydra.test.inference.all",
+    "hydra.test.json.parser",
     "hydra.test.json.roundtrip",
     "hydra.test.json.writer",
     "hydra.test.json.yaml",
+    "hydra.test.ordering",
     "hydra.test.reduction",
     "hydra.test.rewriting",
     "hydra.test.serialization",
@@ -99,8 +92,7 @@
     "hydra.test.substitution",
     "hydra.test.unification",
     "hydra.test.validate.all",
-    "hydra.test.variables"],
-  "typeDependencies": [
+    "hydra.test.variables",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -123,4 +115,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.validation",
+    "hydra.variants"],
+  "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
+  "namespace": "hydra.test.testSuite"}

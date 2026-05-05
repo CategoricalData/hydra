@@ -167,7 +167,7 @@ object TestSuiteRunner {
     boundTerms += ("hydra.annotations.setTermDescription" ->
       lambda("d",
         apply(apply(variable("hydra.annotations.setTermAnnotation"),
-          variable("hydra.constants.key_description")),
+          variable("hydra.constants.keyDescription")),
           apply(apply(primitive("hydra.lib.maybes.map"),
             lambda("s",
               inject("hydra.core.Term", "literal",
@@ -197,7 +197,7 @@ object TestSuiteRunner {
                         variable("lit"))))),
                   variable("descTerm")))),
               apply(apply(primitive("hydra.lib.maps.lookup"),
-                variable("hydra.constants.key_description")),
+                variable("hydra.constants.keyDescription")),
                 variable("anns")))))))
 
     // hydra.annotations.getTermDescription
@@ -386,17 +386,17 @@ object TestSuiteRunner {
     // Kernel constants needed by annotation and other tests
     def nameConstant(s: String): hydra.core.Term =
       Term.wrap(WrappedTerm("hydra.core.Name", Term.literal(Literal.string(s))))
-    boundTerms += ("hydra.constants.key_classes" -> nameConstant("classes"))
-    boundTerms += ("hydra.constants.key_description" -> nameConstant("description"))
-    boundTerms += ("hydra.constants.key_type" -> nameConstant("type"))
-    boundTerms += ("hydra.constants.key_debugId" -> nameConstant("debugId"))
-    boundTerms += ("hydra.constants.key_firstClassType" -> nameConstant("firstClassType"))
-    boundTerms += ("hydra.constants.key_deprecated" -> nameConstant("deprecated"))
-    boundTerms += ("hydra.constants.key_exclude" -> nameConstant("exclude"))
-    boundTerms += ("hydra.constants.key_maxLength" -> nameConstant("maxLength"))
-    boundTerms += ("hydra.constants.key_minLength" -> nameConstant("minLength"))
-    boundTerms += ("hydra.constants.key_preserveFieldName" -> nameConstant("preserveFieldName"))
-    boundTerms += ("hydra.constants.key_freshTypeVariableCount" -> nameConstant("freshTypeVariableCount"))
+    boundTerms += ("hydra.constants.keyClasses" -> nameConstant("classes"))
+    boundTerms += ("hydra.constants.keyDescription" -> nameConstant("description"))
+    boundTerms += ("hydra.constants.keyType" -> nameConstant("type"))
+    boundTerms += ("hydra.constants.keyDebugId" -> nameConstant("debugId"))
+    boundTerms += ("hydra.constants.keyFirstClassType" -> nameConstant("firstClassType"))
+    boundTerms += ("hydra.constants.keyDeprecated" -> nameConstant("deprecated"))
+    boundTerms += ("hydra.constants.keyExclude" -> nameConstant("exclude"))
+    boundTerms += ("hydra.constants.keyMaxLength" -> nameConstant("maxLength"))
+    boundTerms += ("hydra.constants.keyMinLength" -> nameConstant("minLength"))
+    boundTerms += ("hydra.constants.keyPreserveFieldName" -> nameConstant("preserveFieldName"))
+    boundTerms += ("hydra.constants.keyFreshTypeVariableCount" -> nameConstant("freshTypeVariableCount"))
     boundTerms += ("hydra.constants.ignoredVariable" ->
       Term.literal(Literal.string("_")))
     boundTerms += ("hydra.constants.maxTraceDepth" ->

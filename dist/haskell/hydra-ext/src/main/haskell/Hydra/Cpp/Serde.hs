@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Serialization functions for converting C++ AST to abstract expressions
 
 module Hydra.Cpp.Serde where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Cpp.Syntax as Syntax
 import qualified Hydra.Lib.Equality as Equality
@@ -15,52 +13,46 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Convert an access specifier to an expression
-encodeAccessSpecifier :: Syntax.AccessSpecifier -> Ast.Expr
-encodeAccessSpecifier a =
+accessSpecifierToExpr :: Syntax.AccessSpecifier -> Ast.Expr
+accessSpecifierToExpr a =
     case a of
       Syntax.AccessSpecifierPublic -> Serialization.cst "public"
       Syntax.AccessSpecifierProtected -> Serialization.cst "protected"
       Syntax.AccessSpecifierPrivate -> Serialization.cst "private"
       Syntax.AccessSpecifierNone -> Serialization.cst ""
-
 -- | Convert an add operation to an expression
-encodeAddOperation :: Syntax.AddOperation -> Ast.Expr
-encodeAddOperation op =
+addOperationToExpr :: Syntax.AddOperation -> Ast.Expr
+addOperationToExpr op =
 
       let left = Syntax.addOperationLeft op
           right = Syntax.addOperationRight op
       in (Serialization.spaceSep [
-        encodeAdditiveExpression left,
+        additiveExpressionToExpr left,
         (Serialization.cst "+"),
-        (encodeMultiplicativeExpression right)])
-
+        (multiplicativeExpressionToExpr right)])
 -- | Convert an additive expression to an expression
-encodeAdditiveExpression :: Syntax.AdditiveExpression -> Ast.Expr
-encodeAdditiveExpression e =
+additiveExpressionToExpr :: Syntax.AdditiveExpression -> Ast.Expr
+additiveExpressionToExpr e =
     case e of
-      Syntax.AdditiveExpressionMultiplicative v0 -> encodeMultiplicativeExpression v0
-      Syntax.AdditiveExpressionAdd v0 -> encodeAddOperation v0
-      Syntax.AdditiveExpressionSubtract v0 -> encodeSubtractOperation v0
-
+      Syntax.AdditiveExpressionMultiplicative v0 -> multiplicativeExpressionToExpr v0
+      Syntax.AdditiveExpressionAdd v0 -> addOperationToExpr v0
+      Syntax.AdditiveExpressionSubtract v0 -> subtractOperationToExpr v0
 -- | Convert an and expression to an expression
-encodeAndExpression :: Syntax.AndExpression -> Ast.Expr
-encodeAndExpression e =
+andExpressionToExpr :: Syntax.AndExpression -> Ast.Expr
+andExpressionToExpr e =
     case e of
-      Syntax.AndExpressionEquality v0 -> encodeEqualityExpression v0
-      Syntax.AndExpressionBitwiseAnd v0 -> encodeBitwiseAndOperation v0
-
+      Syntax.AndExpressionEquality v0 -> equalityExpressionToExpr v0
+      Syntax.AndExpressionBitwiseAnd v0 -> bitwiseAndOperationToExpr v0
 -- | Convert an assignment expression to an expression
-encodeAssignmentExpression :: Syntax.AssignmentExpression -> Ast.Expr
-encodeAssignmentExpression a =
+assignmentExpressionToExpr :: Syntax.AssignmentExpression -> Ast.Expr
+assignmentExpressionToExpr a =
     case a of
-      Syntax.AssignmentExpressionConditional v0 -> encodeConditionalExpression v0
-      Syntax.AssignmentExpressionAssignment v0 -> encodeExplicitAssignment v0
-
+      Syntax.AssignmentExpressionConditional v0 -> conditionalExpressionToExpr v0
+      Syntax.AssignmentExpressionAssignment v0 -> explicitAssignmentToExpr v0
 -- | Convert an assignment operator to an expression
-encodeAssignmentOperator :: Syntax.AssignmentOperator -> Ast.Expr
-encodeAssignmentOperator op =
+assignmentOperatorToExpr :: Syntax.AssignmentOperator -> Ast.Expr
+assignmentOperatorToExpr op =
     case op of
       Syntax.AssignmentOperatorAssign -> Serialization.cst "="
       Syntax.AssignmentOperatorPlusAssign -> Serialization.cst "+="
@@ -73,20 +65,18 @@ encodeAssignmentOperator op =
       Syntax.AssignmentOperatorBitwiseAndAssign -> Serialization.cst "&="
       Syntax.AssignmentOperatorBitwiseXorAssign -> Serialization.cst "^="
       Syntax.AssignmentOperatorBitwiseOrAssign -> Serialization.cst "|="
-
 -- | Convert a base specifier to an expression
-encodeBaseSpecifier :: Syntax.BaseSpecifier -> Ast.Expr
-encodeBaseSpecifier bs =
+baseSpecifierToExpr :: Syntax.BaseSpecifier -> Ast.Expr
+baseSpecifierToExpr bs =
 
       let access = Syntax.baseSpecifierAccess bs
           name = Syntax.baseSpecifierName bs
       in (Serialization.spaceSep [
-        encodeAccessSpecifier access,
+        accessSpecifierToExpr access,
         (Serialization.cst name)])
-
 -- | Convert a basic type to an expression
-encodeBasicType :: Syntax.BasicType -> Ast.Expr
-encodeBasicType t =
+basicTypeToExpr :: Syntax.BasicType -> Ast.Expr
+basicTypeToExpr t =
     case t of
       Syntax.BasicTypeVoid -> Serialization.cst "void"
       Syntax.BasicTypeBool -> Serialization.cst "bool"
@@ -97,156 +87,139 @@ encodeBasicType t =
       Syntax.BasicTypeString -> Serialization.cst "std::string"
       Syntax.BasicTypeAuto -> Serialization.cst "auto"
       Syntax.BasicTypeNamed v0 -> Serialization.cst v0
-
 -- | Convert a bitwise and operation to an expression
-encodeBitwiseAndOperation :: Syntax.BitwiseAndOperation -> Ast.Expr
-encodeBitwiseAndOperation op =
+bitwiseAndOperationToExpr :: Syntax.BitwiseAndOperation -> Ast.Expr
+bitwiseAndOperationToExpr op =
 
       let left = Syntax.bitwiseAndOperationLeft op
           right = Syntax.bitwiseAndOperationRight op
       in (Serialization.spaceSep [
-        encodeAndExpression left,
+        andExpressionToExpr left,
         (Serialization.cst "&"),
-        (encodeEqualityExpression right)])
-
+        (equalityExpressionToExpr right)])
 -- | Convert a bitwise or operation to an expression
-encodeBitwiseOrOperation :: Syntax.BitwiseOrOperation -> Ast.Expr
-encodeBitwiseOrOperation op =
+bitwiseOrOperationToExpr :: Syntax.BitwiseOrOperation -> Ast.Expr
+bitwiseOrOperationToExpr op =
 
       let left = Syntax.bitwiseOrOperationLeft op
           right = Syntax.bitwiseOrOperationRight op
       in (Serialization.spaceSep [
-        encodeInclusiveOrExpression left,
+        inclusiveOrExpressionToExpr left,
         (Serialization.cst "|"),
-        (encodeExclusiveOrExpression right)])
-
+        (exclusiveOrExpressionToExpr right)])
 -- | Convert a bitwise xor operation to an expression
-encodeBitwiseXorOperation :: Syntax.BitwiseXorOperation -> Ast.Expr
-encodeBitwiseXorOperation op =
+bitwiseXorOperationToExpr :: Syntax.BitwiseXorOperation -> Ast.Expr
+bitwiseXorOperationToExpr op =
 
       let left = Syntax.bitwiseXorOperationLeft op
           right = Syntax.bitwiseXorOperationRight op
       in (Serialization.spaceSep [
-        encodeExclusiveOrExpression left,
+        exclusiveOrExpressionToExpr left,
         (Serialization.cst "^"),
-        (encodeAndExpression right)])
-
+        (andExpressionToExpr right)])
 -- | Convert a boolean literal to an expression
-encodeBooleanLiteral :: Syntax.BooleanLiteral -> Ast.Expr
-encodeBooleanLiteral bl = Logic.ifElse (Syntax.unBooleanLiteral bl) (Serialization.cst "true") (Serialization.cst "false")
-
+booleanLiteralToExpr :: Syntax.BooleanLiteral -> Ast.Expr
+booleanLiteralToExpr bl = Logic.ifElse (Syntax.unBooleanLiteral bl) (Serialization.cst "true") (Serialization.cst "false")
+-- | Convert a capture list to an expression
+captureListToExpr :: Syntax.CaptureList -> Ast.Expr
+captureListToExpr cl =
+    case cl of
+      Syntax.CaptureListCaptureByValue -> Serialization.cst "[=]"
+      Syntax.CaptureListCaptures v0 -> Serialization.bracketList Serialization.inlineStyle (Lists.map captureToExpr v0)
 -- | Convert a capture to an expression
-encodeCapture :: Syntax.Capture -> Ast.Expr
-encodeCapture cap =
+captureToExpr :: Syntax.Capture -> Ast.Expr
+captureToExpr cap =
 
       let name = Syntax.captureName cap
           byRef = Syntax.captureByReference cap
       in (Logic.ifElse byRef (Serialization.cst (Strings.cat2 "&" name)) (Serialization.cst name))
-
--- | Convert a capture list to an expression
-encodeCaptureList :: Syntax.CaptureList -> Ast.Expr
-encodeCaptureList cl =
-    case cl of
-      Syntax.CaptureListCaptureByValue -> Serialization.cst "[=]"
-      Syntax.CaptureListCaptures v0 -> Serialization.bracketList Serialization.inlineStyle (Lists.map encodeCapture v0)
-
 -- | Convert a case statement to an expression
-encodeCaseStatement :: Syntax.CaseStatement -> Ast.Expr
-encodeCaseStatement stmt =
+caseStatementToExpr :: Syntax.CaseStatement -> Ast.Expr
+caseStatementToExpr stmt =
     case stmt of
-      Syntax.CaseStatementCase v0 -> encodeCaseValue v0
+      Syntax.CaseStatementCase v0 -> caseValueToExpr v0
       Syntax.CaseStatementDefault v0 -> Serialization.spaceSep [
         Serialization.cst "default:",
-        (encodeStatement v0)]
-
+        (statementToExpr v0)]
 -- | Convert a case value to an expression
-encodeCaseValue :: Syntax.CaseValue -> Ast.Expr
-encodeCaseValue cv =
+caseValueToExpr :: Syntax.CaseValue -> Ast.Expr
+caseValueToExpr cv =
 
       let value = Syntax.caseValueValue cv
           statement = Syntax.caseValueStatement cv
       in (Serialization.spaceSep [
         Serialization.cst "case",
         (Serialization.noSep [
-          encodeExpression value,
+          expressionToExpr value,
           (Serialization.cst ":")]),
-        (encodeStatement statement)])
-
+        (statementToExpr statement)])
 -- | Convert a class body to an expression
-encodeClassBody :: Bool -> Syntax.ClassBody -> Ast.Expr
-encodeClassBody commas cb =
-    Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map (encodeMemberSpecification commas) (Syntax.unClassBody cb)))
-
+classBodyToExpr :: Bool -> Syntax.ClassBody -> Ast.Expr
+classBodyToExpr commas cb =
+    Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map (memberSpecificationToExpr commas) (Syntax.unClassBody cb)))
 -- | Convert a class declaration to an expression
-encodeClassDeclaration :: Syntax.ClassDeclaration -> Ast.Expr
-encodeClassDeclaration cd =
+classDeclarationToExpr :: Syntax.ClassDeclaration -> Ast.Expr
+classDeclarationToExpr cd =
 
       let spec = Syntax.classDeclarationSpecifier cd
           mbody = Syntax.classDeclarationBody cd
           key = Syntax.classSpecifierKey spec
           isEnum = Logic.or (Equality.equal key Syntax.ClassKeyEnum) (Equality.equal key Syntax.ClassKeyEnumClass)
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
-        Just (encodeClassSpecifier spec),
-        (Maybes.map (\body -> encodeClassBody isEnum body) mbody)])))
-
+        Just (classSpecifierToExpr spec),
+        (Maybes.map (\body -> classBodyToExpr isEnum body) mbody)])))
 -- | Convert a class key to an expression
-encodeClassKey :: Syntax.ClassKey -> Ast.Expr
-encodeClassKey k =
+classKeyToExpr :: Syntax.ClassKey -> Ast.Expr
+classKeyToExpr k =
     case k of
       Syntax.ClassKeyClass -> Serialization.cst "class"
       Syntax.ClassKeyEnum -> Serialization.cst "enum"
       Syntax.ClassKeyEnumClass -> Serialization.cst "enum class"
       Syntax.ClassKeyStruct -> Serialization.cst "struct"
-
 -- | Convert a class specifier to an expression
-encodeClassSpecifier :: Syntax.ClassSpecifier -> Ast.Expr
-encodeClassSpecifier cs =
+classSpecifierToExpr :: Syntax.ClassSpecifier -> Ast.Expr
+classSpecifierToExpr cs =
 
       let key = Syntax.classSpecifierKey cs
           name = Syntax.classSpecifierName cs
           inheritance = Syntax.classSpecifierInheritance cs
       in (Serialization.spaceSep (Lists.concat [
         [
-          encodeClassKey key,
+          classKeyToExpr key,
           (Serialization.cst name)],
         (Logic.ifElse (Lists.null inheritance) [] [
           Serialization.cst ":",
-          (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeBaseSpecifier inheritance))])]))
-
+          (Serialization.commaSep Serialization.inlineStyle (Lists.map baseSpecifierToExpr inheritance))])]))
 -- | Convert a comma expression to an expression
-encodeCommaExpression :: Syntax.CommaExpression -> Ast.Expr
-encodeCommaExpression ce =
+commaExpressionToExpr :: Syntax.CommaExpression -> Ast.Expr
+commaExpressionToExpr ce =
 
       let left = Syntax.commaExpressionLeft ce
           right = Syntax.commaExpressionRight ce
       in (Serialization.spaceSep [
-        encodeExpression left,
+        expressionToExpr left,
         (Serialization.cst ","),
-        (encodeAssignmentExpression right)])
-
+        (assignmentExpressionToExpr right)])
 -- | Convert a comment to an expression
-encodeComment :: Syntax.Comment -> Ast.Expr
-encodeComment c =
+commentToExpr :: Syntax.Comment -> Ast.Expr
+commentToExpr c =
 
       let text = Syntax.commentText c
           isMultiline = Syntax.commentIsMultiline c
       in (Serialization.cst (toCppComments text isMultiline))
-
 -- | Convert a compound statement to an expression
-encodeCompoundStatement :: Syntax.CompoundStatement -> Ast.Expr
-encodeCompoundStatement cs =
-    Serialization.curlyBracesList (Just "") Serialization.fullBlockStyle (Lists.map encodeStatement (Syntax.unCompoundStatement cs))
-
+compoundStatementToExpr :: Syntax.CompoundStatement -> Ast.Expr
+compoundStatementToExpr cs =
+    Serialization.curlyBracesList (Just "") Serialization.fullBlockStyle (Lists.map statementToExpr (Syntax.unCompoundStatement cs))
 -- | Convert a conditional expression to an expression
-encodeConditionalExpression :: Syntax.ConditionalExpression -> Ast.Expr
-encodeConditionalExpression c =
+conditionalExpressionToExpr :: Syntax.ConditionalExpression -> Ast.Expr
+conditionalExpressionToExpr c =
     case c of
-      Syntax.ConditionalExpressionLogicalOr v0 -> encodeLogicalOrExpression v0
-      Syntax.ConditionalExpressionTernary v0 -> encodeTernaryExpression v0
-
+      Syntax.ConditionalExpressionLogicalOr v0 -> logicalOrExpressionToExpr v0
+      Syntax.ConditionalExpressionTernary v0 -> ternaryExpressionToExpr v0
 -- | Convert a constructor declaration to an expression
-encodeConstructorDeclaration :: Syntax.ConstructorDeclaration -> Ast.Expr
-encodeConstructorDeclaration cd =
+constructorDeclarationToExpr :: Syntax.ConstructorDeclaration -> Ast.Expr
+constructorDeclarationToExpr cd =
 
       let name = Syntax.constructorDeclarationName cd
           params = Syntax.constructorDeclarationParameters cd
@@ -255,27 +228,25 @@ encodeConstructorDeclaration cd =
       in (Serialization.spaceSep (Maybes.cat [
         Just (Serialization.noSep [
           Serialization.cst name,
-          (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeParameter params)))]),
+          (Serialization.parenListAdaptive (Lists.map parameterToExpr params))]),
         (Logic.ifElse (Lists.null inits) Nothing (Just (Serialization.spaceSep [
           Serialization.cst ":",
-          (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeMemInitializer inits))]))),
-        (Just (encodeFunctionBody body))]))
-
+          (Serialization.commaSep Serialization.inlineStyle (Lists.map memInitializerToExpr inits))]))),
+        (Just (functionBodyToExpr body))]))
 -- | Convert a declaration to an expression
-encodeDeclaration :: Syntax.Declaration -> Ast.Expr
-encodeDeclaration d =
+declarationToExpr :: Syntax.Declaration -> Ast.Expr
+declarationToExpr d =
     case d of
-      Syntax.DeclarationPreprocessor v0 -> encodePreprocessorDirective v0
-      Syntax.DeclarationClass v0 -> encodeClassDeclaration v0
-      Syntax.DeclarationFunction v0 -> encodeFunctionDeclaration v0
-      Syntax.DeclarationVariable v0 -> encodeVariableDeclaration False v0
-      Syntax.DeclarationTypedef v0 -> encodeTypedefDeclaration v0
-      Syntax.DeclarationNamespace v0 -> encodeNamespaceDeclaration v0
-      Syntax.DeclarationTemplate v0 -> encodeTemplateDeclaration v0
-
+      Syntax.DeclarationPreprocessor v0 -> preprocessorDirectiveToExpr v0
+      Syntax.DeclarationClass v0 -> classDeclarationToExpr v0
+      Syntax.DeclarationFunction v0 -> functionDeclarationToExpr v0
+      Syntax.DeclarationVariable v0 -> variableDeclarationToExpr False v0
+      Syntax.DeclarationTypedef v0 -> typedefDeclarationToExpr v0
+      Syntax.DeclarationNamespace v0 -> namespaceDeclarationToExpr v0
+      Syntax.DeclarationTemplate v0 -> templateDeclarationToExpr v0
 -- | Convert a define directive to an expression
-encodeDefineDirective :: Syntax.DefineDirective -> Ast.Expr
-encodeDefineDirective dd =
+defineDirectiveToExpr :: Syntax.DefineDirective -> Ast.Expr
+defineDirectiveToExpr dd =
 
       let name = Syntax.defineDirectiveName dd
           params = Syntax.defineDirectiveParameters dd
@@ -285,130 +256,116 @@ encodeDefineDirective dd =
           Serialization.cst "#define",
           (Serialization.cst name)],
         (Maybes.maybe [] (\ps -> [
-          Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map (\p -> Serialization.cst p) ps))]) params),
+          Serialization.parenListAdaptive (Lists.map (\p -> Serialization.cst p) ps)]) params),
         (Maybes.maybe [] (\r -> [
           Serialization.cst r]) replacement)]))
-
 -- | Convert a destructor declaration to an expression
-encodeDestructorDeclaration :: Syntax.DestructorDeclaration -> Ast.Expr
-encodeDestructorDeclaration dd =
+destructorDeclarationToExpr :: Syntax.DestructorDeclaration -> Ast.Expr
+destructorDeclarationToExpr dd =
 
       let prefixSpecs = Syntax.destructorDeclarationPrefixSpecifiers dd
           name = Syntax.destructorDeclarationName dd
           suffixSpecs = Syntax.destructorDeclarationSuffixSpecifiers dd
           body = Syntax.destructorDeclarationBody dd
       in (Serialization.spaceSep (Lists.concat [
-        Lists.map encodeFunctionSpecifierPrefix prefixSpecs,
+        Lists.map functionSpecifierPrefixToExpr prefixSpecs,
         [
           Serialization.noSep [
             Serialization.cst (Strings.cat2 "~" name),
             (Serialization.parens (Serialization.cst ""))]],
-        (Lists.map encodeFunctionSpecifierSuffix suffixSpecs),
+        (Lists.map functionSpecifierSuffixToExpr suffixSpecs),
         [
-          encodeFunctionBody body]]))
-
+          functionBodyToExpr body]]))
 -- | Convert a divide operation to an expression
-encodeDivideOperation :: Syntax.DivideOperation -> Ast.Expr
-encodeDivideOperation op =
+divideOperationToExpr :: Syntax.DivideOperation -> Ast.Expr
+divideOperationToExpr op =
 
       let left = Syntax.divideOperationLeft op
           right = Syntax.divideOperationRight op
       in (Serialization.spaceSep [
-        encodeMultiplicativeExpression left,
+        multiplicativeExpressionToExpr left,
         (Serialization.cst "/"),
-        (encodeUnaryExpression right)])
-
+        (unaryExpressionToExpr right)])
 -- | Convert a do statement to an expression
-encodeDoStatement :: Syntax.DoStatement -> Ast.Expr
-encodeDoStatement ds =
+doStatementToExpr :: Syntax.DoStatement -> Ast.Expr
+doStatementToExpr ds =
 
       let body = Syntax.doStatementBody ds
           cond = Syntax.doStatementCondition ds
       in (Serialization.newlineSep [
         Serialization.cst "do",
-        (encodeStatement body),
+        (statementToExpr body),
         (Serialization.withSemi (Serialization.spaceSep [
           Serialization.cst "while",
-          (Serialization.parens (encodeExpression cond))]))])
-
+          (Serialization.parens (expressionToExpr cond))]))])
 -- | Convert an elif directive to an expression
-encodeElifDirective :: Syntax.ElifDirective -> Ast.Expr
-encodeElifDirective ed =
+elifDirectiveToExpr :: Syntax.ElifDirective -> Ast.Expr
+elifDirectiveToExpr ed =
     Serialization.spaceSep [
       Serialization.cst "#elif",
       (Serialization.cst (Syntax.elifDirectiveCondition ed))]
-
 -- | Convert an else directive to an expression
-encodeElseDirective :: t0 -> Ast.Expr
-encodeElseDirective ed = Serialization.cst "#else"
-
+elseDirectiveToExpr :: t0 -> Ast.Expr
+elseDirectiveToExpr ed = Serialization.cst "#else"
 -- | Convert an endif directive to an expression
-encodeEndifDirective :: t0 -> Ast.Expr
-encodeEndifDirective ed = Serialization.cst "#endif"
-
+endifDirectiveToExpr :: t0 -> Ast.Expr
+endifDirectiveToExpr ed = Serialization.cst "#endif"
 -- | Convert an equal operation to an expression
-encodeEqualOperation :: Syntax.EqualOperation -> Ast.Expr
-encodeEqualOperation op =
+equalOperationToExpr :: Syntax.EqualOperation -> Ast.Expr
+equalOperationToExpr op =
 
       let left = Syntax.equalOperationLeft op
           right = Syntax.equalOperationRight op
       in (Serialization.spaceSep [
-        encodeEqualityExpression left,
+        equalityExpressionToExpr left,
         (Serialization.cst "=="),
-        (encodeRelationalExpression right)])
-
+        (relationalExpressionToExpr right)])
 -- | Convert an equality expression to an expression
-encodeEqualityExpression :: Syntax.EqualityExpression -> Ast.Expr
-encodeEqualityExpression e =
+equalityExpressionToExpr :: Syntax.EqualityExpression -> Ast.Expr
+equalityExpressionToExpr e =
     case e of
-      Syntax.EqualityExpressionRelational v0 -> encodeRelationalExpression v0
-      Syntax.EqualityExpressionEqual v0 -> encodeEqualOperation v0
-      Syntax.EqualityExpressionNotEqual v0 -> encodeNotEqualOperation v0
-
+      Syntax.EqualityExpressionRelational v0 -> relationalExpressionToExpr v0
+      Syntax.EqualityExpressionEqual v0 -> equalOperationToExpr v0
+      Syntax.EqualityExpressionNotEqual v0 -> notEqualOperationToExpr v0
 -- | Convert an error directive to an expression
-encodeErrorDirective :: Syntax.ErrorDirective -> Ast.Expr
-encodeErrorDirective ed =
+errorDirectiveToExpr :: Syntax.ErrorDirective -> Ast.Expr
+errorDirectiveToExpr ed =
     Serialization.spaceSep [
       Serialization.cst "#error",
       (Serialization.cst (Syntax.errorDirectiveMessage ed))]
-
 -- | Convert an exclusive or expression to an expression
-encodeExclusiveOrExpression :: Syntax.ExclusiveOrExpression -> Ast.Expr
-encodeExclusiveOrExpression e =
+exclusiveOrExpressionToExpr :: Syntax.ExclusiveOrExpression -> Ast.Expr
+exclusiveOrExpressionToExpr e =
     case e of
-      Syntax.ExclusiveOrExpressionAnd v0 -> encodeAndExpression v0
-      Syntax.ExclusiveOrExpressionBitwiseXor v0 -> encodeBitwiseXorOperation v0
-
+      Syntax.ExclusiveOrExpressionAnd v0 -> andExpressionToExpr v0
+      Syntax.ExclusiveOrExpressionBitwiseXor v0 -> bitwiseXorOperationToExpr v0
 -- | Convert an explicit assignment to an expression
-encodeExplicitAssignment :: Syntax.ExplicitAssignment -> Ast.Expr
-encodeExplicitAssignment ea =
+explicitAssignmentToExpr :: Syntax.ExplicitAssignment -> Ast.Expr
+explicitAssignmentToExpr ea =
 
       let left = Syntax.explicitAssignmentLeft ea
           op = Syntax.explicitAssignmentOp ea
           right = Syntax.explicitAssignmentRight ea
       in (Serialization.spaceSep [
-        encodeLogicalOrExpression left,
-        (encodeAssignmentOperator op),
-        (encodeAssignmentExpression right)])
-
+        logicalOrExpressionToExpr left,
+        (assignmentOperatorToExpr op),
+        (assignmentExpressionToExpr right)])
 -- | Convert an expression to an expression
-encodeExpression :: Syntax.Expression -> Ast.Expr
-encodeExpression e =
+expressionToExpr :: Syntax.Expression -> Ast.Expr
+expressionToExpr e =
     case e of
-      Syntax.ExpressionAssignment v0 -> encodeAssignmentExpression v0
-      Syntax.ExpressionComma v0 -> encodeCommaExpression v0
-
+      Syntax.ExpressionAssignment v0 -> assignmentExpressionToExpr v0
+      Syntax.ExpressionComma v0 -> commaExpressionToExpr v0
 -- | Convert a for-init to an expression
-encodeForInit :: Syntax.ForInit -> Ast.Expr
-encodeForInit i =
+forInitToExpr :: Syntax.ForInit -> Ast.Expr
+forInitToExpr i =
     case i of
-      Syntax.ForInitExpression v0 -> encodeExpression v0
-      Syntax.ForInitDeclaration v0 -> encodeVariableDeclaration False v0
+      Syntax.ForInitExpression v0 -> expressionToExpr v0
+      Syntax.ForInitDeclaration v0 -> variableDeclarationToExpr False v0
       Syntax.ForInitEmpty -> Serialization.cst ""
-
 -- | Convert a for statement to an expression
-encodeForStatement :: Syntax.ForStatement -> Ast.Expr
-encodeForStatement fs =
+forStatementToExpr :: Syntax.ForStatement -> Ast.Expr
+forStatementToExpr fs =
 
       let init = Syntax.forStatementInit fs
           cond = Syntax.forStatementCondition fs
@@ -418,45 +375,41 @@ encodeForStatement fs =
         Serialization.spaceSep [
           Serialization.cst "for",
           (Serialization.parens (Serialization.noSep [
-            encodeForInit init,
+            forInitToExpr init,
             (Serialization.cst ";"),
-            (encodeExpression cond),
+            (expressionToExpr cond),
             (Serialization.cst ";"),
-            (encodeExpression inc)]))],
-        (encodeStatement body)])
-
+            (expressionToExpr inc)]))],
+        (statementToExpr body)])
 -- | Convert a function application to an expression
-encodeFunctionApplication :: Syntax.FunctionApplication -> Ast.Expr
-encodeFunctionApplication fa =
+functionApplicationToExpr :: Syntax.FunctionApplication -> Ast.Expr
+functionApplicationToExpr fa =
 
       let func = Syntax.functionApplicationFunction fa
           args = Syntax.functionApplicationArguments fa
       in (Serialization.spaceSep [
-        encodeFunctionIdentifier func,
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeExpression args)))])
-
+        functionIdentifierToExpr func,
+        (Serialization.parenListAdaptive (Lists.map expressionToExpr args))])
 -- | Convert a function body to an expression
-encodeFunctionBody :: Syntax.FunctionBody -> Ast.Expr
-encodeFunctionBody b =
+functionBodyToExpr :: Syntax.FunctionBody -> Ast.Expr
+functionBodyToExpr b =
     case b of
-      Syntax.FunctionBodyCompound v0 -> encodeCompoundStatement v0
+      Syntax.FunctionBodyCompound v0 -> compoundStatementToExpr v0
       Syntax.FunctionBodyDeclaration -> Serialization.cst ";"
       Syntax.FunctionBodyPure -> Serialization.withSemi (Serialization.cst "= 0")
       Syntax.FunctionBodyDefault -> Serialization.withSemi (Serialization.cst "= default")
-
 -- | Convert a function call operation to an expression
-encodeFunctionCallOperation :: Syntax.FunctionCallOperation -> Ast.Expr
-encodeFunctionCallOperation fco =
+functionCallOperationToExpr :: Syntax.FunctionCallOperation -> Ast.Expr
+functionCallOperationToExpr fco =
 
       let func = Syntax.functionCallOperationFunction fco
           args = Syntax.functionCallOperationArguments fco
       in (Serialization.noSep [
-        encodePostfixExpression func,
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeExpression args)))])
-
+        postfixExpressionToExpr func,
+        (Serialization.parenListAdaptive (Lists.map expressionToExpr args))])
 -- | Convert a function declaration to an expression
-encodeFunctionDeclaration :: Syntax.FunctionDeclaration -> Ast.Expr
-encodeFunctionDeclaration fd =
+functionDeclarationToExpr :: Syntax.FunctionDeclaration -> Ast.Expr
+functionDeclarationToExpr fd =
 
       let prefixSpecs = Syntax.functionDeclarationPrefixSpecifiers fd
           retType = Syntax.functionDeclarationReturnType fd
@@ -465,97 +418,87 @@ encodeFunctionDeclaration fd =
           suffixSpecs = Syntax.functionDeclarationSuffixSpecifiers fd
           body = Syntax.functionDeclarationBody fd
       in (Serialization.spaceSep (Lists.concat [
-        Lists.map encodeFunctionSpecifierPrefix prefixSpecs,
+        Lists.map functionSpecifierPrefixToExpr prefixSpecs,
         [
-          encodeTypeExpression retType,
+          typeExpressionToExpr retType,
           (Serialization.noSep [
             Serialization.cst name,
-            (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeParameter params)))])],
-        (Lists.map encodeFunctionSpecifierSuffix suffixSpecs),
+            (Serialization.parenListAdaptive (Lists.map parameterToExpr params))])],
+        (Lists.map functionSpecifierSuffixToExpr suffixSpecs),
         [
-          encodeFunctionBody body]]))
-
+          functionBodyToExpr body]]))
 -- | Convert a function identifier to an expression
-encodeFunctionIdentifier :: Syntax.FunctionIdentifier -> Ast.Expr
-encodeFunctionIdentifier f =
+functionIdentifierToExpr :: Syntax.FunctionIdentifier -> Ast.Expr
+functionIdentifierToExpr f =
     case f of
       Syntax.FunctionIdentifierSimple v0 -> Serialization.cst v0
-      Syntax.FunctionIdentifierQualified v0 -> encodeQualifiedIdentifier v0
-
+      Syntax.FunctionIdentifierQualified v0 -> qualifiedIdentifierToExpr v0
 -- | Convert a function specifier prefix to an expression
-encodeFunctionSpecifierPrefix :: Syntax.FunctionSpecifierPrefix -> Ast.Expr
-encodeFunctionSpecifierPrefix s =
+functionSpecifierPrefixToExpr :: Syntax.FunctionSpecifierPrefix -> Ast.Expr
+functionSpecifierPrefixToExpr s =
     case s of
       Syntax.FunctionSpecifierPrefixInline -> Serialization.cst "inline"
       Syntax.FunctionSpecifierPrefixVirtual -> Serialization.cst "virtual"
       Syntax.FunctionSpecifierPrefixStatic -> Serialization.cst "static"
       Syntax.FunctionSpecifierPrefixExplicit -> Serialization.cst "explicit"
-
 -- | Convert a function specifier suffix to an expression
-encodeFunctionSpecifierSuffix :: Syntax.FunctionSpecifierSuffix -> Ast.Expr
-encodeFunctionSpecifierSuffix s =
+functionSpecifierSuffixToExpr :: Syntax.FunctionSpecifierSuffix -> Ast.Expr
+functionSpecifierSuffixToExpr s =
     case s of
       Syntax.FunctionSpecifierSuffixConst -> Serialization.cst "const"
       Syntax.FunctionSpecifierSuffixNoexcept -> Serialization.cst "noexcept"
       Syntax.FunctionSpecifierSuffixOverride -> Serialization.cst "override"
       Syntax.FunctionSpecifierSuffixFinal -> Serialization.cst "final"
-
 -- | Convert a function type to an expression
-encodeFunctionType :: Syntax.FunctionType -> Ast.Expr
-encodeFunctionType ft =
+functionTypeToExpr :: Syntax.FunctionType -> Ast.Expr
+functionTypeToExpr ft =
 
       let retType = Syntax.functionTypeReturnType ft
           params = Syntax.functionTypeParameters ft
       in (Serialization.spaceSep [
-        encodeTypeExpression retType,
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeParameter params)))])
-
+        typeExpressionToExpr retType,
+        (Serialization.parenListAdaptive (Lists.map parameterToExpr params))])
 -- | Convert a greater-than-or-equal operation to an expression
-encodeGreaterEqualOperation :: Syntax.GreaterEqualOperation -> Ast.Expr
-encodeGreaterEqualOperation op =
+greaterEqualOperationToExpr :: Syntax.GreaterEqualOperation -> Ast.Expr
+greaterEqualOperationToExpr op =
 
       let left = Syntax.greaterEqualOperationLeft op
           right = Syntax.greaterEqualOperationRight op
       in (Serialization.spaceSep [
-        encodeRelationalExpression left,
+        relationalExpressionToExpr left,
         (Serialization.cst ">="),
-        (encodeShiftExpression right)])
-
+        (shiftExpressionToExpr right)])
 -- | Convert a greater-than operation to an expression
-encodeGreaterOperation :: Syntax.GreaterOperation -> Ast.Expr
-encodeGreaterOperation op =
+greaterOperationToExpr :: Syntax.GreaterOperation -> Ast.Expr
+greaterOperationToExpr op =
 
       let left = Syntax.greaterOperationLeft op
           right = Syntax.greaterOperationRight op
       in (Serialization.spaceSep [
-        encodeRelationalExpression left,
+        relationalExpressionToExpr left,
         (Serialization.cst ">"),
-        (encodeShiftExpression right)])
-
+        (shiftExpressionToExpr right)])
 -- | Convert an if directive to an expression
-encodeIfDirective :: Syntax.IfDirective -> Ast.Expr
-encodeIfDirective ifd =
+ifDirectiveToExpr :: Syntax.IfDirective -> Ast.Expr
+ifDirectiveToExpr ifd =
     Serialization.spaceSep [
       Serialization.cst "#if",
       (Serialization.cst (Syntax.ifDirectiveCondition ifd))]
-
 -- | Convert an ifdef directive to an expression
-encodeIfdefDirective :: Syntax.IfdefDirective -> Ast.Expr
-encodeIfdefDirective id =
+ifdefDirectiveToExpr :: Syntax.IfdefDirective -> Ast.Expr
+ifdefDirectiveToExpr id =
     Serialization.spaceSep [
       Serialization.cst "#ifdef",
       (Serialization.cst (Syntax.ifdefDirectiveIdentifier id))]
-
 -- | Convert an ifndef directive to an expression
-encodeIfndefDirective :: Syntax.IfndefDirective -> Ast.Expr
-encodeIfndefDirective ind =
+ifndefDirectiveToExpr :: Syntax.IfndefDirective -> Ast.Expr
+ifndefDirectiveToExpr ind =
     Serialization.spaceSep [
       Serialization.cst "#ifndef",
       (Serialization.cst (Syntax.ifndefDirectiveIdentifier ind))]
-
 -- | Convert an include directive to an expression
-encodeIncludeDirective :: Syntax.IncludeDirective -> Ast.Expr
-encodeIncludeDirective incl =
+includeDirectiveToExpr :: Syntax.IncludeDirective -> Ast.Expr
+includeDirectiveToExpr incl =
 
       let name = Syntax.includeDirectiveName incl
           isSystem = Syntax.includeDirectiveIsSystem incl
@@ -566,108 +509,98 @@ encodeIncludeDirective incl =
         "#include \"",
         name,
         "\""])))
-
 -- | Convert an inclusive or expression to an expression
-encodeInclusiveOrExpression :: Syntax.InclusiveOrExpression -> Ast.Expr
-encodeInclusiveOrExpression e =
+inclusiveOrExpressionToExpr :: Syntax.InclusiveOrExpression -> Ast.Expr
+inclusiveOrExpressionToExpr e =
     case e of
-      Syntax.InclusiveOrExpressionExclusiveOr v0 -> encodeExclusiveOrExpression v0
-      Syntax.InclusiveOrExpressionBitwiseOr v0 -> encodeBitwiseOrOperation v0
-
+      Syntax.InclusiveOrExpressionExclusiveOr v0 -> exclusiveOrExpressionToExpr v0
+      Syntax.InclusiveOrExpressionBitwiseOr v0 -> bitwiseOrOperationToExpr v0
 -- | Convert an integer literal to an expression
-encodeIntegerLiteral :: Syntax.IntegerLiteral -> Ast.Expr
-encodeIntegerLiteral i =
+integerLiteralToExpr :: Syntax.IntegerLiteral -> Ast.Expr
+integerLiteralToExpr i =
     case i of
       Syntax.IntegerLiteralDecimal v0 -> Serialization.cst (Literals.showBigint v0)
       Syntax.IntegerLiteralHexadecimal v0 -> Serialization.cst (Strings.cat2 "0x" v0)
       Syntax.IntegerLiteralOctal v0 -> Serialization.cst (Strings.cat2 "0" v0)
       Syntax.IntegerLiteralBinary v0 -> Serialization.cst (Strings.cat2 "0b" v0)
-
 -- | Convert an iteration statement to an expression
-encodeIterationStatement :: Syntax.IterationStatement -> Ast.Expr
-encodeIterationStatement i =
+iterationStatementToExpr :: Syntax.IterationStatement -> Ast.Expr
+iterationStatementToExpr i =
     case i of
-      Syntax.IterationStatementWhile v0 -> encodeWhileStatement v0
-      Syntax.IterationStatementDo v0 -> encodeDoStatement v0
-      Syntax.IterationStatementFor v0 -> encodeForStatement v0
-      Syntax.IterationStatementRangeFor v0 -> encodeRangeForStatement v0
-
+      Syntax.IterationStatementWhile v0 -> whileStatementToExpr v0
+      Syntax.IterationStatementDo v0 -> doStatementToExpr v0
+      Syntax.IterationStatementFor v0 -> forStatementToExpr v0
+      Syntax.IterationStatementRangeFor v0 -> rangeForStatementToExpr v0
 -- | Convert a jump statement to an expression
-encodeJumpStatement :: Syntax.JumpStatement -> Ast.Expr
-encodeJumpStatement j =
+jumpStatementToExpr :: Syntax.JumpStatement -> Ast.Expr
+jumpStatementToExpr j =
     case j of
       Syntax.JumpStatementBreak -> Serialization.withSemi (Serialization.cst "break")
       Syntax.JumpStatementContinue -> Serialization.withSemi (Serialization.cst "continue")
       Syntax.JumpStatementReturnValue v0 -> Serialization.withSemi (Serialization.spaceSep [
         Serialization.cst "return",
-        (encodeExpression v0)])
+        (expressionToExpr v0)])
       Syntax.JumpStatementReturnVoid -> Serialization.withSemi (Serialization.cst "return")
       Syntax.JumpStatementThrow v0 -> Serialization.withSemi (Serialization.spaceSep [
         Serialization.cst "throw",
-        (encodeExpression v0)])
-
+        (expressionToExpr v0)])
 -- | Convert a labeled statement to an expression
-encodeLabeledStatement :: Syntax.LabeledStatement -> Ast.Expr
-encodeLabeledStatement ls =
+labeledStatementToExpr :: Syntax.LabeledStatement -> Ast.Expr
+labeledStatementToExpr ls =
 
       let label = Syntax.labeledStatementLabel ls
           stmt = Syntax.labeledStatementStatement ls
       in (Serialization.newlineSep [
         Serialization.cst (Strings.cat2 label ":"),
-        (encodeStatement stmt)])
-
+        (statementToExpr stmt)])
 -- | Convert a lambda expression to an expression
-encodeLambdaExpression :: Syntax.LambdaExpression -> Ast.Expr
-encodeLambdaExpression le =
+lambdaExpressionToExpr :: Syntax.LambdaExpression -> Ast.Expr
+lambdaExpressionToExpr le =
 
       let captures = Syntax.lambdaExpressionCaptures le
           params = Syntax.lambdaExpressionParameters le
           retType = Syntax.lambdaExpressionReturnType le
           body = Syntax.lambdaExpressionBody le
       in (Serialization.spaceSep [
-        encodeCaptureList captures,
-        (Logic.ifElse (Lists.null params) (Serialization.parens (Serialization.cst "")) (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeParameter params)))),
+        captureListToExpr captures,
+        (Logic.ifElse (Lists.null params) (Serialization.parens (Serialization.cst "")) (Serialization.parenListAdaptive (Lists.map parameterToExpr params))),
         (Maybes.maybe (Serialization.cst "") (\t -> Serialization.spaceSep [
           Serialization.cst "->",
-          (encodeTypeExpression t)]) retType),
-        (encodeCompoundStatement body)])
-
+          (typeExpressionToExpr t)]) retType),
+        (compoundStatementToExpr body)])
 -- | Convert a left shift operation to an expression
-encodeLeftShiftOperation :: Syntax.LeftShiftOperation -> Ast.Expr
-encodeLeftShiftOperation op =
+leftShiftOperationToExpr :: Syntax.LeftShiftOperation -> Ast.Expr
+leftShiftOperationToExpr op =
 
       let left = Syntax.leftShiftOperationLeft op
           right = Syntax.leftShiftOperationRight op
       in (Serialization.spaceSep [
-        encodeShiftExpression left,
+        shiftExpressionToExpr left,
         (Serialization.cst "<<"),
-        (encodeAdditiveExpression right)])
-
+        (additiveExpressionToExpr right)])
 -- | Convert a less-than-or-equal operation to an expression
-encodeLessEqualOperation :: Syntax.LessEqualOperation -> Ast.Expr
-encodeLessEqualOperation op =
+lessEqualOperationToExpr :: Syntax.LessEqualOperation -> Ast.Expr
+lessEqualOperationToExpr op =
 
       let left = Syntax.lessEqualOperationLeft op
           right = Syntax.lessEqualOperationRight op
       in (Serialization.spaceSep [
-        encodeRelationalExpression left,
+        relationalExpressionToExpr left,
         (Serialization.cst "<="),
-        (encodeShiftExpression right)])
-
+        (shiftExpressionToExpr right)])
 -- | Convert a less-than operation to an expression
-encodeLessOperation :: Syntax.LessOperation -> Ast.Expr
-encodeLessOperation op =
+lessOperationToExpr :: Syntax.LessOperation -> Ast.Expr
+lessOperationToExpr op =
 
       let left = Syntax.lessOperationLeft op
           right = Syntax.lessOperationRight op
       in (Serialization.spaceSep [
-        encodeRelationalExpression left,
+        relationalExpressionToExpr left,
         (Serialization.cst "<"),
-        (encodeShiftExpression right)])
-
+        (shiftExpressionToExpr right)])
 -- | Convert a line directive to an expression
-encodeLineDirective :: Syntax.LineDirective -> Ast.Expr
-encodeLineDirective ld =
+lineDirectiveToExpr :: Syntax.LineDirective -> Ast.Expr
+lineDirectiveToExpr ld =
 
       let lineNumber = Syntax.lineDirectiveLineNumber ld
           filename = Syntax.lineDirectiveFilename ld
@@ -680,12 +613,11 @@ encodeLineDirective ld =
             "\"",
             f,
             "\""])]) filename)]))
-
 -- | Convert a literal to an expression
-encodeLiteral :: Syntax.Literal -> Ast.Expr
-encodeLiteral l =
+literalToExpr :: Syntax.Literal -> Ast.Expr
+literalToExpr l =
     case l of
-      Syntax.LiteralInteger v0 -> encodeIntegerLiteral v0
+      Syntax.LiteralInteger v0 -> integerLiteralToExpr v0
       Syntax.LiteralFloating v0 -> Serialization.cst (Literals.showBigfloat (Syntax.unFloatingLiteral v0))
       Syntax.LiteralCharacter v0 -> Serialization.cst (Strings.cat [
         "'",
@@ -695,48 +627,54 @@ encodeLiteral l =
         "\"",
         (Syntax.unStringLiteral v0),
         "\""])
-      Syntax.LiteralBoolean v0 -> encodeBooleanLiteral v0
+      Syntax.LiteralBoolean v0 -> booleanLiteralToExpr v0
       Syntax.LiteralNull -> Serialization.cst "nullptr"
-
 -- | Convert a logical and expression to an expression
-encodeLogicalAndExpression :: Syntax.LogicalAndExpression -> Ast.Expr
-encodeLogicalAndExpression e =
+logicalAndExpressionToExpr :: Syntax.LogicalAndExpression -> Ast.Expr
+logicalAndExpressionToExpr e =
     case e of
-      Syntax.LogicalAndExpressionInclusiveOr v0 -> encodeInclusiveOrExpression v0
-      Syntax.LogicalAndExpressionLogicalAnd v0 -> encodeLogicalAndOperation v0
-
+      Syntax.LogicalAndExpressionInclusiveOr v0 -> inclusiveOrExpressionToExpr v0
+      Syntax.LogicalAndExpressionLogicalAnd v0 -> logicalAndOperationToExpr v0
 -- | Convert a logical and operation to an expression
-encodeLogicalAndOperation :: Syntax.LogicalAndOperation -> Ast.Expr
-encodeLogicalAndOperation op =
+logicalAndOperationToExpr :: Syntax.LogicalAndOperation -> Ast.Expr
+logicalAndOperationToExpr op =
 
       let left = Syntax.logicalAndOperationLeft op
           right = Syntax.logicalAndOperationRight op
       in (Serialization.spaceSep [
-        encodeLogicalAndExpression left,
+        logicalAndExpressionToExpr left,
         (Serialization.cst "&&"),
-        (encodeInclusiveOrExpression right)])
-
+        (inclusiveOrExpressionToExpr right)])
 -- | Convert a logical or expression to an expression
-encodeLogicalOrExpression :: Syntax.LogicalOrExpression -> Ast.Expr
-encodeLogicalOrExpression e =
+logicalOrExpressionToExpr :: Syntax.LogicalOrExpression -> Ast.Expr
+logicalOrExpressionToExpr e =
     case e of
-      Syntax.LogicalOrExpressionLogicalAnd v0 -> encodeLogicalAndExpression v0
-      Syntax.LogicalOrExpressionLogicalOr v0 -> encodeLogicalOrOperation v0
-
+      Syntax.LogicalOrExpressionLogicalAnd v0 -> logicalAndExpressionToExpr v0
+      Syntax.LogicalOrExpressionLogicalOr v0 -> logicalOrOperationToExpr v0
 -- | Convert a logical or operation to an expression
-encodeLogicalOrOperation :: Syntax.LogicalOrOperation -> Ast.Expr
-encodeLogicalOrOperation op =
+logicalOrOperationToExpr :: Syntax.LogicalOrOperation -> Ast.Expr
+logicalOrOperationToExpr op =
 
       let left = Syntax.logicalOrOperationLeft op
           right = Syntax.logicalOrOperationRight op
       in (Serialization.spaceSep [
-        encodeLogicalOrExpression left,
+        logicalOrExpressionToExpr left,
         (Serialization.cst "||"),
-        (encodeLogicalAndExpression right)])
+        (logicalAndExpressionToExpr right)])
+-- | Convert a map entry to an expression
+mapEntryToExpr :: Syntax.MapEntry -> Ast.Expr
+mapEntryToExpr me =
 
+      let key = Syntax.mapEntryKey me
+          val = Syntax.mapEntryValue me
+      in (Serialization.spaceSep [
+        Serialization.curlyBracesList Nothing Serialization.inlineStyle [
+          expressionToExpr key],
+        (Serialization.cst "->"),
+        (expressionToExpr val)])
 -- | Convert a map to an expression
-encodeMap :: Syntax.Map -> Ast.Expr
-encodeMap m =
+mapToExpr :: Syntax.Map -> Ast.Expr
+mapToExpr m =
 
       let keyType = Syntax.mapKeyType m
           valType = Syntax.mapValueType m
@@ -744,139 +682,115 @@ encodeMap m =
       in (Serialization.spaceSep [
         Serialization.cst "std::map<",
         (Serialization.commaSep Serialization.inlineStyle [
-          encodeTypeExpression keyType,
-          (encodeTypeExpression valType)]),
+          typeExpressionToExpr keyType,
+          (typeExpressionToExpr valType)]),
         (Serialization.cst ">"),
-        (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map encodeMapEntry entries))])
-
--- | Convert a map entry to an expression
-encodeMapEntry :: Syntax.MapEntry -> Ast.Expr
-encodeMapEntry me =
-
-      let key = Syntax.mapEntryKey me
-          val = Syntax.mapEntryValue me
-      in (Serialization.spaceSep [
-        Serialization.curlyBracesList Nothing Serialization.inlineStyle [
-          encodeExpression key],
-        (Serialization.cst "->"),
-        (encodeExpression val)])
-
+        (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map mapEntryToExpr entries))])
 -- | Convert a member initializer to an expression
-encodeMemInitializer :: Syntax.MemInitializer -> Ast.Expr
-encodeMemInitializer mi =
+memInitializerToExpr :: Syntax.MemInitializer -> Ast.Expr
+memInitializerToExpr mi =
 
       let name = Syntax.memInitializerName mi
           args = Syntax.memInitializerArguments mi
       in (Serialization.noSep [
         Serialization.cst name,
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeExpression args)))])
-
+        (Serialization.parenListAdaptive (Lists.map expressionToExpr args))])
 -- | Convert a member access operation to an expression
-encodeMemberAccessOperation :: Syntax.MemberAccessOperation -> Ast.Expr
-encodeMemberAccessOperation mao =
+memberAccessOperationToExpr :: Syntax.MemberAccessOperation -> Ast.Expr
+memberAccessOperationToExpr mao =
 
       let obj = Syntax.memberAccessOperationObject mao
           member = Syntax.memberAccessOperationMember mao
       in (Serialization.noSep [
-        encodePostfixExpression obj,
+        postfixExpressionToExpr obj,
         (Serialization.cst "."),
         (Serialization.cst member)])
-
 -- | Convert a member declaration to an expression
-encodeMemberDeclaration :: Bool -> Syntax.MemberDeclaration -> Ast.Expr
-encodeMemberDeclaration commas m =
+memberDeclarationToExpr :: Bool -> Syntax.MemberDeclaration -> Ast.Expr
+memberDeclarationToExpr commas m =
     case m of
-      Syntax.MemberDeclarationFunction v0 -> encodeFunctionDeclaration v0
-      Syntax.MemberDeclarationVariable v0 -> encodeVariableDeclaration commas v0
-      Syntax.MemberDeclarationConstructor v0 -> encodeConstructorDeclaration v0
-      Syntax.MemberDeclarationDestructor v0 -> encodeDestructorDeclaration v0
-      Syntax.MemberDeclarationNestedClass v0 -> encodeClassDeclaration v0
-      Syntax.MemberDeclarationTemplate v0 -> encodeTemplateDeclaration v0
-
+      Syntax.MemberDeclarationFunction v0 -> functionDeclarationToExpr v0
+      Syntax.MemberDeclarationVariable v0 -> variableDeclarationToExpr commas v0
+      Syntax.MemberDeclarationConstructor v0 -> constructorDeclarationToExpr v0
+      Syntax.MemberDeclarationDestructor v0 -> destructorDeclarationToExpr v0
+      Syntax.MemberDeclarationNestedClass v0 -> classDeclarationToExpr v0
+      Syntax.MemberDeclarationTemplate v0 -> templateDeclarationToExpr v0
 -- | Convert a member specification to an expression
-encodeMemberSpecification :: Bool -> Syntax.MemberSpecification -> Ast.Expr
-encodeMemberSpecification commas m =
+memberSpecificationToExpr :: Bool -> Syntax.MemberSpecification -> Ast.Expr
+memberSpecificationToExpr commas m =
     case m of
       Syntax.MemberSpecificationAccessLabel v0 -> Serialization.noSep [
-        encodeAccessSpecifier v0,
+        accessSpecifierToExpr v0,
         (Serialization.cst ":")]
-      Syntax.MemberSpecificationMember v0 -> encodeMemberDeclaration commas v0
-
+      Syntax.MemberSpecificationMember v0 -> memberDeclarationToExpr commas v0
 -- | Convert a modulo operation to an expression
-encodeModuloOperation :: Syntax.ModuloOperation -> Ast.Expr
-encodeModuloOperation op =
+moduloOperationToExpr :: Syntax.ModuloOperation -> Ast.Expr
+moduloOperationToExpr op =
 
       let left = Syntax.moduloOperationLeft op
           right = Syntax.moduloOperationRight op
       in (Serialization.spaceSep [
-        encodeMultiplicativeExpression left,
+        multiplicativeExpressionToExpr left,
         (Serialization.cst "%"),
-        (encodeUnaryExpression right)])
-
+        (unaryExpressionToExpr right)])
 -- | Convert a multiplicative expression to an expression
-encodeMultiplicativeExpression :: Syntax.MultiplicativeExpression -> Ast.Expr
-encodeMultiplicativeExpression e =
+multiplicativeExpressionToExpr :: Syntax.MultiplicativeExpression -> Ast.Expr
+multiplicativeExpressionToExpr e =
     case e of
-      Syntax.MultiplicativeExpressionUnary v0 -> encodeUnaryExpression v0
-      Syntax.MultiplicativeExpressionMultiply v0 -> encodeMultiplyOperation v0
-      Syntax.MultiplicativeExpressionDivide v0 -> encodeDivideOperation v0
-      Syntax.MultiplicativeExpressionModulo v0 -> encodeModuloOperation v0
-
+      Syntax.MultiplicativeExpressionUnary v0 -> unaryExpressionToExpr v0
+      Syntax.MultiplicativeExpressionMultiply v0 -> multiplyOperationToExpr v0
+      Syntax.MultiplicativeExpressionDivide v0 -> divideOperationToExpr v0
+      Syntax.MultiplicativeExpressionModulo v0 -> moduloOperationToExpr v0
 -- | Convert a multiply operation to an expression
-encodeMultiplyOperation :: Syntax.MultiplyOperation -> Ast.Expr
-encodeMultiplyOperation op =
+multiplyOperationToExpr :: Syntax.MultiplyOperation -> Ast.Expr
+multiplyOperationToExpr op =
 
       let left = Syntax.multiplyOperationLeft op
           right = Syntax.multiplyOperationRight op
       in (Serialization.spaceSep [
-        encodeMultiplicativeExpression left,
+        multiplicativeExpressionToExpr left,
         (Serialization.cst "*"),
-        (encodeUnaryExpression right)])
-
+        (unaryExpressionToExpr right)])
 -- | Convert a namespace declaration to an expression
-encodeNamespaceDeclaration :: Syntax.NamespaceDeclaration -> Ast.Expr
-encodeNamespaceDeclaration nd =
+namespaceDeclarationToExpr :: Syntax.NamespaceDeclaration -> Ast.Expr
+namespaceDeclarationToExpr nd =
 
       let name = Syntax.namespaceDeclarationName nd
           decls = Syntax.namespaceDeclarationDeclarations nd
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "namespace " name),
-        (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map encodeDeclaration decls)))])
-
+        (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map declarationToExpr decls)))])
 -- | Convert a not-equal operation to an expression
-encodeNotEqualOperation :: Syntax.NotEqualOperation -> Ast.Expr
-encodeNotEqualOperation op =
+notEqualOperationToExpr :: Syntax.NotEqualOperation -> Ast.Expr
+notEqualOperationToExpr op =
 
       let left = Syntax.notEqualOperationLeft op
           right = Syntax.notEqualOperationRight op
       in (Serialization.spaceSep [
-        encodeEqualityExpression left,
+        equalityExpressionToExpr left,
         (Serialization.cst "!="),
-        (encodeRelationalExpression right)])
-
+        (relationalExpressionToExpr right)])
 -- | Convert an optional to an expression
-encodeOptional :: Syntax.Optional -> Ast.Expr
-encodeOptional opt =
+optionalToExpr :: Syntax.Optional -> Ast.Expr
+optionalToExpr opt =
 
       let valType = Syntax.optionalValueType opt
           val = Syntax.optionalValue opt
       in (Serialization.spaceSep [
         Serialization.cst "std::optional<",
-        (encodeTypeExpression valType),
+        (typeExpressionToExpr valType),
         (Serialization.cst ">"),
         (Maybes.maybe (Serialization.cst "{}") (\v -> Serialization.curlyBracesList Nothing Serialization.inlineStyle [
-          encodeExpression v]) val)])
-
+          expressionToExpr v]) val)])
 -- | Convert overloaded lambdas to an expression
-encodeOverloadedLambdas :: Syntax.OverloadedLambdas -> Ast.Expr
-encodeOverloadedLambdas ol =
+overloadedLambdasToExpr :: Syntax.OverloadedLambdas -> Ast.Expr
+overloadedLambdasToExpr ol =
     Serialization.spaceSep [
       Serialization.cst "overloaded",
-      (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map encodeLambdaExpression (Syntax.unOverloadedLambdas ol))))]
-
+      (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map lambdaExpressionToExpr (Syntax.unOverloadedLambdas ol))))]
 -- | Convert a parameter to an expression
-encodeParameter :: Syntax.Parameter -> Ast.Expr
-encodeParameter p =
+parameterToExpr :: Syntax.Parameter -> Ast.Expr
+parameterToExpr p =
 
       let typ = Syntax.parameterType p
           name = Syntax.parameterName p
@@ -889,99 +803,91 @@ encodeParameter p =
                     "*/"]) name)
       in (Serialization.spaceSep (Lists.concat [
         [
-          encodeTypeExpression typ,
+          typeExpressionToExpr typ,
           nameExpr],
         (Maybes.maybe [] (\expr -> [
           Serialization.cst "=",
-          (encodeExpression expr)]) defaultVal)]))
-
+          (expressionToExpr expr)]) defaultVal)]))
 -- | Convert a pattern match to an expression
-encodePatternMatch :: Syntax.PatternMatch -> Ast.Expr
-encodePatternMatch pm =
+patternMatchToExpr :: Syntax.PatternMatch -> Ast.Expr
+patternMatchToExpr pm =
 
       let visitor = Syntax.patternMatchVisitor pm
           variant = Syntax.patternMatchVariant pm
       in (Serialization.spaceSep [
         Serialization.cst "std::visit",
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle [
-          encodeVisitor visitor,
-          (encodeExpression variant)]))])
-
+        (Serialization.parenListAdaptive [
+          visitorToExpr visitor,
+          (expressionToExpr variant)])])
 -- | Convert a pointer member access operation to an expression
-encodePointerMemberAccessOperation :: Syntax.PointerMemberAccessOperation -> Ast.Expr
-encodePointerMemberAccessOperation pmao =
+pointerMemberAccessOperationToExpr :: Syntax.PointerMemberAccessOperation -> Ast.Expr
+pointerMemberAccessOperationToExpr pmao =
 
       let ptr = Syntax.pointerMemberAccessOperationPointer pmao
           member = Syntax.pointerMemberAccessOperationMember pmao
       in (Serialization.noSep [
-        encodePostfixExpression ptr,
+        postfixExpressionToExpr ptr,
         (Serialization.cst "->"),
         (Serialization.cst member)])
-
 -- | Convert a postfix expression to an expression
-encodePostfixExpression :: Syntax.PostfixExpression -> Ast.Expr
-encodePostfixExpression e =
+postfixExpressionToExpr :: Syntax.PostfixExpression -> Ast.Expr
+postfixExpressionToExpr e =
     case e of
-      Syntax.PostfixExpressionPrimary v0 -> encodePrimaryExpression v0
-      Syntax.PostfixExpressionSubscript v0 -> encodeSubscriptOperation v0
-      Syntax.PostfixExpressionFunctionCall v0 -> encodeFunctionCallOperation v0
-      Syntax.PostfixExpressionTemplateFunctionCall v0 -> encodeTemplateFunctionCallOperation v0
-      Syntax.PostfixExpressionMemberAccess v0 -> encodeMemberAccessOperation v0
-      Syntax.PostfixExpressionPointerMemberAccess v0 -> encodePointerMemberAccessOperation v0
+      Syntax.PostfixExpressionPrimary v0 -> primaryExpressionToExpr v0
+      Syntax.PostfixExpressionSubscript v0 -> subscriptOperationToExpr v0
+      Syntax.PostfixExpressionFunctionCall v0 -> functionCallOperationToExpr v0
+      Syntax.PostfixExpressionTemplateFunctionCall v0 -> templateFunctionCallOperationToExpr v0
+      Syntax.PostfixExpressionMemberAccess v0 -> memberAccessOperationToExpr v0
+      Syntax.PostfixExpressionPointerMemberAccess v0 -> pointerMemberAccessOperationToExpr v0
       Syntax.PostfixExpressionPostIncrement v0 -> Serialization.noSep [
-        encodePostfixExpression v0,
+        postfixExpressionToExpr v0,
         (Serialization.cst "++")]
       Syntax.PostfixExpressionPostDecrement v0 -> Serialization.noSep [
-        encodePostfixExpression v0,
+        postfixExpressionToExpr v0,
         (Serialization.cst "--")]
-
 -- | Convert a pragma directive to an expression
-encodePragmaDirective :: Syntax.PragmaDirective -> Ast.Expr
-encodePragmaDirective pd = Serialization.cst (Strings.cat2 "#pragma " (Syntax.pragmaDirectiveContent pd))
-
+pragmaDirectiveToExpr :: Syntax.PragmaDirective -> Ast.Expr
+pragmaDirectiveToExpr pd = Serialization.cst (Strings.cat2 "#pragma " (Syntax.pragmaDirectiveContent pd))
 -- | Convert a preprocessor directive to an expression
-encodePreprocessorDirective :: Syntax.PreprocessorDirective -> Ast.Expr
-encodePreprocessorDirective d =
+preprocessorDirectiveToExpr :: Syntax.PreprocessorDirective -> Ast.Expr
+preprocessorDirectiveToExpr d =
     case d of
-      Syntax.PreprocessorDirectiveInclude v0 -> encodeIncludeDirective v0
-      Syntax.PreprocessorDirectivePragma v0 -> encodePragmaDirective v0
-      Syntax.PreprocessorDirectiveDefine v0 -> encodeDefineDirective v0
-      Syntax.PreprocessorDirectiveUndef v0 -> encodeUndefDirective v0
-      Syntax.PreprocessorDirectiveIfdef v0 -> encodeIfdefDirective v0
-      Syntax.PreprocessorDirectiveIfndef v0 -> encodeIfndefDirective v0
-      Syntax.PreprocessorDirectiveIf v0 -> encodeIfDirective v0
-      Syntax.PreprocessorDirectiveElif v0 -> encodeElifDirective v0
-      Syntax.PreprocessorDirectiveElse v0 -> encodeElseDirective v0
-      Syntax.PreprocessorDirectiveEndif v0 -> encodeEndifDirective v0
-      Syntax.PreprocessorDirectiveLine v0 -> encodeLineDirective v0
-      Syntax.PreprocessorDirectiveError v0 -> encodeErrorDirective v0
-      Syntax.PreprocessorDirectiveWarning v0 -> encodeWarningDirective v0
-
+      Syntax.PreprocessorDirectiveInclude v0 -> includeDirectiveToExpr v0
+      Syntax.PreprocessorDirectivePragma v0 -> pragmaDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveDefine v0 -> defineDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveUndef v0 -> undefDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveIfdef v0 -> ifdefDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveIfndef v0 -> ifndefDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveIf v0 -> ifDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveElif v0 -> elifDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveElse v0 -> elseDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveEndif v0 -> endifDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveLine v0 -> lineDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveError v0 -> errorDirectiveToExpr v0
+      Syntax.PreprocessorDirectiveWarning v0 -> warningDirectiveToExpr v0
 -- | Convert a primary expression to an expression
-encodePrimaryExpression :: Syntax.PrimaryExpression -> Ast.Expr
-encodePrimaryExpression e =
+primaryExpressionToExpr :: Syntax.PrimaryExpression -> Ast.Expr
+primaryExpressionToExpr e =
     case e of
       Syntax.PrimaryExpressionIdentifier v0 -> Serialization.cst v0
-      Syntax.PrimaryExpressionLiteral v0 -> encodeLiteral v0
-      Syntax.PrimaryExpressionParenthesized v0 -> Serialization.parens (encodeExpression v0)
-      Syntax.PrimaryExpressionLambda v0 -> encodeLambdaExpression v0
-
+      Syntax.PrimaryExpressionLiteral v0 -> literalToExpr v0
+      Syntax.PrimaryExpressionParenthesized v0 -> Serialization.parens (expressionToExpr v0)
+      Syntax.PrimaryExpressionLambda v0 -> lambdaExpressionToExpr v0
 -- | Convert a program to an expression
-encodeProgram :: Syntax.Program -> Ast.Expr
-encodeProgram prog =
+programToExpr :: Syntax.Program -> Ast.Expr
+programToExpr prog =
 
       let preps = Syntax.programPreprocessorDirectives prog
           includes = Syntax.programIncludes prog
           decls = Syntax.programDeclarations prog
           separate = \sep -> \defs -> Logic.ifElse (Lists.null defs) Nothing (Just (sep defs))
       in (Serialization.doubleNewlineSep (Maybes.cat [
-        separate Serialization.newlineSep (Lists.map encodePreprocessorDirective preps),
-        (separate Serialization.newlineSep (Lists.map encodeIncludeDirective includes)),
-        (separate Serialization.doubleNewlineSep (Lists.map encodeDeclaration decls))]))
-
+        separate Serialization.newlineSep (Lists.map preprocessorDirectiveToExpr preps),
+        (separate Serialization.newlineSep (Lists.map includeDirectiveToExpr includes)),
+        (separate Serialization.doubleNewlineSep (Lists.map declarationToExpr decls))]))
 -- | Convert a qualified identifier to an expression
-encodeQualifiedIdentifier :: Syntax.QualifiedIdentifier -> Ast.Expr
-encodeQualifiedIdentifier qi =
+qualifiedIdentifierToExpr :: Syntax.QualifiedIdentifier -> Ast.Expr
+qualifiedIdentifierToExpr qi =
 
       let ns = Syntax.qualifiedIdentifierNamespace qi
           name = Syntax.qualifiedIdentifierName qi
@@ -989,30 +895,28 @@ encodeQualifiedIdentifier qi =
         ns,
         "::",
         name]))
-
 -- | Convert a qualified type to an expression
-encodeQualifiedType :: Syntax.QualifiedType -> Ast.Expr
-encodeQualifiedType qt =
+qualifiedTypeToExpr :: Syntax.QualifiedType -> Ast.Expr
+qualifiedTypeToExpr qt =
 
       let baseType = Syntax.qualifiedTypeBaseType qt
           qualifier = Syntax.qualifiedTypeQualifier qt
       in case qualifier of
         Syntax.TypeQualifierConst -> Serialization.spaceSep [
           Serialization.cst "const",
-          (encodeTypeExpression baseType)]
+          (typeExpressionToExpr baseType)]
         Syntax.TypeQualifierLvalueRef -> Serialization.noSep [
-          encodeTypeExpression baseType,
+          typeExpressionToExpr baseType,
           (Serialization.cst "&")]
         Syntax.TypeQualifierRvalueRef -> Serialization.noSep [
-          encodeTypeExpression baseType,
+          typeExpressionToExpr baseType,
           (Serialization.cst "&&")]
         Syntax.TypeQualifierPointer -> Serialization.noSep [
-          encodeTypeExpression baseType,
+          typeExpressionToExpr baseType,
           (Serialization.cst "*")]
-
 -- | Convert a range-for statement to an expression
-encodeRangeForStatement :: Syntax.RangeForStatement -> Ast.Expr
-encodeRangeForStatement rfs =
+rangeForStatementToExpr :: Syntax.RangeForStatement -> Ast.Expr
+rangeForStatementToExpr rfs =
 
       let typ = Syntax.rangeForStatementType rfs
           var = Syntax.rangeForStatementVariable rfs
@@ -1022,36 +926,33 @@ encodeRangeForStatement rfs =
         Serialization.spaceSep [
           Serialization.cst "for",
           (Serialization.parens (Serialization.spaceSep [
-            encodeTypeExpression typ,
+            typeExpressionToExpr typ,
             (Serialization.cst var),
             (Serialization.cst ":"),
-            (encodeExpression range)]))],
-        (encodeStatement body)])
-
+            (expressionToExpr range)]))],
+        (statementToExpr body)])
 -- | Convert a relational expression to an expression
-encodeRelationalExpression :: Syntax.RelationalExpression -> Ast.Expr
-encodeRelationalExpression e =
+relationalExpressionToExpr :: Syntax.RelationalExpression -> Ast.Expr
+relationalExpressionToExpr e =
     case e of
-      Syntax.RelationalExpressionShift v0 -> encodeShiftExpression v0
-      Syntax.RelationalExpressionLess v0 -> encodeLessOperation v0
-      Syntax.RelationalExpressionGreater v0 -> encodeGreaterOperation v0
-      Syntax.RelationalExpressionLessEqual v0 -> encodeLessEqualOperation v0
-      Syntax.RelationalExpressionGreaterEqual v0 -> encodeGreaterEqualOperation v0
-
+      Syntax.RelationalExpressionShift v0 -> shiftExpressionToExpr v0
+      Syntax.RelationalExpressionLess v0 -> lessOperationToExpr v0
+      Syntax.RelationalExpressionGreater v0 -> greaterOperationToExpr v0
+      Syntax.RelationalExpressionLessEqual v0 -> lessEqualOperationToExpr v0
+      Syntax.RelationalExpressionGreaterEqual v0 -> greaterEqualOperationToExpr v0
 -- | Convert a right shift operation to an expression
-encodeRightShiftOperation :: Syntax.RightShiftOperation -> Ast.Expr
-encodeRightShiftOperation op =
+rightShiftOperationToExpr :: Syntax.RightShiftOperation -> Ast.Expr
+rightShiftOperationToExpr op =
 
       let left = Syntax.rightShiftOperationLeft op
           right = Syntax.rightShiftOperationRight op
       in (Serialization.spaceSep [
-        encodeShiftExpression left,
+        shiftExpressionToExpr left,
         (Serialization.cst ">>"),
-        (encodeAdditiveExpression right)])
-
+        (additiveExpressionToExpr right)])
 -- | Convert a selection statement to an expression
-encodeSelectionStatement :: Syntax.SelectionStatement -> Ast.Expr
-encodeSelectionStatement ss =
+selectionStatementToExpr :: Syntax.SelectionStatement -> Ast.Expr
+selectionStatementToExpr ss =
 
       let cond = Syntax.selectionStatementCondition ss
           thenBranch = Syntax.selectionStatementThenBranch ss
@@ -1059,96 +960,87 @@ encodeSelectionStatement ss =
       in (Serialization.newlineSep [
         Serialization.spaceSep [
           Serialization.cst "if",
-          (Serialization.parens (encodeExpression cond))],
-        (encodeStatement thenBranch),
+          (Serialization.parens (expressionToExpr cond))],
+        (statementToExpr thenBranch),
         (Maybes.maybe (Serialization.cst "") (\stmt -> Serialization.newlineSep [
           Serialization.cst "else",
-          (encodeStatement stmt)]) elseBranch)])
-
+          (statementToExpr stmt)]) elseBranch)])
 -- | Convert a set to an expression
-encodeSet :: Syntax.Set -> Ast.Expr
-encodeSet s =
+setToExpr :: Syntax.Set -> Ast.Expr
+setToExpr s =
 
       let elemType = Syntax.setElementType s
           elems = Syntax.setElements s
       in (Serialization.spaceSep [
         Serialization.cst "std::set<",
-        (encodeTypeExpression elemType),
+        (typeExpressionToExpr elemType),
         (Serialization.cst ">"),
-        (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map encodeExpression elems))])
-
+        (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map expressionToExpr elems))])
 -- | Convert a shift expression to an expression
-encodeShiftExpression :: Syntax.ShiftExpression -> Ast.Expr
-encodeShiftExpression e =
+shiftExpressionToExpr :: Syntax.ShiftExpression -> Ast.Expr
+shiftExpressionToExpr e =
     case e of
-      Syntax.ShiftExpressionAdditive v0 -> encodeAdditiveExpression v0
-      Syntax.ShiftExpressionLeftShift v0 -> encodeLeftShiftOperation v0
-      Syntax.ShiftExpressionRightShift v0 -> encodeRightShiftOperation v0
-
+      Syntax.ShiftExpressionAdditive v0 -> additiveExpressionToExpr v0
+      Syntax.ShiftExpressionLeftShift v0 -> leftShiftOperationToExpr v0
+      Syntax.ShiftExpressionRightShift v0 -> rightShiftOperationToExpr v0
 -- | Convert a sizeof expression to an expression
-encodeSizeofExpression :: Syntax.SizeofExpression -> Ast.Expr
-encodeSizeofExpression se =
+sizeofExpressionToExpr :: Syntax.SizeofExpression -> Ast.Expr
+sizeofExpressionToExpr se =
     Serialization.spaceSep [
       Serialization.cst "sizeof",
-      (Serialization.parens (encodeTypeExpression (Syntax.unSizeofExpression se)))]
-
+      (Serialization.parens (typeExpressionToExpr (Syntax.unSizeofExpression se)))]
 -- | Convert a statement to an expression
-encodeStatement :: Syntax.Statement -> Ast.Expr
-encodeStatement s =
+statementToExpr :: Syntax.Statement -> Ast.Expr
+statementToExpr s =
     case s of
-      Syntax.StatementLabeled v0 -> encodeLabeledStatement v0
-      Syntax.StatementCompound v0 -> encodeCompoundStatement v0
-      Syntax.StatementSelection v0 -> encodeSelectionStatement v0
-      Syntax.StatementSwitch v0 -> encodeSwitchStatement v0
-      Syntax.StatementIteration v0 -> encodeIterationStatement v0
-      Syntax.StatementJump v0 -> encodeJumpStatement v0
-      Syntax.StatementDeclaration v0 -> Serialization.withSemi (encodeVariableDeclaration False v0)
-      Syntax.StatementExpression v0 -> Serialization.withSemi (encodeExpression v0)
-
+      Syntax.StatementLabeled v0 -> labeledStatementToExpr v0
+      Syntax.StatementCompound v0 -> compoundStatementToExpr v0
+      Syntax.StatementSelection v0 -> selectionStatementToExpr v0
+      Syntax.StatementSwitch v0 -> switchStatementToExpr v0
+      Syntax.StatementIteration v0 -> iterationStatementToExpr v0
+      Syntax.StatementJump v0 -> jumpStatementToExpr v0
+      Syntax.StatementDeclaration v0 -> Serialization.withSemi (variableDeclarationToExpr False v0)
+      Syntax.StatementExpression v0 -> Serialization.withSemi (expressionToExpr v0)
 -- | Convert a subscript operation to an expression
-encodeSubscriptOperation :: Syntax.SubscriptOperation -> Ast.Expr
-encodeSubscriptOperation so =
+subscriptOperationToExpr :: Syntax.SubscriptOperation -> Ast.Expr
+subscriptOperationToExpr so =
 
       let array = Syntax.subscriptOperationArray so
           index = Syntax.subscriptOperationIndex so
       in (Serialization.noSep [
-        encodePostfixExpression array,
+        postfixExpressionToExpr array,
         (Serialization.cst "["),
-        (encodeExpression index),
+        (expressionToExpr index),
         (Serialization.cst "]")])
-
 -- | Convert a subtract operation to an expression
-encodeSubtractOperation :: Syntax.SubtractOperation -> Ast.Expr
-encodeSubtractOperation op =
+subtractOperationToExpr :: Syntax.SubtractOperation -> Ast.Expr
+subtractOperationToExpr op =
 
       let left = Syntax.subtractOperationLeft op
           right = Syntax.subtractOperationRight op
       in (Serialization.spaceSep [
-        encodeAdditiveExpression left,
+        additiveExpressionToExpr left,
         (Serialization.cst "-"),
-        (encodeMultiplicativeExpression right)])
-
+        (multiplicativeExpressionToExpr right)])
 -- | Convert a switch statement to an expression
-encodeSwitchStatement :: Syntax.SwitchStatement -> Ast.Expr
-encodeSwitchStatement ss =
+switchStatementToExpr :: Syntax.SwitchStatement -> Ast.Expr
+switchStatementToExpr ss =
 
       let value = Syntax.switchStatementValue ss
           cases = Syntax.switchStatementCases ss
       in (Serialization.spaceSep [
         Serialization.cst "switch",
-        (Serialization.parens (encodeExpression value)),
-        (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map encodeCaseStatement cases)))])
-
+        (Serialization.parens (expressionToExpr value)),
+        (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map caseStatementToExpr cases)))])
 -- | Convert a template argument to an expression
-encodeTemplateArgument :: Syntax.TemplateArgument -> Ast.Expr
-encodeTemplateArgument a =
+templateArgumentToExpr :: Syntax.TemplateArgument -> Ast.Expr
+templateArgumentToExpr a =
     case a of
-      Syntax.TemplateArgumentType v0 -> encodeTypeExpression v0
-      Syntax.TemplateArgumentValue v0 -> encodeExpression v0
-
+      Syntax.TemplateArgumentType v0 -> typeExpressionToExpr v0
+      Syntax.TemplateArgumentValue v0 -> expressionToExpr v0
 -- | Convert a template declaration to an expression
-encodeTemplateDeclaration :: Syntax.TemplateDeclaration -> Ast.Expr
-encodeTemplateDeclaration td =
+templateDeclarationToExpr :: Syntax.TemplateDeclaration -> Ast.Expr
+templateDeclarationToExpr td =
 
       let inline = Syntax.templateDeclarationInline td
           params = Syntax.templateDeclarationParameters td
@@ -1158,57 +1050,59 @@ encodeTemplateDeclaration td =
         Serialization.noSep [
           Serialization.cst "template",
           (Serialization.angleBracesList Serialization.inlineStyle (Lists.map (\p -> Serialization.cst p) params))],
-        (encodeDeclaration declaration)])
-
+        (declarationToExpr declaration)])
 -- | Convert a template function call operation to an expression
-encodeTemplateFunctionCallOperation :: Syntax.TemplateFunctionCallOperation -> Ast.Expr
-encodeTemplateFunctionCallOperation tfco =
+templateFunctionCallOperationToExpr :: Syntax.TemplateFunctionCallOperation -> Ast.Expr
+templateFunctionCallOperationToExpr tfco =
 
       let func = Syntax.templateFunctionCallOperationFunction tfco
           templateArgs = Syntax.templateFunctionCallOperationTemplateArguments tfco
           args = Syntax.templateFunctionCallOperationArguments tfco
       in (Serialization.noSep [
-        encodePostfixExpression func,
-        (Serialization.angleBracesList Serialization.inlineStyle (Lists.map encodeTemplateArgument templateArgs)),
-        (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeExpression args)))])
-
+        postfixExpressionToExpr func,
+        (Serialization.angleBracesList Serialization.inlineStyle (Lists.map templateArgumentToExpr templateArgs)),
+        (Serialization.parenListAdaptive (Lists.map expressionToExpr args))])
 -- | Convert a template type to an expression
-encodeTemplateType :: Syntax.TemplateType -> Ast.Expr
-encodeTemplateType tt =
+templateTypeToExpr :: Syntax.TemplateType -> Ast.Expr
+templateTypeToExpr tt =
 
       let name = Syntax.templateTypeName tt
           args = Syntax.templateTypeArguments tt
       in (Serialization.noSep [
         Serialization.cst name,
-        (Serialization.angleBracesList Serialization.inlineStyle (Lists.map encodeTemplateArgument args))])
-
+        (Serialization.angleBracesList Serialization.inlineStyle (Lists.map templateArgumentToExpr args))])
 -- | Convert a ternary expression to an expression
-encodeTernaryExpression :: Syntax.TernaryExpression -> Ast.Expr
-encodeTernaryExpression te =
+ternaryExpressionToExpr :: Syntax.TernaryExpression -> Ast.Expr
+ternaryExpressionToExpr te =
 
       let cond = Syntax.ternaryExpressionCondition te
           trueExpr = Syntax.ternaryExpressionTrueExpr te
           falseExpr = Syntax.ternaryExpressionFalseExpr te
       in (Serialization.spaceSep [
-        encodeLogicalOrExpression cond,
+        logicalOrExpressionToExpr cond,
         (Serialization.cst "?"),
-        (encodeExpression trueExpr),
+        (expressionToExpr trueExpr),
         (Serialization.cst ":"),
-        (encodeConditionalExpression falseExpr)])
-
+        (conditionalExpressionToExpr falseExpr)])
+-- | Convert a string to a C++ comment. Empty single-line comments emit `//` (no trailing space).
+toCppComments :: String -> Bool -> String
+toCppComments s isMultiline =
+    Logic.ifElse isMultiline (Strings.cat [
+      "/* ",
+      s,
+      " */"]) (Logic.ifElse (Equality.equal s "") "//" (Strings.cat2 "// " s))
 -- | Convert a type expression to an expression
-encodeTypeExpression :: Syntax.TypeExpression -> Ast.Expr
-encodeTypeExpression t =
+typeExpressionToExpr :: Syntax.TypeExpression -> Ast.Expr
+typeExpressionToExpr t =
     case t of
-      Syntax.TypeExpressionBasic v0 -> encodeBasicType v0
-      Syntax.TypeExpressionQualified v0 -> encodeQualifiedType v0
-      Syntax.TypeExpressionTemplate v0 -> encodeTemplateType v0
-      Syntax.TypeExpressionFunction v0 -> encodeFunctionType v0
+      Syntax.TypeExpressionBasic v0 -> basicTypeToExpr v0
+      Syntax.TypeExpressionQualified v0 -> qualifiedTypeToExpr v0
+      Syntax.TypeExpressionTemplate v0 -> templateTypeToExpr v0
+      Syntax.TypeExpressionFunction v0 -> functionTypeToExpr v0
       Syntax.TypeExpressionAuto -> Serialization.cst "auto"
-
 -- | Convert a typedef declaration to an expression
-encodeTypedefDeclaration :: Syntax.TypedefDeclaration -> Ast.Expr
-encodeTypedefDeclaration td =
+typedefDeclarationToExpr :: Syntax.TypedefDeclaration -> Ast.Expr
+typedefDeclarationToExpr td =
 
       let name = Syntax.typedefDeclarationName td
           typ = Syntax.typedefDeclarationType td
@@ -1216,32 +1110,29 @@ encodeTypedefDeclaration td =
       in (Logic.ifElse isUsing (Serialization.withSemi (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "using " name),
         (Serialization.cst "="),
-        (encodeTypeExpression typ)])) (Serialization.withSemi (Serialization.spaceSep [
+        (typeExpressionToExpr typ)])) (Serialization.withSemi (Serialization.spaceSep [
         Serialization.cst "typedef",
-        (encodeTypeExpression typ),
+        (typeExpressionToExpr typ),
         (Serialization.cst name)])))
-
 -- | Convert a unary expression to an expression
-encodeUnaryExpression :: Syntax.UnaryExpression -> Ast.Expr
-encodeUnaryExpression e =
+unaryExpressionToExpr :: Syntax.UnaryExpression -> Ast.Expr
+unaryExpressionToExpr e =
     case e of
-      Syntax.UnaryExpressionPostfix v0 -> encodePostfixExpression v0
-      Syntax.UnaryExpressionUnaryOp v0 -> encodeUnaryOperation v0
-      Syntax.UnaryExpressionSizeof v0 -> encodeSizeofExpression v0
-
+      Syntax.UnaryExpressionPostfix v0 -> postfixExpressionToExpr v0
+      Syntax.UnaryExpressionUnaryOp v0 -> unaryOperationToExpr v0
+      Syntax.UnaryExpressionSizeof v0 -> sizeofExpressionToExpr v0
 -- | Convert a unary operation to an expression
-encodeUnaryOperation :: Syntax.UnaryOperation -> Ast.Expr
-encodeUnaryOperation uo =
+unaryOperationToExpr :: Syntax.UnaryOperation -> Ast.Expr
+unaryOperationToExpr uo =
 
       let op = Syntax.unaryOperationOperator uo
           operand = Syntax.unaryOperationOperand uo
       in (Serialization.spaceSep [
-        encodeUnaryOperator op,
-        (encodeUnaryExpression operand)])
-
+        unaryOperatorToExpr op,
+        (unaryExpressionToExpr operand)])
 -- | Convert a unary operator to an expression
-encodeUnaryOperator :: Syntax.UnaryOperator -> Ast.Expr
-encodeUnaryOperator op =
+unaryOperatorToExpr :: Syntax.UnaryOperator -> Ast.Expr
+unaryOperatorToExpr op =
     case op of
       Syntax.UnaryOperatorPlus -> Serialization.cst "+"
       Syntax.UnaryOperatorMinus -> Serialization.cst "-"
@@ -1251,17 +1142,15 @@ encodeUnaryOperator op =
       Syntax.UnaryOperatorAddressOf -> Serialization.cst "&"
       Syntax.UnaryOperatorPreIncrement -> Serialization.cst "++"
       Syntax.UnaryOperatorPreDecrement -> Serialization.cst "--"
-
 -- | Convert an undef directive to an expression
-encodeUndefDirective :: Syntax.UndefDirective -> Ast.Expr
-encodeUndefDirective ud =
+undefDirectiveToExpr :: Syntax.UndefDirective -> Ast.Expr
+undefDirectiveToExpr ud =
     Serialization.spaceSep [
       Serialization.cst "#undef",
       (Serialization.cst (Syntax.undefDirectiveName ud))]
-
 -- | Convert a variable declaration to an expression
-encodeVariableDeclaration :: Bool -> Syntax.VariableDeclaration -> Ast.Expr
-encodeVariableDeclaration commas vd =
+variableDeclarationToExpr :: Bool -> Syntax.VariableDeclaration -> Ast.Expr
+variableDeclarationToExpr commas vd =
 
       let typ = Syntax.variableDeclarationType vd
           name = Syntax.variableDeclarationName vd
@@ -1271,55 +1160,43 @@ encodeVariableDeclaration commas vd =
       in (terminator (Serialization.spaceSep (Lists.concat [
         Logic.ifElse isAuto [
           Serialization.cst "auto"] (Maybes.maybe [] (\t -> [
-          encodeTypeExpression t]) typ),
+          typeExpressionToExpr t]) typ),
         [
           Serialization.cst name],
         (Maybes.maybe [] (\expr -> [
           Serialization.cst "=",
-          (encodeExpression expr)]) init)])))
-
+          (expressionToExpr expr)]) init)])))
 -- | Convert a vector to an expression
-encodeVector :: Syntax.Vector -> Ast.Expr
-encodeVector v =
+vectorToExpr :: Syntax.Vector -> Ast.Expr
+vectorToExpr v =
 
       let elemType = Syntax.vectorElementType v
           elems = Syntax.vectorElements v
       in (Serialization.spaceSep [
         Serialization.cst "std::vector<",
-        (encodeTypeExpression elemType),
+        (typeExpressionToExpr elemType),
         (Serialization.cst ">"),
-        (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map encodeExpression elems))])
-
+        (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map expressionToExpr elems))])
 -- | Convert a visitor to an expression
-encodeVisitor :: Syntax.Visitor -> Ast.Expr
-encodeVisitor v =
+visitorToExpr :: Syntax.Visitor -> Ast.Expr
+visitorToExpr v =
     case v of
-      Syntax.VisitorLambda v0 -> encodeLambdaExpression v0
-      Syntax.VisitorOverloaded v0 -> encodeOverloadedLambdas v0
-
+      Syntax.VisitorLambda v0 -> lambdaExpressionToExpr v0
+      Syntax.VisitorOverloaded v0 -> overloadedLambdasToExpr v0
 -- | Convert a warning directive to an expression
-encodeWarningDirective :: Syntax.WarningDirective -> Ast.Expr
-encodeWarningDirective wd =
+warningDirectiveToExpr :: Syntax.WarningDirective -> Ast.Expr
+warningDirectiveToExpr wd =
     Serialization.spaceSep [
       Serialization.cst "#warning",
       (Serialization.cst (Syntax.warningDirectiveMessage wd))]
-
 -- | Convert a while statement to an expression
-encodeWhileStatement :: Syntax.WhileStatement -> Ast.Expr
-encodeWhileStatement ws =
+whileStatementToExpr :: Syntax.WhileStatement -> Ast.Expr
+whileStatementToExpr ws =
 
       let cond = Syntax.whileStatementCondition ws
           body = Syntax.whileStatementBody ws
       in (Serialization.newlineSep [
         Serialization.spaceSep [
           Serialization.cst "while",
-          (Serialization.parens (encodeExpression cond))],
-        (encodeStatement body)])
-
--- | Convert a string to a C++ comment
-toCppComments :: String -> Bool -> String
-toCppComments s isMultiline =
-    Logic.ifElse isMultiline (Strings.cat [
-      "/* ",
-      s,
-      " */"]) (Strings.cat2 "// " s)
+          (Serialization.parens (expressionToExpr cond))],
+        (statementToExpr body)])

@@ -110,8 +110,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "C++ utilities for constructing C++ syntax trees"}
   where
     definitions = [

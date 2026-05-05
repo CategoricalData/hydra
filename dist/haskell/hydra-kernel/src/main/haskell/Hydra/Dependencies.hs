@@ -56,12 +56,14 @@ flattenLetTerms term =
                         innerBinding = Pairs.first recursive
                         deps = Pairs.second recursive
                         val2 = Core.bindingTerm innerBinding
-                    in (Core.Binding {
-                      Core.bindingName = key0,
-                      Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-                        Core.annotatedTermBody = val2,
-                        Core.annotatedTermAnnotation = ann})),
-                      Core.bindingTypeScheme = t}, deps)
+                    in (
+                      Core.Binding {
+                        Core.bindingName = key0,
+                        Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+                          Core.annotatedTermBody = val2,
+                          Core.annotatedTermAnnotation = ann})),
+                        Core.bindingTypeScheme = t},
+                      deps)
                   Core.TermLet v0 ->
                     let bindings1 = Core.letBindings v0
                         body1 = Core.letBody v0
@@ -76,14 +78,18 @@ flattenLetTerms term =
                                   Core.bindingName = (qualify (Core.bindingName b)),
                                   Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
                                   Core.bindingTypeScheme = (Core.bindingTypeScheme b)}
-                    in (Core.Binding {
+                    in (
+                      Core.Binding {
+                        Core.bindingName = key0,
+                        Core.bindingTerm = newBody,
+                        Core.bindingTypeScheme = t},
+                      (Lists.map newBinding bindings1))
+                  _ -> (
+                    Core.Binding {
                       Core.bindingName = key0,
-                      Core.bindingTerm = newBody,
-                      Core.bindingTypeScheme = t}, (Lists.map newBinding bindings1))
-                  _ -> (Core.Binding {
-                    Core.bindingName = key0,
-                    Core.bindingTerm = val0,
-                    Core.bindingTypeScheme = t}, [])
+                      Core.bindingTerm = val0,
+                      Core.bindingTypeScheme = t},
+                    [])
           flattenBodyLet =
                   \bindings -> \body -> case body of
                     Core.TermLet v0 ->
@@ -292,13 +298,17 @@ topologicalSortTypeDefinitions :: [Packaging.TypeDefinition] -> [[Packaging.Type
 topologicalSortTypeDefinitions defs =
 
       let toPair =
-              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def)))))
+              \def -> (
+                Packaging.typeDefinitionName def,
+                (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def)))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
+-- | Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references
 typeDependencyNames :: Bool -> Core.Type -> S.Set Core.Name
 typeDependencyNames withSchema typ =
     Logic.ifElse withSchema (Sets.union (Variables.freeVariablesInType typ) (typeNamesInType typ)) (Variables.freeVariablesInType typ)
+-- | Collect every type name that appears anywhere inside a type expression
 typeNamesInType :: Ord t0 => (Core.Type -> S.Set t0)
 typeNamesInType typ0 =
 

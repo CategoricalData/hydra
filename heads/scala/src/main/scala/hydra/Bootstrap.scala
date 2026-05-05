@@ -229,13 +229,13 @@ object BootstrapHelpers:
       try Generation.readManifestField(pkgDir, fieldName)
       catch case _: RuntimeException => Seq.empty
 
-  /** Load a package's mainModules + evalLibModules from its manifest. */
+  /** Load a package's mainModules + defaultLibModules from its manifest. */
   def loadPackageMain(root: String, pkg: String,
       schemaMap: Map[String, Type]): Seq[hydra.packaging.Module] =
     val pkgDir = packageMainDir(root, pkg)
     val mainNs = readManifestFieldOrEmpty(pkgDir, "mainModules")
-    val evalNs = readManifestFieldOrEmpty(pkgDir, "evalLibModules")
-    val allNs = mainNs ++ evalNs
+    val defaultNs = readManifestFieldOrEmpty(pkgDir, "defaultLibModules")
+    val allNs = mainNs ++ defaultNs
     if allNs.isEmpty then Seq.empty
     else
       println(s"  $pkg: ${allNs.size} modules from $pkgDir")

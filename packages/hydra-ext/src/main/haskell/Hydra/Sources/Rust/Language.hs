@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.rust.language"),
             moduleDefinitions = [toDefinition rustLanguage, toDefinition rustReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for Rust"}
 rustLanguage :: TTermDefinition Language
 rustLanguage = define "rustLanguage" $
@@ -165,8 +164,8 @@ rustLanguage = define "rustLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.rust")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.rust")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

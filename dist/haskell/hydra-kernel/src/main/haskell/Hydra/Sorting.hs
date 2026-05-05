@@ -50,6 +50,7 @@ adjacencyListsToGraph edges0 =
                     in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges)
           vertexToKey = \v -> Maps.lookup v vertexMap
       in (graph, vertexToKey)
+-- | Construct an OrderingIsomorphism between two orderings of the same elements. The two list arguments must be permutations of each other; the result is a pair of mappings that transport an element list from one ordering to the other.
 createOrderingIsomorphism :: Ord t0 => ([t0] -> [t0] -> Topology.OrderingIsomorphism t1)
 createOrderingIsomorphism sourceOrd targetOrd =
 

@@ -172,8 +172,11 @@ for l in $HOSTS $TARGETS; do
     fi
 done
 
-# (hosts ∪ targets) as a sorted unique list.
-LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | sort -u | xargs)
+# (hosts ∪ targets) preserving the order in which languages first appear.
+# We deliberately don't `sort -u` here — Java and Python are higher-value
+# than Lisp, so when --targets all expands, we want them assembled (and
+# tested) before the Lisp dialects so failures surface earlier.
+LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | awk '!seen[$0]++' | xargs)
 
 # Ensure JAVA_HOME is set to a native arm64 JDK 19 if any host or target is java.
 need_java=false

@@ -18,7 +18,7 @@ set -euo pipefail
 #   synthesized from the loaded kernel type modules via --synthesize-sources.
 #
 # This replaces the older multi-pass approach (update-haskell-kernel →
-# update-kernel-tests → update-haskell-eval-lib → update-haskell-sources →
+# update-kernel-tests → update-haskell-default-lib → update-haskell-sources →
 # update-haskell-kernel again) with a single JSON-reading generator call.
 #
 # Prerequisites:
@@ -57,7 +57,7 @@ for arg in "$@"; do
             echo "  2. Export kernel + test modules to JSON (DSL → JSON)"
             echo "  3. Verify JSON kernel + write manifest"
             echo "  4. Generate Haskell from JSON (JSON → Haskell)"
-            echo "  5. Post-process generated files (TestGraph.hs patch)"
+            echo "  5. Post-process generated files (no-op since #307)"
             echo "  6. Run tests (unless --no-tests)"
             echo "  7. Regenerate the lexicon"
             exit 0
@@ -164,12 +164,14 @@ fi
 step 5 $TOTAL_STEPS "Post-processing generated files"
 echo ""
 
-# TestGraph post-generation patch has been eliminated: the DSL at
-# packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/TestGraph.hs
-# now emits `TestEnv.testGraph testTypes` and `TestEnv.testContext`
-# directly, via the FQN stubs in Hydra.Sources.Test.TestEnv. See
-# task #25 in the feature_290_packaging plan for the detailed design.
-echo "  (No post-processing needed — generator emits TestEnv refs directly.)"
+# All post-generation patches have been eliminated as of #307. The DSL
+# at packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/TestGraph.hs
+# emits `TestEnv.testGraph testTypes testTerms` and `TestEnv.testContext`
+# directly via the FQN stubs in Hydra.Sources.Test.TestEnv; the Scala
+# line-wrap is now applied during emission via
+# generateSourcesWithTransform; the EL/CL/Clojure/Scheme test_graph
+# files reference test_env.* directly with no rewriting needed.
+echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
 # Rebuild so subsequent steps (test, lexicon) pick up the new Haskell dist.
 echo ""

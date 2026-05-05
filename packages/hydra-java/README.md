@@ -158,7 +158,7 @@ bin/sync-java.sh
 
 This will:
 1. Generate the kernel modules into `dist/java/hydra-kernel/src/main/java`
-2. Generate the eval lib modules
+2. Generate the default lib modules
 3. Generate the kernel tests into `dist/java/hydra-kernel/src/test/java`
 4. Build and run all tests
 

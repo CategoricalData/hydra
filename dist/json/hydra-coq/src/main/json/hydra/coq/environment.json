@@ -6,11 +6,7 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Cross-module state threaded through the Coq encoder"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "Cross-module state threaded through the Coq encoder"}}}],
               "body": {
                 "record": [
                   {
@@ -34,10 +30,7 @@
                             "value": {
                               "literal": {
                                 "string": "Number of constructors in each union type, keyed by local type name (e.g. \"Term\" -> 14). Used to decide whether a match is exhaustive."}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"literal": {"string": {}}},
-                            "values": {"literal": {"integer": {"int32": {}}}}}}}}},
+                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}}},
                   {
                     "name": "ambiguousNames",
                     "type": {
@@ -61,7 +54,6 @@
                                 "string": "Accessor names for record fields that were sanitized to unit due to Coq's strict positivity requirement. Applications of these accessors are replaced with hydra_unreachable at emission time."}}}],
                         "body": {"set": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core"],
   "description": "Environment types for Coq code generation",
-  "namespace": "hydra.coq.environment",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.coq.environment"}

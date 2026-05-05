@@ -61,8 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [toDefinition hydraLanguage],
-            moduleTermDependencies = [Reflect.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Reflect.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for Hydra Core"}
 hydraLanguage :: TTermDefinition Language
 hydraLanguage = definitionInModule module_ "hydraLanguage" $
@@ -76,8 +75,8 @@ hydraLanguage = definitionInModule module_ "hydraLanguage" $
   "typeVariants">: Sets.fromList Reflect.typeVariants,
   "types">: "t" ~> cases _Type (var "t") (Just true) []] $
   Coders.language
-    (Coders.languageName_ (string "hydra.core"))
-    (Coders.languageConstraints_
+    (Coders.languageName2 (string "hydra.core"))
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

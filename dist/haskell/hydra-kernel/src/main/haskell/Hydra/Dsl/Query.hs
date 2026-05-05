@@ -7,6 +7,7 @@ import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | DSL injection for the equal variant of hydra.query.ComparisonConstraint
 comparisonConstraintEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintEqual =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -14,6 +15,7 @@ comparisonConstraintEqual =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equal"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the greaterThan variant of hydra.query.ComparisonConstraint
 comparisonConstraintGreaterThan :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintGreaterThan =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -21,6 +23,7 @@ comparisonConstraintGreaterThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the greaterThanOrEqual variant of hydra.query.ComparisonConstraint
 comparisonConstraintGreaterThanOrEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintGreaterThanOrEqual =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -28,6 +31,7 @@ comparisonConstraintGreaterThanOrEqual =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThanOrEqual"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the lessThan variant of hydra.query.ComparisonConstraint
 comparisonConstraintLessThan :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintLessThan =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -35,6 +39,7 @@ comparisonConstraintLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the lessThanOrEqual variant of hydra.query.ComparisonConstraint
 comparisonConstraintLessThanOrEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintLessThanOrEqual =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -42,6 +47,7 @@ comparisonConstraintLessThanOrEqual =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanOrEqual"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the notEqual variant of hydra.query.ComparisonConstraint
 comparisonConstraintNotEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintNotEqual =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -49,6 +55,7 @@ comparisonConstraintNotEqual =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEqual"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL constructor for hydra.query.Edge
 edge :: Phantoms.TTerm Core.Name -> Phantoms.TTerm (Maybe Core.Name) -> Phantoms.TTerm (Maybe Core.Name) -> Phantoms.TTerm Query.Edge
 edge type_ out in_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -63,6 +70,7 @@ edge type_ out in_ =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Phantoms.unTTerm in_)}]}))
+-- | DSL accessor for the in field of hydra.query.Edge
 edgeIn :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name)
 edgeIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -70,6 +78,7 @@ edgeIn x =
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
         Core.projectionField = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the out field of hydra.query.Edge
 edgeOut :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name)
 edgeOut x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -77,6 +86,7 @@ edgeOut x =
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
         Core.projectionField = (Core.Name "out")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the type field of hydra.query.Edge
 edgeType :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Core.Name
 edgeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -84,6 +94,7 @@ edgeType x =
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the in field of hydra.query.Edge
 edgeWithIn :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name) -> Phantoms.TTerm Query.Edge
 edgeWithIn original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -106,6 +117,7 @@ edgeWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the out field of hydra.query.Edge
 edgeWithOut :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name) -> Phantoms.TTerm Query.Edge
 edgeWithOut original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -128,6 +140,7 @@ edgeWithOut original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
               Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.query.Edge
 edgeWithType :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Query.Edge
 edgeWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -150,6 +163,7 @@ edgeWithType original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
               Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.query.GraphPattern
 graphPattern :: Phantoms.TTerm Core.Name -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.GraphPattern
 graphPattern graph patterns =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -161,6 +175,7 @@ graphPattern graph patterns =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Phantoms.unTTerm patterns)}]}))
+-- | DSL accessor for the graph field of hydra.query.GraphPattern
 graphPatternGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Core.Name
 graphPatternGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -168,6 +183,7 @@ graphPatternGraph x =
         Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
         Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the patterns field of hydra.query.GraphPattern
 graphPatternPatterns :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm [Query.Pattern]
 graphPatternPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -175,6 +191,7 @@ graphPatternPatterns x =
         Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
         Core.projectionField = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the graph field of hydra.query.GraphPattern
 graphPatternWithGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Query.GraphPattern
 graphPatternWithGraph original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -190,6 +207,7 @@ graphPatternWithGraph original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
               Core.projectionField = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the patterns field of hydra.query.GraphPattern
 graphPatternWithPatterns :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.GraphPattern
 graphPatternWithPatterns original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -205,6 +223,7 @@ graphPatternWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the term variant of hydra.query.Node
 nodeTerm :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Query.Node
 nodeTerm x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -212,6 +231,7 @@ nodeTerm x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the variable variant of hydra.query.Node
 nodeVariable :: Phantoms.TTerm Query.Variable -> Phantoms.TTerm Query.Node
 nodeVariable x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -219,6 +239,7 @@ nodeVariable x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the wildcard variant of hydra.query.Node
 nodeWildcard :: Phantoms.TTerm Query.Node
 nodeWildcard =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -226,6 +247,7 @@ nodeWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL constructor for hydra.query.PathEquation
 pathEquation :: Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
 pathEquation left right =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -237,6 +259,7 @@ pathEquation left right =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Phantoms.unTTerm right)}]}))
+-- | DSL accessor for the left field of hydra.query.PathEquation
 pathEquationLeft :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path
 pathEquationLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -244,6 +267,7 @@ pathEquationLeft x =
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
         Core.projectionField = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the right field of hydra.query.PathEquation
 pathEquationRight :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path
 pathEquationRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -251,6 +275,7 @@ pathEquationRight x =
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
         Core.projectionField = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the left field of hydra.query.PathEquation
 pathEquationWithLeft :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
 pathEquationWithLeft original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -266,6 +291,7 @@ pathEquationWithLeft original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
               Core.projectionField = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the right field of hydra.query.PathEquation
 pathEquationWithRight :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
 pathEquationWithRight original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -281,6 +307,7 @@ pathEquationWithRight original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the inverse variant of hydra.query.Path
 pathInverse :: Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.Path
 pathInverse x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -288,6 +315,7 @@ pathInverse x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inverse"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the regex variant of hydra.query.Path
 pathRegex :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path
 pathRegex x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -295,6 +323,7 @@ pathRegex x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the step variant of hydra.query.Path
 pathStep :: Phantoms.TTerm Query.Step -> Phantoms.TTerm Query.Path
 pathStep x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -302,6 +331,7 @@ pathStep x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "step"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the conjunction variant of hydra.query.Pattern
 patternConjunction :: Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Pattern
 patternConjunction x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -309,6 +339,7 @@ patternConjunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjunction"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the disjunction variant of hydra.query.Pattern
 patternDisjunction :: Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Pattern
 patternDisjunction x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -316,6 +347,7 @@ patternDisjunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjunction"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the graph variant of hydra.query.Pattern
 patternGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Query.Pattern
 patternGraph x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -323,6 +355,7 @@ patternGraph x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for hydra.query.PatternImplication
 patternImplication :: Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
 patternImplication antecedent consequent =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -334,6 +367,7 @@ patternImplication antecedent consequent =
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
           Core.fieldTerm = (Phantoms.unTTerm consequent)}]}))
+-- | DSL accessor for the antecedent field of hydra.query.PatternImplication
 patternImplicationAntecedent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern
 patternImplicationAntecedent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -341,6 +375,7 @@ patternImplicationAntecedent x =
         Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
         Core.projectionField = (Core.Name "antecedent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the consequent field of hydra.query.PatternImplication
 patternImplicationConsequent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern
 patternImplicationConsequent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -348,6 +383,7 @@ patternImplicationConsequent x =
         Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
         Core.projectionField = (Core.Name "consequent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the antecedent field of hydra.query.PatternImplication
 patternImplicationWithAntecedent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
 patternImplicationWithAntecedent original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -363,6 +399,7 @@ patternImplicationWithAntecedent original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
               Core.projectionField = (Core.Name "consequent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the consequent field of hydra.query.PatternImplication
 patternImplicationWithConsequent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
 patternImplicationWithConsequent original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -378,6 +415,7 @@ patternImplicationWithConsequent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the negation variant of hydra.query.Pattern
 patternNegation :: Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.Pattern
 patternNegation x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -385,6 +423,7 @@ patternNegation x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negation"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the triple variant of hydra.query.Pattern
 patternTriple :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Pattern
 patternTriple x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -392,6 +431,7 @@ patternTriple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "triple"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for hydra.query.Query
 query :: Phantoms.TTerm [Query.Variable] -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Query
 query variables patterns =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -403,6 +443,7 @@ query variables patterns =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Phantoms.unTTerm patterns)}]}))
+-- | DSL accessor for the patterns field of hydra.query.Query
 queryPatterns :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Pattern]
 queryPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -410,6 +451,7 @@ queryPatterns x =
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
         Core.projectionField = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the variables field of hydra.query.Query
 queryVariables :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Variable]
 queryVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -417,6 +459,7 @@ queryVariables x =
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
         Core.projectionField = (Core.Name "variables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the patterns field of hydra.query.Query
 queryWithPatterns :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Query
 queryWithPatterns original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -432,6 +475,7 @@ queryWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the variables field of hydra.query.Query
 queryWithVariables :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Variable] -> Phantoms.TTerm Query.Query
 queryWithVariables original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -447,6 +491,7 @@ queryWithVariables original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.Query"),
               Core.projectionField = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.query.Range
 range :: Phantoms.TTerm Int -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
 range min max =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -458,6 +503,7 @@ range min max =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Phantoms.unTTerm max)}]}))
+-- | DSL accessor for the max field of hydra.query.Range
 rangeMax :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int
 rangeMax x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -465,6 +511,7 @@ rangeMax x =
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
         Core.projectionField = (Core.Name "max")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the min field of hydra.query.Range
 rangeMin :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int
 rangeMin x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -472,6 +519,7 @@ rangeMin x =
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
         Core.projectionField = (Core.Name "min")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the max field of hydra.query.Range
 rangeWithMax :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
 rangeWithMax original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -487,6 +535,7 @@ rangeWithMax original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the min field of hydra.query.Range
 rangeWithMin :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
 rangeWithMin original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -502,6 +551,7 @@ rangeWithMin original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.Range"),
               Core.projectionField = (Core.Name "max")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL injection for the atLeast variant of hydra.query.RegexQuantifier
 regexQuantifierAtLeast :: Phantoms.TTerm Int -> Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierAtLeast x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -509,6 +559,7 @@ regexQuantifierAtLeast x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "atLeast"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the exactly variant of hydra.query.RegexQuantifier
 regexQuantifierExactly :: Phantoms.TTerm Int -> Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierExactly x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -516,6 +567,7 @@ regexQuantifierExactly x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exactly"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the one variant of hydra.query.RegexQuantifier
 regexQuantifierOne :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierOne =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -523,6 +575,7 @@ regexQuantifierOne =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "one"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the oneOrMore variant of hydra.query.RegexQuantifier
 regexQuantifierOneOrMore :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierOneOrMore =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -530,6 +583,7 @@ regexQuantifierOneOrMore =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "oneOrMore"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the range variant of hydra.query.RegexQuantifier
 regexQuantifierRange :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierRange x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -537,6 +591,7 @@ regexQuantifierRange x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the zeroOrMore variant of hydra.query.RegexQuantifier
 regexQuantifierZeroOrMore :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierZeroOrMore =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -544,6 +599,7 @@ regexQuantifierZeroOrMore =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zeroOrMore"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the zeroOrOne variant of hydra.query.RegexQuantifier
 regexQuantifierZeroOrOne :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierZeroOrOne =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -551,6 +607,7 @@ regexQuantifierZeroOrOne =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zeroOrOne"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL constructor for hydra.query.RegexSequence
 regexSequence :: Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.RegexQuantifier -> Phantoms.TTerm Query.RegexSequence
 regexSequence path quantifier =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -562,6 +619,7 @@ regexSequence path quantifier =
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
           Core.fieldTerm = (Phantoms.unTTerm quantifier)}]}))
+-- | DSL accessor for the path field of hydra.query.RegexSequence
 regexSequencePath :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path
 regexSequencePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -569,6 +627,7 @@ regexSequencePath x =
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
         Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the quantifier field of hydra.query.RegexSequence
 regexSequenceQuantifier :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.RegexQuantifier
 regexSequenceQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -576,6 +635,7 @@ regexSequenceQuantifier x =
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
         Core.projectionField = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the path field of hydra.query.RegexSequence
 regexSequenceWithPath :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.RegexSequence
 regexSequenceWithPath original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -591,6 +651,7 @@ regexSequenceWithPath original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
               Core.projectionField = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the quantifier field of hydra.query.RegexSequence
 regexSequenceWithQuantifier :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.RegexQuantifier -> Phantoms.TTerm Query.RegexSequence
 regexSequenceWithQuantifier original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -606,6 +667,7 @@ regexSequenceWithQuantifier original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the compare variant of hydra.query.Step
 stepCompare :: Phantoms.TTerm Query.ComparisonConstraint -> Phantoms.TTerm Query.Step
 stepCompare x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -613,6 +675,7 @@ stepCompare x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "compare"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the edge variant of hydra.query.Step
 stepEdge :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Query.Step
 stepEdge x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -620,6 +683,7 @@ stepEdge x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the project variant of hydra.query.Step
 stepProject :: Phantoms.TTerm Core.Projection -> Phantoms.TTerm Query.Step
 stepProject x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -627,6 +691,7 @@ stepProject x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for hydra.query.TriplePattern
 triplePattern :: Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
 triplePattern subject predicate object =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -641,6 +706,7 @@ triplePattern subject predicate object =
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Phantoms.unTTerm object)}]}))
+-- | DSL accessor for the object field of hydra.query.TriplePattern
 triplePatternObject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node
 triplePatternObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -648,6 +714,7 @@ triplePatternObject x =
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
         Core.projectionField = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the predicate field of hydra.query.TriplePattern
 triplePatternPredicate :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Path
 triplePatternPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -655,6 +722,7 @@ triplePatternPredicate x =
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
         Core.projectionField = (Core.Name "predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the subject field of hydra.query.TriplePattern
 triplePatternSubject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node
 triplePatternSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -662,6 +730,7 @@ triplePatternSubject x =
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
         Core.projectionField = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the object field of hydra.query.TriplePattern
 triplePatternWithObject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
 triplePatternWithObject original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -684,6 +753,7 @@ triplePatternWithObject original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the predicate field of hydra.query.TriplePattern
 triplePatternWithPredicate :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.TriplePattern
 triplePatternWithPredicate original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -706,6 +776,7 @@ triplePatternWithPredicate original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
               Core.projectionField = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the subject field of hydra.query.TriplePattern
 triplePatternWithSubject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
 triplePatternWithSubject original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -728,11 +799,13 @@ triplePatternWithSubject original newVal =
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
               Core.projectionField = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL accessor for the body of hydra.query.Variable
 unVariable :: Phantoms.TTerm Query.Variable -> Phantoms.TTerm String
 unVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.query.Variable")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL constructor for the hydra.query.Variable wrapper
 variable :: Phantoms.TTerm String -> Phantoms.TTerm Query.Variable
 variable x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {

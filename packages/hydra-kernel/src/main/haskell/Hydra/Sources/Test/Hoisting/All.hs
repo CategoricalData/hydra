@@ -24,8 +24,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = namespaces,
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = namespaces Prelude.++ kernelTypesNamespaces,
             moduleDescription = Just "Hydra's hoisting test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]

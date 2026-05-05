@@ -39,6 +39,7 @@ import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSourc
 import qualified Hydra.Sources.Decode.Core                 as DecodeCore
 import qualified Hydra.Sources.Encode.Core                 as EncodeCore
 import           Prelude hiding ((++))
+import qualified Data.List                  as L
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -65,12 +66,11 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [moduleNamespace CppLanguageSource.module_,
+            moduleDependencies = [moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_],
-            moduleTypeDependencies = (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "C++ code generator: converts Hydra modules to C++ header files"}
   where
     definitions = [
@@ -1086,7 +1086,7 @@ serializeHeaderFile = def "serializeHeaderFile" $
       (bindingNameToFilePath @@ var "name")
       (SerializationSource.printExpr @@
         (SerializationSource.parenthesize @@
-          (TTerm (TermVariable (Name "hydra.cpp.serde.encodeProgram"))
+          (TTerm (TermVariable (Name "hydra.cpp.serde.programToExpr"))
             @@ (createHeaderFile @@ var "includes" @@ var "decls"))))
 
 -- | Convert a binding name to a file path

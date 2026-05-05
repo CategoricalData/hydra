@@ -40,8 +40,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [SortingModule.ns, ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [SortingModule.ns, ShowCore.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for topological sorting algorithms")}
   where
     definitions = [Phantoms.toDefinition allTests]

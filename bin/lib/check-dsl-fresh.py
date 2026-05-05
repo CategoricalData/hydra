@@ -23,7 +23,13 @@ import re
 import sys
 from pathlib import Path
 
-NAMESPACE_RE = re.compile(r'^ns\s*=\s*Namespace\s*"([^"]+)"', re.MULTILINE)
+# Two namespace declaration idioms appear across the source tree:
+#   1. Top-level `ns = Namespace "..."` (kernel + most term-level sources).
+#   2. Inline `moduleNamespace = (Namespace "...")` inside a Module record
+#      (~half of non-kernel sources, e.g. hydra-pg, hydra-ext, hydra-python).
+# Mirrors Hydra.Digest.extractNs in heads/haskell/src/main/haskell/Hydra/Digest.hs.
+NAMESPACE_RE_TOPLEVEL = re.compile(r'^ns\s*=\s*Namespace\s*"([^"]+)"', re.MULTILINE)
+NAMESPACE_RE_INLINE = re.compile(r'moduleNamespace\s*=\s*.?Namespace\s*"([^"]+)"')
 
 
 def hash_file(path: Path) -> str:
@@ -49,7 +55,7 @@ def discover_namespaces(packages_root: Path) -> dict:
                 content = hs.read_text(errors='replace')
             except OSError:
                 continue
-            m = NAMESPACE_RE.search(content)
+            m = NAMESPACE_RE_TOPLEVEL.search(content) or NAMESPACE_RE_INLINE.search(content)
             if m:
                 out[m.group(1)] = str(hs)
     return out
