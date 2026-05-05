@@ -229,12 +229,6 @@
               "body": {
                 "union": [
                   {
-                    "name": "bigfloat",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision floating-point type"}}}],
-                        "body": {"unit": {}}}}},
-                  {
                     "name": "float32",
                     "type": {
                       "annotated": {
@@ -256,12 +250,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A floating-point literal value"}}}],
               "body": {
                 "union": [
-                  {
-                    "name": "bigfloat",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision floating-point value"}}}],
-                        "body": {"literal": {"float": {"bigfloat": {}}}}}}},
                   {
                     "name": "float32",
                     "type": {

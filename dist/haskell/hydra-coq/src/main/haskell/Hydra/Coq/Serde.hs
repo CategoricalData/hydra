@@ -280,7 +280,7 @@ pattern0ToExpr p =
       Syntax.Pattern0Parens v0 -> Serialization.parens (Serialization.infixWsList ", " (Lists.map (\p2 -> patternToExpr p2) v0))
       Syntax.Pattern0Number v0 ->
         let v = Syntax.unNumber v0
-        in (Serialization.cst (Literals.showBigfloat v))
+        in (Serialization.cst (Literals.showFloat64 v))
       Syntax.Pattern0String v0 -> Serialization.spaceSep [
         Serialization.cst "\"",
         (Serialization.cst (Syntax.unString v0)),
@@ -445,7 +445,7 @@ term0ToExpr t =
       Syntax.Term0PrimitiveNotations v0 -> case v0 of
         Syntax.PrimitiveNotationsNumber v1 ->
           let v = Syntax.unNumber v1
-          in (Serialization.cst (Literals.showBigfloat v))
+          in (Serialization.cst (Literals.showFloat64 v))
         Syntax.PrimitiveNotationsString v1 -> Serialization.spaceSep [
           Serialization.cst "\"",
           (Serialization.cst (Syntax.unString v1)),

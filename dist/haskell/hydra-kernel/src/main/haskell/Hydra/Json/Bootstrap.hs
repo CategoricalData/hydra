@@ -581,12 +581,6 @@ typesByName =
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeUnion [
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "bigfloat"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = Core.TypeUnit,
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An arbitrary-precision floating-point type")))])}))},
-            Core.FieldType {
               Core.fieldTypeName = (Core.Name "float32"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = Core.TypeUnit,
@@ -604,12 +598,6 @@ typesByName =
         Core.Name "hydra.core.FloatValue",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeUnion [
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "bigfloat"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An arbitrary-precision floating-point value")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "float32"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {

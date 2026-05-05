@@ -25,13 +25,6 @@
               "cases": {
                 "cases": [
                   {
-                    "name": "bigfloat",
-                    "term": {
-                      "lambda": {
-                        "body": {"inject": {"field": {"name": "arbitrary", "term": {"unit": {}}}, "typeName": "hydra.util.Precision"}},
-                        "domain": {"unit": {}},
-                        "parameter": "_"}}},
-                  {
                     "name": "float32",
                     "term": {
                       "lambda": {
@@ -59,7 +52,6 @@
             "annotation": [{"key": "description", "value": {"literal": {"string": "All floating-point types in a canonical order"}}}],
             "body": {
               "list": [
-                {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
                 {"inject": {"field": {"name": "float32", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
                 {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}}]}}},
         "typeScheme": {"body": {"list": {"variable": "hydra.core.FloatType"}}, "variables": []}}},
@@ -72,13 +64,6 @@
             "body": {
               "cases": {
                 "cases": [
-                  {
-                    "name": "bigfloat",
-                    "term": {
-                      "lambda": {
-                        "body": {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
-                        "domain": {"literal": {"float": {"bigfloat": {}}}},
-                        "parameter": "_"}}},
                   {
                     "name": "float32",
                     "term": {

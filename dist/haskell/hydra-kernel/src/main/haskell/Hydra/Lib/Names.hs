@@ -222,18 +222,6 @@ listsZipWith = Core.Name "hydra.lib.lists.zipWith"
 -- | Namespace of the literals library
 literals :: Packaging.Namespace
 literals = Packaging.Namespace "hydra.lib.literals"
--- | Name of the literals.bigfloatToBigint primitive
-literalsBigfloatToBigint :: Core.Name
-literalsBigfloatToBigint = Core.Name "hydra.lib.literals.bigfloatToBigint"
--- | Name of the literals.bigfloatToFloat32 primitive
-literalsBigfloatToFloat32 :: Core.Name
-literalsBigfloatToFloat32 = Core.Name "hydra.lib.literals.bigfloatToFloat32"
--- | Name of the literals.bigfloatToFloat64 primitive
-literalsBigfloatToFloat64 :: Core.Name
-literalsBigfloatToFloat64 = Core.Name "hydra.lib.literals.bigfloatToFloat64"
--- | Name of the literals.bigintToBigfloat primitive
-literalsBigintToBigfloat :: Core.Name
-literalsBigintToBigfloat = Core.Name "hydra.lib.literals.bigintToBigfloat"
 -- | Name of the literals.bigintToDecimal primitive
 literalsBigintToDecimal :: Core.Name
 literalsBigintToDecimal = Core.Name "hydra.lib.literals.bigintToDecimal"
@@ -276,18 +264,18 @@ literalsDecimalToFloat32 = Core.Name "hydra.lib.literals.decimalToFloat32"
 -- | Name of the literals.decimalToFloat64 primitive
 literalsDecimalToFloat64 :: Core.Name
 literalsDecimalToFloat64 = Core.Name "hydra.lib.literals.decimalToFloat64"
--- | Name of the literals.float32ToBigfloat primitive
-literalsFloat32ToBigfloat :: Core.Name
-literalsFloat32ToBigfloat = Core.Name "hydra.lib.literals.float32ToBigfloat"
 -- | Name of the literals.float32ToDecimal primitive
 literalsFloat32ToDecimal :: Core.Name
 literalsFloat32ToDecimal = Core.Name "hydra.lib.literals.float32ToDecimal"
--- | Name of the literals.float64ToBigfloat primitive
-literalsFloat64ToBigfloat :: Core.Name
-literalsFloat64ToBigfloat = Core.Name "hydra.lib.literals.float64ToBigfloat"
+-- | Name of the literals.float32ToFloat64 primitive
+literalsFloat32ToFloat64 :: Core.Name
+literalsFloat32ToFloat64 = Core.Name "hydra.lib.literals.float32ToFloat64"
 -- | Name of the literals.float64ToDecimal primitive
 literalsFloat64ToDecimal :: Core.Name
 literalsFloat64ToDecimal = Core.Name "hydra.lib.literals.float64ToDecimal"
+-- | Name of the literals.float64ToFloat32 primitive
+literalsFloat64ToFloat32 :: Core.Name
+literalsFloat64ToFloat32 = Core.Name "hydra.lib.literals.float64ToFloat32"
 -- | Name of the literals.int16ToBigint primitive
 literalsInt16ToBigint :: Core.Name
 literalsInt16ToBigint = Core.Name "hydra.lib.literals.int16ToBigint"
@@ -300,9 +288,6 @@ literalsInt64ToBigint = Core.Name "hydra.lib.literals.int64ToBigint"
 -- | Name of the literals.int8ToBigint primitive
 literalsInt8ToBigint :: Core.Name
 literalsInt8ToBigint = Core.Name "hydra.lib.literals.int8ToBigint"
--- | Name of the literals.readBigfloat primitive
-literalsReadBigfloat :: Core.Name
-literalsReadBigfloat = Core.Name "hydra.lib.literals.readBigfloat"
 -- | Name of the literals.readBigint primitive
 literalsReadBigint :: Core.Name
 literalsReadBigint = Core.Name "hydra.lib.literals.readBigint"
@@ -345,9 +330,6 @@ literalsReadUint64 = Core.Name "hydra.lib.literals.readUint64"
 -- | Name of the literals.readUint8 primitive
 literalsReadUint8 :: Core.Name
 literalsReadUint8 = Core.Name "hydra.lib.literals.readUint8"
--- | Name of the literals.showBigfloat primitive
-literalsShowBigfloat :: Core.Name
-literalsShowBigfloat = Core.Name "hydra.lib.literals.showBigfloat"
 -- | Name of the literals.showBigint primitive
 literalsShowBigint :: Core.Name
 literalsShowBigint = Core.Name "hydra.lib.literals.showBigint"
@@ -591,9 +573,6 @@ mathRange = Core.Name "hydra.lib.math.range"
 -- | Name of the math.round primitive
 mathRound :: Core.Name
 mathRound = Core.Name "hydra.lib.math.round"
--- | Name of the math.roundBigfloat primitive
-mathRoundBigfloat :: Core.Name
-mathRoundBigfloat = Core.Name "hydra.lib.math.roundBigfloat"
 -- | Name of the math.roundFloat32 primitive
 mathRoundFloat32 :: Core.Name
 mathRoundFloat32 = Core.Name "hydra.lib.math.roundFloat32"

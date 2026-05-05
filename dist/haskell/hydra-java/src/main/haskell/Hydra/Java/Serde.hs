@@ -424,7 +424,7 @@ fieldModifierToExpr m =
       Syntax.FieldModifierVolatile -> Serialization.cst "volatile"
 floatingPointLiteralToExpr :: Syntax.FloatingPointLiteral -> Ast.Expr
 floatingPointLiteralToExpr fl =
-    Serialization.cst (javaFloatLiteralText (Literals.showBigfloat (Syntax.unFloatingPointLiteral fl)))
+    Serialization.cst (javaFloatLiteralText (Literals.showFloat64 (Syntax.unFloatingPointLiteral fl)))
 floatingPointTypeToExpr :: Syntax.FloatingPointType -> Ast.Expr
 floatingPointTypeToExpr ft =
     case ft of
