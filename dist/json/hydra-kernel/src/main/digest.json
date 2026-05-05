@@ -36,6 +36,8 @@
     "hydra.json.decoding": "9d65cfbfd7c57157055299e90b2bbde0538be953179c1b21048800293d1cce38",
     "hydra.json.encode": "f0d8021fb819d9ec344fb2d3104ec649aff89491065827570c38949fa65090d7",
     "hydra.json.model": "44df486090885c1cd3723d29e175a1c37938d099c94970fe6074b4cd7a292c9b",
+    "hydra.json.parser": "dbf4154d4193e8f63ca20ec174917c68e647192e6301f51d4f31fd20f0094555",
+    "hydra.json.writer": "a04d8a1d40f2013c0625fcb0926f06afeaf214ea3ab48e7d280b908f4b62e8d4",
     "hydra.json.yaml.decode": "f6e2d1bb551eb36f2f91acdf4af9d5f3b483b1f1567d8e322a6ea5a93a064111",
     "hydra.json.yaml.encode": "6845d8baa7af390d8830a77c57244476833293ea0f30dfd29261172345b9e10f",
     "hydra.languages": "143cb53787811de9fd9cea9e5262b422f223225b7bf69e58ea59f3485b1306b2",
