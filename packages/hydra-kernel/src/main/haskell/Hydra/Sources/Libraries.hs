@@ -122,10 +122,6 @@ _lists_zip         = LibNames.listsZip
 _lists_zipWith     = LibNames.listsZipWith
 
 -- Literals
-_literals_bigfloatToBigint  = LibNames.literalsBigfloatToBigint
-_literals_bigfloatToFloat32 = LibNames.literalsBigfloatToFloat32
-_literals_bigfloatToFloat64 = LibNames.literalsBigfloatToFloat64
-_literals_bigintToBigfloat  = LibNames.literalsBigintToBigfloat
 _literals_bigintToDecimal   = LibNames.literalsBigintToDecimal
 _literals_bigintToInt8      = LibNames.literalsBigintToInt8
 _literals_bigintToInt16     = LibNames.literalsBigintToInt16
@@ -140,15 +136,14 @@ _literals_binaryToString    = LibNames.literalsBinaryToString
 _literals_decimalToBigint   = LibNames.literalsDecimalToBigint
 _literals_decimalToFloat32  = LibNames.literalsDecimalToFloat32
 _literals_decimalToFloat64  = LibNames.literalsDecimalToFloat64
-_literals_float32ToBigfloat = LibNames.literalsFloat32ToBigfloat
 _literals_float32ToDecimal  = LibNames.literalsFloat32ToDecimal
-_literals_float64ToBigfloat = LibNames.literalsFloat64ToBigfloat
+_literals_float32ToFloat64  = LibNames.literalsFloat32ToFloat64
 _literals_float64ToDecimal  = LibNames.literalsFloat64ToDecimal
+_literals_float64ToFloat32  = LibNames.literalsFloat64ToFloat32
 _literals_int8ToBigint      = LibNames.literalsInt8ToBigint
 _literals_int16ToBigint     = LibNames.literalsInt16ToBigint
 _literals_int32ToBigint     = LibNames.literalsInt32ToBigint
 _literals_int64ToBigint     = LibNames.literalsInt64ToBigint
-_literals_readBigfloat      = LibNames.literalsReadBigfloat
 _literals_readBigint        = LibNames.literalsReadBigint
 _literals_readBoolean       = LibNames.literalsReadBoolean
 _literals_readDecimal       = LibNames.literalsReadDecimal
@@ -163,7 +158,6 @@ _literals_readUint8         = LibNames.literalsReadUint8
 _literals_readUint16        = LibNames.literalsReadUint16
 _literals_readUint32        = LibNames.literalsReadUint32
 _literals_readUint64        = LibNames.literalsReadUint64
-_literals_showBigfloat      = LibNames.literalsShowBigfloat
 _literals_showBigint        = LibNames.literalsShowBigint
 _literals_showBoolean       = LibNames.literalsShowBoolean
 _literals_showDecimal       = LibNames.literalsShowDecimal
@@ -247,7 +241,6 @@ _math_maybePred = LibNames.mathMaybePred
 _math_range    = LibNames.mathRange
 _math_maybeRem = LibNames.mathMaybeRem
 _math_round         = LibNames.mathRound
-_math_roundBigfloat = LibNames.mathRoundBigfloat
 _math_roundFloat32  = LibNames.mathRoundFloat32
 _math_roundFloat64  = LibNames.mathRoundFloat64
 _math_signum        = LibNames.mathSignum
@@ -484,10 +477,6 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
 
 hydraLibLiterals :: Library
 hydraLibLiterals = standardLibrary _hydra_lib_literals [
-  prim1 _literals_bigfloatToBigint  Literals.bigfloatToBigint  [] bigfloat bigint,
-  prim1 _literals_bigfloatToFloat32 Literals.bigfloatToFloat32 [] bigfloat float32,
-  prim1 _literals_bigfloatToFloat64 Literals.bigfloatToFloat64 [] bigfloat float64,
-  prim1 _literals_bigintToBigfloat  Literals.bigintToBigfloat  [] bigint bigfloat,
   prim1 _literals_bigintToDecimal   Literals.bigintToDecimal   [] bigint decimal,
   prim1 _literals_bigintToInt8      Literals.bigintToInt8      [] bigint int8,
   prim1 _literals_bigintToInt16     Literals.bigintToInt16     [] bigint int16,
@@ -502,15 +491,14 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_decimalToBigint   Literals.decimalToBigint   [] decimal bigint,
   prim1 _literals_decimalToFloat32  Literals.decimalToFloat32  [] decimal float32,
   prim1 _literals_decimalToFloat64  Literals.decimalToFloat64  [] decimal float64,
-  prim1 _literals_float32ToBigfloat Literals.float32ToBigfloat [] float32 bigfloat,
   prim1 _literals_float32ToDecimal  Literals.float32ToDecimal  [] float32 decimal,
-  prim1 _literals_float64ToBigfloat Literals.float64ToBigfloat [] float64 bigfloat,
+  prim1 _literals_float32ToFloat64  Literals.float32ToFloat64  [] float32 float64,
   prim1 _literals_float64ToDecimal  Literals.float64ToDecimal  [] float64 decimal,
+  prim1 _literals_float64ToFloat32  Literals.float64ToFloat32  [] float64 float32,
   prim1 _literals_int8ToBigint      Literals.int8ToBigint      [] int8 bigint,
   prim1 _literals_int16ToBigint     Literals.int16ToBigint     [] int16 bigint,
   prim1 _literals_int32ToBigint     Literals.int32ToBigint     [] int32 bigint,
   prim1 _literals_int64ToBigint     Literals.int64ToBigint     [] int64 bigint,
-  prim1 _literals_readBigfloat      Literals.readBigfloat      [] string (optional bigfloat),
   prim1 _literals_readBigint        Literals.readBigint        [] string (optional bigint),
   prim1 _literals_readBoolean       Literals.readBoolean       [] string (optional boolean),
   prim1 _literals_readDecimal       Literals.readDecimal       [] string (optional decimal),
@@ -525,7 +513,6 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_readUint16        Literals.readUint16        [] string (optional uint16),
   prim1 _literals_readUint32        Literals.readUint32        [] string (optional uint32),
   prim1 _literals_readUint64        Literals.readUint64        [] string (optional uint64),
-  prim1 _literals_showBigfloat      Literals.showBigfloat      [] bigfloat string,
   prim1 _literals_showBigint        Literals.showBigint        [] bigint string,
   prim1 _literals_showBoolean       Literals.showBoolean       [] boolean string,
   prim1 _literals_showDecimal       Literals.showDecimal       [] decimal string,
@@ -601,7 +588,6 @@ hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim0 _math_pi       Math.pi       [] float64,
   prim2 _math_pow      Math.pow      [] float64 float64 float64,
   prim1 _math_round         Math.round         [] float64 float64,
-  prim2 _math_roundBigfloat Math.roundBigfloat [] int32 bigfloat bigfloat,
   prim2 _math_roundFloat32  Math.roundFloat32  [] int32 float32 float32,
   prim2 _math_roundFloat64  Math.roundFloat64  [] int32 float64 float64,
   prim1 _math_sin            Math.sin           [] float64 float64,

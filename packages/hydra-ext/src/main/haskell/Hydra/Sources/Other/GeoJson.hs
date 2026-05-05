@@ -69,8 +69,8 @@ boundingBox = define "BoundingBox" $
 coordinateRange :: Binding
 coordinateRange = define "CoordinateRange" $
   T.record [
-    "min">: T.bigfloat,
-    "max">: T.bigfloat]
+    "min">: T.float64,
+    "max">: T.float64]
 
 feature :: Binding
 feature = define "Feature" $
@@ -135,7 +135,7 @@ geometry = define "Geometry" $
 id_ :: Binding
 id_ = define "Id" $
   T.union [
-    "number">: T.bigfloat,
+    "number">: T.float64,
     "string">: T.string]
 
 lineString :: Binding
@@ -206,6 +206,6 @@ position = define "Position" $
        "numbers.  Altitude or elevation MAY be included as an optional third " ++
        "element.") $
   T.record [
-    "latitude">: T.bigfloat,
-    "longitude">: T.bigfloat,
-    "altitude">: T.maybe T.bigfloat]
+    "latitude">: T.float64,
+    "longitude">: T.float64,
+    "altitude">: T.maybe T.float64]

@@ -54,10 +54,6 @@ encodeLiteral lit =
         Syntax.literalDatatypeIri = (xmlSchemaDatatypeIri "boolean"),
         Syntax.literalLanguageTag = Nothing}
       Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueBigfloat v1 -> Syntax.Literal {
-          Syntax.literalLexicalForm = (Literals.showBigfloat v1),
-          Syntax.literalDatatypeIri = (xmlSchemaDatatypeIri "decimal"),
-          Syntax.literalLanguageTag = Nothing}
         Core.FloatValueFloat32 v1 -> Syntax.Literal {
           Syntax.literalLexicalForm = (Literals.showFloat32 v1),
           Syntax.literalDatatypeIri = (xmlSchemaDatatypeIri "float"),

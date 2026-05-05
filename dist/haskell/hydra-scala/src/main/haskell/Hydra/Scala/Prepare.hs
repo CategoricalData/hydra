@@ -45,13 +45,7 @@ prepareLiteralType at =
 
 -- | Prepare a float type for Scala
 prepareFloatType :: Core.FloatType -> (Core.FloatType, ((Core.FloatValue -> Core.FloatValue), (S.Set String)))
-prepareFloatType ft =
-    case ft of
-      Core.FloatTypeBigfloat -> (Core.FloatTypeFloat64, ((\v -> case v of
-        Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1)
-        _ -> v), (Sets.fromList [
-        "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"])))
-      _ -> same ft
+prepareFloatType ft = same ft
 
 -- | Prepare an integer type for Scala
 prepareIntegerType :: Core.IntegerType -> (Core.IntegerType, ((Core.IntegerValue -> Core.IntegerValue), (S.Set String)))

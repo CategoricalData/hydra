@@ -8,7 +8,6 @@ import hydra.errors.OtherError;
 import hydra.graph.Graph;
 import hydra.util.Either;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.function.BiFunction;
@@ -46,10 +45,6 @@ public class PrimitiveType<T> {
 
     public static PrimitiveType<Boolean> boolean_() {
         return new PrimitiveType<>("boolean", Types.boolean_(), hydra.extract.Core::boolean_, Boolean::compareTo);
-    }
-
-    public static PrimitiveType<BigDecimal> bigfloat() {
-        return new PrimitiveType<>("bigfloat", Types.bigfloat(), hydra.extract.Core::bigfloat, BigDecimal::compareTo);
     }
 
     public static PrimitiveType<BigInteger> bigint() {

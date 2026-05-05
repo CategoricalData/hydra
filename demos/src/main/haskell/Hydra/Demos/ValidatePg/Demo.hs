@@ -113,7 +113,6 @@ showLiteralType lt = case lt of
 
 showFloatType :: Core.FloatType -> String
 showFloatType ft = case ft of
-  Core.FloatTypeBigfloat -> "bigfloat"
   Core.FloatTypeFloat32  -> "float32"
   Core.FloatTypeFloat64  -> "float64"
 
@@ -139,7 +138,6 @@ showLiteral l = case l of
 
 showFloatValue :: Core.FloatValue -> String
 showFloatValue fv = case fv of
-  Core.FloatValueBigfloat d -> "float:bigfloat:" ++ show d
   Core.FloatValueFloat32 f  -> "float:float32:" ++ show f
   Core.FloatValueFloat64 d  -> "float:float64:" ++ show d
 
@@ -164,7 +162,6 @@ literalFamily l = case l of
   Core.LiteralInteger iv  -> "integer:" ++ integerFamily iv
   where
     floatFamily fv = case fv of
-      Core.FloatValueBigfloat _ -> "bigfloat"
       Core.FloatValueFloat32 _  -> "float32"
       Core.FloatValueFloat64 _  -> "float64"
     integerFamily iv = case iv of
@@ -267,7 +264,6 @@ decodeLiteralType json
 
 decodeFloatType :: Json.Value -> Core.FloatType
 decodeFloatType json
-  | hasField obj "bigfloat" = Core.FloatTypeBigfloat
   | hasField obj "float32"  = Core.FloatTypeFloat32
   | hasField obj "float64"  = Core.FloatTypeFloat64
   | otherwise = error "Unknown float type"
@@ -299,7 +295,6 @@ decodeLiteral json
 
 decodeFloatValue :: Json.Value -> Core.FloatValue
 decodeFloatValue json
-  | hasField obj "bigfloat" = Core.FloatValueBigfloat $ expectNumber (requireField obj "bigfloat")
   | hasField obj "float32"  = Core.FloatValueFloat32 $ realToFrac $ expectNumber (requireField obj "float32")
   | hasField obj "float64"  = Core.FloatValueFloat64 $ expectNumber (requireField obj "float64")
   | otherwise = error "Unknown float value"

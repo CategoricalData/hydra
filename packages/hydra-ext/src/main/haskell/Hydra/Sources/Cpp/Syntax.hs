@@ -763,7 +763,7 @@ integerLiteral = define "IntegerLiteral" $ T.union [
   "binary">: T.string]
 
 floatingLiteral :: Binding
-floatingLiteral = define "FloatingLiteral" $ T.wrap T.bigfloat
+floatingLiteral = define "FloatingLiteral" $ T.wrap T.float64
 
 characterLiteral :: Binding
 characterLiteral = define "CharacterLiteral" $ T.wrap T.string

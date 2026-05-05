@@ -389,7 +389,7 @@ normalApplication = define "NormalApplication" $ T.record [
   "rhs">: nonemptyList $ coq "Arg"]
 
 number :: Binding
-number = define "Number" $ T.wrap T.bigfloat
+number = define "Number" $ T.wrap T.float64
 
 oneTerm :: Binding
 oneTerm = define "OneTerm" $ T.union [

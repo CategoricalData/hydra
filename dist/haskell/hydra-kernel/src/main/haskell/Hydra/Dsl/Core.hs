@@ -646,14 +646,6 @@ fieldWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL injection for the bigfloat variant of hydra.core.FloatType
-floatTypeBigfloat :: Phantoms.TTerm Core.FloatType
-floatTypeBigfloat =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "bigfloat"),
-        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the float32 variant of hydra.core.FloatType
 floatTypeFloat32 :: Phantoms.TTerm Core.FloatType
 floatTypeFloat32 =
@@ -670,14 +662,6 @@ floatTypeFloat64 =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float64"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the bigfloat variant of hydra.core.FloatValue
-floatValueBigfloat :: Phantoms.TTerm Double -> Phantoms.TTerm Core.FloatValue
-floatValueBigfloat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "bigfloat"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the float32 variant of hydra.core.FloatValue
 floatValueFloat32 :: Phantoms.TTerm Float -> Phantoms.TTerm Core.FloatValue
 floatValueFloat32 x =

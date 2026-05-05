@@ -443,7 +443,7 @@
     {
       "type": {
         "name": "hydra.coq.syntax.Number",
-        "typeScheme": {"body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.OneTerm",

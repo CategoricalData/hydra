@@ -1224,8 +1224,8 @@
                             "name": "float",
                             "term": {
                               "lambda": {
-                                "body": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "body": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
+                                "domain": {"literal": {"float": {"float64": {}}}},
                                 "parameter": "f"}}},
                           {
                             "name": "int",

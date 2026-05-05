@@ -271,13 +271,6 @@ floatLiteralsTests =
       Testing.testGroupSubgroups = [],
       Testing.testGroupCases = [
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "bigfloat",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14159))))),
-            Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "float32",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
             Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.71828))))),

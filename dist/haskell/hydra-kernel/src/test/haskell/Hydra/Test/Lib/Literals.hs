@@ -423,7 +423,7 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "float32ToBigfloat",
+          Testing.testGroupName = "float32ToFloat64",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -431,31 +431,31 @@ allTests =
               Testing.testCaseWithMetadataName = "positive",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float32ToBigfloat")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float32ToFloat64")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 2.5))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 2.5))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "negative",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float32ToBigfloat")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float32ToFloat64")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-2.5))))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-2.5)))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-2.5)))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "zero",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float32ToBigfloat")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float32ToFloat64")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 0.0)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "float64ToBigfloat",
+          Testing.testGroupName = "float64ToFloat32",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -463,49 +463,17 @@ allTests =
               Testing.testCaseWithMetadataName = "positive",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float64ToBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 3.14159)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14159))))})),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float64ToFloat32")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 2.5)))})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "negative",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float64ToBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-2.71828))))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-2.71828)))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "zero",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float64ToBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "bigfloatToFloat32",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToFloat32")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "negative",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToFloat32")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-2.5))))})))),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float64ToFloat32")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-2.5))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-2.5)))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -513,132 +481,9 @@ allTests =
               Testing.testCaseWithMetadataName = "zero",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToFloat32")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0)))})))),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.float64ToFloat32")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 0.0))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "bigfloatToFloat64",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToFloat64")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14159)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 3.14159))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "negative",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToFloat64")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-2.71828))))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-2.71828)))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "zero",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToFloat64")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "bigintToBigfloat",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigintToBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 42)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 42.0))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "negative",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigintToBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint (-42))))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-42.0)))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "zero",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigintToBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 0)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "bigfloatToBigint",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToBigint")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 42.7)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 43))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "negative",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToBigint")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-42.7))))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint (-43)))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "zero",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToBigint")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 0))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "round down",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToBigint")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 42.3)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 42))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "half even up",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToBigint")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 42.5)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 42))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "half even down",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.bigfloatToBigint")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 43.5)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 44))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1295,65 +1140,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "showBigfloat",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "3.14")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "zero",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "0.0")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "small positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 5.0e-2)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "5.0e-2")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "small positive 2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.0e-2)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "3.0e-2")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "very small",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 1.0e-3)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "1.0e-3")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "normal decimal",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.1)))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "0.1")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "showBoolean",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -1964,29 +1750,6 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.readFloat64")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "abc"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "readBigfloat",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "positive",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.readBigfloat")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "3.14"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14))))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "invalid",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.readBigfloat")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "abc"))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,

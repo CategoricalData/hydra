@@ -19,15 +19,10 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
--- | Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold.
-encodeFloat :: Core.FloatValue -> Either String Model.Value
+-- | Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode.
+encodeFloat :: Core.FloatValue -> Either t0 Model.Value
 encodeFloat fv =
     case fv of
-      Core.FloatValueBigfloat v0 ->
-        let s = Literals.showBigfloat v0
-        in (Logic.ifElse (requiresJsonStringSentinel s) (Left (Strings.cat [
-          "JSON cannot represent bigfloat value: ",
-          s])) (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
       Core.FloatValueFloat32 v0 ->
         let s = Literals.showFloat32 v0
         in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float32ToDecimal v0))))
@@ -48,7 +43,7 @@ encodeInteger iv =
       Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
       Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint16ToBigint v0)))
 -- | Encode a Hydra literal to a JSON value
-encodeLiteral :: Core.Literal -> Either String Model.Value
+encodeLiteral :: Core.Literal -> Either t0 Model.Value
 encodeLiteral lit =
     case lit of
       Core.LiteralBinary v0 -> Right (Model.ValueString (Literals.binaryToString v0))

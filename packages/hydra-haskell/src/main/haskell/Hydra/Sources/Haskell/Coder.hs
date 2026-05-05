@@ -400,9 +400,7 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
           _FloatValue_float32>>: "f" ~>
             right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_float $ var "f"),
           _FloatValue_float64>>: "f" ~>
-            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ var "f"),
-          _FloatValue_bigfloat>>: "f" ~>
-            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ Literals.bigfloatToFloat64 $ var "f")],
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ var "f")],
       _Literal_integer>>: "iv" ~>
         cases _IntegerValue (var "iv") Nothing [
           _IntegerValue_bigint>>: "i" ~>
@@ -621,8 +619,6 @@ encodeType = haskellCoderDefinition "encodeType" $
             _FloatType_float32>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Float",
             _FloatType_float64>>: constant $
-              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double",
-            _FloatType_bigfloat>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double"],
         _LiteralType_integer>>: "it" ~>
           cases _IntegerType (var "it")

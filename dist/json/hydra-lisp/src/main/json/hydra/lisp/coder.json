@@ -2090,10 +2090,7 @@
                                             "fields": [
                                               {
                                                 "name": "value",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}},
-                                                    "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                "term": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}}},
                                               {"name": "precision", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
                                             "typeName": "hydra.lisp.syntax.FloatLiteral"}}},
                                       "typeName": "hydra.lisp.syntax.Literal"}}},
@@ -2139,7 +2136,7 @@
                                                             "fields": [
                                                               {
                                                                 "name": "value",
-                                                                "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
+                                                                "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float32ToFloat64"}}}},
                                                               {"name": "precision", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
                                                             "typeName": "hydra.lisp.syntax.FloatLiteral"}}},
                                                       "typeName": "hydra.lisp.syntax.Literal"}}},
@@ -2161,36 +2158,12 @@
                                                         "term": {
                                                           "record": {
                                                             "fields": [
-                                                              {
-                                                                "name": "value",
-                                                                "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
-                                                              {"name": "precision", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
-                                                            "typeName": "hydra.lisp.syntax.FloatLiteral"}}},
-                                                      "typeName": "hydra.lisp.syntax.Literal"}}},
-                                                "typeName": "hydra.lisp.syntax.Expression"}},
-                                            "domain": {"literal": {"float": {"float64": {}}}},
-                                            "parameter": "f"}}},
-                                      {
-                                        "name": "bigfloat",
-                                        "term": {
-                                          "lambda": {
-                                            "body": {
-                                              "inject": {
-                                                "field": {
-                                                  "name": "literal",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "float",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
                                                               {"name": "value", "term": {"variable": "f"}},
                                                               {"name": "precision", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
                                                             "typeName": "hydra.lisp.syntax.FloatLiteral"}}},
                                                       "typeName": "hydra.lisp.syntax.Literal"}}},
                                                 "typeName": "hydra.lisp.syntax.Expression"}},
-                                            "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                            "domain": {"literal": {"float": {"float64": {}}}},
                                             "parameter": "f"}}}],
                                     "typeName": "hydra.core.FloatValue"}}}},
                             "domain": {"variable": "hydra.core.FloatValue"},
