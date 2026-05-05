@@ -12,7 +12,7 @@ import Hydra.Kernel hiding (pure)
 import qualified Hydra.Core as Core
 import qualified Hydra.Go.Language as GoLang
 import qualified Hydra.Go.Syntax as Go
-import Hydra.Sources.Go.Serde (moduleToExpr)
+import Hydra.Go.Serde (moduleToExpr)
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.Char as C
