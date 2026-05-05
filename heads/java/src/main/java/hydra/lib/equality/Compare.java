@@ -119,7 +119,6 @@ public class Compare extends PrimitiveFunction {
     private static BigDecimal floatToBigDecimal(FloatValue v) {
         if (v instanceof FloatValue.Float32) return BigDecimal.valueOf(((FloatValue.Float32) v).value);
         if (v instanceof FloatValue.Float64) return BigDecimal.valueOf(((FloatValue.Float64) v).value);
-        if (v instanceof FloatValue.Bigfloat) return new BigDecimal(((FloatValue.Bigfloat) v).value.toString());
         return null;
     }
 

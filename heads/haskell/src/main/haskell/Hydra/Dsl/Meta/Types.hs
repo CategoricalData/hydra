@@ -61,7 +61,6 @@ field s = fieldType (name s)
 -- Example: float FloatTypeFloat64
 float :: FloatType -> TTerm FloatType
 float t = Phantoms.injectUnit _FloatType $ case t of
-  FloatTypeBigfloat -> _FloatType_bigfloat
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
@@ -74,11 +73,6 @@ float32 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat32
 -- Example: float64
 float64 :: TTerm Type
 float64 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat64
-
--- | Create a term-encoded arbitrary-precision floating point type
--- Example: bigfloat
-bigfloat :: TTerm Type
-bigfloat = typeLiteral $ literalTypeFloat $ float FloatTypeBigfloat
 
 -- | Create a term-encoded arbitrary-precision decimal type
 -- Example: decimal

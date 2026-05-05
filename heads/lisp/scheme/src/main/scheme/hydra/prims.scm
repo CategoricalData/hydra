@@ -9,7 +9,7 @@
           (hydra lib sets))
   (export collect-type-vars-ordered build-type-scheme
           wrap-other-error
-          tc-bigfloat tc-bigint tc-decimal tc-boolean
+          tc-bigint tc-decimal tc-boolean
           tc-float32 tc-float64
           tc-int8 tc-int16 tc-int32 tc-int64
           tc-uint8 tc-uint16 tc-uint32 tc-uint64
@@ -105,12 +105,6 @@
     ;; ============================================================================
 
     ;; Scalar TermCoders
-
-    (define (tc-bigfloat)
-      (make-hydra_graph_term_coder
-       (list 'literal (list 'float (list 'bigfloat '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_bigfloat g) t))))
-        (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'float (list 'bigfloat (inexact v)))))))))
 
     (define (tc-bigint)
       (make-hydra_graph_term_coder

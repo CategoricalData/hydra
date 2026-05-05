@@ -3,8 +3,6 @@
 import hydra.dsl.terms as terms
 from hydra.phantoms import TTerm
 
-type Bigfloat = float
-
 
 def string(value: str) -> TTerm[str]:
     """Construct a string term."""
@@ -24,11 +22,6 @@ def true() -> TTerm[bool]:
 def false() -> TTerm[bool]:
     """Construct a false term."""
     return boolean(False)
-
-
-def bigfloat(value: Bigfloat) -> TTerm[Bigfloat]:
-    """Construct a bigfloat term."""
-    return TTerm[Bigfloat](terms.bigfloat(value))
 
 
 def bigint(value: int) -> TTerm[int]:

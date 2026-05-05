@@ -93,14 +93,6 @@ def apply_all(func: Term, args: Sequence[Term]) -> Term:
     return reduce(apply, args, func)
 
 
-def bigfloat(value: float) -> Term:
-    """Create a bigfloat literal.
-
-    Example: bigfloat(3.14159265359)
-    """
-    return literal(lt.bigfloat(value))
-
-
 def bigint(value: int) -> Term:
     """Create a bigint literal.
 

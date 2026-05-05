@@ -243,11 +243,6 @@
         (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs x)))))]
           (/ (Math/round (* x factor)) factor))))))
 
-;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
-(def hydra_lib_math_round_bigfloat
-  "Round a bigfloat to n significant digits."
-  hydra_lib_math_round_float64)
-
 ;; signum :: Int -> Int
 (def hydra_lib_math_signum
   "Return the sign of a number (-1, 0, or 1)."

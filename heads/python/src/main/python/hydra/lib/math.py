@@ -245,11 +245,6 @@ def round_(x: float) -> float:
 round = round_
 
 
-def round_bigfloat(n: int, x: Decimal) -> Decimal:
-    """Round a bigfloat to n significant digits."""
-    return Decimal(str(round_float64(n, float(x))))
-
-
 def round_float32(n: int, x: float) -> float:
     """Round a float32 to n significant digits."""
     import struct
