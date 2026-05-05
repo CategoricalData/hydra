@@ -399,16 +399,30 @@ refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
       putStrLn $ "  Per-package digest: " ++ dpath
         ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
--- | Ensure per-package digest files exist on disk. Called on cache
--- hit so that Stage 3+ tooling has digests to read even when no
--- regen ran. Compared to refreshPerPackageDigests, this is a no-op
--- if every per-package digest already exists; cheap to call.
+-- | Ensure per-package digest files exist on disk AND match current DSL source
+-- content. Called on cache hit so that Stage 3+ tooling has correct digests to
+-- read even when no full regen ran.
+--
+-- For each package, compute the current input hash from packages/<pkg>/.../*.hs
+-- and compare against the on-disk per-package digest. Rewrite if missing or
+-- stale. Without this, a universe-wide cache hit on top of an out-of-date
+-- per-package digest leaves Phase 3 to silently believe its inputs haven't
+-- changed when in fact they have — causing per-target dist regeneration to be
+-- skipped.
 ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
 ensurePerPackageDigests distJsonRoot mods = do
+  nsFiles <- Digest.discoverNamespaceFiles
   let groups = groupByPackage mods
-      paths  = [ perPackageDigestPath distJsonRoot pkg | (pkg, _) <- groups ]
-  allExist <- fmap and (mapM SD.doesFileExist paths)
-  CM.unless allExist $ refreshPerPackageDigests distJsonRoot [] mods
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
+      exists <- SD.doesFileExist dpath
+      stored <- if exists then Digest.readDigest dpath else return M.empty
+      CM.when (stored /= pkgDigest) $ do
+        Digest.writeDigest dpath pkgDigest
+        putStrLn $ "  Per-package digest refreshed: " ++ dpath
+          ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
 -- | Try the incremental inference path: partition universeMods into
 --   * cleanMods — DSL hash matches recorded digest AND existing JSON

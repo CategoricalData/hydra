@@ -224,6 +224,7 @@ adaptTerm constraints litmap cx graph term0 =
                               let supportedVariant = Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints)
                               in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term))
                 in (Eithers.bind (recurse term02) (\term1 -> case term1 of
+                  Core.TermAnnotated _ -> Right term1
                   Core.TermTypeApplication v0 -> Eithers.bind (adaptType constraints litmap (Core.typeApplicationTermType v0)) (\atyp -> Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
@@ -540,6 +541,9 @@ pushTypeAppsInward term =
 
       let push =
               \body -> \typ -> case body of
+                Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermBody = (push (Core.annotatedTermBody v0) typ),
+                  Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
                 Core.TermApplication v0 -> go (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.applicationFunction v0),
