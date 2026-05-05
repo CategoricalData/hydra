@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# Layer 2 assembler: produce a complete Go distribution for one package.
+#
+# Usage:
+#   assemble-distribution.sh <pkg> [--dist-root <dir>]
+#
+# Produces <dist-root>/<pkg>/ (default: ../../dist/go/<pkg>/).
+#
+# The Go head is a "head bud" right now: this script regenerates main and
+# test sources via the Haskell driver but does not yet emit per-package
+# build files (no go.mod scaffolding here — the heads/go/go.mod covers
+# the hand-written runtime; generated trees compile against it through a
+# top-level workspace once that's wired).
+
+set -euo pipefail
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <package> [--dist-root <dir>]" >&2
+    exit 1
+fi
+
+PACKAGE="$1"
+shift
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_GO_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_GO_HEAD/../.." && pwd )"
+
+DIST_ROOT="$HYDRA_ROOT_DIR/dist/go"
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dist-root) DIST_ROOT="$2"; shift 2 ;;
+        *) shift ;;
+    esac
+done
+
+OUT_DIR="$DIST_ROOT/$PACKAGE"
+OUT_MAIN="$OUT_DIR/src/main/go"
+OUT_TEST="$OUT_DIR/src/test/go"
+DIST_JSON_ROOT="$HYDRA_ROOT_DIR/dist/json"
+INPUT_DIGEST_MAIN="$DIST_JSON_ROOT/$PACKAGE/src/main/digest.json"
+INPUT_DIGEST_TEST="$DIST_JSON_ROOT/$PACKAGE/src/test/digest.json"
+OUTPUT_DIGEST_MAIN="$OUT_DIR/src/main/digest.json"
+OUTPUT_DIGEST_TEST="$OUT_DIR/src/test/digest.json"
+TEST_JSON_DIR="$DIST_JSON_ROOT/$PACKAGE/src/test/json"
+
+echo "=== Assembling Go distribution: $PACKAGE ==="
+echo "  Output: $OUT_DIR"
+echo ""
+
+HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
+
+source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
+
+# Step 1: Main modules.
+if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
+    echo "Step 1: Main modules unchanged; skipping main regeneration."
+else
+    rm -f "$OUTPUT_DIGEST_MAIN"
+    echo "Step 1: Generating main Go modules..."
+    "$HASKELL_BIN/transform-json-to-go.sh" "$PACKAGE" main \
+        --output "$DIST_ROOT" --include-dsls
+    assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
+fi
+
+# Step 2: Test modules (if present).
+echo ""
+if [ ! -d "$TEST_JSON_DIR" ]; then
+    echo "Step 2: No test sources for $PACKAGE; skipping."
+else
+    if assemble_check_fresh "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"; then
+        echo "Step 2: Test modules unchanged; skipping test regeneration."
+    else
+        rm -f "$OUTPUT_DIGEST_TEST"
+        echo "Step 2: Generating test Go modules..."
+        "$HASKELL_BIN/transform-json-to-go.sh" "$PACKAGE" test \
+            --output "$DIST_ROOT"
+        assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"
+    fi
+fi
+
+echo ""
+echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="
