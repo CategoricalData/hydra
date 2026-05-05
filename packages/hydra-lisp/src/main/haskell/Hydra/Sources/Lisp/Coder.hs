@@ -360,7 +360,7 @@ encodeLiteral = def "encodeLiteral" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_float $
           record L._FloatLiteral [
-            L._FloatLiteral_value>>: Literals.float64ToBigfloat (Literals.decimalToFloat64 (var "d")),
+            L._FloatLiteral_value>>: Literals.decimalToFloat64 (var "d"),
             L._FloatLiteral_precision>>: nothing],
     _Literal_string>>: lambda "s" $
       inject L._Expression L._Expression_literal $
@@ -371,15 +371,9 @@ encodeLiteral = def "encodeLiteral" $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_float $
               record L._FloatLiteral [
-                L._FloatLiteral_value>>: Literals.float32ToBigfloat (var "f"),
+                L._FloatLiteral_value>>: Literals.float32ToFloat64 (var "f"),
                 L._FloatLiteral_precision>>: nothing],
         _FloatValue_float64>>: lambda "f" $
-          inject L._Expression L._Expression_literal $
-            inject L._Literal L._Literal_float $
-              record L._FloatLiteral [
-                L._FloatLiteral_value>>: Literals.float64ToBigfloat (var "f"),
-                L._FloatLiteral_precision>>: nothing],
-        _FloatValue_bigfloat>>: lambda "f" $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_float $
               record L._FloatLiteral [

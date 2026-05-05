@@ -331,7 +331,7 @@ integerLiteral = def "IntegerLiteral" $
 floatingPointLiteral :: Binding
 floatingPointLiteral = def "FloatingPointLiteral" $
   doc "Note: this is an approximation which ignores encoding" $
-  T.wrap T.bigfloat
+  T.wrap T.float64
 
 stringLiteral :: Binding
 stringLiteral = def "StringLiteral" $

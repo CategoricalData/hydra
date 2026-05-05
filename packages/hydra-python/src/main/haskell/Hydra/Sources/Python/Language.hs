@@ -102,7 +102,6 @@ pythonLanguage = define "pythonLanguage" $
       Variants.literalVariantInteger, -- (see integer types)
       Variants.literalVariantString], -- str
     "floatTypes">: Sets.fromList $ list [
-      Core.floatTypeBigfloat, -- Decimal. mpmath's mpf type would be another option.
       Core.floatTypeFloat64], -- float
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,

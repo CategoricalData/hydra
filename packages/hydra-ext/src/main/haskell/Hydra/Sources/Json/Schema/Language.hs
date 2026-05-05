@@ -99,7 +99,7 @@ jsonSchemaLanguage = define "jsonSchemaLanguage" $
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,
     Variants.literalVariantString],
-  "floatTypes">: Sets.fromList $ list [Core.floatTypeBigfloat],
+  "floatTypes">: Sets.fromList $ list [Core.floatTypeFloat64],
   "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [Core.integerTypeBigint],
   "termVariants">: Sets.fromList Reflect.termVariants,

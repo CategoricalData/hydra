@@ -384,7 +384,7 @@ literal :: Binding
 literal = def "Literal" $ T.union [
   "boolean">: T.boolean,
   "integer">: csharp "IntegerLiteral",
-  "real">: T.bigfloat,
+  "real">: T.float64,
   "character">: T.string,
   "string">: T.string,
   "null">: T.unit]
