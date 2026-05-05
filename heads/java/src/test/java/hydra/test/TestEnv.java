@@ -5,6 +5,7 @@
 package hydra.test;
 
 import hydra.core.Name;
+import hydra.core.Term;
 import hydra.core.Type;
 import hydra.graph.Graph;
 import hydra.context.Context;
@@ -17,13 +18,14 @@ public class TestEnv {
     private static Context cachedContext;
 
     /**
-     * Returns the test graph. The testTypes argument is accepted for signature
-     * parity with the DSL declaration (Map Name Type -> Graph); the actual
-     * graph is built from the TestSuiteRunner and ignores the argument —
-     * primitives and kernel bindings are host-language specific and can't be
-     * expressed at the DSL level.
+     * Returns the test graph. The testTypes and testTerms arguments are
+     * accepted for signature parity with the DSL declaration
+     * (Map Name Type -> Map Name Term -> Graph); the actual graph is built
+     * from the TestSuiteRunner and ignores both arguments — primitives and
+     * kernel bindings are host-language specific and can't be expressed at
+     * the DSL level.
      */
-    public static Graph testGraph(Map<Name, Type> testTypes) {
+    public static Graph testGraph(Map<Name, Type> testTypes, Map<Name, Term> testTerms) {
         if (cachedGraph == null) {
             cachedGraph = TestSuiteRunner.buildTestGraph();
         }

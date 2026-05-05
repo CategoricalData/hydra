@@ -310,8 +310,14 @@ The core principles (see CLAUDE.md and the
 
 1. **No post-generation patches.** Generated code (anything under `dist/`) must
    match what the generator produces. If the output is wrong, fix the generator.
-   The only exception is a deliberate bootstrap patch that will be overwritten by
-   the next regeneration — document it as such.
+   This applies to any read-modify-write of generated content, regardless of
+   form: shell `sed` against `dist/` files, Haskell directory walks that
+   read-and-rewrite, Python scripts that open generated files in `'w'` or
+   `'a'` mode after they've been written, etc. A whole-file content transform
+   applied **during** emission (between the codegen output and the file
+   write) is part of the generation pipeline, not a post-pass.
+   The only exception is a deliberate bootstrap patch that will be overwritten
+   by the next regeneration — document it as such.
 2. **No hand-written files under `dist/`.** If a file needs to live alongside
    generated artifacts (because tests import it from that location), write it
    under `heads/` and copy it in from a sync script.
@@ -325,19 +331,30 @@ The core principles (see CLAUDE.md and the
 
 ### Procedure
 
-**Check 1: post-generation patches in sync scripts.**
-Sync scripts are the most common place violations hide.
-Grep for the patterns that indicate patches:
+**Check 1: post-generation patches in sync scripts and codegen pipeline.**
+Sync scripts are the most common place violations hide. Haskell-side
+read-back passes (functions in `heads/haskell/src/main/haskell/` and
+`heads/haskell/src/exec/` that read a file from `dist/` and write a
+modified version back) count too.
+
+Shell-level scan:
 
 ```bash
 grep -rn "sed_inplace\|sed -i\|Post-process\|Patch\|patching\|post-process" \
-  bin/ heads/haskell/bin/ demos/bootstrapping/bin/ 2>/dev/null \
+  bin/ heads/ demos/bootstrapping/bin/ 2>/dev/null \
   | grep -v "test\|grep" \
   | grep -vE ":\s*#"
 ```
 
-Every match is a potential violation.
-For each, ask:
+Haskell-side scan (look for read-back patterns over `dist/`):
+
+```bash
+grep -rn "readFile\|hGetContents\|withFile.*ReadMode" \
+  heads/haskell/src/main/ heads/haskell/src/exec/ 2>/dev/null \
+  | grep -v "digest\|content-hash\|byte-identical"
+```
+
+Every match is a potential violation. For each, ask:
 - **Is this fixing the generator, or working around it?**
   A patch that renames `case macro(` to `` case `macro`( `` is working around
   a missing keyword-escape in the Scala code generator.
@@ -345,10 +362,15 @@ For each, ask:
 - **Is this copying a hand-written file into `dist/`?**
   That is principle 2; the canonical copy must live in `heads/`.
   Copying *into* `dist/` is acceptable; hand-writing *in* `dist/` is not.
+- **Is this part of the generation pipeline, or a post-pass?**
+  A `String -> String` transform applied between codegen output and
+  file write (e.g. via `generateSourcesWithTransform`) is part of
+  generation. A pass that walks `dist/` after files have been written
+  to re-read and rewrite them is a post-generation patch.
 - **Is this a deliberate bootstrap patch?**
   Bootstrap patches are explicitly allowed but must be overwritten by the next
   regeneration.
-  A `sed` patch that runs on every sync is not a bootstrap patch — it means
+  A patch that runs on every sync is not a bootstrap patch — it means
   the generator is broken.
 
 Track the list of accepted post-generation patches.
@@ -389,61 +411,44 @@ Fix it at the generator level.
 
 ### Known accepted patches
 
-The following post-generation `sed` patches are currently applied in
-per-language `assemble-distribution.sh` scripts.
-Each is tech debt against the corresponding generator and should be tracked
-toward removal.
-
-- **Java Lisp `Coder.java` PartialVisitor type parameter**
-  (`heads/java/bin/assemble-distribution.sh` lines ~111-113;
-  `heads/java/bin/assemble-all.sh` lines ~71-73):
-  rewrites two `Either<lisp.syntax.TopLevelFormWithComments, ...>`
-  occurrences to `Either<T2, ...>`.
-  The Java coder mis-infers the `PartialVisitor` type parameter for
-  `hydra-lisp`'s `Coder` when generating Java.
-- **Scala `TestGraph` `emptyGraph` rewrite**
-  (`heads/scala/bin/assemble-all.sh` line ~61):
-  rewrites `hydra.lexical.emptyGraph` to `hydra.TestSuiteRunner.buildTestGraph()`.
-  The DSL emits `emptyGraph`, but the Scala test runner needs the populated
-  bootstrap graph at evaluation time.
-- **Clojure `TestGraph` import injection**
-  (`heads/lisp/clojure/bin/assemble-distribution.sh` line ~102):
-  appends additional `:refer :all` clauses
-  (`hydra.lib.libraries`, `hydra.rewriting`, `hydra.scoping`,
-  `hydra.json.bootstrap`, `hydra.graph`, `hydra.context`,
-  `hydra.annotation-bindings`) to the generated `test_graph.clj`.
-  The DSL doesn't emit these imports, but the Clojure runtime needs them
-  resolved when the file loads.
-- **Scheme `TestGraph` trailing-paren strip**
-  (`heads/lisp/scheme/bin/assemble-distribution.sh` line ~149):
-  removes a trailing `))` that the Scheme code generator emits
-  one too many of for `test_graph.scm`.
+**None.** All post-generation `sed` patches were eliminated in #307.
 
 When adding a new accepted patch, document it here and open an issue against
-the generator.
-When removing a patch (because the generator was fixed), update this list too.
+the generator. The bar is high: prefer fixing the generator, and exhaust
+that path before introducing a patch.
 
 ### Hand-written files under `dist/`
 
-These files are checked in under `dist/` despite principle 2 ("no hand-written
-files under `dist/`"). Each is tolerated because moving it to `heads/` and
-copying it in via the sync script is more work than the bridge is worth.
-Treat as tech debt, not precedent.
+The hard rule is "no hand-written files under `dist/`." One bridge file
+remains:
 
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
-  the Haskell test harness imports `Hydra.Test.TestEnv` from this path
-  and `bootstrap-from-json` does not target it, so the file is left alone
-  by regeneration.
-- `dist/python/hydra-kernel/src/test/python/hydra/test/test_env.py` —
-  same role for Python tests; the kernel filters `hydra.test.testEnv` from
-  emitted output (per the `testSkipEmit` set in each host's bootstrap),
-  and the Python runtime needs the symbols this file provides.
+  the Haskell-level runtime counterpart of the DSL stub
+  `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
+  from emitted output (via `testSkipEmitNamespaces` in
+  `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
+  Tolerated for now because the Haskell test build's source set spans
+  `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`
+  would require restructuring the Haskell test build's source layout.
 
-The corresponding `test_env` files for the lisp dialects live under
-`heads/`, not `dist/`:
+For every other target, the hand-written `test_env` runtime lives in
+`heads/<target>/src/test/...` and is copied into `dist/` at assemble time
+by the per-target `assemble-distribution.sh`. The pattern, target by target:
 
-- `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
-- `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
+- Java: `heads/java/src/test/java/hydra/test/TestEnv.java`
+- Python: `heads/python/src/test/python/hydra/test/test_env.py`
+- Scala: `heads/scala/src/test/scala/hydra/test/testEnv.scala`
+- Clojure: `heads/lisp/clojure/src/test/clojure/hydra/test/testEnv.clj`
+- Common Lisp: `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
+- Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
+- Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
+
+Each provides `hydra_test_test_env_test_context` (a `Context` value) and
+`hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
+matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
+four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the
+function as `((f types) terms)` to match their coders' multi-arg emission;
+Java and Python use the flat `f(types, terms)` form.
 
 ---
 

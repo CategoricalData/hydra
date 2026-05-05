@@ -269,11 +269,17 @@
         "name": "hydra.test.testGraph.testGraph",
         "term": {
           "application": {
-            "argument": {"variable": "hydra.test.testGraph.testTypes"},
+            "argument": {"variable": "hydra.test.testGraph.testTerms"},
             "function": {
-              "typeApplication": {
-                "body": {"variable": "hydra.test.testEnv.testGraph"},
-                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}}},
+              "application": {
+                "argument": {"variable": "hydra.test.testGraph.testTypes"},
+                "function": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {"variable": "hydra.test.testEnv.testGraph"},
+                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}},
+                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}}}},
         "typeScheme": {"body": {"variable": "hydra.graph.Graph"}, "variables": []}}},
     {
       "term": {
