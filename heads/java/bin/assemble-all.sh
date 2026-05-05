@@ -52,7 +52,7 @@ rm -f "$DIST_ROOT"/*/src/main/digest.json "$DIST_ROOT"/*/src/test/digest.json
 
 echo "Step 1: Generating main Java modules for every package..."
 cd "$HYDRA_ROOT_DIR/heads/haskell"
-stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
+stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
 stack exec bootstrap-from-json -- \
     --target java \
     --all-packages \

@@ -38,7 +38,7 @@ BATCH_PACKAGES=$(batch_emit_packages)
 # stale .scala files behind that are silently picked up by the build.
 
 cd "$HYDRA_ROOT_DIR/heads/haskell"
-stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
+stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
 
 # Invalidate per-target digests so Stage 7 can't trust stale records.
 rm -f "$DIST_ROOT"/*/src/main/digest.json "$DIST_ROOT"/*/src/test/digest.json
