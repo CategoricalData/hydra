@@ -118,9 +118,6 @@ case "$PACKAGE" in
             rm -f "$LISPCODER.bak"
         fi
         ;;
-    *)
-        # No per-package post-processing for other packages today.
-        ;;
 esac
 
 # Step 4: Generate per-package build.gradle + settings.gradle so each

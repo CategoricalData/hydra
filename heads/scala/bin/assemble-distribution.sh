@@ -80,7 +80,7 @@ else
     fi
 fi
 
-# Step 3: Package-specific post-processing.
+# No package-specific post-processing today.
 # (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the DSL now
 # emits `hydra.test.testEnv.testGraph(testTypes)` directly, and the hand-written
 # heads/scala testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
@@ -90,10 +90,6 @@ fi
 # dist/scala/hydra-kernel/src/main/scala under unmanagedSourceDirectories,
 # so a copy would duplicate every class. Bootstrap-demo target setup
 # handles the runtime layout independently.)
-case "$PACKAGE" in
-    *)
-        ;;
-esac
 
 echo ""
 
