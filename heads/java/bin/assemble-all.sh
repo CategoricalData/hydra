@@ -77,16 +77,30 @@ echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
 # assemble-distribution.sh Step 4. The build files live at
 # dist/java/<pkg>/{build.gradle,settings.gradle} — outside the
 # src/<set>/java tree the digest tracks — so ordering with digest
-# refresh is moot, but we run before it for consistency with Step 3.
+# refresh is moot.
+#
+# Package list comes from hydra.json (the authoritative registry),
+# filtered by each package's package.json targetLanguages declaration.
+# Coder-only packages like hydra-coq/hydra-javascript/hydra-wasm declare
+# targetLanguages: ["haskell"] and so are skipped here.
 echo ""
-echo "Step 4: Generating per-package build.gradle for every package..."
-for pkg_dir in "$DIST_ROOT"/*/; do
-    pkg=$(basename "$pkg_dir")
-    pkg_dir_trim="${pkg_dir%/}"
-    if [ -f "$HYDRA_ROOT_DIR/packages/$pkg/package.json" ]; then
-        HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-java-package-build.py" \
-            "$pkg" --out-dir "$pkg_dir_trim"
-    fi
+echo "Step 4: Generating per-package build.gradle for every Java-targeted package..."
+JAVA_PACKAGES=$(python3 -c "
+import json, sys
+with open('$HYDRA_ROOT_DIR/hydra.json') as f:
+    pkgs = json.load(f)['packages']
+out = []
+for p in pkgs:
+    with open('$HYDRA_ROOT_DIR/packages/' + p + '/package.json') as f:
+        meta = json.load(f)
+    tls = meta.get('targetLanguages')
+    if tls is None or 'java' in tls:
+        out.append(p)
+print(' '.join(out))
+")
+for pkg in $JAVA_PACKAGES; do
+    HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-java-package-build.py" \
+        "$pkg" --out-dir "$DIST_ROOT/$pkg"
 done
 
 # Refresh per-source-set digests for fresh-check cache. Each package

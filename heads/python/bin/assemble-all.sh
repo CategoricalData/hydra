@@ -82,15 +82,27 @@ echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
 # assemble-distribution.sh Step 4. The pyproject.toml lives at
 # dist/python/<pkg>/pyproject.toml — outside the src/<set>/python tree
 # the digest tracks — so ordering with digest refresh is moot.
+#
+# Package list comes from hydra.json (the authoritative registry),
+# filtered by each package's package.json targetLanguages declaration.
 echo ""
-echo "Step 4: Generating per-package pyproject.toml for every package..."
-for pkg_dir in "$DIST_ROOT"/*/; do
-    pkg=$(basename "$pkg_dir")
-    pkg_dir_trim="${pkg_dir%/}"
-    if [ -f "$HYDRA_ROOT_DIR/packages/$pkg/package.json" ]; then
-        HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-python-package-build.py" \
-            "$pkg" --out-dir "$pkg_dir_trim"
-    fi
+echo "Step 4: Generating per-package pyproject.toml for every Python-targeted package..."
+PYTHON_PACKAGES=$(python3 -c "
+import json, sys
+with open('$HYDRA_ROOT_DIR/hydra.json') as f:
+    pkgs = json.load(f)['packages']
+out = []
+for p in pkgs:
+    with open('$HYDRA_ROOT_DIR/packages/' + p + '/package.json') as f:
+        meta = json.load(f)
+    tls = meta.get('targetLanguages')
+    if tls is None or 'python' in tls:
+        out.append(p)
+print(' '.join(out))
+")
+for pkg in $PYTHON_PACKAGES; do
+    HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-python-package-build.py" \
+        "$pkg" --out-dir "$DIST_ROOT/$pkg"
 done
 
 # Refresh per-source-set digests for fresh-check cache.
