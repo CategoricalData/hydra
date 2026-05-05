@@ -145,9 +145,6 @@ PYEOF
         echo "Step 3c: Copying hand-written Python runtime into hydra-kernel dist..."
         "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
         ;;
-    *)
-        # No per-package post-processing for other packages today.
-        ;;
 esac
 
 # Step 4: Generate per-package pyproject.toml so each dist/python/<pkg>/

@@ -184,8 +184,6 @@ SCMEOF
 SCMEOF
         fi
         ;;
-    *)
-        ;;
 esac
 
 echo ""
