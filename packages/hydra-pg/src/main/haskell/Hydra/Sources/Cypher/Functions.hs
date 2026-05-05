@@ -1,3 +1,16 @@
+-- | Meta-level Haskell scaffold for OpenCypher function metadata.
+--
+-- This file is plain Haskell, not a DSL source (it defines no @Module@ and imports nothing
+-- from Hydra). It is included under @Hydra.Sources@ as a helper consumed by the sibling DSL
+-- source 'Hydra.Sources.Cypher.Features': the records defined here describe the standard
+-- OpenCypher function libraries, and 'Features' walks 'cypherLibraries' at module-construction
+-- time to emit the corresponding Hydra types (which are then available in all eight target
+-- languages, like every other DSL output).
+--
+-- In other words: the plain-Haskell shape is the convenience syntax used to /define/ the
+-- function-library spec; the artifact that flows through the DSL pipeline is the set of
+-- Hydra types generated from it. This is structurally the same pattern used by the inline
+-- 'FeatureSet' scaffold inside 'Hydra.Sources.Cypher.Features' itself.
 module Hydra.Sources.Cypher.Functions where
 
 data CypherFunction = CypherFunction {
