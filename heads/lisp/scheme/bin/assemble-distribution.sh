@@ -48,6 +48,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 # Per-source-set freshness check via digest-check. See
 # heads/java/bin/assemble-distribution.sh for the pattern; same shape
 # across every target language.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Step 1: Main modules.
@@ -142,7 +143,7 @@ EOF
             # Replace the (hydra test test_env) import line with the imports
             # the inline build needs. The Serde writer lays out each import on
             # its own line, so this is a single-line substitution.
-            sed -i.bak 's|^(hydra test test_env)$|(hydra context)\
+            sed_inplace 's|^(hydra test test_env)$|(hydra context)\
 (hydra graph)\
 (hydra lexical)\
 (hydra lib libraries)\
@@ -150,11 +151,10 @@ EOF
 (hydra scoping)\
 (hydra json bootstrap)|' "$SCHEME_TESTGRAPH"
             # Drop the generator's test_env-based defines; they'll be replaced.
-            sed -i.bak '/^(define hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$SCHEME_TESTGRAPH"
-            sed -i.bak '/^(define hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$SCHEME_TESTGRAPH"
+            sed_inplace '/^(define hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$SCHEME_TESTGRAPH"
+            sed_inplace '/^(define hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$SCHEME_TESTGRAPH"
             # Remove trailing )) that closes begin and define-library; we'll re-add after appending.
-            sed -i.bak '$ s/))$//' "$SCHEME_TESTGRAPH"
-            rm -f "$SCHEME_TESTGRAPH.bak"
+            sed_inplace '$ s/))$//' "$SCHEME_TESTGRAPH"
             cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 ;; Include annotation term-level bindings (shared with test runner).
 SCMEOF

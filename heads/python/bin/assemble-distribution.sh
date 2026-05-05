@@ -59,6 +59,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 # Per-source-set freshness check via digest-check. See
 # heads/java/bin/assemble-distribution.sh for the pattern; same shape
 # across every target language.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Step 1: Main modules.
@@ -116,9 +117,8 @@ case "$PACKAGE" in
         TESTGRAPH="$OUT_TEST/hydra/test/test_graph.py"
         if [ -f "$TESTGRAPH" ]; then
             echo "Step 3b: Patching test_graph.py..."
-            sed -i.bak '/^test_context = /d' "$TESTGRAPH"
-            sed -i.bak '/^test_graph = /d' "$TESTGRAPH"
-            rm -f "$TESTGRAPH.bak"
+            sed_inplace '/^test_context = /d' "$TESTGRAPH"
+            sed_inplace '/^test_graph = /d' "$TESTGRAPH"
             cat >> "$TESTGRAPH" << 'PYEOF'
 
 _test_graph_cache = None

@@ -48,6 +48,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 # Per-source-set freshness check via digest-check. See
 # heads/java/bin/assemble-distribution.sh for the pattern; same shape
 # across every target language.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Step 1: Main modules.
@@ -93,9 +94,8 @@ case "$PACKAGE" in
         if [ -f "$CL_TESTGRAPH" ]; then
             echo ""
             echo "Step 3: Patching test_graph.lisp..."
-            sed -i.bak '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
-            sed -i.bak '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
-            rm -f "$CL_TESTGRAPH.bak"
+            sed_inplace '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
+            sed_inplace '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
             cat >> "$CL_TESTGRAPH" << 'CLEOF'
 
 (cl:defvar hydra_test_test_graph_test_context (make-hydra_context_context (cl:list) (cl:list) hydra_lib_maps_empty))
