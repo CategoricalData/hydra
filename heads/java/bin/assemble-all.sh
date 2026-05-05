@@ -47,8 +47,8 @@ BATCH_PACKAGES=$(batch_emit_packages)
 # bootstrap-from-json writes only the modules currently in the
 # dist/json universe; without this wipe, an older generated file with
 # no upstream JSON source would persist, get hashed into the digest,
-# and silently become part of the build. See follow-up #N for the
-# generator-side fix that would make this redundant.
+# and silently become part of the build. See #357 for the generator-side
+# fix that would make this wipe redundant.
 #
 # This wipes only src/{main,test}/java/. Per-package build.gradle and
 # settings.gradle (in $DIST_ROOT/<pkg>/) are preserved; the kernel's
