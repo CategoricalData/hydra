@@ -8,7 +8,6 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Pg.Mapping as Mapping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | Encoder for hydra.pg.mapping.AnnotationSchema
 annotationSchema :: Mapping.AnnotationSchema -> Core.Term
 annotationSchema x =
     Core.TermRecord (Core.Record {
@@ -59,7 +58,6 @@ annotationSchema x =
         Core.Field {
           Core.fieldName = (Core.Name "ignore"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaIgnore x))}]})
--- | Encoder for hydra.pg.mapping.EdgeSpec
 edgeSpec :: Mapping.EdgeSpec -> Core.Term
 edgeSpec x =
     Core.TermRecord (Core.Record {
@@ -80,7 +78,6 @@ edgeSpec x =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map propertySpec xs)) (Mapping.edgeSpecProperties x))}]})
--- | Encoder for hydra.pg.mapping.ElementSpec
 elementSpec :: Mapping.ElementSpec -> Core.Term
 elementSpec x =
     case x of
@@ -94,7 +91,6 @@ elementSpec x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),
           Core.fieldTerm = (edgeSpec v0)}})
--- | Encoder for hydra.pg.mapping.PropertySpec
 propertySpec :: Mapping.PropertySpec -> Core.Term
 propertySpec x =
     Core.TermRecord (Core.Record {
@@ -106,7 +102,6 @@ propertySpec x =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (valueSpec (Mapping.propertySpecValue x))}]})
--- | Encoder for hydra.pg.mapping.ValueSpec
 valueSpec :: Mapping.ValueSpec -> Core.Term
 valueSpec x =
     case x of
@@ -120,7 +115,6 @@ valueSpec x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
--- | Encoder for hydra.pg.mapping.VertexSpec
 vertexSpec :: Mapping.VertexSpec -> Core.Term
 vertexSpec x =
     Core.TermRecord (Core.Record {
