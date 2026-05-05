@@ -38,7 +38,6 @@
           hydra_lib_math_pow
           hydra_lib_math_range
           hydra_lib_math_round
-          hydra_lib_math_round_bigfloat
           hydra_lib_math_round_float32
           hydra_lib_math_round_float64
           hydra_lib_math_signum
@@ -320,9 +319,6 @@
       (lambda (n)
         (lambda (x)
           (snap-to-float32 ((hydra_lib_math_round_float64 n) x)))))
-
-    ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
-    (define hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)
 
     ;; signum :: Int -> Int
     (define hydra_lib_math_signum

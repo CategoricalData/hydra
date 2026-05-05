@@ -16,30 +16,6 @@ import qualified Data.Text.Encoding as TE
 -- 2. ByteString versions will be used after regenerating Core.hs
 
 
--- | Convert a bigfloat (Double) to a bigint (Integer).
-bigfloatToBigint :: Double -> Integer
-bigfloatToBigint = round
-
--- | Convert a bigfloat (Double) to a float32 (Float).
--- IEEE special values are preserved; for finite values, realToFrac
--- (which converts via Rational) is used. Note: realToFrac on Double
--- Inf does work in this direction (Float has same special-value
--- representation), but we mirror float32ToBigfloat's pattern for
--- symmetry and to be defensive against future Rational changes.
-bigfloatToFloat32 :: Double -> Float
-bigfloatToFloat32 x
-  | isNaN x      = 0/0
-  | isInfinite x = if x < 0 then -1/0 else 1/0
-  | otherwise    = realToFrac x
-
--- | Convert a bigfloat (Double) to a float64 (Double).
-bigfloatToFloat64 :: Double -> Double
-bigfloatToFloat64 = id
-
--- | Convert a bigint (Integer) to a bigfloat (Double).
-bigintToBigfloat :: Integer -> Double
-bigintToBigfloat = fromIntegral
-
 -- | Convert a bigint (Integer) to a decimal (Scientific).
 bigintToDecimal :: Integer -> Scientific
 bigintToDecimal n = Sci.scientific n 0
@@ -102,26 +78,31 @@ binaryToString = T.unpack . TE.decodeUtf8 . B64.encode
 binaryToStringBS :: B.ByteString -> String
 binaryToStringBS = binaryToString
 
--- | Convert a float32 (Float) to a bigfloat (Double).
--- Preserves IEEE special values (NaN, +/-Infinity); plain realToFrac
--- routes through Rational and collapses Inf to maxFinite (~3.4028e38).
-float32ToBigfloat :: Float -> Double
-float32ToBigfloat x
-  | isNaN x      = 0/0
-  | isInfinite x = if x < 0 then -1/0 else 1/0
-  | otherwise    = realToFrac x
-
 -- | Convert a float32 (Float) to a decimal (Scientific).
 float32ToDecimal :: Float -> Scientific
 float32ToDecimal = fromFloatDigits
 
--- | Convert a float64 (Double) to a bigfloat (Double).
-float64ToBigfloat :: Double -> Double
-float64ToBigfloat = id
+-- | Convert a float32 (Float) to a float64 (Double).
+-- Preserves IEEE special values (NaN, +/-Infinity); plain realToFrac
+-- routes through Rational and collapses Inf to maxFinite (~3.4028e38).
+float32ToFloat64 :: Float -> Double
+float32ToFloat64 x
+  | isNaN x      = 0/0
+  | isInfinite x = if x < 0 then -1/0 else 1/0
+  | otherwise    = realToFrac x
 
 -- | Convert a float64 (Double) to a decimal (Scientific).
 float64ToDecimal :: Double -> Scientific
 float64ToDecimal = fromFloatDigits
+
+-- | Convert a float64 (Double) to a float32 (Float). May lose precision.
+-- IEEE special values are preserved; for finite values, realToFrac
+-- (which converts via Rational) is used.
+float64ToFloat32 :: Double -> Float
+float64ToFloat32 x
+  | isNaN x      = 0/0
+  | isInfinite x = if x < 0 then -1/0 else 1/0
+  | otherwise    = realToFrac x
 
 -- | Convert an int8 to a bigint (Integer).
 int8ToBigint :: Int8 -> Integer
@@ -138,10 +119,6 @@ int32ToBigint = fromIntegral
 -- | Convert an int64 to a bigint (Integer).
 int64ToBigint :: Int64 -> Integer
 int64ToBigint = fromIntegral
-
--- | Parse a string to a bigfloat (Double).
-readBigfloat :: String -> Maybe Double
-readBigfloat s = readMaybe s :: Maybe Double
 
 -- | Parse a string to a bigint (Integer).
 readBigint :: String -> Maybe Integer
@@ -216,10 +193,6 @@ readUint64 :: String -> Maybe Integer
 readUint64 s = do
   n <- readMaybe s :: Maybe Integer
   if n >= 0 && n <= 18446744073709551615 then Just n else Nothing
-
--- | Convert a bigfloat (Double) to string.
-showBigfloat :: Double -> String
-showBigfloat = show
 
 -- | Convert a bigint (Integer) to string.
 showBigint :: Integer -> String

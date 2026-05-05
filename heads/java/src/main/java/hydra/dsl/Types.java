@@ -277,14 +277,6 @@ public interface Types {
     }
 
     /**
-     * Arbitrary-precision floating point type.
-     * @return the bigfloat type
-     */
-    static Type bigfloat() {
-        return literal(LiteralTypes.bigfloat());
-    }
-
-    /**
      * Non-negative 32-bit integer type.
      * Currently an alias for int32; intended for semantic annotation.
      * @return the non-negative int32 type

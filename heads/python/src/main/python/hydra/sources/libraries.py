@@ -668,9 +668,6 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "round")] = prims.prim1(
         qname(namespace, "round"), math.round_, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "roundBigfloat")] = prims.prim2(
-        qname(namespace, "roundBigfloat"), math.round_bigfloat, [], prims.int32(), prims.bigfloat(), prims.bigfloat()
-    )
     primitives[qname(namespace, "roundFloat32")] = prims.prim2(
         qname(namespace, "roundFloat32"), math.round_float32, [], prims.int32(), prims.float32(), prims.float32()
     )
@@ -941,22 +938,6 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     primitives: dict[Name, Primitive] = {}
 
     # Conversion primitives
-    primitives[qname(namespace, "bigfloatToBigint")] = prims.prim1(
-        qname(namespace, "bigfloatToBigint"), literals.bigfloat_to_bigint, [],
-        prims.bigfloat(), prims.bigint()
-    )
-    primitives[qname(namespace, "bigfloatToFloat32")] = prims.prim1(
-        qname(namespace, "bigfloatToFloat32"), literals.bigfloat_to_float32, [],
-        prims.bigfloat(), prims.float32()
-    )
-    primitives[qname(namespace, "bigfloatToFloat64")] = prims.prim1(
-        qname(namespace, "bigfloatToFloat64"), literals.bigfloat_to_float64, [],
-        prims.bigfloat(), prims.float64()
-    )
-    primitives[qname(namespace, "bigintToBigfloat")] = prims.prim1(
-        qname(namespace, "bigintToBigfloat"), literals.bigint_to_bigfloat, [],
-        prims.bigint(), prims.bigfloat()
-    )
     primitives[qname(namespace, "bigintToDecimal")] = prims.prim1(
         qname(namespace, "bigintToDecimal"), literals.bigint_to_decimal, [],
         prims.bigint(), prims.decimal()
@@ -1013,21 +994,21 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "decimalToFloat64"), literals.decimal_to_float64, [],
         prims.decimal(), prims.float64()
     )
-    primitives[qname(namespace, "float32ToBigfloat")] = prims.prim1(
-        qname(namespace, "float32ToBigfloat"), literals.float32_to_bigfloat, [],
-        prims.float32(), prims.bigfloat()
-    )
     primitives[qname(namespace, "float32ToDecimal")] = prims.prim1(
         qname(namespace, "float32ToDecimal"), literals.float32_to_decimal, [],
         prims.float32(), prims.decimal()
     )
-    primitives[qname(namespace, "float64ToBigfloat")] = prims.prim1(
-        qname(namespace, "float64ToBigfloat"), literals.float64_to_bigfloat, [],
-        prims.float64(), prims.bigfloat()
+    primitives[qname(namespace, "float32ToFloat64")] = prims.prim1(
+        qname(namespace, "float32ToFloat64"), literals.float32_to_float64, [],
+        prims.float32(), prims.float64()
     )
     primitives[qname(namespace, "float64ToDecimal")] = prims.prim1(
         qname(namespace, "float64ToDecimal"), literals.float64_to_decimal, [],
         prims.float64(), prims.decimal()
+    )
+    primitives[qname(namespace, "float64ToFloat32")] = prims.prim1(
+        qname(namespace, "float64ToFloat32"), literals.float64_to_float32, [],
+        prims.float64(), prims.float32()
     )
     primitives[qname(namespace, "int8ToBigint")] = prims.prim1(
         qname(namespace, "int8ToBigint"), literals.int8_to_bigint, [],
@@ -1047,10 +1028,6 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     )
 
     # Read primitives
-    primitives[qname(namespace, "readBigfloat")] = prims.prim1(
-        qname(namespace, "readBigfloat"), literals.read_bigfloat, [],
-        prims.string(), prims.optional(prims.bigfloat())
-    )
     primitives[qname(namespace, "readBigint")] = prims.prim1(
         qname(namespace, "readBigint"), literals.read_bigint, [],
         prims.string(), prims.optional(prims.bigint())
@@ -1109,10 +1086,6 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     )
 
     # Show primitives
-    primitives[qname(namespace, "showBigfloat")] = prims.prim1(
-        qname(namespace, "showBigfloat"), literals.show_bigfloat, [],
-        prims.bigfloat(), prims.string()
-    )
     primitives[qname(namespace, "showBigint")] = prims.prim1(
         qname(namespace, "showBigint"), literals.show_bigint, [],
         prims.bigint(), prims.string()

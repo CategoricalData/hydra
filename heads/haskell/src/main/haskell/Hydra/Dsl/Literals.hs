@@ -9,11 +9,6 @@ import qualified Data.ByteString as B
 import qualified Data.Scientific as Sci
 
 
--- | Create an arbitrary-precision floating point literal
--- Example: bigfloat 3.14159265359
-bigfloat :: Double -> Literal
-bigfloat = float . FloatValueBigfloat
-
 -- | Create an arbitrary-precision integer literal
 -- Example: bigint 9223372036854775808
 bigint :: Integer -> Literal
