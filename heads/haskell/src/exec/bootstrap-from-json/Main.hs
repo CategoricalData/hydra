@@ -32,7 +32,7 @@ import Hydra.Generation
 import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
 import qualified Hydra.Digest as Digest
 import Hydra.Sources.All (kernelModules)
-import Hydra.ExtGeneration (moduleToLispDialect, wrapLongLinesInScalaTree)
+import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform)
 import Hydra.Haskell.Coder (moduleToHaskell)
 import Hydra.Haskell.Language (haskellLanguage)
 import Hydra.Java.Coder (moduleToJava)
@@ -530,7 +530,7 @@ main = do
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
         "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
-        "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' mods
+        "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
               generateSources g lispLanguage True False False False dir allModsFinal' mods
         _ -> do
@@ -628,7 +628,7 @@ main = do
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allUniverse mods
             "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allUniverse mods
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allUniverse mods
-            "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allUniverse mods
+            "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
             _ -> return 0
 
@@ -662,14 +662,10 @@ main = do
 
   let genTestSuccess = True
 
-  -- Scala post-processing: wrap long lines in every generated .scala file.
-  -- The Scala compiler hits stack/memory limits on extremely long single-line
-  -- expressions; wrapping is the same pass that writeScala applies in the
-  -- DSL-direct path, lifted here so the JSON pipeline produces identical output.
-  when (target == "scala") $ do
-    putStrLn "Post-processing: wrapping long Scala lines..."
-    wrapLongLinesInScalaTree outBase
-    putStrLn ""
+  -- (Scala line-wrap moved into the generation pipeline as a content
+  -- transform on each file before write. See generateSourcesWithTransform
+  -- in Hydra.Generation; the scala dispatch in genForDir/genTestForDir
+  -- above passes wrapLongScalaText.)
 
   putStrLn "=========================================="
   putStrLn $ "Done: " ++ show mainFileCount ++ " main"
