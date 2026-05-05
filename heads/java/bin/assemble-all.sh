@@ -32,7 +32,7 @@ echo ""
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 # Warm-cache short-circuit: skip BEFORE any stack invocation or digest wipe.
-source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
+source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
 if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     echo "  Cache hit: every per-package digest fresh; skipping batch."
@@ -79,48 +79,60 @@ echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
 # src/<set>/java tree the digest tracks — so ordering with digest
 # refresh is moot.
 #
-# Package list comes from hydra.json (the authoritative registry),
-# filtered by each package's package.json targetLanguages declaration.
-# Coder-only packages like hydra-coq/hydra-javascript/hydra-wasm declare
-# targetLanguages: ["haskell"] and so are skipped here.
+# Package list is the batch emit set (baseline + coders): the same
+# packages bootstrap-from-json wrote source for above. The ext and
+# ext-demo packages (hydra-pg, hydra-rdf, hydra-ext, ...) get their
+# build files from the per-package assemble-distribution.sh path,
+# which CI runs separately after this batch.
+BATCH_PACKAGES=$(batch_emit_packages)
 echo ""
-echo "Step 4: Generating per-package build.gradle for every Java-targeted package..."
-JAVA_PACKAGES=$(python3 -c "
-import json, sys
-with open('$HYDRA_ROOT_DIR/hydra.json') as f:
-    pkgs = json.load(f)['packages']
-out = []
-for p in pkgs:
-    with open('$HYDRA_ROOT_DIR/packages/' + p + '/package.json') as f:
-        meta = json.load(f)
-    tls = meta.get('targetLanguages')
-    if tls is None or 'java' in tls:
-        out.append(p)
-print(' '.join(out))
-")
-for pkg in $JAVA_PACKAGES; do
+echo "Step 4: Generating per-package build.gradle for every batch-emitted package..."
+for pkg in $BATCH_PACKAGES; do
     HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-java-package-build.py" \
         "$pkg" --out-dir "$DIST_ROOT/$pkg"
 done
 
-# Refresh per-source-set digests for fresh-check cache. Each package
-# gets up to two digests: src/main/digest.json (always) and
-# src/test/digest.json (when test sources exist).
-for pkg_dir in "$DIST_ROOT"/*/; do
-    pkg=$(basename "$pkg_dir")
-    pkg_dir_trim="${pkg_dir%/}"
-    for set_name in main test; do
-        input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/$set_name/digest.json"
-        out_set_dir="$pkg_dir_trim/src/$set_name/java"
-        out_digest="$pkg_dir_trim/src/$set_name/digest.json"
-        if [ -f "$input_digest" ] && [ -d "$out_set_dir" ]; then
-            (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-             stack exec digest-check -- refresh \
-                --inputs "$input_digest" \
-                --output-dir "$out_set_dir" \
-                --output-digest "$out_digest")
+# Refresh per-source-set digests for fresh-check cache. Driven by the
+# batch emit set above, not by walking dist: every package the batch
+# generator emitted must have a main source set on disk, so a missing
+# dist/java/<pkg>/src/main/java/ is an error (signal of a broken
+# bootstrap-from-json pass) rather than something to silently skip.
+# The test source set is optional — gated on whether the input test
+# digest at dist/json/<pkg>/src/test/digest.json exists.
+for pkg in $BATCH_PACKAGES; do
+    pkg_dir="$DIST_ROOT/$pkg"
+    # Main set: required.
+    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/main/digest.json"
+    out_set_dir="$pkg_dir/src/main/java"
+    out_digest="$pkg_dir/src/main/digest.json"
+    if [ ! -f "$input_digest" ]; then
+        echo "ERROR: missing input digest for $pkg main: $input_digest" >&2
+        exit 1
+    fi
+    if [ ! -d "$out_set_dir" ]; then
+        echo "ERROR: missing generated output for $pkg main: $out_set_dir" >&2
+        exit 1
+    fi
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$input_digest" \
+        --output-dir "$out_set_dir" \
+        --output-digest "$out_digest")
+    # Test set: optional, gated on input test digest presence.
+    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/test/digest.json"
+    if [ -f "$test_input_digest" ]; then
+        test_out_set_dir="$pkg_dir/src/test/java"
+        test_out_digest="$pkg_dir/src/test/digest.json"
+        if [ ! -d "$test_out_set_dir" ]; then
+            echo "ERROR: missing generated test output for $pkg: $test_out_set_dir" >&2
+            exit 1
         fi
-    done
+        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+         stack exec digest-check -- refresh \
+            --inputs "$test_input_digest" \
+            --output-dir "$test_out_set_dir" \
+            --output-digest "$test_out_digest")
+    fi
 done
 
 echo ""
