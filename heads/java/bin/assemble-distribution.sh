@@ -99,17 +99,12 @@ fi
 #   dist/java/hydra-kernel/src/main/java/ so the published Maven artifact is
 #   self-contained. Cypher/GQL/RDF native bindings are NOT copied (they belong
 #   in bindings/ once that subtree exists).
-# - hydra-lisp: patch Coder.java's PartialVisitor type inference.
 case "$PACKAGE" in
     hydra-kernel)
         echo ""
         echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
         "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
         ;;
-    # (hydra-lisp Coder.java PartialVisitor type-inference patch eliminated:
-    # the Java coder now emits Either<T2, ...> generics directly; the
-    # sed pattern looking for Either<TopLevelFormWithComments, TopLevelFormWithComments>
-    # matches no occurrences in regenerated output.)
 esac
 
 # Step 4: Generate per-package build.gradle + settings.gradle so each

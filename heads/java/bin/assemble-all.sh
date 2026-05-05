@@ -63,10 +63,31 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
-# (TestGraph.java post-generation patch eliminated: the DSL emits TestEnv
-# refs directly. hydra-lisp Coder.java PartialVisitor type-inference
-# patch eliminated: the Java coder now emits Either<T2, ...> generics
-# directly; the sed pattern matched no occurrences in regenerated output.)
+# Step 3: Per-package post-processing. Mirrors assemble-distribution.sh
+# Step 3 — hydra-kernel only today. Must run BEFORE the digest refresh
+# below: copy-kernel-runtime.sh writes into dist/java/hydra-kernel/src/main/java/,
+# which the digest tracks; running it after refresh would leave those
+# hand-written files unrecorded and trigger a needless re-run on the
+# next 'fresh' check.
+echo ""
+echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
+"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+
+# Step 4: Generate per-package build.gradle + settings.gradle. Mirrors
+# assemble-distribution.sh Step 4. The build files live at
+# dist/java/<pkg>/{build.gradle,settings.gradle} — outside the
+# src/<set>/java tree the digest tracks — so ordering with digest
+# refresh is moot, but we run before it for consistency with Step 3.
+echo ""
+echo "Step 4: Generating per-package build.gradle for every package..."
+for pkg_dir in "$DIST_ROOT"/*/; do
+    pkg=$(basename "$pkg_dir")
+    pkg_dir_trim="${pkg_dir%/}"
+    if [ -f "$HYDRA_ROOT_DIR/packages/$pkg/package.json" ]; then
+        HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-java-package-build.py" \
+            "$pkg" --out-dir "$pkg_dir_trim"
+    fi
+done
 
 # Refresh per-source-set digests for fresh-check cache. Each package
 # gets up to two digests: src/main/digest.json (always) and
