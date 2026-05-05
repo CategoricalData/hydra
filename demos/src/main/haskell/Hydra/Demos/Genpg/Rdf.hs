@@ -266,7 +266,6 @@ graphSchemaToShapesGraph schema =
       LiteralTypeBinary -> "base64Binary"
       LiteralTypeBoolean -> "boolean"
       LiteralTypeFloat ft -> case ft of
-        FloatTypeBigfloat -> "decimal"
         FloatTypeFloat32 -> "float"
         FloatTypeFloat64 -> "double"
       LiteralTypeInteger it -> case it of
