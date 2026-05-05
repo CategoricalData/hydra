@@ -2,6 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
+    "hydra.haskell.coder": "955517bac5c3ae491e831d4badca996b3ce3d05e604fd359d377c420da46380e",
     "hydra.haskell.environment": "75ff0a28ef41a6048ba5ac53c2721dcdd3dba6bb190dc7e9d96155d16f33acbe",
     "hydra.haskell.language": "7c1c995341c0df4428453b90a21a618e82e29fcee9378d2d21388b5bf2a3b0a2",
     "hydra.haskell.operators": "04c2e4250bbaf44718cfc65d397a099894eb86a1e429379a905862c9903b4e14",
