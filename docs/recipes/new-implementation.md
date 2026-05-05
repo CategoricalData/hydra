@@ -17,6 +17,12 @@ language-independent JSON representation and regenerate code for any of the targ
 Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all five
 languages is semantically equivalent.
 
+A sixth implementation, [Hydra-Go](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-go),
+is in early development. It can act as a generation target (`bin/sync-go.sh` produces
+Go source under `dist/go/`), but the Go coder still has emission bugs, the head's
+hand-written runtime is largely placeholder, and it does not yet pass the test suite.
+The steps below have been applied to Hydra-Go only partially — completing them is open work.
+
 The following is a guide to creating a Hydra implementation in a new host language,
 like [C#](https://github.com/CategoricalData/hydra/issues/139).
 For this guide, we'll use a hypothetical language called `NewLang` as our example.

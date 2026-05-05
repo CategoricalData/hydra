@@ -24,6 +24,7 @@ worktrees/<branch>/
     hydra-python/     # Python coder DSL sources (Haskell-based)
     hydra-scala/      # Scala coder DSL sources
     hydra-lisp/       # Lisp coder DSL sources + per-dialect generated output
+    hydra-go/         # Go coder DSL sources (head bud — Coder/Serde still plain Haskell under heads/haskell)
     hydra-pg/         # Property graph model DSL sources
     hydra-rdf/        # RDF/SHACL model DSL sources
     hydra-ext/        # Miscellaneous extension DSL sources (Avro, Protobuf, GraphQL, ...)
@@ -35,6 +36,7 @@ worktrees/<branch>/
     python/           # Hand-written Python primitives, DSL; pyproject.toml lives here
     scala/            # Hand-written Scala primitives; sbt source crossover
     lisp/             # Per-dialect subdirs: clojure/, common-lisp/, emacs-lisp/, scheme/
+    go/               # Head bud: go.mod, bin/{assemble,test}-distribution.sh, mostly placeholder runtime
   dist/               # Generated output per host language
     json/             # Always checked in. Kernel JSON modules.
     haskell/          # Partially checked in (kernel + coders for bootstrap)
@@ -45,6 +47,7 @@ worktrees/<branch>/
     common-lisp/      # Generated Common Lisp kernel
     emacs-lisp/       # Generated Emacs Lisp kernel
     scheme/           # Generated Scheme kernel
+    go/               # NOT checked in. Regenerate via bin/sync-go.sh (kernel only; head bud)
     coq/              # NOT checked in. Regenerate via generate-coq + generate-coq-tests
   demos/              # Example applications (not published)
   bindings/           # Host-specific third-party integrations (future)
