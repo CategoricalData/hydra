@@ -121,8 +121,6 @@ case "$PACKAGE" in
 CLEOF
         fi
         ;;
-    *)
-        ;;
 esac
 
 echo ""

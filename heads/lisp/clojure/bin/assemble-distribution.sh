@@ -134,8 +134,6 @@ case "$PACKAGE" in
 CLJEOF
         fi
         ;;
-    *)
-        ;;
 esac
 
 echo ""

@@ -111,8 +111,6 @@ case "$PACKAGE" in
 ELEOF
         fi
         ;;
-    *)
-        ;;
 esac
 
 echo ""
