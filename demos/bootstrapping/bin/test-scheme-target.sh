@@ -14,51 +14,15 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
-# Patch test_graph.scm to build a full graph with primitives and schema types
-# instead of using the empty graph. Same patching that the Scheme assembler applies.
-echo "Patching test_graph.scm..."
-SCHEME_TESTGRAPH="$OUTPUT_DIR/src/test/scheme/hydra/test/test_graph.scm"
-if [ -f "$SCHEME_TESTGRAPH" ]; then
-    # Copy annotation bindings alongside the generated test graph
-    cp "$OUTPUT_DIR/src/test/scheme/hydra/annotation_bindings.scm" \
-       "$OUTPUT_DIR/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null || true
-
-    # Add required imports for building graph with primitives
-    sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra module) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra module) (hydra rewriting) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
-    # Delete the empty context and graph defs
-    sed -i '' '/^(define hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$SCHEME_TESTGRAPH"
-    sed -i '' '/^(define hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$SCHEME_TESTGRAPH"
-    # Remove the final )) that closes begin and define-library, then append defs + closing
-    sed -i '' '$ s/))$//' "$SCHEME_TESTGRAPH"
-    cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
-;; Include annotation term-level bindings (shared with test runner).
-SCMEOF
-    # Insert include with absolute path
-    ANN_BINDINGS_PATH="$OUTPUT_DIR/src/test/scheme/hydra/annotation_bindings.scm"
-    echo "(include \"$ANN_BINDINGS_PATH\")" >> "$SCHEME_TESTGRAPH"
-    cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
-
-(define hydra_test_test_graph_test_context (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
-(define hydra_test_test_graph_test_graph
-  (let* ((all-prims (standard-library))
-         (type-to-ts hydra_rewriting_f_type_to_type_scheme)
-         (kernel-schemas (map (lambda (entry) (list (car entry) (type-to-ts (cdr entry)))) hydra_json_bootstrap_types_by_name))
-         (test-schemas (map (lambda (entry) (list (car entry) (type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
-         (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
-         (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))
-         (bound-terms (append
-           (map (lambda (pair) (list (car pair) (list (quote function) (list (quote primitive) (car pair))))) all-prims)
-           (annotation-bindings)
-           (list (list "hydra.monads.emptyContext" (list (quote unit) (list)))
-                 (list "hydra.lexical.emptyGraph" (list (quote unit) (list))))
-           test-terms)))
-    (make-hydra_graph_graph
-      (hydra_lib_maps_from_list bound-terms)
-      hydra_lib_maps_empty (list) (list) hydra_lib_maps_empty
-      (hydra_lib_maps_from_list (map (lambda (p) (list (car p) (cdr p))) all-prims))
-      schema-types (list))))
-))
-SCMEOF
+# test_graph.scm post-generation patch removed. The DSL emits
+# (import (hydra test test_env)) and references hydra_test_test_env_test_*
+# directly. Copy the hand-written test_env.scm into the dist tree so the
+# generated import resolves (load path includes src/test/scheme).
+TEST_ENV_SRC="$HYDRA_ROOT/heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm"
+TEST_ENV_DST="$OUTPUT_DIR/src/test/scheme/hydra/test/test_env.scm"
+if [ -f "$TEST_ENV_SRC" ]; then
+    mkdir -p "$(dirname "$TEST_ENV_DST")"
+    cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
 fi
 
 echo "Running Scheme tests..."
