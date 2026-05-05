@@ -98,15 +98,16 @@ discoverNamespaceFiles = do
       case content of
         Left _ -> return Nothing
         Right s ->
-          -- Two namespace declaration idioms appear across the source tree:
+          -- Three namespace declaration idioms appear across the source tree:
           --   1. Top-level `ns = Namespace "..."` (kernel + most term-level sources).
           --   2. Inline `moduleNamespace = (Namespace "...")` inside a Module
           --      record (~half of non-kernel sources, e.g. hydra-pg, hydra-ext).
-          -- We accept both. Without case 2, files like
-          -- packages/hydra-pg/.../Validate/Pg.hs are absent from the per-package
-          -- digest, which causes silent cache hits in Phase 3 when those
-          -- sources change.
-          let pat1 = "^ns = Namespace \"([^\"]+)\"" :: String
+          --   3. Indented `ns = Namespace "..."` inside a where clause
+          --      (e.g. packages/hydra-haskell/.../Sources/Haskell/Coder.hs).
+          -- We accept all three. Without cases 2 and 3, those files are
+          -- absent from the per-package digest, which causes silent cache hits
+          -- in Phase 3 when those sources change.
+          let pat1 = "^[[:space:]]*ns = Namespace \"([^\"]+)\"" :: String
               pat2 = "moduleNamespace = .Namespace \"([^\"]+)\"" :: String
               try1 = (s RE.=~ pat1 :: [[String]])
               try2 = (s RE.=~ pat2 :: [[String]])
