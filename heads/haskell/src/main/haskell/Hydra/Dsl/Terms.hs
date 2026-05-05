@@ -54,11 +54,6 @@ apply fun arg = TermApplication $ Application fun arg
 binary :: B.ByteString -> Term
 binary = literal . Literals.binary
 
--- | Create a bigfloat literal. Note: in practice, precision is limited to 64 bits (same as Double) in Haskell.
--- Example: bigfloat 3.14159265359
-bigfloat :: Double -> Term
-bigfloat = literal . Literals.bigfloat
-
 -- | Create a bigint literal
 -- Example: bigint 9223372036854775808
 bigint :: Integer -> Term

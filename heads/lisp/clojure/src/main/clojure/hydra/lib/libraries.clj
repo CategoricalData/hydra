@@ -289,7 +289,6 @@
         i32 (p/tc-int32)
         f32 (p/tc-float32)
         f64 (p/tc-float64)
-        bf  (p/tc-bigfloat)
         bi  (p/tc-bigint)
         b   (p/tc-boolean)]
     (merge
@@ -332,9 +331,6 @@
       (qname ns_ "pi")       (p/prim0 (qname ns_ "pi")       (fn [] math/hydra_lib_math_pi)       [] f64)
       (qname ns_ "pow")      (p/prim2 (qname ns_ "pow")      (fn [a b] ((math/hydra_lib_math_pow a) b)) [] f64 f64 f64)
       (qname ns_ "round")    (p/prim1 (qname ns_ "round")    math/hydra_lib_math_round    [] f64 f64)
-      (qname ns_ "roundBigfloat") (p/prim2 (qname ns_ "roundBigfloat")
-                                            (fn [n x] ((math/hydra_lib_math_round_bigfloat n) x))
-                                            [] i32 bf bf)
       (qname ns_ "roundFloat32")  (p/prim2 (qname ns_ "roundFloat32")
                                             (fn [n x] ((math/hydra_lib_math_round_float32 n) x))
                                             [] i32 f32 f32)
@@ -508,7 +504,6 @@
 
 (defn register-literals []
   (let [ns_ "hydra.lib.literals"
-        bf  (p/tc-bigfloat)
         bi  (p/tc-bigint)
         dec (p/tc-decimal)
         f32 (p/tc-float32)
@@ -526,11 +521,7 @@
         bin (p/tc-binary)]
     (merge
      ;; Conversions
-     {(qname ns_ "bigfloatToBigint")   (p/prim1 (qname ns_ "bigfloatToBigint")   literals/hydra_lib_literals_bigfloat_to_bigint   [] bf bi)
-      (qname ns_ "bigfloatToFloat32")  (p/prim1 (qname ns_ "bigfloatToFloat32")  literals/hydra_lib_literals_bigfloat_to_float32  [] bf f32)
-      (qname ns_ "bigfloatToFloat64")  (p/prim1 (qname ns_ "bigfloatToFloat64")  literals/hydra_lib_literals_bigfloat_to_float64  [] bf f64)
-      (qname ns_ "bigintToBigfloat")   (p/prim1 (qname ns_ "bigintToBigfloat")   literals/hydra_lib_literals_bigint_to_bigfloat   [] bi bf)
-      (qname ns_ "bigintToDecimal")    (p/prim1 (qname ns_ "bigintToDecimal")    literals/hydra_lib_literals_bigint_to_decimal    [] bi dec)
+     {(qname ns_ "bigintToDecimal")    (p/prim1 (qname ns_ "bigintToDecimal")    literals/hydra_lib_literals_bigint_to_decimal    [] bi dec)
       (qname ns_ "bigintToInt8")       (p/prim1 (qname ns_ "bigintToInt8")       literals/hydra_lib_literals_bigint_to_int8       [] bi i8)
       (qname ns_ "bigintToInt16")      (p/prim1 (qname ns_ "bigintToInt16")      literals/hydra_lib_literals_bigint_to_int16      [] bi i16)
       (qname ns_ "bigintToInt32")      (p/prim1 (qname ns_ "bigintToInt32")      literals/hydra_lib_literals_bigint_to_int32      [] bi i32)
@@ -544,10 +535,10 @@
       (qname ns_ "decimalToBigint")    (p/prim1 (qname ns_ "decimalToBigint")    literals/hydra_lib_literals_decimal_to_bigint    [] dec bi)
       (qname ns_ "decimalToFloat32")   (p/prim1 (qname ns_ "decimalToFloat32")   literals/hydra_lib_literals_decimal_to_float32   [] dec f32)
       (qname ns_ "decimalToFloat64")   (p/prim1 (qname ns_ "decimalToFloat64")   literals/hydra_lib_literals_decimal_to_float64   [] dec f64)
-      (qname ns_ "float32ToBigfloat")  (p/prim1 (qname ns_ "float32ToBigfloat")  literals/hydra_lib_literals_float32_to_bigfloat  [] f32 bf)
       (qname ns_ "float32ToDecimal")   (p/prim1 (qname ns_ "float32ToDecimal")   literals/hydra_lib_literals_float32_to_decimal   [] f32 dec)
-      (qname ns_ "float64ToBigfloat")  (p/prim1 (qname ns_ "float64ToBigfloat")  literals/hydra_lib_literals_float64_to_bigfloat  [] f64 bf)
+      (qname ns_ "float32ToFloat64")   (p/prim1 (qname ns_ "float32ToFloat64")   literals/hydra_lib_literals_float32_to_float64   [] f32 f64)
       (qname ns_ "float64ToDecimal")   (p/prim1 (qname ns_ "float64ToDecimal")   literals/hydra_lib_literals_float64_to_decimal   [] f64 dec)
+      (qname ns_ "float64ToFloat32")   (p/prim1 (qname ns_ "float64ToFloat32")   literals/hydra_lib_literals_float64_to_float32   [] f64 f32)
       (qname ns_ "int8ToBigint")       (p/prim1 (qname ns_ "int8ToBigint")       literals/hydra_lib_literals_int8_to_bigint       [] i8 bi)
       (qname ns_ "int16ToBigint")      (p/prim1 (qname ns_ "int16ToBigint")      literals/hydra_lib_literals_int16_to_bigint      [] i16 bi)
       (qname ns_ "int32ToBigint")      (p/prim1 (qname ns_ "int32ToBigint")      literals/hydra_lib_literals_int32_to_bigint      [] i32 bi)
@@ -558,8 +549,7 @@
       (qname ns_ "uint64ToBigint")     (p/prim1 (qname ns_ "uint64ToBigint")     literals/hydra_lib_literals_uint64_to_bigint     [] u64 bi)
       (qname ns_ "stringToBinary")     (p/prim1 (qname ns_ "stringToBinary")     literals/hydra_lib_literals_string_to_binary     [] s bin)}
      ;; Read primitives
-     {(qname ns_ "readBigfloat") (p/prim1 (qname ns_ "readBigfloat") literals/hydra_lib_literals_read_bigfloat [] s (p/tc-optional bf))
-      (qname ns_ "readBigint")   (p/prim1 (qname ns_ "readBigint")   literals/hydra_lib_literals_read_bigint   [] s (p/tc-optional bi))
+     {(qname ns_ "readBigint")   (p/prim1 (qname ns_ "readBigint")   literals/hydra_lib_literals_read_bigint   [] s (p/tc-optional bi))
       (qname ns_ "readBoolean")  (p/prim1 (qname ns_ "readBoolean")  literals/hydra_lib_literals_read_boolean  [] s (p/tc-optional b))
       (qname ns_ "readDecimal")  (p/prim1 (qname ns_ "readDecimal")  literals/hydra_lib_literals_read_decimal  [] s (p/tc-optional dec))
       (qname ns_ "readFloat32")  (p/prim1 (qname ns_ "readFloat32")  literals/hydra_lib_literals_read_float32  [] s (p/tc-optional f32))
@@ -574,8 +564,7 @@
       (qname ns_ "readUint32")   (p/prim1 (qname ns_ "readUint32")   literals/hydra_lib_literals_read_uint32   [] s (p/tc-optional u32))
       (qname ns_ "readUint64")   (p/prim1 (qname ns_ "readUint64")   literals/hydra_lib_literals_read_uint64   [] s (p/tc-optional u64))}
      ;; Show primitives
-     {(qname ns_ "showBigfloat") (p/prim1 (qname ns_ "showBigfloat") literals/hydra_lib_literals_show_bigfloat [] bf s)
-      (qname ns_ "showBigint")   (p/prim1 (qname ns_ "showBigint")   literals/hydra_lib_literals_show_bigint   [] bi s)
+     {(qname ns_ "showBigint")   (p/prim1 (qname ns_ "showBigint")   literals/hydra_lib_literals_show_bigint   [] bi s)
       (qname ns_ "showBoolean")  (p/prim1 (qname ns_ "showBoolean")  literals/hydra_lib_literals_show_boolean  [] b s)
       (qname ns_ "showDecimal")  (p/prim1 (qname ns_ "showDecimal")  literals/hydra_lib_literals_show_decimal  [] dec s)
       (qname ns_ "showFloat32")  (p/prim1 (qname ns_ "showFloat32")  literals/hydra_lib_literals_show_float32  [] f32 s)

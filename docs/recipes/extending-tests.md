@@ -273,7 +273,7 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
    --              roundedPrimCase2 "atan2 3 4" _math_atan2 3.0 4.0 (atan2 3.0 4.0)
    ```
 
-   The underlying primitives `roundFloat64`, `roundFloat32`, and `roundBigfloat` (`hydra.lib.math`)
+   The underlying primitives `roundFloat64` and `roundFloat32` (`hydra.lib.math`)
    round a floating-point value to N significant digits. They are available for general use, not just
    tests.
 

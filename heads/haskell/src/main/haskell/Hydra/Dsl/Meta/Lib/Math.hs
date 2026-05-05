@@ -150,10 +150,6 @@ maybeRem = primitive2 _math_maybeRem
 round :: TTerm Double -> TTerm Double
 round = primitive1 _math_round
 
--- | Round a bigfloat to n significant digits.
-roundBigfloat :: TTerm Int -> TTerm Double -> TTerm Double
-roundBigfloat = primitive2 _math_roundBigfloat
-
 -- | Round a float32 to n significant digits.
 roundFloat32 :: TTerm Int -> TTerm Float -> TTerm Float
 roundFloat32 = primitive2 _math_roundFloat32

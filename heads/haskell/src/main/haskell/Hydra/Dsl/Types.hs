@@ -54,10 +54,6 @@ apply lhs rhs = TypeApplication (ApplicationType (asType lhs) (asType rhs))
 applys :: AsType a => a -> [Type] -> Type
 applys t ts = L.foldl apply (asType t) ts
 
--- | Arbitrary-precision floating point type
-bigfloat :: Type
-bigfloat = float FloatTypeBigfloat
-
 -- | Arbitrary-precision integer type
 bigint :: Type
 bigint = integer IntegerTypeBigint

@@ -100,11 +100,6 @@
 
 ;; Scalar TermCoders — each carries its actual Hydra type
 
-(defun tc-bigfloat ()
-  (make-term_coder (list :literal (list :float (list :bigfloat nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigfloat g) t_))))
-    (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :float (list :bigfloat (float v 1.0d0)))))))))
-
 (defun tc-bigint ()
   (make-term_coder (list :literal (list :integer (list :bigint nil)))
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigint g) t_))))

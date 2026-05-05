@@ -3,16 +3,7 @@
 
 ;; Numeric conversion functions (mostly identity in Clojure/JVM)
 
-;; BigFloat conversions
-;; Haskell's round: half-to-even (banker's rounding)
-(def hydra_lib_literals_bigfloat_to_bigint
-  (fn [x] (long (.setScale (BigDecimal/valueOf (double x)) 0 java.math.RoundingMode/HALF_EVEN))))
-(def hydra_lib_literals_bigfloat_to_float (fn [x] (double x)))
-(def hydra_lib_literals_bigfloat_to_float32 (fn [x] (float x)))
-(def hydra_lib_literals_bigfloat_to_float64 (fn [x] (double x)))
-
 ;; BigInt conversions
-(def hydra_lib_literals_bigint_to_bigfloat (fn [x] (double x)))
 (def hydra_lib_literals_bigint_to_decimal (fn [x] (bigdec x)))
 (def hydra_lib_literals_bigint_to_int8 (fn [x] (byte x)))
 (def hydra_lib_literals_bigint_to_int16 (fn [x] (short x)))
@@ -29,10 +20,10 @@
 (def hydra_lib_literals_decimal_to_float64 (fn [x] (double (.doubleValue (bigdec x)))))
 
 ;; Float conversions
-(def hydra_lib_literals_float32_to_bigfloat (fn [x] (double x)))
 (def hydra_lib_literals_float32_to_decimal (fn [x] (bigdec (Float/toString (float x)))))
-(def hydra_lib_literals_float64_to_bigfloat (fn [x] (double x)))
+(def hydra_lib_literals_float32_to_float64 (fn [x] (double x)))
 (def hydra_lib_literals_float64_to_decimal (fn [x] (bigdec (str x))))
+(def hydra_lib_literals_float64_to_float32 (fn [x] (float x)))
 
 ;; Integer to BigInt conversions
 (def hydra_lib_literals_int8_to_bigint (fn [x] (long x)))
@@ -58,10 +49,6 @@
       (catch Exception _ []))))
 
 ;; Read functions (return Maybe)
-(def hydra_lib_literals_read_bigfloat
-  (fn [s] (try (list :just (Double/parseDouble s))
-               (catch Exception _ (list :nothing)))))
-
 (def hydra_lib_literals_read_bigint
   (fn [s] (try (list :just (bigint (BigInteger. s)))
                (catch Exception _ (list :nothing)))))
@@ -131,7 +118,6 @@
             (str mant-s "e" exp)))))))
 
 ;; Show functions
-(def hydra_lib_literals_show_bigfloat (fn [x] (haskell-show-float x)))
 (def hydra_lib_literals_show_bigint (fn [x] (str x)))
 (def hydra_lib_literals_show_float (fn [x] (haskell-show-float x)))
 (def hydra_lib_literals_show_float32

@@ -87,6 +87,5 @@ Because the Lisp coder shares one language-constraints definition across
 all dialects, Hydra modules that use `decimal` are currently adapted to
 `float64` before code generation for all four Lisp targets, with
 potential precision loss.
-This matches the existing treatment of `bigfloat` in these hosts.
 A future change may split the Lisp language constraints to let Clojure
 emit native `BigDecimal` while the others continue to adapt.

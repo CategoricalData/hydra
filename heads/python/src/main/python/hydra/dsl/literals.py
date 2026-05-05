@@ -10,7 +10,6 @@ from hydra.core import (
     LiteralFloat,
     LiteralInteger,
     LiteralString,
-    FloatValueBigfloat,
     IntegerValueBigint,
     FloatValueFloat32,
     FloatValueFloat64,
@@ -81,15 +80,6 @@ def float64(value: float) -> Literal:
     Example: float64(3.14159265359)
     """
     return float_(FloatValueFloat64(value))
-
-
-def bigfloat(value: float) -> Literal:
-    """Create an arbitrary-precision floating point literal.
-
-    Example: bigfloat(3.14159265359)
-    """
-    # Use str(value) to avoid full binary precision conversion
-    return float_(FloatValueBigfloat(Decimal(str(value))))
 
 
 def integer(value: IntegerValue) -> Literal:

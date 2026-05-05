@@ -4016,16 +4016,6 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "bigfloat",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                    "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                "parameter": "d"}}},
-                          {
                             "name": "float32",
                             "term": {
                               "lambda": {

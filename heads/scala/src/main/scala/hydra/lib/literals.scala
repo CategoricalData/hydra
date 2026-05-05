@@ -2,12 +2,6 @@ package hydra.lib
 
 object literals:
   // Haskell uses round (half-even / banker's rounding)
-  def bigfloatToBigint(x: BigDecimal): BigInt = x.setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toBigInt
-  def bigfloatToFloat(x: BigDecimal)(ft: Any): Any = ft // Placeholder
-  def bigfloatToFloat32(x: BigDecimal): Float = x.toFloat
-  def bigfloatToFloat64(x: BigDecimal): Double = x.toDouble
-  def bigfloatToFloatValue(x: BigDecimal): Any = x // Placeholder
-  def bigintToBigfloat(x: BigInt): BigDecimal = BigDecimal(x)
   def bigintToDecimal(x: BigInt): BigDecimal = BigDecimal(x)
   def bigintToInt(x: BigInt)(it: Any): Any = it // Placeholder
   def bigintToInt8(x: BigInt): Byte = x.toByte
@@ -29,19 +23,12 @@ object literals:
   def decimalToFloat64(x: BigDecimal): Double = x.toDouble
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
   // BigDecimal cannot represent NaN or Infinity; use sentinel zero (mirrors Java).
-  def float32ToBigfloat(x: Float): BigDecimal =
-    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toDouble)
   def float32ToDecimal(x: Float): BigDecimal =
     if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toString)
-  def float64ToBigfloat(x: Double): BigDecimal =
-    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x)
+  def float32ToFloat64(x: Float): Double = x.toDouble
   def float64ToDecimal(x: Double): BigDecimal =
     if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toString)
-  def floatValueToBigfloat(x: Any): BigDecimal = x match
-    case d: BigDecimal => d
-    case d: Double => float64ToBigfloat(d)
-    case f: Float => float32ToBigfloat(f)
-    case _ => BigDecimal(0)
+  def float64ToFloat32(x: Double): Float = x.toFloat
   def int(it: Any)(x: BigInt): Any = x // Placeholder
   def int8ToBigint(x: Byte): BigInt = BigInt(x)
   def int16ToBigint(x: Short): BigInt = BigInt(x)
@@ -53,7 +40,6 @@ object literals:
     case l: Long => BigInt(l)
     case b: BigInt => b
     case _ => BigInt(0)
-  def readBigfloat(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readBigint(s: String): Option[BigInt] = try Some(BigInt(s)) catch { case _: Exception => None }
   def readBoolean(s: String): Option[Boolean] = s.toBooleanOption
   def readDecimal(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
@@ -134,7 +120,6 @@ object literals:
           sb.append(mantissa).append('e').append(exponent)
           sb.toString
 
-  def showBigfloat(x: BigDecimal): String = showHaskellDouble(x.toDouble)
   def showBigint(x: BigInt): String = x.toString
   def showBoolean(x: Boolean): String = if x then "true" else "false"
   def showDecimal(x: BigDecimal): String = {

@@ -216,7 +216,13 @@
     (define hydra_test_test_env_test_context
       (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
 
+    ;; Curried form to match the Scheme coder's emission for multi-arg
+    ;; DSL functions: Map Name Type -> Map Name Term -> Graph becomes
+    ;; ((f types) terms) at the call site. The test-terms argument is
+    ;; appended to bound-terms so reduction tests that reference test
+    ;; data (e.g. testDataArthur) can resolve through the graph.
     (define (hydra_test_test_env_test_graph test-types)
+     (lambda (test-terms)
       (let* ((all-prims (standard-library))
              (type-to-ts hydra_scoping_f_type_to_type_scheme)
              (kernel-schemas
@@ -230,11 +236,16 @@
              (schema-types
                (hydra_lib_maps_from_list
                  (append kernel-schemas test-schemas)))
+             (test-term-pairs
+               (map (lambda (entry)
+                      (list (car entry) (cadr entry)))
+                    (hydra_lib_maps_to_list test-terms)))
              (bound-terms
                (append
                  (annotation-bindings)
                  (list (list "hydra.monads.emptyContext" (list 'unit '()))
-                       (list "hydra.lexical.emptyGraph" (list 'unit '()))))))
+                       (list "hydra.lexical.emptyGraph" (list 'unit '())))
+                 test-term-pairs)))
         (make-hydra_graph_graph
           (hydra_lib_maps_from_list bound-terms)
           hydra_lib_maps_empty
@@ -244,4 +255,4 @@
           (hydra_lib_maps_from_list
             (map (lambda (p) (list (car p) (cdr p))) all-prims))
           schema-types
-          (list))))))
+          (list)))))))
