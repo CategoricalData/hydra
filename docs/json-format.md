@@ -162,7 +162,7 @@ key/value list — duplicate keys would parse but should not be produced.
 ```
 
 Integer and float literals are themselves tagged with their precision class
-(`int8`/`int16`/`int32`/`int64`/`uint8`/.../`bigint` and `float32`/`float64`/`bigfloat`).
+(`int8`/`int16`/`int32`/`int64`/`uint8`/.../`bigint` and `float32`/`float64`).
 
 ### Float formatting
 
@@ -179,9 +179,6 @@ Integer and float literals are themselves tagged with their precision class
 Decoders accept both shapes for either precision.
 The schema disambiguates `float32` from `float64`, just as it disambiguates `int8` from `int64`;
 a JSON number `0.5` decodes to a `float32` value under one schema and a `float64` value under another.
-
-`Literal.float (bigfloat _)` is deprecated and will be retired in a future release;
-its current encoding is documented in the Haskell encoder source.
 
 ### String escapes
 
