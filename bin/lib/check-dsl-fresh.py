@@ -23,12 +23,14 @@ import re
 import sys
 from pathlib import Path
 
-# Two namespace declaration idioms appear across the source tree:
+# Three namespace declaration idioms appear across the source tree:
 #   1. Top-level `ns = Namespace "..."` (kernel + most term-level sources).
 #   2. Inline `moduleNamespace = (Namespace "...")` inside a Module record
 #      (~half of non-kernel sources, e.g. hydra-pg, hydra-ext, hydra-python).
+#   3. Indented `ns = Namespace "..."` inside a where clause
+#      (e.g. packages/hydra-haskell/.../Sources/Haskell/Coder.hs).
 # Mirrors Hydra.Digest.extractNs in heads/haskell/src/main/haskell/Hydra/Digest.hs.
-NAMESPACE_RE_TOPLEVEL = re.compile(r'^ns\s*=\s*Namespace\s*"([^"]+)"', re.MULTILINE)
+NAMESPACE_RE_TOPLEVEL = re.compile(r'^\s*ns\s*=\s*Namespace\s*"([^"]+)"', re.MULTILINE)
 NAMESPACE_RE_INLINE = re.compile(r'moduleNamespace\s*=\s*.?Namespace\s*"([^"]+)"')
 
 
