@@ -310,8 +310,14 @@ The core principles (see CLAUDE.md and the
 
 1. **No post-generation patches.** Generated code (anything under `dist/`) must
    match what the generator produces. If the output is wrong, fix the generator.
-   The only exception is a deliberate bootstrap patch that will be overwritten by
-   the next regeneration — document it as such.
+   This applies to any read-modify-write of generated content, regardless of
+   form: shell `sed` against `dist/` files, Haskell directory walks that
+   read-and-rewrite, Python scripts that open generated files in `'w'` or
+   `'a'` mode after they've been written, etc. A whole-file content transform
+   applied **during** emission (between the codegen output and the file
+   write) is part of the generation pipeline, not a post-pass.
+   The only exception is a deliberate bootstrap patch that will be overwritten
+   by the next regeneration — document it as such.
 2. **No hand-written files under `dist/`.** If a file needs to live alongside
    generated artifacts (because tests import it from that location), write it
    under `heads/` and copy it in from a sync script.
@@ -325,19 +331,30 @@ The core principles (see CLAUDE.md and the
 
 ### Procedure
 
-**Check 1: post-generation patches in sync scripts.**
-Sync scripts are the most common place violations hide.
-Grep for the patterns that indicate patches:
+**Check 1: post-generation patches in sync scripts and codegen pipeline.**
+Sync scripts are the most common place violations hide. Haskell-side
+read-back passes (functions in `heads/haskell/src/main/haskell/` and
+`heads/haskell/src/exec/` that read a file from `dist/` and write a
+modified version back) count too.
+
+Shell-level scan:
 
 ```bash
 grep -rn "sed_inplace\|sed -i\|Post-process\|Patch\|patching\|post-process" \
-  bin/ heads/haskell/bin/ demos/bootstrapping/bin/ 2>/dev/null \
+  bin/ heads/ demos/bootstrapping/bin/ 2>/dev/null \
   | grep -v "test\|grep" \
   | grep -vE ":\s*#"
 ```
 
-Every match is a potential violation.
-For each, ask:
+Haskell-side scan (look for read-back patterns over `dist/`):
+
+```bash
+grep -rn "readFile\|hGetContents\|withFile.*ReadMode" \
+  heads/haskell/src/main/ heads/haskell/src/exec/ 2>/dev/null \
+  | grep -v "digest\|content-hash\|byte-identical"
+```
+
+Every match is a potential violation. For each, ask:
 - **Is this fixing the generator, or working around it?**
   A patch that renames `case macro(` to `` case `macro`( `` is working around
   a missing keyword-escape in the Scala code generator.
@@ -345,10 +362,15 @@ For each, ask:
 - **Is this copying a hand-written file into `dist/`?**
   That is principle 2; the canonical copy must live in `heads/`.
   Copying *into* `dist/` is acceptable; hand-writing *in* `dist/` is not.
+- **Is this part of the generation pipeline, or a post-pass?**
+  A `String -> String` transform applied between codegen output and
+  file write (e.g. via `generateSourcesWithTransform`) is part of
+  generation. A pass that walks `dist/` after files have been written
+  to re-read and rewrite them is a post-generation patch.
 - **Is this a deliberate bootstrap patch?**
   Bootstrap patches are explicitly allowed but must be overwritten by the next
   regeneration.
-  A `sed` patch that runs on every sync is not a bootstrap patch — it means
+  A patch that runs on every sync is not a bootstrap patch — it means
   the generator is broken.
 
 Track the list of accepted post-generation patches.
@@ -389,14 +411,7 @@ Fix it at the generator level.
 
 ### Known accepted patches
 
-**None.** All post-generation `sed` patches were eliminated as part of #307
-(commits up through 845089add). Most were dead code matching pre-fix output;
-two required real changes (Python lazy thunk emission already worked once
-test_env exposed `test_context` as a value; Clojure/EL needed a DSL
-signature extension so `testEnv.testGraph` receives both `testTypes` and
-`testTerms`). One uncovered a latent bug — the EL regex primitives didn't
-bind `case-fold-search` to nil, so `[a-z]` was matching uppercase letters
-(commit c9835dccd).
+**None.** All post-generation `sed` patches were eliminated in #307.
 
 When adding a new accepted patch, document it here and open an issue against
 the generator. The bar is high: prefer fixing the generator, and exhaust
@@ -430,10 +445,10 @@ by the per-target `assemble-distribution.sh`. The pattern, target by target:
 
 Each provides `hydra_test_test_env_test_context` (a `Context` value) and
 `hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
-matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Lisp dialects
-(Scala, CL, Scheme, Clojure, Emacs Lisp) curry the function as
-`((f types) terms)` to match their coders' multi-arg emission; Java and
-Python use the flat `f(types, terms)` form.
+matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
+four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the
+function as `((f types) terms)` to match their coders' multi-arg emission;
+Java and Python use the flat `f(types, terms)` form.
 
 ---
 
