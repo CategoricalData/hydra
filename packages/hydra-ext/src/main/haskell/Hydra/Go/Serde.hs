@@ -2,7 +2,7 @@
 --
 -- This module provides functions for converting Go AST nodes to source code text,
 -- using Hydra's Ast.Expr representation as an intermediate form.
-module Hydra.Sources.Go.Serde where
+module Hydra.Go.Serde where
 
 import Hydra.Constants
 import Hydra.Kernel
@@ -755,13 +755,12 @@ interpretedStringLitToExpr (Go.InterpretedStringLit s) = cst $ "\"" ++ escapeGoS
       _ | c < ' ' || c > '~' -> goUnicodeEscape (ord c)
         | otherwise -> [c]
     goUnicodeEscape n
-      | n > 0xFFFF = -- Supplementary plane: use UTF-16 surrogate pair
-          let n' = n - 0x10000
-              hi = 0xD800 + (n' `div` 0x400)
-              lo = 0xDC00 + (n' `mod` 0x400)
-          in "\\u" ++ padHex hi ++ "\\u" ++ padHex lo
-      | otherwise = "\\u" ++ padHex n
-    padHex n = replicate (4 - length hex) '0' ++ hex
+      | n > 0xFFFF = -- Supplementary plane: use \U with 8 hex digits (Go doesn't support surrogates)
+          "\\U" ++ padHex8 n
+      | otherwise = "\\u" ++ padHex4 n
+    padHex4 n = replicate (4 - length hex) '0' ++ hex
+      where hex = fmap toUpper $ showHex n ""
+    padHex8 n = replicate (8 - length hex) '0' ++ hex
       where hex = fmap toUpper $ showHex n ""
 
 -- ============================================================================
