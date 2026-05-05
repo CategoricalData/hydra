@@ -66,8 +66,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Constants.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Utilities for sorting."
       <> " This module includes an implementation of Tarjan's algorithm,"
       <> " originally based on GraphSCC by Iavor S. Diatchki:"
@@ -137,6 +136,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
 
 createOrderingIsomorphism :: TTermDefinition ([a] -> [a] -> Topo.OrderingIsomorphism b)
 createOrderingIsomorphism = define "createOrderingIsomorphism" $
+  doc "Construct an OrderingIsomorphism between two orderings of the same elements. The two list arguments must be permutations of each other; the result is a pair of mappings that transport an element list from one ordering to the other." $
   "sourceOrd" ~> "targetOrd" ~>
   "sourceToTargetMapping" <~ ("els" ~>
     "mp" <~ Maps.fromList (Lists.zip (var "sourceOrd") (var "els")) $

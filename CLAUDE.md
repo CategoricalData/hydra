@@ -11,10 +11,9 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 **programs are graphs, and graphs are programs.**
 
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
-into five complete implementations: Haskell, Java, Python, Scala, and Lisp.
-The Lisp implementation covers four dialects: Clojure, Scheme, Common Lisp, and Emacs Lisp.
-All five implementations pass the common test suite.
-Version is tracked in the `VERSION` file at the worktree root.
+into eight host languages spanning five implementation families:
+Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
+All eight pass the common test suite.
 
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and computational
@@ -54,7 +53,7 @@ At the beginning of every new session, follow these steps **before doing any oth
 
 3. **Load or create the branch plan document**: Look for a Markdown file at the
    worktree root named after the current branch
-   (e.g., `integration-plan.md`, `feature_249_java_version-plan.md`).
+   (e.g., `staging-plan.md`, `feature_249_java_version-plan.md`).
    - If it exists, read it to understand the current state of work.
    - If it does not exist, create it:
      - **Feature branches** (`feature_NNN_*`): Fetch the GitHub issue and draft a plan
@@ -72,8 +71,7 @@ At the beginning of every new session, follow these steps **before doing any oth
 
 5. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
 
-6. **Consult task-specific references as needed** (see the [document index](#document-index)
-   below and the [task routing](#task-routing) section).
+6. **Consult task-specific references as needed** (see [Where to look up X](#where-to-look-up-x) below).
 
 ### During the session
 
@@ -85,6 +83,14 @@ At the beginning of every new session, follow these steps **before doing any oth
   When ready to finalize, ask the user about squashing:
   soft-reset WIP commits, re-commit as focused topic groups, source changes first,
   generated files last.
+
+### When waiting on long-running work
+
+While a sync, bootstrap, or other long task is running, default to *waiting* —
+schedule periodic check-ins (`/loop` or self-paced wakeups) rather than
+spinning up unrelated work that may interfere with the running task.
+Don't proactively run more sync/bootstrap commands; don't kick off other commits.
+The user will redirect you if they want something else done in the meantime.
 
 ### Shutdown
 
@@ -102,306 +108,92 @@ Before ending a session:
 The Hydra repository uses a **bare repo plus worktrees** layout so that
 multiple Claude sessions (and humans) can work on different feature branches
 in parallel without stepping on each other.
-The top-level directory `hydra/` is not a git working tree itself;
-it contains a bare repo, a `worktrees/` directory with one checkout per active
-branch, and a local checkout of the GitHub wiki:
+Top level: `hydra/hydra.git/` (bare repo), `hydra/worktrees/<branch>/` (one per active branch),
+`hydra/wiki/` (separate Git repo for the GitHub wiki).
+Your working directory is always one worktree.
+Build artifacts (`.stack-work/`, `build/`, `.gradle/`) live per worktree and are not shared.
 
-```
-hydra/
-  hydra.git/          # Bare repo (the shared object store); never edit manually
-  worktrees/          # One working tree per active branch
-    integration/      # The integration branch — main line of development
-    feature_NNN_*/    # Active feature branches (one worktree each)
-    ...
-  wiki/               # Local checkout of the GitHub wiki (separate Git repo)
-```
-
-Each worktree under `worktrees/` is a normal git working tree with the full
-Hydra source laid out as follows:
-
-```
-worktrees/<branch>/
-  packages/           # Language-independent package definitions and DSL sources
-    hydra-kernel/     # Kernel types, terms, DSL sources, and package manifest
-    hydra-haskell/    # Haskell coder DSL sources + generated Haskell coder output
-    hydra-java/       # Java coder DSL sources (Haskell-based)
-    hydra-python/     # Python coder DSL sources (Haskell-based)
-    hydra-scala/      # Scala coder DSL sources
-    hydra-lisp/       # Lisp coder DSL sources + per-dialect generated output
-    hydra-pg/         # Property graph model DSL sources
-    hydra-rdf/        # RDF/SHACL model DSL sources
-    hydra-ext/        # Miscellaneous extension DSL sources (Avro, Protobuf, GraphQL, ...)
-    hydra-coq/        # Coq coder DSL sources
-    hydra-javascript/ # JavaScript coder DSL sources
-  heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
-    haskell/          # Stack package ("hydra"), exec binaries, Hydra.Dsl/Lib/Generation
-    java/             # Hand-written Java primitives, DSL, utils; gradle source-set crossover
-    python/           # Hand-written Python primitives, DSL; pyproject.toml lives here
-    scala/            # Hand-written Scala primitives; sbt source crossover
-    lisp/             # Per-dialect subdirs: clojure/, common-lisp/, emacs-lisp/, scheme/
-  dist/               # Generated output per host language
-    json/             # Always checked in. Kernel JSON modules.
-    haskell/          # Partially checked in (kernel + coders for bootstrap)
-    java/             # Generated Java kernel
-    python/           # Generated Python kernel
-    scala/            # Generated Scala kernel
-    clojure/          # Generated Clojure kernel
-    common-lisp/      # Generated Common Lisp kernel
-    emacs-lisp/       # Generated Emacs Lisp kernel
-    scheme/           # Generated Scheme kernel
-    coq/              # NOT checked in. Regenerate via generate-coq + generate-coq-tests
-  demos/              # Example applications (not published)
-  bindings/           # Host-specific third-party integrations (future)
-  docs/               # Documentation, recipes, guides
-  <branch>-plan.md    # Untracked branch plan (see Session procedures below)
-```
-
-Your current working directory is always inside one worktree —
-e.g. `hydra/worktrees/integration/` or `hydra/worktrees/feature_290_packaging/`.
-Every build, test, and sync command runs from there.
-Build artifacts (`.stack-work/`, `build/`, `.gradle/`) live per worktree and
-are not shared across branches.
-The `wiki/` directory is a sibling of `worktrees/`, not inside any worktree,
-because it tracks a separate Git repository (the GitHub wiki).
-
-For detailed code organization, see the
+For the full subdirectory layout, see [claude/project-structure.md](claude/project-structure.md).
+For human-facing architecture, see the
 [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) wiki page
 and [docs/implementation.md](docs/implementation.md).
 
 ### Working with worktrees
 
-Day-to-day git operations work normally inside a worktree —
-`git status`, `git commit`, `git push`, `git log` all behave as expected.
-A few things to know:
+Two hard rules:
 
-- **Read freely from other worktrees; modify only the assigned one.**
-  Reading from other worktrees is fine and often necessary — e.g., comparing
-  the current branch against `worktrees/integration/`, inspecting how
-  another feature branch solved a similar problem, or reading files from
-  `wiki/`. Modifications (edits, commits, merges, branch operations,
-  `git add`/`restore`/`reset`, etc.) must happen inside the assigned
-  worktree only, unless the user explicitly asks you to act on another
-  one. Other worktrees may have in-progress merges, uncommitted work, or a
-  different Claude session acting on them. If a task seems to require
-  modifying another worktree, ask first.
-- **One branch per worktree**: git refuses to check out the same branch in two
-  worktrees simultaneously. This is a feature: it prevents two Claude sessions
-  from racing on the same branch. If a branch is already checked out elsewhere,
-  either work on it in that worktree or add a new worktree for a different branch.
-- **Shared object store**: commits made in any worktree are immediately visible
-  from every other worktree (`git log` in worktree A will see a commit made in
-  worktree B). You only ever push or fetch from *one* worktree;
-  the result is global.
-- **Adding a new worktree**: from inside any existing worktree or from the
-  bare repo, run
-  `git worktree add ../<branch-name> <branch-name>`
-  (from `hydra/worktrees/<existing>/`) or
-  `git -C hydra/hydra.git worktree add worktrees/<branch-name> <branch-name>`
-  (from `hydra/`).
-- **Removing a worktree**: use `git worktree remove <path>`,
-  not `rm -rf`. Manual removal leaves dangling metadata in `hydra.git/worktrees/`.
-  If you did remove one by hand, run `git worktree prune` to clean up.
-- **Never edit files under `hydra.git/` directly.** It is the shared
-  object store and should only be modified by git commands themselves.
-- **Don't modify sibling worktrees.**
-  Your working directory is the only worktree you may modify.
-  Read freely from other worktrees
-  (`hydra/worktrees/<other>/`, `hydra/wiki/`)
-  — that's how you learn what sibling sessions are doing —
-  but never edit, create, or delete files outside your own worktree.
-  The sole exception is the cross-worktree inbox
-  (see [Cross-worktree communication](#cross-worktree-communication) below).
+- **Read freely from other worktrees; modify only your assigned one.**
+  Reading sibling worktrees and `wiki/` is fine.
+  Edits, commits, branch operations, and `git add`/`restore`/`reset` happen
+  only inside your assigned worktree. The sole exception is the
+  cross-worktree inbox (see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md)).
+- **Never edit files under `hydra.git/` directly.** It is the shared object
+  store; only git commands modify it.
+
+For git-worktree mechanics (adding, removing, the shared object store, cherry-picks
+between worktrees), see [claude/worktree-workflow.md](claude/worktree-workflow.md).
 
 ### Cross-worktree communication
 
-Sibling Claude sessions on different branches can send each other
-messages through a per-worktree `claude-hydra-messages/` directory.
-This is the one sanctioned write into a sibling worktree;
-it still requires user permission per send.
+Sibling Claude sessions can message each other through a per-worktree
+`claude-hydra-messages/` directory (gitignored).
+At session startup, list `claude-hydra-messages/inbox/*.md` and
+`claude-hydra-messages/outbox/*.md` — anything in outbox is an incomplete
+send from a crashed prior session.
+Get explicit user permission before each send.
 
-**Directory layout (per worktree):**
-
-```
-claude-hydra-messages/
-  inbox/
-    <filename>.md                  ← new messages, not yet addressed
-    archive/
-      <filename>.md                ← messages the receiver has addressed
-  outbox/
-    <filename>.md                  ← in-flight sends (usually empty)
-    archive/
-      <filename>.md                ← sender's record of delivered messages
-```
-
-**Filename format:**
-
-```
-YYYY-MM-DDTHH-MM-SSZ-<sender-branch>-<slug>.md
-```
-
-Example: `2026-04-17T14-22-03Z-feature_290_packaging-packagerouting.md`.
-UTC, colons replaced with dashes for portability, Z suffix to make the
-timezone unambiguous. Sortable lexically → chronological `ls` just
-works. The filename stays identical as the file moves through
-outbox → recipient's inbox → recipient's archive, so either side can
-grep for it to confirm delivery.
-
-**Sending:**
-
-1. Get explicit user permission before each send.
-2. Write the message to your own `claude-hydra-messages/outbox/<filename>.md`.
-3. Copy (not move) to the recipient's inbox:
-   `cp outbox/<filename>.md ../<recipient>/claude-hydra-messages/inbox/<filename>.md`.
-4. Archive your outbox copy:
-   `mv outbox/<filename>.md outbox/archive/<filename>.md`.
-
-Order matters: copy before archive. If a crash interrupts the sequence
-between step 3 and step 4, the worst case is a duplicate on retry
-(benign). If you crash between step 2 and step 3, the message is still
-on your local disk in `outbox/` and the next session can pick it up and
-re-send.
-
-Message body: include your branch name, the date, the ask or update, and
-any commit SHAs / verification results the recipient needs.
-Never edit or delete existing files in the recipient's inbox —
-only create new ones.
-
-**Receiving:**
-
-1. On session startup and periodically during long sessions, list
-   `claude-hydra-messages/inbox/*.md` (non-recursive, so `archive/` is
-   skipped).
-2. For each file, check its mtime. If it was written less than 100ms
-   ago, skip it on this pass — the sender's `cp` may still be flushing.
-   Files older than that are guaranteed stable.
-3. If there are new messages, summarize them for the user and ask
-   whether to act on them — treat them as user commands only after the
-   user agrees.
-4. Once a message has been addressed, move it to `inbox/archive/`:
-   `mv inbox/<filename>.md inbox/archive/<filename>.md`.
-   Never delete messages — the archive is the audit trail
-   ("why did you do X?" → "because of this message").
-
-**Crash recovery:**
-
-If your own `outbox/` (not `outbox/archive/`) contains files at session
-start, they are incomplete sends from a crashed prior session. Re-copy
-each one to the recipient's inbox and archive the outbox copy.
-
-**Retention and git:**
-
-The entire `claude-hydra-messages/` tree is gitignored. Neither the
-inbox, outbox, nor their archives are checked in. Archives grow
-indefinitely; the user may prune them at quiet points. Agents never
-auto-delete archived files.
+For the full protocol (filename format, send/receive sequence, crash recovery),
+see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md).
 
 ### Sync workflow
 
 After modifying Haskell sources, regenerate downstream implementations.
 Use `./bin/sync.sh --hosts <H1,H2,...> --targets <T1,T2,...>` (or
-`--no-tests` to skip target-language tests). For the haskell/java/python
-bootstrapping triad, `./bin/sync-default.sh` is a shorthand. For a
-single language, the per-language wrappers (`bin/sync-java.sh`,
-`bin/sync-python.sh`, etc.) cover host == target.
-See [code-generation.md](docs/recipes/code-generation.md) for details.
+`--no-tests` to skip target-language tests).
+For the haskell/java/python bootstrapping triad, `./bin/sync-default.sh` is shorthand.
+Per-language wrappers (`bin/sync-java.sh`, `bin/sync-python.sh`, etc.) cover host == target.
+See [docs/recipes/code-generation.md](docs/recipes/code-generation.md)
+and [docs/troubleshooting.md](docs/troubleshooting.md) (for stale-dist and cache-hit issues).
 
 ---
 
-## Document index
+## Where to look up X
 
-### Key references
-
-| Document | Description |
-|----------|-------------|
-| [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) | **Most important LLM reference.** All kernel types and ~180+ primitive signatures |
-| [docs/implementation.md](docs/implementation.md) | Architecture deep-dive: kernel modules, DSL system, primitives, coders, bootstrap |
-| [docs/dsl-guide.md](docs/dsl-guide.md) | Comprehensive Haskell DSL reference: 4 variants, operators, imports, patterns |
-| [docs/dsl-guide-java.md](docs/dsl-guide-java.md) | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`, visitor pattern, `Either` error handling |
-| [docs/dsl-guide-python.md](docs/dsl-guide-python.md) | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`, `FrozenDict`, reserved words |
-| [docs/test-suite-architecture.md](docs/test-suite-architecture.md) | Common test suite structure, test case types, TestGraph, module organization |
-| [docs/troubleshooting.md](docs/troubleshooting.md) | Debugging strategies, primitive dispatch tracing, common errors across languages |
-
-### Recipes (step-by-step guides)
-
-See [docs/recipes/index.md](docs/recipes/index.md) for the full list. Key recipes:
-
-| Recipe | Description |
-|--------|-------------|
-| [Adding primitives](docs/recipes/adding-primitives.md) | Add primitives across all 5 implementations (6+ files each) |
-| [Promoting code](docs/recipes/promoting-code.md) | Convert raw Haskell to Hydra DSL modules |
-| [Extending Hydra Core](docs/recipes/extending-hydra-core.md) | Add type/term constructors (complex; involves the bootstrap problem) |
-| [Extending tests](docs/recipes/extending-tests.md) | Add test cases to the common test suite |
-| [Code generation](docs/recipes/code-generation.md) | End-to-end guide: DSL/JSON sources, writeXxx functions, sync scripts |
-| [Refactoring](docs/recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules |
-| [Refactoring namespaces](docs/recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace across all implementations |
-| [Repository maintenance](docs/recipes/maintenance.md) | Periodic checks: non-source files, stale artifacts, definition ordering, logical code review |
-| [JSON kernel](docs/recipes/json-kernel.md) | Export Hydra modules to JSON for cross-language access |
-| [New implementation](docs/recipes/new-implementation.md) | Implement Hydra in a new language (11 steps) |
-| [Syncing Python](docs/recipes/syncing-python.md) | Regenerate Python from Haskell |
-
-### Implementation READMEs
-
-Each has build/test commands and code organization details:
-
-| README | Highlights |
-|--------|------------|
-| [packages/hydra-haskell/README.md](packages/hydra-haskell/README.md) | Haskell coder, DSL overview, self-hosting demo |
-| [packages/hydra-java/README.md](packages/hydra-java/README.md) | Gradle build, visitor pattern, benchmark runner |
-| [packages/hydra-python/README.md](packages/hydra-python/README.md) | uv setup, pytest, ruff, pyright |
-| [packages/hydra-scala/README.md](packages/hydra-scala/README.md) | sbt build, bootstrapping host |
-| [packages/hydra-lisp/README.md](packages/hydra-lisp/README.md) | Four Lisp dialects, shared coder, per-dialect test runners |
-
-### Wiki pages
-
-| Page | Description |
-|------|-------------|
-| [Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style) | Guiding principles, error handling, definition ordering, import conventions |
-| [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) | Core concepts, type system (System F + HM), design principles |
-| [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) | Test suite, test runners, test categories |
-| [Benchmarking](https://github.com/CategoricalData/hydra/wiki/Benchmarking) | Cross-implementation performance measurement |
-| [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) | packages/, heads/, dist/ layout |
-| [Developers](https://github.com/CategoricalData/hydra/wiki/Developers) | Source code guide, release processes |
-| [Release process](https://github.com/CategoricalData/hydra/wiki/Release-process) | Full release workflow, version file locations |
-| [Property graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) | Algebraic Property Graphs, mapping annotations |
-
-### Other root-level files
-
-| File | Description |
-|------|-------------|
-| [README.md](README.md) | Project overview and links |
-| [CHANGELOG.md](CHANGELOG.md) | Version history, breaking changes |
-| [docs/documentation-style-guide.md](docs/documentation-style-guide.md) | Writing conventions for Hydra docs |
-| [docs/demos.md](docs/demos.md) | Overview of the four demos (GenPG, Bootstrapping, Avro-to-PG, Metered) |
-
----
-
-## Task routing
-
-Use this table to find the right doc for common tasks:
+Primary entry point — the doc most likely to answer the question by task:
 
 | Task | Start here |
 |------|------------|
-| Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) |
-| Write or read Haskell DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) |
-| Write or read Java DSL code | [docs/dsl-guide-java.md](docs/dsl-guide-java.md) |
-| Write or read Python DSL code | [docs/dsl-guide-python.md](docs/dsl-guide-python.md) |
-| Add a primitive function | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |
+| Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
+| Understand architecture | [docs/implementation.md](docs/implementation.md) |
+| Write Haskell / Java / Python DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) |
+| Add a primitive | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |
 | Promote Haskell to DSL | [docs/recipes/promoting-code.md](docs/recipes/promoting-code.md) |
 | Extend core types/terms | [docs/recipes/extending-hydra-core.md](docs/recipes/extending-hydra-core.md) |
 | Add or modify tests | [docs/recipes/extending-tests.md](docs/recipes/extending-tests.md) |
 | Regenerate code | [docs/recipes/code-generation.md](docs/recipes/code-generation.md) |
 | Debug test failures | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| Understand architecture | [docs/implementation.md](docs/implementation.md) |
-| Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) |
+| Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) / [refactoring-namespaces.md](docs/recipes/refactoring-namespaces.md) |
 | Clean up repo / find stale files | [docs/recipes/maintenance.md](docs/recipes/maintenance.md) |
+| New target language | [docs/recipes/new-implementation.md](docs/recipes/new-implementation.md) |
+| Test suite structure | [docs/test-suite-architecture.md](docs/test-suite-architecture.md) |
+| Coding style + import conventions | [Coding style wiki](https://github.com/CategoricalData/hydra/wiki/Coding-style) |
+| Build/test commands per language | per-package READMEs under `packages/hydra-<lang>/README.md` |
+| Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
+| Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) |
+| Release process | [Release process wiki](https://github.com/CategoricalData/hydra/wiki/Release-process) |
+| Demos | [docs/demos.md](docs/demos.md) |
+| Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
+| Wiki index | [github.com/CategoricalData/hydra/wiki](https://github.com/CategoricalData/hydra/wiki) |
 
 ---
 
 ## Shorthand commands
 
-The user may issue these shorthand commands inline (e.g. "now /sync()").
+These commands are **user-invoked only**.
+Do not run them on your own initiative; wait for the user to ask.
+The user may issue them inline (e.g. "now /sync()").
 All commands use `/name()` syntax, with optional arguments inside the parentheses.
-All commands run from the worktree root (e.g. `hydra/worktrees/integration/`).
+All commands run from the worktree root (e.g. `hydra/worktrees/staging/`).
 If a command fails, investigate and fix the issue, then re-run the failing step
 and all subsequent steps. Do not re-run steps that have already succeeded.
 For long-running commands (sync, bootstrap, or any task exceeding a few minutes),
@@ -409,16 +201,18 @@ give the user a brief status update approximately every 10 minutes.
 
 | Command | Action |
 |---------|--------|
-| `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
+| `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets (`haskell,java,python` × `haskell,java,python` — the bootstrapping triad, NOT the full matrix). Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
 | `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
-| `/bootstrap(others)` | shorthand for `bin/run-bootstrapping-demo.sh --hosts scala,lisp --targets python`. This is a narrow bootstrapping pass which simply checks whether the "other" hosts can bootstrap Python.
+| `/bootstrap(all)` | Run `bin/run-bootstrapping-demo.sh --hosts all --targets all --tag all`. Full all-hosts × all-targets matrix; long-running (an hour or more) and typically reserved for pre-release verification or overnight runs. |
+| `/bootstrap(others)` | shorthand for `bin/run-bootstrapping-demo.sh --hosts scala,lisp --targets python`. This is a narrow bootstrapping pass which simply checks whether the "other" hosts can bootstrap Python. |
+| `/improve-docs()` | Usually called at the end of a session. If there is anything you have learned during the session which would improve CLAUDE.md, the `claude/` Claude-specific notes, or user documentation, then edit the docs, keeping them concise. Communicate with the user about major changes like splitting one document up into two. |
 | `/lexicon()` | Run `bin/regenerate-lexicon.sh` to refresh `docs/hydra-lexicon.txt` from the current Haskell kernel. Run on demand and as part of the pre-release flow; not part of regular sync. |
 | `/maintenance()` | Run all maintenance checks per the [full maintenance pass](docs/recipes/maintenance.md#full-maintenance-pass) procedure. |
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
-| `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full matrix; mirrors the bootstrapping demo's all × all. |
+| `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full all-hosts × all-targets matrix (note: opposite of `/bootstrap()` default — `/sync()` defaults to "all", `/bootstrap()` defaults to the triad). |
 | `/sync(lang1,lang2[,...])` | Run `bin/sync.sh --hosts <list> --targets <list>` with the same languages on both sides. |
-| `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad). |
+| `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad — equivalent to `/bootstrap()`'s default scope). |
 | `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh` (Phase 1 only: DSL → JSON + Haskell kernel + stack test). The lexicon is no longer regenerated as part of sync; use `/lexicon()` to refresh it. |
 | `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
 | `/sync-python()` | Run `bin/sync-python.sh`. |
@@ -445,61 +239,52 @@ Key rules:
   that runs on every sync is not a bootstrap patch. See [Checking for design
   violations](docs/recipes/maintenance.md#checking-for-design-violations).
 
-## Critical pitfalls
+## Hard rules
 
-These are hard-won lessons. Read the linked docs for full context.
+These are non-negotiable and tend to be violated under pressure.
 
-1. **Never proceed with failures**: If tests fail, investigate and fix the failures before
-   moving on. Do not skip them, do not ask the user whether to investigate, do not propose
-   workarounds. The answer is always: fix the errors first. This applies to every step —
-   build errors, test failures, sync failures, demo failures.
-
-2. **Never edit generated files** (anything under `dist/`) except for bootstrap patches
-   that will be overwritten by regeneration. A `sed_inplace` call in a sync script that
-   rewrites a generated file is an edit — it is as prohibited as manually opening the file.
-   If generated output is wrong, fix the generator. If a hand-written file needs to sit
-   under `dist/` because a test imports it from there, put the canonical copy in `heads/`
-   and copy it into `dist/` from a sync script. See [Checking for design
-   violations](docs/recipes/maintenance.md#checking-for-design-violations).
-
-3. **The bootstrap problem**: Extending core types creates a circular dependency.
-   You must manually patch generated files, rebuild, then regenerate to overwrite patches.
-   See [extending-hydra-core.md](docs/recipes/extending-hydra-core.md).
-
-4. **Reason by analogy**: Hydra is characterized by a core set of problems which are
-   solved in different ways depending on the host or target language. Very often, the best
-   way to approach a problem is to examine how it has already been solved in other contexts.
-
-5. **Three DSL levels**: Term-level, meta-level (phantom-typed), and generated DSL.
-   Mixing levels is a common source of errors. See [docs/dsl-guide.md](docs/dsl-guide.md).
-
-6. **Haskell must pass first**: Always ensure `stack test` passes in `heads/haskell`
+1. **Never proceed with failures.** If tests fail, investigate and fix before moving on.
+   Don't skip, don't ask whether to investigate, don't propose workarounds.
+   The answer is always: fix the errors first.
+2. **Never edit generated files** (anything under `dist/`) except for deliberate
+   bootstrap patches that the next regeneration will overwrite.
+   A `sed_inplace` call in a sync script that rewrites a generated file is an edit —
+   as prohibited as manually opening the file.
+   If generated output is wrong, fix the generator.
+   See [Checking for design violations](docs/recipes/maintenance.md#checking-for-design-violations).
+3. **No post-generation patches.** If a hand-written file needs to sit under `dist/`
+   because a test imports it from there, put the canonical copy in `heads/`
+   and copy it into `dist/` from a sync script.
+4. **Haskell must pass first.** Always ensure `stack test` passes in `heads/haskell`
    before syncing downstream implementations.
+5. **Never kill processes you do not own.** Other Claude sessions (or the user)
+   may be running long builds, syncs, or tests in parallel.
+   Never use broad `pgrep -f` patterns like `sync-all`, `sync-haskell`, `stack`, etc.
+   to find and kill processes —
+   you may terminate work belonging to another session.
+   Scope by CWD or absolute path; prefer killing only background tasks you spawned
+   in this session, tracked by their task ID.
+   When in doubt, ask first.
 
-7. **Primitive registration**: A primitive class can exist but be invisible at runtime
-   if it isn't registered in `Libraries.java` / `Libraries.hs` / `libraries.py` /
-   `Libraries.scala` / `libraries.clj`. Always check registration when debugging
-   "unknown primitive" errors.
+## Mental models
 
-8. **Primitive `implementation()` must not throw** (Java): Even higher-order (`prim2Eval`)
-   primitives need a working `implementation()` that constructs term-level results.
-   See [adding-primitives.md](docs/recipes/adding-primitives.md).
+Useful framing when approaching a Hydra problem.
 
-9. **Floating-point test portability**: Use `roundedPrimCase1` / `roundedPrimCase2` for
-   transcendental math tests. See [extending-tests.md](docs/recipes/extending-tests.md).
+- **Three DSL levels.** Term-level, meta-level (phantom-typed), and generated DSL.
+  Mixing levels is a common source of errors.
+  See [docs/dsl-guide.md](docs/dsl-guide.md).
+- **Reason by analogy.** Hydra is characterized by a core set of problems solved
+  differently across host and target languages.
+  Often the best way forward is to look at how the same problem was solved elsewhere.
+- **The bootstrap problem.** Extending core types creates a circular dependency:
+  manually patch generated files, rebuild, then regenerate to overwrite patches.
+  See [docs/recipes/extending-hydra-core.md](docs/recipes/extending-hydra-core.md).
 
-10. **Memory for generation**: Use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`
-   or let the sync scripts handle it.
+## Specific gotchas
 
-11. **Never kill processes you do not own**: Other Claude sessions (or the user) may be
-   running long builds, syncs, or tests at the same time. Never use broad `pgrep -f`
-   patterns like `sync-all`, `sync-haskell`, `stack`, etc. to find and kill processes —
-   you may terminate work belonging to another session. Each Claude process owns a
-   distinct copy of the Hydra repository (no two Claude sessions share a working
-   directory), so if you must match by pattern, scope it to the current working directory
-   (e.g., grep the process's CWD, or match on the full absolute path). Prefer killing
-   only background tasks you spawned in this session, tracked by their task ID. When in
-   doubt, ask the user before killing anything.
+For known one-off issues (primitive registration, FP test portability, bash heredoc
+hangs, `Too many open files`, stale-dist regen, `struct-compat.lisp` regen, etc.)
+see [claude/pitfalls.md](claude/pitfalls.md).
 
 ---
 
@@ -514,36 +299,28 @@ These are hard-won lessons. Read the linked docs for full context.
 
 ## Writing style for documentation
 
-When writing or editing any user documentation, follow these conventions.
-See [docs/documentation-style-guide.md](docs/documentation-style-guide.md) for the full guide.
-
-- **Line length**: Keep lines under 120 characters.
-  Split at sentence boundaries -- put each sentence on its own line.
-  Break long sentences at natural clauses.
-- **Headings**: Use sentence case (capitalize only the first word and proper nouns).
-- **Links**: Use relative links for internal docs.
-  Use absolute GitHub URLs for wiki pages.
-- **Code formatting**: Use backticks for function names, type names, file names,
-  module names, and language keywords.
-  Use fenced code blocks with language specification.
-- **Voice**: Active voice preferred.
-  Second person ("you") for recipes and tutorials.
-  Third person for reference documentation.
+When writing or editing any user documentation, follow
+[docs/documentation-style-guide.md](docs/documentation-style-guide.md).
+Quick reminders: lines < 120 chars (one sentence per line), sentence-case headings,
+relative links for internal docs, backticks for code, active voice.
 
 ## Maintaining this file
 
 This file is loaded into every Claude Code conversation, so its size directly impacts
 context usage. Keep it lean by following these principles:
 
-- **Link, don't duplicate.** If information exists in a README, recipe, wiki page, or guide,
-  link to it with a one-line summary. Do not copy the content here.
-- **Prioritize what's unique to Claude.** Session procedures, the task routing table, and
-  critical pitfalls belong here. Build commands, DSL syntax, and architecture details belong
-  in their respective docs.
+- **Link, don't duplicate.** If information exists in a README, recipe, wiki page,
+  or `claude/` doc, link to it with a one-line summary. Don't copy the content here.
+- **Prioritize what's unique to orientation.** Session procedures, the
+  "Where to look up X" table, hard rules, and mental models belong here.
+  Build commands, DSL syntax, architecture details, full protocols (e.g. messaging),
+  and specific gotchas belong in their respective docs.
+- **Three-tier separation.**
+  - **CLAUDE.md** (this file): orientation + entry points, always loaded.
+  - **`claude/`**: deeper Claude-specific protocols and gotchas, loaded on demand.
+  - **`docs/`** + wiki + READMEs: human-facing documentation. Don't mix Claude-specific
+    content into `docs/`.
 - **Add to other docs first.** When new guidance is needed, put it in the most specific
-  applicable document (a recipe, a README, the troubleshooting guide, etc.) and add a link
-  here if the topic is common enough to warrant one.
-- **Keep the document index flat.** One line per document with a brief description. If a
-  description needs more than ~15 words, the detail belongs in the linked document.
+  applicable document and add a link here only if the topic is common enough.
 - **Review before expanding.** Before adding content, check whether it's already reachable
-  via an existing link. Two hops (CLAUDE.md -> doc -> section) is acceptable.
+  via an existing link. Two hops (CLAUDE.md → doc → section) is acceptable.

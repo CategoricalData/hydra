@@ -11,14 +11,8 @@ if [ -z "$OUTPUT_DIR" ]; then
     exit 1
 fi
 
-# Patch TestGraph.java to use TestEnv (real graph with primitives) instead of emptyGraph.
-# TODO: Replace this with hydra.test.environment module.
-echo "Patching TestGraph.java..."
-TESTGRAPH="$OUTPUT_DIR/src/test/java/hydra/test/TestGraph.java"
-if [ -f "$TESTGRAPH" ]; then
-    sed -i '' 's/return hydra.Lexical.emptyGraph();/return hydra.TestEnv.testGraph();/' "$TESTGRAPH"
-    sed -i '' 's/return hydra.Lexical.emptyContext();/return hydra.TestEnv.testContext();/' "$TESTGRAPH"
-fi
+# TestGraph.java Lexical.empty post-generation patch eliminated: the DSL
+# now emits TestEnv refs directly. Sed patterns matched nothing.
 
 echo "Building Java target..."
 cd "$OUTPUT_DIR"

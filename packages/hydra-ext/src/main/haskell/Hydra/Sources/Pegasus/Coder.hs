@@ -101,8 +101,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns],
-            moduleTypeDependencies = (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"}
   where
     definitions = [
@@ -384,7 +383,7 @@ moduleToPdl = def "moduleToPdl" $
       (lambda "pair" $
         pair
           (Pairs.first (var "pair"))
-          (Serialization.printExpr @@ (Serialization.parenthesize @@ (PegasusSerdeSource.exprSchemaFile @@ Pairs.second (var "pair")))))
+          (Serialization.printExpr @@ (Serialization.parenthesize @@ (PegasusSerdeSource.schemaFileToExpr @@ Pairs.second (var "pair")))))
       (Maps.toList (var "files"))))
 
 moduleToPegasusSchemas :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error (M.Map FilePath PDL.SchemaFile))

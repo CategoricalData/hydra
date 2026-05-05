@@ -9,9 +9,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An execution context for tracing and diagnostics, threaded through function calls"}}}],
+                  "value": {"literal": {"string": "An execution context for tracing and diagnostics, threaded through function calls"}}}],
               "body": {
                 "record": [
                   {
@@ -21,18 +19,13 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A stack of context labels describing the current execution path"}}}],
+                            "value": {"literal": {"string": "A stack of context labels describing the current execution path"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}}},
                   {
                     "name": "messages",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}}},
                   {
                     "name": "other",
@@ -41,13 +34,8 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"variable": "hydra.core.Name"},
-                            "values": {"variable": "hydra.core.Term"}}}}}}]}}},
+                            "value": {"literal": {"string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -58,9 +46,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A particular domain object (such as an error) together with an execution context"}}}],
+                  "value": {"literal": {"string": "A particular domain object (such as an error) together with an execution context"}}}],
               "body": {
                 "forall": {
                   "body": {
@@ -69,24 +55,16 @@
                         "name": "object",
                         "type": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A domain object; typically an error"}}}],
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "A domain object; typically an error"}}}],
                             "body": {"variable": "e"}}}},
                       {
                         "name": "context",
                         "type": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {"string": "The execution context at the point of capture"}}}],
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The execution context at the point of capture"}}}],
                             "body": {"variable": "hydra.context.Context"}}}}]},
                   "parameter": "e"}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "Execution context for tracing and diagnostics",
-  "namespace": "hydra.context",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.context"}

@@ -35,8 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, HoistingModule.ns, Lexical.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, HoistingModule.ns, Lexical.ns] ++ kernelTypesNamespaces,
             moduleDescription = Just "Test cases for subterm hoisting and case statement hoisting"}
   where
     definitions = [Phantoms.toDefinition allTests]

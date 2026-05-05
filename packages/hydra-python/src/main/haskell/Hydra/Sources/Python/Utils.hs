@@ -101,8 +101,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns],
-            moduleTypeDependencies = (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Python utilities for constructing Python syntax trees"}
   where
     definitions = [
@@ -769,7 +768,7 @@ typeAliasStatement310 :: TTermDefinition (Py.Name -> [Py.TypeParameter] -> Maybe
 typeAliasStatement310 = def "typeAliasStatement310" $
   doc "Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = \"TypeExpression\"" $
   "name" ~> "_tparams" ~> "mcomment" ~> "tyexpr" ~>
-    "quotedExpr" <~ (doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "tyexpr"))) $
+    "quotedExpr" <~ (doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.expressionToExpr @@ var "tyexpr"))) $
     annotatedStatement @@ var "mcomment" @@
       (pyAssignmentToPyStatement @@
         (PyDsl.assignmentTyped $
@@ -785,7 +784,7 @@ unionTypeClassStatements310 = def "unionTypeClassStatements310" $
   "name" ~> "mcomment" ~> "tyexpr" ~> "extraStmts" ~>
     "nameStr" <~ (PyDsl.unName $ var "name") $
     "metaName" <~ (PyDsl.name $ string "_" ++ var "nameStr" ++ string "Meta") $
-    "docString" <~ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "tyexpr")) $
+    "docString" <~ (Serialization.printExpr @@ (PySerde.expressionToExpr @@ var "tyexpr")) $
     -- return object statement
     "returnObject" <~ (pySimpleStatementToPyStatement @@
       (PyDsl.simpleStatementReturn $

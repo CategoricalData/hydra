@@ -9,11 +9,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Generate a constant name for a field definition"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a constant name for a field definition"}}}],
                     "body": {
                       "lambda": {
                         "body": {
@@ -24,22 +20,13 @@
                                   "wrap": {
                                     "body": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "fname"},
-                                            "function": {"unwrap": "hydra.core.Name"}}},
+                                        "argument": {"application": {"argument": {"variable": "fname"}, "function": {"unwrap": "hydra.core.Name"}}},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "inject": {
-                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
-                                                "typeName": "hydra.util.CaseConvention"}},
+                                            "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                             "function": {
                                               "application": {
-                                                "argument": {
-                                                  "inject": {
-                                                    "field": {"name": "camel", "term": {"unit": {}}},
-                                                    "typeName": "hydra.util.CaseConvention"}},
+                                                "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
                                     "typeName": "hydra.python.syntax.Name"}},
                                 "domain": {"variable": "hydra.core.Name"},
@@ -55,10 +42,7 @@
             "function": {
               "codomain": {
                 "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.python.syntax.Name"},
-                      "domain": {"variable": "hydra.core.Name"}}},
+                  "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}},
@@ -71,19 +55,12 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Generate a constant name for a type definition"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a constant name for a type definition"}}}],
                     "body": {
                       "lambda": {
                         "body": {
                           "lambda": {
-                            "body": {
-                              "wrap": {
-                                "body": {"literal": {"string": "TYPE_"}},
-                                "typeName": "hydra.python.syntax.Name"}},
+                            "body": {"wrap": {"body": {"literal": {"string": "TYPE_"}}, "typeName": "hydra.python.syntax.Name"}},
                             "domain": {"variable": "t1"},
                             "parameter": "tname"}},
                         "domain": {"variable": "t0"},
@@ -93,10 +70,7 @@
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.python.syntax.Name"},
-                  "domain": {"variable": "t1"}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}},
     {
@@ -104,28 +78,16 @@
         "name": "hydra.python.names.encodeEnumValue",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Encode a name as a Python enum value (UPPER_SNAKE case)"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a Python enum value (UPPER_SNAKE case)"}}}],
             "body": {
               "application": {
-                "argument": {
-                  "inject": {
-                    "field": {"name": "upperSnake", "term": {"unit": {}}},
-                    "typeName": "hydra.util.CaseConvention"}},
+                "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                 "function": {
-                  "application": {
-                    "argument": {"literal": {"boolean": false}},
-                    "function": {"variable": "hydra.python.names.encodeName"}}}}}}},
+                  "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.names.encodeName"}}}}}}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.python.syntax.Name"},
-                  "domain": {"variable": "hydra.core.Name"}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
           "variables": []}}},
     {
@@ -133,11 +95,7 @@
         "name": "hydra.python.names.encodeFieldName",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Encode a name as a Python field name (lower_snake case)"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a Python field name (lower_snake case)"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -150,14 +108,9 @@
                             "argument": {"variable": "env"},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "inject": {
-                                    "field": {"name": "lowerSnake", "term": {"unit": {}}},
-                                    "typeName": "hydra.util.CaseConvention"}},
+                                "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                 "function": {
-                                  "application": {
-                                    "argument": {"literal": {"boolean": false}},
-                                    "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
+                                  "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "fname"}},
                 "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
@@ -165,10 +118,7 @@
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.python.syntax.Name"},
-                  "domain": {"variable": "hydra.core.Name"}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
           "variables": []}}},
     {
@@ -176,10 +126,7 @@
         "name": "hydra.python.names.encodeName",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a Hydra name as a Python name"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra name as a Python name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -196,15 +143,10 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "env"},
-                                        "function": {
-                                          "project": {
-                                            "field": "namespaces",
-                                            "typeName": "hydra.python.environment.PythonEnvironment"}}}},
+                                        "function": {"project": {"field": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                     "typeScheme": {
                                       "body": {
-                                        "application": {
-                                          "argument": {"variable": "hydra.python.syntax.DottedName"},
-                                          "function": {"variable": "hydra.packaging.Namespaces"}}},
+                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusPair",
@@ -213,14 +155,10 @@
                                         "argument": {"variable": "namespaces"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
+                                            "body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {
-                                      "body": {
-                                        "pair": {
-                                          "first": {"variable": "hydra.packaging.Namespace"},
-                                          "second": {"variable": "hydra.python.syntax.DottedName"}}},
+                                      "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.python.syntax.DottedName"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusNs",
@@ -229,10 +167,7 @@
                                         "argument": {"variable": "focusPair"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.pairs.first"},
-                                                "type": {"variable": "hydra.packaging.Namespace"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                                   {
@@ -242,52 +177,31 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "env"},
-                                            "function": {
-                                              "project": {
-                                                "field": "boundTypeVariables",
-                                                "typeName": "hydra.python.environment.PythonEnvironment"}}}},
+                                            "function": {"project": {"field": "boundTypeVariables", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.pairs.second"},
-                                                "type": {"list": {"variable": "hydra.core.Name"}}}},
-                                            "type": {
-                                              "map": {
-                                                "keys": {"variable": "hydra.core.Name"},
-                                                "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.Name"}}}},
+                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
                                     "typeScheme": {
-                                      "body": {
-                                        "map": {
-                                          "keys": {"variable": "hydra.core.Name"},
-                                          "values": {"variable": "hydra.python.syntax.Name"}}},
+                                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}},
                                       "variables": []}},
                                   {
                                     "name": "qualName",
-                                    "term": {
-                                      "application": {
-                                        "argument": {"variable": "name"},
-                                        "function": {"variable": "hydra.names.qualifyName"}}},
-                                    "typeScheme": {
-                                      "body": {"variable": "hydra.packaging.QualifiedName"},
-                                      "variables": []}},
+                                    "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.qualifyName"}}},
+                                    "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
                                   {
                                     "name": "mns",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "qualName"},
-                                        "function": {
-                                          "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                                    "typeScheme": {
-                                      "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
-                                      "variables": []}},
+                                        "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                    "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
                                   {
                                     "name": "local",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "qualName"},
-                                        "function": {
-                                          "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                        "function": {"project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "pyLocal",
@@ -301,10 +215,7 @@
                                                 "argument": {"variable": "conv"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "inject": {
-                                                        "field": {"name": "camel", "term": {"unit": {}}},
-                                                        "typeName": "hydra.util.CaseConvention"}},
+                                                    "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
                                         "function": {"variable": "hydra.python.names.sanitizePythonName"}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
@@ -318,54 +229,30 @@
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "nsVal"},
-                                                        "function": {"unwrap": "hydra.packaging.Namespace"}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "."}},
-                                                        "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                                    "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                    "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {"name": "lowerSnake", "term": {"unit": {}}},
-                                                            "typeName": "hydra.util.CaseConvention"}},
+                                                        "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {
-                                                              "inject": {
-                                                                "field": {"name": "camel", "term": {"unit": {}}},
-                                                                "typeName": "hydra.util.CaseConvention"}},
+                                                            "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                             "function": {"variable": "hydra.formatting.convertCase"}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                            "type": {"literal": {"string": {}}}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
                                                         "type": {"literal": {"string": {}}}}}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "."}},
-                                                "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                            "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                         "domain": {"variable": "hydra.packaging.Namespace"},
                                         "parameter": "nsVal"}},
                                     "typeScheme": {
-                                      "body": {
-                                        "function": {
-                                          "codomain": {"literal": {"string": {}}},
-                                          "domain": {"variable": "hydra.packaging.Namespace"}}},
+                                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.packaging.Namespace"}}},
                                       "variables": []}}],
                                 "body": {
                                   "application": {
-                                    "argument": {
-                                      "wrap": {
-                                        "body": {"variable": "pyLocal"},
-                                        "typeName": "hydra.python.syntax.Name"}},
+                                    "argument": {"wrap": {"body": {"variable": "pyLocal"}, "typeName": "hydra.python.syntax.Name"}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -378,18 +265,11 @@
                                                     "argument": {"variable": "name"},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.maps.lookup"},
-                                                            "type": {"variable": "hydra.core.Name"}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "hydra.python.syntax.Name"}}}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {
-                                                  "lambda": {
-                                                    "body": {"variable": "n"},
-                                                    "domain": {"variable": "hydra.python.syntax.Name"},
-                                                    "parameter": "n"}},
+                                                "argument": {"lambda": {"body": {"variable": "n"}, "domain": {"variable": "hydra.python.syntax.Name"}, "parameter": "n"}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -408,30 +288,20 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "pyLocal"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"literal": {"string": "."}},
-                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {
-                                                                                  "application": {"argument": {"variable": "nsVal"}, "function": {"variable": "pyNs"}}},
+                                                                                "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"variable": "pyNs"}}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                         "typeName": "hydra.python.syntax.Name"}},
                                                                     "domain": {"variable": "hydra.packaging.Namespace"},
                                                                     "parameter": "nsVal"}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {
-                                                                      "wrap": {
-                                                                        "body": {"variable": "pyLocal"},
-                                                                        "typeName": "hydra.python.syntax.Name"}},
+                                                                    "argument": {"wrap": {"body": {"variable": "pyLocal"}, "typeName": "hydra.python.syntax.Name"}},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                            "type": {"variable": "hydra.python.syntax.Name"}}},
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Name"}}},
                                                                         "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
                                                         "function": {
                                                           "application": {
@@ -443,19 +313,14 @@
                                                                       "application": {
                                                                         "argument": {"variable": "pyLocal"},
                                                                         "function": {
-                                                                          "application": {
-                                                                            "argument": {"literal": {"boolean": true}},
-                                                                            "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
+                                                                          "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "pyLocal"},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "hydra.python.names.useFutureAnnotations"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                                                                 "typeName": "hydra.python.syntax.Name"}},
                                                             "function": {
                                                               "application": {
@@ -466,27 +331,16 @@
                                                                       "application": {
                                                                         "argument": {"variable": "mns"},
                                                                         "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                                            "type": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}}}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                    "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                            "type": {"variable": "hydra.python.syntax.Name"}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Name"}}},
                                                         "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "isQualified"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}}}},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}}}},
                             "domain": {"variable": "hydra.core.Name"},
                             "parameter": "name"}},
                         "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
@@ -502,10 +356,7 @@
                 "function": {
                   "codomain": {
                     "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"variable": "hydra.python.syntax.Name"},
-                          "domain": {"variable": "hydra.core.Name"}}},
+                      "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
                   "domain": {"variable": "hydra.util.CaseConvention"}}},
               "domain": {"literal": {"boolean": {}}}}},
@@ -515,11 +366,7 @@
         "name": "hydra.python.names.encodeNameQualified",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Encode a name as a fully qualified Python name"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a fully qualified Python name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -532,15 +379,10 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "env"},
-                                "function": {
-                                  "project": {
-                                    "field": "namespaces",
-                                    "typeName": "hydra.python.environment.PythonEnvironment"}}}},
+                                "function": {"project": {"field": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                             "typeScheme": {
                               "body": {
-                                "application": {
-                                  "argument": {"variable": "hydra.python.syntax.DottedName"},
-                                  "function": {"variable": "hydra.packaging.Namespaces"}}},
+                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}},
                               "variables": []}},
                           {
                             "name": "focusPair",
@@ -549,14 +391,10 @@
                                 "argument": {"variable": "namespaces"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {
-                                      "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
+                                    "body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                             "typeScheme": {
-                              "body": {
-                                "pair": {
-                                  "first": {"variable": "hydra.packaging.Namespace"},
-                                  "second": {"variable": "hydra.python.syntax.DottedName"}}},
+                              "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.python.syntax.DottedName"}}},
                               "variables": []}},
                           {
                             "name": "focusNs",
@@ -565,10 +403,7 @@
                                 "argument": {"variable": "focusPair"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.pairs.first"},
-                                        "type": {"variable": "hydra.packaging.Namespace"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},
                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                             "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                           {
@@ -578,52 +413,31 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "env"},
-                                    "function": {
-                                      "project": {
-                                        "field": "boundTypeVariables",
-                                        "typeName": "hydra.python.environment.PythonEnvironment"}}}},
+                                    "function": {"project": {"field": "boundTypeVariables", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.pairs.second"},
-                                        "type": {"list": {"variable": "hydra.core.Name"}}}},
-                                    "type": {
-                                      "map": {
-                                        "keys": {"variable": "hydra.core.Name"},
-                                        "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.Name"}}}},
+                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}}}},
                             "typeScheme": {
-                              "body": {
-                                "map": {
-                                  "keys": {"variable": "hydra.core.Name"},
-                                  "values": {"variable": "hydra.python.syntax.Name"}}},
+                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}},
                               "variables": []}},
                           {
                             "name": "qualName",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "name"},
-                                "function": {"variable": "hydra.names.qualifyName"}}},
-                            "typeScheme": {
-                              "body": {"variable": "hydra.packaging.QualifiedName"},
-                              "variables": []}},
+                            "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.qualifyName"}}},
+                            "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
                           {
                             "name": "mns",
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {
-                                  "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "typeScheme": {
-                              "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
-                              "variables": []}},
+                                "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
+                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
                           {
                             "name": "local",
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {
-                                  "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                "function": {"project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "application": {
@@ -635,18 +449,11 @@
                                     "argument": {"variable": "name"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.maps.lookup"},
-                                            "type": {"variable": "hydra.core.Name"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
                                         "type": {"variable": "hydra.python.syntax.Name"}}}}}}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {"variable": "n"},
-                                    "domain": {"variable": "hydra.python.syntax.Name"},
-                                    "parameter": "n"}},
+                                "argument": {"lambda": {"body": {"variable": "n"}, "domain": {"variable": "hydra.python.syntax.Name"}, "parameter": "n"}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -659,28 +466,16 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "name"},
-                                                            "function": {"unwrap": "hydra.core.Name"}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"literal": {"string": "."}},
-                                                            "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                                        "argument": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.core.Name"}}},
+                                                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "hydra.python.names.sanitizePythonName"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.map"},
-                                                                "type": {"literal": {"string": {}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
                                                             "type": {"literal": {"string": {}}}}}}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"literal": {"string": "."}},
-                                                    "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                             "typeName": "hydra.python.syntax.Name"}},
                                         "function": {
                                           "application": {
@@ -692,19 +487,14 @@
                                                       "application": {
                                                         "argument": {"variable": "local"},
                                                         "function": {
-                                                          "application": {
-                                                            "argument": {"literal": {"boolean": true}},
-                                                            "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
+                                                          "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "local"},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "hydra.python.names.useFutureAnnotations"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                                                 "typeName": "hydra.python.syntax.Name"}},
                                             "function": {
                                               "application": {
@@ -715,19 +505,11 @@
                                                       "application": {
                                                         "argument": {"variable": "mns"},
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                            "type": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}}}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                    "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.maybes.maybe"},
-                                            "type": {"variable": "hydra.python.syntax.Name"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Name"}}},
                                         "type": {"variable": "hydra.python.syntax.Name"}}}}}}}}}}},
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "name"}},
@@ -736,10 +518,7 @@
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.python.syntax.Name"},
-                  "domain": {"variable": "hydra.core.Name"}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
           "variables": []}}},
     {
@@ -747,10 +526,7 @@
         "name": "hydra.python.names.encodeNamespace",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a namespace as a Python dotted name"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a namespace as a Python dotted name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -759,14 +535,8 @@
                       "application": {
                         "argument": {
                           "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "nsVal"},
-                                "function": {"unwrap": "hydra.packaging.Namespace"}}},
-                            "function": {
-                              "application": {
-                                "argument": {"literal": {"string": "."}},
-                                "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                            "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                            "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                         "function": {
                           "application": {
                             "argument": {
@@ -778,111 +548,75 @@
                                         "argument": {"variable": "part"},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "inject": {
-                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
-                                                "typeName": "hydra.util.CaseConvention"}},
+                                            "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                             "function": {
                                               "application": {
-                                                "argument": {
-                                                  "inject": {
-                                                    "field": {"name": "camel", "term": {"unit": {}}},
-                                                    "typeName": "hydra.util.CaseConvention"}},
+                                                "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
                                     "typeName": "hydra.python.syntax.Name"}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "part"}},
                             "function": {
                               "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.lists.map"},
-                                    "type": {"literal": {"string": {}}}}},
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
                                 "type": {"variable": "hydra.python.syntax.Name"}}}}}}},
                     "typeName": "hydra.python.syntax.DottedName"}},
                 "domain": {"variable": "hydra.packaging.Namespace"},
                 "parameter": "nsVal"}}}},
         "typeScheme": {
           "body": {
-            "function": {
-              "codomain": {"variable": "hydra.python.syntax.DottedName"},
-              "domain": {"variable": "hydra.packaging.Namespace"}}},
+            "function": {"codomain": {"variable": "hydra.python.syntax.DottedName"}, "domain": {"variable": "hydra.packaging.Namespace"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.python.names.encodeTypeVariable",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a type variable name (capitalized)"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type variable name (capitalized)"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "wrap": {
                     "body": {
                       "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "name"},
-                            "function": {"unwrap": "hydra.core.Name"}}},
+                        "argument": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.formatting.capitalize"}}},
                     "typeName": "hydra.python.syntax.Name"}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.python.syntax.Name"},
-              "domain": {"variable": "hydra.core.Name"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.python.names.sanitizePythonName",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Sanitize a string to be a valid Python name"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Sanitize a string to be a valid Python name"}}}],
             "body": {
               "application": {
                 "argument": {"variable": "hydra.python.language.pythonReservedWords"},
                 "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
         "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"literal": {"string": {}}},
-              "domain": {"literal": {"string": {}}}}},
+          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {
         "name": "hydra.python.names.termVariableReference",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Reference a term variable as a Python expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a term variable as a Python expression"}}}],
             "body": {
               "application": {
                 "argument": {"literal": {"boolean": false}},
                 "function": {
                   "application": {
-                    "argument": {
-                      "inject": {
-                        "field": {"name": "lowerSnake", "term": {"unit": {}}},
-                        "typeName": "hydra.util.CaseConvention"}},
+                    "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.python.syntax.Expression"},
-                  "domain": {"variable": "hydra.core.Name"}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Expression"}, "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
           "variables": []}}},
     {
@@ -890,28 +624,18 @@
         "name": "hydra.python.names.typeVariableReference",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Reference a type variable as a Python expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a type variable as a Python expression"}}}],
             "body": {
               "application": {
                 "argument": {"literal": {"boolean": false}},
                 "function": {
                   "application": {
-                    "argument": {
-                      "inject": {
-                        "field": {"name": "pascal", "term": {"unit": {}}},
-                        "typeName": "hydra.util.CaseConvention"}},
+                    "argument": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.python.syntax.Expression"},
-                  "domain": {"variable": "hydra.core.Name"}}},
+              "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Expression"}, "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
           "variables": []}}},
     {
@@ -920,11 +644,7 @@
         "term": {
           "annotated": {
             "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Whether to use __future__ annotations for forward references"}}}],
+              {"key": "description", "value": {"literal": {"string": "Whether to use __future__ annotations for forward references"}}}],
             "body": {"literal": {"boolean": true}}}},
         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
     {
@@ -932,10 +652,7 @@
         "name": "hydra.python.names.variableReference",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reference a variable as a Python expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a variable as a Python expression"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -958,10 +675,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "conv"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"literal": {"boolean": true}},
-                                                    "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
+                                                "function": {"application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.python.syntax.Name"}, "variables": []}},
                                   {
                                     "name": "unquoted",
@@ -991,10 +705,7 @@
                                                                             "fields": [
                                                                               {
                                                                                 "name": "lhs",
-                                                                                "term": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"maybe": null},
-                                                                                    "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                               {
                                                                                 "name": "rhs",
                                                                                 "term": {
@@ -1002,10 +713,7 @@
                                                                                     "fields": [
                                                                                       {
                                                                                         "name": "lhs",
-                                                                                        "term": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"maybe": null},
-                                                                                            "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                       {
                                                                                         "name": "rhs",
                                                                                         "term": {
@@ -1013,10 +721,7 @@
                                                                                             "fields": [
                                                                                               {
                                                                                                 "name": "lhs",
-                                                                                                "term": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"maybe": null},
-                                                                                                    "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                               {
                                                                                                 "name": "rhs",
                                                                                                 "term": {
@@ -1024,10 +729,7 @@
                                                                                                     "fields": [
                                                                                                       {
                                                                                                         "name": "lhs",
-                                                                                                        "term": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"maybe": null},
-                                                                                                            "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                       {
                                                                                                         "name": "rhs",
                                                                                                         "term": {
@@ -1035,10 +737,7 @@
                                                                                                             "fields": [
                                                                                                               {
                                                                                                                 "name": "lhs",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"maybe": null},
-                                                                                                                    "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                               {
                                                                                                                 "name": "rhs",
                                                                                                                 "term": {
@@ -1046,10 +745,7 @@
                                                                                                                     "fields": [
                                                                                                                       {
                                                                                                                         "name": "lhs",
-                                                                                                                        "term": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"maybe": null},
-                                                                                                                            "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                       {
                                                                                                                         "name": "rhs",
                                                                                                                         "term": {
@@ -1071,18 +767,12 @@
                                                                                                                                                 "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "simple",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "inject": {
-                                                                                                                                                        "field": {"name": "name", "term": {"variable": "pyName"}},
-                                                                                                                                                        "typeName": "hydra.python.syntax.Atom"}}},
+                                                                                                                                                    "term": {"inject": {"field": {"name": "name", "term": {"variable": "pyName"}}, "typeName": "hydra.python.syntax.Atom"}}},
                                                                                                                                                   "typeName": "hydra.python.syntax.Primary"}}}],
                                                                                                                                           "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                     {
                                                                                                                                       "name": "rhs",
-                                                                                                                                      "term": {
-                                                                                                                                        "typeApplication": {
-                                                                                                                                          "body": {"maybe": null},
-                                                                                                                                          "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                   "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                             "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                     "typeName": "hydra.python.syntax.Term"}}}],
@@ -1093,32 +783,22 @@
                                                                             "typeName": "hydra.python.syntax.BitwiseOr"}}},
                                                                       {
                                                                         "name": "rhs",
-                                                                        "term": {
-                                                                          "typeApplication": {
-                                                                            "body": {"list": []},
-                                                                            "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}],
+                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}],
                                                                     "typeName": "hydra.python.syntax.Comparison"}}},
                                                               "typeName": "hydra.python.syntax.Inversion"}}]},
                                                       "typeName": "hydra.python.syntax.Conjunction"}}]},
                                               "typeName": "hydra.python.syntax.Disjunction"}}},
                                         "typeName": "hydra.python.syntax.Expression"}},
-                                    "typeScheme": {
-                                      "body": {"variable": "hydra.python.syntax.Expression"},
-                                      "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.python.syntax.Expression"}, "variables": []}},
                                   {
                                     "name": "namespaces",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "env"},
-                                        "function": {
-                                          "project": {
-                                            "field": "namespaces",
-                                            "typeName": "hydra.python.environment.PythonEnvironment"}}}},
+                                        "function": {"project": {"field": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                     "typeScheme": {
                                       "body": {
-                                        "application": {
-                                          "argument": {"variable": "hydra.python.syntax.DottedName"},
-                                          "function": {"variable": "hydra.packaging.Namespaces"}}},
+                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusPair",
@@ -1127,14 +807,10 @@
                                         "argument": {"variable": "namespaces"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
+                                            "body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {
-                                      "body": {
-                                        "pair": {
-                                          "first": {"variable": "hydra.packaging.Namespace"},
-                                          "second": {"variable": "hydra.python.syntax.DottedName"}}},
+                                      "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.python.syntax.DottedName"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusNs",
@@ -1143,21 +819,13 @@
                                         "argument": {"variable": "focusPair"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.pairs.first"},
-                                                "type": {"variable": "hydra.packaging.Namespace"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
                                   {
                                     "name": "mns",
-                                    "term": {
-                                      "application": {
-                                        "argument": {"variable": "name"},
-                                        "function": {"variable": "hydra.names.namespaceOf"}}},
-                                    "typeScheme": {
-                                      "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
-                                      "variables": []}},
+                                    "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.namespaceOf"}}},
+                                    "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
                                   {
                                     "name": "sameNamespace",
                                     "term": {
@@ -1174,9 +842,7 @@
                                                       "application": {
                                                         "argument": {"variable": "ns"},
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                            "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                 "domain": {"variable": "hydra.packaging.Namespace"},
                                                 "parameter": "ns"}},
                                             "function": {
@@ -1184,10 +850,7 @@
                                                 "argument": {"literal": {"boolean": false}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                        "type": {"literal": {"boolean": {}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"boolean": {}}}}},
                                                     "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
                                     "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                                 "body": {
@@ -1221,10 +884,7 @@
                                                                                 "fields": [
                                                                                   {
                                                                                     "name": "lhs",
-                                                                                    "term": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"maybe": null},
-                                                                                        "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                   {
                                                                                     "name": "rhs",
                                                                                     "term": {
@@ -1232,10 +892,7 @@
                                                                                         "fields": [
                                                                                           {
                                                                                             "name": "lhs",
-                                                                                            "term": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"maybe": null},
-                                                                                                "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                           {
                                                                                             "name": "rhs",
                                                                                             "term": {
@@ -1243,10 +900,7 @@
                                                                                                 "fields": [
                                                                                                   {
                                                                                                     "name": "lhs",
-                                                                                                    "term": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"maybe": null},
-                                                                                                        "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                   {
                                                                                                     "name": "rhs",
                                                                                                     "term": {
@@ -1254,10 +908,7 @@
                                                                                                         "fields": [
                                                                                                           {
                                                                                                             "name": "lhs",
-                                                                                                            "term": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"maybe": null},
-                                                                                                                "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                           {
                                                                                                             "name": "rhs",
                                                                                                             "term": {
@@ -1265,10 +916,7 @@
                                                                                                                 "fields": [
                                                                                                                   {
                                                                                                                     "name": "lhs",
-                                                                                                                    "term": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {"maybe": null},
-                                                                                                                        "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                   {
                                                                                                                     "name": "rhs",
                                                                                                                     "term": {
@@ -1276,10 +924,7 @@
                                                                                                                         "fields": [
                                                                                                                           {
                                                                                                                             "name": "lhs",
-                                                                                                                            "term": {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {"maybe": null},
-                                                                                                                                "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                           {
                                                                                                                             "name": "rhs",
                                                                                                                             "term": {
@@ -1310,26 +955,17 @@
                                                                                                                                                                   "fields": [
                                                                                                                                                                     {
                                                                                                                                                                       "name": "value",
-                                                                                                                                                                      "term": {
-                                                                                                                                                                        "application": {
-                                                                                                                                                                          "argument": {"variable": "pyName"},
-                                                                                                                                                                          "function": {"unwrap": "hydra.python.syntax.Name"}}}},
+                                                                                                                                                                      "term": {"application": {"argument": {"variable": "pyName"}, "function": {"unwrap": "hydra.python.syntax.Name"}}}},
                                                                                                                                                                     {
                                                                                                                                                                       "name": "quoteStyle",
-                                                                                                                                                                      "term": {
-                                                                                                                                                                        "inject": {
-                                                                                                                                                                          "field": {"name": "double", "term": {"unit": {}}},
-                                                                                                                                                                          "typeName": "hydra.python.syntax.QuoteStyle"}}}],
+                                                                                                                                                                      "term": {"inject": {"field": {"name": "double", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
                                                                                                                                                                   "typeName": "hydra.python.syntax.String"}}},
                                                                                                                                                             "typeName": "hydra.python.syntax.Atom"}}},
                                                                                                                                                       "typeName": "hydra.python.syntax.Primary"}}}],
                                                                                                                                               "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                         {
                                                                                                                                           "name": "rhs",
-                                                                                                                                          "term": {
-                                                                                                                                            "typeApplication": {
-                                                                                                                                              "body": {"maybe": null},
-                                                                                                                                              "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                       "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                 "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                         "typeName": "hydra.python.syntax.Term"}}}],
@@ -1340,10 +976,7 @@
                                                                                 "typeName": "hydra.python.syntax.BitwiseOr"}}},
                                                                           {
                                                                             "name": "rhs",
-                                                                            "term": {
-                                                                              "typeApplication": {
-                                                                                "body": {"list": []},
-                                                                                "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}],
+                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}],
                                                                         "typeName": "hydra.python.syntax.Comparison"}}},
                                                                   "typeName": "hydra.python.syntax.Inversion"}}]},
                                                           "typeName": "hydra.python.syntax.Conjunction"}}]},
@@ -1354,14 +987,9 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "sameNamespace"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "quoted"},
-                                                    "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                "function": {"application": {"argument": {"variable": "quoted"}, "function": {"variable": "hydra.lib.logic.and"}}}}},
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}}}}}}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Expression"}}}}}}}}}}},
                             "domain": {"variable": "hydra.core.Name"},
                             "parameter": "name"}},
                         "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
@@ -1377,10 +1005,7 @@
                 "function": {
                   "codomain": {
                     "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"variable": "hydra.python.syntax.Expression"},
-                          "domain": {"variable": "hydra.core.Name"}}},
+                      "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Expression"}, "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
                   "domain": {"literal": {"boolean": {}}}}},
               "domain": {"variable": "hydra.util.CaseConvention"}}},
@@ -1390,11 +1015,7 @@
         "name": "hydra.python.names.variantName",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Generate a variant name from type name and field name"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a variant name from type name and field name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1411,17 +1032,11 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "fname"},
-                                                "function": {"unwrap": "hydra.core.Name"}}},
+                                            "argument": {"application": {"argument": {"variable": "fname"}, "function": {"unwrap": "hydra.core.Name"}}},
                                             "function": {"variable": "hydra.formatting.capitalize"}}},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "tname"},
-                                                "function": {"unwrap": "hydra.core.Name"}}},
+                                            "argument": {"application": {"argument": {"variable": "tname"}, "function": {"unwrap": "hydra.core.Name"}}},
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "typeName": "hydra.core.Name"}},
                                 "function": {
@@ -1429,14 +1044,8 @@
                                     "argument": {"variable": "env"},
                                     "function": {
                                       "application": {
-                                        "argument": {
-                                          "inject": {
-                                            "field": {"name": "pascal", "term": {"unit": {}}},
-                                            "typeName": "hydra.util.CaseConvention"}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "isQualified"},
-                                            "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
+                                        "argument": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
+                                        "function": {"application": {"argument": {"variable": "isQualified"}, "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
                             "domain": {"variable": "hydra.core.Name"},
                             "parameter": "fname"}},
                         "domain": {"variable": "hydra.core.Name"},
@@ -1452,22 +1061,16 @@
                 "function": {
                   "codomain": {
                     "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"variable": "hydra.python.syntax.Name"},
-                          "domain": {"variable": "hydra.core.Name"}}},
+                      "codomain": {"function": {"codomain": {"variable": "hydra.python.syntax.Name"}, "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
               "domain": {"literal": {"boolean": {}}}}},
           "variables": []}}}],
-  "description": "Python naming utilities: encoding Hydra names as Python names",
-  "namespace": "hydra.python.names",
-  "termDependencies": [
+  "dependencies": [
     "hydra.names",
     "hydra.formatting",
     "hydra.python.serde",
-    "hydra.python.language"],
-  "typeDependencies": [
+    "hydra.python.language",
     "hydra.python.environment",
     "hydra.python.syntax",
     "hydra.paths",
@@ -1492,4 +1095,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.validation",
+    "hydra.variants"],
+  "description": "Python naming utilities: encoding Hydra names as Python names",
+  "namespace": "hydra.python.names"}

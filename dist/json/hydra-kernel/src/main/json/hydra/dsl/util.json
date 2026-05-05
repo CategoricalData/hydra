@@ -4,367 +4,11 @@
       "term": {
         "name": "hydra.dsl.util.caseConventionCamel",
         "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.CaseConvention"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "camel"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.CaseConvention"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.caseConventionPascal",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.CaseConvention"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "pascal"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.CaseConvention"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.caseConventionLowerSnake",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.CaseConvention"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "lowerSnake"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.CaseConvention"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.caseConventionUpperSnake",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.CaseConvention"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "upperSnake"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.CaseConvention"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.comparisonLessThan",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.Comparison"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "lessThan"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.Comparison"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.comparisonEqualTo",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.Comparison"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "equalTo"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.Comparison"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.comparisonGreaterThan",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.Comparison"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "greaterThan"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.Comparison"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.precisionArbitrary",
-        "term": {
-          "wrap": {
-            "body": {
-              "inject": {
-                "field": {
-                  "name": "inject",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.util.Precision"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "field",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "name",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "arbitrary"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "term",
-                                  "term": {
-                                    "inject": {
-                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.Term"}}}],
-                              "typeName": "hydra.core.Field"}}}],
-                      "typeName": "hydra.core.Injection"}}},
-                "typeName": "hydra.core.Term"}},
-            "typeName": "hydra.phantoms.TTerm"}},
-        "typeScheme": {
-          "body": {
-            "application": {
-              "argument": {"variable": "hydra.util.Precision"},
-              "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.util.precisionBits",
-        "term": {
-          "lambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the camel variant of hydra.util.CaseConvention"}}}],
             "body": {
               "wrap": {
                 "body": {
@@ -376,61 +20,323 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "hydra.util.Precision"}},
-                                  "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.CaseConvention"}}, "typeName": "hydra.core.Name"}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "bits"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "camel"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}},
-            "domain": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
-                    "body": {"literal": {"integer": {"int32": {}}}}}},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "parameter": "x"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {
+            "application": {"argument": {"variable": "hydra.util.CaseConvention"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.caseConventionPascal",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the pascal variant of hydra.util.CaseConvention"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.CaseConvention"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pascal"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {
+            "application": {"argument": {"variable": "hydra.util.CaseConvention"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.caseConventionLowerSnake",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the lowerSnake variant of hydra.util.CaseConvention"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.CaseConvention"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lowerSnake"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {
+            "application": {"argument": {"variable": "hydra.util.CaseConvention"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.caseConventionUpperSnake",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the upperSnake variant of hydra.util.CaseConvention"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.CaseConvention"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "upperSnake"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {
+            "application": {"argument": {"variable": "hydra.util.CaseConvention"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.comparisonLessThan",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the lessThan variant of hydra.util.Comparison"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Comparison"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {"application": {"argument": {"variable": "hydra.util.Comparison"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.comparisonEqualTo",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the equalTo variant of hydra.util.Comparison"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Comparison"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {"application": {"argument": {"variable": "hydra.util.Comparison"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.comparisonGreaterThan",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the greaterThan variant of hydra.util.Comparison"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Comparison"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {"application": {"argument": {"variable": "hydra.util.Comparison"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.precisionArbitrary",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the arbitrary variant of hydra.util.Precision"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Precision"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "arbitrary"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}}}},
+        "typeScheme": {
+          "body": {"application": {"argument": {"variable": "hydra.util.Precision"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.precisionBits",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the bits variant of hydra.util.Precision"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Precision"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bits"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {
-                "application": {
-                  "argument": {"variable": "hydra.util.Precision"},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "codomain": {"application": {"argument": {"variable": "hydra.util.Precision"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
+  "dependencies": ["hydra.util", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
   "description": "DSL functions for hydra.util",
-  "namespace": "hydra.dsl.util",
-  "termDependencies": ["hydra.dsl.core"],
-  "typeDependencies": ["hydra.util", "hydra.phantoms", "hydra.core"]}
+  "namespace": "hydra.dsl.util"}

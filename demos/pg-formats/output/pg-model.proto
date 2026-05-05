@@ -1,0 +1,164 @@
+// A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types
+//
+// Note: this is an automatically generated file. Do not edit.
+syntax = "proto3";
+package hydra.pg;
+option java_multiple_files = true;
+option java_package = "hydra.pg";
+// An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided.
+message AdjacentEdge {
+  // The label of the edge
+  EdgeLabel label = 1;
+  // The unique identifier of the edge
+  string id = 2;
+  // The id of the other vertex adjacent to the edge
+  string vertex = 3;
+  // A key/value map of edge properties
+  map<string, string> properties = 4;
+}
+// The direction of an edge or edge pattern
+enum Direction {
+  DIRECTION_UNSPECIFIED = 0;
+  DIRECTION_OUT = 1;
+  DIRECTION_IN = 2;
+  DIRECTION_BOTH = 3;
+  DIRECTION_UNDIRECTED = 4;
+}
+// An edge
+message Edge {
+  // The label of the edge
+  EdgeLabel label = 1;
+  // The unique identifier of the edge
+  string id = 2;
+  // The id of the out-vertex (tail) of the edge
+  string out = 3;
+  // The id of the in-vertex (head) of the edge
+  string in = 4;
+  // A key/value map of edge properties
+  map<string, string> properties = 5;
+}
+// The label of an edge
+message EdgeLabel {
+  // The label of an edge
+  string value = 1;
+}
+// The type of an edge
+message EdgeType {
+  // The label of any edge of this edge type
+  EdgeLabel label = 1;
+  // The type of the id of any edge of this edge type
+  string id = 2;
+  // The label of the out-vertex (tail) of any edge of this edge type
+  VertexLabel out = 3;
+  // The label of the in-vertex (head) of any edge of this edge type
+  VertexLabel in = 4;
+  // A list of property types. The types are ordered for the sake of applications in which property order is significant.
+  repeated PropertyType properties = 5;
+}
+// Either a vertex or an edge
+message Element {
+  oneof value {
+    Vertex vertex = 1;
+    Edge edge = 2;
+  }
+}
+// The kind of an element: vertex or edge
+enum ElementKind {
+  ELEMENT_KIND_UNSPECIFIED = 0;
+  ELEMENT_KIND_VERTEX = 1;
+  ELEMENT_KIND_EDGE = 2;
+}
+// An element together with its dependencies in some context
+message ElementTree {
+  Element self = 1;
+  repeated ElementTree dependencies = 2;
+}
+// The type of a vertex or edge
+message ElementType {
+  oneof value {
+    VertexType vertex = 1;
+    EdgeType edge = 2;
+  }
+}
+// An element type together with its dependencies in some context
+message ElementTypeTree {
+  ElementType self = 1;
+  repeated ElementTypeTree dependencies = 2;
+}
+// A graph; a self-contained collection of vertices and edges
+message Graph {
+  map<string, Vertex> vertices = 1;
+  map<string, Edge> edges = 2;
+}
+// A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
+message GraphSchema {
+  // A unique vertex type for each vertex label which may occur in a graph
+  map<string, VertexType> vertices = 1;
+  // A unique edge type for each edge label which may occur in a graph
+  map<string, EdgeType> edges = 2;
+}
+// Either a vertex or edge label
+message Label {
+  oneof value {
+    VertexLabel vertex = 1;
+    EdgeLabel edge = 2;
+  }
+}
+// A graph which does not assume that vertex or edge ids are unique. This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.
+message LazyGraph {
+  repeated Vertex vertices = 1;
+  repeated Edge edges = 2;
+}
+// A key/value property
+message Property {
+  // They key of the property
+  PropertyKey key = 1;
+  // The value of the property
+  string value = 2;
+}
+// A property key
+message PropertyKey {
+  // A property key
+  string value = 1;
+}
+// The type of a property
+message PropertyType {
+  // A property's key
+  PropertyKey key = 1;
+  // The type of a property's value
+  string value = 2;
+  // Whether the property is required; values may be omitted from a property map otherwise
+  bool required = 3;
+}
+// A vertex
+message Vertex {
+  // The label of the vertex
+  VertexLabel label = 1;
+  // The unique identifier of the vertex
+  string id = 2;
+  // A key/value map of vertex properties
+  map<string, string> properties = 3;
+}
+// The label of a vertex. The default (null) vertex is represented by the empty string
+message VertexLabel {
+  // The label of a vertex. The default (null) vertex is represented by the empty string
+  string value = 1;
+}
+// The type of a vertex
+message VertexType {
+  // The label of any vertex of this vertex type
+  VertexLabel label = 1;
+  // The type of the id of any vertex of this vertex type
+  string id = 2;
+  // A list of property types. The types are ordered for the sake of applications in which property order is significant.
+  repeated PropertyType properties = 3;
+}
+// A vertex together with any outgoing and/or incoming edges; a vertex object
+message VertexWithAdjacentEdges {
+  // The focus vertex
+  Vertex vertex = 1;
+  // An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge
+  repeated AdjacentEdge ins = 2;
+  // An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge
+  repeated AdjacentEdge outs = 3;
+}

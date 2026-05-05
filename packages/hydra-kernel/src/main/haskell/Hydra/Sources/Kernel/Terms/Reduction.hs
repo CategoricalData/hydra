@@ -81,10 +81,9 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
+            moduleDependencies = [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
-      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
   where
    definitions = [
@@ -167,7 +166,9 @@ contractTerm = define "contractTerm" $
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
 countPrimitiveInvocations :: TTermDefinition Bool
-countPrimitiveInvocations = define "countPrimitiveInvocations" true
+countPrimitiveInvocations = define "countPrimitiveInvocations" $
+  doc "Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes." $
+  true
 
 -- | Eta-expand a term using Graph for type lookups. This is a pure function that does not
 -- require type inference, instead relying on the Graph being properly populated with types
@@ -449,10 +450,42 @@ etaExpandTerm = define "etaExpandTerm" $
       _Term_set>>: "st" ~> var "afterRecursion" @@
         (Core.termSet $ Sets.fromList $ Lists.map ("el" ~> var "recurse" @@ var "tx" @@ var "el") $ Sets.toList (var "st")),
 
-      -- TypeApplication: recurse into body
-      _Term_typeApplication>>: "tt" ~> var "afterRecursion" @@ (Core.termTypeApplication $ Core.typeApplicationTerm
-        (var "recurse" @@ var "tx" @@ Core.typeApplicationTermBody (var "tt"))
-        (Core.typeApplicationTermType $ var "tt")),
+      -- TypeApplication: gather the surrounding TypeApp chain and recurse into body.
+      -- If the body (after stripping annotations and TypeApps) is a case-statement,
+      -- we use the gathered type args to construct a properly typed wrapper lambda
+      -- (otherwise the wrapper would have a bare nominal domain, which after
+      -- pushTypeAppsInward would clash with the typed inner case-statement).
+      _Term_typeApplication>>: "tt" ~>
+        "gatherTypeApps" <~ ("acc" ~> "trm" ~> cases _Term (Strip.deannotateTerm @@ var "trm")
+          (Just $ pair (var "trm") (var "acc")) [
+          _Term_typeApplication>>: "tt2" ~>
+            var "gatherTypeApps"
+              @@ Lists.cons (Core.typeApplicationTermType $ var "tt2") (var "acc")
+              @@ Core.typeApplicationTermBody (var "tt2")]) $
+        "gathered" <~ (var "gatherTypeApps"
+          @@ list [Core.typeApplicationTermType $ var "tt"]
+          @@ Core.typeApplicationTermBody (var "tt")) $
+        "innermost" <~ Pairs.first (var "gathered") $
+        "tApps" <~ Pairs.second (var "gathered") $
+        cases _Term (Strip.deannotateTerm @@ var "innermost")
+          (Just $ var "afterRecursion" @@ (Core.termTypeApplication $ Core.typeApplicationTerm
+            (var "recurse" @@ var "tx" @@ Core.typeApplicationTermBody (var "tt"))
+            (Core.typeApplicationTermType $ var "tt"))) [
+          _Term_cases>>: "cs" ~>
+            "newCs" <~ Core.caseStatement
+              (Core.caseStatementTypeName $ var "cs")
+              (Maybes.map ("t1" ~> var "recurse" @@ var "tx" @@ var "t1") (Core.caseStatementDefault $ var "cs"))
+              (Lists.map (var "forCaseBranch") (Core.caseStatementCases $ var "cs")) $
+            "casesWithTypeApps" <~ (Lists.foldl
+              ("trm" ~> "t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "trm") (var "t"))
+              (Core.termCases $ var "newCs")
+              (var "tApps")) $
+            "elimHeadTypeTyped" <~ (just (Core.typeFunction $ Core.functionType
+              (Resolution.nominalApplication
+                @@ (Core.caseStatementTypeName $ var "cs")
+                @@ var "tApps")
+              Core.typeUnit)) $
+            var "expand" @@ true @@ var "args" @@ (int32 1) @@ var "elimHeadTypeTyped" @@ var "casesWithTypeApps"],
 
       -- TypeLambda: extend context for body
       _Term_typeLambda>>: "tl" ~>
@@ -502,7 +535,15 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
         right (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
       _Term_application>>: "a" ~>
-        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $ -- TODO: hack for type checking
+        -- Inference hack: this Logic.ifElse always evaluates to `list []`,
+        -- but the dead `true` branch annotates the empty list with element
+        -- type `Type` so downstream Java code generation sees `list<Type>`
+        -- (not `list<unit>`). Excising the hack causes bootstrap-from-json
+        -- for the Java target to fail with "type mismatch: expected
+        -- list<hydra.core.Type> but found list<unit>". Validate.Core's
+        -- constant-condition rule flags this; the rule is disabled in
+        -- update-json-main's exemption list along with the comment there.
+        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $
         "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
         "rhs" <<~ var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
         right (Core.termApplication $ Core.application (var "lhs") (var "rhs")),

@@ -847,6 +847,45 @@ myMap = Terms.map (M.fromList [...])
 myList = Lists.map (lambda "x" (var "x")) someList
 ```
 
+### Pattern 7: Documenting definitions
+
+The `doc` combinator (from `Hydra.Dsl.Annotations` or `Hydra.Dsl.Meta.Phantoms`)
+attaches a human-readable description to a term or type binding.
+
+```haskell
+import Hydra.Dsl.Annotations (doc)
+
+myFunction :: TTermDefinition (Int -> Int)
+myFunction = define "myFunction" $
+  doc "Add one to an integer" $
+  "x" ~> Math.add (var "x") (int32 1)
+```
+
+`doc` must be the **outermost wrapper around the function body**, before lambdas
+and let bindings. The `Validate.Packaging.checkDefinitionDocumentation` check
+(part of `kernelPackage` for the kernel) verifies this placement; it peels
+`TypeLambda` and `TypeApplication` layers from the body and then requires the
+result to be an `Annotated` node carrying a `description` annotation.
+Burying `doc` inside the lambda body — e.g. `"x" ~> doc "..." (...)` — does not
+satisfy the check.
+
+**Synthesizer doc propagation.** When a synthesizer (e.g.
+`generateRecordAccessor` in `Hydra/Sources/Kernel/Terms/Dsls.hs`) builds a
+`Binding` whose body is computed at meta-DSL interpretation time, host-level
+`doc` is not available because the description string depends on runtime
+values. Use `Annotations.setTermDescription` from
+`Hydra.Sources.Kernel.Terms.Annotations` instead:
+
+```haskell
+"description" <~ (Strings.cat $ list [string "DSL accessor for the ",
+  Core.unName (var "fieldName"), string " field"]) $
+"body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
+Core.binding (var "name") (var "body") (just (var "ts"))
+```
+
+This produces a binding whose interpreted term carries the description at the
+outermost layer, satisfying the same validator check as host-level `doc`.
+
 ## Working with types
 
 ### Basic types

@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.lisp.language"),
             moduleDefinitions = [toDefinition lispLanguage, toDefinition lispReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)"}
 -- | Language constraints for Lisp.
 --
@@ -201,8 +200,8 @@ lispLanguage = define "lispLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.lisp")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.lisp")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

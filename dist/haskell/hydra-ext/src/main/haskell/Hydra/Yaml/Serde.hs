@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Native YAML serialization: YAML Node to String
 
 module Hydra.Yaml.Serde where
-
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -16,7 +14,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Yaml.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Escape single quotes by doubling them
 escapeSingleQuotes :: String -> String
 escapeSingleQuotes s =
@@ -26,18 +23,15 @@ escapeSingleQuotes s =
         squote,
         squote] [
         c])))
-
 -- | Check if a string has leading or trailing whitespace
 hasLeadingTrailingSpace :: String -> Bool
 hasLeadingTrailingSpace s =
 
       let chars = Strings.toList s
       in (Logic.or (Maybes.fromMaybe False (Maybes.map (\c -> Chars.isSpace c) (Lists.maybeHead chars))) (Maybes.fromMaybe False (Maybes.map (\c -> Chars.isSpace c) (Lists.maybeLast chars))))
-
 -- | Serialize a YAML node to a string
 hydraYamlToString :: Model.Node -> String
 hydraYamlToString node = writeNode node
-
 -- | Indent all lines of a string by 2 spaces
 indentString :: String -> String
 indentString s =
@@ -45,7 +39,6 @@ indentString s =
       "  ",
       line,
       "\n"])) (Strings.lines s))
-
 -- | Check if character codes represent a decimal number
 isDecimalString :: [Int] -> Bool
 isDecimalString chars =
@@ -59,7 +52,6 @@ isDecimalString chars =
         in (Logic.ifElse (Lists.null after) False (
           let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
           in (Logic.and (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) before)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) after))))))))
-
 -- | Check if a string looks like a number
 looksLikeNumber :: String -> Bool
 looksLikeNumber s =
@@ -72,7 +64,6 @@ looksLikeNumber s =
             isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
             allDigits = Logic.and (Logic.not (Lists.null rest)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) rest))
         in (Logic.ifElse allDigits True (isDecimalString rest))) (Lists.uncons chars)))
-
 -- | Check if a string needs quoting in YAML
 needsQuoting :: String -> Bool
 needsQuoting s =
@@ -81,7 +72,6 @@ needsQuoting s =
           specials = Strings.toList yamlSpecialChars
           hasSpecial = Logic.not (Lists.null (Lists.filter (\c -> Lists.elem c specials) chars))
       in (Logic.ifElse hasSpecial True (hasLeadingTrailingSpace s)))))
-
 -- | Write a mapping entry in block style
 writeMappingEntry :: (Model.Node, Model.Node) -> String
 writeMappingEntry entry =
@@ -106,7 +96,6 @@ writeMappingEntry entry =
           writeNodeInline key,
           ":\n",
           (indentString (writeNode value))])
-
 -- | Write a mapping entry for the first item of a sequence element
 writeMappingEntryInline :: (Model.Node, Model.Node) -> String
 writeMappingEntryInline entry =
@@ -131,7 +120,6 @@ writeMappingEntryInline entry =
           writeNodeInline key,
           ":\n",
           (indentString (writeNode value))])
-
 -- | Write a YAML node as a top-level value in block style
 writeNode :: Model.Node -> String
 writeNode node =
@@ -139,7 +127,6 @@ writeNode node =
       Model.NodeScalar v0 -> Strings.cat2 (writeScalar v0) "\n"
       Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "[]\n" (Strings.cat (Lists.map (\item -> writeSequenceItem item) v0))
       Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "{}\n" (Strings.cat (Lists.map (\e -> writeMappingEntry e) (Maps.toList v0)))
-
 -- | Write a node inline (for use as a mapping key)
 writeNodeInline :: Model.Node -> String
 writeNodeInline node =
@@ -159,7 +146,6 @@ writeNodeInline node =
           "{",
           (Strings.intercalate ", " (Lists.map writeFlowEntry (Maps.toList v0))),
           "}"])
-
 -- | Write a scalar value
 writeScalar :: Model.Scalar -> String
 writeScalar s =
@@ -170,7 +156,6 @@ writeScalar s =
       Model.ScalarInt v0 -> Literals.showBigint v0
       Model.ScalarNull -> "null"
       Model.ScalarStr v0 -> writeString v0
-
 -- | Write a sequence item in block style
 writeSequenceItem :: Model.Node -> String
 writeSequenceItem node =
@@ -191,7 +176,6 @@ writeSequenceItem node =
             "- ",
             firstStr,
             (indentString restStr)])) (Lists.uncons entries))))
-
 -- | Write a string value, quoting if necessary
 writeString :: String -> String
 writeString s =
@@ -199,7 +183,6 @@ writeString s =
       "'",
       (escapeSingleQuotes s),
       "'"]) s
-
 -- | YAML reserved words that need quoting
 yamlReservedWords :: [String]
 yamlReservedWords =
@@ -226,7 +209,6 @@ yamlReservedWords =
       "NO",
       "ON",
       "OFF"]
-
 -- | YAML special characters that trigger quoting
 yamlSpecialChars :: String
 yamlSpecialChars = ": {}[]#,&*!|>'\"%@`"

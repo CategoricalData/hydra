@@ -45,8 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
+            moduleDependencies = [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Java code generation"}
   where
     definitions = [

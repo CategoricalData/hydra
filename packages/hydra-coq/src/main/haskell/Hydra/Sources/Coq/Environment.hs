@@ -30,8 +30,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "Environment types for Coq code generation"}
   where
     definitions = [

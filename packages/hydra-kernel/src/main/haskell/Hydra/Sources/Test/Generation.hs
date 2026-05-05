@@ -34,8 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Generation.ns, ShowCore.ns, TestGraph.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for code generation operations such as inferModules and inferModulesGiven")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -99,7 +98,6 @@ modA = Packaging.module_
   Phantoms.nothing
   nsA
   (Phantoms.list ([] :: [TTerm Namespace]))
-  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list [
     typedTermDef nameIdA (Terms.lambda "x" (Terms.var "x")) idAScheme])
 
@@ -108,7 +106,6 @@ modB = Packaging.module_
   Phantoms.nothing
   nsB
   (Phantoms.list [nsA])
-  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list [
     untypedTermDef nameUseId (Terms.apply (Terms.var "hydra.testInput.a.idA") (Terms.int32 42))])
 
@@ -120,7 +117,7 @@ universeMods = Phantoms.list [modA, modB]
 -- quantifiers (type variables that appear only in the domain, never in the
 -- codomain), plus a "stale" target that applies the function. This shape is
 -- actually produced by a prior inference run on the real kernel, e.g. the
--- stored scheme for `hydra.eval.lib.eithers.either` after round-tripping
+-- stored scheme for `hydra.lib.defaults.eithers.either` after round-tripping
 -- through JSON. `inferModules` and `inferModulesGiven` must agree on the
 -- rendered inferred modules for any such universe.
 --
@@ -159,7 +156,6 @@ modV = Packaging.module_
   Phantoms.nothing
   nsV
   (Phantoms.list ([] :: [TTerm Namespace]))
-  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list [typedTermDef nameFunky funkyTerm funkyScheme])
 
 -- useFunky = funky "foo" 7 100
@@ -168,7 +164,6 @@ modW = Packaging.module_
   Phantoms.nothing
   nsW
   (Phantoms.list [nsV])
-  (Phantoms.list ([] :: [TTerm Namespace]))
   (Phantoms.list [
     untypedTermDef nameUseFunky
       (Terms.apply

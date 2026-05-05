@@ -7,6 +7,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.phantoms.TBinding
 tBinding :: t0 -> Phantoms.TBinding t1 -> Core.Term
 tBinding a x =
     Core.TermRecord (Core.Record {
@@ -18,11 +19,13 @@ tBinding a x =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (tTerm a (Phantoms.tBindingTerm x))}]})
+-- | Encoder for hydra.phantoms.TTerm
 tTerm :: t0 -> Phantoms.TTerm t1 -> Core.Term
 tTerm a x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
       Core.wrappedTermBody = (EncodeCore.term (Phantoms.unTTerm x))})
+-- | Encoder for hydra.phantoms.TTermDefinition
 tTermDefinition :: t0 -> Phantoms.TTermDefinition t1 -> Core.Term
 tTermDefinition a x =
     Core.TermRecord (Core.Record {

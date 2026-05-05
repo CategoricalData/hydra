@@ -223,7 +223,10 @@ main = do
 
 -- | Check whether a module contains only native type definitions (no term definitions).
 isTypeModule :: Module -> Bool
-isTypeModule m = all isNativeType (moduleBindings m)
+isTypeModule m = all isType (moduleDefinitions m)
+  where
+    isType (DefinitionType _) = True
+    isType _ = False
 
 -- | Strip type annotations from a module for comparison with raw (pre-inference) modules.
 -- Removes TypeLambda, TypeApplication, binding TypeSchemes, and lambda domain types from terms,
@@ -244,10 +247,8 @@ findDifference orig decoded
       "namespace differs: " ++ unNamespace (moduleNamespace orig) ++ " vs " ++ unNamespace (moduleNamespace decoded)
   | length (moduleDefinitions orig) /= length (moduleDefinitions decoded) =
       "element count differs: " ++ show (length (moduleDefinitions orig)) ++ " vs " ++ show (length (moduleDefinitions decoded))
-  | moduleTermDependencies orig /= moduleTermDependencies decoded =
-      "termDependencies differ"
-  | moduleTypeDependencies orig /= moduleTypeDependencies decoded =
-      "typeDependencies differ"
+  | moduleDependencies orig /= moduleDependencies decoded =
+      "dependencies differ"
   | moduleDescription orig /= moduleDescription decoded =
       "description differs"
   | otherwise =

@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.wasm.language"),
             moduleDefinitions = [toDefinition wasmLanguage, toDefinition wasmReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for WebAssembly (WAT text format)"}
 wasmLanguage :: TTermDefinition Language
 wasmLanguage = define "wasmLanguage" $
@@ -156,8 +155,8 @@ wasmLanguage = define "wasmLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.wasm")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.wasm")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

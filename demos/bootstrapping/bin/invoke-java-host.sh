@@ -37,11 +37,14 @@ for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hy
     fi
 done
 
-# Build hydra-java
+# Build hydra-java. We need both the main source set (kernel + every per-package
+# coder distribution) and the headsExtras source set, which carries the developer
+# drivers (hydra.Bootstrap, hydra.Generation, HydraTestBase) and demos that the
+# kernel artifact intentionally doesn't bundle.
 echo "Building hydra-java..."
 BUILD_START=$(date +%s)
 cd "$HYDRA_ROOT"
-if ! ./gradlew :hydra-java:compileJava 2>&1; then
+if ! ./gradlew :hydra-java:compileJava :hydra-java:compileHeadsExtrasJava 2>&1; then
     echo ""
     echo "ERROR: Java compilation failed. See errors above."
     exit 1
@@ -50,9 +53,11 @@ BUILD_END=$(date +%s)
 echo "  Build time: $((BUILD_END - BUILD_START))s"
 echo ""
 
-# Build classpath
+# Build classpath. main = kernel + coders; headsExtras = Bootstrap, Generation,
+# demos. The bootstrap demo's entry point (hydra.Bootstrap) lives in headsExtras.
 GRADLE_CACHE="$HOME/.gradle/caches/modules-2/files-2.1"
 JAVA_CP="$HYDRA_ROOT/packages/hydra-java/build/classes/java/main"
+JAVA_CP="$JAVA_CP:$HYDRA_ROOT/packages/hydra-java/build/classes/java/headsExtras"
 JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'json-io-4.14.1.jar' | head -1)"
 JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'commons-text-1.10.0.jar' | head -1)"
 JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'commons-lang3-3.12.0.jar' | head -1)"

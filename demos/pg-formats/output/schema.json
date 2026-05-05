@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "@key": "created",
+      "@value": {
+        "id": {"integer": {"int32": {}}},
+        "in": "software",
+        "label": "created",
+        "out": "person",
+        "properties": [
+          {
+            "key": "weight",
+            "required": true,
+            "value": {"float": {"float64": {}}}}]}},
+    {
+      "@key": "knows",
+      "@value": {
+        "id": {"integer": {"int32": {}}},
+        "in": "person",
+        "label": "knows",
+        "out": "person",
+        "properties": [
+          {
+            "key": "weight",
+            "required": true,
+            "value": {"float": {"float64": {}}}}]}}],
+  "vertices": [
+    {
+      "@key": "person",
+      "@value": {
+        "id": {"integer": {"int32": {}}},
+        "label": "person",
+        "properties": [
+          {"key": "name", "required": true, "value": {"string": {}}},
+          {"key": "age", "required": false, "value": {"integer": {"int32": {}}}}]}},
+    {
+      "@key": "software",
+      "@value": {
+        "id": {"integer": {"int32": {}}},
+        "label": "software",
+        "properties": [
+          {"key": "name", "required": true, "value": {"string": {}}},
+          {"key": "lang", "required": true, "value": {"string": {}}}]}}]}

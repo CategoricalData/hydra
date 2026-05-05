@@ -84,8 +84,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Dependency extraction, binding sort, and let normalization")}
   where
    definitions = [
@@ -388,6 +387,7 @@ topologicalSortBindings = define "topologicalSortBindings" $
 
 typeDependencyNames :: TTermDefinition (Bool -> Type -> S.Set Name)
 typeDependencyNames = define "typeDependencyNames" $
+  doc "Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references" $
   "withSchema" ~> "typ" ~> Logic.ifElse (var "withSchema")
     (Sets.union
       (Variables.freeVariablesInType @@ var "typ")
@@ -396,6 +396,7 @@ typeDependencyNames = define "typeDependencyNames" $
 
 typeNamesInType :: TTermDefinition (Type -> S.Set Name)
 typeNamesInType = define "typeNamesInType" $
+  doc "Collect every type name that appears anywhere inside a type expression" $
   "typ0" ~>
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"

@@ -117,6 +117,28 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS'
 
 The sync scripts handle this automatically.
 
+### Build appears to succeed but the kernel didn't actually compile
+
+**Symptom**: `stack build` reports exit 0, but a later step fails because
+generated artifacts weren't updated.
+
+**Cause**: A pipeline like `stack build 2>&1 | tail -30` masks Stack's
+non-zero exit code with `tail`'s zero exit. Stack's compile-error output
+also runs into hundreds of lines, so `tail -30` typically captures only the
+final `[S-7282]` postscript without the actual `error: [GHC-...]` line that
+identifies the broken module.
+
+**Fix**: Redirect to a file and inspect by greppable patterns:
+
+```bash
+stack build > /tmp/build.log 2>&1
+grep -E "error:|S-7011" /tmp/build.log | head
+```
+
+For a long compile, run in the background and tail-watch a specific filter
+rather than the raw log; the noise-to-signal ratio for full Stack output
+is high.
+
 ### "No such field: X" during code generation
 
 **Cause**: Missing entries in `Meta.hs` enums (`TermVariant`/`TypeVariant`). This happens
@@ -153,6 +175,29 @@ Transcendental math functions (`sin`, `exp`, `atanh`, etc.) can produce results 
 by 1 ULP across platforms. When adding float64 test cases for these functions, use
 `roundedPrimCase1` / `roundedPrimCase2` instead of raw `primCase`.
 See [extending tests](recipes/extending-tests.md#floating-point-test-portability).
+
+## Annotated `Core.Term` values in test fixtures
+
+When a Hydra-DSL test fixture builds a `Core.Term` value that needs to be a
+`TermAnnotated` -- e.g. to test a validator that inspects annotation maps --
+do **not** use `Phantoms.doc` to attach the annotation.
+The Haskell coder's `encodeTerm` strips outer-layer annotations before its
+variant dispatch (the description, if any, has already been captured at the
+enclosing binding via `getTermDescription` and emitted as a Haskell comment).
+That stripping silently drops the annotation when the annotated term is
+nested inside a record literal rather than at a definition's top level.
+
+Use the explicit data-constructor form instead:
+
+```haskell
+Core.termAnnotated $ Core.annotatedTerm
+  someBody
+  (Maps.fromList $ list [Phantoms.pair (Core.name $ string "description")
+    (Core.termLiteral $ Core.literalString $ string "...")])
+```
+
+This produces a `TermInject _Term "annotated" ...` Hydra term, which the coder
+treats as data and emits as `Core.TermAnnotated (Core.AnnotatedTerm{...})`.
 
 ## Related resources
 

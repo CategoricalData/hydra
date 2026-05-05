@@ -80,11 +80,10 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
+            moduleDependencies = [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
-      moduleNamespace DecodeCore.module_],
-            moduleTypeDependencies = (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+      moduleNamespace DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"}
   where
     definitions = [
@@ -385,7 +384,7 @@ encodeFieldType = def "encodeFieldType" $
       "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx",
       "idx">: Pairs.first (var "idxPair"),
       "cx1">: Pairs.second (var "idxPair")] $
-    "preserve" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_preserveFieldName @@ var "ftype") $
+    "preserve" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.keyPreserveFieldName @@ var "ftype") $
     right $ pair
       (record P3._Field [
         P3._Field_name>>: asTerm encodeFieldName @@ var "preserve" @@ var "fname",
@@ -522,7 +521,7 @@ findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
     "mdesc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    "bdep" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_deprecated @@ var "typ") $ lets [
+    "bdep" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.keyDeprecated @@ var "typ") $ lets [
       "mdescAnn">: Maybes.map
         ("desc_" ~> record P3._Option [
           P3._Option_name>>: ProtobufSerdeSource.descriptionOptionName,
@@ -695,7 +694,7 @@ moduleToProtobuf = def "moduleToProtobuf" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned")] $
     "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
-      "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.writeProtoFile @@ var "pfile")),
+      "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.protoFileToExpr @@ var "pfile")),
       "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
       right $ Maps.singleton (var "path") (var "content")
 

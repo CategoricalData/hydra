@@ -5,33 +5,23 @@
         "name": "hydra.test.validate.all.allTests",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The group of all validation tests"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "The group of all validation tests"}}}],
             "body": {
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "validation"}}},
-                  {
-                    "name": "description",
-                    "term": {
-                      "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                   {
                     "name": "subgroups",
-                    "term": {"list": [{"variable": "hydra.test.validate.core.allTests"}]}},
+                    "term": {"list": [{"variable": "hydra.test.validate.core.allTests"}, {"variable": "hydra.test.validate.packaging.allTests"}]}},
                   {
                     "name": "cases",
-                    "term": {
-                      "typeApplication": {
-                        "body": {"list": []},
-                        "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Hydra's validation test suite",
-  "namespace": "hydra.test.validate.all",
-  "termDependencies": ["hydra.test.validate.core"],
-  "typeDependencies": [
+  "dependencies": [
+    "hydra.test.validate.core",
+    "hydra.test.validate.packaging",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -54,4 +44,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.validation",
+    "hydra.variants"],
+  "description": "Hydra's validation test suite",
+  "namespace": "hydra.test.validate.all"}

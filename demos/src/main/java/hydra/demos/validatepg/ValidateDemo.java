@@ -12,6 +12,7 @@ import hydra.error.pg.InvalidGraphError;
 import hydra.error.pg.InvalidValueError;
 import hydra.validate.Pg;
 import hydra.util.Maybe;
+import hydra.validation.ValidationResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -118,13 +119,15 @@ public class ValidateDemo {
             String name = names.get(i);
             Graph<Literal> graph = graphs.get(i);
 
-            Maybe<InvalidGraphError<Literal>> validationResult = Pg.validateGraph(
+            ValidationResult<InvalidGraphError<Literal>> validationResult = Pg.validateGraph(
+                    Pg.defaultPgProfile(),
+                    new ValidationResult<InvalidGraphError<Literal>>(java.util.Collections.emptyList(), java.util.Collections.emptyList()),
                     CHECK_LITERAL,
                     schema,
                     graph);
 
-            if (validationResult.isJust()) {
-                System.out.println("Graph \"" + name + "\": INVALID - " + validationResult.fromJust());
+            if (!validationResult.errors.isEmpty()) {
+                System.out.println("Graph \"" + name + "\": INVALID - " + validationResult.errors.get(0));
             } else {
                 System.out.println("Graph \"" + name + "\": VALID");
             }

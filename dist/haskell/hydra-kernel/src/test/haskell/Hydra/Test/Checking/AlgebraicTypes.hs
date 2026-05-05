@@ -352,7 +352,9 @@ nestedPairsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "pair of pairs",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one"))), (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one"))),
+              (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -365,9 +367,11 @@ nestedPairsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "pair with list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermList [
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermLiteral (Core.LiteralString "numbers")))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
+              (Core.TermLiteral (Core.LiteralString "numbers")))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -513,18 +517,20 @@ pairsWithComplexTypesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "pair with record on first",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "Person"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "firstName"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Alice"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "lastName"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Smith"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "age"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]}), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "Person"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "firstName"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Alice"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lastName"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Smith"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "age"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]}),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeVariable (Core.Name "Person")),
               Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
@@ -533,18 +539,20 @@ pairsWithComplexTypesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "pair with record on second",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (Core.TermLiteral (Core.LiteralString "name"), (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "Person"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "firstName"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Bob"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "lastName"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Jones"))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "age"),
-                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]})))))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
+              Core.TermLiteral (Core.LiteralString "name"),
+              (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "Person"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "firstName"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Bob"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "lastName"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Jones"))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "age"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]})))))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
               Core.pairTypeSecond = (Core.TypeVariable (Core.Name "Person"))})))})),

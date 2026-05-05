@@ -97,10 +97,9 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
+            moduleDependencies = [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
-      Unification.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+      Unification.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Type inference following Algorithm W, extended for nominal terms and types"}
   where
     definitions = [
@@ -138,8 +137,8 @@ module_ = Module {
       toDefinition inferTypeOfRecord,
       toDefinition inferTypeOfSet,
       toDefinition inferTypeOfTerm,
-      toDefinition inferTypeOfTypeLambda,
       toDefinition inferTypeOfTypeApplication,
+      toDefinition inferTypeOfTypeLambda,
       toDefinition inferTypeOfUnit,
       toDefinition inferTypeOfUnwrap,
       toDefinition inferTypeOfVariable,
@@ -293,23 +292,6 @@ freshVariableType = define "freshVariableType" $
   "cx2" <~ Pairs.second (var "result") $
   pair (Core.typeVariable (var "name")) (var "cx2")
 
-mergeClassConstraints :: TTermDefinition (M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
-mergeClassConstraints = define "mergeClassConstraints" $
-  doc "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets." $
-  "m1" ~> "m2" ~>
-  Lists.foldl
-    ("acc" ~> "pair" ~>
-      "k" <~ Pairs.first (var "pair") $
-      "v" <~ Pairs.second (var "pair") $
-      Maybes.maybe
-        (Maps.insert (var "k") (var "v") (var "acc"))
-        ("existing" ~>
-          "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "v")) $
-          Maps.insert (var "k") (var "merged") (var "acc"))
-        (Maps.lookup (var "k") (var "acc")))
-    (var "m1")
-    (Maps.toList $ var "m2")
-
 generalize :: TTermDefinition (Graph -> Type -> TypeScheme)
 generalize = define "generalize" $
   doc "Generalize a type to a type scheme" $
@@ -334,6 +316,10 @@ generalize = define "generalize" $
 -- | Extract the first element of a list, or fail with a descriptive error if
 -- the list is empty. Used to destructure lists whose non-emptiness is
 -- structurally guaranteed by the caller but not expressible in the type.
+
+-- | Extract the first element of a list, or fail with a descriptive error if
+-- the list is empty. Used to destructure lists whose non-emptiness is
+-- structurally guaranteed by the caller but not expressible in the type.
 headOrFail :: TTermDefinition (String -> [a] -> Prelude.Either Error a)
 headOrFail = define "headOrFail" $
   doc "Return the first element of a list, or Left(Other) with the given description if the list is empty" $
@@ -342,7 +328,6 @@ headOrFail = define "headOrFail" $
     (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc")
     (unaryFunction right)
     (Lists.maybeHead $ var "xs")
-
 inferGraphTypes :: TTermDefinition (Context -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), Context))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
@@ -373,6 +358,39 @@ inferInGraphContext = define "inferInGraphContext" $
   "fcx" ~> "cx" ~> "term" ~>
   inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "single term")
 
+inferMany :: TTermDefinition (Context -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), Context))
+inferMany = define "inferMany" $
+  doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
+  "fcx" ~> "cx" ~> "pairs" ~>
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
+  Maybes.maybe (var "emptyResult")
+    ("pairsUc" ~>
+    "headPair" <~ Pairs.first (var "pairsUc") $
+    "tl" <~ Pairs.second (var "pairsUc") $
+    "e" <~ Pairs.first (var "headPair") $
+    "desc" <~ Pairs.second (var "headPair") $
+    "result1" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "e" @@ var "desc" $
+    "fcx2" <~ Typing.inferenceResultContext (var "result1") $
+    "e1" <~ Typing.inferenceResultTerm (var "result1") $
+    "t1" <~ Typing.inferenceResultType (var "result1") $
+    "s1" <~ Typing.inferenceResultSubst (var "result1") $
+    "c1" <~ Typing.inferenceResultClassConstraints (var "result1") $
+    "rp2" <<~ inferMany @@ var "fcx2" @@ (Substitution.substInContext @@ var "s1" @@ var "cx") @@ var "tl" $
+    "result2" <~ Pairs.first (var "rp2") $
+    "fcx3" <~ Pairs.second (var "rp2") $
+    "e2" <~ Pairs.first (var "result2") $
+    "t2" <~ Pairs.first (Pairs.second $ var "result2") $
+    "s2" <~ Pairs.first (Pairs.second $ Pairs.second $ var "result2") $
+    "c2" <~ Pairs.second (Pairs.second $ Pairs.second $ var "result2") $
+    "c1Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "c1" $
+    "mergedConstraints" <~ mergeClassConstraints @@ var "c1Subst" @@ var "c2" $
+    right $ pair (pair
+      (Lists.cons (Substitution.substTypesInTerm @@ var "s2" @@ var "e1") (var "e2"))
+      (pair
+        (Lists.cons (Substitution.substInType @@ var "s2" @@ var "t1") (var "t2"))
+        (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3"))
+    (Lists.uncons (var "pairs"))
+
 
 inferTypeOf :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error ((Term, TypeScheme), Context))
 inferTypeOf = define "inferTypeOf" $
@@ -401,111 +419,6 @@ inferTypeOf = define "inferTypeOf" $
       (string " bindings")])) (var "fcx2"))
 
 
-inferTypeOfLiteral :: TTermDefinition (Context -> Literal -> InferenceResult)
-inferTypeOfLiteral = define "inferTypeOfLiteral" $
-  doc "Infer the type of a literal" $
-  "fcx" ~> "lit" ~>
-  Typing.inferenceResult
-    (Core.termLiteral $ var "lit")
-    (Core.typeLiteral $ Reflect.literalType @@ var "lit")
-    (asTerm Substitution.idTypeSubst)
-    Maps.empty
-    (var "fcx")
-
-
-inferTypeOfUnit :: TTermDefinition (Context -> InferenceResult)
-inferTypeOfUnit = define "inferTypeOfUnit" $
-  doc "The trivial inference rule for the unit term" $
-  "fcx" ~>
-  Typing.inferenceResult
-    (Core.termUnit)
-    (Core.typeUnit)
-    (asTerm Substitution.idTypeSubst)
-    Maps.empty
-    (var "fcx")
-
-isUnbound :: TTermDefinition (Graph -> Name -> Bool)
-isUnbound = define "isUnbound" $
-  doc "Check if a variable is unbound in context" $
-  "cx" ~> "v" ~>
-  Logic.and
-    (Logic.not $ Sets.member (var "v") $ freeVariablesInContext @@ var "cx")
-    (Logic.not $ Maps.member (var "v") $ Graph.graphSchemaTypes $ var "cx")
-
-mapConstraints :: TTermDefinition (Context -> Graph -> (TypeSubst -> a) -> [TypeConstraint] -> Either Error a)
-mapConstraints = define "mapConstraints" $
-  doc "Map over type constraints after unification" $
-  "flowCx" ~> "cx" ~> "f" ~> "constraints" ~>
-  "s" <<~ Eithers.bimap
-    ("_e" ~> Error.errorUnification (var "_e"))
-    ("_a" ~> var "_a")
-    (Unification.unifyTypeConstraints @@ var "flowCx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "constraints") $
-  Eithers.bind (Checking.checkTypeSubst @@ var "flowCx" @@ var "cx" @@ var "s") (
-    "_" ~> right (var "f" @@ var "s"))
-
-showInferenceResult :: TTermDefinition (InferenceResult -> String)
-showInferenceResult = define "showInferenceResult" $
-  doc "Show an inference result for debugging" $
-  "result" ~>
-  "term" <~ Typing.inferenceResultTerm (var "result") $
-  "typ" <~ Typing.inferenceResultType (var "result") $
-  "subst" <~ Typing.inferenceResultSubst (var "result") $
-  Strings.cat $ list [
-    (string "{term="),
-    ShowCore.term @@ var "term",
-    (string ", type="),
-    ShowCore.type_ @@ var "typ",
-    (string ", subst="),
-    ShowTyping.typeSubst @@ var "subst",
-    (string "}")]
-
-yield :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> InferenceResult)
-yield = define "yield" $
-  doc "Create an inference result with no class constraints" $
-  "fcx" ~> "term" ~> "typ" ~> "subst" ~>
-  Typing.inferenceResult
-    (Substitution.substTypesInTerm @@ var "subst" @@ var "term")
-    (Substitution.substInType @@ var "subst" @@ var "typ")
-    (var "subst")
-    Maps.empty
-    (var "fcx")
-
-yieldWithConstraints :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
-yieldWithConstraints = define "yieldWithConstraints" $
-  doc "Create an inference result with class constraints" $
-  "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
-  Typing.inferenceResult
-    (Substitution.substTypesInTerm @@ var "subst" @@ var "term")
-    (Substitution.substInType @@ var "subst" @@ var "typ")
-    (var "subst")
-    (var "constraints")
-    (var "fcx")
-
--- TODO: pass context and variables, and actually check types
-yieldChecked :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> InferenceResult)
-yieldChecked = define "yieldChecked" $
-  doc "Create a checked inference result" $
-  "fcx" ~> "term" ~> "typ" ~> "subst" ~>
-  "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
-  "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
-  Typing.inferenceResult (var "iterm") (var "itype") (var "subst") Maps.empty (var "fcx")
-
-yieldCheckedWithConstraints :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
-yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
-  doc "Create a checked inference result with class constraints" $
-  "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
-  "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
-  "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
-  -- Apply the substitution to constraint keys as well, so they track the final variable names
-  "iconstraints" <~ Substitution.substInClassConstraints @@ var "subst" @@ var "constraints" $
-  Typing.inferenceResult (var "iterm") (var "itype") (var "subst") (var "iconstraints") (var "fcx")
-
--- ============================================================================
--- Inference functions: Either Error InferenceResult
--- All take "fcx" (Context for errors/tracing) and "cx" (Graph for type context)
--- and return InferenceResult (which now contains the updated Context).
--- ============================================================================
-
 inferTypeOfAnnotatedTerm :: TTermDefinition (Context -> Graph -> AnnotatedTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
   doc "Infer the type of an annotated term (Either version)" $
@@ -524,6 +437,7 @@ inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
     (var "isubst")
     (var "iconstraints")
     (var "fcx2")
+
 
 inferTypeOfApplication :: TTermDefinition (Context -> Graph -> Application -> Prelude.Either Error InferenceResult)
 inferTypeOfApplication = define "inferTypeOfApplication" $
@@ -768,6 +682,183 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "cx3" <~ Substitution.substInContext @@ var "isubst" @@ var "cx" $
   "iconstraints" <~ Substitution.substInClassConstraints @@ var "isubst" @@ (Typing.inferenceResultClassConstraints $ var "result") $
   right (Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst") (var "iconstraints") (var "fcx3"))
+inferTypeOfLet :: TTermDefinition (Context -> Graph -> Let -> Prelude.Either Error InferenceResult)
+inferTypeOfLet = define "inferTypeOfLet" $
+  doc "Normalize a let term before inferring its type (Either version)" $
+  "fcx0" ~> "cx" ~> "let0" ~>
+  "fcx" <~ Ctx.pushTrace (string "let") (var "fcx0") $
+  "bindings0" <~ Core.letBindings (var "let0") $
+  "body0" <~ Core.letBody (var "let0") $
+  "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings0") $
+  "nameSet" <~ Sets.fromList (var "names") $
+  "toPair" <~ ("binding" ~>
+    "name" <~ Core.bindingName (var "binding") $
+    "term" <~ Core.bindingTerm (var "binding") $
+    pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
+      Sets.toList $ Variables.freeVariablesInTerm @@ var "term") $
+  "adjList" <~ Lists.map (var "toPair") (var "bindings0") $
+  "groups" <~ Sorting.topologicalSortComponents @@ var "adjList" $
+  "bindingMap" <~ Maps.fromList (Lists.zip (var "names") (var "bindings0")) $
+  "createLet" <~ ("e" ~> "group" ~> Core.termLet $ Core.let_
+    (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap")) (var "group"))
+    (var "e")) $
+  "rewrittenLet" <~ Lists.foldl (var "createLet") (var "body0") (Lists.reverse $ var "groups") $
+  "restoreLet" <~ ("iterm" ~>
+    "helper" <~ ("level" ~> "bins" ~> "term" ~>
+      "nonzero" <~ ("term" ~> cases _Term (var "term") Nothing [
+        _Term_let>>: "l" ~>
+          "bs" <~ Core.letBindings (var "l") $
+          "letBody" <~ Core.letBody (var "l") $
+          var "helper" @@
+            (Math.sub (var "level") (int32 1)) @@
+            (Lists.concat $ list [var "bs", var "bins"]) @@
+            (var "letBody")]) $
+      Logic.ifElse (Equality.equal (var "level") (int32 0))
+        (pair (var "bins") (var "term"))
+        (var "nonzero" @@ var "term")) $
+    "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list ([] :: [TTerm Binding]) @@ var "iterm" $
+    "bindingList" <~ Pairs.first (var "result") $
+    "e" <~ Pairs.second (var "result") $
+    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
+    Core.termLet $ Core.let_
+      (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
+      (var "e")) $
+  "rewriteResult" <~ ("iresult" ~>
+    "fcxR" <~ Typing.inferenceResultContext (var "iresult") $
+    "iterm" <~ Typing.inferenceResultTerm (var "iresult") $
+    "itype" <~ Typing.inferenceResultType (var "iresult") $
+    "isubst" <~ Typing.inferenceResultSubst (var "iresult") $
+    "iconstraints" <~ Typing.inferenceResultClassConstraints (var "iresult") $
+    Typing.inferenceResult (var "restoreLet" @@ var "iterm") (var "itype") (var "isubst") (var "iconstraints") (var "fcxR")) $
+  "res" <~ (cases _Term (var "rewrittenLet")
+     (Just $ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "rewrittenLet" @@ (string "empty let term")) [
+     _Term_let>>: "l" ~> inferTypeOfLetNormalized @@ var "fcx" @@ var "cx" @@ var "l"]) $
+  Eithers.map (var "rewriteResult") (var "res")
+
+inferTypeOfLetNormalized :: TTermDefinition (Context -> Graph -> Let -> Prelude.Either Error InferenceResult)
+inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
+  doc "Infer the type of a let (letrec) term which is already in a normal form (Either version)" $
+  "fcx0" ~> "cx0" ~> "letTerm" ~>
+  "fcx" <~ Ctx.pushTrace (string "let-normalized") (var "fcx0") $
+  "bins0" <~ Core.letBindings (var "letTerm") $
+  "body0" <~ Core.letBody (var "letTerm") $
+  "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bins0") $
+
+  -- Phase 1: Create fresh temporary type variables
+  "bvarsResult" <~ Names.freshNames @@ (Lists.length $ var "bins0") @@ var "fcx" $
+  "bvars" <~ Pairs.first (var "bvarsResult") $
+  "fcx2" <~ Pairs.second (var "bvarsResult") $
+  "tbins0" <~ Lists.map (unaryFunction Core.typeVariable) (var "bvars") $
+
+  "cx1" <~ (extendContext
+    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TTerm Name])) (var "t") Phantoms.nothing) (var "tbins0"))
+    @@ (var "cx0")) $
+
+  -- Phase 2: Infer actual types
+  "irRp" <<~ inferTypesOfTemporaryBindings @@ var "fcx2" @@ var "cx1" @@ var "bins0" $
+  "inferredResult" <~ Pairs.first (var "irRp") $
+  "fcx3" <~ Pairs.second (var "irRp") $
+  "bterms1" <~ Pairs.first (var "inferredResult") $
+  "tbins1" <~ Pairs.first (Pairs.second $ var "inferredResult") $
+  "substAndConstraints" <~ Pairs.second (Pairs.second $ var "inferredResult") $
+  "s1" <~ Pairs.first (var "substAndConstraints") $
+  "inferredConstraints" <~ Pairs.second (var "substAndConstraints") $
+
+  -- Phase 3: Unify temporary types with actual inferred types
+  "s2" <<~ Eithers.bimap
+    ("_e" ~> Error.errorUnification (var "_e"))
+    ("_a" ~> var "_a")
+    (Unification.unifyTypeLists
+    @@ var "fcx3"
+    @@ (Graph.graphSchemaTypes $ var "cx0")
+    @@ (Lists.map (Substitution.substInType @@ var "s1") (var "tbins0"))
+    @@ (var "tbins1")
+    @@ (string "temporary type bindings")) $
+  "_" <<~ Checking.checkTypeSubst @@ var "fcx3" @@ var "cx0" @@ var "s2" $
+
+  "g2base" <~ (Substitution.substInContext @@
+    (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") @@
+    (var "cx0")) $
+  "constraintsWithS2" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "inferredConstraints" $
+
+  "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
+  "originalBindingConstraints" <~ Lists.foldl
+    ("acc" ~> "b" ~>
+      Maybes.maybe
+        (var "acc")
+        ("ts" ~> Maybes.maybe
+          (var "acc")
+          ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")
+          (Core.typeSchemeConstraints $ var "ts"))
+        (Core.bindingTypeScheme $ var "b"))
+    Maps.empty
+    (var "bins0") $
+  "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
+
+  "allInferredConstraints" <~ mergeClassConstraints @@ var "constraintsWithS2" @@ var "originalConstraintsSubst" $
+  "mergedConstraints" <~ mergeClassConstraints @@ (Graph.graphClassConstraints $ var "g2base") @@ var "allInferredConstraints" $
+  "g2" <~ Graph.graphWithClassConstraints (var "g2base") (var "mergedConstraints") $
+
+  "bterms1Subst" <~ Lists.map (Substitution.substTypesInTerm @@ var "s2") (var "bterms1") $
+
+  -- Phase 4: Generalize
+  "tsbins1" <~ (Lists.zip (var "bnames") $
+    Lists.map ("t" ~> generalize @@ var "g2" @@
+      (Substitution.substInType @@ var "s2" @@ var "t")) (var "tbins1")) $
+
+  -- Phase 5: Infer body type
+  "bodyResult" <<~ inferTypeOfTerm @@ var "fcx3" @@
+    (extendContext @@ var "tsbins1" @@ var "g2") @@
+    (var "body0") @@
+    (string "let body") $
+  "fcx4" <~ Typing.inferenceResultContext (var "bodyResult") $
+  "body1" <~ Typing.inferenceResultTerm (var "bodyResult") $
+  "tbody" <~ Typing.inferenceResultType (var "bodyResult") $
+  "sbody" <~ Typing.inferenceResultSubst (var "bodyResult") $
+
+  -- Phase 6: Create term substitution for polymorphic instantiation
+  "st1" <~ (Typing.termSubst (Maps.fromList $
+    Lists.map
+      ("pair" ~>
+        "name" <~ Pairs.first (var "pair") $
+        "ts" <~ Pairs.second (var "pair") $
+        pair
+          (var "name") $
+          (buildTypeApplicationTerm
+            @@ (Core.typeSchemeVariables $ var "ts")
+            @@ (Core.termVariable $ var "name")))
+      (var "tsbins1"))) $
+
+  -- Phase 7: Create final bindings with type lambdas
+  "createBinding" <~ ("bindingPair" ~>
+    "nameTsPair" <~ Pairs.first (var "bindingPair") $
+    "term" <~ Pairs.second (var "bindingPair") $
+    "name" <~ Pairs.first (var "nameTsPair") $
+    "ts" <~ Pairs.second (var "nameTsPair") $
+    "finalTs" <~ Substitution.substInTypeScheme @@ var "sbody" @@ var "ts" $
+    "typeLambdaTerm" <~ Lists.foldl
+      ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
+      (Substitution.substituteInTerm @@ var "st1" @@ var "term")
+      (Lists.reverse $ Core.typeSchemeVariables $ var "finalTs") $
+    Core.binding (var "name")
+      (Substitution.substTypesInTerm @@
+        (Substitution.composeTypeSubst @@ var "sbody" @@ var "s2") @@
+        (var "typeLambdaTerm"))
+      (just $ var "finalTs")) $
+
+  "bins1" <~ (Lists.map (var "createBinding") $
+    Lists.zip (var "tsbins1") (var "bterms1Subst")) $
+
+  "bodyConstraints" <~ Substitution.substInClassConstraints @@ var "sbody" @@ (Typing.inferenceResultClassConstraints $ var "bodyResult") $
+  "bindingConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "sbody" @@ var "constraintsWithS2" $
+  "allConstraints" <~ mergeClassConstraints @@ var "bindingConstraintsSubst" @@ var "bodyConstraints" $
+
+  right (Typing.inferenceResult
+    (Core.termLet $ Core.let_ (var "bins1") (var "body1"))
+    (var "tbody")
+    (Substitution.composeTypeSubstList @@ list [var "s1", var "s2", var "sbody"])
+    (var "allConstraints")
+    (var "fcx4"))
 
 inferTypeOfList :: TTermDefinition (Context -> Graph -> [Term] -> Prelude.Either Error InferenceResult)
 inferTypeOfList = define "inferTypeOfList" $
@@ -779,6 +870,17 @@ inferTypeOfList = define "inferTypeOfList" $
     @@ (unaryFunction Core.termList)
     @@ (string "list element")
     @@ (Sets.empty :: TTerm (S.Set Name))
+
+inferTypeOfLiteral :: TTermDefinition (Context -> Literal -> InferenceResult)
+inferTypeOfLiteral = define "inferTypeOfLiteral" $
+  doc "Infer the type of a literal" $
+  "fcx" ~> "lit" ~>
+  Typing.inferenceResult
+    (Core.termLiteral $ var "lit")
+    (Core.typeLiteral $ Reflect.literalType @@ var "lit")
+    (asTerm Substitution.idTypeSubst)
+    Maps.empty
+    (var "fcx")
 
 inferTypeOfMap :: TTermDefinition (Context -> Graph -> M.Map Term Term -> Prelude.Either Error InferenceResult)
 inferTypeOfMap = define "inferTypeOfMap" $
@@ -998,17 +1100,28 @@ inferTypeOfTerm = define "inferTypeOfTerm" $
     _Term_variable>>: "name" ~> inferTypeOfVariable @@ var "fcx2" @@ var "cx" @@ var "name",
     _Term_wrap>>: "w" ~> inferTypeOfWrappedTerm @@ var "fcx2" @@ var "cx" @@ var "w"]
 
+inferTypeOfTypeApplication :: TTermDefinition (Context -> Graph -> TypeApplicationTerm -> Prelude.Either Error InferenceResult)
+inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
+  doc "Infer the type of a type application (Either version)" $
+  "fcx" ~> "cx" ~> "tt" ~>
+  inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ (Core.typeApplicationTermBody $ var "tt") @@ (string "type application term")
+
 inferTypeOfTypeLambda :: TTermDefinition (Context -> Graph -> TypeLambda -> Prelude.Either Error InferenceResult)
 inferTypeOfTypeLambda = define "inferTypeOfTypeLambda" $
   doc "Infer the type of a type abstraction (Either version)" $
   "fcx" ~> "cx" ~> "ta" ~>
   inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ (Core.typeLambdaBody $ var "ta") @@ (string "type abstraction")
 
-inferTypeOfTypeApplication :: TTermDefinition (Context -> Graph -> TypeApplicationTerm -> Prelude.Either Error InferenceResult)
-inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
-  doc "Infer the type of a type application (Either version)" $
-  "fcx" ~> "cx" ~> "tt" ~>
-  inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ (Core.typeApplicationTermBody $ var "tt") @@ (string "type application term")
+inferTypeOfUnit :: TTermDefinition (Context -> InferenceResult)
+inferTypeOfUnit = define "inferTypeOfUnit" $
+  doc "The trivial inference rule for the unit term" $
+  "fcx" ~>
+  Typing.inferenceResult
+    (Core.termUnit)
+    (Core.typeUnit)
+    (asTerm Substitution.idTypeSubst)
+    Maps.empty
+    (var "fcx")
 
 inferTypeOfUnwrap :: TTermDefinition (Context -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
@@ -1095,184 +1208,6 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")] $
   right (var "mcResult")
 
-inferTypeOfLet :: TTermDefinition (Context -> Graph -> Let -> Prelude.Either Error InferenceResult)
-inferTypeOfLet = define "inferTypeOfLet" $
-  doc "Normalize a let term before inferring its type (Either version)" $
-  "fcx0" ~> "cx" ~> "let0" ~>
-  "fcx" <~ Ctx.pushTrace (string "let") (var "fcx0") $
-  "bindings0" <~ Core.letBindings (var "let0") $
-  "body0" <~ Core.letBody (var "let0") $
-  "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings0") $
-  "nameSet" <~ Sets.fromList (var "names") $
-  "toPair" <~ ("binding" ~>
-    "name" <~ Core.bindingName (var "binding") $
-    "term" <~ Core.bindingTerm (var "binding") $
-    pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
-      Sets.toList $ Variables.freeVariablesInTerm @@ var "term") $
-  "adjList" <~ Lists.map (var "toPair") (var "bindings0") $
-  "groups" <~ Sorting.topologicalSortComponents @@ var "adjList" $
-  "bindingMap" <~ Maps.fromList (Lists.zip (var "names") (var "bindings0")) $
-  "createLet" <~ ("e" ~> "group" ~> Core.termLet $ Core.let_
-    (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap")) (var "group"))
-    (var "e")) $
-  "rewrittenLet" <~ Lists.foldl (var "createLet") (var "body0") (Lists.reverse $ var "groups") $
-  "restoreLet" <~ ("iterm" ~>
-    "helper" <~ ("level" ~> "bins" ~> "term" ~>
-      "nonzero" <~ ("term" ~> cases _Term (var "term") Nothing [
-        _Term_let>>: "l" ~>
-          "bs" <~ Core.letBindings (var "l") $
-          "letBody" <~ Core.letBody (var "l") $
-          var "helper" @@
-            (Math.sub (var "level") (int32 1)) @@
-            (Lists.concat $ list [var "bs", var "bins"]) @@
-            (var "letBody")]) $
-      Logic.ifElse (Equality.equal (var "level") (int32 0))
-        (pair (var "bins") (var "term"))
-        (var "nonzero" @@ var "term")) $
-    "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list ([] :: [TTerm Binding]) @@ var "iterm" $
-    "bindingList" <~ Pairs.first (var "result") $
-    "e" <~ Pairs.second (var "result") $
-    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
-    Core.termLet $ Core.let_
-      (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
-      (var "e")) $
-  "rewriteResult" <~ ("iresult" ~>
-    "fcxR" <~ Typing.inferenceResultContext (var "iresult") $
-    "iterm" <~ Typing.inferenceResultTerm (var "iresult") $
-    "itype" <~ Typing.inferenceResultType (var "iresult") $
-    "isubst" <~ Typing.inferenceResultSubst (var "iresult") $
-    "iconstraints" <~ Typing.inferenceResultClassConstraints (var "iresult") $
-    Typing.inferenceResult (var "restoreLet" @@ var "iterm") (var "itype") (var "isubst") (var "iconstraints") (var "fcxR")) $
-  "res" <~ (cases _Term (var "rewrittenLet")
-     (Just $ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "rewrittenLet" @@ (string "empty let term")) [
-     _Term_let>>: "l" ~> inferTypeOfLetNormalized @@ var "fcx" @@ var "cx" @@ var "l"]) $
-  Eithers.map (var "rewriteResult") (var "res")
-
-inferTypeOfLetNormalized :: TTermDefinition (Context -> Graph -> Let -> Prelude.Either Error InferenceResult)
-inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
-  doc "Infer the type of a let (letrec) term which is already in a normal form (Either version)" $
-  "fcx0" ~> "cx0" ~> "letTerm" ~>
-  "fcx" <~ Ctx.pushTrace (string "let-normalized") (var "fcx0") $
-  "bins0" <~ Core.letBindings (var "letTerm") $
-  "body0" <~ Core.letBody (var "letTerm") $
-  "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bins0") $
-
-  -- Phase 1: Create fresh temporary type variables
-  "bvarsResult" <~ Names.freshNames @@ (Lists.length $ var "bins0") @@ var "fcx" $
-  "bvars" <~ Pairs.first (var "bvarsResult") $
-  "fcx2" <~ Pairs.second (var "bvarsResult") $
-  "tbins0" <~ Lists.map (unaryFunction Core.typeVariable) (var "bvars") $
-
-  "cx1" <~ (extendContext
-    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TTerm Name])) (var "t") Phantoms.nothing) (var "tbins0"))
-    @@ (var "cx0")) $
-
-  -- Phase 2: Infer actual types
-  "irRp" <<~ inferTypesOfTemporaryBindings @@ var "fcx2" @@ var "cx1" @@ var "bins0" $
-  "inferredResult" <~ Pairs.first (var "irRp") $
-  "fcx3" <~ Pairs.second (var "irRp") $
-  "bterms1" <~ Pairs.first (var "inferredResult") $
-  "tbins1" <~ Pairs.first (Pairs.second $ var "inferredResult") $
-  "substAndConstraints" <~ Pairs.second (Pairs.second $ var "inferredResult") $
-  "s1" <~ Pairs.first (var "substAndConstraints") $
-  "inferredConstraints" <~ Pairs.second (var "substAndConstraints") $
-
-  -- Phase 3: Unify temporary types with actual inferred types
-  "s2" <<~ Eithers.bimap
-    ("_e" ~> Error.errorUnification (var "_e"))
-    ("_a" ~> var "_a")
-    (Unification.unifyTypeLists
-    @@ var "fcx3"
-    @@ (Graph.graphSchemaTypes $ var "cx0")
-    @@ (Lists.map (Substitution.substInType @@ var "s1") (var "tbins0"))
-    @@ (var "tbins1")
-    @@ (string "temporary type bindings")) $
-  "_" <<~ Checking.checkTypeSubst @@ var "fcx3" @@ var "cx0" @@ var "s2" $
-
-  "g2base" <~ (Substitution.substInContext @@
-    (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") @@
-    (var "cx0")) $
-  "constraintsWithS2" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "inferredConstraints" $
-
-  "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
-  "originalBindingConstraints" <~ Lists.foldl
-    ("acc" ~> "b" ~>
-      Maybes.maybe
-        (var "acc")
-        ("ts" ~> Maybes.maybe
-          (var "acc")
-          ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")
-          (Core.typeSchemeConstraints $ var "ts"))
-        (Core.bindingTypeScheme $ var "b"))
-    Maps.empty
-    (var "bins0") $
-  "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
-
-  "allInferredConstraints" <~ mergeClassConstraints @@ var "constraintsWithS2" @@ var "originalConstraintsSubst" $
-  "mergedConstraints" <~ mergeClassConstraints @@ (Graph.graphClassConstraints $ var "g2base") @@ var "allInferredConstraints" $
-  "g2" <~ Graph.graphWithClassConstraints (var "g2base") (var "mergedConstraints") $
-
-  "bterms1Subst" <~ Lists.map (Substitution.substTypesInTerm @@ var "s2") (var "bterms1") $
-
-  -- Phase 4: Generalize
-  "tsbins1" <~ (Lists.zip (var "bnames") $
-    Lists.map ("t" ~> generalize @@ var "g2" @@
-      (Substitution.substInType @@ var "s2" @@ var "t")) (var "tbins1")) $
-
-  -- Phase 5: Infer body type
-  "bodyResult" <<~ inferTypeOfTerm @@ var "fcx3" @@
-    (extendContext @@ var "tsbins1" @@ var "g2") @@
-    (var "body0") @@
-    (string "let body") $
-  "fcx4" <~ Typing.inferenceResultContext (var "bodyResult") $
-  "body1" <~ Typing.inferenceResultTerm (var "bodyResult") $
-  "tbody" <~ Typing.inferenceResultType (var "bodyResult") $
-  "sbody" <~ Typing.inferenceResultSubst (var "bodyResult") $
-
-  -- Phase 6: Create term substitution for polymorphic instantiation
-  "st1" <~ (Typing.termSubst (Maps.fromList $
-    Lists.map
-      ("pair" ~>
-        "name" <~ Pairs.first (var "pair") $
-        "ts" <~ Pairs.second (var "pair") $
-        pair
-          (var "name") $
-          (buildTypeApplicationTerm
-            @@ (Core.typeSchemeVariables $ var "ts")
-            @@ (Core.termVariable $ var "name")))
-      (var "tsbins1"))) $
-
-  -- Phase 7: Create final bindings with type lambdas
-  "createBinding" <~ ("bindingPair" ~>
-    "nameTsPair" <~ Pairs.first (var "bindingPair") $
-    "term" <~ Pairs.second (var "bindingPair") $
-    "name" <~ Pairs.first (var "nameTsPair") $
-    "ts" <~ Pairs.second (var "nameTsPair") $
-    "finalTs" <~ Substitution.substInTypeScheme @@ var "sbody" @@ var "ts" $
-    "typeLambdaTerm" <~ Lists.foldl
-      ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
-      (Substitution.substituteInTerm @@ var "st1" @@ var "term")
-      (Lists.reverse $ Core.typeSchemeVariables $ var "finalTs") $
-    Core.binding (var "name")
-      (Substitution.substTypesInTerm @@
-        (Substitution.composeTypeSubst @@ var "sbody" @@ var "s2") @@
-        (var "typeLambdaTerm"))
-      (just $ var "finalTs")) $
-
-  "bins1" <~ (Lists.map (var "createBinding") $
-    Lists.zip (var "tsbins1") (var "bterms1Subst")) $
-
-  "bodyConstraints" <~ Substitution.substInClassConstraints @@ var "sbody" @@ (Typing.inferenceResultClassConstraints $ var "bodyResult") $
-  "bindingConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "sbody" @@ var "constraintsWithS2" $
-  "allConstraints" <~ mergeClassConstraints @@ var "bindingConstraintsSubst" @@ var "bodyConstraints" $
-
-  right (Typing.inferenceResult
-    (Core.termLet $ Core.let_ (var "bins1") (var "body1"))
-    (var "tbody")
-    (Substitution.composeTypeSubstList @@ list [var "s1", var "s2", var "sbody"])
-    (var "allConstraints")
-    (var "fcx4"))
-
 inferTypesOfTemporaryBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), Context))
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
@@ -1336,38 +1271,93 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
         (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) (var "fcx3"))
     (Lists.uncons (var "bins"))
 
-inferMany :: TTermDefinition (Context -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), Context))
-inferMany = define "inferMany" $
-  doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
-  "fcx" ~> "cx" ~> "pairs" ~>
-  "emptyResult" <~ (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
-  Maybes.maybe (var "emptyResult")
-    ("pairsUc" ~>
-    "headPair" <~ Pairs.first (var "pairsUc") $
-    "tl" <~ Pairs.second (var "pairsUc") $
-    "e" <~ Pairs.first (var "headPair") $
-    "desc" <~ Pairs.second (var "headPair") $
-    "result1" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "e" @@ var "desc" $
-    "fcx2" <~ Typing.inferenceResultContext (var "result1") $
-    "e1" <~ Typing.inferenceResultTerm (var "result1") $
-    "t1" <~ Typing.inferenceResultType (var "result1") $
-    "s1" <~ Typing.inferenceResultSubst (var "result1") $
-    "c1" <~ Typing.inferenceResultClassConstraints (var "result1") $
-    "rp2" <<~ inferMany @@ var "fcx2" @@ (Substitution.substInContext @@ var "s1" @@ var "cx") @@ var "tl" $
-    "result2" <~ Pairs.first (var "rp2") $
-    "fcx3" <~ Pairs.second (var "rp2") $
-    "e2" <~ Pairs.first (var "result2") $
-    "t2" <~ Pairs.first (Pairs.second $ var "result2") $
-    "s2" <~ Pairs.first (Pairs.second $ Pairs.second $ var "result2") $
-    "c2" <~ Pairs.second (Pairs.second $ Pairs.second $ var "result2") $
-    "c1Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "c1" $
-    "mergedConstraints" <~ mergeClassConstraints @@ var "c1Subst" @@ var "c2" $
-    right $ pair (pair
-      (Lists.cons (Substitution.substTypesInTerm @@ var "s2" @@ var "e1") (var "e2"))
-      (pair
-        (Lists.cons (Substitution.substInType @@ var "s2" @@ var "t1") (var "t2"))
-        (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3"))
-    (Lists.uncons (var "pairs"))
+isUnbound :: TTermDefinition (Graph -> Name -> Bool)
+isUnbound = define "isUnbound" $
+  doc "Check if a variable is unbound in context" $
+  "cx" ~> "v" ~>
+  Logic.and
+    (Logic.not $ Sets.member (var "v") $ freeVariablesInContext @@ var "cx")
+    (Logic.not $ Maps.member (var "v") $ Graph.graphSchemaTypes $ var "cx")
+
+mapConstraints :: TTermDefinition (Context -> Graph -> (TypeSubst -> a) -> [TypeConstraint] -> Either Error a)
+mapConstraints = define "mapConstraints" $
+  doc "Map over type constraints after unification" $
+  "flowCx" ~> "cx" ~> "f" ~> "constraints" ~>
+  "s" <<~ Eithers.bimap
+    ("_e" ~> Error.errorUnification (var "_e"))
+    ("_a" ~> var "_a")
+    (Unification.unifyTypeConstraints @@ var "flowCx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "constraints") $
+  Eithers.bind (Checking.checkTypeSubst @@ var "flowCx" @@ var "cx" @@ var "s") (
+    "_" ~> right (var "f" @@ var "s"))
+
+mergeClassConstraints :: TTermDefinition (M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+mergeClassConstraints = define "mergeClassConstraints" $
+  doc "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets." $
+  "m1" ~> "m2" ~>
+  Lists.foldl
+    ("acc" ~> "pair" ~>
+      "k" <~ Pairs.first (var "pair") $
+      "v" <~ Pairs.second (var "pair") $
+      Maybes.maybe
+        (Maps.insert (var "k") (var "v") (var "acc"))
+        ("existing" ~>
+          "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "v")) $
+          Maps.insert (var "k") (var "merged") (var "acc"))
+        (Maps.lookup (var "k") (var "acc")))
+    (var "m1")
+    (Maps.toList $ var "m2")
+
+showInferenceResult :: TTermDefinition (InferenceResult -> String)
+showInferenceResult = define "showInferenceResult" $
+  doc "Show an inference result for debugging" $
+  "result" ~>
+  "term" <~ Typing.inferenceResultTerm (var "result") $
+  "typ" <~ Typing.inferenceResultType (var "result") $
+  "subst" <~ Typing.inferenceResultSubst (var "result") $
+  Strings.cat $ list [
+    (string "{term="),
+    ShowCore.term @@ var "term",
+    (string ", type="),
+    ShowCore.type_ @@ var "typ",
+    (string ", subst="),
+    ShowTyping.typeSubst @@ var "subst",
+    (string "}")]
+
+yield :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> InferenceResult)
+yield = define "yield" $
+  doc "Create an inference result with no class constraints" $
+  "fcx" ~> "term" ~> "typ" ~> "subst" ~>
+  Typing.inferenceResult
+    (Substitution.substTypesInTerm @@ var "subst" @@ var "term")
+    (Substitution.substInType @@ var "subst" @@ var "typ")
+    (var "subst")
+    Maps.empty
+    (var "fcx")
+
+-- TODO: pass context and variables, and actually check types
+yieldChecked :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> InferenceResult)
+yieldChecked = define "yieldChecked" $
+  doc "Create a checked inference result" $
+  "fcx" ~> "term" ~> "typ" ~> "subst" ~>
+  "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
+  "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
+  Typing.inferenceResult (var "iterm") (var "itype") (var "subst") Maps.empty (var "fcx")
+
+yieldCheckedWithConstraints :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
+  doc "Create a checked inference result with class constraints" $
+  "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
+  "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
+  "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
+  -- Apply the substitution to constraint keys as well, so they track the final variable names
+  "iconstraints" <~ Substitution.substInClassConstraints @@ var "subst" @@ var "constraints" $
+  Typing.inferenceResult (var "iterm") (var "itype") (var "subst") (var "iconstraints") (var "fcx")
+
+-- ============================================================================
+-- Inference functions: Either Error InferenceResult
+-- All take "fcx" (Context for errors/tracing) and "cx" (Graph for type context)
+-- and return InferenceResult (which now contains the updated Context).
+-- ============================================================================
 
 yieldDebug :: TTermDefinition (Context -> Graph -> String -> Term -> Type -> TypeSubst -> Prelude.Either Error InferenceResult)
 yieldDebug = define "yieldDebug" $
@@ -1383,3 +1373,16 @@ yieldDebug = define "yieldDebug" $
       (string "\n\trterm: "), ShowCore.term @@ var "rterm",
       (string "\n\trtyp: "),  ShowCore.type_ @@ var "rtyp"]) $
   right (Typing.inferenceResult (var "rterm") (var "rtyp") (var "subst") Maps.empty (var "fcx"))
+
+yieldWithConstraints :: TTermDefinition (Context -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldWithConstraints = define "yieldWithConstraints" $
+  doc "Create an inference result with class constraints" $
+  "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
+  Typing.inferenceResult
+    (Substitution.substTypesInTerm @@ var "subst" @@ var "term")
+    (Substitution.substInType @@ var "subst" @@ var "typ")
+    (var "subst")
+    (var "constraints")
+    (var "fcx")
+
+-- TODO: pass context and variables, and actually check types

@@ -99,8 +99,7 @@ query ($ns: String!) {
   module(namespace: $ns) {
     namespace { value }
     description
-    termDependencies { value }
-    typeDependencies { value }
+    dependencies { value }
   }
 }
 ```

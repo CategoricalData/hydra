@@ -86,8 +86,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.typeScript.language"),
             moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
-            moduleTermDependencies = [Strip.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for TypeScript"}
 typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
@@ -123,8 +122,8 @@ typeScriptLanguage = define "typeScriptLanguage" $
       (Just true) [
       _Type_maybe>>: constant false])]] $
   Coders.language
-    (Coders.languageName_ (string "hydra.typeScript"))
-    (Coders.languageConstraints_
+    (Coders.languageName2 (string "hydra.typeScript"))
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

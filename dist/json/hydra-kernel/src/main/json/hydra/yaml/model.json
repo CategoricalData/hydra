@@ -6,41 +6,26 @@
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A YAML node (value)"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A YAML node (value)"}}}],
               "body": {
                 "union": [
                   {
                     "name": "mapping",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
-                        "body": {
-                          "map": {
-                            "keys": {"variable": "hydra.yaml.model.Node"},
-                            "values": {"variable": "hydra.yaml.model.Node"}}}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                        "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}}},
                   {
                     "name": "scalar",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A scalar value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A scalar value"}}}],
                         "body": {"variable": "hydra.yaml.model.Scalar"}}}},
                   {
                     "name": "sequence",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A sequence of nodes"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
                         "body": {"list": {"variable": "hydra.yaml.model.Node"}}}}}]}}},
           "variables": []}}},
     {
@@ -53,18 +38,14 @@
                 {
                   "key": "description",
                   "value": {
-                    "literal": {
-                      "string": "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here"}}}],
+                    "literal": {"string": "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here"}}}],
               "body": {
                 "union": [
                   {
                     "name": "bool",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Represents a true/false value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents a true/false value"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
                     "name": "decimal",
@@ -73,49 +54,33 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
+                            "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
                         "body": {"literal": {"decimal": {}}}}}},
                   {
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
                         "body": {"literal": {"float": {"bigfloat": {}}}}}}},
                   {
                     "name": "int",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}}},
                   {
                     "name": "null",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Represents the lack of a value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents the lack of a value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "str",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A string value"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
+  "dependencies": ["hydra.core", "hydra.core"],
   "description": "A basic YAML representation model. Based on:\n  https://yaml.org/spec/1.2/spec.html\nThe Serialization and Presentation properties of YAML,\nincluding directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\nIn addition, tags are omitted from this model, and non-standard scalars are unsupported.",
-  "namespace": "hydra.yaml.model",
-  "termDependencies": ["hydra.core"],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.yaml.model"}

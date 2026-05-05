@@ -11,8 +11,10 @@ import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+-- | Decoder for hydra.topology.Graph
 graph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map Int [Int])
 graph = ExtractCore.decodeMap vertex (ExtractCore.decodeList vertex)
+-- | Decoder for hydra.topology.TarjanState
 tarjanState :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Topology.TarjanState
 tarjanState cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -44,6 +46,7 @@ tarjanState cx raw =
           Topology.tarjanStateOnStack = field_onStack,
           Topology.tarjanStateSccs = field_sccs}))))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.topology.Vertex
 vertex :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Int
 vertex cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

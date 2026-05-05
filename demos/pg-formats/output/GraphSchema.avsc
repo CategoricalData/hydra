@@ -1,0 +1,43 @@
+{
+  "@description": "A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema",
+  "fields": [
+    {
+      "name": "vertices",
+      "type": {
+        "type": "map",
+        "values": {
+          "@description": "The type of a vertex",
+          "fields": [
+            {"name": "label", "type": "string"},
+            {"name": "id", "type": "string"},
+            {
+              "name": "properties",
+              "type": {
+                "items": {
+                  "@description": "The type of a property",
+                  "fields": [{"name": "key", "type": "string"}, {"name": "value", "type": "string"}, {"name": "required", "type": "boolean"}],
+                  "name": "PropertyType",
+                  "namespace": "hydra.pg.model",
+                  "type": "record"},
+                "type": "array"}}],
+          "name": "VertexType",
+          "namespace": "hydra.pg.model",
+          "type": "record"}}},
+    {
+      "name": "edges",
+      "type": {
+        "type": "map",
+        "values": {
+          "@description": "The type of an edge",
+          "fields": [
+            {"name": "label", "type": "string"},
+            {"name": "id", "type": "string"},
+            {"name": "out", "type": "string"},
+            {"name": "in", "type": "string"},
+            {"name": "properties", "type": {"items": "PropertyType", "type": "array"}}],
+          "name": "EdgeType",
+          "namespace": "hydra.pg.model",
+          "type": "record"}}}],
+  "name": "GraphSchema",
+  "namespace": "hydra.pg.model",
+  "type": "record"}

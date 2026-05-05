@@ -8,14 +8,15 @@
 #   1. Calling Layer 1 transform-json-to-python.sh for main modules
 #   2. Calling Layer 1 transform-json-to-python.sh for test modules
 #   3. Applying package-specific post-processing:
-#      - hydra-kernel: copy test_env.py, patch test_graph.py
+#      - hydra-kernel: copy test_env.py (the runtime counterpart of
+#        hydra.test.testEnv, filtered from emitted output) and the
+#        hand-written runtime support (lib/, dsl/, sources/, tools.py,
+#        py.typed) so the published wheel is self-contained.
+#   4. Generating a per-package pyproject.toml so each dist/python/<pkg>/
+#      is a standalone publishable wheel build.
 #
 # Assemblers do NOT run tests. Test invocation is Layer 2.5's
-# test-distribution.sh. See feature_290_packaging-plan.md.
-#
-# Note: pyproject.toml currently lives in heads/python/, not per-dist, so no
-# build-file generation happens per package. Future work: per-package
-# pyproject.toml templates.
+# test-distribution.sh.
 
 set -euo pipefail
 
@@ -92,17 +93,17 @@ else
 fi
 
 # Step 3: Package-specific post-processing.
-# (Python exception: do NOT copy heads/python/.../lib/ + dsl/ into
-# dist/python/hydra-kernel/. heads/python/pyproject.toml lists both
-# heads/python/src/main/python AND dist/python/hydra-kernel/src/main/python
-# on the package path, and ruff/pyright/pytest all see both. A copy
-# would create twin definitions; bootstrap-demo's setup-python-target.sh
-# handles the runtime layout independently.)
+# - hydra-kernel: copy test_env.py (the Python runtime counterpart of
+#   hydra.test.testEnv, filtered from emitted output by
+#   testSkipEmitNamespaces) into the dist test tree, then copy the
+#   hand-written runtime support (lib/, dsl/, sources/, tools.py,
+#   py.typed) into dist/python/hydra-kernel/ so the published wheel is
+#   self-contained.
 case "$PACKAGE" in
     hydra-kernel)
-        # Copy test_env.py from heads/python into dist/.
-        # The patched test_graph.py below imports hydra.test.test_env, which
-        # must resolve under the dist tree at test time.
+        # Copy test_env.py from heads/python into dist/. The generated
+        # test_graph.py imports hydra.test.test_env, which must resolve
+        # under the dist tree at test time.
         TEST_ENV_SRC="$HYDRA_PYTHON_HEAD/src/test/python/hydra/test/test_env.py"
         TEST_ENV_DST="$OUT_TEST/hydra/test/test_env.py"
         if [ -f "$TEST_ENV_SRC" ]; then
@@ -112,40 +113,22 @@ case "$PACKAGE" in
             cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
         fi
 
-        # Patch test_graph.py: replace module-level test_graph/test_context
-        # with a lazy __getattr__ shim that defers construction. Without the
-        # shim, test_env imports fail at module load time.
-        TESTGRAPH="$OUT_TEST/hydra/test/test_graph.py"
-        if [ -f "$TESTGRAPH" ]; then
-            echo "Step 3b: Patching test_graph.py..."
-            sed -i.bak '/^test_context = /d' "$TESTGRAPH"
-            sed -i.bak '/^test_graph = /d' "$TESTGRAPH"
-            rm -f "$TESTGRAPH.bak"
-            cat >> "$TESTGRAPH" << 'PYEOF'
-
-_test_graph_cache = None
-_test_context_cache = None
-
-def __getattr__(name):
-    global _test_graph_cache, _test_context_cache
-    if name == "test_graph":
-        if _test_graph_cache is None:
-            import hydra.test.test_env as _test_env
-            _test_graph_cache = _test_env.test_graph()
-        return _test_graph_cache
-    elif name == "test_context":
-        if _test_context_cache is None:
-            import hydra.test.test_env as _test_env
-            _test_context_cache = _test_env.test_context()
-        return _test_context_cache
-    raise AttributeError(f"module 'hydra.test.test_graph' has no attribute {name!r}")
-PYEOF
-        fi
+        # Step 3b: Copy hand-written Python runtime so the published kernel
+        # wheel is self-contained.
+        echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
+        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
         ;;
     *)
         # No per-package post-processing for other packages today.
         ;;
 esac
+
+# Step 4: Generate per-package pyproject.toml so each dist/python/<pkg>/
+# is a standalone publishable wheel build.
+echo ""
+echo "Step 4: Generating per-package pyproject.toml..."
+HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-python-package-build.py" \
+    "$PACKAGE" --out-dir "$OUT_DIR"
 
 echo ""
 

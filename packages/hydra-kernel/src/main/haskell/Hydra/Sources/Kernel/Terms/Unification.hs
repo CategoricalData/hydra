@@ -65,8 +65,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Utilities for type unification.")}
   where
    definitions = [
@@ -203,12 +202,14 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
 
 unifyTypeLists :: TTermDefinition (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $
+  doc "Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics." $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   "toConstraint" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") (var "comment")) $
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
 
 unifyTypes :: TTermDefinition (Context -> M.Map Name TypeScheme -> Type -> Type -> String -> Either UnificationError TypeSubst)
 unifyTypes = define "unifyTypes" $
+  doc "Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics." $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
 

@@ -88,8 +88,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Type and term classification predicates")}
   where
     definitions = [
@@ -213,6 +212,7 @@ isEnumType = define "isEnumType" $
 --   Type aliases (applications, functions, literal types, etc.) return false.
 isNominalType :: TTermDefinition (Type -> Bool)
 isNominalType = define "isNominalType" $
+  doc "Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false." $
   lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
       (Just false) [

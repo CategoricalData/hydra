@@ -96,8 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Constants.ns, Serialization.ns, HaskellOperators.ns],
-            moduleTypeDependencies = (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
@@ -337,7 +336,7 @@ expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
         Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (expressionToExpr) (var "exprs")),
       H._Expression_parens>>: lambda "expr'" $ Serialization.parenthesize @@ (expressionToExpr @@ var "expr'"),
       H._Expression_tuple>>: lambda "exprs" $
-        Serialization.parenList @@ false @@ (Lists.map (expressionToExpr) (var "exprs")),
+        Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "exprs")),
       H._Expression_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
 fieldToExpr :: TTermDefinition (H.Field -> Expr)
@@ -549,7 +548,7 @@ patternToExpr = haskellSerdeDefinition "patternToExpr" $
       H._Pattern_name>>: lambda "name" $ nameToExpr @@ var "name",
       H._Pattern_parens>>: lambda "pat'" $ Serialization.parenthesize @@ (patternToExpr @@ var "pat'"),
       H._Pattern_tuple>>: lambda "pats" $
-        Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "pats")),
+        Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "pats")),
       H._Pattern_wildcard>>: constant $ Serialization.cst @@ (string "_")]
 
 rightHandSideToExpr :: TTermDefinition (H.RightHandSide -> Expr)
@@ -592,12 +591,10 @@ typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $
     "nameExpr">: nameToExpr @@ var "name",
     "typeExpr">: typeToExpr @@ var "typ",
     "inlineSig">: Serialization.structuralSpaceSep @@ list [var "nameExpr", Serialization.cst @@ string "::", var "typeExpr"]] $
-    -- If the inline form exceeds 120 chars, break the type onto the next line with indentation
-    Logic.ifElse (Equality.gt (Serialization.expressionLength @@ var "inlineSig") (int32 120))
+    Serialization.chooseLayout @@ Serialization.maxLineWidth @@ var "inlineSig" @@
       (Serialization.newlineSep @@ list [
         Serialization.spaceSep @@ list [var "nameExpr", Serialization.cst @@ string "::"],
         Serialization.tabIndent @@ var "typeExpr"])
-      (var "inlineSig")
 
 typeToExpr :: TTermDefinition (H.Type -> Expr)
 typeToExpr = haskellSerdeDefinition "typeToExpr" $
@@ -619,7 +616,7 @@ typeToExpr = haskellSerdeDefinition "typeToExpr" $
       H._Type_list>>: lambda "htype'" $
         Serialization.bracketList @@ Serialization.inlineStyle @@ list [typeToExpr @@ var "htype'"],
       H._Type_tuple>>: lambda "types" $
-        Serialization.parenList @@ false @@ (Lists.map (typeToExpr) (var "types")),
+        Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "types")),
       H._Type_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
 valueBindingToExpr :: TTermDefinition (H.ValueBinding -> Expr)
@@ -635,12 +632,10 @@ valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
         "rhsExpr">: rightHandSideToExpr @@ var "rhs",
         -- Use structuralSpaceSep to avoid triggering parenthesize on the RHS
         "inlineBody">: Serialization.structuralSpaceSep @@ list [var "lhsExpr", Serialization.cst @@ string "=", var "rhsExpr"],
-        -- If the inline form exceeds 120 chars, break the RHS onto the next line with indentation
-        "body">: Logic.ifElse (Equality.gt (Serialization.expressionLength @@ var "inlineBody") (int32 120))
+        "body">: Serialization.chooseLayout @@ Serialization.maxLineWidth @@ var "inlineBody" @@
           (Serialization.newlineSep @@ list [
             Serialization.spaceSep @@ list [var "lhsExpr", Serialization.cst @@ string "="],
-            Serialization.tabIndent @@ var "rhsExpr"])
-          (var "inlineBody")] $
+            Serialization.tabIndent @@ var "rhsExpr"])] $
         Maybes.maybe
           (var "body")
           (lambda "localBindings" $ lets [

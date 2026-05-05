@@ -37,8 +37,8 @@ compactName namespaces name =
 freshName :: Context.Context -> (Core.Name, Context.Context)
 freshName cx =
 
-      let count = Annotations.getCount Constants.key_freshTypeVariableCount cx
-      in (normalTypeVariable count, (Annotations.putCount Constants.key_freshTypeVariableCount (Math.add count 1) cx))
+      let count = Annotations.getCount Constants.keyFreshTypeVariableCount cx
+      in (normalTypeVariable count, (Annotations.putCount Constants.keyFreshTypeVariableCount (Math.add count 1) cx))
 -- | Generate multiple fresh type variable names, threading Context
 freshNames :: Int -> Context.Context -> ([Core.Name], Context.Context)
 freshNames n cx =
@@ -63,7 +63,7 @@ nameToFilePath nsConv localConv ext name =
           ns = Packaging.qualifiedNameNamespace qualName
           local = Packaging.qualifiedNameLocal qualName
           nsToFilePath =
-                  \ns2 -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unNamespace ns2)))
+                  \nsArg -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unNamespace nsArg)))
           prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
           suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
       in (Strings.cat [

@@ -15,18 +15,13 @@ module Hydra.Demos.GraphqlJson (
 
 import Hydra.Kernel
 import Hydra.ExtGeneration
+import Hydra.Generation (moduleAsBindings)
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
-import Hydra.Module.Compat (moduleBindings)
 
 import qualified Hydra.Graphql.Coder as GraphqlCoder
-import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
-import qualified Hydra.Errors as Errors
-import qualified Hydra.Strip as Strip
 
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified System.Directory as SD
 import qualified System.FilePath as FP
@@ -45,36 +40,23 @@ filterModulesByNamespace names mods =
 allKernelModules :: [Module]
 allKernelModules = kernelModules
 
--- | Decode type bindings directly into TypeDefinitions, bypassing the adapter.
--- Each native type binding's term is decoded into a Type.
--- Skips types that fail to decode.
-bindingsToTypeDefinitions :: Graph -> [Binding] -> [TypeDefinition]
-bindingsToTypeDefinitions graph bindings =
-  [TypeDefinition (bindingName b) (TypeScheme [] typ Nothing) | b <- bindings,
-   Annotations.isNativeType b,
-   Right typ <- [DecodeCore.type_ graph (Strip.deannotateTerm (bindingTerm b))]]
-
--- | Convert TypeDefinitions to Definitions
-typeDefsToDefinitions :: [TypeDefinition] -> [Definition]
-typeDefsToDefinitions = map DefinitionType
-
 -- | Generate the GraphQL schema by calling the coder directly, bypassing language adaptation.
 generateGraphqlSchema :: FilePath -> IO Int
 generateGraphqlSchema outputDir = do
   putStrLn $ "Generating GraphQL schema to: " ++ outputDir
 
-  -- Build the schema graph from kernel type modules
+  -- Build the schema graph from kernel type modules. elementsToGraph still
+  -- operates in terms of Bindings, so we convert each module's definitions
+  -- via the kernel-aligned helper before feeding it the graph.
   let allMods = kernelTypesModules
-      schemaElements = concatMap (\m -> filter Annotations.isNativeType (moduleBindings m)) allMods
+      schemaElements = concatMap moduleAsBindings allMods
       schemaGraph = Lexical.elementsToGraph bootstrapGraph M.empty schemaElements
       cx = Context.Context [] [] M.empty
 
-  -- For each schema module, decode types and run the coder
+  -- For each schema module, hand the coder the type definitions directly.
   let results = do
         mod <- schemaModules
-        let typeBindings = filter Annotations.isNativeType (moduleBindings mod)
-            typeDefs = bindingsToTypeDefinitions schemaGraph typeBindings
-            defs = typeDefsToDefinitions typeDefs
+        let defs = [d | d@(DefinitionType _) <- moduleDefinitions mod]
         case GraphqlCoder.moduleToGraphql mod defs cx schemaGraph of
           Left ic -> [(unNamespace (moduleNamespace mod), Left $ show ic)]
           Right files -> [(path, Right content) | (path, content) <- M.toList files]

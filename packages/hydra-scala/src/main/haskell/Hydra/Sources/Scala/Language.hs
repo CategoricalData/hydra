@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.scala.language"),
             moduleDefinitions = [toDefinition scalaLanguage, toDefinition scalaReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for Scala"}
 scalaLanguage :: TTermDefinition Language
 scalaLanguage = define "scalaLanguage" $
@@ -165,8 +164,8 @@ scalaLanguage = define "scalaLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.scala")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.scala")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

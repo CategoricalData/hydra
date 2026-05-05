@@ -31,8 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, StripModule.ns, TestGraph.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, StripModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for annotation and type stripping operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

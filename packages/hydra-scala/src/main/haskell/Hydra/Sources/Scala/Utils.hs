@@ -98,8 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [scalaLanguageNs, Names.ns, Formatting.ns],
-            moduleTypeDependencies = (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [scalaLanguageNs, Names.ns, Formatting.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Utility functions for constructing Scala AST nodes"}
   where
     definitions = [

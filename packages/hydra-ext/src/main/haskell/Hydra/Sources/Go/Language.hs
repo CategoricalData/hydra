@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.go.language"),
             moduleDefinitions = [toDefinition goLanguage, toDefinition goReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for Go 1.22+"}
 goLanguage :: TTermDefinition Language
 goLanguage = define "goLanguage" $
@@ -171,8 +170,8 @@ goLanguage = define "goLanguage" $
     -- Go's type system is more restrictive than Haskell's, but with generics most types work
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName_ $ string "hydra.go")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.go")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

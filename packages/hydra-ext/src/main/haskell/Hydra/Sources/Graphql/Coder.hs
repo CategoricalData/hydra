@@ -96,10 +96,9 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
+            moduleDependencies = [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleNamespace GraphqlLanguage.module_,
-      GraphqlSerde.ns],
-            moduleTypeDependencies = (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+      GraphqlSerde.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"}
   where
     definitions = [
@@ -410,7 +409,7 @@ moduleToGraphql = define "moduleToGraphql" $
     "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
     right (Maps.fromList $ Lists.pure $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@
-        (GraphqlSerde.exprDocument @@ (wrap G._Document
+        (GraphqlSerde.documentToExpr @@ (wrap G._Document
           (Lists.map
             (lambda "gtdef" $
               inject G._Definition G._Definition_typeSystem

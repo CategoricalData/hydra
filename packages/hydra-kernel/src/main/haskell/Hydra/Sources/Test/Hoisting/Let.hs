@@ -32,8 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, HoistingModule.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, HoistingModule.ns] ++ kernelTypesNamespaces,
             moduleDescription = Just "Test cases for let-binding hoisting transformations"}
   where
     definitions = [Phantoms.toDefinition allTests]

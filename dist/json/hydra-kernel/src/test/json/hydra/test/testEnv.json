@@ -11,21 +11,22 @@
         "term": {
           "typeLambda": {
             "body": {
-              "lambda": {
-                "body": {"variable": "hydra.lexical.emptyGraph"},
-                "domain": {"variable": "t0"},
-                "parameter": "tys"}},
+              "typeLambda": {
+                "body": {
+                  "lambda": {
+                    "body": {"lambda": {"body": {"variable": "hydra.lexical.emptyGraph"}, "domain": {"variable": "t1"}, "parameter": "tms"}},
+                    "domain": {"variable": "t0"},
+                    "parameter": "tys"}},
+                "parameter": "t1"}},
             "parameter": "t0"}},
         "typeScheme": {
           "body": {
             "function": {
-              "codomain": {"variable": "hydra.graph.Graph"},
+              "codomain": {"function": {"codomain": {"variable": "hydra.graph.Graph"}, "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}}],
-  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
-  "namespace": "hydra.test.testEnv",
-  "termDependencies": ["hydra.lexical"],
-  "typeDependencies": [
+          "variables": ["t0", "t1"]}}}],
+  "dependencies": [
+    "hydra.lexical",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -48,4 +49,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.validation",
+    "hydra.variants"],
+  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+  "namespace": "hydra.test.testEnv"}
